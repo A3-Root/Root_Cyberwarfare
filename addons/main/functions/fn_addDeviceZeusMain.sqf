@@ -17,7 +17,7 @@ private _allLamps = _allDevices select 1;
 private _allDrones = _allDevices select 2;
 private _allDatabases = _allDevices select 3;
 private _allCustom = _allDevices select 4;
-private _validObject = false;
+private _isCustomObject = false;
 
 private _objectType = typeOf _targetObject;
 private _netId = netId _targetObject;
@@ -29,6 +29,8 @@ private _displayName = getText (configFile >> "CfgVehicles" >> typeOf _targetObj
 private _typeofhackable = 0;
 private _deviceId = 0;
 
+private _buildingDoors = [];
+
 // Store activation/deactivation code for ALL objects
 _targetObject setVariable ["ROOT_ActivationCode", _activationCode, true];
 _targetObject setVariable ["ROOT_DeactivationCode", _deactivationCode, true];
@@ -38,7 +40,7 @@ _targetObject setVariable ["ROOT_AvailableToFutureLaptops", _availableToFutureLa
 
 if (_treatAsCustom) then {
     // Treat as custom device
-    _validObject = true;
+    _isCustomObject = true;
     _deviceId = (round (random 8999)) + 1000;
     if (count _allCustom > 0) then {
         while {true} do {
@@ -59,7 +61,7 @@ if (_treatAsCustom) then {
 } else {
     // Existing logic for standard objects
     if (_targetObject isKindOf "House" || _targetObject isKindOf "Building") then {
-        _validObject = true;
+        _isCustomObject = true;
 
         private _buildingDoors = [];
         private _building = _targetObject;
@@ -73,18 +75,18 @@ if (_treatAsCustom) then {
                     private _doorNumber = parseNumber (((_regexFinds select 0) select 1) select 0);
 
                     if(!(_doorNumber in _buildingDoors)) then {
-                        if(count _buildingDoors == 0) then {
-                            _buildingDoors pushback _doorNumber;
+                        if(_buildingDoors isEqualTo []) then {
+                            _buildingDoors pushBack _doorNumber;
                         };
-                        if((_buildingDoors select ((count _buildingDoors) -1)) != _doorNumber) then {
-                            _buildingDoors pushback _doorNumber;
+                        if((_buildingDoors select -1) != _doorNumber) then {
+                            _buildingDoors pushBack _doorNumber;
                         };
                     };
                 };
             };
         } forEach _simpleObjects;
 
-        if(count _buildingDoors > 0) then {
+        if(_buildingDoors isNotEqualTo []) then {
             private _buildingNetId = netId _building;
 
             _deviceId = (round (random 8999)) + 1000;
@@ -104,12 +106,12 @@ if (_treatAsCustom) then {
                 };
             };
             _typeofhackable = 1;
-            _allDoors pushback [_deviceId, _buildingNetId, _buildingDoors, _linkedComputers, _activationCode, _deactivationCode, _availableToFutureLaptops];
+            _allDoors pushBack [_deviceId, _buildingNetId, _buildingDoors, _linkedComputers, _activationCode, _deactivationCode, _availableToFutureLaptops];
         };
     };
 
     if (_targetObject isKindOf "Lamps_base_F") then {
-        _validObject = true;
+        _isCustomObject = true;
         _deviceId = (round (random 8999)) + 1000;
         if (count _allLamps > 0) then {
             while {true} do {
@@ -128,7 +130,7 @@ if (_treatAsCustom) then {
     };
 
     if (unitIsUAV _targetObject) then {
-        _validObject = true;
+        _isCustomObject = true;
         _deviceId = (round (random 8999)) + 1000;
         if (count _allDrones > 0) then {
             while {true} do {
@@ -150,7 +152,7 @@ if (_treatAsCustom) then {
     };
 };
 
-if (!_validObject) exitWith {
+if (!_isCustomObject) exitWith {
     [format ["Object (%1) is not compatible for hacking!", _targetObject]] remoteExec ["systemChat", _execUserId];
 };
 
@@ -164,7 +166,7 @@ if (count _linkedComputers > 0) then {
         private _computerNetId = _x;
         private _existingLinks = _deviceLinks select {_x select 0 == _computerNetId};
         
-        if (count _existingLinks == 0) then {
+        if (_existingLinks isEqualTo []) then {
             _deviceLinks pushBack [_computerNetId, [[_typeofhackable, _deviceId]]];
         } else {
             private _index = _deviceLinks find (_existingLinks select 0);
@@ -240,6 +242,6 @@ switch (_typeofhackable) do {
         [format ["Root Cyber Warfare: Custom device '%1' added (ID: %2). %3.", _customName, _deviceId, _availabilityText]] remoteExec ["systemChat", _execUserId];
     };
     default {
-        [format ["ERROR! Bad Value: '_typeofhackable' in 'AddDeviceZeusMain.sqf'"]] remoteExec ["systemChat", _execUserId];
+        [format ["ERROR! Bad Value: '_typeofhackable' in 'Root_fnc_addDeviceZeusMain'"]] remoteExec ["systemChat", _execUserId];
     };
 };

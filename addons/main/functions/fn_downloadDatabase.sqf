@@ -10,10 +10,10 @@ if (_databaseIdNum != 0) then {
 
     // Filter databases to only those accessible by this computer
     private _accessibleDatabases = _allDatabases select { 
-        [_computer, 4, _x select 0, _commandPath] call Root_fnc_IsDeviceAccessible 
+        [_computer, 4, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible 
     };
 
-    if (count _accessibleDatabases == 0) then {
+    if (_accessibleDatabases isEqualTo []) then {
         _string = "Error! No accessible databases found or access denied.";
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         missionNamespace setVariable [_nameOfVariable, true, true];

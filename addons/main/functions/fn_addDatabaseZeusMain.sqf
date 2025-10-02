@@ -21,7 +21,7 @@ if (count _allDatabases > 0) then {
 };
 
 // Store database variables
-_allDatabases pushback [_databaseId, netId _fileObject, _linkedComputers, _availableToFutureLaptops];
+_allDatabases pushBack [_databaseId, netId _fileObject, _linkedComputers, _availableToFutureLaptops];
 _fileObject setVariable ["ROOT_DatabaseName_Edit", _filename, true];
 _fileObject setVariable ["ROOT_DatabaseSize_Edit", _filesize, true];
 _fileObject setVariable ["ROOT_DatabaseData_Edit", _filecontent, true];
@@ -38,7 +38,7 @@ if (count _linkedComputers > 0) then {
         private _computerNetId = _x;
         private _existingLinks = _deviceLinks select {_x select 0 == _computerNetId};
         
-        if (count _existingLinks == 0) then {
+        if (_existingLinks isEqualTo []) then {
             _deviceLinks pushBack [_computerNetId, [[4, _databaseId]]]; // 4 = database type
         } else {
             private _index = _deviceLinks find (_existingLinks select 0);
@@ -64,7 +64,8 @@ if ((_availableToFutureLaptops) || (count _linkedComputers == 0)) then {
         } else {
             // Scenario: Available to future + no linked
             // Exclude ALL current laptops - only future ones get access
-            private _allHackingLaptops = allObjects select {_x getVariable ["ROOT_HackingTools", false]};
+            private _allObjects = 24 allObjects 1; // All objects
+            private _allHackingLaptops = _allObjects select {_x getVariable ["ROOT_HackingTools", false]};
             {
                 _excludedNetIds pushBack (netId _x);
             } forEach _allHackingLaptops;

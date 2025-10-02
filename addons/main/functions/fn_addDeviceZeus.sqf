@@ -59,12 +59,12 @@ hint str format ['Code triggered'];", {}, 7]],
 
         // If available to future laptops, keep the selected computers but mark for future availability
         // If not available to future laptops and no computers selected, use all current computers
-        if (!_availableToFutureLaptops && count _selectedComputers == 0) then {
+        if (!_availableToFutureLaptops && _selectedComputers isEqualTo []) then {
             _selectedComputers = _allComputers apply { _x select 0 };
         };
         
         // Pass all parameters including the availability setting
-        [_targetObject, _execUserId, _selectedComputers, _treatAsCustom, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops] remoteExec ["Root_fnc_AddDeviceZeusMain", 2];
+        [_targetObject, _execUserId, _selectedComputers, _treatAsCustom, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
         ["Hackable Object Added!"] call zen_common_fnc_showMessage;
     }, 
     {

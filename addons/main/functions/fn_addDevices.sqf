@@ -34,7 +34,7 @@ private _allObjects = createHashMap;
 
     if(_sizeX == 0 && _sizeY == 0) then {
         private _customName = vehicleVarName _x;
-        _allCustom pushback [_customName, netId _x];
+        _allCustom pushBack [_customName, netId _x];
         _x setTriggerActivation ["NONE", "PRESENT", true];
         _x setTriggerArea [worldSize, worldSize, 0, true];
         _x setPos [worldSize/2, worldSize/2, 0];
@@ -85,18 +85,18 @@ private _drones = _uniqueObjects select {unitIsUAV _x};
                 private _doorNumber = parseNumber (((_regexFinds select 0) select 1) select 0);
 
                 if(!(_doorNumber in _buildingDoors)) then {
-                    if(count _buildingDoors == 0) then {
-                        _buildingDoors pushback _doorNumber;
+                    if(_buildingDoors isEqualTo []) then {
+                        _buildingDoors pushBack _doorNumber;
                     };
-                    if((_buildingDoors select ((count _buildingDoors) -1)) != _doorNumber) then {
-                        _buildingDoors pushback _doorNumber;
+                    if((_buildingDoors select -1) != _doorNumber) then {
+                        _buildingDoors pushBack _doorNumber;
                     };
                 };
             };
         };
     } forEach _simpleObjects;
 
-    if(count _buildingDoors > 0) then {
+    if(_buildingDoors isNotEqualTo []) then {
         private _buildingNetId = netId _building;
 
         private _buildingId = 0;
@@ -116,14 +116,14 @@ private _drones = _uniqueObjects select {unitIsUAV _x};
         _typeofhackable = 1;
 
         // Link to all computers if any exist
-        _allDoors pushback [_buildingId, _buildingNetId, _buildingDoors, _allComputers];
+        _allDoors pushBack [_buildingId, _buildingNetId, _buildingDoors, _allComputers];
     };
 
 } forEach _buildings;
 
 for "_i" from 0 to ((count _lamps) - 1) do {
     // Link to all computers if any exist
-    _allLamps pushback [_i + 1, netId (_lamps select _i), _allComputers];
+    _allLamps pushBack [_i + 1, netId (_lamps select _i), _allComputers];
 };
 
 {
@@ -143,7 +143,7 @@ for "_i" from 0 to ((count _lamps) - 1) do {
     };
 
     // Link to all computers if any exist
-    _allDrones pushback [_droneId, netId _x, _allComputers];
+    _allDrones pushBack [_droneId, netId _x, _allComputers];
 } forEach _drones;
 
 private _syncedDatabases = synchronizedObjects _module select { _x isKindOf "Root_CyberWarfareAddDatabase" };
@@ -164,11 +164,11 @@ private _syncedDatabases = synchronizedObjects _module select { _x isKindOf "Roo
     };
 
     // Link to all computers if any exist
-    _allDatabases pushback [_databaseId, netId _x, _allComputers];
+    _allDatabases pushBack [_databaseId, netId _x, _allComputers];
 } forEach _syncedDatabases;
 
 // Handle device linking for all devices to all computers
-if (count _allComputers > 0) then {
+if (_allComputers isNotEqualTo []) then {
     private _deviceLinks = missionNamespace getVariable ["ROOT-Device-Links", []];
     
     // Process doors (type 1)
@@ -178,7 +178,7 @@ if (count _allComputers > 0) then {
             private _computerNetId = _x;
             private _existingLinks = _deviceLinks select {_x select 0 == _computerNetId};
             
-            if (count _existingLinks == 0) then {
+            if (_existingLinks isEqualTo []) then {
                 _deviceLinks pushBack [_computerNetId, [[1, _deviceId]]];
             } else {
                 private _index = _deviceLinks find (_existingLinks select 0);
@@ -196,7 +196,7 @@ if (count _allComputers > 0) then {
             private _computerNetId = _x;
             private _existingLinks = _deviceLinks select {_x select 0 == _computerNetId};
             
-            if (count _existingLinks == 0) then {
+            if (_existingLinks isEqualTo []) then {
                 _deviceLinks pushBack [_computerNetId, [[2, _deviceId]]];
             } else {
                 private _index = _deviceLinks find (_existingLinks select 0);
@@ -214,7 +214,7 @@ if (count _allComputers > 0) then {
             private _computerNetId = _x;
             private _existingLinks = _deviceLinks select {_x select 0 == _computerNetId};
             
-            if (count _existingLinks == 0) then {
+            if (_existingLinks isEqualTo []) then {
                 _deviceLinks pushBack [_computerNetId, [[3, _deviceId]]];
             } else {
                 private _index = _deviceLinks find (_existingLinks select 0);
@@ -232,7 +232,7 @@ if (count _allComputers > 0) then {
             private _computerNetId = _x;
             private _existingLinks = _deviceLinks select {_x select 0 == _computerNetId};
             
-            if (count _existingLinks == 0) then {
+            if (_existingLinks isEqualTo []) then {
                 _deviceLinks pushBack [_computerNetId, [[4, _deviceId]]];
             } else {
                 private _index = _deviceLinks find (_existingLinks select 0);

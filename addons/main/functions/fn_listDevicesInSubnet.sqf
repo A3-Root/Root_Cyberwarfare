@@ -10,26 +10,26 @@ private _allCustom = _allDevices select 4;
 
 // Filter devices based on accessibility
 private _accessibleDoors = _allDoors select { 
-    [_computer, 1, _x select 0, _commandPath] call Root_fnc_IsDeviceAccessible 
+    [_computer, 1, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible 
 };
 
 private _accessibleLights = _allLights select { 
-    [_computer, 2, _x select 0, _commandPath] call Root_fnc_IsDeviceAccessible 
+    [_computer, 2, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible 
 };
 
 private _accessibleDrones = _allDrones select { 
-    [_computer, 3, _x select 0, _commandPath] call Root_fnc_IsDeviceAccessible 
+    [_computer, 3, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible 
 };
 
 private _accessibleDatabases = _allDatabases select { 
-    [_computer, 4, _x select 0, _commandPath] call Root_fnc_IsDeviceAccessible 
+    [_computer, 4, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible 
 };
 
 private _accessibleCustom = _allCustom select { 
-    [_computer, 5, _x select 0, _commandPath] call Root_fnc_IsDeviceAccessible 
+    [_computer, 5, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible 
 };
 
-if (count _accessibleDoors != 0) then {
+if (_accessibleDoors isNotEqualTo []) then {
     {
         private _building = objectFromNetId (_x select 1);
         private _buildingDisplayName = getText (configFile >> "CfgVehicles" >> typeOf _building >> "displayName");
@@ -66,7 +66,7 @@ if (count _accessibleDoors != 0) then {
     } forEach _accessibleDoors;
 };
 
-if (count _accessibleLights != 0) then {
+if (_accessibleLights isNotEqualTo []) then {
     _string = format ["Lights:"];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     {
@@ -85,7 +85,7 @@ if (count _accessibleLights != 0) then {
     } forEach _accessibleLights;
 };
 
-if (count _accessibleDrones != 0) then {
+if (_accessibleDrones isNotEqualTo []) then {
     _string = format ["Drones:"];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     {
@@ -118,7 +118,7 @@ if (count _accessibleDrones != 0) then {
     } forEach _accessibleDrones;
 };
 
-if (count _accessibleDatabases != 0) then {
+if (_accessibleDatabases isNotEqualTo []) then {
     _string = format ["Files:"];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     {
@@ -131,7 +131,7 @@ if (count _accessibleDatabases != 0) then {
     } forEach _accessibleDatabases;
 };
 
-if (count _accessibleCustom != 0) then {
+if (_accessibleCustom isNotEqualTo []) then {
     _string = format ["Custom Devices:"];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     {

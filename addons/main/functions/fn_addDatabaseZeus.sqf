@@ -54,7 +54,7 @@ hint str format ['Code triggered'];", {}, 7]],
 
         // If available to future laptops, keep the selected computers but mark for future availability
         // If not available to future laptops and no computers selected, use all current computers
-        if (!_availableToFutureLaptops && count _linkedComputers == 0) then {
+        if (!_availableToFutureLaptops && _linkedComputers isEqualTo []) then {
             _linkedComputers = _allComputers apply { _x select 0 };
         };
         
@@ -66,7 +66,7 @@ hint str format ['Code triggered'];", {}, 7]],
         private _allCustom = _allDevices select 4;
         private _databaseId = 0;
         private _execUserId = clientOwner;
-        [_allDatabases, _databaseId, _fileObject, _filename, _filesize, _filecontent, _allDevices, _allDoors, _allLamps, _allDrones, _allCustom, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops] remoteExec ["Root_fnc_AddDatabaseZeusMain", 2];
+        [_allDatabases, _databaseId, _fileObject, _filename, _filesize, _filecontent, _allDevices, _allDoors, _allLamps, _allDrones, _allCustom, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
         ["Hackable File Added!"] call zen_common_fnc_showMessage;
     },  
     {

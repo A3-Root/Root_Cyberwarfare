@@ -18,10 +18,10 @@ if(_buildingIdNum != 0 && (_doorIdNum != 0 || _doorId isEqualTo "a") && (_doorDe
 
     // Filter doors to only those accessible by this computer
     private _accessibleDoors = _allDoors select { 
-        [_computer, 1, _x select 0, _commandPath] call Root_fnc_IsDeviceAccessible 
+        [_computer, 1, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible 
     };
 
-    if (count _accessibleDoors == 0) then {
+    if (_accessibleDoors isEqualTo []) then {
         _string = "Error! No accessible buildings found or access denied.";
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         missionNamespace setVariable [_nameOfVariable, true, true];
@@ -46,12 +46,12 @@ if(_buildingIdNum != 0 && (_doorIdNum != 0 || _doorId isEqualTo "a") && (_doorDe
                     if(_doorDesiredState isEqualTo "unlock" && _currentState != 0) then {
                         _countOfChangingDoors = _countOfChangingDoors + 1;
                     };
-                } foreach _doorsOfBuilding;
+                } forEach _doorsOfBuilding;
                 _affectedBuildings pushBack _x;
             };
         } forEach _accessibleDoors;
 
-        if (count _affectedBuildings == 0) then {
+        if (_affectedBuildings isEqualTo []) then {
             _string = "Error! No accessible buildings found for the specified criteria.";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             missionNamespace setVariable [_nameOfVariable, true, true];
@@ -81,7 +81,7 @@ if(_buildingIdNum != 0 && (_doorIdNum != 0 || _doorId isEqualTo "a") && (_doorDe
             };
         };
 
-        [_computer, _battery, (_powerCostPerDoor * _countOfChangingDoors)] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\RemovePower.sqf";
+        [_computer, _battery, (_powerCostPerDoor * _countOfChangingDoors)] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\fn_removePower.sqf";
         
         // Apply changes to all accessible buildings
         {
@@ -96,7 +96,7 @@ if(_buildingIdNum != 0 && (_doorIdNum != 0 || _doorId isEqualTo "a") && (_doorDe
                     if(_doorDesiredState isEqualTo "unlock") then {
                         _building setVariable [format ["bis_disabled_Door_%1", _x], 0, true];
                     };
-                } foreach _doorsOfBuilding;
+                } forEach _doorsOfBuilding;
             };
         } forEach _affectedBuildings;
         
@@ -144,7 +144,7 @@ if(_buildingIdNum != 0 && (_doorIdNum != 0 || _doorId isEqualTo "a") && (_doorDe
                         _building setVariable [format ["bis_disabled_Door_%1", _doorIdNum], 1, true];
                         _string = format ["Door locked."];
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                        [_computer, _battery, _powerCostPerDoor] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\RemovePower.sqf";
+                        [_computer, _battery, _powerCostPerDoor] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\fn_removePower.sqf";
                     } else {
                         if(_doorDesiredState isEqualTo "lock" && _currentState == 1) then {
                             _string = format ["Door already locked."];
@@ -178,7 +178,7 @@ if(_buildingIdNum != 0 && (_doorIdNum != 0 || _doorId isEqualTo "a") && (_doorDe
                                 _building setVariable [format ["bis_disabled_Door_%1", _doorIdNum], 0, true];
                                 _string = format ["Door unlocked."];
                                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                                [_computer, _battery, _powerCostPerDoor] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\RemovePower.sqf";
+                                [_computer, _battery, _powerCostPerDoor] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\fn_removePower.sqf";
                             } else {
                                 if(_doorDesiredState isEqualTo "unlock" && _currentState == 0) then {
                                     _string = format ["Door already unlocked."];

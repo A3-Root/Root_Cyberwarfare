@@ -12,10 +12,10 @@ if((_lightIdNum != 0 || _lightId isEqualTo "a") && (_lightState isEqualTo "on" |
 
     // Filter lights to only those accessible by this computer
     private _accessibleLights = _allLights select { 
-        [_computer, 2, _x select 0, _commandPath] call Root_fnc_IsDeviceAccessible 
+        [_computer, 2, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible 
     };
 
-    if (count _accessibleLights == 0) then {
+    if (_accessibleLights isEqualTo []) then {
         _string = "Error! No accessible lights found or access denied.";
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         missionNamespace setVariable [_nameOfVariable, true, true];

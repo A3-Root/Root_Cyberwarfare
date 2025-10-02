@@ -1,4 +1,4 @@
-// Root_fnc_IsDeviceAccessible
+// Root_fnc_isDeviceAccessible
 // Checks if a computer can access a specific device with optional backdoor bypass
 // Parameters: [_computer, _deviceType, _deviceId, _commandPath]
 // Returns: Boolean
@@ -48,13 +48,13 @@ private _computerNetId = netId _computer;
 private _deviceLinks = missionNamespace getVariable ["ROOT-Device-Links", []];
 
 // If no devices are linked to any computers, no access to private devices
-if (count _deviceLinks == 0) exitWith { false };
+if (_deviceLinks isEqualTo []) exitWith { false };
 
 // Find this computer's allowed devices
 private _computerLinks = _deviceLinks select { _x select 0 == _computerNetId };
 
 // If computer has no specific links, it can't access any restricted devices
-if (count _computerLinks == 0) exitWith { false };
+if (_computerLinks isEqualTo []) exitWith { false };
 
 // Check if this device is in the allowed list
 private _allowedDevices = (_computerLinks select 0) select 1;

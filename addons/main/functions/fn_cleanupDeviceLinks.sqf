@@ -1,4 +1,4 @@
-// Root_fnc_CleanupDeviceLinks
+// Root_fnc_cleanupDeviceLinks
 // Cleans up device links for deleted computers
 
 if (!isServer) exitWith {};

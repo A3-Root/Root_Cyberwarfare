@@ -15,7 +15,7 @@ ROOT_customLaptopName = format ["HackingPlatform_%1", ROOT_customLaptopNameIndex
 	], {
 		params ["_results", "_entity"];
 		_results params ["_path", "_customName"];
-		[_entity, _path, _execUserId, _customName] remoteExec ["ROOT_fnc_AddHackingToolsZeusMain", 2];
+		[_entity, _path, _execUserId, _customName] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
 		ROOT_customLaptopNameIndex = ROOT_customLaptopNameIndex + 1;
 		["Hacking Tool Added to the Device!"] call zen_common_fnc_showMessage;
 	}, {

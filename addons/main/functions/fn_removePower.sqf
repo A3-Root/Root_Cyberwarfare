@@ -6,7 +6,7 @@ private _string = "";
 
 private _newLevel = _batteryLevel - (_changeWh/1000);
 
-_battery setVariable ["AE3_power_batteryLevel", _newLevel];
+_battery setVariable ["AE3_power_batteryLevel", _newLevel, true];
 
 _string = format ['Power Cost: %1Wh', _changeWh];
 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
