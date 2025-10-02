@@ -69,8 +69,6 @@ if (_backdoor != "") then {
         };
         private _computerNetIdString = str (netId _x);
         _content = "
-            Table of content:
-
             Type 'devices' to list all devices you can hack into.
                     .
             Type 'door DoorID (ID or 'a' for all) lock/unlock' to lock/unlock doors. Ex: 'door 2881 lock' or 'door a unlock'

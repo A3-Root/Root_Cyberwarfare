@@ -42,6 +42,7 @@ class CfgFactionClasses {
 class CfgFunctions {
 	class Root {
 		class RootCyberWarfareCategory {
+			file = "\z\root_cyberwarfare\addons\main\functions";
 			class addDatabaseZeus {};
 			class addDatabaseZeusMain {};
 			class addDevices {};
@@ -74,9 +75,7 @@ class CfgVehicles {
 			class Edit;
 			class ModuleDescription;
 		};
-		class ModuleDescription {
-			class Anything;
-		};
+		class ModuleDescription;
 	};
 	class ROOT_ModuleAddDevices: Module_F {
 		scope = 2;

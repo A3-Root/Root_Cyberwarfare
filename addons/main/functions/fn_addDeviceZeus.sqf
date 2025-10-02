@@ -12,7 +12,8 @@ if !(hasInterface) exitWith {};
 private _allComputers = [];
 {
     if (_x getVariable ["ROOT_HackingTools", false]) then {
-        private _computerName = _x getVariable ["ROOT_CustomName", getText (configFile >> "CfgVehicles" >> typeOf _x >> "displayName")];
+        private _displayName = getText (configOf _x >> "displayName");
+        private _computerName = _x getVariable ["ROOT_CustomName", _displayName];
         private _netId = netId _x;
         private _position = getPosATL _x;
         private _gridPos = mapGridPosition _x;
@@ -37,7 +38,7 @@ hint str format ['Code triggered'];", {}, 7]],
 } forEach _allComputers;
 
 [
-    format ["Add Hackable Object - %1", getText (configFile >> "CfgVehicles" >> typeOf _targetObject >> "displayName")], 
+    format ["Add Hackable Object - %1", getText (configOf _targetObject >> "displayName")], 
     _dialogControls,
     // Fix the dialog result handler section:
     {

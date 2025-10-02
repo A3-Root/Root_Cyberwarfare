@@ -74,7 +74,8 @@ private _drones = _uniqueObjects select {unitIsUAV _x};
     private _buildingDoors = [];
 
     private _building = _x;
-    private _config = configFile >> "CfgVehicles" >> typeOf _building;
+    // private _config = configFile >> "CfgVehicles" >> typeOf _building;
+    private _config = configOf _building;
 
     private _simpleObjects = getArray (_config >> "SimpleObject" >> "animate");
     {

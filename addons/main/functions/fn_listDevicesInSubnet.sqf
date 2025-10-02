@@ -32,7 +32,8 @@ private _accessibleCustom = _allCustom select {
 if (_accessibleDoors isNotEqualTo []) then {
     {
         private _building = objectFromNetId (_x select 1);
-        private _buildingDisplayName = getText (configFile >> "CfgVehicles" >> typeOf _building >> "displayName");
+        // private _buildingDisplayName = getText (configFile >> "CfgVehicles" >> typeOf _building >> "displayName");
+        private _buildingDisplayName = getText (configOf _building >> "displayName");
         private _mapGridPos = mapGridPosition _building;
         private _doorsOfBuilding = _x select 2;
         _string = format ["Building: %1 (%2) located at Grid - %3", (_x select 0), _buildingDisplayName, _mapGridPos];
@@ -72,7 +73,8 @@ if (_accessibleLights isNotEqualTo []) then {
     {
         private _lightId = _x select 0;
         private _light = objectFromNetId (_x select 1);
-        private _lightDisplayName = getText (configFile >> "CfgVehicles" >> typeOf _light >> "displayName");
+        private _lightDisplayName = getText (configOf _light >> "displayName");
+        // private _lightDisplayName = getText (configFile >> "CfgVehicles" >> typeOf _light >> "displayName");
         private _mapGridPos = mapGridPosition _light;
         private _currentState = lightIsOn _light;
         private _currentStateStringColor = "#8ce10b";
@@ -91,7 +93,8 @@ if (_accessibleDrones isNotEqualTo []) then {
     {
         private _droneId = _x select 0;
         private _drone = objectFromNetId (_x select 1);
-        private _droneName = getText (configFile >> "CfgVehicles" >> typeOf (vehicle _drone) >> "displayName");
+        private _droneName = getText (configOf (vehicle _drone) >> "displayName");
+        // private _droneName = getText (configFile >> "CfgVehicles" >> typeOf (vehicle _drone) >> "displayName");
         private _mapGridPos = mapGridPosition _drone;
         private _droneSide = side _drone;
         private _droneSideString = side _drone;

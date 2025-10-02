@@ -24,7 +24,7 @@ private _netId = netId _targetObject;
 
 private _existingDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], []]];
 
-private _displayName = getText (configFile >> "CfgVehicles" >> typeOf _targetObject >> "displayName");
+private _displayName = getText (configOf _targetObject >> "displayName");
 
 private _typeofhackable = 0;
 private _deviceId = 0;
@@ -65,7 +65,8 @@ if (_treatAsCustom) then {
 
         private _buildingDoors = [];
         private _building = _targetObject;
-        private _config = configFile >> "CfgVehicles" >> typeOf _building;
+        // private _config = configFile >> "CfgVehicles" >> typeOf _building;
+        private _config = configOf _building;
         private _simpleObjects = getArray (_config >> "SimpleObject" >> "animate");
         {
             if(count _x == 2) then {
