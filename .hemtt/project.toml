@@ -10,6 +10,10 @@ include = [
     "root_cyberwarfare_logo.paa",
     "README.md",
 ]
+exclude = [
+    "repomix-output.xml",
+    ".gitignore",
+]
 
 [properties]
 author = "Root"
