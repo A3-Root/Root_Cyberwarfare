@@ -11,7 +11,8 @@ class CfgPatches {
 			"ROOT_CyberWarfareAddDeviceZeus",
 			"ROOT_CyberWarfareAddHackingToolsZeus",
 			"ROOT_CyberWarfareModifyPowerZeus",
-			"ROOT_CyberWarfareAddDatabaseZeus"
+			"ROOT_CyberWarfareAddFileZeus",
+			"ROOT_CyberWarfareAddGPSTrackerZeus"
 		};
 		requiredAddons[] = {
 			"A3_Modules_F_Curator",
@@ -215,11 +216,18 @@ class CfgVehicles {
 		function = "Root_fnc_modifyPowerZeus";
 		displayName = "Modify Power Costs";
 	};
-	class ROOT_CyberWarfareAddDatabaseZeus: zen_modules_moduleBase {
+	class ROOT_CyberWarfareAddFileZeus: zen_modules_moduleBase {
 		author = "Root";
-		_generalMacro = "ROOT_CyberWarfareAddDatabaseZeus";
+		_generalMacro = "ROOT_CyberWarfareAddFileZeus";
 		category = "ROOT_CYBERWARFARE";
 		function = "Root_fnc_addDatabaseZeus";
 		displayName = "Add Hackable File";
+	};
+	class ROOT_CyberWarfareAddGPSTrackerZeus: zen_modules_moduleBase {
+		author = "Root";
+		_generalMacro = "ROOT_CyberWarfareAddGPSTrackerZeus";
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_addGPSTrackerZeus";
+		displayName = "Add GPS Tracker";
 	};
 };
