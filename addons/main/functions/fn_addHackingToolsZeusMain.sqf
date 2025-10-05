@@ -60,7 +60,7 @@ private _computerNetIdString = str (netId _entity);
 _content = "
     Type 'devices' to list all devices you can hack into.
             .
-    Type 'door BuildingID DoorID (ID or 'a' for all) lock/unlock' to lock/unlock doors. Ex: 'door 2881 lock' or 'door a unlock'
+    Type 'door BuildingID DoorID (ID or 'a' for all) lock/unlock' to lock/unlock doors. Ex: 'door 1454 2881 lock' or 'door 1454 a unlock'
             .
     Type 'light LightID (ID or 'a' for all) off/on' to turn lights off or on. Ex: 'light a on' or 'light 3 off'
             .
