@@ -49,6 +49,8 @@ class CfgFunctions {
 			class addDevices {};
 			class addDeviceZeus {};
 			class addDeviceZeusMain {};
+			class addGPSTrackerZeus {};
+			class addGPSTrackerZeusMain {};
 			class addHackingTools {};
 			class addHackingToolsZeus {};
 			class addHackingToolsZeusMain {};
