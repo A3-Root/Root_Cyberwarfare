@@ -60,10 +60,13 @@ class CfgFunctions {
 			class cleanupDeviceLinks {
 				postInit = 1;
 			};
+			class createDiaryEntry {
+				postInit = 1;
+			};
 			class customDevice {};
 			class disableDrone {};
+			class displayGPSPosition {};
 			class downloadDatabase {};
-			class gpsTracker {};
 			class isDeviceAccessible {};
 			class listDevicesInSubnet {};
 			class modifyPowerZeus {};

@@ -350,7 +350,7 @@ _content = "
     private _nameOfVariable = 'ROOT-GpsTrack-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _trackerId, _commandName] remoteExec ['Root_fnc_gpsTracker', _owner];
+    [_owner, _computer, _nameOfVariable, _trackerId, _commandName] remoteExec ['Root_fnc_displayGPSPosition', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
