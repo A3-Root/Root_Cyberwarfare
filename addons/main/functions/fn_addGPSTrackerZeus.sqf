@@ -23,31 +23,28 @@ private _allComputers = [];
 } forEach (24 allObjects 1);
 
 private _dialogControls = [
-    ["TOOLBOX:YESNO", ["Treat as Custom Device", "Add the object EXCLUSIVELY to the 'Custom' section?"], false],
-    ["EDIT", ["Custom Device Name", "Name that will appear in the terminal for this device (only if treated as custom)"], ["Power Generator Overload"]],
-    ["EDIT:CODE", ["Activation Code (Custom Device Only)", "Code to run in a SCHEDULED environment (spawn) when device is activated. Use (_this select 0) to reference the computer object."], ["// Example: Display Hint when triggered 
-hint str format ['Code triggered'];", {}, 7]],
-    ["EDIT:CODE", ["Deactivation Code (Custom Device Only)", "Code to run in a SCHEDULED environment (spawn) when device is deactivated. Use (_this select 0) to reference the computer object."], ["// Example: Display Hint when triggered 
-hint str format ['Code triggered'];", {}, 7]],
-    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false]
+    ["EDIT", ["Tracker Name", "Name that will appear in the terminal for this tracker"], ["High Value Target"]],
+    ["SLIDER", ["Tracking Time (seconds)", "Maximum time in seconds the tracking will stay active"], [0, 300, 60, 0]],
+    ["SLIDER", ["Update Frequency (seconds)", "Frequency in seconds between position updates"], [0, 30, 5, 0]],
+    ["EDIT", ["Custom Marker (optional)", "Custom marker name to use (leave empty for default)"], [""]],
+    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this tracker be available to laptops that are added later?"], false]
 ];
 
 // Add a checkbox for each computer
 {
     _x params ["_netId", "_computerName"];
-    _dialogControls pushBack ["CHECKBOX", [_computerName, format ["Link this device to %1", _computerName]], false];
+    _dialogControls pushBack ["CHECKBOX", [_computerName, format ["Link this tracker to %1", _computerName]], false];
 } forEach _allComputers;
 
 [
-    format ["Add Hackable Object - %1", getText (configOf _targetObject >> "displayName")], 
+    format ["Add GPS Tracker - %1", getText (configOf _targetObject >> "displayName")], 
     _dialogControls,
-    // Fix the dialog result handler section:
     {
         params ["_results", "_args"];
         _args params ["_targetObject", "_execUserId", "_allComputers"];
         
-        // First five results are the device configuration
-        _results params ["_treatAsCustom", "_customName", "_activationCode", "_deactivationCode", "_availableToFutureLaptops"];
+        // First five results are the tracker configuration
+        _results params ["_trackerName", "_trackingTime", "_updateFrequency", "_customMarker", "_availableToFutureLaptops"];
         
         // The rest are checkbox values for each computer
         private _selectedComputers = [];
@@ -66,8 +63,8 @@ hint str format ['Code triggered'];", {}, 7]],
         };
         
         // Pass all parameters including the availability setting
-        [_targetObject, _execUserId, _selectedComputers, _treatAsCustom, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-        ["Hackable Object Added!"] call zen_common_fnc_showMessage;
+        [_targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
+        ["GPS Tracker Added!"] call zen_common_fnc_showMessage;
     }, 
     {
         ["Aborted"] call zen_common_fnc_showMessage;

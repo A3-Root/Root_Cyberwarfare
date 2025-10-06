@@ -22,6 +22,8 @@ _changedrone = _result + "/changedrone";
 _disabledrone = _result + "/disabledrone";
 _download = _result + "/download";
 _custom = _result + "/custom";
+_gpstrack = _result + "/gpstrack";
+
 
 
 if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then 
@@ -46,6 +48,7 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
     _disabledrone = _result + "disabledrone";
     _download = _result + "download";
     _custom = _result + "custom";
+    _gpstrack = _result + "gpstrack";
 } else {
     if (_execUserId == 0) then {
         _execUserId = owner _entity;
@@ -71,6 +74,9 @@ _content = "
     Type 'download FileID' to download the File into the 'Downloads' folder. Ex: 'download 1234'
             .
     Type 'custom customId activate/deactivate to activate or deactivate a custom device. Ex: 'custom 5 activate'
+            .
+    Type 'gpstrack TrackerID' to start tracking a GPS target. Ex: 'gpstrack 2421'
+'
 ";
 
 [_entity, _guide, _content, false, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call AE3_filesystem_fnc_device_addFile;
@@ -318,8 +324,41 @@ _content = "
         [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
     };
 ";
-
 [_entity, _custom, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call AE3_filesystem_fnc_device_addFile;
+
+_content = "
+    params['_computer', '_options', '_commandName'];
+
+    private _commandOpts = [];
+    private _commandSyntax =
+    [
+        [
+            ['command', _commandName, true, false],
+            ['path', 'trackerId', true, false]
+        ]
+    ];
+    private _commandSettings = [_commandName, _commandOpts, _commandSyntax];
+
+    [] params ([_computer, _options, _commandSettings] call AE3_armaos_fnc_shell_getOpts);
+
+    if (!_ae3OptsSuccess) exitWith {};
+
+    private _trackerId = (_ae3OptsThings select 0);
+
+    private _owner = clientOwner;
+
+    private _nameOfVariable = 'ROOT-GpsTrack-' + "+ _computerNetIdString +";
+
+    missionNamespace setVariable [_nameOfVariable, false, true];
+    [_owner, _computer, _nameOfVariable, _trackerId, _commandName] remoteExec ['Root_fnc_gpsTracker', _owner];
+    private _tStart = time;
+    waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
+    if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
+        [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
+    };
+";
+[_entity, _gpstrack, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call AE3_filesystem_fnc_device_addFile;
+
 
 
 [format ["Root Cyber Warfare: Added Hacking Tools to Path: %1", _result]] remoteExec ["systemChat", _execUserId];

@@ -63,6 +63,7 @@ class CfgFunctions {
 			class customDevice {};
 			class disableDrone {};
 			class downloadDatabase {};
+			class gpsTracker {};
 			class isDeviceAccessible {};
 			class listDevicesInSubnet {};
 			class modifyPowerZeus {};
@@ -228,6 +229,7 @@ class CfgVehicles {
 	class ROOT_CyberWarfareAddGPSTrackerZeus: zen_modules_moduleBase {
 		author = "Root";
 		_generalMacro = "ROOT_CyberWarfareAddGPSTrackerZeus";
+		curatorCanAttach = 1;
 		category = "ROOT_CYBERWARFARE";
 		function = "Root_fnc_addGPSTrackerZeus";
 		displayName = "Add GPS Tracker";

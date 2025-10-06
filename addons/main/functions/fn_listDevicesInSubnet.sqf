@@ -7,6 +7,7 @@ private _allLights = _allDevices select 1;
 private _allDrones = _allDevices select 2;
 private _allDatabases = _allDevices select 3;
 private _allCustom = _allDevices select 4;
+private _allGpsTrackers = _allDevices select 5;
 
 // Filter devices based on accessibility
 private _accessibleDoors = _allDoors select { 
@@ -27,6 +28,10 @@ private _accessibleDatabases = _allDatabases select {
 
 private _accessibleCustom = _allCustom select { 
     [_computer, 5, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible 
+};
+
+private _accessibleGpsTrackers = _allGpsTrackers select { 
+    [_computer, 6, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible 
 };
 
 if (_accessibleDoors isNotEqualTo []) then {
@@ -143,6 +148,29 @@ if (_accessibleCustom isNotEqualTo []) then {
         _string = format ["    %1 (ID: %2)", _customName, _customId];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     } forEach _accessibleCustom;
+};
+
+if (_accessibleGpsTrackers isNotEqualTo []) then {
+    _string = format ["GPS Trackers:"];
+    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+    {
+        private _trackerId = _x select 0;
+        private _trackerName = _x select 2;
+        private _trackingTime = _x select 3;
+        private _updateFrequency = _x select 4;
+        private _status = (_x select 8) select 0; // Get status from [status, startTime, markerName]
+        
+        private _statusColor = "#8ce10b"; // Green for Untracked
+        if (_status == "Tracked") then {
+            _statusColor = "#008DF8"; // Blue for Tracked
+        } else {
+            if (_status == "Dead") then {
+                _statusColor = "#fa4c58"; // Red for Dead
+            };
+        };
+        _string = format ["    %1 (ID: %2) - %3s - %4s - ", _trackerName, _trackerId, _trackingTime, _updateFrequency];
+        [_computer, [[_string, [_status, _statusColor]]]] call AE3_armaos_fnc_shell_stdout;
+    } forEach _accessibleGpsTrackers;
 };
 
 missionNamespace setVariable [_nameOfVariable, true, true];
