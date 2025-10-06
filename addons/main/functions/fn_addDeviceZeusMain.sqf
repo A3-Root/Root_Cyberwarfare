@@ -182,10 +182,10 @@ if (count _linkedComputers > 0) then {
     missionNamespace setVariable ["ROOT-Device-Links", _deviceLinks, true];
 };
 
+private _excludedNetIds = [];
 /// Handle public device access
 if (_availableToFutureLaptops || count _linkedComputers == 0) then {
     private _publicDevices = missionNamespace getVariable ["ROOT-Public-Devices", []];
-    private _excludedNetIds = [];
 
     if (_availableToFutureLaptops) then {
         if (count _linkedComputers > 0) then {

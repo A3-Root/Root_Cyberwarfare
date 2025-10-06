@@ -21,7 +21,7 @@ if (count _allDatabases > 0) then {
 };
 
 // Store database variables
-_allDatabases pushBack [_databaseId, netId _fileObject, _linkedComputers, _availableToFutureLaptops];
+_allDatabases pushBack [_databaseId, netId _fileObject, _filename, _filesize, _linkedComputers, _availableToFutureLaptops];
 _fileObject setVariable ["ROOT_DatabaseName_Edit", _filename, true];
 _fileObject setVariable ["ROOT_DatabaseSize_Edit", _filesize, true];
 _fileObject setVariable ["ROOT_DatabaseData_Edit", _filecontent, true];
@@ -52,10 +52,10 @@ if (count _linkedComputers > 0) then {
     missionNamespace setVariable ["ROOT-Device-Links", _deviceLinks, true];
 };
 
+private _excludedNetIds = [];
 // Handle public device access
 if ((_availableToFutureLaptops) || (count _linkedComputers == 0)) then {
     private _publicDevices = missionNamespace getVariable ["ROOT-Public-Devices", []];
-    private _excludedNetIds = [];
 
     if (_availableToFutureLaptops) then {
         if (count _linkedComputers > 0) then {

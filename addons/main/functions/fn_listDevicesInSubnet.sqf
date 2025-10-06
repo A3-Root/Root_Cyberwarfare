@@ -31,7 +31,9 @@ private _accessibleCustom = _allCustom select {
 };
 
 private _accessibleGpsTrackers = _allGpsTrackers select { 
-    [_computer, 6, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible 
+    private _deviceData = _x;
+    private _deviceId = _deviceData select 0;
+    [_computer, 6, _deviceId, _commandPath] call Root_fnc_isDeviceAccessible 
 };
 
 if (_accessibleDoors isNotEqualTo []) then {
@@ -132,8 +134,8 @@ if (_accessibleDatabases isNotEqualTo []) then {
     {
         private _databaseId = _x select 0;
         private _database = objectFromNetId (_x select 1);
-        private _databaseName = _database getVariable ["ROOT_DatabaseName_Edit", "Unknown Database"];
-        private _databaseSize = _database getVariable ["ROOT_DatabaseSize_Edit", 10];
+        private _databaseName = _x select 2;
+        private _databaseSize = _x select 3;
         _string = format ["    File: %2 (ID: %1)    Est. Transfer Time: %3 seconds", _databaseId, _databaseName, _databaseSize];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     } forEach _accessibleDatabases;

@@ -39,7 +39,7 @@ if (_trackerIdNum != 0) then {
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 } else {
                     // Check if retracking is allowed for completed trackers
-                    if (((_currentStatus select 0) == "Completed") && !(_allowRetracking)) then {
+                   if (((_currentStatus select 0) in ["Completed", "Untrackable"]) && !(_allowRetracking)) then {
                         _string = format ["Tracker '%1' (ID: %2) cannot be tracked again.", _trackerName, _trackerIdNum];
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     } else {
@@ -113,9 +113,9 @@ if (_trackerIdNum != 0) then {
                                 _markerName setMarkerColorLocal "ColorCIV";
                                 
                                 // Update status based on retracking permission
-                                private _newStatus = "Trackable"; 
+                                private _newStatus = "Completed"; 
                                 if !(_allowRetracking) then {
-                                    private _newStatus = "Untrackable" ;
+                                    _newStatus = "Untrackable";
                                 };
     
                                 private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", []];
@@ -141,8 +141,8 @@ if (_trackerIdNum != 0) then {
                                 } forEach _allGpsTrackers;
                                 
                                 // Notify user that tracking ended
-                                private _endString = format ["Tracking for target ID %1 has ended. Marker remains at last known position.", _trackerIdNum];
-                                [_computer, _endString] call AE3_armaos_fnc_shell_stdout;
+                                _string = format ["Tracking for target ID %1 has ended. Marker remains at last known position.", _trackerIdNum];
+                                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                             };
                         };
                     };

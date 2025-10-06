@@ -12,7 +12,7 @@ private _backdoorPaths = _computer getVariable ["ROOT_BackdoorFunction", []];
 private _isBackdoorAccess = false;
 
 {
-    if (_commandPath find _x == 0) then { // Check if function executed is the BACKDOOR Function
+    if (_commandPath find _x == 0) then {
         _isBackdoorAccess = true;
         break;
     };
@@ -21,29 +21,36 @@ private _isBackdoorAccess = false;
 // If this is a backdoor path, grant access to all devices
 if (_isBackdoorAccess) exitWith { true };
 
-// Normal access check (existing logic)
 if !(_computer getVariable ["ROOT_HackingTools", false]) exitWith { false };
 
-// Check if this device is in the public list
+// Check if this device is in the public list FIRST
 private _publicDevices = missionNamespace getVariable ["ROOT-Public-Devices", []];
 
-// Find the public entry index for this device (if any)
-private _publicEntryIndex = _publicDevices findIf { (_x select 0) == _deviceType && ((_x select 1) == _deviceId) };
+// Find the public entry for this device (if any)
+private _publicEntries = _publicDevices select { (_x select 0) == _deviceType && ((_x select 1) == _deviceId) };
 
-if (_publicEntryIndex != -1) then {
-    private _entry = _publicDevices select _publicEntryIndex;
+private _publicStatus = false;
+
+if (_publicEntries isNotEqualTo []) then {
+    private _entry = _publicEntries select 0;
     private _excludedNetIds = if ((count _entry) > 2) then { _entry select 2 } else { [] };
     private _computerNetId = netId _computer;
 
     // If there's no exclusion list -> fully public
-    if (count _excludedNetIds == 0) exitWith { true };
+    if (_excludedNetIds isEqualTo []) exitWith {
+        _publicStatus = true;
+        true
+    };
 
     // If exclusion list exists, allow only if this computer's netId is NOT listed
-    if ((_excludedNetIds find _computerNetId) == -1) exitWith { true };
+    if !(_computerNetId in _excludedNetIds) exitWith {
+        _publicStatus = true;
+        true
+    };
 };
 
-
-
+if (_publicStatus) exitWith { true };
+// ONLY if public access is not granted, check private device links
 private _computerNetId = netId _computer;
 private _deviceLinks = missionNamespace getVariable ["ROOT-Device-Links", []];
 

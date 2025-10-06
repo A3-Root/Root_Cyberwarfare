@@ -68,10 +68,10 @@ if (count _linkedComputers > 0) then {
     missionNamespace setVariable ["ROOT-Device-Links", _deviceLinks, true];
 };
 
+private _excludedNetIds = [];
 // Handle public device access
 if (_availableToFutureLaptops || count _linkedComputers == 0) then {
     private _publicDevices = missionNamespace getVariable ["ROOT-Public-Devices", []];
-    private _excludedNetIds = [];
 
     if (_availableToFutureLaptops) then {
         if (count _linkedComputers > 0) then {
@@ -103,8 +103,12 @@ if (_availableToFutureLaptops || count _linkedComputers == 0) then {
         _availabilityText = format ["Available to all current computers."];
     };
 
-    _publicDevices pushBack [6, _deviceId, _excludedNetIds]; // 6 = GPS tracker type
-    missionNamespace setVariable ["ROOT-Public-Devices", _publicDevices, true];
+    // Only add to public devices if we have exclusions or it's available to future
+    if (_availableToFutureLaptops || _excludedNetIds isNotEqualTo []) then {
+        _publicDevices pushBack [6, _deviceId, _excludedNetIds]; // 6 = GPS tracker type
+        missionNamespace setVariable ["ROOT-Public-Devices", _publicDevices, true];
+    };
 };
+
 
 [format ["Root Cyber Warfare: GPS Tracker '%1' added (ID: %2). %3", _trackerName, _deviceId, _availabilityText]] remoteExec ["systemChat", _execUserId];
