@@ -46,8 +46,8 @@ while {ROOT_CleanupTimer != 0} do {
     };
 
     // Also clean up any invalid devices from the main device list
-    private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], []]];
-    private _cleanedDevices = [[], [], [], [], []];
+    private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], []]];
+    private _cleanedDevices = [[], [], [], [], [], []];
 
     {
         private _deviceType = _x;

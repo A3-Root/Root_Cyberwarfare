@@ -11,18 +11,19 @@ private _customCost = missionNamespace getVariable ["ROOT_Hack_Custom_Cost_Edit"
 
 missionNamespace setVariable ["ROOT-All-Costs", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
 
-private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], []]];
 private _allDoors = _allDevices select 0;
 private _allLamps = _allDevices select 1;
 private _allDrones = _allDevices select 2;
 private _allDatabases = _allDevices select 3;
 private _allCustom = _allDevices select 4;
+private _allGpsTrackers = _allDevices select 5;
 private _isCustomObject = false;
 
 private _objectType = typeOf _targetObject;
 private _netId = netId _targetObject;
 
-private _existingDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], []]];
+private _existingDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], []]];
 
 private _displayName = getText (configOf _targetObject >> "displayName");
 
@@ -225,6 +226,7 @@ _existingDevices set [1, _allLamps];
 _existingDevices set [2, _allDrones];
 _existingDevices set [3, _allDatabases];
 _existingDevices set [4, _allCustom];
+_existingDevices set [5, _allGpsTrackers];
 missionNamespace setVariable ["ROOT-All-Devices", _existingDevices, true];
 _targetObject setVariable ["ROOT-Connected", true, true];
 

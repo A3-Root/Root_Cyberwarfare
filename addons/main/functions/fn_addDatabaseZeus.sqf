@@ -58,12 +58,13 @@ hint str format ['Code triggered'];", {}, 7]],
             _linkedComputers = _allComputers apply { _x select 0 };
         };
         
-        private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], []]];
+        private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], []]];
         private _allDoors = _allDevices select 0;
         private _allLamps = _allDevices select 1;
         private _allDrones = _allDevices select 2;
         private _allDatabases = _allDevices select 3;
         private _allCustom = _allDevices select 4;
+        private _allGpsTrackers = _allDevices select 5;
         private _databaseId = 0;
         private _execUserId = clientOwner;
         [_allDatabases, _databaseId, _fileObject, _filename, _filesize, _filecontent, _allDevices, _allDoors, _allLamps, _allDrones, _allCustom, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];

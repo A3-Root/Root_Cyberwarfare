@@ -11,8 +11,8 @@ include = [
     "README.md",
 ]
 exclude = [
-    "repomix-output.xml",
     ".gitignore",
+    ".editorconfig",
 ]
 
 [properties]

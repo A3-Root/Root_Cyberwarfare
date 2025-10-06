@@ -1,7 +1,7 @@
 params['_owner', '_computer', '_nameOfVariable', '_commandPath'];
 
 private _string = "";
-private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], []]];
 private _allDoors = _allDevices select 0;
 private _allLights = _allDevices select 1;
 private _allDrones = _allDevices select 2;
@@ -158,17 +158,20 @@ if (_accessibleGpsTrackers isNotEqualTo []) then {
         private _trackerName = _x select 2;
         private _trackingTime = _x select 3;
         private _updateFrequency = _x select 4;
-        private _status = (_x select 8) select 0; // Get status from [status, startTime, markerName]
+        private _allowRetracking = _x select 9;
+        private _status = (_x select 8) select 0;
         
         private _statusColor = "#8ce10b"; // Green for Untracked
         if (_status == "Tracked") then {
             _statusColor = "#008DF8"; // Blue for Tracked
-        } else {
-            if (_status == "Dead") then {
-                _statusColor = "#fa4c58"; // Red for Dead
-            };
         };
-        _string = format ["    %1 (ID: %2) - %3s - %4s - ", _trackerName, _trackerId, _trackingTime, _updateFrequency];
+        if (_status == "Completed") then {
+            _statusColor = "#FFD966"; // Yellow for Completed
+        };
+        if (_status == "Dead") then {
+            _statusColor = "#fa4c58"; // Red for Dead
+        };
+        _string = format ["    %1 (ID: %2) - Track Time: %3s - Frequency: %4s - ", _trackerName, _trackerId, _trackingTime, _updateFrequency];
         [_computer, [[_string, [_status, _statusColor]]]] call AE3_armaos_fnc_shell_stdout;
     } forEach _accessibleGpsTrackers;
 };

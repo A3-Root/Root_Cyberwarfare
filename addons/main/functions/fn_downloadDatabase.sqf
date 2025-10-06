@@ -57,7 +57,7 @@ if (_databaseIdNum != 0) then {
                 private _loadingBar = _filledPart + _emptyPart;
                 _string = format ['Downloading File: %1%%. [%2]', _formattedStringOfPercentage, _loadingBar];
                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                sleep 1;
+                uiSleep 1;
             };
             
             private _fileName = (_databaseName splitString " ") joinString "_";
