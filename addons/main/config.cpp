@@ -67,6 +67,8 @@ class CfgFunctions {
 			class disableDrone {};
 			class displayGPSPosition {};
 			class downloadDatabase {};
+			class gpsTrackerClient {};
+			class gpsTrackerServer {};
 			class isDeviceAccessible {};
 			class listDevicesInSubnet {};
 			class modifyPowerZeus {};

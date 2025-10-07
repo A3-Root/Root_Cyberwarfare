@@ -1,4 +1,3 @@
-// root_cyberwarfare\functions\fn_gpstrack.sqf
 params['_owner', '_computer', '_nameOfVariable', '_trackerId', '_commandPath'];
 
 private _string = "";
@@ -32,6 +31,7 @@ if (_trackerIdNum != 0) then {
                 private _customMarker = _x select 5;
                 private _currentStatus = _x select 8;
                 private _allowRetracking = _x select 9;
+                private _lastPingTimer = _x select 10;
                 
                 // Check if already being tracked by this computer
                 if ((_currentStatus select 0) == "Tracked") then {
@@ -70,14 +70,7 @@ if (_trackerIdNum != 0) then {
                             // If there's an existing marker from a previous track, delete it first
                             if ((_currentStatus select 2) != "") then {
                                 deleteMarkerLocal (_currentStatus select 2);
-                            };
-                            
-                            // Create marker
-                            private _marker = createMarkerLocal [_markerName, getPos _trackerObject];
-                            _marker setMarkerTypeLocal "mil_dot";
-                            _marker setMarkerTextLocal _trackerName;
-                            _marker setMarkerColorLocal "ColorRed";
-                            
+                            };                           
                             // Update tracker status
                             _allGpsTrackers set [_forEachIndex, [
                                 _storedTrackerId, 
@@ -98,52 +91,8 @@ if (_trackerIdNum != 0) then {
                             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                             
                             // Start tracking loop
-                            [_trackerObject, _markerName, _trackingTime, _updateFrequency, _storedTrackerId, _computer, _allowRetracking, _trackerIdNum] spawn {
-                                params ["_trackerObject", "_markerName", "_trackingTime", "_updateFrequency", "_trackerId", "_computer", "_allowRetracking", "_trackerIdNum"];
-                                
-                                private _startTime = time;
-                                private _endTime = _startTime + _trackingTime;
-                                
-                                while {time < _endTime && !isNull _trackerObject} do {
-                                    _markerName setMarkerPosLocal (getPos _trackerObject);
-                                    uiSleep _updateFrequency;
-                                };
-                                
-                                // After tracking time, change marker color to indicate it's no longer updating
-                                _markerName setMarkerColorLocal "ColorCIV";
-                                
-                                // Update status based on retracking permission
-                                private _newStatus = "Completed"; 
-                                if !(_allowRetracking) then {
-                                    _newStatus = "Untrackable";
-                                };
-    
-                                private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", []];
-                                private _allGpsTrackers = _allDevices param [5, []];
-                                
-                                {
-                                    if ((_x select 0) == _trackerId) then {
-                                        _allGpsTrackers set [_forEachIndex, [
-                                            _x select 0, 
-                                            _x select 1, 
-                                            _x select 2, 
-                                            _x select 3, 
-                                            _x select 4, 
-                                            _x select 5, 
-                                            _x select 6, 
-                                            _x select 7, 
-                                            [_newStatus, time, _markerName],
-                                            _x select 9
-                                        ]];
-                                        _allDevices set [5, _allGpsTrackers];
-                                        missionNamespace setVariable ["ROOT-All-Devices", _allDevices, true];
-                                    };
-                                } forEach _allGpsTrackers;
-                                
-                                // Notify user that tracking ended
-                                _string = format ["Tracking for target ID %1 has ended. Marker remains at last known position.", _trackerIdNum];
-                                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                            };
+                            private _clientID = clientOwner;
+                            [_trackerObject, _markerName, _trackingTime, _updateFrequency, _storedTrackerId, _computer, _allowRetracking, _trackerIdNum, _trackerName, _clientID, _lastPingTimer] remoteExec ["Root_fnc_gpsTrackerServer", 2];
                         };
                     };
                 };

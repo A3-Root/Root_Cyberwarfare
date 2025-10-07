@@ -1,4 +1,4 @@
-params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_trackerName", ""], ["_trackingTime", 60], ["_updateFrequency", 5], ["_customMarker", ""], ["_availableToFutureLaptops", false], ["_allowRetracking", false]];
+params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_trackerName", ""], ["_trackingTime", 60], ["_updateFrequency", 5], ["_customMarker", ""], ["_availableToFutureLaptops", false], ["_allowRetracking", false], "_lastPingTimer"];
 
 if (_execUserId == 0) then {
     _execUserId = owner _targetObject;
@@ -29,7 +29,7 @@ if (count _allGpsTrackers > 0) then {
 };
 
 // Store the tracker with initial status "Untracked"
-_allGpsTrackers pushBack [_deviceId, _netId, _trackerName, _trackingTime, _updateFrequency, _customMarker, _linkedComputers, _availableToFutureLaptops, ["Untracked", 0, ""], _allowRetracking];
+_allGpsTrackers pushBack [_deviceId, _netId, _trackerName, _trackingTime, _updateFrequency, _customMarker, _linkedComputers, _availableToFutureLaptops, ["Untracked", 0, ""], _allowRetracking, _lastPingTimer];
 
 // Update the allDevices array with the new GPS trackers category
 _allDevices set [5, _allGpsTrackers];
@@ -43,6 +43,7 @@ _targetObject setVariable ["ROOT_GpsTrackerUpdateFrequency", _updateFrequency, t
 _targetObject setVariable ["ROOT_GpsTrackerCustomMarker", _customMarker, true];
 _targetObject setVariable ["ROOT_AvailableToFutureLaptops", _availableToFutureLaptops, true];
 _targetObject setVariable ["ROOT_GpsTrackerAllowRetracking", _allowRetracking, false];
+_targetObject setVariable ["ROOT_GpsTrackerLastPingTimer", _lastPingTimer, false];
 
 private _availabilityText = "";
 

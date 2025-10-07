@@ -8,10 +8,8 @@ if (isNull _targetObject) exitWith {
 };
 
 if !(hasInterface) exitWith {};
-
-if (isNil "ROOT_gpsTrackerIndex") then { ROOT_gpsTrackerIndex = 1 };
-ROOT_gpsTrackerName = format ["GPS_Tracker_%1", ROOT_gpsTrackerIndex];
-
+private _index = missionNamespace getVariable ["ROOT_gpsTrackerIndex", 1];
+ROOT_gpsTrackerName = format ["GPS_Tracker_%1", _index];
 
 // Get all existing laptops with hacking tools
 private _allComputers = [];
@@ -28,8 +26,9 @@ private _allComputers = [];
 
 private _dialogControls = [
     ["EDIT", ["Tracker Name", "Name that will appear in the terminal and as the marker in the map for this tracker"], [ROOT_gpsTrackerName]],
-    ["SLIDER", ["Tracking Time (seconds)", "Maximum time in seconds the tracking will stay active"], [0, 300, 60, 0]],
-    ["SLIDER", ["Update Frequency (seconds)", "Frequency in seconds between position updates"], [1, 30, 5, 0]],
+    ["SLIDER", ["Tracking Time (seconds)", "Maximum time in seconds the tracking will stay active"], [1, 3000, 60, 0]],
+    ["SLIDER", ["Update Frequency (seconds)", "Frequency in seconds between position updates"], [1, 3000, 5, 0]],
+    ["SLIDER", ["Last Ping Duration", "Frequency in seconds for the last ping to be active for"], [1, 3000, 5, 0]],
     ["EDIT", ["Custom Marker (optional)", "Custom name for the map marker to be used. Leave empty to use Tracker Name"], [""]],
     ["TOOLBOX:YESNO", ["Allow Retracking", "Allow tracking again after the initial tracking time ends?"], false],
     ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this tracker be available to laptops that are added later?"], false]
@@ -46,14 +45,14 @@ private _dialogControls = [
     _dialogControls,
     {
         params ["_results", "_args"];
-        _args params ["_targetObject", "_execUserId", "_allComputers"];
+        _args params ["_targetObject", "_execUserId", "_allComputers", "_index"];
         
         // First six results are the tracker configuration
-        _results params ["_trackerName", "_trackingTime", "_updateFrequency", "_customMarker", "_allowRetracking", "_availableToFutureLaptops"];
+        _results params ["_trackerName", "_trackingTime", "_updateFrequency", "_lastPingTimer", "_customMarker", "_allowRetracking", "_availableToFutureLaptops"];
         
         // The rest are checkbox values for each computer
         private _selectedComputers = [];
-        private _checkboxStartIndex = 6;
+        private _checkboxStartIndex = 7;
         
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
@@ -68,15 +67,16 @@ private _dialogControls = [
         };
         
         // Pass all parameters including the availability setting
-        [_targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking] remoteExec ["Root_fnc_addGpsTrackerZeusMain", 2];
+        [_targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer] remoteExec ["Root_fnc_addGpsTrackerZeusMain", 2];
         ["GPS Tracker Added!"] call zen_common_fnc_showMessage;
-        ROOT_gpsTrackerIndex = ROOT_gpsTrackerIndex + 1;
+        _index = _index + 1;
+        missionNamespace setVariable ["ROOT_gpsTrackerIndex", _index, true];
     }, 
     {
         ["Aborted"] call zen_common_fnc_showMessage;
         playSound "FD_Start_F";
     }, 
-    [_targetObject, _execUserId, _allComputers]
+    [_targetObject, _execUserId, _allComputers, _index]
 ] call zen_dialog_fnc_create;
 
 deleteVehicle _logic;
