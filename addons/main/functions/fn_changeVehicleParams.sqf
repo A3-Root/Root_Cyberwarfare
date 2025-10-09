@@ -72,6 +72,7 @@ if (_vehicleIDNum != 0) then {
                         (cos _dir * _value),
                         (_vel select 2)
                     ];
+                    _invalidOption = false;
                 };
                 if (_action == "brake") then {
                     if (_vehicleObject isKindOf "LandVehicle") then {
