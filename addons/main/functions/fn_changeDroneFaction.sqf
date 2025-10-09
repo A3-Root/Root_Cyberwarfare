@@ -86,7 +86,7 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
             };
         };
 
-        [_computer, _battery, (_powerCostPerDrone * _countOfChangingDrones)] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\fn_removePower.sqf";
+        [_computer, _battery, (_powerCostPerDrone * _countOfChangingDrones)] remoteExecCall ["Root_fnc_removePower", 2];
         
         // Apply changes to all affected drones
         {
@@ -136,7 +136,7 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
                     [_drone] joinSilent _newGroup;
                     _string = format ["Drone side changed."];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    [_computer, _battery, _powerCostPerDrone] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\fn_removePower.sqf";
+                    [_computer, _battery, _powerCostPerDrone] remoteExecCall ["Root_fnc_removePower", 2];
                 } else {
                     _string = format ["Error! Drone already of side %1.", _droneFaction];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;

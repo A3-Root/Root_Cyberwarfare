@@ -1,4 +1,4 @@
-params ["_allDatabases", "_databaseId", "_fileObject", "_filename", "_filesize", "_filecontent", "_allDevices", "_allDoors", "_allLamps", "_allDrones", "_allCustom", ["_execUserId", 0], ["_linkedComputers", []], ["_executionCode", ""], ["_availableToFutureLaptops", false]];
+params ["_allDatabases", "_databaseId", "_fileObject", "_filename", "_filesize", "_filecontent", "_allDevices", "_allDoors", "_allLamps", "_allDrones", "_allCustom", "_allGpsTrackers", "_allVehicles", ["_execUserId", 0], ["_linkedComputers", []], ["_executionCode", ""], ["_availableToFutureLaptops", false]];
 
 if (_execUserId == 0) then {
     _execUserId = owner _fileObject;
@@ -31,7 +31,7 @@ _fileObject setVariable ["ROOT_AvailableToFutureLaptops", _availableToFutureLapt
 private _availabilityText = "";
 
 // Store database linking information (for selected computers)
-if (count _linkedComputers > 0) then {
+if (_linkedComputers isNotEqualTo []) then {
     private _deviceLinks = missionNamespace getVariable ["ROOT-Device-Links", []];
     
     {
@@ -58,7 +58,7 @@ if ((_availableToFutureLaptops) || (count _linkedComputers == 0)) then {
     private _publicDevices = missionNamespace getVariable ["ROOT-Public-Devices", []];
 
     if (_availableToFutureLaptops) then {
-        if (count _linkedComputers > 0) then {
+        if (_linkedComputers isNotEqualTo []) then {
             // Scenario: Available to future + some linked            
             _availabilityText = format ["Accessible by %1 linked computer(s) and all future computers", count _linkedComputers];
         } else {
@@ -82,14 +82,14 @@ if ((_availableToFutureLaptops) || (count _linkedComputers == 0)) then {
     missionNamespace setVariable ["ROOT-Public-Devices", _publicDevices, true];
 };
 
-private _existingDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], []]];
+private _existingDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
 _existingDevices set [0, _allDoors];
 _existingDevices set [1, _allLamps];
 _existingDevices set [2, _allDrones];
 _existingDevices set [3, _allDatabases];
 _existingDevices set [4, _allCustom];
-private _allGpsTrackers = _allDevices select 5;
 _existingDevices set [5, _allGpsTrackers];
+_existingDevices set [6, _allVehicles];
 
 missionNamespace setVariable ["ROOT-All-Devices", _existingDevices, true];
 

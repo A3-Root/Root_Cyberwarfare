@@ -1,16 +1,17 @@
-params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_trackerName", ""], ["_trackingTime", 60], ["_updateFrequency", 5], ["_customMarker", ""], ["_availableToFutureLaptops", false], ["_allowRetracking", false], "_lastPingTimer"];
+params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_trackerName", ""], ["_trackingTime", 60], ["_updateFrequency", 5], ["_customMarker", ""], ["_availableToFutureLaptops", false], ["_allowRetracking", false], "_lastPingTimer", "_powerCost"];
 
 if (_execUserId == 0) then {
     _execUserId = owner _targetObject;
 };
 
-private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
 private _allDoors = _allDevices select 0;
 private _allLamps = _allDevices select 1;
 private _allDrones = _allDevices select 2;
 private _allDatabases = _allDevices select 3;
 private _allCustom = _allDevices select 4;
 private _allGpsTrackers = _allDevices select 5;
+private _allVehicles = _allDevices select 6;
 
 private _netId = netId _targetObject;
 
@@ -29,11 +30,12 @@ if (count _allGpsTrackers > 0) then {
 };
 
 // Store the tracker with initial status "Untracked"
-_allGpsTrackers pushBack [_deviceId, _netId, _trackerName, _trackingTime, _updateFrequency, _customMarker, _linkedComputers, _availableToFutureLaptops, ["Untracked", 0, ""], _allowRetracking, _lastPingTimer];
+_allGpsTrackers pushBack [_deviceId, _netId, _trackerName, _trackingTime, _updateFrequency, _customMarker, _linkedComputers, _availableToFutureLaptops, ["Untracked", 0, ""], _allowRetracking, _lastPingTimer, _powerCost];
 
 // Update the allDevices array with the new GPS trackers category
 _allDevices set [5, _allGpsTrackers];
 missionNamespace setVariable ["ROOT-All-Devices", _allDevices, true];
+
 
 // Store variables on the target object
 _targetObject setVariable ["ROOT_GpsTrackerId", _deviceId, true];
@@ -42,13 +44,14 @@ _targetObject setVariable ["ROOT_GpsTrackerTrackingTime", _trackingTime, true];
 _targetObject setVariable ["ROOT_GpsTrackerUpdateFrequency", _updateFrequency, true];
 _targetObject setVariable ["ROOT_GpsTrackerCustomMarker", _customMarker, true];
 _targetObject setVariable ["ROOT_AvailableToFutureLaptops", _availableToFutureLaptops, true];
-_targetObject setVariable ["ROOT_GpsTrackerAllowRetracking", _allowRetracking, false];
-_targetObject setVariable ["ROOT_GpsTrackerLastPingTimer", _lastPingTimer, false];
+_targetObject setVariable ["ROOT_GpsTrackerAllowRetracking", _allowRetracking, true];
+_targetObject setVariable ["ROOT_GpsTrackerLastPingTimer", _lastPingTimer, true];
+_targetObject setVariable ["ROOT_GpsTrackerPowerCost", _powerCost, true];
 
 private _availabilityText = "";
 
 // Store device linking information (for selected computers)
-if (count _linkedComputers > 0) then {
+if (_linkedComputers isNotEqualTo []) then {
     private _deviceLinks = missionNamespace getVariable ["ROOT-Device-Links", []];
     
     {
@@ -75,7 +78,7 @@ if (_availableToFutureLaptops || count _linkedComputers == 0) then {
     private _publicDevices = missionNamespace getVariable ["ROOT-Public-Devices", []];
 
     if (_availableToFutureLaptops) then {
-        if (count _linkedComputers > 0) then {
+        if (_linkedComputers isNotEqualTo []) then {
             // Scenario: Available to future + some linked
             // Exclude current laptops that are NOT linked
             {

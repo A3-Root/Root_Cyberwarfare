@@ -33,7 +33,7 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
             if(_customState isEqualTo "activate") then {
                 _string = format ["Custom device '%1' (ID: %2) activated.", _customName, _customId];
                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                [_computer, _battery, _powerCostPerCustom] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\fn_removePower.sqf";
+                [_computer, _battery, _powerCostPerCustom] remoteExecCall ["Root_fnc_removePower", 2];
                 if (_activationCode != "") then {
                     [_computer] spawn (compile _activationCode);
                 };
@@ -41,7 +41,7 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
                 if(_customState isEqualTo "deactivate") then {
                     _string = format ["Custom device '%1' (ID: %2) deactivated.", _customName, _customId];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    [_computer, _battery, _powerCostPerCustom] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\fn_removePower.sqf";
+                    [_computer, _battery, _powerCostPerCustom] remoteExecCall ["Root_fnc_removePower", 2];
                     if (_deactivationCode != "") then {
                         [_computer] spawn (compile _deactivationCode);
                     };

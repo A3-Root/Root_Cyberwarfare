@@ -247,14 +247,16 @@ if (_allComputers isNotEqualTo []) then {
     missionNamespace setVariable ["ROOT-Device-Links", _deviceLinks, true];
 };
 
-private _existingDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], []]];
+private _existingDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
 private _allGpsTrackers = _existingDevices select 5;
+private _allVehicles = _existingDevices select 6;
 _existingDevices set [0, (_existingDevices select 0) + _allDoors];
 _existingDevices set [1, (_existingDevices select 1) + _allLamps];
 _existingDevices set [2, (_existingDevices select 2) + _allDrones];
 _existingDevices set [3, (_existingDevices select 3) + _allDatabases];
 _existingDevices set [4, (_existingDevices select 4) + _allCustom];
 _existingDevices set [5, _allGpsTrackers];
+_existingDevices set [6, _allVehicles];
 
 missionNamespace setVariable ["ROOT-All-Devices", _existingDevices, true];
 

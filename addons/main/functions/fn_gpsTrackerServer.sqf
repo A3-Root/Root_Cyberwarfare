@@ -5,12 +5,13 @@ private _endTime = _startTime + _trackingTime;
 private _trackerPos = [];
 private _computerNetId = netId _computer;
 
-// Update tracker status to "Tracked" on server
+// Update tracker status to "Tracking" on server
 private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", []];
 private _allGpsTrackers = _allDevices param [5, []];
 
 {
     if ((_x select 0) == _trackerId) then {
+        // [_deviceId, _netId, _trackerName, _trackingTime, _updateFrequency, _customMarker, _linkedComputers, _availableToFutureLaptops, ["Untracked", 0, ""], _allowRetracking, _lastPingTimer, _powerCost];
         _allGpsTrackers set [_forEachIndex, [
             _x select 0, 
             _x select 1, 
@@ -20,8 +21,10 @@ private _allGpsTrackers = _allDevices param [5, []];
             _x select 5, 
             _x select 6, 
             _x select 7, 
-            ["Tracked", time, _markerName],
-            _x select 9
+            ["Tracking", time, _markerName],
+            _x select 9,
+            _x select 10,
+            _x select 11
         ]];
         _allDevices set [5, _allGpsTrackers];
         missionNamespace setVariable ["ROOT-All-Devices", _allDevices, true];
@@ -30,7 +33,8 @@ private _allGpsTrackers = _allDevices param [5, []];
 
 [_trackerObject, _markerName, _trackingTime, _updateFrequency, _trackerName, _lastPingTimer] remoteExec ["Root_fnc_gpsTrackerClient", _clientID];
 
-waitUntil {time < (_endTime + 2)};
+uiSleep (_trackingTime + 0.5);
+// waitUntil {time > _endTime};
 
 private _lastPosition = [0, 0, 0];
 _lastPosition = getPos _trackerObject;
@@ -39,11 +43,6 @@ _lastPosition = getPos _trackerObject;
 private _newStatus = "Completed"; 
 if !(_allowRetracking) then {
     _newStatus = "Untrackable";
-};
-
-// If tracker object was destroyed during tracking
-if (isNull _trackerObject) then {
-    _newStatus = "Dead";
 };
 
 // Update the global tracker status
@@ -62,7 +61,9 @@ _allGpsTrackers = _allDevices param [5, []];
             _x select 6, 
             _x select 7, 
             [_newStatus, time, _markerName],
-            _x select 9
+            _x select 9,
+            _x select 10,
+            _x select 11
         ]];
         _allDevices set [5, _allGpsTrackers];
         missionNamespace setVariable ["ROOT-All-Devices", _allDevices, true];
@@ -70,12 +71,15 @@ _allGpsTrackers = _allDevices param [5, []];
 } forEach _allGpsTrackers;
 
 // Send completion message to the original computer if it still exists
-private _computerObj = objectFromNetId _computerNetId;
-if (!isNull _computerObj) then {
-    private _string = format ["Tracking for target '%1' (ID: %2) has ended.", _trackerName, _trackerIdNum];
-    [_computerObj, _string] call AE3_armaos_fnc_shell_stdout;
-    
+private _computer = objectFromNetId _computerNetId;
+if (!isNull _computer) then {
     private _trackerGridPos = mapGridPosition _lastPosition;
+    private _string = format ["Tracking for target '%1' (ID: %2) has ended at last position: %3.", _trackerName, _trackerIdNum, _trackerGridPos];
+    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+    [_computer, _string] remoteExec ["AE3_armaos_fnc_shell_stdout", _clientID];
     _string = format ["     Last pinged position: %1.", _trackerGridPos];
-    [_computerObj, _string] call AE3_armaos_fnc_shell_stdout;
+    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+    [_computer, _string] remoteExec ["AE3_armaos_fnc_shell_stdout", _clientID];
 };
+
+scopeName "exit";

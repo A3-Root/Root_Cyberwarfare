@@ -81,7 +81,7 @@ if(_buildingIdNum != 0 && (_doorIdNum != 0 || _doorId isEqualTo "a") && (_doorDe
             };
         };
 
-        [_computer, _battery, (_powerCostPerDoor * _countOfChangingDoors)] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\fn_removePower.sqf";
+        [_computer, _battery, (_powerCostPerDoor * _countOfChangingDoors)] remoteExecCall ["Root_fnc_removePower", 2];
         
         // Apply changes to all accessible buildings
         {
@@ -144,7 +144,7 @@ if(_buildingIdNum != 0 && (_doorIdNum != 0 || _doorId isEqualTo "a") && (_doorDe
                         _building setVariable [format ["bis_disabled_Door_%1", _doorIdNum], 1, true];
                         _string = format ["Door locked."];
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                        [_computer, _battery, _powerCostPerDoor] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\fn_removePower.sqf";
+                        [_computer, _battery, _powerCostPerDoor] remoteExecCall ["Root_fnc_removePower", 2];
                     } else {
                         if(_doorDesiredState isEqualTo "lock" && _currentState == 1) then {
                             _string = format ["Door already locked."];
@@ -178,7 +178,7 @@ if(_buildingIdNum != 0 && (_doorIdNum != 0 || _doorId isEqualTo "a") && (_doorDe
                                 _building setVariable [format ["bis_disabled_Door_%1", _doorIdNum], 0, true];
                                 _string = format ["Door unlocked."];
                                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                                [_computer, _battery, _powerCostPerDoor] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\fn_removePower.sqf";
+                                [_computer, _battery, _powerCostPerDoor] remoteExecCall ["Root_fnc_removePower", 2];
                             } else {
                                 if(_doorDesiredState isEqualTo "unlock" && _currentState == 0) then {
                                     _string = format ["Door already unlocked."];

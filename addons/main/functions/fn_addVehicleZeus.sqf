@@ -2,14 +2,15 @@ params ["_logic"];
 private _targetObject = attachedTo _logic;
 private _execUserId = clientOwner;
 
+if !(hasInterface) exitWith {};
+
 if (isNull _targetObject) exitWith {
     deleteVehicle _logic;
     ["Place the module on an object!"] call zen_common_fnc_showMessage;
 };
 
-if !(hasInterface) exitWith {};
-private _index = missionNamespace getVariable ["ROOT_gpsTrackerIndex", 1];
-ROOT_gpsTrackerName = format ["GPS_Tracker_%1", _index];
+private _index = missionNamespace getVariable ["ROOT_hackingVehicleIndex", 1];
+ROOT_hackingVehicleName = format ["Vehicle_%1", _index];
 
 // Get all existing laptops with hacking tools
 private _allComputers = [];
@@ -25,35 +26,37 @@ private _allComputers = [];
 } forEach (24 allObjects 1);
 
 private _dialogControls = [
-    ["EDIT", ["Tracker Name", "Name that will appear in the terminal and as the default marker in the map for this tracker"], [ROOT_gpsTrackerName]],
-    ["SLIDER", ["Tracking Time (seconds)", "Maximum time in seconds the tracking will stay active"], [1, 3000, 60, 0]],
-    ["SLIDER", ["Update Frequency (seconds)", "Frequency in seconds between position updates"], [1, 3000, 5, 0]],
-    ["SLIDER", ["Last Ping Duration", "Frequency in seconds for the last ping to be active for"], [1, 3000, 5, 0]],
-    ["SLIDER", ["Power Cost to Track", "Energy / Power (in Wh) required to track this signal"], [1, 30, 10, 1]],
-    ["EDIT", ["Custom Marker (optional)", "Custom name for the map marker to be used. Leave empty to use Tracker Name"], [""]],
-    ["TOOLBOX:YESNO", ["Allow Retracking", "Allow tracking again after the initial tracking time ends?"], false],
-    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this tracker be available to laptops that are added later?"], false]
+    ["EDIT", ["Vehicle Name", "Name that will appear in the terminal for hacking"], [ROOT_hackingVehicleName]],
+    ["SLIDER", ["Power Cost to Hack", "Energy / Power (in Wh) required to hack this vehicle. Consumption per hacking action / use."], [1, 30, 2, 1]],
+    ["TOOLBOX:YESNO", ["Allow Fuel Draining", "Allow the vehicle fuel / battery to be hacked."], true],
+    ["TOOLBOX:YESNO", ["Allow Speed Control", "Allow the vehicle speed to be hacked."], true],
+    ["TOOLBOX:YESNO", ["Allow Brakes Control", "Allow the vehicle brakes to be hacked."], true],
+    ["TOOLBOX:YESNO", ["Allow Lights Control", "Allow the vehicle lights to be hacked."], true],
+    ["TOOLBOX:YESNO", ["Allow Engine Control", "Allow the vehicle engine to be hacked."], true],
+    ["TOOLBOX:YESNO", ["Allow Car Alarm", "Allow the vehicle alarm to sound."], true],
+    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this vehicle be available to tools that are added later?"], false]
 ];
 
 // Add a checkbox for each computer
 {
     _x params ["_netId", "_computerName"];
-    _dialogControls pushBack ["CHECKBOX", [_computerName, format ["Link this tracker to %1", _computerName]], false];
+    _dialogControls pushBack ["CHECKBOX", [_computerName, format ["Link this device to %1", _computerName]], false];
 } forEach _allComputers;
 
 [
-    format ["Add GPS Tracker - %1", getText (configOf _targetObject >> "displayName")], 
+    format ["Add Hackable Vehicle - %1", getText (configOf _targetObject >> "displayName")], 
     _dialogControls,
+    // Fix the dialog result handler section:
     {
         params ["_results", "_args"];
         _args params ["_targetObject", "_execUserId", "_allComputers", "_index"];
         
-        // First six results are the tracker configuration
-        _results params ["_trackerName", "_trackingTime", "_updateFrequency", "_lastPingTimer", "_powerCost", "_customMarker", "_allowRetracking", "_availableToFutureLaptops"];
+        // First seven results are the device configuration
+        _results params ["_vehicleName", "_powerCost", "_allowFuel", "_allowSpeed", "_allowBrakes", "_allowLights", "_allowEngine", "_allowAlarm", "_availableToFutureLaptops"];
         
         // The rest are checkbox values for each computer
         private _selectedComputers = [];
-        private _checkboxStartIndex = 8;
+        private _checkboxStartIndex = 9;
         
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
@@ -68,10 +71,10 @@ private _dialogControls = [
         };
         
         // Pass all parameters including the availability setting
-        [_targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost] remoteExec ["Root_fnc_addGpsTrackerZeusMain", 2];
-        ["GPS Tracker Added!"] call zen_common_fnc_showMessage;
+        [_targetObject, _execUserId, _selectedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+        ["Hackable Vehicle Added!"] call zen_common_fnc_showMessage;
         _index = _index + 1;
-        missionNamespace setVariable ["ROOT_gpsTrackerIndex", _index, true];
+        missionNamespace setVariable ["ROOT_hackingVehicleIndex", _index, true];
     }, 
     {
         ["Aborted"] call zen_common_fnc_showMessage;

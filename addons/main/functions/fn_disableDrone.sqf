@@ -68,7 +68,7 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a")) then {
             };
         };
 
-        [_computer, _battery, (_powerCostPerDrone * _countOfChangingDrones)] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\fn_removePower.sqf";
+        [_computer, _battery, (_powerCostPerDrone * _countOfChangingDrones)] remoteExecCall ["Root_fnc_removePower", 2];
         
         // Disable all affected drones
         {
@@ -115,7 +115,7 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a")) then {
                     (vehicle _drone) setDamage 1;
                     _string = format ["Drone disabled."];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    [_computer, _battery, _powerCostPerDrone] call compile preprocessFileLineNumbers "root_cyberwarfare\functions\fn_removePower.sqf";
+                    [_computer, _battery, _powerCostPerDrone] remoteExecCall ["Root_fnc_removePower", 2];
                 } else {
                     _string = format ["Error! Drone is already disabled or destroyed."];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;

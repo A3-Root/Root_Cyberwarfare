@@ -1,13 +1,14 @@
 params['_owner', '_computer', '_nameOfVariable', '_commandPath'];
 
 private _string = "";
-private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
 private _allDoors = _allDevices select 0;
 private _allLights = _allDevices select 1;
 private _allDrones = _allDevices select 2;
 private _allDatabases = _allDevices select 3;
 private _allCustom = _allDevices select 4;
 private _allGpsTrackers = _allDevices select 5;
+private _allVehicles = _allDevices select 6;
 
 // Filter devices based on accessibility
 private _accessibleDoors = _allDoors select { 
@@ -34,6 +35,10 @@ private _accessibleGpsTrackers = _allGpsTrackers select {
     private _deviceData = _x;
     private _deviceId = _deviceData select 0;
     [_computer, 6, _deviceId, _commandPath] call Root_fnc_isDeviceAccessible 
+};
+
+private _accessibleVehicles = _allVehicles select { 
+    [_computer, 7, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible 
 };
 
 if (_accessibleDoors isNotEqualTo []) then {
@@ -162,20 +167,51 @@ if (_accessibleGpsTrackers isNotEqualTo []) then {
         private _updateFrequency = _x select 4;
         private _allowRetracking = _x select 9;
         private _status = (_x select 8) select 0;
+        private _powerCost = _x select 11;
         
         private _statusColor = "#8ce10b"; // Green for Untracked
-        if (_status == "Tracked") then {
+        if (_status == "Tracking") then {
             _statusColor = "#008DF8"; // Blue for Tracked
         };
         if (_status == "Completed") then {
             _statusColor = "#FFD966"; // Yellow for Completed
         };
-        if (_status == "Dead") then {
-            _statusColor = "#fa4c58"; // Red for Dead
+        if (_status in ["Dead", "Untrackable"]) then {
+            _statusColor = "#fa4c58"; // Red for Dead/Untrackable
         };
-        _string = format ["    %1 (ID: %2) - Track Time: %3s - Frequency: %4s - ", _trackerName, _trackerId, _trackingTime, _updateFrequency];
+        _string = format ["    %1 (ID: %2) - Track Time: %3s - Frequency: %4s - Power Cost: %5 - ", _trackerName, _trackerId, _trackingTime, _updateFrequency, _powerCost];
         [_computer, [[_string, [_status, _statusColor]]]] call AE3_armaos_fnc_shell_stdout;
     } forEach _accessibleGpsTrackers;
+};
+
+if (_accessibleVehicles isNotEqualTo []) then {
+    _string = format ["Vehicles:"];
+    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+    {
+        _x params ["_vehicleId", "_netId", "_vehicleName", "_allowFuel", "_allowSpeed", "_allowBrakes", "_allowLights", "_allowEngine", "_allowAlarm", "_availableToFutureLaptops", "_powerCost", "_linkedComputers"];
+        private _vehicle = objectFromNetId _netId;
+        private _mapGridPos = mapGridPosition _vehicle;
+        private _displayName = getText (configOf _vehicle >> "displayName");
+        private _features = [
+            ["Battery", _allowFuel],
+            ["Speed", _allowSpeed],
+            ["Brakes", _allowBrakes],
+            ["Lights", _allowLights],
+            ["Engine", _allowEngine],
+            ["Alarm", _allowAlarm]
+        ];
+        private _enabledFeatures = _features select { _x select 1 };
+        private _enabledNames = _enabledFeatures apply { _x select 0 };
+        private _featureString = if (_enabledNames isNotEqualTo []) then {
+            _enabledNames joinString ", "
+        };
+        if ((_featureString select [(count _featureString) - 2, 2]) isEqualTo ", ") then {
+            _featureString = (_featureString select [0, (count _featureString) - 2]) + " ";
+        };
+
+        _string = format ["    %1 - %2 (%3) - %4 @ %5", _vehicleId, _vehicleName, _displayName, _featureString, _mapGridPos];
+        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+    } forEach _accessibleVehicles;
 };
 
 missionNamespace setVariable [_nameOfVariable, true, true];

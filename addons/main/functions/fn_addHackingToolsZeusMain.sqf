@@ -23,6 +23,7 @@ _disabledrone = _result + "/disabledrone";
 _download = _result + "/download";
 _custom = _result + "/custom";
 _gpstrack = _result + "/gpstrack";
+_vehicle = _result + "/vehicle";
 
 
 
@@ -38,6 +39,8 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
     _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "disabledrone");
     _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "download");
     _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "custom");
+    _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "gpstrack");
+    _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "vehicle");
     _entity setVariable ["ROOT_BackdoorFunction", _currentBackdoorPaths, true];
     _result = _result + "/" + _backdoorScriptPrefix;
     _guide = _result + "guide";
@@ -49,6 +52,7 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
     _download = _result + "download";
     _custom = _result + "custom";
     _gpstrack = _result + "gpstrack";
+    _vehicle = _result + "vehicle";
 } else {
     if (_execUserId == 0) then {
         _execUserId = owner _entity;
@@ -73,10 +77,11 @@ _content = "
             .
     Type 'download FileID' to download the File into the 'Downloads' folder. Ex: 'download 1234'
             .
-    Type 'custom customId activate/deactivate to activate or deactivate a custom device. Ex: 'custom 5 activate'
+    Type 'custom CustomID activate/deactivate to activate or deactivate a custom device. Ex: 'custom 5 activate'
             .
     Type 'gpstrack TrackerID' to start tracking a GPS target. Ex: 'gpstrack 2421'
-'
+            .
+    Type 'vehicle VehicleID HackType Value' to hack a vehicle. Ex: 'vehicle 1337 battery 9000' or vehicle 1337 engine off'
 ";
 
 [_entity, _guide, _content, false, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call AE3_filesystem_fnc_device_addFile;
@@ -359,6 +364,41 @@ _content = "
 ";
 [_entity, _gpstrack, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call AE3_filesystem_fnc_device_addFile;
 
+_content = "
+    params['_computer', '_options', '_commandName'];
 
+    private _commandOpts = [];
+    private _commandSyntax =
+    [
+        [
+            ['command', _commandName, true, false],
+            ['path', 'vehicleID', true, false],
+            ['path', 'action', true, false],
+            ['path', 'value', true, false]
+        ]
+    ];
+    private _commandSettings = [_commandName, _commandOpts, _commandSyntax];
+
+    [] params ([_computer, _options, _commandSettings] call AE3_armaos_fnc_shell_getOpts);
+
+    if (!_ae3OptsSuccess) exitWith {};
+
+    private _vehicleID = (_ae3OptsThings select 0);
+    private _action = (_ae3OptsThings select 1);
+    private _value = (_ae3OptsThings select 2);
+
+    private _owner = clientOwner;
+
+    private _nameOfVariable = 'ROOT-HackableVehicle-' + "+ _computerNetIdString +";
+
+    missionNamespace setVariable [_nameOfVariable, false, true];
+    [_owner, _computer, _nameOfVariable, _vehicleID, _action, _value, _commandName] remoteExec ['Root_fnc_changeVehicleParams', _owner];
+    private _tStart = time;
+    waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
+    if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
+        [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
+    };
+";
+[_entity, _vehicle, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call AE3_filesystem_fnc_device_addFile;
 
 [format ["Root Cyber Warfare: Added Hacking Tools to Path: %1", _result]] remoteExec ["systemChat", _execUserId];

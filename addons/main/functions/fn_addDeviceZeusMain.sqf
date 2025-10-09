@@ -11,19 +11,20 @@ private _customCost = missionNamespace getVariable ["ROOT_Hack_Custom_Cost_Edit"
 
 missionNamespace setVariable ["ROOT-All-Costs", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
 
-private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
 private _allDoors = _allDevices select 0;
 private _allLamps = _allDevices select 1;
 private _allDrones = _allDevices select 2;
 private _allDatabases = _allDevices select 3;
 private _allCustom = _allDevices select 4;
 private _allGpsTrackers = _allDevices select 5;
+private _allVehicles = _allDevices select 6;
 private _isCustomObject = false;
 
 private _objectType = typeOf _targetObject;
 private _netId = netId _targetObject;
 
-private _existingDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], []]];
+private _existingDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
 
 private _displayName = getText (configOf _targetObject >> "displayName");
 
@@ -161,7 +162,7 @@ if (!_isCustomObject) exitWith {
 private _availabilityText = "";
 
 // Store device linking information (for selected computers)
-if (count _linkedComputers > 0) then {
+if (_linkedComputers isNotEqualTo []) then {
     private _deviceLinks = missionNamespace getVariable ["ROOT-Device-Links", []];
     
     {
@@ -188,7 +189,7 @@ if (_availableToFutureLaptops || count _linkedComputers == 0) then {
     private _publicDevices = missionNamespace getVariable ["ROOT-Public-Devices", []];
 
     if (_availableToFutureLaptops) then {
-        if (count _linkedComputers > 0) then {
+        if (_linkedComputers isNotEqualTo []) then {
             // Scenario 4: Available to future + some linked
             // Exclude current laptops that are NOT linked
             {
@@ -200,7 +201,7 @@ if (_availableToFutureLaptops || count _linkedComputers == 0) then {
                 };
             } forEach (24 allObjects 1);
             
-            _availabilityText = _availabilityText + format [" all future computers."];
+            _availabilityText = _availabilityText + format [" and all future computers"];
         } else {
             // Scenario 3: Available to future + no linked
             // Exclude ALL current laptops
@@ -209,12 +210,12 @@ if (_availableToFutureLaptops || count _linkedComputers == 0) then {
                     _excludedNetIds pushBack (netId _x);
                 };
             } forEach (24 allObjects 1);
-            _availabilityText = "Available to future computers only";
+            _availabilityText = "Available to future computers only.";
         };
     } else {
         // Scenario 1: Not available to future + no linked
         // No exclusions - all current laptops get access
-        _availabilityText = format ["Available to all current computers."];
+        _availabilityText = format ["Available to all current computers only"];
     };
 
     _publicDevices pushBack [_typeofhackable, _deviceId, _excludedNetIds];
@@ -227,13 +228,14 @@ _existingDevices set [2, _allDrones];
 _existingDevices set [3, _allDatabases];
 _existingDevices set [4, _allCustom];
 _existingDevices set [5, _allGpsTrackers];
+_existingDevices set [6, _allVehicles];
 missionNamespace setVariable ["ROOT-All-Devices", _existingDevices, true];
 _targetObject setVariable ["ROOT-Connected", true, true];
 
 
 switch (_typeofhackable) do {
     case 1: {
-        [format ["Root Cyber Warfare: Building (%1) added (ID: %2) with %3 doors! %4", _displayName, _deviceId, count _buildingDoors, _availabilityText]] remoteExec ["systemChat", _execUserId];
+        [format ["Root Cyber Warfare: Building (%1) added (ID: %2)! %3.", _displayName, _deviceId, _availabilityText]] remoteExec ["systemChat", _execUserId];
     };
     case 2: {
         [format ["Root Cyber Warfare: Light (%2) Added! ID: %1. %3.", _deviceId, _displayName, _availabilityText]] remoteExec ["systemChat", _execUserId];

@@ -3,10 +3,20 @@
 
 if (!isServer) exitWith {};
 
-if (isNil "ROOT_CleanupTimer") then { ROOT_CleanupTimer = 60 };
-publicVariable "ROOT_CleanupTimer";
+private _gpsIndex = 0;
+private _laptopIndex = 0;
+private _hackingIndex = 0;
 
-diag_log format ["[Root Cyber Warfare] Regular Device Cleanup script started! Running periodically every %1 seconds. You can change this value by modifying the 'ROOT_CleanupTimer' variable. Set the variable value to 0 to disable/stop the clean up.", ROOT_CleanupTimer];
+if (isNil "ROOT_CleanupTimer") then { ROOT_CleanupTimer = 60 };
+if (isNil "ROOT_gpsTrackerIndex") then { _gpsIndex = 1 };
+if (isNil "ROOT_customLaptopNameIndex") then { _laptopIndex = 1 };
+if (isNil "ROOT_hackingVehicleIndex") then { _hackingIndex = 1 };
+
+missionNamespace setVariable ["ROOT_gpsTrackerIndex", _gpsIndex, true];
+missionNamespace setVariable ["ROOT_customLaptopNameIndex", _laptopIndex, true];
+missionNamespace setVariable ["ROOT_hackingVehicleIndex", _hackingIndex, true];
+
+publicVariable "ROOT_CleanupTimer";
 
 private _doorCost = missionNamespace getVariable ["ROOT_Hack_Door_Cost_Edit", 2];
 private _droneSideCost = missionNamespace getVariable ["ROOT_Hack_Drone_Side_Cost_Edit", 20];
@@ -14,6 +24,8 @@ private _droneDestructionCost = missionNamespace getVariable ["ROOT_Hack_Drone_D
 private _customCost = missionNamespace getVariable ["ROOT_Hack_Custom_Cost_Edit", 10];
 
 missionNamespace setVariable ["ROOT-All-Costs", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
+
+diag_log format ["[Root Cyber Warfare] Regular Device Cleanup script started! Running periodically every %1 seconds. You can change this value by modifying the 'ROOT_CleanupTimer' variable. Set the variable value to 0 to disable/stop the clean up.", ROOT_CleanupTimer];
 
 while {ROOT_CleanupTimer != 0} do {
     uiSleep ROOT_CleanupTimer;
@@ -46,7 +58,7 @@ while {ROOT_CleanupTimer != 0} do {
     };
 
     // Also clean up any invalid devices from the main device list
-    private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], []]];
+    private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
     private _cleanedDevices = [[], [], [], [], [], []];
 
     {

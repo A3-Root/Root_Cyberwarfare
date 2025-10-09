@@ -17,24 +17,22 @@ if (_trackerIdNum != 0) then {
     private _foundTracker = false;
     
     {
-        private _storedTrackerId = _x select 0;
-        private _trackerNetId = _x select 1;
+        // [_deviceId, _netId, _trackerName, _trackingTime, _updateFrequency, _customMarker, _linkedComputers, _availableToFutureLaptops, ["Untracked", 0, ""], _allowRetracking, _lastPingTimer, _powerCost];
+
+        _x params ["_storedTrackerId", "_trackerNetId", "_trackerName", "_trackingTime", "_updateFrequency", "_customMarker", "_linkedComputers", "_availableToFutureLaptops", "_currentStatus", "_allowRetracking", "_lastPingTimer", "_powerCost"];
+        private _trackerObject = objectFromNetId _trackerNetId;
         
         if (_trackerIdNum == _storedTrackerId) then {
             // Check if this specific tracker is accessible
             if ([_computer, 6, _storedTrackerId, _commandPath] call Root_fnc_isDeviceAccessible) then {
                 _foundTracker = true;
-                private _trackerObject = objectFromNetId _trackerNetId;
-                private _trackerName = _x select 2;
-                private _trackingTime = _x select 3;
-                private _updateFrequency = _x select 4;
-                private _customMarker = _x select 5;
-                private _currentStatus = _x select 8;
-                private _allowRetracking = _x select 9;
-                private _lastPingTimer = _x select 10;
+
+                if ((isNil "_powerCost") || (_powerCost < 1)) then { _powerCost = _trackerObject getVariable ["ROOT_GpsTrackerPowerCost", 10] };
+                private _battery = uiNamespace getVariable "AE3_Battery";
+                private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
                 
                 // Check if already being tracked by this computer
-                if ((_currentStatus select 0) == "Tracked") then {
+                if ((_currentStatus select 0) == "Tracking") then {
                     _string = format ["Tracker '%1' (ID: %2) is already being tracked.", _trackerName, _trackerIdNum];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 } else {
@@ -45,7 +43,7 @@ if (_trackerIdNum != 0) then {
                     } else {
                         // Check if object still exists
                         if (isNull _trackerObject) then {
-                            _string = format ["Tracker '%1' (ID: %2) - Target object no longer exists.", _trackerName, _trackerIdNum];
+                            _string = format ["Tracker '%1' (ID: %2) - no longer exists.", _trackerName, _trackerIdNum];
                             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                             
                             // Update status to Dead
@@ -56,14 +54,34 @@ if (_trackerIdNum != 0) then {
                                 _trackingTime, 
                                 _updateFrequency, 
                                 _customMarker, 
-                                _x select 6, 
-                                _x select 7, 
+                                _linkedComputers, 
+                                _availableToFutureLaptops, 
                                 ["Dead", 0, ""],
-                                _allowRetracking
+                                _allowRetracking,
+                                _lastPingTimer,
+                                _powerCost
                             ]];
                             _allDevices set [5, _allGpsTrackers];
                             missionNamespace setVariable ["ROOT-All-Devices", _allDevices, true];
                         } else {
+                            _string = format ['Are you sure? (Y/N): '];
+                            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                            while{sleep 1; true} do {
+                                private _areYouSure = [_computer] call AE3_armaos_fnc_shell_stdin;
+                                if((_areYouSure isEqualTo "y") || (_areYouSure isEqualTo "Y")) then {
+                                    break;
+                                };
+                                if((_areYouSure isEqualTo "n") || (_areYouSure isEqualTo "N")) then {
+                                    missionNamespace setVariable [_nameOfVariable, true, true];
+                                    breakTo "exit";
+                                };
+                            };
+                            if(_batteryLevel < ((_powerCost)/1000)) then {
+                                _string = format ['Error! Insufficient Power!'];
+                                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                                breakTo "exit";
+                            };
+                            [_computer, _battery, _powerCost] remoteExecCall ["Root_fnc_removePower", 2];
                             // Start tracking
                             private _markerName = if (_customMarker != "") then { _customMarker } else { format ["ROOT_GpsTracker_%1_%2", _trackerIdNum, round(random 10000)] };
                             
@@ -79,15 +97,17 @@ if (_trackerIdNum != 0) then {
                                 _trackingTime, 
                                 _updateFrequency, 
                                 _customMarker, 
-                                _x select 6, 
-                                _x select 7, 
-                                ["Tracked", time, _markerName],
-                                _allowRetracking
+                                _linkedComputers, 
+                                _availableToFutureLaptops, 
+                                ["Tracking", time, _markerName],
+                                _allowRetracking,
+                                _lastPingTimer,
+                                _powerCost
                             ]];
                             _allDevices set [5, _allGpsTrackers];
                             missionNamespace setVariable ["ROOT-All-Devices", _allDevices, true];
                             
-                            _string = format ["Tracking target '%1' (ID: %2) for %3 seconds.", _trackerName, _trackerIdNum, _trackingTime];
+                            _string = format ["Tracking '%1' (ID: %2) for %3 seconds.", _trackerName, _trackerIdNum, _trackingTime];
                             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                             
                             // Start tracking loop
