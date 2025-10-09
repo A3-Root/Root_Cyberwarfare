@@ -85,8 +85,14 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
                 breakTo "exit";
             };
         };
-
-        [_computer, _battery, (_powerCostPerDrone * _countOfChangingDrones)] remoteExecCall ["Root_fnc_removePower", 2];
+        private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
+        private _changeWh = (_powerCostPerDrone * _countOfChangingDrones);
+        private _newLevel = _batteryLevel - (_changeWh/1000);
+        [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
+        _string = format ['Power Cost: %1Wh', _changeWh];
+        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        _string = format ['New Power Level: %1Wh', _newLevel*1000];
+        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         
         // Apply changes to all affected drones
         {
@@ -136,7 +142,14 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
                     [_drone] joinSilent _newGroup;
                     _string = format ["Drone side changed."];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    [_computer, _battery, _powerCostPerDrone] remoteExecCall ["Root_fnc_removePower", 2];
+                    private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
+                    private _changeWh = _powerCostPerDrone;
+                    private _newLevel = _batteryLevel - (_changeWh/1000);
+                    [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
+                    _string = format ['Power Cost: %1Wh', _changeWh];
+                    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                    _string = format ['New Power Level: %1Wh', _newLevel*1000];
+                    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 } else {
                     _string = format ["Error! Drone already of side %1.", _droneFaction];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;

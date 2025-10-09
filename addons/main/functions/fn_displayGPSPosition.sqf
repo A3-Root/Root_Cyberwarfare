@@ -66,7 +66,7 @@ if (_trackerIdNum != 0) then {
                         } else {
                             _string = format ['Are you sure? (Y/N): '];
                             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                            while{sleep 1; true} do {
+                            while{true} do {
                                 private _areYouSure = [_computer] call AE3_armaos_fnc_shell_stdin;
                                 if((_areYouSure isEqualTo "y") || (_areYouSure isEqualTo "Y")) then {
                                     break;
@@ -81,7 +81,16 @@ if (_trackerIdNum != 0) then {
                                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                                 breakTo "exit";
                             };
-                            [_computer, _battery, _powerCost] remoteExecCall ["Root_fnc_removePower", 2];
+                            
+                            private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
+                            private _changeWh = _powerCost;
+                            private _newLevel = _batteryLevel - (_changeWh/1000);
+                            [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
+                            _string = format ['Power Cost: %1Wh', _changeWh];
+                            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                            _string = format ['New Power Level: %1Wh', _newLevel*1000];
+                            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+
                             // Start tracking
                             private _markerName = if (_customMarker != "") then { _customMarker } else { format ["ROOT_GpsTracker_%1_%2", _trackerIdNum, round(random 10000)] };
                             

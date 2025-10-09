@@ -33,7 +33,6 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
             if(_customState isEqualTo "activate") then {
                 _string = format ["Custom device '%1' (ID: %2) activated.", _customName, _customId];
                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                [_computer, _battery, _powerCostPerCustom] remoteExecCall ["Root_fnc_removePower", 2];
                 if (_activationCode != "") then {
                     [_computer] spawn (compile _activationCode);
                 };
@@ -41,7 +40,6 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
                 if(_customState isEqualTo "deactivate") then {
                     _string = format ["Custom device '%1' (ID: %2) deactivated.", _customName, _customId];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    [_computer, _battery, _powerCostPerCustom] remoteExecCall ["Root_fnc_removePower", 2];
                     if (_deactivationCode != "") then {
                         [_computer] spawn (compile _deactivationCode);
                     };
@@ -50,6 +48,14 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 };
             };
+            private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
+            private _changeWh = _powerCostPerCustom;
+            private _newLevel = _batteryLevel - (_changeWh/1000);
+            [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
+            _string = format ['Power Cost: %1Wh', _changeWh];
+            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+            _string = format ['New Power Level: %1Wh', _newLevel*1000];
+            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             break;
         };
     } forEach _allCustom;

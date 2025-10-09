@@ -80,8 +80,14 @@ if(_buildingIdNum != 0 && (_doorIdNum != 0 || _doorId isEqualTo "a") && (_doorDe
                 breakTo "exit";
             };
         };
-
-        [_computer, _battery, (_powerCostPerDoor * _countOfChangingDoors)] remoteExecCall ["Root_fnc_removePower", 2];
+        private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
+        private _changeWh = (_powerCostPerDoor * _countOfChangingDoors);
+        private _newLevel = _batteryLevel - (_changeWh/1000);
+        [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
+        _string = format ['Power Cost: %1Wh', _changeWh];
+        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        _string = format ['New Power Level: %1Wh', _newLevel*1000];
+        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         
         // Apply changes to all accessible buildings
         {
@@ -144,7 +150,14 @@ if(_buildingIdNum != 0 && (_doorIdNum != 0 || _doorId isEqualTo "a") && (_doorDe
                         _building setVariable [format ["bis_disabled_Door_%1", _doorIdNum], 1, true];
                         _string = format ["Door locked."];
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                        [_computer, _battery, _powerCostPerDoor] remoteExecCall ["Root_fnc_removePower", 2];
+                        private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
+                        private _changeWh = _powerCostPerDoor;
+                        private _newLevel = _batteryLevel - (_changeWh/1000);
+                        [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
+                        _string = format ['Power Cost: %1Wh', _changeWh];
+                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                        _string = format ['New Power Level: %1Wh', _newLevel*1000];
+                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     } else {
                         if(_doorDesiredState isEqualTo "lock" && _currentState == 1) then {
                             _string = format ["Door already locked."];
@@ -178,7 +191,14 @@ if(_buildingIdNum != 0 && (_doorIdNum != 0 || _doorId isEqualTo "a") && (_doorDe
                                 _building setVariable [format ["bis_disabled_Door_%1", _doorIdNum], 0, true];
                                 _string = format ["Door unlocked."];
                                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                                [_computer, _battery, _powerCostPerDoor] remoteExecCall ["Root_fnc_removePower", 2];
+                                private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
+                                private _changeWh = _powerCostPerDoor;
+                                private _newLevel = _batteryLevel - (_changeWh/1000);
+                                [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
+                                _string = format ['Power Cost: %1Wh', _changeWh];
+                                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                                _string = format ['New Power Level: %1Wh', _newLevel*1000];
+                                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                             } else {
                                 if(_doorDesiredState isEqualTo "unlock" && _currentState == 0) then {
                                     _string = format ["Door already unlocked."];

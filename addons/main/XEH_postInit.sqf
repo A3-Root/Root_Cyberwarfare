@@ -26,7 +26,10 @@
                 ["isNotInside"]
             ] call ace_common_fnc_progressBar;
         },
-        {true}
+        {
+            private _gpsTrackerClass = missionNamespace getVariable ['ROOT_CW_GPSTrackerClass', 'ACE_Banana'];
+            _gpsTrackerClass in (uniformItems _player + vestItems _player + backpackItems _player + items _player);
+        }
     ] call ace_interact_menu_fnc_createAction;
     ["All", 0, ["ACE_MainActions"], _action, true] call ace_interact_menu_fnc_addActionToClass;
 }, []] call CBA_fnc_waitUntilAndExecute;

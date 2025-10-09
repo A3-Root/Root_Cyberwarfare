@@ -28,12 +28,12 @@ private _allComputers = [];
 private _dialogControls = [
     ["EDIT", ["Vehicle Name", "Name that will appear in the terminal for hacking"], [ROOT_hackingVehicleName]],
     ["SLIDER", ["Power Cost to Hack", "Energy / Power (in Wh) required to hack this vehicle. Consumption per hacking action / use."], [1, 30, 2, 1]],
-    ["TOOLBOX:YESNO", ["Allow Fuel Draining", "Allow the vehicle fuel / battery to be hacked."], true],
-    ["TOOLBOX:YESNO", ["Allow Speed Control", "Allow the vehicle speed to be hacked."], true],
-    ["TOOLBOX:YESNO", ["Allow Brakes Control", "Allow the vehicle brakes to be hacked."], true],
-    ["TOOLBOX:YESNO", ["Allow Lights Control", "Allow the vehicle lights to be hacked."], true],
-    ["TOOLBOX:YESNO", ["Allow Engine Control", "Allow the vehicle engine to be hacked."], true],
-    ["TOOLBOX:YESNO", ["Allow Car Alarm", "Allow the vehicle alarm to sound."], true],
+    ["TOOLBOX:YESNO", ["Allow Battery (Fuel) Control", "Allow the vehicle fuel / battery to be hacked and modified."], true],
+    ["TOOLBOX:YESNO", ["Allow Speed (Velocity) Control", "Allow the vehicle speed to be hacked and modified."], true],
+    ["TOOLBOX:YESNO", ["Allow Brakes Control", "Allow the vehicle brakes to be hacked and applied."], true],
+    ["TOOLBOX:YESNO", ["Allow Lights Control", "Allow the vehicle lights to be hacked and modified (Only works on Empty / Non AI Controlled Vehicles)."], true],
+    ["TOOLBOX:YESNO", ["Allow Engine Control", "Allow the vehicle engine to be hacked and turned on/off."], true],
+    ["TOOLBOX:YESNO", ["Allow Car Alarm", "Allow the vehicle alarm to be hacked to produce its sound."], true],
     ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this vehicle be available to tools that are added later?"], false]
 ];
 

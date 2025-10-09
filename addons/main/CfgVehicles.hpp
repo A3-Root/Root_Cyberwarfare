@@ -174,9 +174,9 @@ class CfgVehicles {
 			class ACE_Equipment {
 				class ROOT_AttachGPSTracker_Self {
 					displayName = "Attach GPS Tracker";
-					condition = "true";
+					condition = "private _gpsTrackerClass = missionNamespace getVariable ['ROOT_CW_GPSTrackerClass', 'ACE_Banana']; _gpsTrackerClass in (uniformItems _player + vestItems _player + backpackItems _player + items _player)";
 					exceptions[] = {};
-					statement = "[_player] call ROOT_fnc_aceAttachGPSTrackerSelf;";
+					statement = "[5, [_player], { (_this select 0) call ROOT_fnc_aceAttachGPSTrackerSelf }, {}, 'Attaching GPS Tracker to Self'] call ace_common_fnc_progressBar;";
 				};
 			};
         };
