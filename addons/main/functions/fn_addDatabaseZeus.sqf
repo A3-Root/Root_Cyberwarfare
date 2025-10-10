@@ -19,7 +19,7 @@ private _allComputers = [];
 
 private _dialogControls = [
     ["EDIT", ["File Name", "Name of the File"], ["My Other Projects"]],
-    ["SLIDER", ["File Hack Time (in seconds)", "Time taken to hack and download the file (in seconds)"], [0, 300, 10, 0]],
+    ["SLIDER", ["File Hack Time (in seconds)", "Time taken to hack and download the file (in seconds)"], [1, 300, 10, 0]],
     ["EDIT:MULTI", ["File Contents", "Content of the file that could be read after downloading via the command 'cat <filename>"], ["Check out my other projects that could interest you here: https://github.com/A3-Root/", {}, 7]],
     ["EDIT:CODE", ["Code to Execute on Download", "Code that will be executed in a SCHEDULED environment (spawn) when file is successfully downloaded. Use (_this select 0) to reference the computer object."], ["// Example: Display Hint when triggered 
 hint str format ['Code triggered'];", {}, 7]],
@@ -57,15 +57,11 @@ hint str format ['Code triggered'];", {}, 7]],
         if (!_availableToFutureLaptops && _linkedComputers isEqualTo []) then {
             _linkedComputers = _allComputers apply { _x select 0 };
         };
+
+        if (_filesize < 1) then {_filesize = 1};
         
         private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
-        private _allDoors = _allDevices select 0;
-        private _allLamps = _allDevices select 1;
-        private _allDrones = _allDevices select 2;
-        private _allDatabases = _allDevices select 3;
-        private _allCustom = _allDevices select 4;
-        private _allGpsTrackers = _allDevices select 5;
-        private _allVehicles = _allDevices select 6;
+        _allDevices params ["_allDoors", "_allLamps", "_allDrones", "_allDatabases", "_allCustom", "_allGpsTrackers", "_allVehicles"];
         private _databaseId = 0;
         private _execUserId = clientOwner;
         [_allDatabases, _databaseId, _fileObject, _filename, _filesize, _filecontent, _allDevices, _allDoors, _allLamps, _allDrones, _allCustom, _allGpsTrackers, _allVehicles, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];

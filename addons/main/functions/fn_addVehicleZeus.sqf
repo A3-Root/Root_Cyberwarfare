@@ -71,6 +71,9 @@ private _dialogControls = [
         };
         
         // Pass all parameters including the availability setting
+
+        if (_powerCost < 1) then { _powerCost = 1; };
+
         [_targetObject, _execUserId, _selectedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
         ["Hackable Vehicle Added!"] call zen_common_fnc_showMessage;
         _index = _index + 1;

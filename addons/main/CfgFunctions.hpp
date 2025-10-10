@@ -45,6 +45,10 @@ class CfgFunctions {
 			};
 			class aceAttachGPSTrackerSelf {};
 			class aceAttachGPSTrackerObject {};
+			class searchForGPSTracker {};
+			class revealLaptopLocations {};
+			class disableGPSTracker {};
+			class disableGPSTrackerServer {};
 		};
 	};
 };

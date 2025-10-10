@@ -176,8 +176,8 @@ if (_accessibleGpsTrackers isNotEqualTo []) then {
         if (_status == "Completed") then {
             _statusColor = "#FFD966"; // Yellow for Completed
         };
-        if (_status in ["Dead", "Untrackable"]) then {
-            _statusColor = "#fa4c58"; // Red for Dead/Untrackable
+        if (_status in ["Dead", "Untrackable", "Disabled"]) then {
+            _statusColor = "#fa4c58"; // Red for Dead/Untrackable/Disabled
         };
         _string = format ["    %1 (ID: %2) - Track Time: %3s - Frequency: %4s - Power Cost: %5 - ", _trackerName, _trackerId, _trackingTime, _updateFrequency, _powerCost];
         [_computer, [[_string, [_status, _statusColor]]]] call AE3_armaos_fnc_shell_stdout;

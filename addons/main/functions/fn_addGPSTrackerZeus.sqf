@@ -67,6 +67,11 @@ private _dialogControls = [
             _selectedComputers = _allComputers apply { _x select 0 };
         };
         
+        private _underFlow = [_trackingTime, _updateFrequency, _lastPingTimer, _powerCost];
+        {
+            if (_x < 1) then { _x = 1; };
+        } forEach _underFlow;
+        
         // Pass all parameters including the availability setting
         [_targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost] remoteExec ["Root_fnc_addGpsTrackerZeusMain", 2];
         ["GPS Tracker Added!"] call zen_common_fnc_showMessage;
