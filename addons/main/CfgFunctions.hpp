@@ -1,54 +1,75 @@
 class CfgFunctions {
 	class Root {
-		class RootCyberWarfareCategory {
-			file = "\z\root_cyberwarfare\addons\main\functions";
-			class addDatabaseZeus {};
-			class addDatabaseZeusMain {};
+		tag = "Root";
+
+		class Core {
+			file = "\z\root_cyberwarfare\addons\main\functions\core";
+			class isDeviceAccessible {};
+			class cleanupDeviceLinks { postInit = 1; };
+			class createDiaryEntry { postInit = 1; };
+			class initSettings { preInit = 1; };
+		};
+
+		class Devices {
+			file = "\z\root_cyberwarfare\addons\main\functions\devices";
 			class addDevices {};
-			class addDeviceZeus {};
-			class addDeviceZeusMain {};
-			class addGPSTrackerZeus {};
-			class addGPSTrackerZeusMain {};
-			class addHackingTools {};
-			class addHackingToolsZeus {};
-			class addHackingToolsZeusMain {};
-			class addVehicleZeus {};
-			class addVehicleZeusMain {};
 			class changeDoorState {};
-			class changeDroneFaction {};
 			class changeLightState {};
-			class changeVehicleParams {};
-			class cleanupDeviceLinks {
-				postInit = 1;
-			};
-			class createDiaryEntry {
-				postInit = 1;
-			};
-			class customDevice {};
+			class changeDroneFaction {};
 			class disableDrone {};
-			class displayGPSPosition {};
-			class downloadDatabase {};
+			class customDevice {};
+			class changeVehicleParams {};
+			class listDevicesInSubnet {};
+		};
+
+		class GPS {
+			file = "\z\root_cyberwarfare\addons\main\functions\gps";
 			class gpsTrackerClient {};
 			class gpsTrackerServer {};
-			class isDeviceAccessible {};
-			class listDevicesInSubnet {};
-			class localSoundBroadcast {};
-			class modifyPowerZeus {};
-			class removePower {};
-		};
-		class RootAceInteractionCategory {
-			file = "\z\root_cyberwarfare\addons\main\functions";
-			requiredAddons[] = {
-				"ace_main",
-				"ace_common",
-				"ace_interact_menu"
-			};
 			class aceAttachGPSTrackerSelf {};
 			class aceAttachGPSTrackerObject {};
 			class searchForGPSTracker {};
-			class revealLaptopLocations {};
 			class disableGPSTracker {};
 			class disableGPSTrackerServer {};
+			class displayGPSPosition {};
+			class revealLaptopLocations {};
+		};
+
+		class Database {
+			file = "\z\root_cyberwarfare\addons\main\functions\database";
+			class downloadDatabase {};
+		};
+
+		class Zeus {
+			file = "\z\root_cyberwarfare\addons\main\functions\zeus";
+			class addDeviceZeus {};
+			class addDeviceZeusMain {};
+			class addDatabaseZeus {};
+			class addDatabaseZeusMain {};
+			class addGPSTrackerZeus {};
+			class addGPSTrackerZeusMain {};
+			class addVehicleZeus {};
+			class addVehicleZeusMain {};
+			class modifyPowerZeus {};
+			class addHackingToolsZeus {};
+			class addHackingToolsZeusMain {};
+		};
+
+		class Utility {
+			file = "\z\root_cyberwarfare\addons\main\functions\utility";
+			class checkPowerAvailable {};
+			class consumePower {};
+			class getUserConfirmation {};
+			class getAccessibleDevices {};
+			class cacheDeviceLinks {};
+			class removePower {};
+			class localSoundBroadcast {};
+		};
+
+		// Hacking tools functions (not refactored, keep as-is)
+		class HackingTools {
+			file = "\z\root_cyberwarfare\addons\main\functions";
+			class addHackingTools {};
 		};
 	};
 };

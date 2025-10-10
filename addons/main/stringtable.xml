@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project name="Root_Cyberwarfare">
+    <Package name="Device_Operations">
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_ALREADY_LOCKED">
+            <English>Door already locked.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_ALREADY_UNLOCKED">
+            <English>Door already unlocked.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_LOCKED_SUCCESS">
+            <English>Door locked.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_UNLOCKED_SUCCESS">
+            <English>Door unlocked.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_OPERATION_COMPLETED_DOORS">
+            <English>Operation completed on %1 doors.</English>
+        </Key>
+    </Package>
+    <Package name="Errors">
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_BUILDING_NOT_FOUND">
+            <English>Error! Building ID %1 not found!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_DOOR_NOT_IN_BUILDING">
+            <English>Error! No such door with ID: %1 in the building (ID: %2)!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER">
+            <English>Error! Insufficient Power!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_BUILDING_ID">
+            <English>Error! Invalid BuildingID - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DOOR_ID">
+            <English>Error! Invalid DoorID - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DOOR_STATE">
+            <English>Error! Invalid Door State Desired - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_BUILDINGS">
+            <English>Error! No accessible buildings found or access denied.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_BUILDINGS_CRITERIA">
+            <English>Error! No accessible buildings found for the specified criteria.</English>
+        </Key>
+    </Package>
+    <Package name="GPS">
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACHING_OBJECT">
+            <English>Attaching GPS Tracker to %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_OBJECT">
+            <English>Attach GPS Tracker</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_CANNOT_SEARCH_SELF">
+            <English>Cannot search yourself!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_SEARCH">
+            <English>Search for GPS Tracker</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_SEARCHING">
+            <English>Searching %1 for GPS Tracker</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_UNABLE_ATTACH">
+            <English>Unable to attach GPS Tracker!</English>
+        </Key>
+    </Package>
+    <Package name="Power">
+        <Key ID="STR_ROOT_CYBERWARFARE_AFFECTED_DOORS">
+            <English>Affected Doors: %1. Power Cost: %2W.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL">
+            <English>New Power Level: %1Wh</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_POWER_COST">
+            <English>Power Cost: %1Wh</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_POWER_COST_PREVIEW">
+            <English>Power Cost: %1Wh.</English>
+        </Key>
+    </Package>
+    <Package name="Prompts">
+        <Key ID="STR_ROOT_CYBERWARFARE_CONFIRM_PROMPT">
+            <English>Are you sure? (Y/N):</English>
+        </Key>
+    </Package>
+    <Package name="Settings">
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_CATEGORY">
+            <English>Root Cyberwarfare Configuration</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_CUSTOM_COST">
+            <English>Custom Device Power Cost</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_CUSTOM_COST_DESC">
+            <English>Power cost in Wh to hack a custom device</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DOOR_COST">
+            <English>Door Lock/Unlock Power Cost</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DOOR_COST_DESC">
+            <English>Power cost in Wh to lock or unlock a door</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DRONE_HACK_COST">
+            <English>Drone Hacking Power Cost</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DRONE_HACK_COST_DESC">
+            <English>Power cost in Wh to disable a drone</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DRONE_SIDE_COST">
+            <English>Drone Side Change Power Cost</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DRONE_SIDE_COST_DESC">
+            <English>Power cost in Wh to change a drone's faction</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY">
+            <English>GPS Settings</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_DETECTION_DEVICES">
+            <English>GPS Detection Devices</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_DETECTION_DEVICES_DESC">
+            <English>Comma-separated classnames of items that speed up GPS tracker detection</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_TRACKER_DEVICE">
+            <English>GPS Tracker Item</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_TRACKER_DEVICE_DESC">
+            <English>Classname of item used as GPS tracker</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY">
+            <English>Power Cost Settings</English>
+        </Key>
+    </Package>
+</Project>
