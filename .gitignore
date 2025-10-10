@@ -4,5 +4,3 @@ hemtt
 hemtt.exe
 *.biprivatekey
 repomix-output.xml
-releases/*
-!releases/root_cyberwarfare-latest.zip
