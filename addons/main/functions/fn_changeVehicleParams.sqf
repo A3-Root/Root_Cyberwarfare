@@ -4,7 +4,7 @@ private _string = "";
 private _vehicleIDNum = parseNumber _vehicleID;
 
 if (_vehicleIDNum != 0) then {
-    private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", []];
+    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
     private _allVehicles = _allDevices param [6, []];
 
     if (_allVehicles isEqualTo []) then {
@@ -27,7 +27,7 @@ if (_vehicleIDNum != 0) then {
         if ((_vehicleIDNum == _storedDeviceID) && (alive _vehicleObject)) then {
             if ([_computer, 7, _storedDeviceID, _commandPath] call Root_fnc_isDeviceAccessible) then {
                 _foundVehicle = true;
-                _powerCost = _vehicleObject getVariable ["ROOT_VehiclePowerCost", 2];
+                _powerCost = _vehicleObject getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", 2];
                 private _battery = uiNamespace getVariable "AE3_Battery";
                 private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
                 _string = format ['Are you sure? (Y/N): '];
@@ -86,6 +86,7 @@ if (_vehicleIDNum != 0) then {
                 };
 
                 if (_action == "brakes") then {
+                    _invalidOption = false;
                     if (_vehicleObject isKindOf "LandVehicle") then {
                         [_vehicleObject] spawn {
                             params ["_vehicleObject"];
@@ -107,7 +108,6 @@ if (_vehicleIDNum != 0) then {
                                 private _newVel = [(_dir select 0) * _newSpeed, (_dir select 1) * _newSpeed, _vel select 2];
                                 _vehicleObject setVelocity _newVel;
                                 uiSleep 0.02;
-                                _invalidOption = false;
                             };
                         };
                     } else {

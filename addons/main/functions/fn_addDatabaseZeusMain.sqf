@@ -22,17 +22,17 @@ if (count _allDatabases > 0) then {
 
 // Store database variables
 _allDatabases pushBack [_databaseId, netId _fileObject, _filename, _filesize, _linkedComputers, _availableToFutureLaptops];
-_fileObject setVariable ["ROOT_DatabaseName_Edit", _filename, true];
-_fileObject setVariable ["ROOT_DatabaseSize_Edit", _filesize, true];
-_fileObject setVariable ["ROOT_DatabaseData_Edit", _filecontent, true];
-_fileObject setVariable ["ROOT_DatabaseExecutionCode", _executionCode, true];
-_fileObject setVariable ["ROOT_AvailableToFutureLaptops", _availableToFutureLaptops, true];
+_fileObject setVariable ["ROOT_CYBERWARFARE_DATABASE_NAME_EDIT", _filename, true];
+_fileObject setVariable ["ROOT_CYBERWARFARE_DATABASE_SIZE_EDIT", _filesize, true];
+_fileObject setVariable ["ROOT_CYBERWARFARE_DATABASE_DATA_EDIT", _filecontent, true];
+_fileObject setVariable ["ROOT_CYBERWARFARE_DATABASE_EXECUTIONCODE", _executionCode, true];
+_fileObject setVariable ["ROOT_CYBERWARFARE_AVAILABLE_FUTURE", _availableToFutureLaptops, true];
 
 private _availabilityText = "";
 
 // Store database linking information (for selected computers)
 if (_linkedComputers isNotEqualTo []) then {
-    private _deviceLinks = missionNamespace getVariable ["ROOT-Device-Links", []];
+    private _deviceLinks = missionNamespace getVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", []];
     
     {
         private _computerNetId = _x;
@@ -49,13 +49,13 @@ if (_linkedComputers isNotEqualTo []) then {
     } forEach _linkedComputers;
 
     _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
-    missionNamespace setVariable ["ROOT-Device-Links", _deviceLinks, true];
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", _deviceLinks, true];
 };
 
 private _excludedNetIds = [];
 // Handle public device access
 if ((_availableToFutureLaptops) || (count _linkedComputers == 0)) then {
-    private _publicDevices = missionNamespace getVariable ["ROOT-Public-Devices", []];
+    private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
 
     if (_availableToFutureLaptops) then {
         if (_linkedComputers isNotEqualTo []) then {
@@ -65,7 +65,7 @@ if ((_availableToFutureLaptops) || (count _linkedComputers == 0)) then {
             // Scenario: Available to future + no linked
             // Exclude ALL current laptops - only future ones get access
             private _allObjects = 24 allObjects 1; // All objects
-            private _allHackingLaptops = _allObjects select {_x getVariable ["ROOT_HackingTools", false]};
+            private _allHackingLaptops = _allObjects select {_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]};
             {
                 _excludedNetIds pushBack (netId _x);
             } forEach _allHackingLaptops;
@@ -79,10 +79,10 @@ if ((_availableToFutureLaptops) || (count _linkedComputers == 0)) then {
 
     // Store [type, id, excludedNetIds] 
     _publicDevices pushBack [4, _databaseId, _excludedNetIds]; // 4 = database type
-    missionNamespace setVariable ["ROOT-Public-Devices", _publicDevices, true];
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
 };
 
-private _existingDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
+private _existingDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
 _existingDevices set [0, _allDoors];
 _existingDevices set [1, _allLamps];
 _existingDevices set [2, _allDrones];
@@ -91,6 +91,6 @@ _existingDevices set [4, _allCustom];
 _existingDevices set [5, _allGpsTrackers];
 _existingDevices set [6, _allVehicles];
 
-missionNamespace setVariable ["ROOT-All-Devices", _existingDevices, true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _existingDevices, true];
 
 [format ["Root Cyber Warfare: File added with ID: %1. %2.", _databaseId, _availabilityText]] remoteExec ["systemChat", _execUserId];

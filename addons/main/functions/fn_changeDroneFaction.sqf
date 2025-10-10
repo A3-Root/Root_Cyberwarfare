@@ -9,8 +9,8 @@ private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
 _droneFaction = toLower _droneFaction;
 
 if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "west" || _droneFaction isEqualTo "east" || _droneFaction isEqualTo "guer" || _droneFaction isEqualTo "civ")) then {
-    private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", []];
-    private _allCosts = missionNamespace getVariable ["ROOT-All-Costs", []];
+    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
+    private _allCosts = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_COSTS", []];
     private _powerCostPerDrone = _allCosts select 1;
     private _allDrones = _allDevices select 2;
 

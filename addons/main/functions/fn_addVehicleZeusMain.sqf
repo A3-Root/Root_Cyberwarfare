@@ -4,7 +4,7 @@ if (_execUserId == 0) then {
     _execUserId = owner _targetObject;
 };
 
-private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
 private _allDoors = _allDevices select 0;
 private _allLamps = _allDevices select 1;
 private _allDrones = _allDevices select 2;
@@ -16,7 +16,7 @@ private _allVehicles = _allDevices select 6;
 private _objectType = typeOf _targetObject;
 private _netId = netId _targetObject;
 
-private _existingDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
+private _existingDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
 
 private _displayName = getText (configOf _targetObject >> "displayName");
 
@@ -24,16 +24,16 @@ private _deviceId = 0;
 
 private _typeofhackable = 7;
 
-_targetObject setVariable ["ROOT_VehicleId", _deviceId, true];
-_targetObject setVariable ["ROOT_VehicleName", _vehicleName, true];
-_targetObject setVariable ["ROOT_VehicleallowFuel", _allowFuel, true];
-_targetObject setVariable ["ROOT_VehicleallowSpeed", _allowSpeed, true];
-_targetObject setVariable ["ROOT_VehicleallowBrakes", _allowBrakes, true];
-_targetObject setVariable ["ROOT_VehicleallowLights", _allowLights, true];
-_targetObject setVariable ["ROOT_VehicleallowEngine", _allowEngine, true];
-_targetObject setVariable ["ROOT_VehicleallowDoor", _allowAlarm, true];
-_targetObject setVariable ["ROOT_AvailableToFutureLaptops", _availableToFutureLaptops, true];
-_targetObject setVariable ["ROOT_VehiclePowerCost", _powerCost, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_ID", _deviceId, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_NAME", _vehicleName, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_FUEL", _allowFuel, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_SPEED", _allowSpeed, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_BRAKES", _allowBrakes, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_LIGHTS", _allowLights, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_ENGINE", _allowEngine, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_DOOR", _allowAlarm, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_AVAILABLE_FUTURE", _availableToFutureLaptops, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", _powerCost, true];
 
 _deviceId = (round (random 8999)) + 1000;
 if (_allVehicles isNotEqualTo []) then {
@@ -57,7 +57,7 @@ private _availableHacks = "";
 
 // Store device linking information (for selected computers)
 if (_linkedComputers isNotEqualTo []) then {
-    private _deviceLinks = missionNamespace getVariable ["ROOT-Device-Links", []];
+    private _deviceLinks = missionNamespace getVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", []];
     
     {
         private _computerNetId = _x;
@@ -74,20 +74,20 @@ if (_linkedComputers isNotEqualTo []) then {
     } forEach _linkedComputers;
 
     _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
-    missionNamespace setVariable ["ROOT-Device-Links", _deviceLinks, true];
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", _deviceLinks, true];
 };
 
 private _excludedNetIds = [];
 /// Handle public device access
 if ((_availableToFutureLaptops) || (_linkedComputers isEqualTo [])) then {
-    private _publicDevices = missionNamespace getVariable ["ROOT-Public-Devices", []];
+    private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
 
     if (_availableToFutureLaptops) then {
         if (_linkedComputers isNotEqualTo []) then {
             // Scenario 4: Available to future + some linked
             // Exclude current laptops that are NOT linked
             {
-                if (_x getVariable ["ROOT_HackingTools", false]) then {
+                if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
                     private _netId = netId _x;
                     if !(_netId in _linkedComputers) then {
                         _excludedNetIds pushBack _netId;
@@ -100,7 +100,7 @@ if ((_availableToFutureLaptops) || (_linkedComputers isEqualTo [])) then {
             // Scenario 3: Available to future + no linked
             // Exclude ALL current laptops
             {
-                if (_x getVariable ["ROOT_HackingTools", false]) then {
+                if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
                     _excludedNetIds pushBack (netId _x);
                 };
             } forEach (24 allObjects 1);
@@ -113,7 +113,7 @@ if ((_availableToFutureLaptops) || (_linkedComputers isEqualTo [])) then {
     };
 
     _publicDevices pushBack [_typeofhackable, _deviceId, _excludedNetIds];
-    missionNamespace setVariable ["ROOT-Public-Devices", _publicDevices, true];
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
 };
 
 _existingDevices set [0, _allDoors];
@@ -123,8 +123,8 @@ _existingDevices set [3, _allDatabases];
 _existingDevices set [4, _allCustom];
 _existingDevices set [5, _allGpsTrackers];
 _existingDevices set [6, _allVehicles];
-missionNamespace setVariable ["ROOT-All-Devices", _existingDevices, true];
-_targetObject setVariable ["ROOT-Connected", true, true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _existingDevices, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_CONNECTED", true, true];
 
 if (_allowFuel) then { _availableHacks = _availableHacks + "Battery, "};
 if (_allowSpeed) then { _availableHacks = _availableHacks + "Speed, "};

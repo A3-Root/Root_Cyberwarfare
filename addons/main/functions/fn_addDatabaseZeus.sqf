@@ -8,8 +8,8 @@ deleteVehicle _logic;
 // Get all existing laptops with hacking tools
 private _allComputers = [];
 {
-    if (_x getVariable ["ROOT_HackingTools", false]) then {
-        private _computerName = _x getVariable ["ROOT_CustomName", ROOT_customLaptopName];
+    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
+        private _computerName = _x getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME];
         private _netId = netId _x;
         private _position = getPosATL _x;
         private _gridPos = mapGridPosition _x;
@@ -60,7 +60,7 @@ hint str format ['Code triggered'];", {}, 7]],
 
         if (_filesize < 1) then {_filesize = 1};
         
-        private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
+        private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
         _allDevices params ["_allDoors", "_allLamps", "_allDrones", "_allDatabases", "_allCustom", "_allGpsTrackers", "_allVehicles"];
         private _databaseId = 0;
         private _execUserId = clientOwner;

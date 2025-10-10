@@ -4,7 +4,7 @@ private _string = "";
 private _trackerIdNum = parseNumber _trackerId;
 
 if (_trackerIdNum != 0) then {
-    private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", []];
+    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
     private _allGpsTrackers = _allDevices param [5, []];
 
     if (_allGpsTrackers isEqualTo []) then {
@@ -27,7 +27,7 @@ if (_trackerIdNum != 0) then {
             if ([_computer, 6, _storedTrackerId, _commandPath] call Root_fnc_isDeviceAccessible) then {
                 _foundTracker = true;
 
-                if ((isNil "_powerCost") || (_powerCost < 1)) then { _powerCost = _trackerObject getVariable ["ROOT_GpsTrackerPowerCost", 10] };
+                if ((isNil "_powerCost") || (_powerCost < 1)) then { _powerCost = _trackerObject getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_COST", 10] };
                 private _battery = uiNamespace getVariable "AE3_Battery";
                 private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
                 
@@ -62,7 +62,7 @@ if (_trackerIdNum != 0) then {
                                 _powerCost
                             ]];
                             _allDevices set [5, _allGpsTrackers];
-                            missionNamespace setVariable ["ROOT-All-Devices", _allDevices, true];
+                            missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
                         } else {
                             _string = format ['Are you sure? (Y/N): '];
                             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
@@ -114,7 +114,7 @@ if (_trackerIdNum != 0) then {
                                 _powerCost
                             ]];
                             _allDevices set [5, _allGpsTrackers];
-                            missionNamespace setVariable ["ROOT-All-Devices", _allDevices, true];
+                            missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
                             
                             _string = format ["Tracking '%1' (ID: %2) for %3 seconds.", _trackerName, _trackerIdNum, _trackingTime];
                             [_computer, _string] call AE3_armaos_fnc_shell_stdout;

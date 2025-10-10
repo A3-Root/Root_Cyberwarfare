@@ -17,29 +17,29 @@ class CfgVehicles {
 		isTriggerActivated = 0;
 		isDisposable = 1;
 		class Attributes: AttributesBase {
-			class ROOT_Hack_Door_Cost_Edit: Edit {
-				property = "ROOT_Hack_Door_Cost_Edit";
+			class ROOT_CYBERWARFARE_COST_DOOR_EDIT: Edit {
+				property = "ROOT_CYBERWARFARE_COST_DOOR_EDIT";
 				displayName = "Door Hacking Cost";
 				tooltip = "Power cost in Wh to hack a Door";
 				typeName = "NUMBER";
 				defaultValue = 2;
 			};
-			class ROOT_Hack_Drone_Side_Cost_Edit: Edit {
-				property = "ROOT_Hack_Drone_Side_Cost_Edit";
+			class ROOT_CYBERWARFARE_COST_DRONE_SIDE_EDIT: Edit {
+				property = "ROOT_CYBERWARFARE_COST_DRONE_SIDE_EDIT";
 				displayName = "Drone Side Changing Cost";
 				tooltip = "Power cost in Wh to hack a drone and switch its side";
 				typeName = "NUMBER";
 				defaultValue = 20;
 			};
-			class ROOT_Hack_Drone_Disable_Cost_Edit: Edit {
-				property = "ROOT_Hack_Drone_Disable_Cost_Edit";
+			class ROOT_CYBERWARFARE_COST_DRONE_DISABLE_EDIT: Edit {
+				property = "ROOT_CYBERWARFARE_COST_DRONE_DISABLE_EDIT";
 				displayName = "Drone disable hacking cost";
 				tooltip = "Power cost in Wh to hack a drone and disable (blow) it";
 				typeName = "NUMBER";
 				defaultValue = 10;
 			};
-			class ROOT_Hack_Custom_Cost_Edit: Edit {
-				property = "ROOT_Hack_Custom_Cost_Edit";
+			class ROOT_CYBERWARFARE_COST_CUSTOM_EDIT: Edit {
+				property = "ROOT_CYBERWARFARE_COST_CUSTOM_EDIT";
 				displayName = "Custom device hacking cost";
 				tooltip = "Power cost in Wh to hack a custom device";
 				typeName = "NUMBER";
@@ -61,15 +61,15 @@ class CfgVehicles {
 		isTriggerActivated = 0;
 		isDisposable = 1;
 		class Attributes: AttributesBase {
-			class ROOT_Hack_Tool_Location_Edit: Edit {
-				property = "ROOT_Hack_Tool_Location_Edit";
+			class ROOT_CYBERWARFARE_HACK_TOOL_LOCATION_EDIT: Edit {
+				property = "ROOT_CYBERWARFARE_HACK_TOOL_LOCATION_EDIT";
 				displayName = "Tool Path";
 				tooltip = "Path for the tools to be installed from the root path. Example: '/rubberducky/tools/'";
 				typeName = "STRING";
 				defaultValue = """/rubberducky/tools/""";
 			};
-			class ROOT_Hack_Tool_Backdoor_Edit: Edit {
-				property = "ROOT_Hack_Tool_Backdoor_Edit";
+			class ROOT_CYBERWARFARE_HACK_TOOL_BACKDOOR_EDIT: Edit {
+				property = "ROOT_CYBERWARFARE_HACK_TOOL_BACKDOOR_EDIT";
 				displayName = "Backdoor Function Prefix";
 				tooltip = "Prefix name for the backdoor. Example: 'backdoor_'. Leave empty for no backdoor. If the value is not empty, all hacking functions in the specified path will have this prefix and will have access to all devices in the game even if unlinked to the laptop / module.";
 				typeName = "STRING";
@@ -90,22 +90,22 @@ class CfgVehicles {
 		isTriggerActivated = 0;
 		isDisposable = 1;
 		class Attributes: AttributesBase {
-			class ROOT_DatabaseName_Edit: Edit {
-				property = "ROOT_DatabaseName_Edit";
+			class ROOT_CYBERWARFARE_DATABASE_NAME_EDIT: Edit {
+				property = "ROOT_CYBERWARFARE_DATABASE_NAME_EDIT";
 				displayName = "File Name";
 				tooltip = "Name of the File";
 				typeName = "STRING";
 				defaultValue = """Very important Database""";
 			};
-			class ROOT_DatabaseSize_Edit: Edit {
-				property = "ROOT_DatabaseSize_Edit";
+			class ROOT_CYBERWARFARE_DATABASE_SIZE_EDIT: Edit {
+				property = "ROOT_CYBERWARFARE_DATABASE_SIZE_EDIT";
 				displayName = "File Size";
 				tooltip = "Seconds to hack and download";
 				typeName = "NUMBER";
 				defaultValue = 10;
 			};
-			class ROOT_DatabaseData_Edit: Edit {
-				property = "ROOT_DatabaseData_Edit";
+			class ROOT_CYBERWARFARE_DATABASE_DATA_EDIT: Edit {
+				property = "ROOT_CYBERWARFARE_DATABASE_DATA_EDIT";
 				control = "EditCodeMulti5";
 				displayName = "File Contents";
 				tooltip = "Contents to be displayed when the file is opened using the 'cat' command";

@@ -7,8 +7,8 @@ private _battery = uiNamespace getVariable 'AE3_Battery';
 private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
 
 if((_droneIdNum != 0 || _droneId isEqualTo "a")) then {
-    private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", []];
-    private _allCosts = missionNamespace getVariable ["ROOT-All-Costs", []];
+    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
+    private _allCosts = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_COSTS", []];
     private _powerCostPerDrone = _allCosts select 2;
     private _allDrones = _allDevices select 2;
 

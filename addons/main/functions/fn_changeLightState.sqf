@@ -7,7 +7,7 @@ private _lightIdNum = parseNumber _lightId;
 _lightState = toLower _lightState;
 
 if((_lightIdNum != 0 || _lightId isEqualTo "a") && (_lightState isEqualTo "on" || _lightState isEqualTo "off")) then {
-    private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", []];
+    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
     private _allLights = _allDevices select 1;
 
     // Filter lights to only those accessible by this computer

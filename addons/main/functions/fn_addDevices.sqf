@@ -17,7 +17,7 @@ private _allComputers = [];
 
 // Get all existing computers with hacking tools at mission start
 {
-    if (_x getVariable ["ROOT_HackingTools", false]) then {
+    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
         _allComputers pushBack (netId _x);
     };
 } forEach (allMissionObjects "All");
@@ -170,7 +170,7 @@ private _syncedDatabases = synchronizedObjects _module select { _x isKindOf "Roo
 
 // Handle device linking for all devices to all computers
 if (_allComputers isNotEqualTo []) then {
-    private _deviceLinks = missionNamespace getVariable ["ROOT-Device-Links", []];
+    private _deviceLinks = missionNamespace getVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", []];
     
     // Process doors (type 1)
     {
@@ -244,10 +244,10 @@ if (_allComputers isNotEqualTo []) then {
         } forEach _allComputers;
     } forEach _allDatabases;
     
-    missionNamespace setVariable ["ROOT-Device-Links", _deviceLinks, true];
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", _deviceLinks, true];
 };
 
-private _existingDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
+private _existingDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
 private _allGpsTrackers = _existingDevices select 5;
 private _allVehicles = _existingDevices select 6;
 _existingDevices set [0, (_existingDevices select 0) + _allDoors];
@@ -258,18 +258,18 @@ _existingDevices set [4, (_existingDevices select 4) + _allCustom];
 _existingDevices set [5, _allGpsTrackers];
 _existingDevices set [6, _allVehicles];
 
-missionNamespace setVariable ["ROOT-All-Devices", _existingDevices, true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _existingDevices, true];
 
-private _doorCost = _module getVariable ["ROOT_Hack_Door_Cost_Edit", 2];
-private _droneSideCost = _module getVariable ["ROOT_Hack_Drone_Side_Cost_Edit", 20];
-private _droneDestructionCost = _module getVariable ["ROOT_Hack_Drone_Disable_Cost_Edit", 10];
-private _customCost = _module getVariable ["ROOT_Hack_Custom_Cost_Edit", 10];
+private _doorCost = _module getVariable ["ROOT_CYBERWARFARE_COST_DOOR_EDIT", 2];
+private _droneSideCost = _module getVariable ["ROOT_CYBERWARFARE_COST_DRONE_SIDE_EDIT", 20];
+private _droneDestructionCost = _module getVariable ["ROOT_CYBERWARFARE_COST_DRONE_DISABLE_EDIT", 10];
+private _customCost = _module getVariable ["ROOT_CYBERWARFARE_COST_CUSTOM_EDIT", 10];
 
-missionNamespace setVariable ["ROOT-All-Costs", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_COSTS", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
 
 _syncedObjects = synchronizedObjects _module;
 
 {
     private _syncedNetId = netId _x;
-    _x setVariable ["ROOT-Connected", true, true];
+    _x setVariable ["ROOT_CYBERWARFARE_CONNECTED", true, true];
 } forEach _syncedObjects;

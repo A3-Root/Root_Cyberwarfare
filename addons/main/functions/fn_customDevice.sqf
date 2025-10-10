@@ -9,8 +9,8 @@ _customState = toLower _customState;
 _customId = parseNumber _customId;
 
 if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualTo "deactivate")) then {
-    private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", []];
-    private _allCosts = missionNamespace getVariable ["ROOT-All-Costs", []];
+    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
+    private _allCosts = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_COSTS", []];
     private _powerCostPerCustom = _allCosts select 3;
     private _allCustom = _allDevices select 4;
 

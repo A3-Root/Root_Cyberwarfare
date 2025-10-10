@@ -11,8 +11,8 @@ private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
 _doorDesiredState = toLower _doorDesiredState;
 
 if(_buildingIdNum != 0 && (_doorIdNum != 0 || _doorId isEqualTo "a") && (_doorDesiredState isEqualTo "lock" || _doorDesiredState isEqualTo "unlock")) then {
-    private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", []];
-    private _allCosts = missionNamespace getVariable ["ROOT-All-Costs", []];
+    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
+    private _allCosts = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_COSTS", []];
     private _powerCostPerDoor = _allCosts select 0;
     private _allDoors = _allDevices select 0;
 

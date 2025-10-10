@@ -9,15 +9,15 @@ if (isNull _targetObject) exitWith {
     ["Place the module on an object!"] call zen_common_fnc_showMessage;
 };
 
-private _index = missionNamespace getVariable ["ROOT_hackingVehicleIndex", 1];
+private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_VEHICLE_INDEX", 1];
 ROOT_hackingVehicleName = format ["Vehicle_%1", _index];
 
 // Get all existing laptops with hacking tools
 private _allComputers = [];
 {
-    if (_x getVariable ["ROOT_HackingTools", false]) then {
+    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
         private _displayName = getText (configOf _x >> "displayName");
-        private _computerName = _x getVariable ["ROOT_CustomName", _displayName];
+        private _computerName = _x getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _displayName];
         private _netId = netId _x;
         private _position = getPosATL _x;
         private _gridPos = mapGridPosition _x;
@@ -77,7 +77,7 @@ private _dialogControls = [
         [_targetObject, _execUserId, _selectedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
         ["Hackable Vehicle Added!"] call zen_common_fnc_showMessage;
         _index = _index + 1;
-        missionNamespace setVariable ["ROOT_hackingVehicleIndex", _index, true];
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_VEHICLE_INDEX", _index, true];
     }, 
     {
         ["Aborted"] call zen_common_fnc_showMessage;

@@ -8,11 +8,11 @@ if (isNull _target || {_target == _player}) exitWith {
     ["Cannot search this target!", true, 1.5, 2] call ace_common_fnc_displayText;
 };
 
-private _isBeingSearched = missionNamespace getVariable ["ROOT_CYBERWARFARE_ACTIVESEARCH", false];
+private _isBeingSearched = missionNamespace getVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", false];
 if (_isBeingSearched) exitWith {
     ["Search already underway by another person!", true, 1.5, 2] call ace_common_fnc_displayText;
 };
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ACTIVESEARCH", true, true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", true, true];
 
 // Check if player has spectrum device
 private _hasSpectrumDevice = false;
@@ -31,7 +31,7 @@ private _detectNormal = missionNamespace getVariable ["ROOT_CYBERWARFARE_SPECTRU
 private _detectionChance = [_detectNormal, _detectTool] select (_hasSpectrumDevice);
 
 // Check if target actually has a GPS tracker
-private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
 private _allGpsTrackers = _allDevices select 5;
 
 private _targetNetId = netId _target;
@@ -102,4 +102,4 @@ if (_hasSpectrumDevice) then {
         [_target, _player, _trackerData]
     ] call zen_dialog_fnc_create;
 };
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ACTIVESEARCH", false, true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", false, true];

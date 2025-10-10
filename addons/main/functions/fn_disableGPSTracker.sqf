@@ -7,7 +7,7 @@ params ["_target", "_trackerData", "_player"];
 _trackerData params ["_trackerId", "_trackerNetId", "_trackerName", "_trackingTime", "_updateFrequency", "_customMarker", "_linkedComputers", "_availableToFutureLaptops", "_currentStatus", "_allowRetracking", "_lastPingTimer", "_powerCost"];
 
 // Get current devices
-private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
 private _allGpsTrackers = _allDevices select 5;
 
 // Find and update the tracker status

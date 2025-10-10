@@ -9,7 +9,7 @@ private _trackerName = format ["GPS_Tracker_%1", _index];
 // Get all existing laptops
 private _allComputers = [];
 {
-    if (_x getVariable ["ROOT_HackingTools", false]) then {
+    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
         private _netId = netId _x;
         _allComputers pushBack _netId;
     };
@@ -49,7 +49,7 @@ private _allComputers = [];
             };
         };
 
-        missionNamespace setVariable ["ROOT_gpsTrackerIndex", _index + 1, true];
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_INDEX", _index + 1, true];
 
         [format ["GPS Tracker attached successfully to %1!", getText (configOf _target >> "displayName")], 2] call ACE_common_fnc_displayTextStructured;
 	}, {

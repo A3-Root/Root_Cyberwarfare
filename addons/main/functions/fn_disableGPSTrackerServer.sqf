@@ -6,7 +6,7 @@ if (!isServer) exitWith {};
 
 params ["_allDevices", "_trackerId"];
 
-missionNamespace setVariable ["ROOT-All-Devices", _allDevices, true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
 
 diag_log format ["[Root Cyber Warfare] GPS Tracker ID %1 has been disabled by player search.", _trackerId];
 

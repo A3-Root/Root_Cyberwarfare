@@ -1,7 +1,7 @@
 params['_owner', '_computer', '_nameOfVariable', '_commandPath'];
 
 private _string = "";
-private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
 private _allDoors = _allDevices select 0;
 private _allLights = _allDevices select 1;
 private _allDrones = _allDevices select 2;

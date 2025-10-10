@@ -8,7 +8,7 @@ params ["_computer", "_deviceType", "_deviceId", ["_commandPath", ""]];
 if (isNull _computer) exitWith { false };
 
 // Check if this command is running from a backdoor path
-private _backdoorPaths = _computer getVariable ["ROOT_BackdoorFunction", []];
+private _backdoorPaths = _computer getVariable ["ROOT_CYBERWARFARE_BACKDOOR_FUNCTION", []];
 private _isBackdoorAccess = false;
 
 {
@@ -21,10 +21,10 @@ private _isBackdoorAccess = false;
 // If this is a backdoor path, grant access to all devices
 if (_isBackdoorAccess) exitWith { true };
 
-if !(_computer getVariable ["ROOT_HackingTools", false]) exitWith { false };
+if !(_computer getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) exitWith { false };
 
 // Check if this device is in the public list FIRST
-private _publicDevices = missionNamespace getVariable ["ROOT-Public-Devices", []];
+private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
 
 // Find the public entry for this device (if any)
 private _publicEntries = _publicDevices select { (_x select 0) == _deviceType && ((_x select 1) == _deviceId) };
@@ -52,7 +52,7 @@ if (_publicEntries isNotEqualTo []) then {
 if (_publicStatus) exitWith { true };
 // ONLY if public access is not granted, check private device links
 private _computerNetId = netId _computer;
-private _deviceLinks = missionNamespace getVariable ["ROOT-Device-Links", []];
+private _deviceLinks = missionNamespace getVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", []];
 
 // If no devices are linked to any computers, no access to private devices
 if (_deviceLinks isEqualTo []) exitWith { false };

@@ -5,7 +5,7 @@ private _databaseIdNum = parseNumber _databaseId;
 
 if (_databaseIdNum != 0) then {
     private _pointer = _computer getVariable "AE3_filepointer";
-    private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", []];
+    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
     private _allDatabases = _allDevices select 3;
 
     // Filter databases to only those accessible by this computer
@@ -29,10 +29,10 @@ if (_databaseIdNum != 0) then {
         if (_databaseIdNum == _idOfDatabase) then {
             _foundDatabase = true;
             private _database = objectFromNetId _DatabaseNetId;
-            private _databaseName = _database getVariable ["ROOT_DatabaseName_Edit", ""];
-            private _databaseSize = _database getVariable ["ROOT_DatabaseSize_Edit", ""];
-            private _databaseContent = _database getVariable ["ROOT_DatabaseData_Edit", ""];
-            private _executionCode = _database getVariable ["ROOT_DatabaseExecutionCode", ""];
+            private _databaseName = _database getVariable ["ROOT_CYBERWARFARE_DATABASE_NAME_EDIT", ""];
+            private _databaseSize = _database getVariable ["ROOT_CYBERWARFARE_DATABASE_SIZE_EDIT", ""];
+            private _databaseContent = _database getVariable ["ROOT_CYBERWARFARE_DATABASE_DATA_EDIT", ""];
+            private _executionCode = _database getVariable ["ROOT_CYBERWARFARE_DATABASE_EXECUTIONCODE", ""];
             private _paddingZeroes = "0000000000";
             private _formatTotalLength = 3;
             private _loadingBar1 = "#";

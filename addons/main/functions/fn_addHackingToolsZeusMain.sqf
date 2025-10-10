@@ -29,7 +29,7 @@ _vehicle = _result + "/vehicle";
 
 if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then 
 {
-    private _currentBackdoorPaths = _entity getVariable ["ROOT_BackdoorFunction", []];
+    private _currentBackdoorPaths = _entity getVariable ["ROOT_CYBERWARFARE_BACKDOOR_FUNCTION", []];
     if (_backdoorScriptPrefix == "") then { _backdoorScriptPrefix = "backdoor_debug_" };
     _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "guide");
     _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "devices");
@@ -41,7 +41,7 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
     _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "custom");
     _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "gpstrack");
     _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "vehicle");
-    _entity setVariable ["ROOT_BackdoorFunction", _currentBackdoorPaths, true];
+    _entity setVariable ["ROOT_CYBERWARFARE_BACKDOOR_FUNCTION", _currentBackdoorPaths, true];
     _result = _result + "/" + _backdoorScriptPrefix;
     _guide = _result + "guide";
     _devices = _result + "devices";
@@ -57,8 +57,8 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
     if (_execUserId == 0) then {
         _execUserId = owner _entity;
     };
-    _entity setVariable ["ROOT_HackingTools", true, true];
-    _entity setVariable ["ROOT_CustomName", _customLaptopName, true];
+    _entity setVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", true, true];
+    _entity setVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _customLaptopName, true];
 };
 
 
@@ -105,7 +105,7 @@ private _content = "
 
     private _owner = clientOwner;
 
-    private _nameOfVariable = 'ROOT-List-Devices-' + "+ _computerNetIdString +";
+    private _nameOfVariable = 'ROOT_CYBERWARFARE_LIST_DEVICES-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
     [_owner, _computer, _nameOfVariable, _commandName] remoteExec ['Root_fnc_listDevicesInSubnet', _owner];
@@ -143,7 +143,7 @@ _content = "
 
     private _owner = clientOwner;
 
-    private _nameOfVariable = 'ROOT-Door-' + "+ _computerNetIdString +";
+    private _nameOfVariable = 'ROOT_CYBERWARFARE_DOOR-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
     [_owner, _computer, _nameOfVariable, _buildingId, _doorId, _desiredState, _commandName] remoteExec ['Root_fnc_changeDoorState', _owner];
@@ -179,7 +179,7 @@ _content = "
 
     private _owner = clientOwner;
 
-    private _nameOfVariable = 'ROOT-Light-' + "+ _computerNetIdString +";
+    private _nameOfVariable = 'ROOT_CYBERWARFARE_LIGHT-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
     [_owner, _computer, _nameOfVariable, _lightId, _desiredState, _commandName] remoteExec ['Root_fnc_changeLightState', _owner];
@@ -213,7 +213,7 @@ _content = "
 
     private _owner = clientOwner;
 
-    private _nameOfVariable = 'ROOT-Disable-Drone>-' + "+ _computerNetIdString +";
+    private _nameOfVariable = 'ROOT_CYBERWARFARE_DISABLE_DRONE>-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
     [_owner, _computer, _nameOfVariable, _droneId, _commandName] remoteExec ['Root_fnc_disableDrone', _owner];
@@ -249,7 +249,7 @@ _content = "
 
     private _owner = clientOwner;
 
-    private _nameOfVariable = 'ROOT-Change-Drone-' + "+ _computerNetIdString +";
+    private _nameOfVariable = 'ROOT_CYBERWARFARE_CHANGE_DRONE-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
     [_owner, _computer, _nameOfVariable, _droneId, _desiredState, _commandName] remoteExec ['Root_fnc_changeDroneFaction', _owner];
@@ -283,7 +283,7 @@ _content = "
 
     private _owner = clientOwner;
 
-    private _nameOfVariable = 'ROOT-Download-Database-' + "+ _computerNetIdString +";
+    private _nameOfVariable = 'ROOT_CYBERWARFARE_DOWNLOAD_DATABASE-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
     [_owner, _computer, _nameOfVariable, _databaseId, _commandName] remoteExec ['Root_fnc_downloadDatabase', _owner];
@@ -319,7 +319,7 @@ _content = "
 
     private _owner = clientOwner;
 
-    private _nameOfVariable = 'ROOT-Custom-Device-' + "+ _computerNetIdString +";
+    private _nameOfVariable = 'ROOT_CYBERWARFARE_CUSTOM_DEVICE-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
     [_owner, _computer, _nameOfVariable, _customId, _customState, _commandName] remoteExec ['Root_fnc_customDevice', _owner];
@@ -352,7 +352,7 @@ _content = "
 
     private _owner = clientOwner;
 
-    private _nameOfVariable = 'ROOT-GpsTrack-' + "+ _computerNetIdString +";
+    private _nameOfVariable = 'ROOT_CYBERWARFARE_GPS_TRACK-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
     [_owner, _computer, _nameOfVariable, _trackerId, _commandName] remoteExec ['Root_fnc_displayGPSPosition', _owner];
@@ -389,7 +389,7 @@ _content = "
 
     private _owner = clientOwner;
 
-    private _nameOfVariable = 'ROOT-HackableVehicle-' + "+ _computerNetIdString +";
+    private _nameOfVariable = 'ROOT_CYBERWARFARE_VEHICLE-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
     [_owner, _computer, _nameOfVariable, _vehicleID, _action, _value, _commandName] remoteExec ['Root_fnc_changeVehicleParams', _owner];

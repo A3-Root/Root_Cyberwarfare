@@ -6,7 +6,7 @@ private _trackerPos = [];
 private _computerNetId = netId _computer;
 
 // Update tracker status to "Tracking" on server
-private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", []];
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
 private _allGpsTrackers = _allDevices param [5, []];
 
 {
@@ -27,7 +27,7 @@ private _allGpsTrackers = _allDevices param [5, []];
             _x select 11
         ]];
         _allDevices set [5, _allGpsTrackers];
-        missionNamespace setVariable ["ROOT-All-Devices", _allDevices, true];
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
     };
 } forEach _allGpsTrackers;
 
@@ -46,7 +46,7 @@ if !(_allowRetracking) then {
 };
 
 // Update the global tracker status
-_allDevices = missionNamespace getVariable ["ROOT-All-Devices", []];
+_allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
 _allGpsTrackers = _allDevices param [5, []];
 
 {
@@ -66,7 +66,7 @@ _allGpsTrackers = _allDevices param [5, []];
             _x select 11
         ]];
         _allDevices set [5, _allGpsTrackers];
-        missionNamespace setVariable ["ROOT-All-Devices", _allDevices, true];
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
     };
 } forEach _allGpsTrackers;
 

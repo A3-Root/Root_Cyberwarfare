@@ -26,3 +26,27 @@ options.banned = [
 options.ignore = [
     "addPublicVariableEventHandler",
 ]
+
+[lints.sqf.var_all_caps]
+options.ignore = [
+    "ROOT_CYBERWARFARE_*",
+]
+
+[config.config_this_call]
+enabled = true
+
+[sqf.undefined]
+enabled = true
+options.check_orphan_code = true #off by default_config
+
+[sqf.if_not_else]
+enabled = true
+
+[sqf.shadowed]
+enabled = true
+
+[sqf.not_private]
+enabled = true
+
+[sqf.short_circuit_bool_var]
+enabled = true

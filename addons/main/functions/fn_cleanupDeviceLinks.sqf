@@ -7,30 +7,30 @@ private _gpsIndex = 0;
 private _laptopIndex = 0;
 private _hackingIndex = 0;
 
-if (isNil "ROOT_CleanupTimer") then { ROOT_CleanupTimer = 60 };
-if (isNil "ROOT_gpsTrackerIndex") then { _gpsIndex = 1 };
-if (isNil "ROOT_customLaptopNameIndex") then { _laptopIndex = 1 };
-if (isNil "ROOT_hackingVehicleIndex") then { _hackingIndex = 1 };
+if (isNil "ROOT_CYBERWARFARE_CLEANUP_TIME") then { ROOT_CYBERWARFARE_CLEANUP_TIME = 60 };
+if (isNil "ROOT_CYBERWARFARE_GPS_TRACKER_INDEX") then { _gpsIndex = 1 };
+if (isNil "ROOT_CYBERWARFARE_HACK_TOOL_INDEX") then { _laptopIndex = 1 };
+if (isNil "ROOT_CYBERWARFARE_VEHICLE_INDEX") then { _hackingIndex = 1 };
 
-missionNamespace setVariable ["ROOT_gpsTrackerIndex", _gpsIndex, true];
-missionNamespace setVariable ["ROOT_customLaptopNameIndex", _laptopIndex, true];
-missionNamespace setVariable ["ROOT_hackingVehicleIndex", _hackingIndex, true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_INDEX", _gpsIndex, true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", _laptopIndex, true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_VEHICLE_INDEX", _hackingIndex, true];
 
-publicVariable "ROOT_CleanupTimer";
+publicVariable "ROOT_CYBERWARFARE_CLEANUP_TIME";
 
-private _doorCost = missionNamespace getVariable ["ROOT_Hack_Door_Cost_Edit", 2];
-private _droneSideCost = missionNamespace getVariable ["ROOT_Hack_Drone_Side_Cost_Edit", 20];
-private _droneDestructionCost = missionNamespace getVariable ["ROOT_Hack_Drone_Disable_Cost_Edit", 10];
-private _customCost = missionNamespace getVariable ["ROOT_Hack_Custom_Cost_Edit", 10];
+private _doorCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_DOOR_EDIT", 2];
+private _droneSideCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_DRONE_SIDE_EDIT", 20];
+private _droneDestructionCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_DRONE_DISABLE_EDIT", 10];
+private _customCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_CUSTOM_EDIT", 10];
 
-missionNamespace setVariable ["ROOT-All-Costs", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_COSTS", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
 
-diag_log format ["[Root Cyber Warfare] Regular Device Cleanup script started! Running periodically every %1 seconds. You can change this value by modifying the 'ROOT_CleanupTimer' variable. Set the variable value to 0 to disable/stop the clean up.", ROOT_CleanupTimer];
+diag_log format ["[Root Cyber Warfare] Regular Device Cleanup script started! Running periodically every %1 seconds. You can change this value by modifying the 'ROOT_CYBERWARFARE_CLEANUP_TIME' variable. Set the variable value to 0 to disable/stop the clean up.", ROOT_CYBERWARFARE_CLEANUP_TIME];
 
-while {ROOT_CleanupTimer != 0} do {
-    uiSleep ROOT_CleanupTimer;
+while {ROOT_CYBERWARFARE_CLEANUP_TIME != 0} do {
+    uiSleep ROOT_CYBERWARFARE_CLEANUP_TIME;
     diag_log "[Root Cyber Warfare] Running periodic device link cleanup...";
-    private _deviceLinks = missionNamespace getVariable ["ROOT-Device-Links", []];
+    private _deviceLinks = missionNamespace getVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", []];
     private _cleanLinks = [];
     private _removedCount = 0;
 
@@ -41,7 +41,7 @@ while {ROOT_CleanupTimer != 0} do {
         private _computer = objectFromNetId _computerNetId;
         
         // Check if computer still exists and has hacking tools
-        if (!isNull _computer && {_computer getVariable ["ROOT_HackingTools", false]}) then {
+        if (!isNull _computer && {_computer getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]}) then {
             _cleanLinks pushBack _x;
         } else {
             // Computer is deleted or no longer has hacking tools
@@ -51,14 +51,14 @@ while {ROOT_CleanupTimer != 0} do {
     } forEach _deviceLinks;
 
     // Update the device links
-    missionNamespace setVariable ["ROOT-Device-Links", _cleanLinks, true];
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", _cleanLinks, true];
 
     if (_removedCount > 0) then {
         diag_log format ["[Root Cyber Warfare] Cleanup removed %1 computer links. %2 links active in the server.", _removedCount, count _cleanLinks];
     };
 
     // Also clean up any invalid devices from the main device list
-    private _allDevices = missionNamespace getVariable ["ROOT-All-Devices", [[], [], [], [], [], [], []]];
+    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
     private _cleanedDevices = [[], [], [], [], [], []];
 
     {
@@ -81,7 +81,7 @@ while {ROOT_CleanupTimer != 0} do {
         _cleanedDevices set [_forEachIndex, _cleanedList];
     } forEach _allDevices;
 
-    missionNamespace setVariable ["ROOT-All-Devices", _cleanedDevices, true];
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _cleanedDevices, true];
 };
 
 true

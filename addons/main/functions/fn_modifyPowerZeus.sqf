@@ -12,7 +12,7 @@ if !(hasInterface) exitWith {};
 	], {
 		params ["_results"];
 		_results params ["_doorCost", "_droneSideCost", "_droneDestructionCost", "_customCost"];
-		missionNamespace setVariable ["ROOT-All-Costs", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
+		missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_COSTS", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
 		["Modified Hacking Power Cost!"] call zen_common_fnc_showMessage;
 	}, {
 		["Aborted"] call zen_common_fnc_showMessage;

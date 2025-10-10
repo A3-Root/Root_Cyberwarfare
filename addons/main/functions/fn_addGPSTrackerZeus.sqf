@@ -8,15 +8,15 @@ if (isNull _targetObject) exitWith {
 };
 
 if !(hasInterface) exitWith {};
-private _index = missionNamespace getVariable ["ROOT_gpsTrackerIndex", 1];
-ROOT_gpsTrackerName = format ["GPS_Tracker_%1", _index];
+private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_INDEX", 1];
+ROOT_CYBERWARFARE_GPS_TRACKER_NAME = format ["GPS_Tracker_%1", _index];
 
 // Get all existing laptops with hacking tools
 private _allComputers = [];
 {
-    if (_x getVariable ["ROOT_HackingTools", false]) then {
+    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
         private _displayName = getText (configOf _x >> "displayName");
-        private _computerName = _x getVariable ["ROOT_CustomName", _displayName];
+        private _computerName = _x getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _displayName];
         private _netId = netId _x;
         private _position = getPosATL _x;
         private _gridPos = mapGridPosition _x;
@@ -25,7 +25,7 @@ private _allComputers = [];
 } forEach (24 allObjects 1);
 
 private _dialogControls = [
-    ["EDIT", ["Tracker Name", "Name that will appear in the terminal and as the default marker in the map for this tracker"], [ROOT_gpsTrackerName]],
+    ["EDIT", ["Tracker Name", "Name that will appear in the terminal and as the default marker in the map for this tracker"], [ROOT_CYBERWARFARE_GPS_TRACKER_NAME]],
     ["SLIDER", ["Tracking Time (seconds)", "Maximum time in seconds the tracking will stay active"], [1, 3000, 60, 0]],
     ["SLIDER", ["Update Frequency (seconds)", "Frequency in seconds between position updates"], [1, 3000, 5, 0]],
     ["SLIDER", ["Last Ping Duration", "Frequency in seconds for the last ping to be active for"], [1, 3000, 5, 0]],
@@ -76,7 +76,7 @@ private _dialogControls = [
         [_targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost] remoteExec ["Root_fnc_addGpsTrackerZeusMain", 2];
         ["GPS Tracker Added!"] call zen_common_fnc_showMessage;
         _index = _index + 1;
-        missionNamespace setVariable ["ROOT_gpsTrackerIndex", _index, true];
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_INDEX", _index, true];
     }, 
     {
         ["Aborted"] call zen_common_fnc_showMessage;
