@@ -8,13 +8,10 @@ private _laptopIndex = 0;
 private _hackingIndex = 0;
 
 if (isNil "ROOT_CYBERWARFARE_CLEANUP_TIME") then { ROOT_CYBERWARFARE_CLEANUP_TIME = 60 };
-if (isNil "ROOT_CYBERWARFARE_GPS_TRACKER_INDEX") then { _gpsIndex = 1 };
-if (isNil "ROOT_CYBERWARFARE_HACK_TOOL_INDEX") then { _laptopIndex = 1 };
-if (isNil "ROOT_CYBERWARFARE_VEHICLE_INDEX") then { _hackingIndex = 1 };
 
-missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_INDEX", _gpsIndex, true];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", _laptopIndex, true];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_VEHICLE_INDEX", _hackingIndex, true];
+missionNamespace getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_INDEX", 1];
+missionNamespace getVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", 1];
+missionNamespace getVariable ["ROOT_CYBERWARFARE_VEHICLE_INDEX", 1];
 
 publicVariable "ROOT_CYBERWARFARE_CLEANUP_TIME";
 

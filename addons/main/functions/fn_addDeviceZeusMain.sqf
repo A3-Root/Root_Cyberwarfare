@@ -34,7 +34,7 @@ private _deviceId = 0;
 private _buildingDoors = [];
 
 // Store activation/deactivation code for ALL objects
-_targetObject setVariable ["ROOT_ActivationCode", _activationCode, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_ACTIVATIONCODE", _activationCode, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_DEACTIVATIONCODE", _deactivationCode, true];
 
 // Store availability setting
