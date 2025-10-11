@@ -82,6 +82,10 @@ if (isServer) then {
     // Structure: Array of [deviceType, deviceId, [excludedNetIds]]
     missionNamespace setVariable [GVAR_PUBLIC_DEVICES, [], true];
 
+    // Initialize legacy ALL_DEVICES array for backward compatibility
+    // Structure: [doors, lights, drones, databases, custom, gpsTrackers, vehicles]
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []], true];
+
     LOG_INFO("Device cache initialized");
 };
 
@@ -109,26 +113,8 @@ if (isServer) then {
                 [localize "STR_ROOT_CYBERWARFARE_GPS_UNABLE_ATTACH", true, 1.5, 2] call ace_common_fnc_displayText;
             };
 
-            // Start progress bar (5 second action)
-            [
-                5,  // Duration in seconds
-                [_actionTarget, _actionPlayer],
-                {
-                    // On completion
-                    params ["_args"];
-                    _args params ["_args_target", "_args_player"];
-                    [_args_target, _args_player] call FUNC(aceAttachGPSTrackerObject);
-                },
-                {},  // On failure
-                format [localize "STR_ROOT_CYBERWARFARE_GPS_ATTACHING_OBJECT", getText (configOf _actionTarget >> "displayName")],
-                {
-                    // Condition to continue - target and player must be valid
-                    params ["_args"];
-                    _args params ["_args_target", "_args_player"];
-                    !isNull _args_target && {alive _args_player}
-                },
-                ["isNotInside"]  // Exceptions
-            ] call ace_common_fnc_progressBar;
+            // Call unified attach function (handles config dialog + progress bar)
+            [_actionTarget, _actionPlayer] call FUNC(aceAttachGPSTracker);
         },
         {
             // Action condition - only show if player has GPS tracker item

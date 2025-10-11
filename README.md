@@ -3,9 +3,9 @@
 A comprehensive cyberwarfare mod for Arma 3 that adds hacking mechanics, GPS tracking, device control, and network infiltration capabilities to enhance tactical gameplay.
 
 ![Version](https://img.shields.io/badge/version-2.19.0-blue)
-![Arma 3](https://img.shields.io/badge/Arma%203-Required-red)
+![AE3](https://img.shields.io/badge/AE3-Required-orange)
 ![CBA_A3](https://img.shields.io/badge/CBA__A3-Required-orange)
-![ACE3](https://img.shields.io/badge/ACE3-Required-green)
+![ACE3](https://img.shields.io/badge/ACE3-Required-orange)
 
 ## Overview
 
@@ -46,12 +46,12 @@ Curators get full control with dedicated modules:
 
 ## Requirements
 
-| Mod | Version | Link |
-|-----|---------|------|
-| CBA_A3 | Latest | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=450814997) |
-| ACE3 | Latest | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=463939057) |
-| AE3 ArmaOS | Latest | [GitHub](https://github.com/WildTangent4/AE3) |
-| ZEN | Recommended | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1779063631) |
+| Mod | Link |
+|-----|------|
+| Community Based Addons (CBA_A3) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=450814997) |
+| Advanced Combat Environment 3 (ACE3) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=463939057) |
+| Advanced Equipment (AE3) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2888888564) |
+| Zeus Enhanced (ZEN) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1779063631) |
 
 ## Installation
 
@@ -59,11 +59,6 @@ Curators get full control with dedicated modules:
 1. Subscribe to Root's Cyber Warfare on Steam Workshop
 2. Launch Arma 3 with CBA_A3, ACE3, and AE3 enabled
 3. The mod will load automatically
-
-### Manual Installation
-1. Download the latest release from GitHub
-2. Extract to your Arma 3 `@root_cyberwarfare` folder
-3. Add `-mod=@cba_a3;@ace;@ae3_main;@root_cyberwarfare` to your launch parameters
 
 ## Quick Start Guide
 
@@ -89,9 +84,11 @@ vehicle 1337 engine off       # Disable vehicle #1337's engine
 1. Open Zeus interface
 2. Use custom modules under "Root Cyberwarfare":
    - **Add Hacking Tools**: Install hacking capability on a laptop
-   - **Add Device**: Register a hackable object
-   - **Add GPS Tracker**: Attach tracker to unit/object
-   - **Modify Power**: Change laptop battery levels
+   - **Add Hackable Object**: Register a hackable object
+   - **Add Hackable Vehicle**: Register a hackable vehicle
+   - **Add Hackable File**: Register a hackable file
+   - **Add GPS Tracker**: Register and attach a hackable (and traceable) GPS Tracker
+   - **Modify Power**: Change power consumption of hackable objects
 
 ### For Mission Makers
 

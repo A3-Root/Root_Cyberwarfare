@@ -1,3 +1,4 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
  * Server-side function to add a hackable database/file to the network
@@ -64,24 +65,18 @@ private _availabilityText = "";
 
 // Store database linking information (for selected computers)
 if (_linkedComputers isNotEqualTo []) then {
-    private _deviceLinks = missionNamespace getVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", []];
-    
+    // Update new hashmap-based link cache
+    private _linkCache = GET_LINK_CACHE;
+
     {
         private _computerNetId = _x;
-        private _existingLinks = _deviceLinks select {_x select 0 == _computerNetId};
-        
-        if (_existingLinks isEqualTo []) then {
-            _deviceLinks pushBack [_computerNetId, [[4, _databaseId]]]; // 4 = database type
-        } else {
-            private _index = _deviceLinks find (_existingLinks select 0);
-            private _devices = (_deviceLinks select _index) select 1;
-            _devices pushBack [4, _databaseId]; // 4 = database type
-            _deviceLinks set [_index, [_computerNetId, _devices]];
-        };
+        private _existingLinks = _linkCache getOrDefault [_computerNetId, []];
+        _existingLinks pushBack [4, _databaseId]; // 4 = database type
+        _linkCache set [_computerNetId, _existingLinks];
     } forEach _linkedComputers;
 
+    missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache, true];
     _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
-    missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", _deviceLinks, true];
 };
 
 private _excludedNetIds = [];

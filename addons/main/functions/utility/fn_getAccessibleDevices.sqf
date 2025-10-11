@@ -34,28 +34,29 @@ if !(VALIDATE_DEVICE_TYPE(_deviceType)) exitWith {
     []
 };
 
-// Get device cache
-private _deviceCache = GET_DEVICE_CACHE;
+// Get devices from legacy array (devices are stored here by Zeus registration functions)
+private _allDevicesArray = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
 
-// Determine cache key based on device type
-private _cacheKey = switch (_deviceType) do {
-    case DEVICE_TYPE_DOOR: { CACHE_KEY_DOORS };
-    case DEVICE_TYPE_LIGHT: { CACHE_KEY_LIGHTS };
-    case DEVICE_TYPE_DRONE: { CACHE_KEY_DRONES };
-    case DEVICE_TYPE_DATABASE: { CACHE_KEY_DATABASES };
-    case DEVICE_TYPE_CUSTOM: { CACHE_KEY_CUSTOM };
-    case DEVICE_TYPE_GPS_TRACKER: { CACHE_KEY_GPS_TRACKERS };
-    case DEVICE_TYPE_VEHICLE: { CACHE_KEY_VEHICLES };
-    default { "" };
+// Determine array index based on device type
+// Array structure: [doors, lights, drones, databases, custom, gpsTrackers, vehicles]
+private _arrayIndex = switch (_deviceType) do {
+    case DEVICE_TYPE_DOOR: { 0 };
+    case DEVICE_TYPE_LIGHT: { 1 };
+    case DEVICE_TYPE_DRONE: { 2 };
+    case DEVICE_TYPE_DATABASE: { 3 };
+    case DEVICE_TYPE_CUSTOM: { 4 };
+    case DEVICE_TYPE_GPS_TRACKER: { 5 };
+    case DEVICE_TYPE_VEHICLE: { 6 };
+    default { -1 };
 };
 
-if (_cacheKey == "") exitWith {
-    LOG_ERROR_1("getAccessibleDevices: Failed to get cache key for type %1",_deviceType);
+if (_arrayIndex == -1) exitWith {
+    LOG_ERROR_1("getAccessibleDevices: Failed to get array index for type %1",_deviceType);
     []
 };
 
 // Get all devices of this type
-private _allDevices = _deviceCache getOrDefault [_cacheKey, []];
+private _allDevices = _allDevicesArray select _arrayIndex;
 
 // Filter to only accessible devices
 private _accessibleDevices = _allDevices select {

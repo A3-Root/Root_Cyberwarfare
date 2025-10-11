@@ -37,8 +37,7 @@ PREP(listDevicesInSubnet);
 
 PREP(gpsTrackerClient);
 PREP(gpsTrackerServer);
-PREP(aceAttachGPSTrackerSelf);
-PREP(aceAttachGPSTrackerObject);
+PREP(aceAttachGPSTracker);
 PREP(searchForGPSTracker);
 PREP(disableGPSTracker);
 PREP(disableGPSTrackerServer);

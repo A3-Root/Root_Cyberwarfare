@@ -22,7 +22,7 @@
 
 params ["_entity", ["_path", "/rubberducky/tools", [""]], ["_execUserId", 0, [0]], ["_customLaptopName", "", [""]], ["_backdoorScriptPrefix", "", [""]]];
 
-private ["_guide", "_devices", "_door", "_light", "_changedrone", "_disabledrone", "_download", "_custom"];
+private ["_guide", "_devices", "_door", "_light", "_changedrone", "_disabledrone", "_download", "_custom", "_gpstrack", "_vehicle"];
 
 // Validate _path is a string
 if (_path isEqualType objNull || {_path isEqualType []}) exitWith {
@@ -52,8 +52,8 @@ _changedrone = _result + "/changedrone";
 _disabledrone = _result + "/disabledrone";
 _download = _result + "/download";
 _custom = _result + "/custom";
-private _gpstrack = _result + "/gpstrack";
-private _vehicle = _result + "/vehicle";
+_gpstrack = _result + "/gpstrack";
+_vehicle = _result + "/vehicle";
 
 
 
@@ -138,7 +138,7 @@ private _menuContent = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_LIST_DEVICES-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _commandName] remoteExec [QFUNC(listDevicesInSubnet), _owner];
+    [_owner, _computer, _nameOfVariable, _commandName] remoteExec ['Root_fnc_listDevicesInSubnet', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -176,7 +176,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_DOOR-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _buildingId, _doorId, _desiredState, _commandName] remoteExec [QFUNC(changeDoorState), _owner];
+    [_owner, _computer, _nameOfVariable, _buildingId, _doorId, _desiredState, _commandName] remoteExec ['Root_fnc_changeDoorState', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -212,7 +212,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_LIGHT-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _lightId, _desiredState, _commandName] remoteExec [QFUNC(changeLightState), _owner];
+    [_owner, _computer, _nameOfVariable, _lightId, _desiredState, _commandName] remoteExec ['Root_fnc_changeLightState', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -246,7 +246,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_DISABLE_DRONE>-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _droneId, _commandName] remoteExec [QFUNC(disableDrone), _owner];
+    [_owner, _computer, _nameOfVariable, _droneId, _commandName] remoteExec ['Root_fnc_disableDrone', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -282,7 +282,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_CHANGE_DRONE-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _droneId, _desiredState, _commandName] remoteExec [QFUNC(changeDroneFaction), _owner];
+    [_owner, _computer, _nameOfVariable, _droneId, _desiredState, _commandName] remoteExec ['Root_fnc_changeDroneFaction', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -316,7 +316,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_DOWNLOAD_DATABASE-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _databaseId, _commandName] remoteExec [QFUNC(downloadDatabase), _owner];
+    [_owner, _computer, _nameOfVariable, _databaseId, _commandName] remoteExec ['Root_fnc_downloadDatabase', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -352,7 +352,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_CUSTOM_DEVICE-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _customId, _customState, _commandName] remoteExec [QFUNC(customDevice), _owner];
+    [_owner, _computer, _nameOfVariable, _customId, _customState, _commandName] remoteExec ['Root_fnc_customDevice', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -385,7 +385,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_GPS_TRACK-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _trackerId, _commandName] remoteExec [QFUNC(displayGPSPosition), _owner];
+    [_owner, _computer, _nameOfVariable, _trackerId, _commandName] remoteExec ['Root_fnc_displayGPSPosition', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -422,7 +422,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_VEHICLE-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _vehicleID, _action, _value, _commandName] remoteExec [QFUNC(changeVehicleParams), _owner];
+    [_owner, _computer, _nameOfVariable, _vehicleID, _action, _value, _commandName] remoteExec ['Root_fnc_changeVehicleParams', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {

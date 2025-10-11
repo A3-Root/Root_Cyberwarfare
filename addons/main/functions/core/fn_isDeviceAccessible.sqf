@@ -52,18 +52,24 @@ if !(_computer getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) 
 
 // Check if this device is in the public list FIRST
 private _publicDevices = GET_PUBLIC_DEVICES;
+private _isPublic = false;
 {
     _x params ["_pubDevType", "_pubDevId", ["_excludedNetIds", []]];
 
     if (_pubDevType == _deviceType && {_pubDevId == _deviceId}) exitWith {
         // If no exclusion list, fully public
-        if (_excludedNetIds isEqualTo []) exitWith { true };
+        if (_excludedNetIds isEqualTo []) exitWith {
+            _isPublic = true;
+        };
 
-        // Check if computer is excluded
+        // Check if computer is NOT excluded
         private _computerNetId = netId _computer;
-        !(_computerNetId in _excludedNetIds)
+        _isPublic = !(_computerNetId in _excludedNetIds);
     };
 } forEach _publicDevices;
+
+// If device is public and accessible, return true
+if (_isPublic) exitWith { true };
 
 // Check private device links using hashmap cache
 private _computerNetId = netId _computer;

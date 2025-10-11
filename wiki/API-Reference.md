@@ -4,7 +4,7 @@ Complete function reference for Root's Cyber Warfare developers.
 
 ## Quick Reference Table
 
-All 40 functions in the mod:
+All 39 functions in the mod:
 
 | Function | Category | Location | Documented |
 |----------|----------|----------|------------|
@@ -28,8 +28,7 @@ All 40 functions in the mod:
 | Root_fnc_changeVehicleParams | Devices | fn_changeVehicleParams.sqf:1 | ℹ️ See source |
 | Root_fnc_gpsTrackerServer | GPS | fn_gpsTrackerServer.sqf:1 | ✅ Below |
 | Root_fnc_gpsTrackerClient | GPS | fn_gpsTrackerClient.sqf:1 | ✅ Below |
-| Root_fnc_aceAttachGPSTrackerObject | GPS | fn_aceAttachGPSTrackerObject.sqf:1 | ℹ️ See source |
-| Root_fnc_aceAttachGPSTrackerSelf | GPS | fn_aceAttachGPSTrackerSelf.sqf:1 | ℹ️ See source |
+| Root_fnc_aceAttachGPSTracker | GPS | fn_aceAttachGPSTracker.sqf:1 | ✅ Below |
 | Root_fnc_disableGPSTracker | GPS | fn_disableGPSTracker.sqf:1 | ℹ️ See source |
 | Root_fnc_disableGPSTrackerServer | GPS | fn_disableGPSTrackerServer.sqf:1 | ℹ️ See source |
 | Root_fnc_displayGPSPosition | GPS | fn_displayGPSPosition.sqf:1 | ℹ️ See source |
@@ -465,6 +464,55 @@ Client-side GPS tracker visualization - creates and updates map marker.
 - Uses `spawn` for scheduled execution
 - Markers are local to the client
 - Automatically cleans up markers
+
+---
+
+### Root_fnc_aceAttachGPSTracker
+
+Unified ACE interaction handler to attach a GPS tracker to any target (object, vehicle, or self).
+
+**Location**: `addons/main/functions/gps/fn_aceAttachGPSTracker.sqf:1`
+
+**Parameters**:
+| # | Name | Type | Optional | Default | Description |
+|---|------|------|----------|---------|-------------|
+| 0 | _target | OBJECT | No | - | The object to attach the tracker to |
+| 1 | _player | OBJECT | No | - | The player attaching the tracker |
+
+**Returns**: None
+
+**Example**:
+```sqf
+// Attach to vehicle
+[_vehicle, player] call Root_fnc_aceAttachGPSTracker;
+
+// Attach to self/vehicle player is in
+[vehicle player, player] call Root_fnc_aceAttachGPSTracker;
+```
+
+**Behavior**:
+1. Shows ZEN configuration dialog for tracker settings (tracking time, update frequency)
+2. After user confirms configuration, shows ACE progress bar (5 seconds)
+3. After progress bar completes, attaches tracker and removes GPS item from player inventory
+4. If cancelled at any stage, tracker is not attached
+
+**Configuration Options**:
+- **Tracking Time**: Duration in seconds the tracking will stay active (1-30000, default: 60)
+- **Update Frequency**: Frequency in seconds between ping updates (1-3000, default: 5)
+
+**Default Settings**:
+- Last ping timer: 30 seconds
+- Power cost: 2 Wh per tracking session
+- Allow retracking: Yes
+- Available to all laptops: Yes
+
+**Notes**:
+- Replaces both `Root_fnc_aceAttachGPSTrackerSelf` and `Root_fnc_aceAttachGPSTrackerObject` (deprecated)
+- Configuration dialog appears BEFORE physical action (improved UX)
+- Requires GPS tracker item in player inventory (configurable via CBA settings)
+- Item is consumed only after successful attachment
+- Automatically increments tracker index for unique naming
+- Called automatically by ACE interaction menus
 
 ---
 

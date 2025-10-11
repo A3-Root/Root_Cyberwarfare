@@ -25,8 +25,7 @@ class CfgFunctions {
 			file = "\z\root_cyberwarfare\addons\main\functions\gps";
 			class gpsTrackerClient {};
 			class gpsTrackerServer {};
-			class aceAttachGPSTrackerSelf {};
-			class aceAttachGPSTrackerObject {};
+			class aceAttachGPSTracker {};
 			class searchForGPSTracker {};
 			class disableGPSTracker {};
 			class disableGPSTrackerServer {};
