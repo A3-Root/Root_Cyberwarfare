@@ -35,19 +35,15 @@ private _customCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_CUST
 
 missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_COSTS", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
 
+// Load device arrays from global storage
 private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
 private _allDoors = _allDevices select 0;
 private _allLamps = _allDevices select 1;
 private _allDrones = _allDevices select 2;
-private _allDatabases = _allDevices select 3;
 private _allCustom = _allDevices select 4;
-private _allGpsTrackers = _allDevices select 5;
-private _allVehicles = _allDevices select 6;
+
 private _isCustomObject = false;
-
 private _netId = netId _targetObject;
-
-private _existingDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
 
 private _displayName = getText (configOf _targetObject >> "displayName");
 
@@ -237,14 +233,12 @@ if (_availableToFutureLaptops || count _linkedComputers == 0) then {
     missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
 };
 
-_existingDevices set [0, _allDoors];
-_existingDevices set [1, _allLamps];
-_existingDevices set [2, _allDrones];
-_existingDevices set [3, _allDatabases];
-_existingDevices set [4, _allCustom];
-_existingDevices set [5, _allGpsTrackers];
-_existingDevices set [6, _allVehicles];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _existingDevices, true];
+// Update global storage with modified device arrays
+_allDevices set [0, _allDoors];
+_allDevices set [1, _allLamps];
+_allDevices set [2, _allDrones];
+_allDevices set [4, _allCustom];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_CONNECTED", true, true];
 
 

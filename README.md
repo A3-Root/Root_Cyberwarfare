@@ -3,9 +3,8 @@
 A comprehensive cyberwarfare mod for Arma 3 that adds hacking mechanics, GPS tracking, device control, and network infiltration capabilities to enhance tactical gameplay.
 
 ![Version](https://img.shields.io/badge/version-2.19.0-blue)
-![AE3](https://img.shields.io/badge/AE3-Required-orange)
-![CBA_A3](https://img.shields.io/badge/CBA__A3-Required-orange)
-![ACE3](https://img.shields.io/badge/ACE3-Required-orange)
+![Build](https://img.shields.io/badge/Build-Passing-green)
+
 
 ## Overview
 

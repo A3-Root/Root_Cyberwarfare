@@ -74,12 +74,9 @@ hint str format ['Code triggered'];", {}, 7]],
         };
 
         if (_filesize < 1) then {_filesize = 1};
-        
-        private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
-        _allDevices params ["_allDoors", "_allLamps", "_allDrones", "_allDatabases", "_allCustom", "_allGpsTrackers", "_allVehicles"];
-        private _databaseId = 0;
+
         private _execUserId = clientOwner;
-        [_allDatabases, _databaseId, _fileObject, _filename, _filesize, _filecontent, _allDevices, _allDoors, _allLamps, _allDrones, _allCustom, _allGpsTrackers, _allVehicles, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
+        [_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
         ["Hackable File Added!"] call zen_common_fnc_showMessage;
     },  
     {

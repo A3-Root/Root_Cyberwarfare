@@ -78,8 +78,9 @@ if (_targetDoors isEqualTo []) exitWith {
     missionNamespace setVariable [_nameOfVariable, true, true];
 };
 
-// Get building object
-_targetDoors params ["_bId", "_buildingNetId", "_doorsOfBuilding"];
+// Get building object from first matching door entry
+private _doorEntry = _targetDoors select 0;
+_doorEntry params ["_bId", "_buildingNetId", "_doorsOfBuilding"];
 private _building = objectFromNetId _buildingNetId;
 
 // Handle "all doors" case
