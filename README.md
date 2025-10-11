@@ -45,19 +45,22 @@ Curators get full control with dedicated modules:
 
 ## Requirements
 
-| Mod | Link |
-|-----|------|
-| Community Based Addons (CBA_A3) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=450814997) |
-| Advanced Combat Environment 3 (ACE3) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=463939057) |
-| Advanced Equipment (AE3) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2888888564) |
-| Zeus Enhanced (ZEN) | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1779063631) |
+| Mod | Required | Link |
+|-----|----------|------|
+| Community Based Addons (CBA_A3) | **Yes** | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=450814997) |
+| Advanced Combat Environment 3 (ACE3) | **Yes** | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=463939057) |
+| Advanced Equipment (AE3) | **Yes** | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2888888564) |
+| Zeus Enhanced (ZEN) | **Yes** | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1779063631) |
+
+**All four dependencies are required** for full mod functionality including Zeus modules and GPS tracker system.
 
 ## Installation
 
 ### Steam Workshop
 1. Subscribe to Root's Cyber Warfare on Steam Workshop
-2. Launch Arma 3 with CBA_A3, ACE3, and AE3 enabled
-3. The mod will load automatically
+2. Subscribe to all **required dependencies**: CBA_A3, ACE3, AE3, and ZEN
+3. Launch Arma 3 with all mods enabled
+4. The mod will load automatically
 
 ## Quick Start Guide
 
@@ -414,10 +417,10 @@ Debug logs will appear in the RPT file with `[ROOT_CYBERWARFARE DEBUG]` prefix.
 
 **Special Thanks**:
 - Mister Adrian - The original creator of the MACW mod available in steam workshop and for providing permissions to take over his work.
-- CBA Team - Community Base Addons framework
-- ACE Team - Advanced Combat Environment
+- CBA Team - Core framework foundation upon which this is built
+- ACE Team - For the ACE interactions in using laptops and GPS attachments 
 - AE3 Team - ArmaOS terminal system
-- ZEN Team - Enhanced Zeus functionality
+- ZEN Team - Core foundation for zeus modules and dialogs
 
 ## License
 

@@ -11,7 +11,7 @@ Before installing, ensure you have:
 | Arma 3 | Latest stable | [Steam](https://store.steampowered.com/app/107410/Arma_3/) |
 | CBA_A3 | Latest | [Steam Workshop](https://steamcommunity.com/workshop/filedetails/?id=450814997) |
 | ACE3 | Latest | [Steam Workshop](https://steamcommunity.com/workshop/filedetails/?id=463939057) |
-| AE3 (Advanced Equipment) | Latest | [Steam Workshop](https://steamcommunity.com/workshop/filedetails/?id=2974004286) |
+| AE3 (Advanced Equipment) | Latest | [Steam Workshop](https://steamcommunity.com/workshop/filedetails/?id=2888888564) |
 | ZEN (Zeus Enhanced) | Latest | [Steam Workshop](https://steamcommunity.com/workshop/filedetails/?id=1779063631) |
 
 **Minimum Arma 3 Version**: 2.00 or higher
@@ -28,10 +28,10 @@ This is the easiest installation method and provides automatic updates.
 
 ### Steps:
 
-1. **Subscribe to all dependencies** in order:
+1. **Subscribe to all required dependencies** in order:
    - [CBA_A3](https://steamcommunity.com/workshop/filedetails/?id=450814997)
    - [ACE3](https://steamcommunity.com/workshop/filedetails/?id=463939057)
-   - [AE3](https://steamcommunity.com/workshop/filedetails/?id=2974004286)
+   - [AE3](https://steamcommunity.com/workshop/filedetails/?id=2888888564)
    - [ZEN](https://steamcommunity.com/workshop/filedetails/?id=1779063631)
 
 2. **Subscribe to Root's Cyber Warfare**:
@@ -168,7 +168,7 @@ No errors should appear.
 **Cause**: AE3 is not installed or not loaded
 
 **Solution**:
-- Install AE3 from [Steam Workshop](https://steamcommunity.com/workshop/filedetails/?id=2974004286)
+- Install AE3 from [Steam Workshop](https://steamcommunity.com/workshop/filedetails/?id=2888888564)
 - Verify AE3 is in the mod load order
 
 #### "Zeus modules not appearing"
@@ -178,6 +178,13 @@ No errors should appear.
 **Solution**:
 - Install/update ZEN from [Steam Workshop](https://steamcommunity.com/workshop/filedetails/?id=1779063631)
 - Verify Zeus/Curator role in mission
+
+#### "ACE GPS tracker interactions not showing"
+
+**Cause**: ZEN is not loaded
+
+**Solution**:
+- Install ZEN from [Steam Workshop](https://steamcommunity.com/workshop/filedetails/?id=1779063631)
 
 #### Mod loads but no hacking tools available
 

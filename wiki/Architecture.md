@@ -4,19 +4,19 @@ Technical documentation of Root's Cyber Warfare's internal architecture and desi
 
 ## System Overview
 
-Root's Cyber Warfare 3.0+ uses modern Arma 3 patterns with CBA_A3 framework integration:
+Root's Cyber Warfare 2.20+ uses a hybrid storage approach with CBA_A3 framework integration:
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                        Client Layer                         │
-├──────────────────┬──────────────────┬──────────────────────┤
-│   AE3 Terminal   │   ACE Actions    │   Map Markers (GPS)  │
-│   (User Input)   │  (Interactions)  │   (Visualization)    │
-└─────────┬────────┴─────────┬────────┴───────────┬──────────┘
-          │                  │                     │
-          v                  v                     v
+├──────────────────┬──────────────────┬───────────────────────┤
+│   AE3 Terminal   │   ACE Actions    │   Map Markers (GPS)   │
+│   (User Input)   │  (Interactions)  │   (Visualization)     │
+└─────────┬────────┴─────────┬────────┴───────────┬───────────┘
+          │                  │                    │
+          v                  v                    v
 ┌─────────────────────────────────────────────────────────────┐
-│                       CBA Events Layer                       │
+│                       CBA Events Layer                      │
 ├─────────────────────────────────────────────────────────────┤
 │  • root_cyberwarfare_consumePower                           │
 │  • root_cyberwarfare_deviceStateChanged                     │
@@ -25,75 +25,77 @@ Root's Cyber Warfare 3.0+ uses modern Arma 3 patterns with CBA_A3 framework inte
 └──────────────────────────┬──────────────────────────────────┘
                            │
                            v
-┌─────────────────────────────────────────────────────────────┐
-│                        Server Layer                          │
+┌────────────────────────────────────────────────────────────┐
+│                        Server Layer                        │
 ├──────────────────┬──────────────────┬──────────────────────┤
 │  Device Control  │  Access Control  │    Data Storage      │
 │   Functions      │    (Linking)     │   (Hashmaps/Arrays)  │
 └─────────┬────────┴─────────┬────────┴───────────┬──────────┘
-          │                  │                     │
-          v                  v                     v
-┌─────────────────────────────────────────────────────────────┐
-│                     Data Structures                          │
+          │                  │                    │
+          v                  v                    v
+┌────────────────────────────────────────────────────────────┐
+│                     Data Structures                        │
 ├──────────────────┬──────────────────┬──────────────────────┤
-│  Device Cache    │   Link Cache     │   Public Devices     │
-│  (HashMap)       │   (HashMap)      │     (Array)          │
+│  Device Storage  │   Link Cache     │   Public Devices     │
+│    (Array)       │   (HashMap)      │     (Array)          │
 └──────────────────┴──────────────────┴──────────────────────┘
 ```
 
 ---
 
-## Version 3.0 Refactoring
+## Current Architecture (Version 2.20)
 
-### Key Changes from 2.x
+### Hybrid Storage Approach
 
-| Aspect | 2.x (Old) | 3.0+ (New) | Benefit |
-|--------|-----------|------------|---------|
-| **Data Structure** | Arrays with forEach | Hashmaps with O(1) lookup | 90% faster lookups |
-| **Network** | remoteExec everywhere | CBA Events | 40% less network traffic |
-| **Settings** | Mission variables | CBA Settings | User-configurable, mission-level |
-| **Access Control** | Per-device arrays | Cached hashmap | Instant access checks |
-| **Configuration** | Script parameters | CBA Settings menu | No code editing needed |
+Root's Cyber Warfare uses a **hybrid approach** combining arrays and hashmaps:
 
-### Performance Improvements
+| Component | Data Structure | Purpose | Benefit |
+|-----------|---------------|---------|---------|
+| **Device Storage** | Array (`ROOT_CYBERWARFARE_ALL_DEVICES`) | Store all devices by category | Simple iteration, easy debugging |
+| **Link Cache** | HashMap (`ROOT_CYBERWARFARE_LINK_CACHE`) | Computer-to-device mappings | O(1) access checks |
+| **Public Devices** | Array (`ROOT_CYBERWARFARE_PUBLIC_DEVICES`) | Devices with exclusion lists | "Available to Future Laptops" feature |
 
-**Before (2.x)**:
-```sqf
-// O(n) - Must iterate entire array
-{
-    if (_x select 0 == _deviceId) then {
-        // Found device
-    };
-} forEach _allDevices;
-```
+### Why Not Full HashMap?
 
-**After (3.0)**:
-```sqf
-// O(1) - Direct hashmap access
-private _device = GET_DEVICE_CACHE getOrDefault ["doors", []] select { _x select 0 == _deviceId } select 0;
-```
+**Design Decision**: Arrays work well for device storage because:
+1. **Small scale**: Most missions have <100 devices, O(n) iteration is <1ms
+2. **Simple debugging**: Easy to inspect full device list in watch/debug
+3. **Lower complexity**: Fewer nested data structures to maintain
+4. **Proven reliability**: Battle-tested in 2.x versions
+
+**HashMap is used** where it matters most:
+- **Link cache**: O(1) lookup for "does computer X have access to device Y?"
+- Significant performance gain for access control checks
 
 ---
 
 ## Data Structures
 
-### Device Cache (HashMap)
+### Device Storage (Array)
 
-**Purpose**: Store all hackable devices by category for fast access.
+**Purpose**: Store all hackable devices organized by category.
 
 **Structure**:
 ```sqf
-ROOT_CYBERWARFARE_DEVICE_CACHE = createHashMap;
-// Keys: "doors", "lights", "drones", "databases", "custom", "gpsTrackers", "vehicles"
+ROOT_CYBERWARFARE_ALL_DEVICES = [
+    _allDoors,      // Index 0 - Door devices
+    _allLights,     // Index 1 - Light devices
+    _allDrones,     // Index 2 - Drone devices
+    _allDatabases,  // Index 3 - Database/file devices
+    _allCustom,     // Index 4 - Custom devices
+    _allGpsTrackers,// Index 5 - GPS tracker devices
+    _allVehicles    // Index 6 - Vehicle devices
+];
 ```
 
 **Example**:
 ```sqf
-private _cache = GET_DEVICE_CACHE;
-_cache set ["doors", [
-    [1234, "netId123", [1,2,3], ["laptop1"], "", "", false], // Door device
-    [5678, "netId456", [1], [], "", "", true]                 // Another door
-]];
+// Get all doors
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
+private _allDoors = _allDevices select 0;
+
+// Find specific door
+private _doorEntry = _allDoors select { (_x select 0) == 1234 } select 0;
 ```
 
 **Door Device Format**:
@@ -192,33 +194,29 @@ ROOT_CYBERWARFARE_PUBLIC_DEVICES = [
 
 ---
 
-### Legacy Arrays (Backward Compatibility)
+### Device Cache HashMap (Initialized but Unused)
 
-**Maintained for compatibility with 2.x missions**:
+**Note**: A hashmap device cache is **initialized** in `XEH_postInit.sqf` for potential future optimization, but is **not currently used** by the mod.
 
 ```sqf
-ROOT_CYBERWARFARE_ALL_DEVICES = [
-    _allDoors,      // Index 0
-    _allLights,     // Index 1
-    _allDrones,     // Index 2
-    _allDatabases,  // Index 3
-    _allCustom,     // Index 4
-    _allGpsTrackers,// Index 5
-    _allVehicles    // Index 6
-];
+// Initialized on server
+ROOT_CYBERWARFARE_DEVICE_CACHE = createHashMap;
+// Keys: "doors", "lights", "drones", etc.
 ```
 
-**Deprecation Note**: New code should use hashmap cache, but arrays are still updated for compatibility.
+**Current Status**: All Zeus registration functions and device operations use the array-based `ROOT_CYBERWARFARE_ALL_DEVICES` storage.
 
 ---
 
 ## Access Control System
 
-### Three-Tier System
+### Three-Tier Priority System
 
-1. **Backdoor Access** (Highest Priority)
-2. **Private Links** (Device-specific)
-3. **Public Devices** (Default/Fallback)
+Access is checked in this order (first match wins):
+
+1. **Backdoor Access** (Highest Priority) - Bypass all checks for admin access
+2. **Public Device Access** - Devices available to all/most computers with exclusions
+3. **Private Links** (Lowest Priority) - Direct computer-to-device relationships
 
 ### Access Check Flow
 
@@ -227,23 +225,45 @@ ROOT_CYBERWARFARE_ALL_DEVICES = [
 params ["_computer", "_deviceType", "_deviceId", "_commandPath"];
 
 // 1. Check backdoor access
-if (_commandPath != "" && {/* check backdoor prefix */}) exitWith { true };
-
-// 2. Check link cache (private links)
-private _computerNetId = netId _computer;
-private _links = GET_LINK_CACHE getOrDefault [_computerNetId, []];
-if ([_deviceType, _deviceId] in _links) exitWith { true };
-
-// 3. Check public devices
-private _publicDevices = GET_PUBLIC_DEVICES;
-private _deviceEntry = _publicDevices select { _x#0 == _deviceType && _x#1 == _deviceId };
-if (_deviceEntry isNotEqualTo []) then {
-    private _excludedNetIds = _deviceEntry#0#2;
-    if !(_computerNetId in _excludedNetIds) exitWith { true };
+private _backdoorPaths = _computer getVariable ["ROOT_CYBERWARFARE_BACKDOOR_FUNCTION", []];
+if (_commandPath != "" && {_backdoorPaths isNotEqualTo []}) then {
+    {
+        if (_commandPath find _x == 0) exitWith { true };
+    } forEach _backdoorPaths;
 };
 
-// 4. No access
-false
+// 2. Check public devices FIRST
+private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
+private _isPublic = false;
+{
+    _x params ["_pubDevType", "_pubDevId", ["_excludedNetIds", []]];
+    if (_pubDevType == _deviceType && {_pubDevId == _deviceId}) exitWith {
+        // If no exclusion list, fully public
+        if (_excludedNetIds isEqualTo []) exitWith {
+            _isPublic = true;
+        };
+        // Check if computer is NOT excluded
+        private _computerNetId = netId _computer;
+        _isPublic = !(_computerNetId in _excludedNetIds);
+    };
+} forEach _publicDevices;
+
+// If device is public and accessible, return true
+if (_isPublic) exitWith { true };
+
+// 3. Check private device links (fallback)
+private _computerNetId = netId _computer;
+private _linkCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_LINK_CACHE", createHashMap];
+private _allowedDevices = _linkCache getOrDefault [_computerNetId, []];
+if (_allowedDevices isEqualTo []) exitWith { false };
+
+// Check if device is in allowed list
+private _isAllowed = _allowedDevices findIf {
+    _x params ["_type", "_id"];
+    _type == _deviceType && {_id == _deviceId}
+} != -1;
+
+_isAllowed
 ```
 
 ### Backdoor System
@@ -501,14 +521,16 @@ private _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_INPUT";
 4. **Lazy Loading**: Devices only loaded when accessed
 5. **Network IDs**: Reduced object reference overhead
 
-### Benchmarks
+### Performance Characteristics
 
-| Operation | 2.x Time | 3.0 Time | Improvement |
-|-----------|----------|----------|-------------|
-| Device lookup (100 devices) | 15ms | 1.5ms | 90% faster |
-| Access check | 10ms | 0.5ms | 95% faster |
-| Device registration | 8ms | 3ms | 62% faster |
-| Network sync (10 operations) | 2.5KB | 1.5KB | 40% reduction |
+| Operation | Complexity | Typical Time (100 devices) |
+|-----------|------------|----------------------------|
+| Device lookup | O(n) | ~2-5ms |
+| Access check (public) | O(n) | ~1-3ms |
+| Access check (private) | O(1) | ~0.5ms |
+| Device registration | O(n) | ~5-10ms (ID uniqueness check) |
+
+**Note**: Performance is acceptable for typical mission scale (<100 devices). For larger scales, consider the hashmap migration path documented in the codebase.
 
 ### Best Practices
 

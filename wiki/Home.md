@@ -6,7 +6,7 @@ Welcome to the official documentation for **Root's Cyber Warfare**, an Arma 3 mo
 
 Root's Cyber Warfare allows players to hack doors, drones, lights, vehicles, GPS trackers, and custom devices using in-game laptops with terminal access. The mod integrates seamlessly with ACE3 for interaction menus and ZEN for dynamic Zeus modules.
 
-**Current Version**: 3.0.0+ (CBA_A3 Refactored)
+**Current Version**: 2.20.0
 
 ## Key Features
 
@@ -43,25 +43,29 @@ Root's Cyber Warfare allows players to hack doors, drones, lights, vehicles, GPS
 
 Root's Cyber Warfare requires the following mods:
 
-| Dependency | Version | Purpose |
-|------------|---------|---------|
-| [CBA_A3](https://steamcommunity.com/workshop/filedetails/?id=450814997) | Latest | Settings, events, function framework |
-| [ACE3](https://steamcommunity.com/workshop/filedetails/?id=463939057) | Latest | Interaction menus, GPS tracker placement |
-| [AE3](https://steamcommunity.com/workshop/filedetails/?id=2974004286) | Latest | Virtual filesystem and laptop functionality |
-| [ZEN](https://steamcommunity.com/workshop/filedetails/?id=1779063631) | Latest | Zeus modules and dialogs |
+| Dependency | Required | Purpose |
+|------------|----------|---------|
+| [CBA_A3](https://steamcommunity.com/workshop/filedetails/?id=450814997) | **Yes** | Settings, events, function framework |
+| [ACE3](https://steamcommunity.com/workshop/filedetails/?id=463939057) | **Yes** | Interaction menus, GPS tracker placement |
+| [AE3](https://steamcommunity.com/workshop/filedetails/?id=2888888564) | **Yes** | Virtual filesystem and laptop functionality |
+| [ZEN](https://steamcommunity.com/workshop/filedetails/?id=1779063631) | **Yes** | Zeus modules and configuration dialogs |
 
-## What's New in Version 3.0.0
+## What's New in Version 2.20.0
 
-Version 3.0.0 is a major refactoring release with significant architectural improvements:
+Version 2.20.0 includes refactoring and bug fixes:
 
-- ✅ **HashMap-Based Caching** - O(1) device lookups instead of O(n) array iteration
-- ✅ **CBA Events** - Replaced remoteExec with CBA event system
-- ✅ **CBA Settings** - Mission-level configuration through CBA settings menu
-- ✅ **Improved Access Control** - Enhanced device linking and public device system
-- ✅ **Performance Improvements** - ~40% reduction in network traffic
-- ✅ **Better Multiplayer** - More reliable synchronization on dedicated servers
+- ✅ **Code Cleanup** - Removed redundant parameter passing in Zeus functions
+- ✅ **Bug Fixes** - Fixed door control undefined variable errors
+- ✅ **Access Control** - Fixed "Available to Future Laptops" functionality
+- ✅ **Performance** - Reduced PBO size through code optimization
+- ✅ **Documentation** - Updated README and wiki to reflect current implementation
 
-See [BREAKING_CHANGES.md](https://github.com/A3-Root/Root_Cyberwarfare/blob/master/BREAKING_CHANGES.md) for migration guide from 2.x versions.
+### Architecture
+
+The mod uses a hybrid storage approach:
+- **Array-based device storage** (`ROOT_CYBERWARFARE_ALL_DEVICES`) for simple iteration
+- **HashMap-based link cache** (`ROOT_CYBERWARFARE_LINK_CACHE`) for O(1) computer-to-device lookups
+- **Array-based public devices** with exclusion lists for "Available to Future Laptops" feature
 
 ## Community & Support
 
