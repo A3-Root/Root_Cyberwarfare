@@ -1,6 +1,21 @@
-// Root_fnc_disableGPSTracker
-// Disables a GPS tracker on an object
-// Parameters: [_target, _trackerData, _player]
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: Disables a GPS tracker attached to an object and notifies linked computers
+ *
+ * Arguments:
+ * 0: _target <OBJECT> - The object with the GPS tracker
+ * 1: _trackerData <ARRAY> - GPS tracker data array
+ * 2: _player <OBJECT> - The player disabling the tracker
+ *
+ * Return Value:
+ * <BOOLEAN> - True if successful, false if tracker not found
+ *
+ * Example:
+ * [_target, _trackerData, player] call Root_fnc_disableGPSTracker;
+ *
+ * Public: No
+ */
 
 params ["_target", "_trackerData", "_player"];
 

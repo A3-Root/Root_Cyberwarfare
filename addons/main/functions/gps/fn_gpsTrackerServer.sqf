@@ -1,3 +1,30 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: Server-side GPS tracker handler - manages tracking state and completion
+ *
+ * Arguments:
+ * 0: _trackerObject <OBJECT> - The object being tracked
+ * 1: _markerName <STRING> - Name for the map marker
+ * 2: _trackingTime <NUMBER> - Duration in seconds to track
+ * 3: _updateFrequency <NUMBER> - Frequency in seconds between updates
+ * 4: _trackerId <NUMBER> - Tracker device ID
+ * 5: _computer <OBJECT> - The laptop/computer object
+ * 6: _allowRetracking <BOOLEAN> - Allow retracking after completion
+ * 7: _trackerIdNum <NUMBER> - Tracker ID number
+ * 8: _trackerName <STRING> - Display name for the tracker
+ * 9: _clientID <NUMBER> - Client owner ID
+ * 10: _lastPingTimer <NUMBER> - Duration in seconds to show last ping marker
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [_obj, "marker1", 60, 5, 1234, _laptop, true, 1234, "Target", 2, 30] remoteExec ["Root_fnc_gpsTrackerServer", 2];
+ *
+ * Public: No
+ */
+
 params ["_trackerObject", "_markerName", "_trackingTime", "_updateFrequency", "_trackerId", "_computer", "_allowRetracking", "_trackerIdNum", "_trackerName", "_clientID", "_lastPingTimer"];
 
 private _computerNetId = netId _computer;

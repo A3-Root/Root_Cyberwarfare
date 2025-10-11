@@ -1,3 +1,25 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: Changes the state of a light or all accessible lights
+ *
+ * Arguments:
+ * 0: _owner <ANY> - Owner parameter (legacy compatibility)
+ * 1: _computer <OBJECT> - The laptop/computer object
+ * 2: _nameOfVariable <STRING> - Variable name for completion flag
+ * 3: _lightId <STRING> - Light ID or "a" for all lights
+ * 4: _lightState <STRING> - State to set (on/off)
+ * 5: _commandPath <STRING> - Command path for access checking
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [nil, _laptop, "var1", "1234", "on", "/tools/"] call Root_fnc_changeLightState;
+ *
+ * Public: No
+ */
+
 params['_owner', '_computer', '_nameOfVariable', '_lightId', "_lightState", "_commandPath"];
 
 private _string = "";

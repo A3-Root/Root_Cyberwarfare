@@ -1,3 +1,30 @@
+/*
+ * Author: Root
+ * Server-side function to add a GPS tracker to the network
+ *
+ * Arguments:
+ * 0: _targetObject <OBJECT> - The object to track
+ * 1: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
+ * 2: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
+ * 3: _trackerName <STRING> (Optional) - Tracker display name, default: ""
+ * 4: _trackingTime <NUMBER> (Optional) - Tracking duration in seconds, default: 60
+ * 5: _updateFrequency <NUMBER> (Optional) - Update frequency in seconds, default: 5
+ * 6: _customMarker <STRING> (Optional) - Custom marker name, default: ""
+ * 7: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ * 8: _allowRetracking <BOOLEAN> (Optional) - Allow retracking, default: false
+ * 9: _lastPingTimer <NUMBER> - Last ping marker duration
+ * 10: _powerCost <NUMBER> - Power cost per ping
+ * 11: _sysChat <BOOLEAN> (Optional) - Show system chat message, default: true
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [_obj, 0, [], "Tracker1", 60, 5, "", false, true, 30, 2, true] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
+ *
+ * Public: No
+ */
+
 params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_trackerName", ""], ["_trackingTime", 60], ["_updateFrequency", 5], ["_customMarker", ""], ["_availableToFutureLaptops", false], ["_allowRetracking", false], "_lastPingTimer", "_powerCost", ["_sysChat", true]];
 
 if (_execUserId == 0) then {

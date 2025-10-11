@@ -1,3 +1,25 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: Activates or deactivates a custom device
+ *
+ * Arguments:
+ * 0: _owner <ANY> - Owner parameter (legacy compatibility)
+ * 1: _computer <OBJECT> - The laptop/computer object
+ * 2: _nameOfVariable <STRING> - Variable name for completion flag
+ * 3: _customId <STRING> - Custom device ID
+ * 4: _customState <STRING> - State to set (activate/deactivate)
+ * 5: _commandPath <STRING> - Command path for access checking
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [nil, _laptop, "var1", "1234", "activate", "/tools/"] call Root_fnc_customDevice;
+ *
+ * Public: No
+ */
+
 params['_owner', '_computer', '_nameOfVariable', '_customId', "_customState", "_commandPath"];
 
 private _string = "";

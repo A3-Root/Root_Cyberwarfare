@@ -1,4 +1,4 @@
-#include "../../script_component.hpp"
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
  * Description: Consumes power from laptop battery and broadcasts via CBA event

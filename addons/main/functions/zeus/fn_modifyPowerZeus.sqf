@@ -1,3 +1,19 @@
+/*
+ * Author: Root
+ * Zeus module to modify global power cost settings
+ *
+ * Arguments:
+ * 0: _logic <OBJECT> - Zeus logic module
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [_logic] call Root_fnc_modifyPowerZeus;
+ *
+ * Public: No
+ */
+
 params ["_logic"];
 deleteVehicle _logic;
 

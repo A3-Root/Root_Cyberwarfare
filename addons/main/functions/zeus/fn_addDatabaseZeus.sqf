@@ -1,3 +1,19 @@
+/*
+ * Author: Root
+ * Zeus module to add a hackable database/file
+ *
+ * Arguments:
+ * 0: _logic <OBJECT> - Zeus logic module
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [_logic] call Root_fnc_addDatabaseZeus;
+ *
+ * Public: No
+ */
+
 params ["_logic"];
 
 if !(hasInterface) exitWith {};

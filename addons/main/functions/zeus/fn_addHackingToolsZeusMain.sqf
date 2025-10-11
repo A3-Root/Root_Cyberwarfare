@@ -1,6 +1,36 @@
-params ["_entity", "_path", ["_execUserId", 0], ["_customLaptopName", ""], ["_backdoorScriptPrefix", ""]];
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: Server-side function to install hacking tools on a computer by creating virtual
+ *              filesystem entries for all hacking commands (door, light, drone, gpstrack, vehicle, etc.)
+ *
+ * Arguments:
+ * 0: _entity <OBJECT> - The computer/laptop object
+ * 1: _path <STRING> (Optional) - Installation path for tools, default: "/rubberducky/tools"
+ * 2: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
+ * 3: _customLaptopName <STRING> (Optional) - Custom name for the laptop, default: ""
+ * 4: _backdoorScriptPrefix <STRING> (Optional) - Backdoor prefix for special access, default: ""
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [_laptop, "/network/tools", 0, "HQ_Terminal"] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
+ *
+ * Public: No
+ */
+
+params ["_entity", ["_path", "/rubberducky/tools", [""]], ["_execUserId", 0, [0]], ["_customLaptopName", "", [""]], ["_backdoorScriptPrefix", "", [""]]];
 
 private ["_guide", "_devices", "_door", "_light", "_changedrone", "_disabledrone", "_download", "_custom"];
+
+// Validate _path is a string
+if (_path isEqualType objNull || {_path isEqualType []}) exitWith {
+    [format [localize "STR_ROOT_CYBERWARFARE_ZEUS_INVALID_PATH_TYPE", typeName _path]] remoteExec ["systemChat", _execUserId];
+};
+
+// Ensure _path is a string
+_path = str _path;
 
 private _result = "";
 private _allowed = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_/";
@@ -108,7 +138,7 @@ private _menuContent = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_LIST_DEVICES-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _commandName] remoteExec ['Root_fnc_listDevicesInSubnet', _owner];
+    [_owner, _computer, _nameOfVariable, _commandName] remoteExec [QFUNC(listDevicesInSubnet), _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -146,7 +176,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_DOOR-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _buildingId, _doorId, _desiredState, _commandName] remoteExec ['Root_fnc_changeDoorState', _owner];
+    [_owner, _computer, _nameOfVariable, _buildingId, _doorId, _desiredState, _commandName] remoteExec [QFUNC(changeDoorState), _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -182,7 +212,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_LIGHT-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _lightId, _desiredState, _commandName] remoteExec ['Root_fnc_changeLightState', _owner];
+    [_owner, _computer, _nameOfVariable, _lightId, _desiredState, _commandName] remoteExec [QFUNC(changeLightState), _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -216,7 +246,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_DISABLE_DRONE>-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _droneId, _commandName] remoteExec ['Root_fnc_disableDrone', _owner];
+    [_owner, _computer, _nameOfVariable, _droneId, _commandName] remoteExec [QFUNC(disableDrone), _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -252,7 +282,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_CHANGE_DRONE-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _droneId, _desiredState, _commandName] remoteExec ['Root_fnc_changeDroneFaction', _owner];
+    [_owner, _computer, _nameOfVariable, _droneId, _desiredState, _commandName] remoteExec [QFUNC(changeDroneFaction), _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -286,7 +316,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_DOWNLOAD_DATABASE-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _databaseId, _commandName] remoteExec ['Root_fnc_downloadDatabase', _owner];
+    [_owner, _computer, _nameOfVariable, _databaseId, _commandName] remoteExec [QFUNC(downloadDatabase), _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -322,7 +352,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_CUSTOM_DEVICE-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _customId, _customState, _commandName] remoteExec ['Root_fnc_customDevice', _owner];
+    [_owner, _computer, _nameOfVariable, _customId, _customState, _commandName] remoteExec [QFUNC(customDevice), _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -355,7 +385,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_GPS_TRACK-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _trackerId, _commandName] remoteExec ['Root_fnc_displayGPSPosition', _owner];
+    [_owner, _computer, _nameOfVariable, _trackerId, _commandName] remoteExec [QFUNC(displayGPSPosition), _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -392,7 +422,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_VEHICLE-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _vehicleID, _action, _value, _commandName] remoteExec ['Root_fnc_changeVehicleParams', _owner];
+    [_owner, _computer, _nameOfVariable, _vehicleID, _action, _value, _commandName] remoteExec [QFUNC(changeVehicleParams), _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -401,4 +431,4 @@ _content = "
 ";
 [_entity, _vehicle, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call AE3_filesystem_fnc_device_addFile;
 
-[format ["Root Cyber Warfare: Added Hacking Tools to Path: %1", _result]] remoteExec ["systemChat", _execUserId];
+[format [localize "STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_ADDED", _result]] remoteExec ["systemChat", _execUserId];

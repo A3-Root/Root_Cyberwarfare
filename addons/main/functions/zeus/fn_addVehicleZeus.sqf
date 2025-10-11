@@ -1,3 +1,19 @@
+/*
+ * Author: Root
+ * Zeus module to add a hackable vehicle
+ *
+ * Arguments:
+ * 0: _logic <OBJECT> - Zeus logic module
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [_logic] call Root_fnc_addVehicleZeus;
+ *
+ * Public: No
+ */
+
 params ["_logic"];
 private _targetObject = attachedTo _logic;
 private _execUserId = clientOwner;

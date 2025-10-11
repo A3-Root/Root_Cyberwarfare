@@ -1,3 +1,25 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: Changes the faction/side of a drone or all accessible drones
+ *
+ * Arguments:
+ * 0: _owner <ANY> - Owner parameter (legacy compatibility)
+ * 1: _computer <OBJECT> - The laptop/computer object
+ * 2: _nameOfVariable <STRING> - Variable name for completion flag
+ * 3: _droneId <STRING> - Drone ID or "a" for all drones
+ * 4: _droneFaction <STRING> - Target faction (west/east/guer/civ)
+ * 5: _commandPath <STRING> - Command path for access checking
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [nil, _laptop, "var1", "1234", "east", "/tools/"] call Root_fnc_changeDroneFaction;
+ *
+ * Public: No
+ */
+
 params['_owner', '_computer', '_nameOfVariable', '_droneId', "_droneFaction", "_commandPath"];
 
 private _string = "";

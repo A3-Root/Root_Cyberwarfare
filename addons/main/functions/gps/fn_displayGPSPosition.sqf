@@ -1,3 +1,24 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: Starts tracking a GPS tracker and displays its position on the map
+ *
+ * Arguments:
+ * 0: _owner <ANY> - Owner parameter (legacy compatibility)
+ * 1: _computer <OBJECT> - The laptop/computer object
+ * 2: _nameOfVariable <STRING> - Variable name for completion flag
+ * 3: _trackerId <STRING> - Tracker ID to display
+ * 4: _commandPath <STRING> - Function name for backdoor access checking
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [nil, _laptop, "var1", "1234", "/backdoor_gpstrack"] call Root_fnc_displayGPSPosition;
+ *
+ * Public: No
+ */
+
 params['_owner', '_computer', '_nameOfVariable', '_trackerId', '_commandPath'];
 
 private _string = "";

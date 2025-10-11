@@ -1,3 +1,30 @@
+/*
+ * Author: Root
+ * Server-side function to add a hackable vehicle to the network
+ *
+ * Arguments:
+ * 0: _targetObject <OBJECT> - The vehicle to make hackable
+ * 1: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
+ * 2: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
+ * 3: _vehicleName <STRING> - Vehicle display name
+ * 4: _allowFuel <BOOLEAN> (Optional) - Allow fuel/battery control, default: false
+ * 5: _allowSpeed <BOOLEAN> (Optional) - Allow speed control, default: false
+ * 6: _allowBrakes <BOOLEAN> (Optional) - Allow brakes control, default: false
+ * 7: _allowLights <BOOLEAN> (Optional) - Allow lights control, default: false
+ * 8: _allowEngine <BOOLEAN> (Optional) - Allow engine control, default: true
+ * 9: _allowAlarm <BOOLEAN> (Optional) - Allow alarm control, default: false
+ * 10: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ * 11: _powerCost <NUMBER> (Optional) - Power cost per action, default: 2
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [_vehicle, 0, [], "Car1", true, true, false, false, true, false, false, 2] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+ *
+ * Public: No
+ */
+
 params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], "_vehicleName", ["_allowFuel", false], ["_allowSpeed", false], ["_allowBrakes", false], ["_allowLights", false], ["_allowEngine", true], ["_allowAlarm", false], ["_availableToFutureLaptops", false], ["_powerCost", 2]];
 
 if (_execUserId == 0) then {

@@ -1,3 +1,4 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
  * Description: ACE interaction callback to attach a GPS tracker to an object

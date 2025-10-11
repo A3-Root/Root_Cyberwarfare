@@ -12,7 +12,6 @@ class CfgFunctions {
 
 		class Devices {
 			file = "\z\root_cyberwarfare\addons\main\functions\devices";
-			class addDevices {};
 			class changeDoorState {};
 			class changeLightState {};
 			class changeDroneFaction {};
@@ -64,12 +63,6 @@ class CfgFunctions {
 			class cacheDeviceLinks {};
 			class removePower {};
 			class localSoundBroadcast {};
-		};
-
-		// Hacking tools functions (not refactored, keep as-is)
-		class HackingTools {
-			file = "\z\root_cyberwarfare\addons\main\functions";
-			class addHackingTools {};
 		};
 	};
 };

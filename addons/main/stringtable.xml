@@ -129,4 +129,18 @@
             <English>Power Cost Settings</English>
         </Key>
     </Package>
+    <Package name="Zeus">
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_ABORTED">
+            <English>Aborted</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_ADDED">
+            <English>Root Cyber Warfare: Added Hacking Tools to Path: %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_SUCCESS">
+            <English>Hacking Tool Added to the Device!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_INVALID_PATH_TYPE">
+            <English>Invalid path parameter type. Expected string, got %1</English>
+        </Key>
+    </Package>
 </Project>

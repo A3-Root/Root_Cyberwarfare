@@ -1,4 +1,4 @@
-#include "../../script_component.hpp"
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
  * Description: Caches device links for a computer in the link cache hashmap

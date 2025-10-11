@@ -1,17 +1,28 @@
-// Core functions
+// Redefine PREP macro for subdirectory: core
+#undef PREP
+#define PREP(fncName) [QPATHTOF(functions\core\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
+
 PREP(initSettings);
 PREP(isDeviceAccessible);
 PREP(cleanupDeviceLinks);
 PREP(createDiaryEntry);
 
-// Utility functions (to be created)
+// Redefine PREP macro for subdirectory: utility
+#undef PREP
+#define PREP(fncName) [QPATHTOF(functions\utility\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
+
+PREP(cacheDeviceLinks);
+PREP(getAccessibleDevices);
 PREP(checkPowerAvailable);
 PREP(consumePower);
 PREP(getUserConfirmation);
-PREP(getAccessibleDevices);
-PREP(cacheDeviceLinks);
+PREP(removePower);
+PREP(localSoundBroadcast);
 
-// Device functions
+// Redefine PREP macro for subdirectory: devices
+#undef PREP
+#define PREP(fncName) [QPATHTOF(functions\devices\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
+
 PREP(changeDoorState);
 PREP(changeLightState);
 PREP(changeDroneFaction);
@@ -20,7 +31,10 @@ PREP(customDevice);
 PREP(changeVehicleParams);
 PREP(listDevicesInSubnet);
 
-// GPS functions
+// Redefine PREP macro for subdirectory: gps
+#undef PREP
+#define PREP(fncName) [QPATHTOF(functions\gps\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
+
 PREP(gpsTrackerClient);
 PREP(gpsTrackerServer);
 PREP(aceAttachGPSTrackerSelf);
@@ -31,10 +45,16 @@ PREP(disableGPSTrackerServer);
 PREP(displayGPSPosition);
 PREP(revealLaptopLocations);
 
-// Database functions
+// Redefine PREP macro for subdirectory: database
+#undef PREP
+#define PREP(fncName) [QPATHTOF(functions\database\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
+
 PREP(downloadDatabase);
 
-// Zeus functions
+// Redefine PREP macro for subdirectory: zeus
+#undef PREP
+#define PREP(fncName) [QPATHTOF(functions\zeus\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
+
 PREP(addDeviceZeus);
 PREP(addDeviceZeusMain);
 PREP(addDatabaseZeus);
@@ -46,7 +66,3 @@ PREP(addVehicleZeusMain);
 PREP(modifyPowerZeus);
 PREP(addHackingToolsZeus);
 PREP(addHackingToolsZeusMain);
-
-// Utility functions
-PREP(removePower);
-PREP(localSoundBroadcast);

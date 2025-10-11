@@ -1,6 +1,20 @@
-// Root_fnc_searchForGPSTracker
-// Searches a target object for GPS trackers
-// Parameters: [_target, _player]
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: Searches a target object for GPS trackers with probability-based detection
+ *
+ * Arguments:
+ * 0: _target <OBJECT> - The object to search
+ * 1: _player <OBJECT> - The player performing the search
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [_target, player] call Root_fnc_searchForGPSTracker;
+ *
+ * Public: No
+ */
 
 params ["_target", "_player"];
 

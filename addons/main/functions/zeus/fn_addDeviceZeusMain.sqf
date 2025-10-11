@@ -1,3 +1,27 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: Server-side function to add a hackable device to the network
+ *
+ * Arguments:
+ * 0: _targetObject <OBJECT> - The object to make hackable
+ * 1: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
+ * 2: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
+ * 3: _treatAsCustom <BOOLEAN> (Optional) - Treat as custom device, default: false
+ * 4: _customName <STRING> (Optional) - Custom device name, default: ""
+ * 5: _activationCode <STRING> (Optional) - Code to run on activation, default: ""
+ * 6: _deactivationCode <STRING> (Optional) - Code to run on deactivation, default: ""
+ * 7: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [_obj, 0, [], true, "Generator", "", "", false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+ *
+ * Public: No
+ */
+
 params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_treatAsCustom", false], ["_customName", ""], ["_activationCode", ""], ["_deactivationCode", ""], ["_availableToFutureLaptops", false]];
 
 if (_execUserId == 0) then {

@@ -1,3 +1,23 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: Lists all accessible devices in the subnet for a computer
+ *
+ * Arguments:
+ * 0: _owner <ANY> - Owner parameter (legacy compatibility)
+ * 1: _computer <OBJECT> - The laptop/computer object
+ * 2: _nameOfVariable <STRING> - Variable name for completion flag
+ * 3: _commandPath <STRING> - Command path for access checking
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [nil, _laptop, "var1", "/tools/"] call Root_fnc_listDevicesInSubnet;
+ *
+ * Public: No
+ */
+
 params['_owner', '_computer', '_nameOfVariable', '_commandPath'];
 
 private _string = "";

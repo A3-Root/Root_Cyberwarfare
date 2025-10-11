@@ -1,3 +1,26 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: Modifies vehicle parameters (battery, speed, brakes, lights, engine, alarm)
+ *
+ * Arguments:
+ * 0: _owner <ANY> - Owner parameter (legacy compatibility)
+ * 1: _computer <OBJECT> - The laptop/computer object
+ * 2: _nameOfVariable <STRING> - Variable name for completion flag
+ * 3: _vehicleID <STRING> - Vehicle ID
+ * 4: _action <STRING> - Action to perform (battery/speed/brakes/lights/engine/alarm)
+ * 5: _value <STRING> - Value for the action
+ * 6: _commandPath <STRING> - Command path for access checking
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [nil, _laptop, "var1", "1234", "battery", "50", "/tools/"] call Root_fnc_changeVehicleParams;
+ *
+ * Public: No
+ */
+
 params ["_owner", "_computer", "_nameOfVariable", "_vehicleID", "_action", "_value", "_commandPath"];
 
 private _string = "";

@@ -1,3 +1,20 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: ACE interaction to attach a GPS tracker to self or vehicle
+ *
+ * Arguments:
+ * 0: _player <OBJECT> - The player attaching the tracker
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [player] call Root_fnc_aceAttachGPSTrackerSelf;
+ *
+ * Public: No
+ */
+
 params ["_player"];
 private _execUserId = clientOwner;
 

@@ -1,4 +1,4 @@
-#include "../../script_component.hpp"
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
  * Description: Checks if sufficient power is available in the laptop battery

@@ -1,3 +1,24 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: Downloads a database file to the computer's filesystem
+ *
+ * Arguments:
+ * 0: _owner <ANY> - Owner parameter (legacy compatibility)
+ * 1: _computer <OBJECT> - The laptop/computer object
+ * 2: _nameOfVariable <STRING> - Variable name for completion flag
+ * 3: _databaseId <STRING> - Database ID to download
+ * 4: _commandPath <STRING> - Command path for access checking
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [nil, _laptop, "var1", "1234", "/tools/"] call Root_fnc_downloadDatabase;
+ *
+ * Public: No
+ */
+
 params['_owner', '_computer', '_nameOfVariable', '_databaseId', "_commandPath"];
 
 private _string = "";

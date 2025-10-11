@@ -1,3 +1,25 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: Client-side GPS tracker visualization - creates and updates map marker
+ *
+ * Arguments:
+ * 0: _trackerObject <OBJECT> - The object being tracked
+ * 1: _markerName <STRING> - Name for the map marker
+ * 2: _trackingTime <NUMBER> - Duration in seconds to track
+ * 3: _updateFrequency <NUMBER> - Frequency in seconds between updates
+ * 4: _trackerName <STRING> - Display name for the tracker
+ * 5: _lastPingTimer <NUMBER> - Duration in seconds to show last ping marker
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [_target, "marker1", 60, 5, "Target_1", 30] call Root_fnc_gpsTrackerClient;
+ *
+ * Public: No
+ */
+
 params ["_trackerObject", "_markerName", "_trackingTime", "_updateFrequency", "_trackerName", "_lastPingTimer"];
 
 private _startTime = time;

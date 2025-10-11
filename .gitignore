@@ -5,3 +5,7 @@ hemtt.exe
 *.biprivatekey
 repomix-output.xml
 releases
+*.md
+**/*.json
+!README.md
+!wiki/*

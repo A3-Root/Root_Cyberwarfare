@@ -1,3 +1,35 @@
+/*
+ * Author: Root
+ * Server-side function to add a hackable database/file to the network
+ *
+ * Arguments:
+ * 0: _allDatabases <ARRAY> - Current database array
+ * 1: _databaseId <NUMBER> - Database ID (will be regenerated)
+ * 2: _fileObject <OBJECT> - Object to store file data on
+ * 3: _filename <STRING> - Name of the file
+ * 4: _filesize <NUMBER> - Size of file (download time in seconds)
+ * 5: _filecontent <STRING> - Content of the file
+ * 6: _allDevices <ARRAY> - Current devices array
+ * 7: _allDoors <ARRAY> - Current doors array
+ * 8: _allLamps <ARRAY> - Current lamps array
+ * 9: _allDrones <ARRAY> - Current drones array
+ * 10: _allCustom <ARRAY> - Current custom devices array
+ * 11: _allGpsTrackers <ARRAY> - Current GPS trackers array
+ * 12: _allVehicles <ARRAY> - Current vehicles array
+ * 13: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
+ * 14: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
+ * 15: _executionCode <STRING> (Optional) - Code to execute on download, default: ""
+ * 16: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [_databases, 0, _obj, "secret.txt", 10, "content", _devices, ...] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
+ *
+ * Public: No
+ */
+
 params ["_allDatabases", "_databaseId", "_fileObject", "_filename", "_filesize", "_filecontent", "_allDevices", "_allDoors", "_allLamps", "_allDrones", "_allCustom", "_allGpsTrackers", "_allVehicles", ["_execUserId", 0], ["_linkedComputers", []], ["_executionCode", ""], ["_availableToFutureLaptops", false]];
 
 if (_execUserId == 0) then {

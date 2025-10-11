@@ -1,6 +1,22 @@
-// Root_fnc_revealLaptopLocations
-// Reveals the location of linked laptops on the map
-// Parameters: [_linkedComputers, _player, _permanent, _aliveTimer]
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+/*
+ * Author: Root
+ * Description: Reveals the location of linked laptops on the map with temporary or permanent markers
+ *
+ * Arguments:
+ * 0: _linkedComputers <ARRAY> - Array of computer netIds to reveal
+ * 1: _player <OBJECT> - The player who will see the markers
+ * 2: _permanent <BOOLEAN> (Optional) - Make markers permanent, default: true
+ * 3: _aliveTimer <NUMBER> (Optional) - Time in seconds before markers disappear (if not permanent), default: 60
+ *
+ * Return Value:
+ * <STRING> - Status message with count of revealed laptops
+ *
+ * Example:
+ * [_linkedComputers, player, false, 60] call Root_fnc_revealLaptopLocations;
+ *
+ * Public: No
+ */
 
 params ["_linkedComputers", "_player", ["_permanent", true], ["_aliveTimer", 60]];
 
