@@ -28,21 +28,40 @@ if (_isBeingSearched) exitWith {
 };
 missionNamespace setVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", true, true];
 
+// Get spectrum devices from CBA settings
+private _spectrumDevicesString = missionNamespace getVariable [SETTING_GPS_SPECTRUM_DEVICES, ""];
+private _spectrumDevices = [];
+
+// Only parse if the string is not empty
+if (_spectrumDevicesString != "") then {
+    _spectrumDevices = _spectrumDevicesString splitString ",";
+    _spectrumDevices = _spectrumDevices apply { _x trim [" ", 2] }; // Remove whitespace
+    // Remove any empty strings from the array
+    _spectrumDevices = _spectrumDevices select { _x != "" };
+};
+
+// Get detection chances from CBA settings
+private _detectNormal = missionNamespace getVariable [SETTING_GPS_SEARCH_CHANCE_NORMAL, 0.2];
+private _detectTool = missionNamespace getVariable [SETTING_GPS_SEARCH_CHANCE_TOOL, 0.8];
+
 // Check if player has spectrum device
 private _hasSpectrumDevice = false;
+if (_spectrumDevices isNotEqualTo []) then {
+    {
+        if (_x in (weapons _player)) exitWith {
+            _hasSpectrumDevice = true;
+        };
+    } forEach _spectrumDevices;
+};
 
-private _spectrumDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_SPECTRUM_DEVICE", ["hgun_esd_01_antenna_01_F", "hgun_esd_01_antenna_02_F", "hgun_esd_01_antenna_03_F", "hgun_esd_01_base_F", "hgun_esd_01_dummy_F", "hgun_esd_01_F"]];
-private _detectTool = missionNamespace getVariable ["ROOT_CYBERWARFARE_SPECTRUM_DETTOOL", 0.8];
-private _detectNormal = missionNamespace getVariable ["ROOT_CYBERWARFARE_SPECTRUM_DETNORM", 0.2];
-
-{
-    if (_x in (weapons _player)) exitWith {
-        _hasSpectrumDevice = true;
-    };
-} forEach _spectrumDevices;
-
-// Calculate detection chance
-private _detectionChance = [_detectNormal, _detectTool] select (_hasSpectrumDevice);
+// Calculate detection chance - if no spectrum devices configured, use 100% success rate
+private _detectionChance = _detectNormal;
+if (_spectrumDevices isEqualTo []) then {
+    // No spectrum devices configured - guaranteed detection
+    _detectionChance = 1.0;
+} else {
+    _detectionChance = [_detectNormal, _detectTool] select (_hasSpectrumDevice);
+};
 
 // Check if target actually has a GPS tracker
 private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];

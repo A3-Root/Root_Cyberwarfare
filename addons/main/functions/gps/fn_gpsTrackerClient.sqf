@@ -25,23 +25,31 @@ params ["_trackerObject", "_markerName", "_trackingTime", "_updateFrequency", "_
 private _startTime = time;
 private _endTime = _startTime + _trackingTime;
 
-private _trackerPos = [];
-_trackerPos = getPos _trackerObject;
+private _trackerPos = getPos _trackerObject;
+private _lastKnownPos = _trackerPos; // Store last known position
 
 private _marker = createMarkerLocal [_markerName, _trackerPos];
 _marker setMarkerTypeLocal "mil_dot";
 _marker setMarkerTextLocal _trackerName;
 _marker setMarkerColorLocal "ColorRed";
 
-while {time < _endTime && !isNull _trackerObject} do {
-    _trackerPos = getPos _trackerObject;
-    _markerName setMarkerPosLocal _trackerPos;
+while {time < _endTime} do {
+    if (isNull _trackerObject) then {
+        // Object became null, use last known position
+        _markerName setMarkerPosLocal _lastKnownPos;
+    } else {
+        _trackerPos = getPos _trackerObject;
+        _lastKnownPos = _trackerPos; // Update last known position
+        _markerName setMarkerPosLocal _trackerPos;
+    };
     uiSleep _updateFrequency;
 };
 
 private _completed = format ["%1 (Last Ping)", _trackerName];
 _marker setMarkerTextLocal _completed;
 _marker setMarkerColorLocal "ColorCIV";
+// Ensure marker is at last known position
+_markerName setMarkerPosLocal _lastKnownPos;
 
 [_marker, _lastPingTimer] spawn {
     params ["_marker", "_lastPingTimer"];

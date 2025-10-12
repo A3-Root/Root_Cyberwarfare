@@ -16,17 +16,18 @@
  * 9: _lastPingTimer <NUMBER> - Last ping marker duration
  * 10: _powerCost <NUMBER> - Power cost per ping
  * 11: _sysChat <BOOLEAN> (Optional) - Show system chat message, default: true
+ * 12: _ownersSelection <ARRAY> (Optional) - Additional sides, groups, or players, to get GPS Pings marked on map, default: [[], [], []]
  *
  * Return Value:
  * None
  *
  * Example:
- * [_obj, 0, [], "Tracker1", 60, 5, "", false, true, 30, 2, true] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
+ * [_obj, 0, [], "Tracker1", 60, 5, "", false, true, 30, 2, true, [[], [], []]] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
  *
  * Public: No
  */
 
-params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_trackerName", ""], ["_trackingTime", 60], ["_updateFrequency", 5], ["_customMarker", ""], ["_availableToFutureLaptops", false], ["_allowRetracking", false], "_lastPingTimer", "_powerCost", ["_sysChat", true]];
+params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_trackerName", ""], ["_trackingTime", 60], ["_updateFrequency", 5], ["_customMarker", ""], ["_availableToFutureLaptops", false], ["_allowRetracking", false], "_lastPingTimer", "_powerCost", ["_sysChat", true], ["_ownersSelection", [[], [], []]]];
 
 if (_execUserId == 0) then {
     _execUserId = owner _targetObject;
@@ -51,8 +52,8 @@ if (count _allGpsTrackers > 0) then {
     };
 };
 
-// Store the tracker with initial status "Untracked"
-_allGpsTrackers pushBack [_deviceId, _netId, _trackerName, _trackingTime, _updateFrequency, _customMarker, _linkedComputers, _availableToFutureLaptops, ["Untracked", 0, ""], _allowRetracking, _lastPingTimer, _powerCost];
+// Store the tracker with initial status "Untracked" and owners selection
+_allGpsTrackers pushBack [_deviceId, _netId, _trackerName, _trackingTime, _updateFrequency, _customMarker, _linkedComputers, _availableToFutureLaptops, ["Untracked", 0, ""], _allowRetracking, _lastPingTimer, _powerCost, _ownersSelection];
 
 // Update the allDevices array with the new GPS trackers category
 _allDevices set [5, _allGpsTrackers];
@@ -69,6 +70,7 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_AVAILABLE_FUTURE", _availableToFut
 _targetObject setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_RETRACK", _allowRetracking, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_PING", _lastPingTimer, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_COST", _powerCost, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_OWNERS", _ownersSelection, true];
 
 private _availabilityText = "";
 

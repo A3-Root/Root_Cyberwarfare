@@ -45,7 +45,7 @@
     "SLIDER",
     [localize "STR_ROOT_CYBERWARFARE_SETTING_DRONE_HACK_COST", localize "STR_ROOT_CYBERWARFARE_SETTING_DRONE_HACK_COST_DESC"],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY"],
-    [0, 100, 10, 0], // [min, max, default, decimal places]
+    [1, 100, 10, 0], // [min, max, default, decimal places]
     1, // mission-level
     {},
     false // doesn't require mission restart
@@ -57,7 +57,7 @@
     "SLIDER",
     [localize "STR_ROOT_CYBERWARFARE_SETTING_DRONE_SIDE_COST", localize "STR_ROOT_CYBERWARFARE_SETTING_DRONE_SIDE_COST_DESC"],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY"],
-    [0, 100, 20, 0], // [min, max, default, decimal places]
+    [1, 100, 20, 0], // [min, max, default, decimal places]
     1, // mission-level
     {},
     false // doesn't require mission restart
@@ -69,7 +69,7 @@
     "SLIDER",
     [localize "STR_ROOT_CYBERWARFARE_SETTING_DOOR_COST", localize "STR_ROOT_CYBERWARFARE_SETTING_DOOR_COST_DESC"],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY"],
-    [0, 50, 2, 0], // [min, max, default, decimal places]
+    [1, 50, 2, 0], // [min, max, default, decimal places]
     1, // mission-level
     {},
     false // doesn't require mission restart
@@ -81,7 +81,43 @@
     "SLIDER",
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CUSTOM_COST", localize "STR_ROOT_CYBERWARFARE_SETTING_CUSTOM_COST_DESC"],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY"],
-    [0, 100, 10, 0], // [min, max, default, decimal places]
+    [1, 100, 10, 0], // [min, max, default, decimal places]
+    1, // mission-level
+    {},
+    false // doesn't require mission restart
+] call CBA_fnc_addSetting;
+
+// GPS Spectrum Devices Setting
+[
+    SETTING_GPS_SPECTRUM_DEVICES,
+    "EDITBOX",
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_SPECTRUM_DEVICES", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_SPECTRUM_DEVICES_DESC"],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
+    "hgun_esd_01_antenna_01_F,hgun_esd_01_antenna_02_F,hgun_esd_01_antenna_03_F,hgun_esd_01_base_F,hgun_esd_01_dummy_F,hgun_esd_01_F",
+    1, // mission-level
+    {},
+    false // doesn't require mission restart
+] call CBA_fnc_addSetting;
+
+// GPS Search Success Chance (Normal) Setting
+[
+    SETTING_GPS_SEARCH_CHANCE_NORMAL,
+    "SLIDER",
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_NORMAL", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_NORMAL_DESC"],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
+    [1, 1, 0.2, 2], // [min, max, default, decimal places]
+    1, // mission-level
+    {},
+    false // doesn't require mission restart
+] call CBA_fnc_addSetting;
+
+// GPS Search Success Chance (With Detection Tool) Setting
+[
+    SETTING_GPS_SEARCH_CHANCE_TOOL,
+    "SLIDER",
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_TOOL", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_TOOL_DESC"],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
+    [1, 1, 0.8, 2], // [min, max, default, decimal places]
     1, // mission-level
     {},
     false // doesn't require mission restart

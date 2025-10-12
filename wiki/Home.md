@@ -21,22 +21,34 @@ Root's Cyber Warfare allows players to hack doors, drones, lights, vehicles, GPS
 - 🎯 **Zeus Modules** - 6 dynamic modules for mission makers
 - 🔐 **Access Control** - Device linking and backdoor system
 
-## Quick Links
+## Documentation Table of Contents
 
-### For Players
-- [Installation Guide](Installation) - Get started with the mod
-- [Player Guide](Player-Guide) - How to use hacking tools
-- [Terminal Commands Reference](Terminal-Commands) - Complete command list
+### 1. [Home](Home)
+Welcome page with mod overview and key features
 
-### For Mission Makers
-- [Zeus/Curator Guide](Zeus-Guide) - Using Zeus modules
-- [Mission Maker Guide](Mission-Maker-Guide) - Scripting integration
-- [Configuration Reference](Configuration) - CBA settings
-- [Custom Device Tutorial](Custom-Device-Tutorial) - Create custom hackable objects
+### 2. [Player Guide](Player-Guide)
+Learn how to use hacking tools and interact with devices in-game
 
-### For Developers
-- [Architecture & Technical Details](Architecture) - System design
-- [API Reference](API-Reference) - Function documentation
+### 3. [Terminal Commands Reference](Terminal-Commands)
+Complete reference for all terminal commands available to players
+
+### 4. [Zeus/Curator Guide](Zeus-Guide)
+Guide for Zeus/Curator on using dynamic modules to add hackable devices
+
+### 5. [Mission Maker Guide](Mission-Maker-Guide)
+Scripting integration and advanced mission-making techniques
+
+### 6. [Configuration Reference](Configuration)
+CBA settings and configuration options
+
+### 7. [Custom Device Tutorial](Custom-Device-Tutorial)
+Step-by-step guide to creating your own custom hackable objects
+
+### 8. [Architecture & Technical Details](Architecture)
+Technical documentation on system design and implementation
+
+### 9. [API Reference](API-Reference)
+Complete function documentation for developers
 
 ## Dependencies
 

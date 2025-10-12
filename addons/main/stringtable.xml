@@ -119,6 +119,24 @@
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_DETECTION_DEVICES_DESC">
             <English>Comma-separated classnames of items that speed up GPS tracker detection</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_NORMAL">
+            <English>GPS Search Success Chance (Normal)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_NORMAL_DESC">
+            <English>Probability (0.0 to 1.0) of detecting a GPS tracker without spectrum device</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_TOOL">
+            <English>GPS Search Success Chance (With Tool)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_TOOL_DESC">
+            <English>Probability (0.0 to 1.0) of detecting a GPS tracker with spectrum device equipped</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SPECTRUM_DEVICES">
+            <English>GPS Spectrum Detection Devices</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SPECTRUM_DEVICES_DESC">
+            <English>Comma-separated classnames of spectrum devices that improve GPS tracker detection success rate</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_TRACKER_DEVICE">
             <English>GPS Tracker Item</English>
         </Key>

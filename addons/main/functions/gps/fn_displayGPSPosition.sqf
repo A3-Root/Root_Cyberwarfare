@@ -38,9 +38,9 @@ if (_trackerIdNum != 0) then {
     private _foundTracker = false;
     
     {
-        // [_deviceId, _netId, _trackerName, _trackingTime, _updateFrequency, _customMarker, _linkedComputers, _availableToFutureLaptops, ["Untracked", 0, ""], _allowRetracking, _lastPingTimer, _powerCost];
+        // [_deviceId, _netId, _trackerName, _trackingTime, _updateFrequency, _customMarker, _linkedComputers, _availableToFutureLaptops, ["Untracked", 0, ""], _allowRetracking, _lastPingTimer, _powerCost, _ownersSelection];
 
-        _x params ["_storedTrackerId", "_trackerNetId", "_trackerName", "_trackingTime", "_updateFrequency", "_customMarker", "_linkedComputers", "_availableToFutureLaptops", "_currentStatus", "_allowRetracking", "_lastPingTimer", "_powerCost"];
+        _x params ["_storedTrackerId", "_trackerNetId", "_trackerName", "_trackingTime", "_updateFrequency", "_customMarker", "_linkedComputers", "_availableToFutureLaptops", "_currentStatus", "_allowRetracking", "_lastPingTimer", "_powerCost", ["_ownersSelection", [[], [], []]]];
         private _trackerObject = objectFromNetId _trackerNetId;
         
         if (_trackerIdNum == _storedTrackerId) then {
@@ -142,7 +142,7 @@ if (_trackerIdNum != 0) then {
                             
                             // Start tracking loop
                             private _clientID = clientOwner;
-                            [_trackerObject, _markerName, _trackingTime, _updateFrequency, _storedTrackerId, _computer, _allowRetracking, _trackerIdNum, _trackerName, _clientID, _lastPingTimer] remoteExec ["Root_fnc_gpsTrackerServer", 2];
+                            [_trackerObject, _markerName, _trackingTime, _updateFrequency, _storedTrackerId, _computer, _allowRetracking, _trackerIdNum, _trackerName, _clientID, _lastPingTimer, _ownersSelection] remoteExec ["Root_fnc_gpsTrackerServer", 2];
                         };
                     };
                 };

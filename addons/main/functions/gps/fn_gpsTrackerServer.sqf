@@ -15,17 +15,18 @@
  * 8: _trackerName <STRING> - Display name for the tracker
  * 9: _clientID <NUMBER> - Client owner ID
  * 10: _lastPingTimer <NUMBER> - Duration in seconds to show last ping marker
+ * 11: _ownersSelection <ARRAY> (Optional) - OWNERS selection [sides, groups, players], default: [[], [], []]
  *
  * Return Value:
  * None
  *
  * Example:
- * [_obj, "marker1", 60, 5, 1234, _laptop, true, 1234, "Target", 2, 30] remoteExec ["Root_fnc_gpsTrackerServer", 2];
+ * [_obj, "marker1", 60, 5, 1234, _laptop, true, 1234, "Target", 2, 30, [[], [], []]] remoteExec ["Root_fnc_gpsTrackerServer", 2];
  *
  * Public: No
  */
 
-params ["_trackerObject", "_markerName", "_trackingTime", "_updateFrequency", "_trackerId", "_computer", "_allowRetracking", "_trackerIdNum", "_trackerName", "_clientID", "_lastPingTimer"];
+params ["_trackerObject", "_markerName", "_trackingTime", "_updateFrequency", "_trackerId", "_computer", "_allowRetracking", "_trackerIdNum", "_trackerName", "_clientID", "_lastPingTimer", ["_ownersSelection", [[], [], []]]];
 
 private _computerNetId = netId _computer;
 
@@ -55,13 +56,51 @@ private _allGpsTrackers = _allDevices param [5, []];
     };
 } forEach _allGpsTrackers;
 
-[_trackerObject, _markerName, _trackingTime, _updateFrequency, _trackerName, _lastPingTimer] remoteExec ["Root_fnc_gpsTrackerClient", _clientID];
+// Calculate target clients from owners selection
+private _targetClients = [_clientID]; // Always include the initiating client
+
+_ownersSelection params [["_selectedSides", []], ["_selectedGroups", []], ["_selectedPlayers", []]];
+
+// Add players from selected sides
+{
+    private _side = _x;
+    {
+        if (side _x == _side && !(_x in _targetClients)) then {
+            _targetClients pushBackUnique (owner _x);
+        };
+    } forEach allPlayers;
+} forEach _selectedSides;
+
+// Add players from selected groups
+{
+    private _group = _x;
+    {
+        if (!(_x in _targetClients)) then {
+            _targetClients pushBackUnique (owner _x);
+        };
+    } forEach (units _group);
+} forEach _selectedGroups;
+
+// Add selected individual players
+{
+    if (!(_x in _targetClients)) then {
+        _targetClients pushBackUnique (owner _x);
+    };
+} forEach _selectedPlayers;
+
+[_trackerObject, _markerName, _trackingTime, _updateFrequency, _trackerName, _lastPingTimer] remoteExec ["Root_fnc_gpsTrackerClient", _targetClients];
 
 uiSleep (_trackingTime + 0.5);
 // waitUntil {time > _endTime};
 
+// Get last position, fallback to [0,0,0] if object is null
 private _lastPosition = [0, 0, 0];
-_lastPosition = getPos _trackerObject;
+if (isNull _trackerObject) then {
+    // Object is null, use default fallback position
+    _lastPosition = [0, 0, 0];
+} else {
+    _lastPosition = getPos _trackerObject;
+};
 
 // Tracking completed - update status
 private _newStatus = "Completed"; 
