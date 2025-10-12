@@ -90,17 +90,21 @@ _ownersSelection params [["_selectedSides", []], ["_selectedGroups", []], ["_sel
 
 [_trackerObject, _markerName, _trackingTime, _updateFrequency, _trackerName, _lastPingTimer] remoteExec ["Root_fnc_gpsTrackerClient", _targetClients];
 
-uiSleep (_trackingTime + 0.5);
-// waitUntil {time > _endTime};
+// Track the last known position during the tracking period
+private _lastPosition = getPos _trackerObject;
+private _startTime = time;
+private _endTime = _startTime + _trackingTime;
 
-// Get last position, fallback to [0,0,0] if object is null
-private _lastPosition = [0, 0, 0];
-if (isNull _trackerObject) then {
-    // Object is null, use default fallback position
-    _lastPosition = [0, 0, 0];
-} else {
-    _lastPosition = getPos _trackerObject;
+while {time < _endTime} do {
+    if (isNull _trackerObject) then {
+        // Object became null, keep the last known position
+    } else {
+        _lastPosition = getPos _trackerObject;
+    };
+    uiSleep _updateFrequency;
 };
+
+uiSleep 0.5; // Small delay to ensure client has finished
 
 // Tracking completed - update status
 private _newStatus = "Completed"; 

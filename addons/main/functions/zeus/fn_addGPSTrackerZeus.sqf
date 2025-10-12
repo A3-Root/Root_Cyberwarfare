@@ -47,7 +47,7 @@ private _dialogControls = [
     ["SLIDER", ["Power Cost to Track", "Energy / Power (in Wh) required to track this signal"], [1, 30, 10, 1]],
     ["EDIT", ["Custom Marker (optional)", "Custom name for the map marker to be used. Leave empty to use Tracker Name"], [""]],
     ["TOOLBOX:YESNO", ["Allow Retracking", "Allow tracking again after the initial tracking time ends?"], false],
-    ["OWNERS", ["GPS Tracking Visibility", "Select which sides, groups, or players can see the GPS tracking marker. By default, only the player who initiates tracking will see the marker."], [[], [], [], 0]],
+    ["OWNERS", ["Additional GPS Tracking Visibility", "Additional (apart from the player who initiated the track) sides, groups, or players that can see the GPS tracking marker."], [[], [], [], 0]],
     ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this tracker be available to laptops that are added later?"], false]
 ];
 

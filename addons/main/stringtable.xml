@@ -113,11 +113,17 @@
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY">
             <English>GPS Settings</English>
         </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_DETECTION_DEVICES">
-            <English>GPS Detection Devices</English>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_ACTIVE">
+            <English>GPS Marker Color (Active Ping)</English>
         </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_DETECTION_DEVICES_DESC">
-            <English>Comma-separated classnames of items that speed up GPS tracker detection</English>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_ACTIVE_DESC">
+            <English>Color of the GPS tracker marker while actively tracking</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_LASTPING">
+            <English>GPS Marker Color (Last Ping)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_LASTPING_DESC">
+            <English>Color of the GPS tracker marker after tracking ends (last known position)</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_NORMAL">
             <English>GPS Search Success Chance (Normal)</English>

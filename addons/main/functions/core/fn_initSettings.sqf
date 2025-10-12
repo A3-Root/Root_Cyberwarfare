@@ -27,18 +27,6 @@
     true // requires mission restart
 ] call CBA_fnc_addSetting;
 
-// GPS Detection Devices Setting
-[
-    SETTING_GPS_DETECTION_DEVICES,
-    "EDITBOX",
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_DETECTION_DEVICES", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_DETECTION_DEVICES_DESC"],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
-    "",
-    1, // mission-level
-    {},
-    true // requires mission restart
-] call CBA_fnc_addSetting;
-
 // Drone Hacking Power Cost Setting
 [
     SETTING_DRONE_HACK_COST,
@@ -118,6 +106,30 @@
     [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_TOOL", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_TOOL_DESC"],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
     [1, 1, 0.8, 2], // [min, max, default, decimal places]
+    1, // mission-level
+    {},
+    false // doesn't require mission restart
+] call CBA_fnc_addSetting;
+
+// GPS Marker Color (Active Ping) Setting
+[
+    SETTING_GPS_MARKER_COLOR_ACTIVE,
+    "LIST",
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_ACTIVE", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_ACTIVE_DESC"],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
+    [["ColorBlack", "ColorGrey", "ColorRed", "ColorBrown", "ColorOrange", "ColorYellow", "ColorKhaki", "ColorGreen", "ColorBlue", "ColorPink", "ColorWhite", "ColorWEST", "ColorEAST", "ColorGUER", "ColorCIV", "ColorUNKNOWN"], ["Black", "Grey", "Red", "Brown", "Orange", "Yellow", "Khaki", "Green", "Blue", "Pink", "White", "BLUFOR", "OPFOR", "Independent", "Civilian", "Unknown"], 2],
+    1, // mission-level
+    {},
+    false // doesn't require mission restart
+] call CBA_fnc_addSetting;
+
+// GPS Marker Color (Last Ping) Setting
+[
+    SETTING_GPS_MARKER_COLOR_LASTPING,
+    "LIST",
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_LASTPING", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_LASTPING_DESC"],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
+    [["ColorBlack", "ColorGrey", "ColorRed", "ColorBrown", "ColorOrange", "ColorYellow", "ColorKhaki", "ColorGreen", "ColorBlue", "ColorPink", "ColorWhite", "ColorWEST", "ColorEAST", "ColorGUER", "ColorCIV", "ColorUNKNOWN"], ["Black", "Grey", "Red", "Brown", "Orange", "Yellow", "Khaki", "Green", "Blue", "Pink", "White", "BLUFOR", "OPFOR", "Independent", "Civilian", "Unknown"], 14],
     1, // mission-level
     {},
     false // doesn't require mission restart

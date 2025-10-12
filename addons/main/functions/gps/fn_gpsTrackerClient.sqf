@@ -28,15 +28,22 @@ private _endTime = _startTime + _trackingTime;
 private _trackerPos = getPos _trackerObject;
 private _lastKnownPos = _trackerPos; // Store last known position
 
+// Get marker colors from CBA settings
+private _activeColor = missionNamespace getVariable [SETTING_GPS_MARKER_COLOR_ACTIVE, "ColorRed"];
+private _lastPingColor = missionNamespace getVariable [SETTING_GPS_MARKER_COLOR_LASTPING, "ColorCIV"];
+
 private _marker = createMarkerLocal [_markerName, _trackerPos];
 _marker setMarkerTypeLocal "mil_dot";
 _marker setMarkerTextLocal _trackerName;
-_marker setMarkerColorLocal "ColorRed";
+_marker setMarkerColorLocal _activeColor;
+private _completed = format ["%1 (Last Ping)", _trackerName];
 
 while {time < _endTime} do {
     if (isNull _trackerObject) then {
         // Object became null, use last known position
         _markerName setMarkerPosLocal _lastKnownPos;
+        _marker setMarkerColorLocal _lastPingColor;
+        _marker setMarkerTextLocal _completed;
     } else {
         _trackerPos = getPos _trackerObject;
         _lastKnownPos = _trackerPos; // Update last known position
@@ -45,9 +52,8 @@ while {time < _endTime} do {
     uiSleep _updateFrequency;
 };
 
-private _completed = format ["%1 (Last Ping)", _trackerName];
 _marker setMarkerTextLocal _completed;
-_marker setMarkerColorLocal "ColorCIV";
+_marker setMarkerColorLocal _lastPingColor;
 // Ensure marker is at last known position
 _markerName setMarkerPosLocal _lastKnownPos;
 
