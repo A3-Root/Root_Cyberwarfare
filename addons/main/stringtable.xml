@@ -84,7 +84,7 @@
     </Package>
     <Package name="Settings">
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_CATEGORY">
-            <English>Root Cyberwarfare Configuration</English>
+            <English>Root Cyber Warfare</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_CUSTOM_COST">
             <English>Custom Device Power Cost</English>

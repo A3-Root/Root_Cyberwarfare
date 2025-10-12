@@ -21,7 +21,7 @@ Mission makers will place laptops in the mission. Look for:
 
 1. **Approach a laptop** with hacking tools installed
 2. **Use ACE interaction** (default: Windows key)
-3. **Select**: `Equipment` → `Open Laptop`
+3. **Select**: `ArmaOS` → `Use`
 4. **Terminal opens** - You're now in the AE3 virtual filesystem
 
 ---
@@ -77,7 +77,7 @@ Your laptop's battery level is displayed in the AE3 interface. Before executing 
 | Toggle Light | 0 Wh (instant) |
 | Change Drone Faction | 20 Wh |
 | Disable Drone | 10 Wh |
-| GPS Tracking | 2 Wh per ping |
+| GPS Tracking | 2 Wh |
 | Custom Device | 10 Wh |
 | Vehicle Hacking | 2 Wh per action |
 
@@ -395,18 +395,29 @@ Mission makers can create custom hackable devices. These appear in the `devices`
 
 ## GPS Tracker Placement (ACE Interaction)
 
-You can physically place GPS trackers on objects using ACE interactions.
+You can physically place GPS trackers on objects (including yourself) and search the said tracker on other objects (excluding yourself) using ACE interactions.
 
 ### Requirements
 
 - GPS tracker item in inventory (default: `ACE_Banana` - configurable by mission maker)
+- Optional GPS Detection item in inventory (default: `Any Spectrum Device from Contact DLC` - configurable by mission maker)
 - Target object (vehicle, player, etc.)
 
-### Placing a GPS Tracker
+### Placing a GPS Tracker on another Object/Player/Vehicle
 
 1. **Approach target** with GPS tracker item in inventory
 2. **Use ACE interaction** (Windows key)
-3. **Select**: `Root Cyberwarfare` → `Attach GPS Tracker`
+3. **Select**: `Attach GPS Tracker`
+4. **Configure settings** in ZEN dialog:
+   - Tracking Time (seconds)
+   - Update Frequency (seconds)
+5. **Confirm** - GPS tracker is placed and item is consumed
+
+### Placing a GPS Tracker on yourself
+
+1. **Approach target** with GPS tracker item in inventory
+2. **Use ACE Self-Interaction** (Control key + Windows key)
+3. **Select**: `Equipment` → `Attach GPS Tracker`
 4. **Configure settings** in ZEN dialog:
    - Tracking Time (seconds)
    - Update Frequency (seconds)
@@ -414,38 +425,20 @@ You can physically place GPS trackers on objects using ACE interactions.
 
 ### Searching for GPS Trackers
 
-Other players can search for trackers:
+Players can search for trackers:
 
 1. **Use ACE interaction** on suspected object
-2. **Select**: `Root Cyberwarfare` → `Search for GPS Tracker`
-3. **Success**: 50% chance to find tracker
-4. **If found**: Option to disable the tracker
+2. **Select**: `Search for GPS Tracker`
+3. **Success**: 20% chance to find tracker (without Detection item) and 80% chance to find tracker (with Detection item) - configurable by mission maker
+4. **If found**: Option to disable the tracker (without Detection item) and find position of all laptops linked to this tracker (with Detection item)
 
 ---
 
-## Tips & Best Practices
+## Multiplayer Considerations
 
-### General Tips
-
-- **Always check `devices` first** - Know what's available before planning operations
-- **Monitor battery** - Don't get stuck with insufficient power mid-mission
-- **Use confirmation prompts** - Double-check before expensive operations
-- **Check power costs** - Commands display cost before execution
-
-### Tactical Tips
-
-- **Doors**: Lock doors behind you to slow pursuers
-- **Lights**: Turn off lights for stealth operations
-- **Drones**: Change enemy drones to your side rather than destroying them
-- **GPS**: Track high-value targets or stolen vehicles
-- **Vehicles**: Disable enemy vehicle batteries to prevent escape
-
-### Multiplayer Considerations
-
-- **Multiple laptops**: Device access is shared across all laptops with access
 - **Power is per-laptop**: Each laptop has its own battery
 - **Devices update globally**: Door locks, light states, etc. sync to all players
-- **GPS tracking is client-side**: Only you see your GPS markers
+- **GPS tracking is client-side**: Only the person who initiated the tracking sees the GPS markers
 
 ---
 
@@ -453,8 +446,7 @@ Other players can search for trackers:
 
 - [Terminal Commands Reference](Terminal-Commands) - Complete command syntax
 - [Configuration Reference](Configuration) - Learn about mission settings
-- [Troubleshooting](Troubleshooting) - Common issues
 
 ---
 
-**Need help?** Contact your mission maker or check the [Troubleshooting](Troubleshooting) page.
+**Need help?** Contact your mission maker or join discord or raise an issue in GitHub.

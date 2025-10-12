@@ -84,7 +84,7 @@ vehicle 1337 engine off       # Disable vehicle #1337's engine
 ### For Zeus/Curators
 
 1. Open Zeus interface
-2. Use custom modules under "Root Cyberwarfare":
+2. Use custom modules under "Root's Cyberwarfare":
    - **Add Hacking Tools**: Install hacking capability on a laptop
    - **Add Hackable Object**: Register a hackable object
    - **Add Hackable Vehicle**: Register a hackable vehicle
@@ -127,7 +127,7 @@ missionNamespace setVariable ["ROOT_CYBERWARFARE_LINK_CACHE", _linkCache, true];
 
 ### CBA Settings
 
-Access via: Main Menu → Options → Addon Options → Root Cyberwarfare Configuration
+Access via: Main Menu → Options → Addon Options → Root Cyber Warfare
 
 | Setting | Default | Description |
 |---------|---------|-------------|

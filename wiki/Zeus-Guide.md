@@ -31,7 +31,6 @@ Installs hacking tools on a laptop, turning it into a functional hacking platfor
 2. **Configure in dialog**:
    - **Installation Path**: Default `/rubberducky/tools`
    - **Custom Laptop Name**: Display name for device linking
-   - **Backdoor Script Prefix**: For special access (optional)
 3. **Click OK**
 
 ### Dialog Options
@@ -40,13 +39,12 @@ Installs hacking tools on a laptop, turning it into a functional hacking platfor
 |--------|-------------|---------|---------|
 | Installation Path | Where tools are installed in filesystem | `/rubberducky/tools` | `/network/tools` |
 | Custom Laptop Name | Unique identifier for this laptop | `HackingPlatform_N` | `HQ_Terminal` |
-| Backdoor Script Prefix | Grants full device access if path starts with this | ` ` (empty) | `/backdoor` |
 
 ### Installed Commands
 
 The module installs these commands:
 - `/path/devices` - List devices
-- `/path/guide.txt` - Help file
+- `/path/guide` - Help file
 - `/path/door` - Door control
 - `/path/light` - Light control
 - `/path/changedrone` - Drone faction change
@@ -61,9 +59,9 @@ The module installs these commands:
 **Backdoor Access** grants full access to ALL devices, bypassing normal access control.
 
 **How it works**:
-- Set backdoor prefix (e.g., `/backdoor`)
+- Set backdoor prefix (e.g., `backdoor`)
 - Any command executed from path starting with prefix has full access
-- Example: `/backdoor_door` has access to all doors
+- Example: `backdoor_door` has access to all doors
 
 **Use cases**:
 - Admin/GM laptops
@@ -75,11 +73,11 @@ The module installs these commands:
 ```
 Laptop: "Intel Officer Terminal"
 Path: /headquarters/tools
-Backdoor: /admin
+Backdoor: admin
 
 Result:
 - Player uses: /headquarters/tools/devices → sees only linked devices
-- Admin uses: /admin_devices → sees ALL devices
+- Admin uses: admin_devices → sees ALL devices
 ```
 
 ### Notes
@@ -229,13 +227,13 @@ Attaches a GPS tracker to an object for remote tracking.
 ### Tracking Behavior
 
 **Active Tracking**:
-- Blue marker on map
+- Red marker on map
 - Updates every N seconds
 - Shows current position
 - Lasts for tracking time
 
 **Last Ping**:
-- Red marker on map
+- Purple marker on map
 - Shows final known position
 - Visible for last ping duration
 
@@ -364,8 +362,8 @@ Result: Full control, high power cost, restricted access
 
 - Vehicle ID randomly generated (1000-9999)
 - Each action consumes power independently
-- Light control only works on empty vehicles (no crew)
-- Brakes only work on land vehicles
+- **Light control only works on empty vehicles (no crew)**
+- **Brakes only work on land vehicles**
 - Features shown in `devices` command output
 
 ---
@@ -627,4 +625,4 @@ Result: Difficulty scales with mission progression
 
 ---
 
-**Need help?** Check [Troubleshooting](Troubleshooting) or GitHub issues.
+**Need help?** Join discord or raise an issue in GitHub.

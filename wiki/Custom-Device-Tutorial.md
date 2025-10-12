@@ -464,26 +464,6 @@ hint 'Code finished';
 
 ## Common Pitfalls
 
-### ❌ Wrong: Using Unscheduled Commands
-
-```sqf
-// This fails (findDisplay only works unscheduled)
-"
-(findDisplay 46) displayAddEventHandler ['KeyDown', {...}];
-"
-```
-
-### ✅ Correct: Spawn Unscheduled Code
-
-```sqf
-// Wrap in spawn if needed
-"
-[] spawn {
-    (findDisplay 46) displayAddEventHandler ['KeyDown', {...}];
-};
-"
-```
-
 ### ❌ Wrong: Local Variables
 
 ```sqf

@@ -5,7 +5,7 @@ Complete reference for all Root's Cyber Warfare settings and configuration optio
 ## Overview
 
 Root's Cyber Warfare uses **CBA Settings** for all configuration. Settings can be adjusted:
-- In-game via ESC → Addon Options → Root Cyberwarfare Configuration
+- In-game via ESC → Addon Options → Root Cyberwarfare
 - Server-side via `userconfig/cba_settings.sqf`
 - Mission-specific via mission config
 
@@ -18,7 +18,7 @@ Root's Cyber Warfare uses **CBA Settings** for all configuration. Settings can b
 1. **In-Game**:
    - Press `ESC`
    - Select `Addon Options`
-   - Find `Root Cyberwarfare Configuration`
+   - Find `Root Cyberwarfare`
    - Adjust settings
    - Click `OK`
 
@@ -482,4 +482,4 @@ hint str (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_COSTS", []]);
 
 ---
 
-**Need help?** Check [Troubleshooting](Troubleshooting) or ask on GitHub.
+**Need help?** Join discord or raise an issue in GitHub.

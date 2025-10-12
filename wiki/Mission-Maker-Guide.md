@@ -2,6 +2,8 @@
 
 This guide covers integrating Root's Cyber Warfare into your Arma 3 missions using scripting.
 
+# **WARNING: THIS IS A STOP GAP SOLUTION UNTIL A MORE PERMANENT 3DEN FRIENDLY MODULES ARE EVENTUALLY RELEASED.**
+
 ## Overview
 
 While Zeus modules are great for dynamic missions, scripted integration gives you more control and allows pre-configuration. This guide shows you how to add hacking tools, devices, and configure access control via scripts.
@@ -495,4 +497,4 @@ hint format ["Doors: %1, Lights: %2, Drones: %3",
 
 ---
 
-**Need help?** Check [Troubleshooting](Troubleshooting) or open an issue on GitHub.
+**Need help?** Join discord or raise an issue in GitHub.

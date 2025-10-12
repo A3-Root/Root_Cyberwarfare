@@ -657,4 +657,4 @@ New Power Level: 498Wh
 
 ---
 
-**Need help?** See [Troubleshooting](Troubleshooting) or contact your mission maker.
+**Need help?** Join discord or raise an issue in GitHub.

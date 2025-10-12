@@ -441,8 +441,8 @@ if (VALIDATE_COMPUTER(_laptop)) then {
 │              │   Start tracking    │  Update      │
 │              │                     │  Status      │
 │ ┌──────────┐ │                     │              │
-│ │ Marker   │ │<────remoteExec─────┤  Track Loop  │
-│ │ Display  │ │    every N secs    │  (scheduled) │
+│ │ Marker   │ │<────remoteExec──────┤  Track Loop  │
+│ │ Display  │ │    every N secs     │  (scheduled) │
 │ │ (client) │ │                     │              │
 │ └──────────┘ │                     │              │
 │              │                     │  Completion  │

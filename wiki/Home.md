@@ -37,7 +37,6 @@ Root's Cyber Warfare allows players to hack doors, drones, lights, vehicles, GPS
 ### For Developers
 - [Architecture & Technical Details](Architecture) - System design
 - [API Reference](API-Reference) - Function documentation
-- [Troubleshooting](Troubleshooting) - Common issues
 
 ## Dependencies
 
@@ -79,8 +78,8 @@ Contributions are welcome! Please see the repository for contribution guidelines
 
 ## License
 
-Root's Cyber Warfare is released under [LICENSE]. See the repository for full license details.
+Root's Cyber Warfare is released under Arma 3 Public License - Share Alike (APL-SA). See the repository for full license details.
 
 ---
 
-**Need help?** Check the [Troubleshooting](Troubleshooting) page or open an issue on GitHub.
+**Need help?** Join discord or raise an issue in GitHub.
