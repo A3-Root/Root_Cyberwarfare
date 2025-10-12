@@ -22,7 +22,7 @@ if (isNull _target || {_target == _player}) exitWith {
     ["Cannot search this target!", true, 1.5, 2] call ace_common_fnc_displayText;
 };
 
-private _isBeingSearched = missionNamespace getVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", false];
+private _isBeingSearched = missionNamespace getVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", false, true];
 if (_isBeingSearched) exitWith {
     ["Search already underway by another person!", true, 1.5, 2] call ace_common_fnc_displayText;
 };
@@ -84,6 +84,7 @@ private _detected = (random 1) < _detectionChance;
 
 if ((!_hasTracker) || (!_detected)) exitWith {
     ["Search complete. No GPS tracker detected.", true, 1.5, 2] call ace_common_fnc_displayText;
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", false, true];
 };
 
 // GPS tracker found!
