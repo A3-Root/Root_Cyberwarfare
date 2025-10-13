@@ -8,7 +8,7 @@ A comprehensive cyberwarfare mod for Arma 3 that adds hacking mechanics, GPS tra
 
 ## Overview
 
-Root's Cyber Warfare transforms Arma 3 into a cyberpunk battlefield where players can hack into buildings, control drones, manipulate vehicles, and track enemies using GPS devices. The mod integrates seamlessly with ACE3 and uses the AE3 ArmaOS terminal system for an immersive hacking experience.
+Root's Cyber Warfare is a comprehensive modification for Arma 3 that introduces advanced cyber warfare mechanics into the tactical simulation environment. The mod enables players to conduct a range of electronic operations, including network infiltration, remote device control, and electronic surveillance. It is built upon a robust framework that integrates seamlessly with ACE3 for interactions and utilizes the AE3 ArmaOS terminal system to provide an authentic and immersive command-line interface for all hacking operations.
 
 ## Features
 

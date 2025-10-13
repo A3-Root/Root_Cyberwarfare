@@ -68,11 +68,7 @@ private _dialogControls = [
         _args params ["_targetObject", "_execUserId", "_allComputers"];
 
         // Parse results
-        _results params ["_generatorName", "_radius", "_allowExplosionActivate", "_allowExplosionDeactivate", "_explosionTypeIndex", "_excludedClassnames", "_availableToFutureLaptops"];
-
-        // Get the selected explosion type
-        private _explosionTypes = ["G_40mm_HE", "M_Mo_82mm_AT_LG", "Sh_120mm_APFSDS", "Sh_120mm_HE", "Sh_155mm_AMOS", "HelicopterExploSmall", "HelicopterExploBig", "Bo_GBU12_LGB", "Bo_GBU12_LGB_MI10"];
-        private _explosionType = _explosionTypes select _explosionTypeIndex;
+        _results params ["_generatorName", "_radius", "_allowExplosionActivate", "_allowExplosionDeactivate", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops"];
 
         // Parse excluded classnames (convert comma-separated string to array)
         private _excludedArray = [];

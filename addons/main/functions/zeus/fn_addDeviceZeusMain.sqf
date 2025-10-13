@@ -61,8 +61,9 @@ if (_treatAsCustom) then {
     // Treat as custom device
     _isCustomObject = true;
     _deviceId = (round (random 8999)) + 1000;
-    if (count _allCustom > 0) then {
+    if (_allCustom isNotEqualTo []) then {
         while {true} do {
+            uiSleep 0.01;
             _deviceId = (round (random 8999)) + 1000;
             private _customIsNew = true;
             {
