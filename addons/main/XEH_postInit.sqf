@@ -74,17 +74,26 @@ if (isServer) then {
     // Store in global namespace with network sync
     missionNamespace setVariable [GVAR_DEVICE_CACHE, _deviceCache, true];
 
-    // Initialize link cache hashmap
+    // Initialize link cache hashmap (only if it doesn't already exist)
     // Structure: HashMap<String, Array> - computerNetId -> [[deviceType, deviceId], ...]
-    missionNamespace setVariable [GVAR_LINK_CACHE, createHashMap, true];
+    // 3DEN modules may have already populated this during mission initialization
+    if (isNil GVAR_LINK_CACHE) then {
+        missionNamespace setVariable [GVAR_LINK_CACHE, createHashMap, true];
+    };
 
-    // Initialize public devices array
+    // Initialize public devices array (only if it doesn't already exist)
     // Structure: Array of [deviceType, deviceId, [excludedNetIds]]
-    missionNamespace setVariable [GVAR_PUBLIC_DEVICES, [], true];
+    // 3DEN modules may have already populated this during mission initialization
+    if (isNil GVAR_PUBLIC_DEVICES) then {
+        missionNamespace setVariable [GVAR_PUBLIC_DEVICES, [], true];
+    };
 
-    // Initialize legacy ALL_DEVICES array for backward compatibility
+    // Initialize legacy ALL_DEVICES array for backward compatibility (only if it doesn't already exist)
     // Structure: [doors, lights, drones, databases, custom, gpsTrackers, vehicles]
-    missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []], true];
+    // 3DEN modules may have already populated this during mission initialization
+    if (isNil "ROOT_CYBERWARFARE_ALL_DEVICES") then {
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []], true];
+    };
 
     LOG_INFO("Device cache initialized");
 };

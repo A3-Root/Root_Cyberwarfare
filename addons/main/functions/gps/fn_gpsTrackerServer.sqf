@@ -142,10 +142,6 @@ private _trackerComputer = objectFromNetId _computerNetId;
 if (!isNull _trackerComputer) then {
     private _trackerGridPos = mapGridPosition _lastPosition;
     private _string = format ["Tracking for target '%1' (ID: %2) has ended at last position: %3.", _trackerName, _trackerIdNum, _trackerGridPos];
-    [_trackerComputer, _string] call AE3_armaos_fnc_shell_stdout;
-    [_trackerComputer, _string] remoteExec ["AE3_armaos_fnc_shell_stdout", _clientID];
-    _string = format ["     Last pinged position: %1.", _trackerGridPos];
-    [_trackerComputer, _string] call AE3_armaos_fnc_shell_stdout;
     [_trackerComputer, _string] remoteExec ["AE3_armaos_fnc_shell_stdout", _clientID];
 };
 

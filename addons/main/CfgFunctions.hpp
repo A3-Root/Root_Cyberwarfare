@@ -48,6 +48,8 @@ class CfgFunctions {
 			class addGPSTrackerZeusMain {};
 			class addVehicleZeus {};
 			class addVehicleZeusMain {};
+			class addPowerGeneratorZeus {};
+			class addPowerGeneratorZeusMain {};
 			class modifyPowerZeus {};
 			class addHackingToolsZeus {};
 			class addHackingToolsZeusMain {};
@@ -62,6 +64,17 @@ class CfgFunctions {
 			class cacheDeviceLinks {};
 			class removePower {};
 			class localSoundBroadcast {};
+		};
+
+		class Eden {
+			file = "\z\root_cyberwarfare\addons\main\functions\3den";
+			class 3denAddHackingTools {};
+			class 3denAdjustPowerCost {};
+			class 3denAddDevices {};
+			class 3denAddDatabase {};
+			class 3denAddVehicle {};
+			class 3denAddGPSTracker {};
+			class 3denAddCustomDevice {};
 		};
 	};
 };

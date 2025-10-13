@@ -62,6 +62,20 @@ PREP(addGPSTrackerZeus);
 PREP(addGPSTrackerZeusMain);
 PREP(addVehicleZeus);
 PREP(addVehicleZeusMain);
+PREP(addPowerGeneratorZeus);
+PREP(addPowerGeneratorZeusMain);
 PREP(modifyPowerZeus);
 PREP(addHackingToolsZeus);
 PREP(addHackingToolsZeusMain);
+
+// Redefine PREP macro for subdirectory: 3den
+#undef PREP
+#define PREP(fncName) [QPATHTOF(functions\3den\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
+
+PREP(3denAddHackingTools);
+PREP(3denAdjustPowerCost);
+PREP(3denAddDevices);
+PREP(3denAddDatabase);
+PREP(3denAddVehicle);
+PREP(3denAddGPSTracker);
+PREP(3denAddCustomDevice);
