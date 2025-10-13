@@ -95,6 +95,10 @@ if (isServer) then {
         missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []], true];
     };
 
+    publicVariable "ROOT_CYBERWARFARE_ALL_DEVICES";
+    publicVariable GVAR_LINK_CACHE;
+    publicVariable GVAR_PUBLIC_DEVICES;
+
     LOG_INFO("Device cache initialized");
 };
 
@@ -104,7 +108,7 @@ if (isServer) then {
 // Set up ACE interaction menu actions after player is initialized
 // Allows players to attach and search for GPS trackers on objects/units
 if (hasInterface) then {
-    [{!isNull ACE_player}, {
+    [{(!isNull ACE_player) && (CBA_missionTime > 0)}, {
         // ========================================================================
         // ACE Action: Attach GPS Tracker to Object
         // ========================================================================

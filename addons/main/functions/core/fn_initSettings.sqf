@@ -23,8 +23,10 @@
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
     "ACE_Banana",
     1, // mission-level
-    {},
-    true // requires mission restart
+    {
+        missionNamespace setVariable [SETTING_GPS_TRACKER_DEVICE, _this, true];
+    },
+    false // doesn't requires mission restart
 ] call CBA_fnc_addSetting;
 
 // Drone Hacking Power Cost Setting
@@ -83,7 +85,9 @@
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
     "hgun_esd_01_antenna_01_F,hgun_esd_01_antenna_02_F,hgun_esd_01_antenna_03_F,hgun_esd_01_base_F,hgun_esd_01_dummy_F,hgun_esd_01_F",
     1, // mission-level
-    {},
+    {
+        missionNamespace setVariable [SETTING_GPS_SPECTRUM_DEVICES, _this, true];
+    },
     false // doesn't require mission restart
 ] call CBA_fnc_addSetting;
 
