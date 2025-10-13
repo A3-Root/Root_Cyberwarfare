@@ -27,11 +27,11 @@ class CfgPatches {
 		};
 		requiredAddons[] = {
 			"A3_Modules_F_Curator",
+			"3DEN",
+			"cba_main",
 			"ace_main",
 			"ace_common",
 			"ace_interact_menu",
-			"cba_main",
-			"3DEN",
 			"zen_custom_modules",
 			"ae3_main",
 			"ae3_filesystem"
