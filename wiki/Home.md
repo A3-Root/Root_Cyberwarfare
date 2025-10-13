@@ -17,8 +17,10 @@ Root's Cyber Warfare allows players to hack doors, drones, lights, vehicles, GPS
 - 📍 **GPS Tracking** - Attach and track GPS trackers
 - 🚗 **Vehicle Hacking** - Manipulate vehicle parameters (battery, speed, brakes, lights, engine, alarm)
 - ⚡ **Custom Devices** - Create your own hackable objects with custom scripts
+- 💡 **Power Generators** - Control lights within radius with optional explosions
 - 🔋 **Power Management** - Laptop battery consumption system
-- 🎯 **Zeus Modules** - 6 dynamic modules for mission makers
+- 🎯 **Zeus Modules** - 7 dynamic modules for mission makers
+- 🏗️ **Eden Modules** - 7 pre-mission configuration modules
 - 🔐 **Access Control** - Device linking and backdoor system
 
 ## Documentation Table of Contents
@@ -33,21 +35,24 @@ Learn how to use hacking tools and interact with devices in-game
 Complete reference for all terminal commands available to players
 
 ### 4. [Zeus/Curator Guide](Zeus-Guide)
-Guide for Zeus/Curator on using dynamic modules to add hackable devices
+Guide for Zeus/Curator on using 7 dynamic modules to add hackable devices
 
 ### 5. [Mission Maker Guide](Mission-Maker-Guide)
 Scripting integration and advanced mission-making techniques
 
-### 6. [Configuration Reference](Configuration)
+### 6. [Eden Modules Reference](Eden-Modules)
+Pre-mission configuration using 7 Eden Editor modules
+
+### 7. [Configuration Reference](Configuration)
 CBA settings and configuration options
 
-### 7. [Custom Device Tutorial](Custom-Device-Tutorial)
+### 8. [Custom Device Tutorial](Custom-Device-Tutorial)
 Step-by-step guide to creating your own custom hackable objects
 
-### 8. [Architecture & Technical Details](Architecture)
+### 9. [Architecture & Technical Details](Architecture)
 Technical documentation on system design and implementation
 
-### 9. [API Reference](API-Reference)
+### 10. [API Reference](API-Reference)
 Complete function documentation for developers
 
 ## Dependencies
@@ -63,13 +68,16 @@ Root's Cyber Warfare requires the following mods:
 
 ## What's New in Version 2.20.0
 
-Version 2.20.0 includes refactoring and bug fixes:
+Version 2.20.0 includes new features, refactoring, and bug fixes:
 
-- ✅ **Code Cleanup** - Removed redundant parameter passing in Zeus functions
-- ✅ **Bug Fixes** - Fixed door control undefined variable errors
-- ✅ **Access Control** - Fixed "Available to Future Laptops" functionality
-- ✅ **Performance** - Reduced PBO size through code optimization
-- ✅ **Documentation** - Updated README and wiki to reflect current implementation
+- ✨ **Power Generator Module** - New Zeus/Eden module for radius-based light control with optional explosions
+- ✨ **Eden Modules** - Full 3DEN Editor integration with 7 pre-mission configuration modules
+- ✅ **Two-Step Workflow** - Eden modules create device links, hacking tools enable access
+- ✅ **GPS Improvements** - Fixed duplicate position printing, improved null object tracking
+- ✅ **Bug Fixes** - Fixed door control errors, 3DEN module type conversions, cache initialization
+- ✅ **Code Cleanup** - Removed redundant parameter passing, improved code organization
+- ✅ **Documentation** - Comprehensive wiki updates including dedicated Eden Modules page
+- ✅ **Access Control** - Fixed "Available to Future Laptops" functionality with proper cache persistence
 
 ### Architecture
 

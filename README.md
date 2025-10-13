@@ -36,12 +36,23 @@ Root's Cyber Warfare transforms Arma 3 into a cyberpunk battlefield where player
 
 ### Zeus Integration
 
-Curators get full control with dedicated modules:
+Curators get full control with 7 dedicated modules:
 - Add hacking tools to any computer
 - Register devices (doors, lights, drones, databases, vehicles)
 - Attach GPS trackers
-- Modify power levels
-- Configure custom laptop names for organization
+- Configure power generators with radius-based light control
+- Modify power costs for hacking operations
+- Configure custom laptop names and access control
+
+### Eden Editor Integration
+
+Mission makers can pre-configure hacking setups using 7 Eden modules:
+- Pre-install hacking tools on laptops
+- Pre-register hackable devices and link to specific laptops
+- Configure GPS trackers before mission start
+- Set up custom devices with scripted behaviors
+- Adjust per-device power costs
+- Two-step workflow: Create device links in Eden, enable access in-game
 
 ## Requirements
 
@@ -86,11 +97,12 @@ vehicle 1337 engine off       # Disable vehicle #1337's engine
 1. Open Zeus interface
 2. Use custom modules under "Root's Cyberwarfare":
    - **Add Hacking Tools**: Install hacking capability on a laptop
-   - **Add Hackable Object**: Register a hackable object
-   - **Add Hackable Vehicle**: Register a hackable vehicle
-   - **Add Hackable File**: Register a hackable file
-   - **Add GPS Tracker**: Register and attach a hackable (and traceable) GPS Tracker
-   - **Modify Power**: Change power consumption of hackable objects
+   - **Add Hackable Object**: Register doors, lights, drones, or custom devices
+   - **Add Hackable Vehicle**: Register vehicle with configurable controls
+   - **Add Hackable File**: Register downloadable files with custom content
+   - **Add GPS Tracker**: Attach GPS tracker with configurable tracking parameters
+   - **Add Power Generator**: Create radius-based light control with optional explosions
+   - **Modify Power**: Adjust power costs for hacking operations (NOT laptop battery)
 
 ### For Mission Makers
 
@@ -100,6 +112,10 @@ vehicle 1337 engine off       # Disable vehicle #1337's engine
 
 // Register a building with doors for hacking (auto-detects door IDs)
 [_building, 0, [], false, "", "", "", false] call Root_fnc_addDeviceZeusMain;
+
+// Register a power generator (controls lights in radius)
+[_generator, 0, [], "Power Grid", 2000, false, true, "HelicopterExploSmall", [], false] call Root_fnc_addPowerGeneratorZeusMain;
+// Parameters: [object, execUserId, linkedComputers, name, radius, allowExplosionActivate, allowExplosionDeactivate, explosionType, excludedClassnames, availableToFuture]
 
 // Register a custom device
 [_generator, 0, [], true, "Generator", "hint 'Activated'", "hint 'Deactivated'", false] call Root_fnc_addDeviceZeusMain;
@@ -302,7 +318,8 @@ All functions are documented with SQFdoc headers. Key functions:
 - `fn_addVehicleZeus.sqf` / `fn_addVehicleZeusMain.sqf` - Register hackable vehicles
 - `fn_addDatabaseZeus.sqf` / `fn_addDatabaseZeusMain.sqf` - Register downloadable files
 - `fn_addGPSTrackerZeus.sqf` / `fn_addGPSTrackerZeusMain.sqf` - Register GPS trackers
-- `fn_modifyPowerZeus.sqf` / `fn_modifyPowerZeusMain.sqf` - Modify power levels
+- `fn_addPowerGeneratorZeus.sqf` / `fn_addPowerGeneratorZeusMain.sqf` - Register power generators (light control)
+- `fn_modifyPowerZeus.sqf` - Modify power costs for hacking operations
 
 ### Adding Custom Devices
 

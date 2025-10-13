@@ -16,6 +16,7 @@ class CfgPatches {
 			"ROOT_CyberWarfareAddFileZeus",
 			"ROOT_CyberWarfareAddGPSTrackerZeus",
 			"ROOT_CyberWarfareAddVehicleZeus",
+			"ROOT_CyberWarfareAddPowerGeneratorZeus",
 			"ROOT_Module3DEN_AddHackingTools",
 			"ROOT_Module3DEN_AdjustPowerCost",
 			"ROOT_Module3DEN_AddDevices",

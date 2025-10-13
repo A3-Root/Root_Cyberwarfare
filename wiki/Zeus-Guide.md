@@ -4,7 +4,7 @@ This guide covers using Root's Cyber Warfare Zeus modules for dynamic mission cr
 
 ## Overview
 
-Root's Cyber Warfare provides **6 Zeus modules** for adding hacking capabilities to your missions on-the-fly. All modules use ZEN (Zeus Enhanced) dialogs for configuration.
+Root's Cyber Warfare provides **7 Zeus modules** for adding hacking capabilities to your missions on-the-fly. All modules use ZEN (Zeus Enhanced) dialogs for configuration.
 
 ---
 
@@ -17,7 +17,8 @@ Root's Cyber Warfare provides **6 Zeus modules** for adding hacking capabilities
 | **Add GPS Tracker** | Add GPS tracker to object | Configurable tracking time, update frequency |
 | **Add Hackable Vehicle** | Make vehicles hackable | Battery, speed, brakes, lights, engine, alarm control |
 | **Add Hackable File** | Create downloadable files | Custom content, execution code |
-| **Modify Power** | Adjust global power costs | Real-time cost modification |
+| **Add Power Generator** | Control lights within radius | Configurable radius, explosions, light exclusion |
+| **Modify Power** | Adjust hack costs for operations | Real-time cost modification |
 
 ---
 
@@ -471,9 +472,174 @@ Result: Trap file that triggers alarm and penalties
 
 ---
 
-## Module 6: Modify Power
+## Module 6: Add Power Generator
 
-Adjusts global power costs for all hacking operations in real-time.
+Creates a power generator device that controls all lights within a configurable radius with optional explosion effects.
+
+### Usage
+
+1. **Place Zeus module** on a target object (generator, building, power equipment)
+2. **Configure in dialog**:
+   - Generator name
+   - Effect radius (lights within range)
+   - Explosion options (activation/deactivation)
+   - Explosion type selection
+   - Excluded light classnames
+   - Link to specific laptops (optional)
+   - Configure availability to future laptops
+3. **Click OK**
+
+### Dialog Options
+
+| Option | Description | Default | Range |
+|--------|-------------|---------|-------|
+| **Generator Name** | Display name in terminal | `Power Generator` | Any string |
+| **Effect Radius** | Radius in meters to affect lights | 1000 | 100-25000 |
+| **Allow Explosion on Activation** | Create explosion when activated | No | Yes/No |
+| **Allow Explosion on Deactivation** | Create explosion when deactivated | No | Yes/No |
+| **Explosion Type** | Type of explosion to create | 40mm HE | 9 options |
+| **Excluded Light Classnames** | Comma-separated classnames to exclude | Empty | Text field |
+| **Available to Future Laptops** | Available to laptops added later | No | Yes/No |
+| **Link to Laptops** | Select specific laptops for access | All current | Checkboxes |
+
+### Explosion Types
+
+| Type | Classname | Description |
+|------|-----------|-------------|
+| 40mm High Explosive | `G_40mm_HE` | Small grenade explosion |
+| 82mm High Explosive | `M_Mo_82mm_AT_LG` | Medium mortar explosion |
+| 120mm APFSDS Tank Shell | `Sh_120mm_APFSDS` | Tank shell impact |
+| 120mm HE Shell | `Sh_120mm_HE` | High-explosive tank round |
+| 155mm HE Shell | `Sh_155mm_AMOS` | Artillery shell |
+| Small Helicopter Explosion | `HelicopterExploSmall` | Light aircraft explosion |
+| Large Helicopter Explosion | `HelicopterExploBig` | Heavy aircraft explosion |
+| 500lb GBU-12 (Type I) | `Bo_GBU12_LGB` | Precision bomb (variant 1) |
+| 500lb GBU-12 (Type II) | `Bo_GBU12_LGB_MI10` | Precision bomb (variant 2) |
+
+### Behavior
+
+**Activation** (`custom <id> activate`):
+- Turns ON all lights within radius (class: `Lamps_base_F`)
+- Excludes lights with classnames in exclusion list
+- Creates explosion at generator position (if enabled)
+- Reports number of lights affected
+
+**Deactivation** (`custom <id> deactivate`):
+- Turns OFF all lights within radius (class: `Lamps_base_F`)
+- Excludes lights with classnames in exclusion list
+- Creates explosion at generator position (if enabled)
+- Reports number of lights affected
+
+### Exclusion List
+
+**Format**: Comma-separated classnames (spaces trimmed automatically)
+
+**Example**:
+```
+Lamp_Street_small_F, Land_LampHalogen_F, Land_LampSolar_F
+```
+
+**Use cases**:
+- Exclude critical lights (helipad markers, runway lights)
+- Exclude specific lamp types
+- Preserve certain areas from power control
+
+### Examples
+
+**Example 1: Town Power Grid**
+```
+Object: Power substation building
+Generator Name: "Town_Power_Grid"
+Effect Radius: 5000m
+Explosion on Activation: No
+Explosion on Deactivation: No
+Excluded: Empty
+Linked: None (available to all)
+Result: Controls all town lights within 5km, safe operation
+```
+
+**Example 2: Military Base with Sabotage**
+```
+Object: Generator unit
+Generator Name: "Base_Generator"
+Effect Radius: 2000m
+Explosion on Activation: Yes
+Explosion on Deactivation: Yes
+Explosion Type: 155mm HE Shell
+Excluded: "Land_LampHalogen_F" (exclude important helipad lights)
+Linked: "Saboteur_Laptop" only
+Result: Controls base lights, explosions on use, preserves helipad, restricted access
+```
+
+**Example 3: Compound Blackout**
+```
+Object: Power box
+Generator Name: "Compound_Power"
+Effect Radius: 500m
+Explosion on Activation: No
+Explosion on Deactivation: Yes (alarm effect)
+Explosion Type: Small Helicopter Explosion
+Excluded: Empty
+Future Laptops: Yes
+Result: Small radius, deactivation triggers alarm, available to future laptops
+```
+
+**Example 4: City-Wide Infrastructure**
+```
+Object: Central power station
+Generator Name: "City_Central_Power"
+Effect Radius: 15000m
+Explosion on Activation: No
+Explosion on Deactivation: No
+Excluded: "Lamp_Street_small_F, Land_LampSolar_F"
+Linked: "Infrastructure_Control_Laptop"
+Result: Massive 15km radius, excludes small/solar lights, restricted to infrastructure team
+```
+
+### Device Linking
+
+Power generator uses standard device linking:
+
+| Scenario | Future Laptops | Linked Laptops | Result |
+|----------|----------------|----------------|--------|
+| **1** | ❌ No | None selected | All current laptops |
+| **2** | ❌ No | Some selected | Only selected laptops |
+| **3** | ✅ Yes | None selected | Only future laptops (current excluded) |
+| **4** | ✅ Yes | Some selected | Selected + all future laptops |
+
+### Technical Details
+
+**Light Detection**:
+- Uses `nearObjects ['Lamps_base_F', _radius]` to find lights
+- Checks `typeOf _light` against exclusion list
+- Uses `switchLight 'ON'` / `switchLight 'OFF'` commands
+
+**State Tracking**:
+- Generator stores current state: `ROOT_CYBERWARFARE_GENERATOR_STATE`
+- `false` = OFF (lights can be turned on)
+- `true` = ON (lights can be turned off)
+
+**Performance Considerations**:
+- Very large radii (>10km) may cause brief performance impact
+- Limit to reasonable radius for your mission area
+- Exclusion list uses exact classname matching (fast)
+
+### Notes
+
+- Generator object does not need to be actual generator (can be any object)
+- Radius shown on map during configuration (visual helper)
+- Explosion occurs at generator object position
+- Terminal output shows number of lights affected
+- Device registered as custom device type
+- Power cost uses global custom device cost setting
+
+---
+
+## Module 7: Modify Power
+
+Adjusts global power costs (the amount of power required to perform hacking operations) for all hacking operations in real-time.
+
+**Important**: This module modifies how much power it COSTS to hack devices. It does NOT modify laptop battery levels or capacity.
 
 ### Usage
 
@@ -531,10 +697,12 @@ Result: Difficulty scales with mission progression
 
 ### Notes
 
+- **This module adjusts hack operation costs, NOT laptop battery levels**
 - Changes affect all laptops immediately
-- Does not affect per-device costs (GPS trackers, vehicles)
+- Does not affect per-device costs (GPS trackers, vehicles with custom costs)
 - Stored globally in `ROOT_CYBERWARFARE_ALL_COSTS`
 - Can be called multiple times during mission
+- To modify laptop battery: Use AE3's power system or direct scripting
 
 ---
 
