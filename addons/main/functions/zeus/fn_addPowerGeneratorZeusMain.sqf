@@ -65,11 +65,20 @@ if (isNull _generator) exitWith {
     [_computer, 'Error: Generator object not found!'] call AE3_armaos_fnc_shell_stdout;
 };
 
+// Check if generator was destroyed by explosion
+private _isDestroyed = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_DESTROYED', false];
+if (_isDestroyed) exitWith {
+    [_computer, 'Error: Generator was destroyed and cannot be reactivated!'] call AE3_armaos_fnc_shell_stdout;
+};
+
 // Get generator config
 private _radius = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_RADIUS', 50];
 private _allowExplosion = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_ACTIVATE', false];
 private _explosionType = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_TYPE', 'G_40mm_HE'];
 private _excludedClassnames = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXCLUDED', []];
+
+private _allObjects = 25 allObjects 0;
+private _objectsInRadius = _allObjects select {(_x distance _generator) <= _radius};
 
 // Turn ON all lights in radius (excluding specified classnames)
 private _lightsAffected = 0;
@@ -80,15 +89,9 @@ private _lightsAffected = 0;
         _light switchLight 'ON';
         _lightsAffected = _lightsAffected + 1;
     };
-} forEach (getPos _generator nearObjects ['Lamps_base_F', _radius]);
+} forEach _objectsInRadius;
 
 [_computer, format ['Generator activated: %1 lights turned ON within %2m radius', _lightsAffected, _radius]] call AE3_armaos_fnc_shell_stdout;
-
-// Create explosion if enabled
-if (_allowExplosion) then {
-    private _explosion = _explosionType createVehicle (getPos _generator);
-    [_computer, format ['Explosion created at generator position: %1', _explosionType]] call AE3_armaos_fnc_shell_stdout;
-};
 
 // Update state
 _generator setVariable ['ROOT_CYBERWARFARE_GENERATOR_STATE', true, true];
@@ -104,11 +107,21 @@ if (isNull _generator) exitWith {
     [_computer, 'Error: Generator object not found!'] call AE3_armaos_fnc_shell_stdout;
 };
 
+// Check if generator was destroyed by explosion
+private _isDestroyed = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_DESTROYED', false];
+if (_isDestroyed) exitWith {
+    [_computer, 'Error: Generator was destroyed and cannot be reactivated!'] call AE3_armaos_fnc_shell_stdout;
+};
+
 // Get generator config
 private _radius = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_RADIUS', 50];
 private _allowExplosion = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_DEACTIVATE', false];
 private _explosionType = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_TYPE', 'G_40mm_HE'];
 private _excludedClassnames = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXCLUDED', []];
+
+private _allObjects = 25 allObjects 0;
+private _objectsInRadius = _allObjects select {(_x distance _generator) <= _radius};
+
 
 // Turn OFF all lights in radius (excluding specified classnames)
 private _lightsAffected = 0;
@@ -119,18 +132,22 @@ private _lightsAffected = 0;
         _light switchLight 'OFF';
         _lightsAffected = _lightsAffected + 1;
     };
-} forEach (getPos _generator nearObjects ['Lamps_base_F', _radius]);
-
-[_computer, format ['Generator deactivated: %1 lights turned OFF within %2m radius', _lightsAffected, _radius]] call AE3_armaos_fnc_shell_stdout;
+} forEach _objectsInRadius;
 
 // Create explosion if enabled
 if (_allowExplosion) then {
     private _explosion = _explosionType createVehicle (getPos _generator);
-    [_computer, format ['Explosion created at generator position: %1', _explosionType]] call AE3_armaos_fnc_shell_stdout;
+    _generator setVariable ['ROOT_CYBERWARFARE_GENERATOR_DESTROYED', true, true];
+    [_computer, format ['WARNING: Generator overloaded! All objects requiring electricity within %2m radius affected.', _lightsAffected, _radius]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, 'Generator has been destroyed and can no longer be activated.'] call AE3_armaos_fnc_shell_stdout;
+} else {
+    [_computer, format ['Generator deactivated: %1 lights turned OFF within %2m radius', _lightsAffected, _radius]] call AE3_armaos_fnc_shell_stdout;
 };
 
-// Update state
-_generator setVariable ['ROOT_CYBERWARFARE_GENERATOR_STATE', false, true];
+// Update state (only if not destroyed)
+if (!_allowExplosion) then {
+    _generator setVariable ['ROOT_CYBERWARFARE_GENERATOR_STATE', false, true];
+};
 ";
 
 // Store these codes on the object itself
