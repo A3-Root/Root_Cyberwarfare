@@ -27,6 +27,9 @@ class CfgPatches {
 		};
 		requiredAddons[] = {
 			"A3_Modules_F_Curator",
+			"ace_main",
+			"ace_common",
+			"ace_interact_menu",
 			"cba_main",
 			"3DEN",
 			"zen_custom_modules",

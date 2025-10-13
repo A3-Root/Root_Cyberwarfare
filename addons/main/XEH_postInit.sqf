@@ -103,85 +103,86 @@ if (isServer) then {
 // ============================================================================
 // Set up ACE interaction menu actions after player is initialized
 // Allows players to attach and search for GPS trackers on objects/units
+if (hasInterface) then {
+    [{!isNull ACE_player}, {
+        // ========================================================================
+        // ACE Action: Attach GPS Tracker to Object
+        // ========================================================================
+        // Allows player to attach a GPS tracker from inventory to another object/unit
+        private _actionAttach = [
+            "ROOT_AttachGPSTracker_Object",
+            localize "STR_ROOT_CYBERWARFARE_GPS_ATTACH_OBJECT",
+            "",
+            {
+                // Action statement - executed when action is selected
+                params ["_actionTarget", "_actionPlayer", "_params"];
 
-[{!isNull player}, {
-    // ========================================================================
-    // ACE Action: Attach GPS Tracker to Object
-    // ========================================================================
-    // Allows player to attach a GPS tracker from inventory to another object/unit
-    private _actionAttach = [
-        "ROOT_AttachGPSTracker_Object",
-        localize "STR_ROOT_CYBERWARFARE_GPS_ATTACH_OBJECT",
-        "",
-        {
-            // Action statement - executed when action is selected
-            params ["_actionTarget", "_actionPlayer", "_params"];
+                // Validate target (cannot attach to self)
+                if (isNull _actionTarget || {_actionTarget == _actionPlayer}) exitWith {
+                    [localize "STR_ROOT_CYBERWARFARE_GPS_UNABLE_ATTACH", true, 1.5, 2] call ace_common_fnc_displayText;
+                };
 
-            // Validate target (cannot attach to self)
-            if (isNull _actionTarget || {_actionTarget == _actionPlayer}) exitWith {
-                [localize "STR_ROOT_CYBERWARFARE_GPS_UNABLE_ATTACH", true, 1.5, 2] call ace_common_fnc_displayText;
-            };
+                // Call unified attach function (handles config dialog + progress bar)
+                [_actionTarget, _actionPlayer] call FUNC(aceAttachGPSTracker);
+            },
+            {
+                // Action condition - only show if player has GPS tracker item
+                private _gpsTrackerClass = missionNamespace getVariable [SETTING_GPS_TRACKER_DEVICE, "ACE_Banana"];
+                _gpsTrackerClass in (uniformItems _player + vestItems _player + backpackItems _player + items _player);
+            }
+        ] call ace_interact_menu_fnc_createAction;
 
-            // Call unified attach function (handles config dialog + progress bar)
-            [_actionTarget, _actionPlayer] call FUNC(aceAttachGPSTracker);
-        },
-        {
-            // Action condition - only show if player has GPS tracker item
-            private _gpsTrackerClass = missionNamespace getVariable [SETTING_GPS_TRACKER_DEVICE, "ACE_Banana"];
-            _gpsTrackerClass in (uniformItems _player + vestItems _player + backpackItems _player + items _player);
-        }
-    ] call ace_interact_menu_fnc_createAction;
+        // Add action to all objects (class "All")
+        ["All", 0, ["ACE_MainActions"], _actionAttach, true] call ace_interact_menu_fnc_addActionToClass;
 
-    // Add action to all objects (class "All")
-    ["All", 0, ["ACE_MainActions"], _actionAttach, true] call ace_interact_menu_fnc_addActionToClass;
+        // ========================================================================
+        // ACE Action: Search for GPS Tracker on Object
+        // ========================================================================
+        // Allows player to search an object/unit for hidden GPS trackers
+        private _actionSearch = [
+            "ROOT_SearchGPSTracker_Object",
+            localize "STR_ROOT_CYBERWARFARE_GPS_SEARCH",
+            "",
+            {
+                // Action statement - executed when action is selected
+                params ["_actionTarget", "_actionPlayer", "_params"];
 
-    // ========================================================================
-    // ACE Action: Search for GPS Tracker on Object
-    // ========================================================================
-    // Allows player to search an object/unit for hidden GPS trackers
-    private _actionSearch = [
-        "ROOT_SearchGPSTracker_Object",
-        localize "STR_ROOT_CYBERWARFARE_GPS_SEARCH",
-        "",
-        {
-            // Action statement - executed when action is selected
-            params ["_actionTarget", "_actionPlayer", "_params"];
+                // Validate target (cannot search self)
+                if (isNull _actionTarget || {_actionTarget == _actionPlayer}) exitWith {
+                    [localize "STR_ROOT_CYBERWARFARE_GPS_CANNOT_SEARCH_SELF", true, 1.5, 2] call ace_common_fnc_displayText;
+                };
 
-            // Validate target (cannot search self)
-            if (isNull _actionTarget || {_actionTarget == _actionPlayer}) exitWith {
-                [localize "STR_ROOT_CYBERWARFARE_GPS_CANNOT_SEARCH_SELF", true, 1.5, 2] call ace_common_fnc_displayText;
-            };
+                // Start progress bar (10 second action)
+                [
+                    10,  // Duration in seconds
+                    [_actionTarget, _actionPlayer],
+                    {
+                        // On completion
+                        params ["_args"];
+                        _args params ["_args_target", "_args_player"];
+                        [_args_target, _args_player] call FUNC(searchForGPSTracker);
+                    },
+                    {},  // On failure
+                    format [localize "STR_ROOT_CYBERWARFARE_GPS_SEARCHING", getText (configOf _actionTarget >> "displayName")],
+                    {
+                        // Condition to continue - target and player must be valid
+                        params ["_args"];
+                        _args params ["_args_target", "_args_player"];
+                        !isNull _args_target && {alive _args_player}
+                    },
+                    ["isNotInside"]  // Exceptions
+                ] call ace_common_fnc_progressBar;
+            },
+            {
+                // Action condition - always available
+                true
+            }
+        ] call ace_interact_menu_fnc_createAction;
 
-            // Start progress bar (10 second action)
-            [
-                10,  // Duration in seconds
-                [_actionTarget, _actionPlayer],
-                {
-                    // On completion
-                    params ["_args"];
-                    _args params ["_args_target", "_args_player"];
-                    [_args_target, _args_player] call FUNC(searchForGPSTracker);
-                },
-                {},  // On failure
-                format [localize "STR_ROOT_CYBERWARFARE_GPS_SEARCHING", getText (configOf _actionTarget >> "displayName")],
-                {
-                    // Condition to continue - target and player must be valid
-                    params ["_args"];
-                    _args params ["_args_target", "_args_player"];
-                    !isNull _args_target && {alive _args_player}
-                },
-                ["isNotInside"]  // Exceptions
-            ] call ace_common_fnc_progressBar;
-        },
-        {
-            // Action condition - always available
-            true
-        }
-    ] call ace_interact_menu_fnc_createAction;
+        // Add action to all objects (class "All")
+        ["All", 0, ["ACE_MainActions"], _actionSearch, true] call ace_interact_menu_fnc_addActionToClass;
 
-    // Add action to all objects (class "All")
-    ["All", 0, ["ACE_MainActions"], _actionSearch, true] call ace_interact_menu_fnc_addActionToClass;
-
-}, []] call CBA_fnc_waitUntilAndExecute;
+    }, []] call CBA_fnc_waitUntilAndExecute;
+};
 
 LOG_INFO("Post-init complete");
