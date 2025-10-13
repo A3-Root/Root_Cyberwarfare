@@ -45,10 +45,10 @@ private _dialogControls = [
     ["TOOLBOX:YESNO", ["Allow Explosion on Activation", "Create explosion when generator is activated"], false],
     ["TOOLBOX:YESNO", ["Allow Explosion on Deactivation", "Create explosion when generator is deactivated"], false],
     ["LIST", ["Explosion Type", "Choose the type of explosion created"], [
-        ["G_40mm_HE", "M_Mo_82mm_AT_LG", "Sh_120mm_APFSDS", "Sh_120mm_HE", "Sh_155mm_AMOS", "HelicopterExploSmall", "HelicopterExploBig", "Bo_GBU12_LGB", "Bo_GBU12_LGB_MI10"],
-        ["40mm High Explosive", "82mm High Explosive", "120mm APFSDS Tank Shell", "120mm HE Shell", "155mm HE Shell", "Small Helicopter Explosion", "Large Helicopter Explosion", "500lb GBU-12 (Type I)", "500lb GBU-12 (Type II)"],
+        ["ClaymoreDirectionalMine_Remote_Ammo_Scripted", "G_40mm_HE", "M_Mo_82mm_AT_LG", "Sh_120mm_APFSDS", "Sh_120mm_HE", "Sh_155mm_AMOS", "HelicopterExploSmall", "HelicopterExploBig", "Bo_GBU12_LGB", "Bo_GBU12_LGB_MI10"],
+        ["Claymore", "40mm High Explosive", "82mm High Explosive", "120mm APFSDS Tank Shell", "120mm HE Shell", "155mm HE Shell", "Small Helicopter Explosion", "Large Helicopter Explosion", "500lb GBU-12 (Type I)", "500lb GBU-12 (Type II)"],
         0,
-        10
+        11
     ]],
     ["EDIT", ["Excluded Light Classnames", "Comma-separated list of classnames to exclude (e.g., Lamp_Street_small_F,Land_LampHalogen_F)"], [""]],
     ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false]

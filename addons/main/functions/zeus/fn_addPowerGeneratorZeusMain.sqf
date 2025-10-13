@@ -130,11 +130,40 @@ if (_allowExplosion) then {
     private _explosion = _explosionType createVehicle (getPos _generator);
     _generator setVariable ['ROOT_CYBERWARFARE_GENERATOR_DESTROYED', true, true];
     [_computer, format ['WARNING: Generator overloaded! All objects requiring electricity within %2m radius affected.', _lightsAffected, _radius]] remoteExec ['AE3_armaos_fnc_shell_stdout', _execUserId];
+    private _surround_pos = [(_generator select 0) + random [-10, 0, 10], (_generator select 1) + random [-10, 0, 10], (_generator select 2) + random [0, 1.5, 3]];
+    private _sparkObj = createVehicle ['Sign_Sphere10cm_F', _surround_pos, [], 0, 'CAN_COLLIDE'];
+    _sparkObj hideObjectGlobal true;
+    for '_i' from 1 to 5 do {
+        private _effect = '#particlesource' createVehicleLocal _surround_pos;
+        _sparkObj setPos _surround_pos;
+        _surround_pos = [(_generator select 0) + random [-10, 0, 10], (_generator select 1) + random [-10, 0, 10], (_generator select 2) + random [0, 1.5, 3]];
+        _claymore = 'ClaymoreDirectionalMine_Remote_Ammo_Scripted' createVehicle _surround_pos;
+        _claymore setDamage 1;
+        _effect setParticleParams [
+            ['\A3\data_f\ParticleEffects\Universal\Universal', 16, 0, 1],
+            '', 'Billboard', 1,
+            1.2,
+            0.15,
+            [0, 0, 0.2],
+            0.1,
+            0.05,
+            0.1,
+            0.3,
+            [1, 0.7, 0.2, 1],
+            [0.1],
+            0.5,
+            0.1,
+            '', '',
+            _sparkObj
+        ];
+        _effect setDropInterval 0.01;
+        uiSleep (random[0.2, 0.3, 0.4]);
+        deleteVehicle _effect;
+        deleteVehicle _claymore;
+    };
+    deleteVehicle _sparkObj;
 } else {
     [_computer, format ['Generator deactivated: %1 lights turned OFF within %2m radius', _lightsAffected, _radius]] remoteExec ['AE3_armaos_fnc_shell_stdout', _execUserId];
-};
-
-if (!_allowExplosion) then {
     _generator setVariable ['ROOT_CYBERWARFARE_GENERATOR_STATE', false, true];
 };
 ";
