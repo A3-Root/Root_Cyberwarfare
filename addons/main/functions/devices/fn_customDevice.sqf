@@ -48,22 +48,26 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
         private _storedCustomId = _x select 0;
         if(_customId == _storedCustomId) then {
             _deviceFound = true;
+            private _deviceNetId = _x select 1;
             private _customName = _x select 2;
             private _activationCode = _x select 3;
             private _deactivationCode = _x select 4;
+
+            // Get the actual device object
+            private _deviceObject = objectFromNetId _deviceNetId;
 
             if(_customState isEqualTo "activate") then {
                 _string = format ["Custom device '%1' (ID: %2) activated.", _customName, _customId];
                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 if (_activationCode != "") then {
-                    [_computer] spawn (compile _activationCode);
+                    [_computer, _deviceObject] spawn (compile _activationCode);
                 };
             } else {
                 if(_customState isEqualTo "deactivate") then {
                     _string = format ["Custom device '%1' (ID: %2) deactivated.", _customName, _customId];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     if (_deactivationCode != "") then {
-                        [_computer] spawn (compile _deactivationCode);
+                        [_computer, _deviceObject] spawn (compile _deactivationCode);
                     };
                 } else {
                     _string = format ['Error! Invalid Input - %1.', _customState];

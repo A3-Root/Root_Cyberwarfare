@@ -53,13 +53,9 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_TYPE", _explos
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXCLUDED", _excludedClassnames, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_STATE", false, true]; // false = off, true = on
 
-private _netId = netId _targetObject;
-
 // Create activation code
 private _activationCode = "
-params ['_computer'];
-private _generatorNetId = _this getVariable ['ROOT_CYBERWARFARE_CUSTOM_NETID', ''];
-private _generator = objectFromNetId _generatorNetId;
+params ['_computer', '_generator'];
 
 if (isNull _generator) exitWith {
     [_computer, 'Error: Generator object not found!'] remoteExec ['AE3_armaos_fnc_shell_stdout', _execUserId];
@@ -95,9 +91,7 @@ _generator setVariable ['ROOT_CYBERWARFARE_GENERATOR_STATE', true, true];
 
 // Create deactivation code
 private _deactivationCode = "
-params ['_computer'];
-private _generatorNetId = _this getVariable ['ROOT_CYBERWARFARE_CUSTOM_NETID', ''];
-private _generator = objectFromNetId _generatorNetId;
+params ['_computer', '_generator'];
 
 if (isNull _generator) exitWith {
     [_computer, 'Error: Generator object not found!'] remoteExec ['AE3_armaos_fnc_shell_stdout', _execUserId];
@@ -172,7 +166,6 @@ if (_allowExplosion) then {
 _targetObject setVariable ["ROOT_CYBERWARFARE_ACTIVATIONCODE", _activationCode, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_DEACTIVATIONCODE", _deactivationCode, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_AVAILABLE_FUTURE", _availableToFutureLaptops, true];
-_targetObject setVariable ["ROOT_CYBERWARFARE_CUSTOM_NETID", _netId, true];
 
 // Register as custom device using existing addDeviceZeusMain
 [_targetObject, _execUserId, _linkedComputers, true, _generatorName, _activationCode, _deactivationCode, _availableToFutureLaptops] call FUNC(addDeviceZeusMain);
