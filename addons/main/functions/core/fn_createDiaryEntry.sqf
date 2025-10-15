@@ -134,9 +134,9 @@ private _diaryLights = player createDiaryRecord [
 	"CyberTerminal",
 	["Lighting Control",
     "<font color='#E67E22' size='14' face='PuristaBold'>ENVIRONMENTAL LIGHTING SYSTEMS</font><br/><br/>
-    
+
 	<font color='#FFFFFF' face='EtelkaMonospacePro'>
-	The <font color='#3498DB'>light</font> command lets you control lighting systems in the environment.
+	The <font color='#3498DB'>light</font> command lets you control linked lighting systems in the environment.
 	Use this to turn lights on or off for tactical advantage or concealment.<br/><br/>
 
 	<font color='#3498DB'>Syntax:</font><br/>
@@ -245,7 +245,7 @@ private _diaryNavigation = player createDiaryRecord [
 	This section covers how to move between folders, view contents, copy, move, and remove files using the terminal.<br/>
 	Read carefully before using destructive commands.<br/><br/>
 
-	<font color='#3498DB' face='PuristaSemibold'>1. Change Directory</font><br/>
+	<font color='#3498DB' face='PuristaSemibold'>1. CHANGE DIRECTORY</font><br/>
 	<font color='#FFFFFF' face='EtelkaMonospacePro'>
 	Use the <font color='#3498DB'>cd</font> command to move between directories (folders).<br/><br/>
 
@@ -262,7 +262,7 @@ private _diaryNavigation = player createDiaryRecord [
 	• Use <font color='#FFFFFF'>ls</font> first to see what directories exist.<br/>
 	• A successful <font color='#FFFFFF'>cd</font> command produces no output — the terminal path simply changes.<br/><br/>
 
-	<font color='#3498DB' face='PuristaSemibold'>2. List Contents</font><br/>
+	<font color='#3498DB' face='PuristaSemibold'>2. LIST CONTENTS</font><br/>
 	<font color='#FFFFFF' face='EtelkaMonospacePro'>
 	The <font color='#3498DB'>ls</font> command displays files and folders in the current directory.<br/><br/>
 
@@ -274,7 +274,7 @@ private _diaryNavigation = player createDiaryRecord [
 	ls -l     // Show file sizes and details<br/>
 	ls -la    // Combined detailed + hidden view<br/><br/>
 
-	<font color='#3498DB' face='PuristaSemibold'>3. Copy Files</font><br/>
+	<font color='#3498DB' face='PuristaSemibold'>3. COPY FILES</font><br/>
 	<font color='#FFFFFF' face='EtelkaMonospacePro'>
 	The <font color='#3498DB'>cp</font> command duplicates a file from one location to another.<br/><br/>
 
@@ -289,7 +289,7 @@ private _diaryNavigation = player createDiaryRecord [
 	• If a file with the same name exists at destination, it will be overwritten.<br/>
 	• Always verify the path before executing the command.<br/><br/>
 
-	<font color='#3498DB' face='PuristaSemibold'>4. Move or Rename Files</font><br/>
+	<font color='#3498DB' face='PuristaSemibold'>4. MOVE OR RENAME FILES</font><br/>
 	<font color='#FFFFFF' face='EtelkaMonospacePro'>
 	The <font color='#3498DB'>mv</font> command moves files or renames them in place.<br/>
 	Moving removes the file from the source directory after placing it in the new location.<br/><br/>
@@ -305,7 +305,7 @@ private _diaryNavigation = player createDiaryRecord [
 	• Be careful when renaming — the old filename will no longer exist.<br/>
 	• Useful for organizing files without creating duplicates.<br/><br/>
 
-	<font color='#3498DB' face='PuristaSemibold'>5. Remove Files (Permanent Deletion)</font><br/>
+	<font color='#3498DB' face='PuristaSemibold'>5. REMOVE FILES (PERMANENT)</font><br/>
 	<font color='#FFFFFF' face='EtelkaMonospacePro'>
 	The <font color='#3498DB'>rm</font> command permanently deletes a file or folder. <font color='#E74C3C'>Use extreme caution.</font><br/>
 	This action cannot be undone.<br/><br/>
@@ -316,14 +316,14 @@ private _diaryNavigation = player createDiaryRecord [
 	rm temp.txt       // Delete a single file<br/>
 	rm -r oldlogs   // Recursively delete a folder and its contents<br/><br/>
 
-	<font color='#E74C3C' face='PuristaBold'>⚠ CAUTION:</font><br/>
+	<font color='#E74C3C' face='PuristaBold'>⚠ •••CAUTION•••</font><br/>
 	• Files deleted with <font color='#FFFFFF'>rm</font> cannot be recovered.<br/>
 	• Use <font color='#FFFFFF'>ls</font> first to confirm target name and location.<br/>
 	• Avoid using <font color='#FFFFFF'>rm -r</font> unless absolutely necessary.<br/>
 	• Never run <font color='#FFFFFF'>rm *</font> — this removes everything in the current directory.<br/>
 	• Always verify directory paths before executing deletion commands.<br/><br/>
     
-    <font color='#3498DB' face='PuristaSemibold'>6. View Files</font><br/>
+    <font color='#3498DB' face='PuristaSemibold'>6. VIEW FILES</font><br/>
     <font color='#FFFFFF' face='EtelkaMonospacePro'>
 	The <font color='#3498DB'>cat</font> command opens and displays the content of a text file inside the terminal window.<br/><br/>
 
@@ -342,7 +342,7 @@ private _diaryNavigation = player createDiaryRecord [
 	• Large files may display multiple lines; scroll carefully.
 	</font><br/><br/>
 
-    <font color='#3498DB' face='PuristaSemibold'>7. Clear Terminal</font><br/>
+    <font color='#3498DB' face='PuristaSemibold'>7. CLEAR TERMINAL</font><br/>
     <font color='#FFFFFF' face='EtelkaMonospacePro'>
 	The <font color='#3498DB'>clear</font> command removes all visible text from the terminal window.
 	It does not delete any files or data — it simply refreshes the display.<br/><br/>
