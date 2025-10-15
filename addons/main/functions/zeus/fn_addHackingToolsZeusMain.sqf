@@ -124,7 +124,8 @@ private _menuContent = "
     private _commandSyntax =
     [
         [
-            ['command', _commandName, true, false]
+            ['command', _commandName, true, false],
+            ['path', 'type', true, false]
         ]
     ];
     private _commandSettings = [_commandName, _commandOpts, _commandSyntax];
@@ -133,12 +134,14 @@ private _menuContent = "
 
     if (!_ae3OptsSuccess) exitWith {};
 
+    private _type = (_ae3OptsThings select 0);
+
     private _owner = clientOwner;
 
     private _nameOfVariable = 'ROOT_CYBERWARFARE_LIST_DEVICES-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _commandName] remoteExec ['Root_fnc_listDevicesInSubnet', _owner];
+    [_owner, _computer, _nameOfVariable, _commandName, _type] remoteExec ['Root_fnc_listDevicesInSubnet', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {

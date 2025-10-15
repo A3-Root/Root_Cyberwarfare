@@ -178,6 +178,12 @@
 #ifndef LOG_INFO_1
     #define LOG_INFO_1(msg,arg1) diag_log text format ["[ROOT_CYBERWARFARE INFO] " + msg, arg1]
 #endif
+#ifndef LOG_INFO_2
+    #define LOG_INFO_2(msg,arg1,arg2) diag_log text format ["[ROOT_CYBERWARFARE INFO] " + msg, arg1, arg2]
+#endif
+#ifndef LOG_INFO_3
+    #define LOG_INFO_3(msg,arg1,arg2,arg3) diag_log text format ["[ROOT_CYBERWARFARE INFO] " + msg, arg1, arg2, arg3]
+#endif
 
 // ============================================================================
 // Validation Macros

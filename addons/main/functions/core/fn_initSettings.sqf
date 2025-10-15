@@ -122,7 +122,7 @@
     [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_ACTIVE", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_ACTIVE_DESC"],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
     [["ColorBlack", "ColorGrey", "ColorRed", "ColorBrown", "ColorOrange", "ColorYellow", "ColorKhaki", "ColorGreen", "ColorBlue", "ColorPink", "ColorWhite", "ColorWEST", "ColorEAST", "ColorGUER", "ColorCIV", "ColorUNKNOWN"], ["Black", "Grey", "Red", "Brown", "Orange", "Yellow", "Khaki", "Green", "Blue", "Pink", "White", "BLUFOR", "OPFOR", "Independent", "Civilian", "Unknown"], 2],
-    1, // mission-level
+    0, // mission-level
     {},
     false // doesn't require mission restart
 ] call CBA_fnc_addSetting;
@@ -134,7 +134,7 @@
     [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_LASTPING", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_LASTPING_DESC"],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
     [["ColorBlack", "ColorGrey", "ColorRed", "ColorBrown", "ColorOrange", "ColorYellow", "ColorKhaki", "ColorGreen", "ColorBlue", "ColorPink", "ColorWhite", "ColorWEST", "ColorEAST", "ColorGUER", "ColorCIV", "ColorUNKNOWN"], ["Black", "Grey", "Red", "Brown", "Orange", "Yellow", "Khaki", "Green", "Blue", "Pink", "White", "BLUFOR", "OPFOR", "Independent", "Civilian", "Unknown"], 14],
-    1, // mission-level
+    0, // mission-level
     {},
     false // doesn't require mission restart
 ] call CBA_fnc_addSetting;

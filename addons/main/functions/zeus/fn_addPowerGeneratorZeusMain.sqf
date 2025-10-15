@@ -32,7 +32,7 @@ params [
     ["_radius", 50],
     ["_allowExplosionActivate", false],
     ["_allowExplosionDeactivate", false],
-    ["_explosionType", "G_40mm_HE"],
+    ["_explosionType", "ClaymoreDirectionalMine_Remote_Ammo_Scripted"],
     ["_excludedClassnames", []],
     ["_availableToFutureLaptops", false]
 ];
@@ -55,7 +55,7 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_STATE", false, true]; //
 
 // Create activation code
 private _activationCode = "
-params ['_computer', '_generator'];
+params ['_computer', '_generator', '_execUserId'];
 
 if (isNull _generator) exitWith {
     [_computer, 'Error: Generator object not found!'] remoteExec ['AE3_armaos_fnc_shell_stdout', _execUserId];
@@ -68,21 +68,15 @@ if (_isDestroyed) exitWith {
 
 private _radius = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_RADIUS', 50];
 private _allowExplosion = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_ACTIVATE', false];
-private _explosionType = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_TYPE', 'G_40mm_HE'];
+private _explosionType = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_TYPE', 'ClaymoreDirectionalMine_Remote_Ammo_Scripted'];
 private _excludedClassnames = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXCLUDED', []];
 
 private _allObjects = 25 allObjects 0;
 private _objectsInRadius = _allObjects select {(_x distance _generator) <= _radius};
 
-private _lightsAffected = 0;
-{
-    private _light = _x;
-    if (typeOf _light in _excludedClassnames) then { continue };
-    if (_light isKindOf 'Lamps_base_F') then {
-        _light switchLight 'ON';
-        _lightsAffected = _lightsAffected + 1;
-    };
-} forEach _objectsInRadius;
+private _lightsAffected = count _objectsInRadius;
+
+['on', _allObjects] remoteExec ['Root_fnc_powerGeneratorLights', [0, -2] select isDedicated, true];
 
 [_computer, format ['Generator activated: %1 lights turned ON within %2m radius', _lightsAffected, _radius]] remoteExec ['AE3_armaos_fnc_shell_stdout', _execUserId];
 
@@ -91,7 +85,7 @@ _generator setVariable ['ROOT_CYBERWARFARE_GENERATOR_STATE', true, true];
 
 // Create deactivation code
 private _deactivationCode = "
-params ['_computer', '_generator'];
+params ['_computer', '_generator', '_execUserId'];
 
 if (isNull _generator) exitWith {
     [_computer, 'Error: Generator object not found!'] remoteExec ['AE3_armaos_fnc_shell_stdout', _execUserId];
@@ -110,15 +104,9 @@ private _excludedClassnames = _generator getVariable ['ROOT_CYBERWARFARE_GENERAT
 private _allObjects = 25 allObjects 0;
 private _objectsInRadius = _allObjects select {(_x distance _generator) <= _radius};
 
-private _lightsAffected = 0;
-{
-    private _light = _x;
-    if (typeOf _light in _excludedClassnames) then { continue };
-    if (_light isKindOf 'Lamps_base_F') then {
-        _light switchLight 'OFF';
-        _lightsAffected = _lightsAffected + 1;
-    };
-} forEach _objectsInRadius;
+private _lightsAffected = count _objectsInRadius;
+
+['off', _allObjects] remoteExec ['Root_fnc_powerGeneratorLights', [0, -2] select isDedicated, true];
 
 if (_allowExplosion) then {
     private _explosion = _explosionType createVehicle (getPos _generator);

@@ -60,14 +60,14 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
                 _string = format ["Custom device '%1' (ID: %2) activated.", _customName, _customId];
                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 if (_activationCode != "") then {
-                    [_computer, _deviceObject] spawn (compile _activationCode);
+                    [_computer, _deviceObject, _owner] spawn (compile _activationCode);
                 };
             } else {
                 if(_customState isEqualTo "deactivate") then {
                     _string = format ["Custom device '%1' (ID: %2) deactivated.", _customName, _customId];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     if (_deactivationCode != "") then {
-                        [_computer, _deviceObject] spawn (compile _deactivationCode);
+                        [_computer, _deviceObject, _owner] spawn (compile _deactivationCode);
                     };
                 } else {
                     _string = format ['Error! Invalid Input - %1.', _customState];

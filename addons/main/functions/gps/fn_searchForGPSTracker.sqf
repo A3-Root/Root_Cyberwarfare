@@ -22,7 +22,7 @@ if (isNull _target || {_target == _player}) exitWith {
     ["Cannot search this target!", true, 1.5, 2] call ace_common_fnc_displayText;
 };
 
-private _isBeingSearched = missionNamespace getVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", false, true];
+private _isBeingSearched = missionNamespace getVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", false];
 if (_isBeingSearched) exitWith {
     ["Search already underway by another person!", true, 1.5, 2] call ace_common_fnc_displayText;
 };

@@ -39,46 +39,27 @@ if (_vehicleIDNum != 0) then {
 
     private _foundVehicle = false;
     private _invalidOption = true;
-    
+    private _battery = uiNamespace getVariable "AE3_Battery";
+    private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
+    private _powerCost = 2;
+
+      
     {
         // [_deviceId, _netId, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost];
 
         _x params ["_storedDeviceID", "_vehicleNetID", "_vehicleName", "_allowFuel", "_allowSpeed", "_allowBrakes", "_allowLights", "_allowEngine", "_allowAlarm", "_linkedComputers", "_availableToFutureLaptops", "_powerCost"];
-
         private _vehicleObject = objectFromNetId _vehicleNetID;
+        _powerCost = _vehicleObject getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", 2];
+        if(_batteryLevel < ((_powerCost)/1000)) then {
+            _string = format ['Error! Insufficient Power!'];
+            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+            breakTo "exit";
+        };
+
 
         if ((_vehicleIDNum == _storedDeviceID) && (alive _vehicleObject)) then {
             if ([_computer, 7, _storedDeviceID, _commandPath] call Root_fnc_isDeviceAccessible) then {
                 _foundVehicle = true;
-                _powerCost = _vehicleObject getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", 2];
-                private _battery = uiNamespace getVariable "AE3_Battery";
-                private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
-                _string = format ['Are you sure? (Y/N): '];
-                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                while{true} do {
-                    private _areYouSure = [_computer] call AE3_armaos_fnc_shell_stdin;
-                    if((_areYouSure isEqualTo "y") || (_areYouSure isEqualTo "Y")) then {
-                        break;
-                    };
-                    if((_areYouSure isEqualTo "n") || (_areYouSure isEqualTo "N")) then {
-                        missionNamespace setVariable [_nameOfVariable, true, true];
-                        breakTo "exit";
-                    };
-                };
-                if(_batteryLevel < ((_powerCost)/1000)) then {
-                    _string = format ['Error! Insufficient Power!'];
-                    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    breakTo "exit";
-                };
-                private _currentBatteryLevel = _battery getVariable "AE3_power_batteryLevel";
-                private _changeWh = _powerCost;
-                private _newLevel = _currentBatteryLevel - (_changeWh/1000);
-                [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
-                _string = format ['Power Cost: %1Wh', _changeWh];
-                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                _string = format ['New Power Level: %1Wh', _newLevel*1000];
-                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-
                 if (_action == "battery") then {
                     _value = parseNumber _value;
                     if (_value < 1) then {
@@ -198,6 +179,26 @@ if (_vehicleIDNum != 0) then {
         _string = format ["Error! Invalid Action/Value specified. Action: %1, Value: %2", _action, _value];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     };
+    _string = format ['Are you sure? (Y/N): '];
+    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+    while{true} do {
+        private _areYouSure = [_computer] call AE3_armaos_fnc_shell_stdin;
+        if((_areYouSure isEqualTo "y") || (_areYouSure isEqualTo "Y")) then {
+            break;
+        };
+        if((_areYouSure isEqualTo "n") || (_areYouSure isEqualTo "N")) then {
+            missionNamespace setVariable [_nameOfVariable, true, true];
+            breakTo "exit";
+        };
+    };
+    private _currentBatteryLevel = _battery getVariable "AE3_power_batteryLevel";
+    private _changeWh = _powerCost;
+    private _newLevel = _currentBatteryLevel - (_changeWh/1000);
+    [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
+    _string = format ['Power Cost: %1Wh', _changeWh];
+    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+    _string = format ['New Power Level: %1Wh', _newLevel*1000];
+    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 } else {
     _string = format ["Error! Invalid VehicleID - %1.", _vehicleID];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;

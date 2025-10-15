@@ -40,8 +40,8 @@ private _allComputers = [];
 private _dialogControls = [
     ["TOOLBOX:YESNO", ["Treat as Custom Device", "Add the object EXCLUSIVELY to the 'Custom' section?"], false],
     ["EDIT", ["Custom Device Name", "Name that will appear in the terminal for this device (only if treated as custom)"], ["Power Generator Overload"]],
-    ["EDIT:CODE", ["Activation Code (Custom Device Only)", "Code to run in a SCHEDULED environment (spawn) when device is activated. Use (_this select 0) to reference the computer and (_this select 1) to reference the custom object."], ["hint str format ['Custom Activation triggered by (computer):%1 on: %2', _this select 0, _this select 1];", {}, 7]],
-    ["EDIT:CODE", ["Deactivation Code (Custom Device Only)", "Code to run in a SCHEDULED environment (spawn) when device is deactivated. Use (_this select 0) to reference the computer and (_this select 1) to reference the custom object."], ["hint str format ['Custom Deactivation triggered by (computer):%1 on: %2', _this select 0, _this select 1];", {}, 7]],
+    ["EDIT:CODE", ["Activation Code (Custom Device Only)", "Code to run in a SCHEDULED environment (spawn) when device is activated. Default parameters ['_computer', '_customObject', '_executedUserId']"], ["hint str format ['Custom Activation triggered using (computer):%1 on: %2 by %3', _this select 0, _this select 1, _this select 2];", {}, 7]],
+    ["EDIT:CODE", ["Deactivation Code (Custom Device Only)", "Code to run in a SCHEDULED environment (spawn) when device is deactivated. Default parameters ['_computer', '_customObject', '_executedUserId']"], ["hint str format ['Custom Deactivation triggered using (computer):%1 on: %2 by %3', _this select 0, _this select 1, _this select 2];", {}, 7]],
     ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false]
 ];
 

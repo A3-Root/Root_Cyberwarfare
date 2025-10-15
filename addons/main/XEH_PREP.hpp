@@ -18,6 +18,7 @@ PREP(consumePower);
 PREP(getUserConfirmation);
 PREP(removePower);
 PREP(localSoundBroadcast);
+PREP(powerGeneratorLights);
 
 // Redefine PREP macro for subdirectory: devices
 #undef PREP
