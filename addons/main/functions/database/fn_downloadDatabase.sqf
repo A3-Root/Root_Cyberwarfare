@@ -90,7 +90,7 @@ if (_databaseIdNum != 0) then {
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             // Execute the custom code after successful download
             if (_executionCode != "") then {
-                [_computer] spawn (compile _executionCode);
+                [_computer, _owner] spawn (compile _executionCode);
             };
         };
     } forEach _accessibleDatabases;

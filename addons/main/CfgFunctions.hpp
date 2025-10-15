@@ -5,9 +5,9 @@ class CfgFunctions {
 		class Core {
 			file = "\z\root_cyberwarfare\addons\main\functions\core";
 			class isDeviceAccessible {};
-			class cleanupDeviceLinks { postInit = 1; };
-			class createDiaryEntry { postInit = 1; };
-			class initSettings { preInit = 1; };
+			class cleanupDeviceLinks {};
+			class createDiaryEntry {};
+			class initSettings {};
 		};
 
 		class Devices {

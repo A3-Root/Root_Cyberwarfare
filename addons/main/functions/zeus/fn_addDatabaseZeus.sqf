@@ -36,8 +36,7 @@ private _dialogControls = [
     ["EDIT", ["File Name", "Name of the File"], ["My Other Projects"]],
     ["SLIDER", ["File Hack Time (in seconds)", "Time taken to hack and download the file (in seconds)"], [1, 300, 10, 0]],
     ["EDIT:MULTI", ["File Contents", "Content of the file that could be read after downloading via the command 'cat <filename>"], ["Check out my other projects that could interest you here: https://github.com/A3-Root/", {}, 7]],
-    ["EDIT:CODE", ["Code to Execute on Download", "Code that will be executed in a SCHEDULED environment (spawn) when file is successfully downloaded. Use (_this select 0) to reference the computer object."], ["// Example: Display Hint when triggered 
-hint str format ['Download file code triggered'];", {}, 7]],
+    ["EDIT:CODE", ["Code to Execute on Download", "Code that will be executed in a SCHEDULED environment (spawn) when file is successfully downloaded. Default parameters ['_computer', '_playerNetID']"], ["hint str format ['File Downloaded ON: %1 ---- BY %2', getText (configOf (_this select 0) >> 'displayName'), getText (configOf (objectFromNetId (_this select 1)) >> 'displayName')];", {}, 7]],
     ["TOOLBOX:ENABLED", ["Available to Future Laptops", "Should this database be available to laptops that are added later?"], false]
 ];
 

@@ -54,6 +54,16 @@ if (isServer) then {
 };
 
 // ============================================================================
+// Server-Side: Initialize Device Cleanup Task
+// ============================================================================
+// Starts background task to periodically clean up invalid device links
+// Ensures integrity of device links when computers or devices are deleted
+// Runs only on server to maintain authoritative state
+if (isServer) then {
+    call FUNC(cleanupDeviceLinks);
+};
+
+// ============================================================================
 // Server-Side: Initialize Device Cache and Link Cache
 // ============================================================================
 // Create hashmap structures for O(1) device lookups
@@ -102,13 +112,9 @@ if (isServer) then {
     LOG_INFO("Device cache initialized");
 };
 
-// ============================================================================
-// Client-Side: ACE Interaction Menus for GPS Trackers
-// ============================================================================
-// Set up ACE interaction menu actions after player is initialized
-// Allows players to attach and search for GPS trackers on objects/units
 if (hasInterface) then {
     [{(!isNull ACE_player) && (CBA_missionTime > 0)}, {
+        call FUNC(createDiaryEntry);
         // ========================================================================
         // ACE Action: Attach GPS Tracker to Object
         // ========================================================================

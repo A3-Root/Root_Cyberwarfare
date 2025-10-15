@@ -58,12 +58,12 @@ private _activationCode = "
 params ['_computer', '_generator', '_execUserId'];
 
 if (isNull _generator) exitWith {
-    [_computer, 'Error: Generator object not found!'] remoteExec ['AE3_armaos_fnc_shell_stdout', _execUserId];
+    [_computer, 'Error: Generator object not found!'] call AE3_armaos_fnc_shell_stdout;
 };
 
 private _isDestroyed = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_DESTROYED', false];
 if (_isDestroyed) exitWith {
-    [_computer, 'Error: Generator was destroyed and cannot be reactivated!'] remoteExec ['AE3_armaos_fnc_shell_stdout', _execUserId];
+    [_computer, 'Error: Generator was destroyed and cannot be reactivated!'] call AE3_armaos_fnc_shell_stdout;
 };
 
 private _radius = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_RADIUS', 50];
@@ -78,7 +78,7 @@ private _lightsAffected = count _objectsInRadius;
 
 ['on', _allObjects] remoteExec ['Root_fnc_powerGeneratorLights', [0, -2] select isDedicated, true];
 
-[_computer, format ['Generator activated: %1 lights turned ON within %2m radius', _lightsAffected, _radius]] remoteExec ['AE3_armaos_fnc_shell_stdout', _execUserId];
+[_computer, format ['Generator activated: %1 lights turned ON within %2m radius', _lightsAffected, _radius]] call AE3_armaos_fnc_shell_stdout;
 
 _generator setVariable ['ROOT_CYBERWARFARE_GENERATOR_STATE', true, true];
 ";
@@ -88,12 +88,12 @@ private _deactivationCode = "
 params ['_computer', '_generator', '_execUserId'];
 
 if (isNull _generator) exitWith {
-    [_computer, 'Error: Generator object not found!'] remoteExec ['AE3_armaos_fnc_shell_stdout', _execUserId];
+    [_computer, 'Error: Generator object not found!'] call AE3_armaos_fnc_shell_stdout;
 };
 
 private _isDestroyed = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_DESTROYED', false];
 if (_isDestroyed) exitWith {
-    [_computer, 'Error: Generator was destroyed and cannot be reactivated!'] remoteExec ['AE3_armaos_fnc_shell_stdout', _execUserId];
+    [_computer, 'Error: Generator was destroyed and cannot be reactivated!'] call AE3_armaos_fnc_shell_stdout;
 };
 
 private _radius = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_RADIUS', 50];
@@ -109,16 +109,17 @@ private _lightsAffected = count _objectsInRadius;
 ['off', _allObjects] remoteExec ['Root_fnc_powerGeneratorLights', [0, -2] select isDedicated, true];
 
 if (_allowExplosion) then {
-    private _explosion = _explosionType createVehicle (getPos _generator);
+    private _generatorPosition = getPosATL _generator;
+    private _explosion = _explosionType createVehicle _generatorPosition;
     _generator setVariable ['ROOT_CYBERWARFARE_GENERATOR_DESTROYED', true, true];
-    [_computer, format ['WARNING: Generator overloaded! All objects requiring electricity within %2m radius affected.', _lightsAffected, _radius]] remoteExec ['AE3_armaos_fnc_shell_stdout', _execUserId];
-    private _surround_pos = [(_generator select 0) + random [-10, 0, 10], (_generator select 1) + random [-10, 0, 10], (_generator select 2) + random [0, 1.5, 3]];
+    [_computer, format ['WARNING: Generator overloaded! All objects requiring electricity within %2m radius affected.', _lightsAffected, _radius]] call AE3_armaos_fnc_shell_stdout;
+    private _surround_pos = [(_generatorPosition select 0) + random [-10, 0, 10], (_generatorPosition select 1) + random [-10, 0, 10], (_generatorPosition select 2) + random [0, 1.5, 3]];
     private _sparkObj = createVehicle ['Sign_Sphere10cm_F', _surround_pos, [], 0, 'CAN_COLLIDE'];
     _sparkObj hideObjectGlobal true;
     for '_i' from 1 to 5 do {
         private _effect = '#particlesource' createVehicleLocal _surround_pos;
         _sparkObj setPos _surround_pos;
-        _surround_pos = [(_generator select 0) + random [-10, 0, 10], (_generator select 1) + random [-10, 0, 10], (_generator select 2) + random [0, 1.5, 3]];
+        _surround_pos = [(_generatorPosition select 0) + random [-10, 0, 10], (_generatorPosition select 1) + random [-10, 0, 10], (_generatorPosition select 2) + random [0, 1.5, 3]];
         _claymore = 'ClaymoreDirectionalMine_Remote_Ammo_Scripted' createVehicle _surround_pos;
         _claymore setDamage 1;
         _effect setParticleParams [
@@ -145,7 +146,7 @@ if (_allowExplosion) then {
     };
     deleteVehicle _sparkObj;
 } else {
-    [_computer, format ['Generator deactivated: %1 lights turned OFF within %2m radius', _lightsAffected, _radius]] remoteExec ['AE3_armaos_fnc_shell_stdout', _execUserId];
+    [_computer, format ['Generator deactivated: %1 lights turned OFF within %2m radius', _lightsAffected, _radius]] call AE3_armaos_fnc_shell_stdout;
     _generator setVariable ['ROOT_CYBERWARFARE_GENERATOR_STATE', false, true];
 };
 ";

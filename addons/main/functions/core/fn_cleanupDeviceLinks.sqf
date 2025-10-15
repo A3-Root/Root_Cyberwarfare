@@ -15,8 +15,16 @@
  * Public: No
  */
 
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
+
 // Exit if not running on server
 if (!isServer) exitWith {};
+
+// Only run if not already running
+if (missionNamespace getVariable ["ROOT_CYBERWARFARE_CLEANUP_STARTED", false]) exitWith {
+    LOG_ERROR("Device cleanup task already running, aborting duplicate initialization.");
+};
+if (isNil "ROOT_CYBERWARFARE_CLEANUP_TIME") then { ROOT_CYBERWARFARE_CLEANUP_TIME = 60 };
 
 // Set default cleanup interval (60 seconds)
 if (isNil "ROOT_CYBERWARFARE_CLEANUP_TIME") then { ROOT_CYBERWARFARE_CLEANUP_TIME = 60 };
@@ -37,67 +45,70 @@ private _customCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_CUST
 // Store costs globally (legacy support)
 missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_COSTS", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
 
-diag_log format ["[Root Cyber Warfare] Regular Device Cleanup script started! Running periodically every %1 seconds. You can change this value by modifying the 'ROOT_CYBERWARFARE_CLEANUP_TIME' variable. Set the variable value to 0 to disable/stop the clean up.", ROOT_CYBERWARFARE_CLEANUP_TIME];
+LOG_INFO_1(format ["Regular Device Cleanup script started! Running periodically every %1 seconds. You can change this value by modifying the 'ROOT_CYBERWARFARE_CLEANUP_TIME' variable. Set the variable value to 0 to disable/stop the clean up.",ROOT_CYBERWARFARE_CLEANUP_TIME]);
 
 // Main cleanup loop
-while {ROOT_CYBERWARFARE_CLEANUP_TIME != 0} do {
-    uiSleep ROOT_CYBERWARFARE_CLEANUP_TIME;
-    diag_log "[Root Cyber Warfare] Running periodic device link cleanup...";
+[] spawn {
+    while {ROOT_CYBERWARFARE_CLEANUP_TIME != 0} do {
+        uiSleep ROOT_CYBERWARFARE_CLEANUP_TIME;
+        LOG_INFO("Running periodic device link cleanup...");
 
-    // Get current device links (legacy array structure)
-    private _deviceLinks = missionNamespace getVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", []];
-    private _cleanLinks = [];
-    private _removedCount = 0;
+        // Get current device links (legacy array structure)
+        private _deviceLinks = missionNamespace getVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", []];
+        private _cleanLinks = [];
+        private _removedCount = 0;
 
-    // Clean up deleted computer links
-    {
-        private _computerNetId = _x select 0;
-
-        private _computer = objectFromNetId _computerNetId;
-
-        // Check if computer still exists and has hacking tools
-        if (!isNull _computer && {_computer getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]}) then {
-            _cleanLinks pushBack _x;
-        } else {
-            // Computer is deleted or no longer has hacking tools
-            _removedCount = _removedCount + 1;
-            diag_log format ["[Root Cyber Warfare] Periodic Cleanup: Removed device links for deleted computer: %1", _computerNetId];
-        };
-    } forEach _deviceLinks;
-
-    // Update the device links
-    missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", _cleanLinks, true];
-
-    if (_removedCount > 0) then {
-        diag_log format ["[Root Cyber Warfare] Cleanup removed %1 computer links. %2 links active in the server.", _removedCount, count _cleanLinks];
-    };
-
-    // Clean up invalid devices from the main device list (legacy array structure)
-    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
-    private _cleanedDevices = [[], [], [], [], [], []];
-
-    {
-        private _deviceList = _allDevices select _forEachIndex;
-        private _cleanedList = [];
-
-        // Check each device to see if it still exists
+        // Clean up deleted computer links
         {
-            private _deviceData = _x;
-            private _deviceNetId = _deviceData select 1;
-            private _deviceObject = objectFromNetId _deviceNetId;
+            private _computerNetId = _x select 0;
 
-            if (isNull _deviceObject) then {
-                diag_log format ["[Root Cyber Warfare] Removing Invalid/Null/Deleted Device: Type %1, NetId %2", _forEachIndex, _deviceNetId];
+            private _computer = objectFromNetId _computerNetId;
+
+            // Check if computer still exists and has hacking tools
+            if (!isNull _computer && {_computer getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]}) then {
+                _cleanLinks pushBack _x;
             } else {
-                _cleanedList pushBack _deviceData;
+                // Computer is deleted or no longer has hacking tools
+                _removedCount = _removedCount + 1;
+                LOG_INFO_1(format ["Periodic Cleanup: Removed device links for deleted computer: %1",_computerNetId]);
             };
-        } forEach _deviceList;
+        } forEach _deviceLinks;
 
-        _cleanedDevices set [_forEachIndex, _cleanedList];
-    } forEach _allDevices;
+        // Update the device links
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", _cleanLinks, true];
 
-    // Update cleaned device list
-    missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _cleanedDevices, true];
+        if (_removedCount > 0) then {
+            LOG_INFO_2(format ["Cleanup removed %1 computer links. %2 links active in the server.",_removedCount,count _cleanLinks]);
+        };
+
+        // Clean up invalid devices from the main device list (legacy array structure)
+        private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
+        private _cleanedDevices = [[], [], [], [], [], []];
+
+        {
+            private _deviceList = _allDevices select _forEachIndex;
+            private _cleanedList = [];
+
+            // Check each device to see if it still exists
+            {
+                private _deviceData = _x;
+                private _deviceNetId = _deviceData select 1;
+                private _deviceObject = objectFromNetId _deviceNetId;
+
+                if (isNull _deviceObject) then {
+                    LOG_INFO_2(format ["[Root Cyber Warfare] Removing Invalid/Null/Deleted Device: Type %1, NetId %2",_forEachIndex,_deviceNetId]);
+                } else {
+                    _cleanedList pushBack _deviceData;
+                };
+            } forEach _deviceList;
+
+            _cleanedDevices set [_forEachIndex, _cleanedList];
+        } forEach _allDevices;
+
+        // Update cleaned device list
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _cleanedDevices, true];
+    };
 };
 
+missionNamespace setVariable ["ROOT_CYBERWARFARE_CLEANUP_STARTED", true, true];
 true
