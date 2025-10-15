@@ -97,7 +97,7 @@
     "SLIDER",
     [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_NORMAL", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_NORMAL_DESC"],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
-    [1, 1, 0.2, 2], // [min, max, default, decimal places]
+    [0.01, 1.0, 0.2, 2], // [min, max, default, decimal places]
     1, // mission-level
     {},
     false // doesn't require mission restart
@@ -109,7 +109,7 @@
     "SLIDER",
     [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_TOOL", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_TOOL_DESC"],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
-    [1, 1, 0.8, 2], // [min, max, default, decimal places]
+    [0.01, 1.0, 0.8, 2], // [min, max, default, decimal places]
     1, // mission-level
     {},
     false // doesn't require mission restart

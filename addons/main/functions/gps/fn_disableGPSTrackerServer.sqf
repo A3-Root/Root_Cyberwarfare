@@ -18,10 +18,21 @@
 
 if (!isServer) exitWith {};
 
-params ["_allDevices", "_trackerId"];
+params ["_allDevices", "_trackerId", "_trackerObject", "_linkedComputers", "_trackerName"];
 
 missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
 
-diag_log format ["[Root Cyber Warfare] GPS Tracker ID %1 has been disabled by player search.", _trackerId];
+// Notify all linked computers
+{
+    private _computerNetId = _x;
+    private _computer = objectFromNetId _computerNetId;
+    
+    if (!isNull _computer) then {
+        private _message = format ["WARNING: GPS Tracker '%1' (ID: %2) has been disabled! Last Ping Position: %3", _trackerName, _trackerId, getPosATL _trackerObject];
+        [_computer, _message] call AE3_armaos_fnc_shell_stdout;
+    };
+} forEach _linkedComputers;
+
+LOG_INFO_1(format ["GPS Tracker ID %1 has been disabled by player search.",_trackerId]);
 
 true

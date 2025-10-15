@@ -56,24 +56,7 @@ _allGpsTrackers set [_trackerIndex, [
 _allDevices set [5, _allGpsTrackers];
 
 // Sync to server
-[_allDevices, _trackerId] remoteExec ["Root_fnc_disableGPSTrackerServer", 2];
-
-// Delete any existing marker for this tracker
-private _markerName = (_currentStatus select 2);
-if (_markerName != "") then {
-    deleteMarkerLocal _markerName;
-};
-
-// Notify all linked computers
-{
-    private _computerNetId = _x;
-    private _computer = objectFromNetId _computerNetId;
-    
-    if (!isNull _computer) then {
-        private _message = format ["WARNING: GPS Tracker '%1' (ID: %2) has been disabled!", _trackerName, _trackerId];
-        private _compOwner = [_computer] remoteExec ["owner", 2];
-        [_computer, _message] remoteExec ["AE3_armaos_fnc_shell_stdout", _compOwner];
-    };
-} forEach _linkedComputers;
+private _trackerObject = objectFromNetId _trackerNetId;
+[_allDevices, _trackerId, _trackerObject, _linkedComputers, _trackerName] remoteExec ["Root_fnc_disableGPSTrackerServer", 2];
 
 true

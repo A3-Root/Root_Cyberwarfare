@@ -27,6 +27,8 @@ if !(_lightState in ["on", "off", "ON", "OFF"]) exitWith {
     LOG_ERROR(_string);
 };
 
+_lightState = toUpper _lightState;
+
 {
     _x switchLight _lightState;
 } forEach _objects;

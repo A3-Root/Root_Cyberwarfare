@@ -76,7 +76,7 @@ private _objectsInRadius = _allObjects select {(_x distance _generator) <= _radi
 
 private _lightsAffected = count _objectsInRadius;
 
-['on', _allObjects] remoteExec ['Root_fnc_powerGeneratorLights', [0, -2] select isDedicated, true];
+['ON', _objectsInRadius] remoteExec ['Root_fnc_powerGeneratorLights', 0, true];
 
 [_computer, format ['Generator activated: %1 lights turned ON within %2m radius', _lightsAffected, _radius]] call AE3_armaos_fnc_shell_stdout;
 
@@ -106,7 +106,7 @@ private _objectsInRadius = _allObjects select {(_x distance _generator) <= _radi
 
 private _lightsAffected = count _objectsInRadius;
 
-['off', _allObjects] remoteExec ['Root_fnc_powerGeneratorLights', [0, -2] select isDedicated, true];
+['OFF', _objectsInRadius] remoteExec ['Root_fnc_powerGeneratorLights', 0, true];
 
 if (_allowExplosion) then {
     private _generatorPosition = getPosATL _generator;

@@ -59,7 +59,7 @@ private _allComputers = [];
     private _lastPingTimer = 30;  // Seconds before last known position is shown
     private _powerCost = 2;        // Power cost per ping in Wh
     private _customMarker = "";    // No custom marker
-    private _allowRetracking = true;  // Allow retracking same target
+    private _allowRetracking = false;  // One time tracking only
     private _availableToFutureLaptops = true;  // All laptops can access
 
     // Now show ACE progress bar AFTER configuration

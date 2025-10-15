@@ -58,7 +58,7 @@ if (_trackerIdNum != 0) then {
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 } else {
                     // Check if retracking is allowed for completed trackers
-                   if (((_currentStatus select 0) in ["Completed", "Untrackable", "Disabled"]) && !(_allowRetracking)) then {
+                   if ((((_currentStatus select 0) in ["Completed", "Tracked"]) && !(_allowRetracking)) || ((_currentStatus select 0) in ["Untrackable", "Disabled"])) then {
                         _string = format ["Tracker '%1' (ID: %2) cannot be tracked again.", _trackerName, _trackerIdNum];
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     } else {
