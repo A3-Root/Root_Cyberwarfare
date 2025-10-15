@@ -61,7 +61,7 @@ private _diaryTerminal = player createDiaryRecord [
 ];
 
 // =======================================================================
-// SECTION 11: DATA OPERATIONS
+// SECTION 11: GPS OPERATIONS
 // =======================================================================
 private _diaryGPSTrack = player createDiaryRecord [
 	"CyberTerminal",
