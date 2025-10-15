@@ -22,11 +22,11 @@ if (isNull _target || {_target == _player}) exitWith {
     ["Cannot search this target!", true, 1.5, 2] call ace_common_fnc_displayText;
 };
 
-private _isBeingSearched = missionNamespace getVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", false];
+private _isBeingSearched = _target getVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", false];
 if (_isBeingSearched) exitWith {
     ["Search already underway by another person!", true, 1.5, 2] call ace_common_fnc_displayText;
 };
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", true, true];
+_target setVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", true, true];
 
 // Get spectrum devices from CBA settings
 private _spectrumDevicesString = missionNamespace getVariable [SETTING_GPS_SPECTRUM_DEVICES, ""];
@@ -84,7 +84,7 @@ private _detected = (random 1) < _detectionChance;
 
 if ((!_hasTracker) || (!_detected)) exitWith {
     ["Search complete. No GPS tracker detected.", true, 1.5, 2] call ace_common_fnc_displayText;
-    missionNamespace setVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", false, true];
+    _target setVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", false, true];
 };
 
 // GPS tracker found!
@@ -136,4 +136,4 @@ if (_hasSpectrumDevice) then {
         [_target, _player, _trackerData]
     ] call zen_dialog_fnc_create;
 };
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", false, true];
+_target setVariable ["ROOT_CYBERWARFARE_ACTIVE_SEARCH", false, true];
