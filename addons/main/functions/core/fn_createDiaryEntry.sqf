@@ -26,7 +26,7 @@ player createDiarySubject [
 ];
 
 // =======================================================================
-// SECTION 10: TERMINAL MANAGEMENT
+// SECTION 12: TERMINAL MANAGEMENT
 // =======================================================================
 private _diaryTerminal = player createDiaryRecord [
 	"CyberTerminal",
@@ -57,11 +57,46 @@ private _diaryTerminal = player createDiaryRecord [
 	• Use <font color='#FFFFFF'>cat guide</font> or <font color='#FFFFFF'>help</font> or <font color='#FFFFFF'>man [command]</font> before attempting unfamiliar commands.<br/>
 	• You can press <font color='#FFFFFF'>Control + C</font> at anytime to stop or exit from an operation provided it has not been executed.
 	</font>"],
-	taskNull, "", true
+	taskNull, "", false
 ];
 
 // =======================================================================
-// SECTION 9: DATA OPERATIONS
+// SECTION 11: DATA OPERATIONS
+// =======================================================================
+private _diaryGPSTrack = player createDiaryRecord [
+	"CyberTerminal",
+	["GPS Tracking",
+	"<font color='#E67E22' size='14' face='PuristaBold'>GPS TRACKING</font><br/><br/>
+	<font color='#FFFFFF' face='EtelkaMonospacePro'>
+	The <font color='#3498DB'>gpstrack</font> command queries the location state of networked GPS devices.
+	Use this to locate friendly, neutral, or enemy trackers exposed to the terminal.<br/><br/>
+
+	<font color='#3498DB'>Syntax:</font><br/>
+	gpstrack [GPSID]<br/><br/>
+
+	<font color='#3498DB'>Examples:</font><br/>
+	gpstrack 1231   // Query GPS device 1231<br/>
+	gpstrack 9912   // Query GPS device 9912<br/><br/>
+
+	<font color='#3498DB'>Possible GPS states:</font><br/>
+	Untracked      - Available for tracking (never tracked)<br/>
+	Tracked        - Previously tracked (location saved)<br/>
+	Tracking       - Tracking currently in progress (live update)<br/>
+	Untrackable    - Cannot be tracked again (mission logic)<br/>
+	Completed      - Tracking completed; no further updates expected<br/>
+	Dead           - GPS not found or device destroyed/unresponsive<br/><br/>
+
+	<font color='#3498DB'>Tips:</font><br/>
+	• Run <font color='#FFFFFF'>devices gps</font> to list available GPSIDs before tracking.<br/>
+	• Tracking reveals coordinates on map as a mildot with the name of the tracker and updates depending on the ping frequency.<br/>
+	</font>"],
+	taskNull,
+	"",
+	false
+];
+
+// =======================================================================
+// SECTION 10: DATA OPERATIONS
 // =======================================================================
 private _diaryData = player createDiaryRecord [
 	"CyberTerminal",
@@ -85,7 +120,46 @@ private _diaryData = player createDiaryRecord [
 	• Downloaded files are stored inside the 'Files' folder from where the download was executed.<br/>
 	• You may have to exit and re-enter the terminal if the Folder does not exist.
 	</font>"],
-	taskNull, "", true
+	taskNull, "", false
+];
+
+// =======================================================================
+// SECTION 9: VEHICLE OPERATIONS
+// =======================================================================
+private _diaryVehicles = player createDiaryRecord [
+	"CyberTerminal",
+	["Vehicle Control",
+	"<font color='#E67E22' size='14' face='PuristaBold'>VEHICLE INTERFACE</font><br/><br/>
+	<font color='#FFFFFF' face='EtelkaMonospacePro'>
+	The <font color='#3498DB'>vehicle</font> command lets the operator modify network-linked vehicle systems.
+	Use it to inspect or change battery level, speed limit, brakes, lights, engine state, and alarm timers.<br/><br/>
+
+	<font color='#3498DB'>Syntax:</font><br/>
+	vehicle [VehicleID] [action] [value]<br/><br/>
+
+	<font color='#3498DB'>Actions and values:</font><br/>
+	battery [0-100]   // Set battery percentage<br/>
+	speed [number]    // Set maximum speed or speed limit<br/>
+	brakes [on/off]   // Engage or release electronic brakes<br/>
+	lights [on/off]   // Toggle vehicle lights<br/>
+	engine [on/off]   // Start or stop engine remotely<br/>
+	alarm [seconds]   // Trigger alarm for specified seconds<br/><br/>
+
+	<font color='#3498DB'>Examples:</font><br/>
+	vehicle 1231 battery 20   // Set vehicle 1231 battery to 20%<br/>
+	vehicle 5121 alarm 14     // Trigger 14s alarm on vehicle 5121<br/>
+	vehicle 5125 brakes on    // Engage brakes on vehicle 5125<br/>
+	vehicle 1512 lights off   // Turn off lights on vehicle 1512<br/>
+	vehicle 9952 speed 12     // Limit vehicle 9952 to speed 12<br/>
+	vehicle 2315 engine off   // Stop engine of vehicle 2315<br/><br/>
+
+	<font color='#E74C3C'>CAUTION:</font><br/>
+	• Commands may affect AI and player control of the vehicle.<br/>
+	• Overwriting settings may cause mission issues. Verify VehicleID with <font color='#FFFFFF'>devices vehicles</font> first.<br/>
+	• Use conservative values when testing.</font>"],
+	taskNull,
+	"",
+	false
 ];
 
 // =======================================================================
@@ -124,7 +198,7 @@ private _diaryDrones = player createDiaryRecord [
 	• Changing allegiance can alter AI behavior instantly — verify before engaging.<br/>
 	• Deactivation (<font color='#FFFFFF'>disabledrone</font>) overloads the drone causing it to explode and as such, cannot be undone unless restarted.
 	</font>"],
-	taskNull, "", true
+	taskNull, "", false
 ];
 
 // =======================================================================
@@ -155,7 +229,7 @@ private _diaryLights = player createDiaryRecord [
 	• Actions apply instantly — use caution if operating near hostiles.<br/>
 	• If the command has no visible effect, the light may be destroyed or not network-linked.<br/>
 	</font>"],
-	taskNull, "", true
+	taskNull, "", false
 ];
 
 // =======================================================================
@@ -191,7 +265,7 @@ private _diaryDoors = player createDiaryRecord [
 	• Locked doors may restrict both players and AI — use responsibly.
 	• Locking doors does NOT close it. It keeps the current state of the door (opened / closed) locked from being switched.
 	</font>"],
-	taskNull, "", true
+	taskNull, "", false
 ];
 
 // =======================================================================
@@ -230,7 +304,7 @@ private _diaryDevices = player createDiaryRecord [
 	• Scanning does not affect gameplay — it only gathers information.<br/>
 	• Device IDs shown in scan results are used by other commands (like <font color='#FFFFFF'>door</font> or <font color='#FFFFFF'>light</font>).
 	</font>"],
-	taskNull, "", true
+	taskNull, "", false
 ];
 
 // =======================================================================
@@ -359,7 +433,7 @@ private _diaryNavigation = player createDiaryRecord [
 	• Combine with <font color='#FFFFFF'>history</font> to review past commands without clutter.<br/>
 	• Use frequently to maintain readability during active operations.
 	</font>"],
-	taskNull, "", true
+	taskNull, "", false
 ];
 
 // =======================================================================
@@ -374,7 +448,7 @@ private _diaryInstallation = player createDiaryRecord [
 	Execute <font color='#3498DB'>cat guide</font> to read the local manual.<br/>
 	Use <font color='#3498DB'>ls</font> to verify installed utilities.
 	</font>"],
-	taskNull, "", true
+	taskNull, "", false
 ];
 
 // =======================================================================
@@ -400,7 +474,7 @@ private _diaryBasics = player createDiaryRecord [
 	help           // Displays list of available system commands<br/>
 	man [command]  // Displays detailed manual entry for system commands<br/>
 	</font>"],
-	taskNull, "", true
+	taskNull, "", false
 ];
 
 // =======================================================================
@@ -414,7 +488,7 @@ private _diaryNotice = player createDiaryRecord [
 	Execute all commands with precision. Incorrect capitalization or syntax will result in command failure.<br/><br/>
 	Operators are advised to familiarize themselves with command structure before mission execution.
 	</font>"],
-	taskNull, "", true
+	taskNull, "", false
 ];
 
 // =======================================================================
@@ -432,14 +506,16 @@ player createDiaryRecord [
 	" + createDiaryLink ["CyberTerminal", _diaryBasics, "2. Basic Terminal Usage"] + "<br/>
 	" + createDiaryLink ["CyberTerminal", _diaryInstallation, "3. Installation Directory"] + "<br/>
 	" + createDiaryLink ["CyberTerminal", _diaryNavigation, "4. System Navigation"] + "<br/>
-	" + createDiaryLink ["CyberTerminal", _diaryDevices, "5. Device Discovery"] + "<br/>
-	" + createDiaryLink ["CyberTerminal", _diaryDoors, "6. Door Control"] + "<br/>
-	" + createDiaryLink ["CyberTerminal", _diaryLights, "7. Lighting Control"] + "<br/>
-	" + createDiaryLink ["CyberTerminal", _diaryDrones, "8. Drone Operations"] + "<br/>
-	" + createDiaryLink ["CyberTerminal", _diaryData, "9. Data Operations"] + "<br/>
-	" + createDiaryLink ["CyberTerminal", _diaryTerminal, "10. Terminal Management"] + "<br/>
+	" + createDiaryLink ["CyberTerminal", _diaryDevices, "5. Device Discovery (Listing Hackable Devices)"] + "<br/>
+	" + createDiaryLink ["CyberTerminal", _diaryDoors, "6. Door Control (Hacking Doors)"] + "<br/>
+	" + createDiaryLink ["CyberTerminal", _diaryLights, "7. Lighting Control (Hacking Lights)"] + "<br/>
+	" + createDiaryLink ["CyberTerminal", _diaryDrones, "8. Drone Operations (Hacking Drones)"] + "<br/>
+	" + createDiaryLink ["CyberTerminal", _diaryVehicles, "9. Vehicle Operations (Hacking Vehicles)"] + "<br/>
+	" + createDiaryLink ["CyberTerminal", _diaryData, "10. Data Operations (Downloading Files)"] + "<br/>
+	" + createDiaryLink ["CyberTerminal", _diaryGPSTrack, "11. GPS Operations (Tracking GPS)"] + "<br/>
+	" + createDiaryLink ["CyberTerminal", _diaryTerminal, "12. Terminal Management"] + "<br/>
 	</font>"],
-	taskNull, "", true
+	taskNull, "", false
 ];
 
 true
