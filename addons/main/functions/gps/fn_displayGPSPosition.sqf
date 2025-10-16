@@ -85,17 +85,33 @@ if (_trackerIdNum != 0) then {
                             _allDevices set [5, _allGpsTrackers];
                             missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
                         } else {
+                            private _changeWh = _powerCost;
+                            _string = format ['Power Cost: %1Wh', _changeWh];
+                            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                             _string = format ['Are you sure? (Y/N): '];
                             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                            while{true} do {
+
+                            private _time = time;
+                            _time = _time + 10;
+                            private _continue = false;
+                            while{time < _time} do {
                                 private _areYouSure = [_computer] call AE3_armaos_fnc_shell_stdin;
                                 if((_areYouSure isEqualTo "y") || (_areYouSure isEqualTo "Y")) then {
+                                    _continue = true;
                                     break;
                                 };
                                 if((_areYouSure isEqualTo "n") || (_areYouSure isEqualTo "N")) then {
                                     missionNamespace setVariable [_nameOfVariable, true, true];
+                                    _continue = false;
                                     breakTo "exit";
                                 };
+                            };
+
+                            if (!_continue) then {
+                                _string = format ['Confirmation Timed Out. Aborting...'];
+                                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                                missionNamespace setVariable [_nameOfVariable, true, true];
+                                breakTo "exit";
                             };
                             if(_batteryLevel < ((_powerCost)/1000)) then {
                                 _string = format ['Error! Insufficient Power!'];
@@ -104,11 +120,8 @@ if (_trackerIdNum != 0) then {
                             };
                             
                             private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
-                            private _changeWh = _powerCost;
                             private _newLevel = _batteryLevel - (_changeWh/1000);
                             [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
-                            _string = format ['Power Cost: %1Wh', _changeWh];
-                            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                             _string = format ['New Power Level: %1Wh', _newLevel*1000];
                             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
