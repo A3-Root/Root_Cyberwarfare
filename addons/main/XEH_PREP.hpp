@@ -31,6 +31,7 @@ PREP(disableDrone);
 PREP(customDevice);
 PREP(changeVehicleParams);
 PREP(listDevicesInSubnet);
+PREP(powerGridControl);
 
 // Redefine PREP macro for subdirectory: gps
 #undef PREP
@@ -57,6 +58,8 @@ PREP(downloadDatabase);
 
 PREP(addDeviceZeus);
 PREP(addDeviceZeusMain);
+PREP(addCustomDeviceZeus);
+PREP(addCustomDeviceZeusMain);
 PREP(addDatabaseZeus);
 PREP(addDatabaseZeusMain);
 PREP(addGPSTrackerZeus);
@@ -68,6 +71,8 @@ PREP(addPowerGeneratorZeusMain);
 PREP(modifyPowerZeus);
 PREP(addHackingToolsZeus);
 PREP(addHackingToolsZeusMain);
+PREP(copyDeviceLinksZeus);
+PREP(copyDeviceLinksZeusMain);
 
 // Redefine PREP macro for subdirectory: 3den
 #undef PREP

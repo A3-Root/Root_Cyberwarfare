@@ -1,25 +1,26 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Server-side function to register a power generator as a custom device that controls lights within radius
+ * Description: Server-side function to register a power generator that controls lights within radius
  *
  * Arguments:
  * 0: _targetObject <OBJECT> - The generator object
  * 1: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
- * 2: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
+ * 2: _linkedComputers <ARRAY> (Optional) - Array of computer objects, default: []
  * 3: _generatorName <STRING> (Optional) - Generator name, default: "Power Generator"
  * 4: _radius <NUMBER> (Optional) - Radius in meters to affect lights, default: 50
  * 5: _allowExplosionActivate <BOOLEAN> (Optional) - Create explosion on activation, default: false
  * 6: _allowExplosionDeactivate <BOOLEAN> (Optional) - Create explosion on deactivation, default: false
- * 7: _explosionType <STRING> (Optional) - Explosion ammo type, default: "G_40mm_HE"
+ * 7: _explosionType <STRING> (Optional) - Explosion ammo type, default: "ClaymoreDirectionalMine_Remote_Ammo_Scripted"
  * 8: _excludedClassnames <ARRAY> (Optional) - Array of classnames to exclude, default: []
  * 9: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ * 10: _powerCost <NUMBER> (Optional) - Power cost in Wh per operation, default: 10
  *
  * Return Value:
  * None
  *
  * Example:
- * [_obj, 0, [], "Generator", 100, true, false, "HelicopterExploSmall", ["Lamp_Street_small_F"], false] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
+ * [_obj, 0, [], "Generator", 100, true, false, "HelicopterExploSmall", ["Lamp_Street_small_F"], false, 15] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
  *
  * Public: No
  */
@@ -34,7 +35,8 @@ params [
     ["_allowExplosionDeactivate", false],
     ["_explosionType", "ClaymoreDirectionalMine_Remote_Ammo_Scripted"],
     ["_excludedClassnames", []],
-    ["_availableToFutureLaptops", false]
+    ["_availableToFutureLaptops", false],
+    ["_powerCost", 10]
 ];
 
 if (isNull _targetObject) exitWith {
@@ -51,120 +53,80 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_ACTIVATE", _al
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_DEACTIVATE", _allowExplosionDeactivate, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_TYPE", _explosionType, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXCLUDED", _excludedClassnames, true];
-_targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_STATE", false, true]; // false = off, true = on
+_targetObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "OFF", true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_DESTROYED", false, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_COST", _powerCost, true];
 
-// Create activation code
-private _activationCode = "
-params ['_computer', '_generator', '_execUserId'];
+// Generate unique device ID
+private _deviceId = (round (random 8999)) + 1000;
 
-if (isNull _generator) exitWith {
-    [_computer, 'Error: Generator object not found!'] call AE3_armaos_fnc_shell_stdout;
+// Get all devices
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
+private _allPowerGrids = _allDevices select 7;
+
+// Store device entry: [gridId, objectNetId, gridName, radius, allowExplosionActivate, allowExplosionDeactivate, explosionType, excludedClassnames, availableToFutureLaptops, powerCost, linkedComputers]
+_allPowerGrids pushBack [
+    _deviceId,
+    netId _targetObject,
+    _generatorName,
+    _radius,
+    _allowExplosionActivate,
+    _allowExplosionDeactivate,
+    _explosionType,
+    _excludedClassnames,
+    _availableToFutureLaptops,
+    _powerCost,
+    _linkedComputers apply {netId _x}
+];
+
+// Update device array
+_allDevices set [7, _allPowerGrids];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
+
+// Handle device linking
+private _linkCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_LINK_CACHE", createHashMap];
+
+// Get all existing computers for exclusion if availableToFuture is enabled
+private _allExistingComputers = [];
+if (_availableToFutureLaptops) then {
+    {
+        private _computerNetId = _x;
+        _allExistingComputers pushBack _computerNetId;
+    } forEach (keys _linkCache);
 };
 
-private _isDestroyed = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_DESTROYED', false];
-if (_isDestroyed) exitWith {
-    [_computer, 'Error: Generator was destroyed and cannot be reactivated!'] call AE3_armaos_fnc_shell_stdout;
-};
+// Link to specified computers
+{
+    private _computer = _x;
+    if (!isNull _computer) then {
+        private _computerNetId = netId _computer;
+        private _existingLinks = _linkCache getOrDefault [_computerNetId, []];
+        _existingLinks pushBack [DEVICE_TYPE_POWERGRID, _deviceId];
+        _linkCache set [_computerNetId, _existingLinks];
 
-private _radius = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_RADIUS', 5000];
-private _allowExplosion = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_ACTIVATE', false];
-private _explosionType = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_TYPE', 'ClaymoreDirectionalMine_Remote_Ammo_Scripted'];
-private _excludedClassnames = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXCLUDED', []];
+        // Remove from exclusion list if they were in it
+        _allExistingComputers = _allExistingComputers - [_computerNetId];
 
-private _allObjects = 9 allObjects 0;
-private _objectsInRadius = _allObjects select {(_x distance _generator) <= _radius};
-
-if (_excludedClassnames isNotEqualTo []) then {
-    _objectsInRadius = _objectsInRadius select {!(getText (configOf _x >> 'classname') in _excludedClassnames)};
-};
-
-private _lightsAffected = count _objectsInRadius;
-
-['ON', _objectsInRadius] remoteExec ['Root_fnc_powerGeneratorLights', 0, true];
-
-[_computer, format ['Generator activated: %1 lights turned ON within %2m radius', _lightsAffected, _radius]] call AE3_armaos_fnc_shell_stdout;
-
-_generator setVariable ['ROOT_CYBERWARFARE_GENERATOR_STATE', true, true];
-";
-
-// Create deactivation code
-private _deactivationCode = "
-params ['_computer', '_generator', '_execUserId'];
-
-if (isNull _generator) exitWith {
-    [_computer, 'Error: Generator object not found!'] call AE3_armaos_fnc_shell_stdout;
-};
-
-private _isDestroyed = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_DESTROYED', false];
-if (_isDestroyed) exitWith {
-    [_computer, 'Error: Generator was destroyed and cannot be reactivated!'] call AE3_armaos_fnc_shell_stdout;
-};
-
-private _radius = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_RADIUS', 50];
-private _allowExplosion = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_DEACTIVATE', false];
-private _explosionType = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_TYPE', 'G_40mm_HE'];
-private _excludedClassnames = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXCLUDED', []];
-
-private _allObjects = 9 allObjects 0;
-private _objectsInRadius = _allObjects select {(_x distance _generator) <= _radius};
-
-if (_excludedClassnames isNotEqualTo []) then {
-    _objectsInRadius = _objectsInRadius select {!(getText (configOf _x >> 'classname') in _excludedClassnames)};
-};
-
-private _lightsAffected = count _objectsInRadius;
-
-['OFF', _objectsInRadius] remoteExec ['Root_fnc_powerGeneratorLights', 0, true];
-
-if (_allowExplosion) then {
-    private _generatorPosition = getPosATL _generator;
-    private _explosion = _explosionType createVehicle _generatorPosition;
-    _generator setVariable ['ROOT_CYBERWARFARE_GENERATOR_DESTROYED', true, true];
-    [_computer, format ['WARNING: Generator overloaded! All objects requiring electricity within %2m radius affected.', _lightsAffected, _radius]] call AE3_armaos_fnc_shell_stdout;
-    private _surround_pos = [(_generatorPosition select 0) + random [-10, 0, 10], (_generatorPosition select 1) + random [-10, 0, 10], (_generatorPosition select 2) + random [0, 1.5, 3]];
-    private _sparkObj = createVehicle ['Sign_Sphere10cm_F', _surround_pos, [], 0, 'CAN_COLLIDE'];
-    _sparkObj hideObjectGlobal true;
-    for '_i' from 1 to 5 do {
-        private _effect = '#particlesource' createVehicleLocal _surround_pos;
-        _sparkObj setPos _surround_pos;
-        _surround_pos = [(_generatorPosition select 0) + random [-10, 0, 10], (_generatorPosition select 1) + random [-10, 0, 10], (_generatorPosition select 2) + random [0, 1.5, 3]];
-        _claymore = 'ClaymoreDirectionalMine_Remote_Ammo_Scripted' createVehicle _surround_pos;
-        _claymore setDamage 1;
-        _effect setParticleParams [
-            ['\A3\data_f\ParticleEffects\Universal\Universal', 16, 0, 1],
-            '', 'Billboard', 1,
-            1.2,
-            0.15,
-            [0, 0, 0.2],
-            0.1,
-            0.05,
-            0.1,
-            0.3,
-            [1, 0.7, 0.2, 1],
-            [0.1],
-            0.5,
-            0.1,
-            '', '',
-            _sparkObj
-        ];
-        _effect setDropInterval 0.01;
-        uiSleep (random[0.2, 0.3, 0.4]);
-        deleteVehicle _effect;
-        deleteVehicle _claymore;
+        // Broadcast event
+        ["root_cyberwarfare_deviceLinked", [_computerNetId, DEVICE_TYPE_POWERGRID, _deviceId]] call CBA_fnc_serverEvent;
     };
-    deleteVehicle _sparkObj;
-} else {
-    [_computer, format ['Generator deactivated: %1 lights turned OFF within %2m radius', _lightsAffected, _radius]] call AE3_armaos_fnc_shell_stdout;
-    _generator setVariable ['ROOT_CYBERWARFARE_GENERATOR_STATE', false, true];
+} forEach _linkedComputers;
+
+// Update link cache
+missionNamespace setVariable ["ROOT_CYBERWARFARE_LINK_CACHE", _linkCache, true];
+
+// If available to future laptops, add to public devices with exclusion list
+if (_availableToFutureLaptops) then {
+    private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
+    _publicDevices pushBack [DEVICE_TYPE_POWERGRID, _deviceId, _allExistingComputers];
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
 };
-";
 
-// Store these codes on the object itself
-_targetObject setVariable ["ROOT_CYBERWARFARE_ACTIVATIONCODE", _activationCode, true];
-_targetObject setVariable ["ROOT_CYBERWARFARE_DEACTIVATIONCODE", _deactivationCode, true];
-_targetObject setVariable ["ROOT_CYBERWARFARE_AVAILABLE_FUTURE", _availableToFutureLaptops, true];
+// Sync variables
+publicVariable "ROOT_CYBERWARFARE_ALL_DEVICES";
+publicVariable "ROOT_CYBERWARFARE_LINK_CACHE";
+if (_availableToFutureLaptops) then {
+    publicVariable "ROOT_CYBERWARFARE_PUBLIC_DEVICES";
+};
 
-// Register as custom device using existing addDeviceZeusMain
-[_targetObject, _execUserId, _linkedComputers, true, _generatorName, _activationCode, _deactivationCode, _availableToFutureLaptops] call FUNC(addDeviceZeusMain);
-
-LOG_INFO_1("Power Generator added: %1",_generatorName);
+LOG_INFO_1("Power Grid added: %1",_generatorName);

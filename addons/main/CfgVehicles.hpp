@@ -16,6 +16,14 @@ class CfgVehicles {
 		function = "Root_fnc_addDeviceZeus";
 		displayName = "Add Hackable Object";
 	};
+	class ROOT_CyberWarfareAddCustomDeviceZeus: zen_modules_moduleBase {
+		author = "Root";
+		_generalMacro = "ROOT_CyberWarfareAddCustomDeviceZeus";
+		curatorCanAttach = 1;
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_addCustomDeviceZeus";
+		displayName = "Add Custom Device";
+	};
 	class ROOT_CyberWarfareModifyPowerZeus: zen_modules_moduleBase {
 		author = "Root";
 		_generalMacro = "ROOT_CyberWarfareModifyPowerZeus";
@@ -54,6 +62,14 @@ class CfgVehicles {
 		category = "ROOT_CYBERWARFARE";
 		function = "Root_fnc_addPowerGeneratorZeus";
 		displayName = "Add Power Generator";
+	};
+	class ROOT_CyberWarfareCopyDeviceLinksZeus: zen_modules_moduleBase {
+		author = "Root";
+		_generalMacro = "ROOT_CyberWarfareCopyDeviceLinksZeus";
+		curatorCanAttach = 1;
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_copyDeviceLinksZeus";
+		displayName = "Copy Device Links";
 	};
 
 	// 3DEN Editor Modules

@@ -157,6 +157,12 @@
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_ABORTED">
             <English>Aborted</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_COMPLETE">
+            <English>Copied %1 device links from %2 to %3</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_SUCCESS">
+            <English>Device Links Copied!</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_ADDED">
             <English>Root Cyber Warfare: Added Hacking Tools to Path: %1</English>
         </Key>
@@ -165,6 +171,24 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_INVALID_PATH_TYPE">
             <English>Invalid path parameter type. Expected string, got %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_INVALID_TARGET">
+            <English>Invalid target! Please point at a laptop or device.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_NO_DEVICE_LINKS">
+            <English>No laptops with device links found!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_POINT_TO_TARGET">
+            <English>Now point at the target laptop to copy links to...</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_SAME_LAPTOP_ERROR">
+            <English>Source and target cannot be the same laptop!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_SOURCE_LAPTOP_NOT_FOUND">
+            <English>Source laptop not found!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_TARGET_LAPTOP_NOT_FOUND">
+            <English>Target laptop not found!</English>
         </Key>
     </Package>
 </Project>

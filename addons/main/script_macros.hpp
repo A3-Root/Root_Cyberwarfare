@@ -42,6 +42,9 @@
 #ifndef DEVICE_TYPE_VEHICLE
     #define DEVICE_TYPE_VEHICLE 7       // Vehicles (alarm, doors, etc.)
 #endif
+#ifndef DEVICE_TYPE_POWERGRID
+    #define DEVICE_TYPE_POWERGRID 8     // Power generators (light control in radius)
+#endif
 
 // ============================================================================
 // Device Cache Keys
@@ -69,6 +72,9 @@
 #endif
 #ifndef CACHE_KEY_VEHICLES
     #define CACHE_KEY_VEHICLES "vehicles"
+#endif
+#ifndef CACHE_KEY_POWERGRIDS
+    #define CACHE_KEY_POWERGRIDS "powerGrids"
 #endif
 
 // ============================================================================
@@ -195,9 +201,9 @@
     #define VALIDATE_COMPUTER(computer) (!isNull computer && computer getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false])
 #endif
 
-// Validates that a device type number is within valid range (1-7)
+// Validates that a device type number is within valid range (1-8)
 #ifndef VALIDATE_DEVICE_TYPE
-    #define VALIDATE_DEVICE_TYPE(type) (type >= DEVICE_TYPE_DOOR && type <= DEVICE_TYPE_VEHICLE)
+    #define VALIDATE_DEVICE_TYPE(type) (type >= DEVICE_TYPE_DOOR && type <= DEVICE_TYPE_POWERGRID)
 #endif
 
 // ============================================================================

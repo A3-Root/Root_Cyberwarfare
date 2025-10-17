@@ -19,6 +19,7 @@ class CfgFunctions {
 			class customDevice {};
 			class changeVehicleParams {};
 			class listDevicesInSubnet {};
+			class powerGridControl {};
 		};
 
 		class GPS {
@@ -42,6 +43,8 @@ class CfgFunctions {
 			file = "\z\root_cyberwarfare\addons\main\functions\zeus";
 			class addDeviceZeus {};
 			class addDeviceZeusMain {};
+			class addCustomDeviceZeus {};
+			class addCustomDeviceZeusMain {};
 			class addDatabaseZeus {};
 			class addDatabaseZeusMain {};
 			class addGPSTrackerZeus {};
@@ -53,6 +56,8 @@ class CfgFunctions {
 			class modifyPowerZeus {};
 			class addHackingToolsZeus {};
 			class addHackingToolsZeusMain {};
+			class copyDeviceLinksZeus {};
+			class copyDeviceLinksZeusMain {};
 		};
 
 		class Utility {
@@ -64,6 +69,7 @@ class CfgFunctions {
 			class cacheDeviceLinks {};
 			class removePower {};
 			class localSoundBroadcast {};
+			class powerGeneratorLights {};
 		};
 
 		class Eden {

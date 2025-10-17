@@ -80,6 +80,7 @@ if (isServer) then {
     _deviceCache set [CACHE_KEY_CUSTOM, []];
     _deviceCache set [CACHE_KEY_GPS_TRACKERS, []];
     _deviceCache set [CACHE_KEY_VEHICLES, []];
+    _deviceCache set [CACHE_KEY_POWERGRIDS, []];
 
     // Store in global namespace with network sync
     missionNamespace setVariable [GVAR_DEVICE_CACHE, _deviceCache, true];
@@ -99,10 +100,10 @@ if (isServer) then {
     };
 
     // Initialize legacy ALL_DEVICES array for backward compatibility (only if it doesn't already exist)
-    // Structure: [doors, lights, drones, databases, custom, gpsTrackers, vehicles]
+    // Structure: [doors, lights, drones, databases, custom, gpsTrackers, vehicles, powerGrids]
     // 3DEN modules may have already populated this during mission initialization
     if (isNil "ROOT_CYBERWARFARE_ALL_DEVICES") then {
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []], true];
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []], true];
     };
 
     publicVariable "ROOT_CYBERWARFARE_ALL_DEVICES";

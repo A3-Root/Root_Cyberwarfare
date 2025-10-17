@@ -88,15 +88,15 @@ if (_vehicleIDNum != 0) then {
                 if (_action == "battery") then {
                     _value = parseNumber _value;
                     if (_value < 1) then {
-                        _vehicleObject setFuel 0;
+                        [_vehicleObject, 0] remoteExec ["setFuel", _vehicleObject];
                         _invalidOption = false;
                     } else {
                         if (_value < 101) then {
                             _value = _value / 100;
-                            _vehicleObject setFuel _value;
+                            [_vehicleObject, _value] remoteExec ["setFuel", _vehicleObject];
                             _invalidOption = false;
                         } else {
-                            _vehicleObject setDamage 1;
+                            [_vehicleObject, 1] remoteExec ["setDamage", _vehicleObject];
                             _invalidOption = false;
                         };
                     };
@@ -106,11 +106,11 @@ if (_vehicleIDNum != 0) then {
                     _value = parseNumber _value;
                     private _vel = velocity _vehicleObject;
                     private _dir = getDir _vehicleObject;
-                    _vehicleObject setVelocity [
+                    [_vehicleObject, [
                         (_vel select 0) + (sin _dir * _value),
                         (_vel select 1) + (cos _dir * _value),
                         (_vel select 2)
-                    ];
+                    ]] remoteExec ["setVelocity", _vehicleObject];
                     _invalidOption = false;
                 };
 
@@ -135,7 +135,7 @@ if (_vehicleIDNum != 0) then {
                                 if (_newSpeed < _targetSpeed) then {_newSpeed = _targetSpeed};
                                 private _dir = if (_speed > 0.001) then { [(_hVel select 0) / _speed, (_hVel select 1) / _speed, 0] } else { [0,0,0] };
                                 private _newVel = [(_dir select 0) * _newSpeed, (_dir select 1) * _newSpeed, _vel select 2];
-                                _vehicleObject setVelocity _newVel;
+                                [_vehicleObject, _newVel] remoteExec ["setVelocity", _vehicleObject];
                                 uiSleep 0.02;
                             };
                         };
@@ -176,11 +176,11 @@ if (_vehicleIDNum != 0) then {
 
                 if (_action == "engine") then {
                     if (_value in ["on", "ON"]) then {
-                        _vehicleObject engineOn true;
+                        [_vehicleObject, true] remoteExec ["engineOn", _vehicleObject];
                         _invalidOption = false;
                     };
                     if (_value in ["OFF", "off"]) then {
-                        _vehicleObject engineOn false;
+                        [_vehicleObject, false] remoteExec ["engineOn", _vehicleObject];
                         _invalidOption = false;
                     };
                 };

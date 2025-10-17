@@ -21,7 +21,7 @@
 params['_owner', '_computer', '_nameOfVariable', '_commandPath', '_type'];
 
 private _string = "";
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
 private _allDoors = _allDevices select 0;
 private _allLights = _allDevices select 1;
 private _allDrones = _allDevices select 2;
@@ -29,6 +29,7 @@ private _allDatabases = _allDevices select 3;
 private _allCustom = _allDevices select 4;
 private _allGpsTrackers = _allDevices select 5;
 private _allVehicles = _allDevices select 6;
+private _allPowerGrids = _allDevices select 7;
 
 // Filter devices based on accessibility
 private _accessibleDoors = _allDoors select { 
@@ -57,8 +58,12 @@ private _accessibleGpsTrackers = _allGpsTrackers select {
     [_computer, 6, _deviceId, _commandPath] call Root_fnc_isDeviceAccessible 
 };
 
-private _accessibleVehicles = _allVehicles select { 
-    [_computer, 7, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible 
+private _accessibleVehicles = _allVehicles select {
+    [_computer, 7, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible
+};
+
+private _accessiblePowerGrids = _allPowerGrids select {
+    [_computer, 8, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible
 };
 
 if (_type in ["doors", "all", "a"]) then {
@@ -240,6 +245,23 @@ if (_type in ["vehicles", "all", "a"]) then {
             _string = format ["    %1 - %2 (%3) - %4 @ %5", _vehicleId, _vehicleName, _displayName, _featureString, _mapGridPos];
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         } forEach _accessibleVehicles;
+    };
+};
+
+if (_type in ["powergrids", "all", "a"]) then {
+    if (_accessiblePowerGrids isNotEqualTo []) then {
+        _string = format ["Power Grids:"];
+        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        {
+            _x params ["_gridId", "_objectNetId", "_gridName", "_radius", "_allowExplosionActivate", "_allowExplosionDeactivate", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops", "_powerCost", "_linkedComputers"];
+            private _gridObject = objectFromNetId _objectNetId;
+            private _mapGridPos = mapGridPosition _gridObject;
+            private _displayName = getText (configOf _gridObject >> "displayName");
+            private _currentState = _gridObject getVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "OFF"];
+            private _currentStateColor = ["#fa4c58", "#8ce10b"] select (_currentState == "ON");
+            _string = format ["    %1 - %2 (%3) - Radius: %4m @ %5 - ", _gridId, _gridName, _displayName, _radius, _mapGridPos];
+            [_computer, [[_string, [_currentState, _currentStateColor]]]] call AE3_armaos_fnc_shell_stdout;
+        } forEach _accessiblePowerGrids;
     };
 };
 

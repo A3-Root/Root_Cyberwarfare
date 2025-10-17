@@ -22,7 +22,7 @@
 
 params ["_entity", ["_path", "/rubberducky/tools", [""]], ["_execUserId", 0, [0]], ["_customLaptopName", "", [""]], ["_backdoorScriptPrefix", "", [""]]];
 
-private ["_guide", "_devices", "_door", "_light", "_changedrone", "_disabledrone", "_download", "_custom", "_gpstrack", "_vehicle"];
+private ["_guide", "_devices", "_door", "_light", "_changedrone", "_disabledrone", "_download", "_custom", "_gpstrack", "_vehicle", "_powergrid"];
 
 // Validate _path is a string
 if (_path isEqualType objNull || {_path isEqualType []}) exitWith {
@@ -54,6 +54,7 @@ _download = _result + "/download";
 _custom = _result + "/custom";
 _gpstrack = _result + "/gpstrack";
 _vehicle = _result + "/vehicle";
+_powergrid = _result + "/powergrid";
 
 
 
@@ -71,6 +72,7 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
     _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "custom");
     _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "gpstrack");
     _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "vehicle");
+    _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "powergrid");
     _entity setVariable ["ROOT_CYBERWARFARE_BACKDOOR_FUNCTION", _currentBackdoorPaths, true];
     _result = _result + "/" + _backdoorScriptPrefix;
     _guide = _result + "guide";
@@ -83,6 +85,7 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
     _custom = _result + "custom";
     _gpstrack = _result + "gpstrack";
     _vehicle = _result + "vehicle";
+    _powergrid = _result + "powergrid";
 } else {
     if (_execUserId == 0) then {
         _execUserId = owner _entity;
@@ -112,6 +115,8 @@ private _content = "
     Type 'gpstrack TrackerID' to start tracking a GPS target. Ex: 'gpstrack 2421'
             .
     Type 'vehicle VehicleID HackType Value' to hack a vehicle. Ex: 'vehicle 1337 battery 9000' or vehicle 1337 engine off'
+            .
+    Type 'powergrid GridID action' to control a power grid. Actions: on, off, overload. Ex: 'powergrid 1234 on' or 'powergrid 1234 overload'
 ";
 
 [_entity, _guide, _content, false, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
@@ -433,5 +438,40 @@ _content = "
     };
 ";
 [_entity, _vehicle, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+
+_content = "
+    params['_computer', '_options', '_commandName'];
+
+    private _commandOpts = [];
+    private _commandSyntax =
+    [
+        [
+            ['command', _commandName, true, false],
+            ['path', 'gridId', true, false],
+            ['path', 'action', true, false]
+        ]
+    ];
+    private _commandSettings = [_commandName, _commandOpts, _commandSyntax];
+
+    [] params ([_computer, _options, _commandSettings] call AE3_armaos_fnc_shell_getOpts);
+
+    if (!_ae3OptsSuccess) exitWith {};
+
+    private _gridId = (_ae3OptsThings select 0);
+    private _action = (_ae3OptsThings select 1);
+
+    private _owner = clientOwner;
+
+    private _nameOfVariable = 'ROOT_CYBERWARFARE_POWERGRID-' + "+ _computerNetIdString +";
+
+    missionNamespace setVariable [_nameOfVariable, false, true];
+    [_owner, _computer, _nameOfVariable, _gridId, _action, _commandName] remoteExec ['Root_fnc_powerGridControl', 2];
+    private _tStart = time;
+    waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
+    if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
+        [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
+    };
+";
+[_entity, _powergrid, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
 
 [format [localize "STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_ADDED", _result]] remoteExec ["systemChat", _execUserId];

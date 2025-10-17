@@ -1,6 +1,6 @@
 /*
  * Author: Root
- * Zeus module to add a hackable device (door/light/drone)
+ * Zeus module to add a custom device with activation/deactivation code
  *
  * Arguments:
  * 0: _logic <OBJECT> - Zeus logic module
@@ -9,7 +9,7 @@
  * None
  *
  * Example:
- * [_logic] call Root_fnc_addDeviceZeus;
+ * [_logic] call Root_fnc_addCustomDeviceZeus;
  *
  * Public: No
  */
@@ -38,6 +38,9 @@ private _allComputers = [];
 } forEach (24 allObjects 1);
 
 private _dialogControls = [
+    ["EDIT", ["Custom Device Name", "Name that will appear in the terminal for this device"], ["Custom Device"]],
+    ["EDIT:CODE", ["Activation Code", "Code to run in a SCHEDULED environment (spawn) when device is activated. The code is run on the player who activated the device. Default parameters ['_computer', '_customObject', '_playerNetID']"], ["hint str format ['Custom Activation triggered USING: %1 ---- ON: %2 ---- BY %3', getText (configOf (_this select 0) >> 'displayName'), getText (configOf (_this select 1) >> 'displayName'), name (_this select 2)];", {}, 7]],
+    ["EDIT:CODE", ["Deactivation Code", "Code to run in a SCHEDULED environment (spawn) when device is deactivated. The code is run on the player who deactivated the device. Default parameters ['_computer', '_customObject', '_playerNetID']"], ["hint str format ['Custom Deactivation triggered USING: %1 ---- ON: %2 ---- BY %3', getText (configOf (_this select 0) >> 'displayName'), getText (configOf (_this select 1) >> 'displayName'), name (_this select 2)];", {}, 7]],
     ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false]
 ];
 
@@ -48,19 +51,18 @@ private _dialogControls = [
 } forEach _allComputers;
 
 [
-    format ["Add Hackable Object - %1", getText (configOf _targetObject >> "displayName")], 
+    format ["Add Custom Device - %1", getText (configOf _targetObject >> "displayName")],
     _dialogControls,
-    // Fix the dialog result handler section:
     {
         params ["_results", "_args"];
         _args params ["_targetObject", "_execUserId", "_allComputers"];
 
-        // First result is the availability setting
-        _results params ["_availableToFutureLaptops"];
+        // First four results are the device configuration
+        _results params ["_customName", "_activationCode", "_deactivationCode", "_availableToFutureLaptops"];
 
         // The rest are checkbox values for each computer
         private _selectedComputers = [];
-        private _checkboxStartIndex = 1;
+        private _checkboxStartIndex = 4;
 
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
@@ -74,14 +76,14 @@ private _dialogControls = [
             _selectedComputers = _allComputers apply { _x select 0 };
         };
 
-        // Call addDeviceZeusMain with treatAsCustom = false (doors/lights/drones only)
-        [_targetObject, _execUserId, _selectedComputers, false, "", "", "", _availableToFutureLaptops] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-        ["Hackable Object Added!"] call zen_common_fnc_showMessage;
-    }, 
+        // Call the new custom device main function
+        [_targetObject, _execUserId, _selectedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
+        ["Custom Device Added!"] call zen_common_fnc_showMessage;
+    },
     {
         ["Aborted"] call zen_common_fnc_showMessage;
         playSound "FD_Start_F";
-    }, 
+    },
     [_targetObject, _execUserId, _allComputers]
 ] call zen_dialog_fnc_create;
 
