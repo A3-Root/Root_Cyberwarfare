@@ -21,13 +21,14 @@ if (!isServer) exitWith {};
 
 // Get module attributes (convert number to boolean)
 private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DEVICES_PUBLIC", 1]) isEqualTo 1;
+private _makeUnbreachable = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DEVICES_UNBREACHABLE", 0]) isEqualTo 1;
 
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;
 
 // Separate laptops from devices
 private _laptops = _syncedObjects select {
-	typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3"]
+	typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"]
 };
 
 private _devices = _syncedObjects select {
@@ -60,8 +61,8 @@ if (_addToPublic) then {
 	private _execUserId = 2; // Server
 
 	// Call the existing Zeus main function
-	// Parameters: _targetObject, _execUserId, _linkedComputers, _treatAsCustom, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops
-	[_device, _execUserId, _linkedComputers, false, "", "", "", _availableToFutureLaptops] call FUNC(addDeviceZeusMain);
+	// Parameters: _targetObject, _execUserId, _linkedComputers, _treatAsCustom, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _makeUnbreachable
+	[_device, _execUserId, _linkedComputers, false, "", "", "", _availableToFutureLaptops, _makeUnbreachable] call FUNC(addDeviceZeusMain);
 
 } forEach _devices;
 

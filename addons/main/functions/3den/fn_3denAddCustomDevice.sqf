@@ -20,7 +20,7 @@ params ["_logic"];
 if (!isServer) exitWith {};
 
 // Get module attributes
-private _customName = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_NAME", "Power Generator"];
+private _customName = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_NAME", "Custom Device"];
 private _activationCode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_ACTIVATE", "// Example: Display Hint when triggered\nhint 'Custom device activated';"];
 private _deactivationCode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_DEACTIVATE", "// Example: Display Hint when triggered\nhint 'Custom device deactivated';"];
 private _addToPublic = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_PUBLIC", true];
@@ -30,7 +30,7 @@ private _syncedObjects = synchronizedObjects _logic;
 
 // Separate laptops from target objects
 private _laptops = _syncedObjects select {
-	typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3"]
+	typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"]
 };
 
 private _targets = _syncedObjects select {

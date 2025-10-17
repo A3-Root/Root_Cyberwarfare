@@ -26,7 +26,7 @@ player createDiarySubject [
 ];
 
 // =======================================================================
-// SECTION 12: TERMINAL MANAGEMENT
+// SECTION 14: TERMINAL MANAGEMENT
 // =======================================================================
 private _diaryTerminal = player createDiaryRecord [
 	"CyberTerminal",
@@ -61,7 +61,7 @@ private _diaryTerminal = player createDiaryRecord [
 ];
 
 // =======================================================================
-// SECTION 11: GPS OPERATIONS
+// SECTION 13: GPS OPERATIONS
 // =======================================================================
 private _diaryGPSTrack = player createDiaryRecord [
 	"CyberTerminal",
@@ -96,7 +96,7 @@ private _diaryGPSTrack = player createDiaryRecord [
 ];
 
 // =======================================================================
-// SECTION 10: DATA OPERATIONS
+// SECTION 12: DATA OPERATIONS
 // =======================================================================
 private _diaryData = player createDiaryRecord [
 	"CyberTerminal",
@@ -124,7 +124,7 @@ private _diaryData = player createDiaryRecord [
 ];
 
 // =======================================================================
-// SECTION 9: VEHICLE OPERATIONS
+// SECTION 11: VEHICLE OPERATIONS
 // =======================================================================
 private _diaryVehicles = player createDiaryRecord [
 	"CyberTerminal",
@@ -163,7 +163,7 @@ private _diaryVehicles = player createDiaryRecord [
 ];
 
 // =======================================================================
-// SECTION 8: DRONE OPERATIONS
+// SECTION 10: DRONE OPERATIONS
 // =======================================================================
 private _diaryDrones = player createDiaryRecord [
 	"CyberTerminal",
@@ -197,6 +197,44 @@ private _diaryDrones = player createDiaryRecord [
 	• Only one drone may respond to a command if multiple share the same ID.<br/>
 	• Changing allegiance can alter AI behavior instantly — verify before engaging.<br/>
 	• Deactivation (<font color='#FFFFFF'>disabledrone</font>) overloads the drone causing it to explode and as such, cannot be undone unless restarted.
+	</font>"],
+	taskNull, "", false
+];
+
+// =======================================================================
+// SECTION 9: POWER GRID CONTROL
+// =======================================================================
+private _diaryPowerGrid = player createDiaryRecord [
+	"CyberTerminal",
+	["Power Generator Control",
+	"<font color='#E67E22' size='14' face='PuristaBold'>POWER GRID MANAGEMENT</font><br/><br/>
+
+	<font color='#FFFFFF' face='EtelkaMonospacePro'>
+	The <font color='#3498DB'>powergrid</font> command allows you to control power generators that supply electricity to lighting systems within a defined radius.
+	Use this to disable entire sectors or restore power to areas.<br/><br/>
+
+	<font color='#3498DB'>Syntax:</font><br/>
+	powergrid [PowerGridID] [action]<br/><br/>
+
+	<font color='#3498DB'>Common Actions:</font><br/>
+	activate      // Turn on the power generator<br/>
+	deactivate    // Turn off the power generator<br/><br/>
+
+	<font color='#3498DB'>Examples:</font><br/>
+	powergrid 1234 activate    // Power on generator 1234<br/>
+	powergrid 5678 deactivate  // Cut power to generator 5678<br/>
+	powergrid a deactivate     // Shut down all accessible power grids<br/><br/>
+
+	<font color='#3498DB'>Beginner Tips:</font><br/>
+	• Use <font color='#FFFFFF'>devices powergrids</font> to list available power generators.<br/>
+	• Power generators control all lights within their configured radius.<br/>
+	• Some generators may trigger explosions when activated or deactivated.<br/>
+	• Deactivating a generator will turn off all lights in its coverage area.<br/>
+	• Power grids are different from individual lights — they control infrastructure.<br/><br/>
+
+	<font color='#E74C3C'>CAUTION:</font><br/>
+	• Some power generators are mission-critical — verify before deactivating.<br/>
+	• Explosion-enabled generators can cause collateral damage to nearby units.
 	</font>"],
 	taskNull, "", false
 ];
@@ -509,11 +547,12 @@ player createDiaryRecord [
 	" + createDiaryLink ["CyberTerminal", _diaryDevices, "5. Device Discovery (Listing Hackable Devices)"] + "<br/>
 	" + createDiaryLink ["CyberTerminal", _diaryDoors, "6. Door Control (Hacking Doors)"] + "<br/>
 	" + createDiaryLink ["CyberTerminal", _diaryLights, "7. Lighting Control (Hacking Lights)"] + "<br/>
-	" + createDiaryLink ["CyberTerminal", _diaryDrones, "8. Drone Operations (Hacking Drones)"] + "<br/>
-	" + createDiaryLink ["CyberTerminal", _diaryVehicles, "9. Vehicle Operations (Hacking Vehicles)"] + "<br/>
-	" + createDiaryLink ["CyberTerminal", _diaryData, "10. Data Operations (Downloading Files)"] + "<br/>
-	" + createDiaryLink ["CyberTerminal", _diaryGPSTrack, "11. GPS Operations (Tracking GPS)"] + "<br/>
-	" + createDiaryLink ["CyberTerminal", _diaryTerminal, "12. Terminal Management"] + "<br/>
+	" + createDiaryLink ["CyberTerminal", _diaryPowerGrid, "8. Power Generator Control (Power Grids)"] + "<br/>
+	" + createDiaryLink ["CyberTerminal", _diaryDrones, "9. Drone Operations (Hacking Drones)"] + "<br/>
+	" + createDiaryLink ["CyberTerminal", _diaryVehicles, "10. Vehicle Operations (Hacking Vehicles)"] + "<br/>
+	" + createDiaryLink ["CyberTerminal", _diaryData, "11. Data Operations (Downloading Files)"] + "<br/>
+	" + createDiaryLink ["CyberTerminal", _diaryGPSTrack, "12. GPS Operations (Tracking GPS)"] + "<br/>
+	" + createDiaryLink ["CyberTerminal", _diaryTerminal, "13. Terminal Management"] + "<br/>
 	</font>"],
 	taskNull, "", false
 ];

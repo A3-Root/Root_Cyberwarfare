@@ -178,9 +178,6 @@
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_NO_DEVICE_LINKS">
             <English>No laptops with device links found!</English>
         </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_POINT_TO_TARGET">
-            <English>Now point at the target laptop to copy links to...</English>
-        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_SAME_LAPTOP_ERROR">
             <English>Source and target cannot be the same laptop!</English>
         </Key>

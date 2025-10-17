@@ -17,13 +17,16 @@ class CfgPatches {
 			"ROOT_CyberWarfareAddGPSTrackerZeus",
 			"ROOT_CyberWarfareAddVehicleZeus",
 			"ROOT_CyberWarfareAddPowerGeneratorZeus",
+			"ROOT_CyberWarfareCopyDeviceLinksZeus",
+			"ROOT_CyberWarfareAddCustomDeviceZeus",
 			"ROOT_Module3DEN_AddHackingTools",
 			"ROOT_Module3DEN_AdjustPowerCost",
 			"ROOT_Module3DEN_AddDevices",
 			"ROOT_Module3DEN_AddDatabase",
 			"ROOT_Module3DEN_AddVehicle",
 			"ROOT_Module3DEN_AddGPSTracker",
-			"ROOT_Module3DEN_AddCustomDevice"
+			"ROOT_Module3DEN_AddCustomDevice",
+			"ROOT_Module3DEN_AddPowerGenerator"
 		};
 		requiredAddons[] = {
 			"A3_Modules_F_Curator",

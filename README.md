@@ -2,7 +2,7 @@
 
 A comprehensive cyberwarfare mod for Arma 3 that adds hacking mechanics, GPS tracking, device control, and network infiltration capabilities to enhance tactical gameplay.
 
-![Version](https://img.shields.io/badge/version-2.20.0-blue)
+![Version](https://img.shields.io/badge/version-2.20.1-blue)
 ![Build](https://img.shields.io/badge/Build-Passing-green)
 
 
@@ -17,8 +17,9 @@ Root's Cyber Warfare is a comprehensive modification for Arma 3 that introduces 
 - **Building Control**: Lock/unlock doors remotely, control lights
 - **Drone Hacking**: Change drone factions, disable enemy UAVs
 - **Vehicle Manipulation**: Control engine state, manipulate fuel/battery levels, lock/unlock doors, trigger alarms
+- **Power Grid Control**: Control lights within configurable radius with optional explosions
 - **Database Access**: Download classified files from networked computers
-- **Custom Devices**: Support for mission-specific hackable objects
+- **Custom Devices**: Support for mission-specific hackable objects with custom activation/deactivation scripts
 
 ### GPS Tracking System
 
@@ -36,21 +37,27 @@ Root's Cyber Warfare is a comprehensive modification for Arma 3 that introduces 
 
 ### Zeus Integration
 
-Curators get full control with 7 dedicated modules:
+Curators get full control with 9 dedicated modules:
 - Add hacking tools to any computer
-- Register devices (doors, lights, drones, databases, vehicles)
-- Attach GPS trackers
+- Register devices (doors, lights)
+- Register custom devices (custom scripted behaviors)
+- Register vehicles and drones (battery, speed, engine, faction control)
+- Register downloadable files with custom content
+- Attach GPS trackers with configurable tracking parameters
 - Configure power generators with radius-based light control
 - Modify power costs for hacking operations
-- Configure custom laptop names and access control
+- Modify device links between laptops (to prevent arma issues and a failsafe for laptops)
 
 ### Eden Editor Integration
 
-Mission makers can pre-configure hacking setups using 7 Eden modules:
+Mission makers can pre-configure hacking setups using 8 Eden modules:
 - Pre-install hacking tools on laptops
-- Pre-register hackable devices and link to specific laptops
+- Pre-register hackable objects (doors, lights) and link to specific laptops
+- Pre-register hackable vehicles and drones with configurable controls
+- Pre-register downloadable files with custom content
 - Configure GPS trackers before mission start
 - Set up custom devices with scripted behaviors
+- Configure power generators with radius-based light control
 - Adjust per-device power costs
 - Two-step workflow: Create device links in Eden, enable access in-game
 
@@ -97,8 +104,9 @@ vehicle 1337 engine off       # Disable vehicle #1337's engine
 1. Open Zeus interface
 2. Use custom modules under "Root's Cyberwarfare":
    - **Add Hacking Tools**: Install hacking capability on a laptop
-   - **Add Hackable Object**: Register doors, lights, drones, or custom devices
-   - **Add Hackable Vehicle**: Register vehicle with configurable controls
+   - **Add Hackable Object**: Register doors and lights
+   - **Add Custom Device**: Register custom devices with scripted activation/deactivation
+   - **Add Hackable Vehicle**: Register vehicles and drones with configurable controls (faction, battery, engine, etc.)
    - **Add Hackable File**: Register downloadable files with custom content
    - **Add GPS Tracker**: Attach GPS tracker with configurable tracking parameters
    - **Add Power Generator**: Create radius-based light control with optional explosions
@@ -180,6 +188,12 @@ Access via: Main Menu → Options → Addon Options → Root Cyber Warfare
 - `light <lightID|a> <on|off>` - Control building lights
   - Example: `light 3 off` - Turn off light #3
   - Example: `light a on` - Turn on all accessible lights
+
+### Power Grid Control
+- `powergrid <generatorID> <on|off|overload>` - Control power generators
+  - Example: `powergrid 1234 on` - Activate generator #1234 (turns on lights in radius)
+  - Example: `powergrid 5678 off` - Deactivate generator #5678 (turns off lights in radius)
+  - Example: `powergrid 4514 overload` - Overloads generator and turns off lights in radius (cannot be turned on/off again)
 
 ### Drone Hacking
 - `changedrone <droneID|a> <west|east|guer|civ>` - Change drone faction
@@ -453,6 +467,6 @@ This project is licensed under the APL-SA License - see [LICENSE](LICENSE) file 
 
 ---
 
-**Version**: 2.20.0
-**Last Updated**: 2025-10-12
+**Version**: 2.20.1
+**Last Updated**: 2025-10-18
 **Arma 3 Version**: 2.18+

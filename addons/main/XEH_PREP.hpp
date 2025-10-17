@@ -85,3 +85,4 @@ PREP(3denAddDatabase);
 PREP(3denAddVehicle);
 PREP(3denAddGPSTracker);
 PREP(3denAddCustomDevice);
+PREP(3denAddPowerGenerator);

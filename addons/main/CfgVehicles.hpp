@@ -112,7 +112,7 @@ class CfgVehicles {
 		};
 		class ModuleDescription: ModuleDescription {
 			description = "Synchronize this module to AE3 Laptop or USB Stick objects to add hacking tools to them.";
-			sync[] = {"Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3"};
+			sync[] = {"Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};
 
@@ -180,11 +180,18 @@ class CfgVehicles {
 				typeName = "BOOL";
 				defaultValue = 1;
 			};
+			class ROOT_CYBERWARFARE_3DEN_DEVICES_UNBREACHABLE: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_DEVICES_UNBREACHABLE";
+				displayName = "Make Unbreachable";
+				tooltip = "If checked, building doors cannot be breached by ACE explosives or lockpicking (only hackable)";
+				typeName = "BOOL";
+				defaultValue = 0;
+			};
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {
 			description = "Synchronize this module to buildings (with doors), drones, and lights to make them hackable.";
-			sync[] = {"House", "Building", "UAV", "Lamps_base_F", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3"};
+			sync[] = {"House", "Building", "UAV", "Lamps_base_F", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};
 
@@ -240,7 +247,7 @@ class CfgVehicles {
 		};
 		class ModuleDescription: ModuleDescription {
 			description = "Creates a hackable file/database. Synchronize to AE3 Laptop objects to link the file to specific computers.";
-			sync[] = {"Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3"};
+			sync[] = {"Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};
 
@@ -322,7 +329,7 @@ class CfgVehicles {
 		};
 		class ModuleDescription: ModuleDescription {
 			description = "Makes a vehicle hackable. Synchronize to vehicle objects and optionally to AE3 Laptop objects.";
-			sync[] = {"Car", "Tank", "Air", "Ship", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3"};
+			sync[] = {"Car", "Tank", "Air", "Ship", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};
 
@@ -397,7 +404,7 @@ class CfgVehicles {
 		};
 		class ModuleDescription: ModuleDescription {
 			description = "Attaches a GPS tracker to an object. Synchronize to the object to track and optionally to AE3 Laptop objects.";
-			sync[] = {"All", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3"};
+			sync[] = {"All", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};
 
@@ -417,7 +424,7 @@ class CfgVehicles {
 				displayName = "Custom Device Name";
 				tooltip = "Name that will appear in the terminal for this device";
 				typeName = "STRING";
-				defaultValue = """Power Generator""";
+				defaultValue = """Custom Device""";
 			};
 			class ROOT_CYBERWARFARE_3DEN_CUSTOM_ACTIVATE: Edit {
 				property = "ROOT_CYBERWARFARE_3DEN_CUSTOM_ACTIVATE";
@@ -448,7 +455,82 @@ hint 'Custom device deactivated';""";
 		};
 		class ModuleDescription: ModuleDescription {
 			description = "Creates a custom hackable device with programmable activation/deactivation code.";
-			sync[] = {"All", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3"};
+			sync[] = {"All", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
+		};
+	};
+
+	class ROOT_Module3DEN_AddPowerGenerator: Module_F {
+		scope = 2;
+		displayName = "Add Power Generator";
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_3denAddPowerGenerator";
+		functionPriority = 4;
+		isGlobal = 0;
+		isTriggerActivated = 0;
+		isDisposable = 1;
+		is3DEN = 0;
+		class Attributes: AttributesBase {
+			class ROOT_CYBERWARFARE_3DEN_POWERGRID_NAME: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_NAME";
+				displayName = "Generator Name";
+				tooltip = "Name that will appear in the terminal for this power generator";
+				typeName = "STRING";
+				defaultValue = """Power Generator""";
+			};
+			class ROOT_CYBERWARFARE_3DEN_POWERGRID_RADIUS: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_RADIUS";
+				displayName = "Effect Radius (meters)";
+				tooltip = "Radius in meters to affect lights";
+				typeName = "NUMBER";
+				defaultValue = 1000;
+			};
+			class ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_ACTIVATE: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_ACTIVATE";
+				displayName = "Allow Explosion on Activation";
+				tooltip = "Create explosion when the generator is activated";
+				typeName = "BOOL";
+				defaultValue = 0;
+			};
+			class ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_DEACTIVATE: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_DEACTIVATE";
+				displayName = "Allow Explosion on Deactivation";
+				tooltip = "Create explosion when the generator is deactivated";
+				typeName = "BOOL";
+				defaultValue = 0;
+			};
+			class ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_TYPE: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_TYPE";
+				displayName = "Explosion Type";
+				tooltip = "Ammo classname for explosion (e.g., HelicopterExploSmall, Bo_GBU12_LGB, Sh_155mm_AMOS)";
+				typeName = "STRING";
+				defaultValue = """HelicopterExploSmall""";
+			};
+			class ROOT_CYBERWARFARE_3DEN_POWERGRID_EXCLUDED: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_EXCLUDED";
+				displayName = "Excluded Light Classnames";
+				tooltip = "Comma-separated list of light classnames to exclude from power control";
+				typeName = "STRING";
+				defaultValue = """""";
+			};
+			class ROOT_CYBERWARFARE_3DEN_POWERGRID_COST: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_COST";
+				displayName = "Power Cost";
+				tooltip = "Power cost in Wh per operation";
+				typeName = "NUMBER";
+				defaultValue = 10;
+			};
+			class ROOT_CYBERWARFARE_3DEN_POWERGRID_PUBLIC: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_PUBLIC";
+				displayName = "Add to Public Device List";
+				tooltip = "If checked, this power generator will be accessible by all laptops (current and future)";
+				typeName = "BOOL";
+				defaultValue = 1;
+			};
+			class ModuleDescription: ModuleDescription{};
+		};
+		class ModuleDescription: ModuleDescription {
+			description = "Creates a power generator that controls lights within a radius. Synchronize to generator object and optionally to AE3 Laptop objects.";
+			sync[] = {"All", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};
 

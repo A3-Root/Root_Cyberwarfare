@@ -12,17 +12,18 @@
  * 5: _activationCode <STRING> (Optional) - Code to run on activation, default: ""
  * 6: _deactivationCode <STRING> (Optional) - Code to run on deactivation, default: ""
  * 7: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ * 8: _makeUnbreachable <BOOLEAN> (Optional) - Prevent non-hacking breaching methods, default: false
  *
  * Return Value:
  * None
  *
  * Example:
- * [_obj, 0, [], true, "Generator", "", "", false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+ * [_obj, 0, [], true, "Generator", "", "", false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
  *
  * Public: No
  */
 
-params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_treatAsCustom", false], ["_customName", ""], ["_activationCode", ""], ["_deactivationCode", ""], ["_availableToFutureLaptops", false]];
+params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_treatAsCustom", false], ["_customName", ""], ["_activationCode", ""], ["_deactivationCode", ""], ["_availableToFutureLaptops", false], ["_makeUnbreachable", false]];
 
 if (_execUserId == 0) then {
     _execUserId = owner _targetObject;
@@ -127,6 +128,12 @@ if (_treatAsCustom) then {
                 };
             };
             _typeofhackable = 1;
+
+            // Store unbreachable flag on building
+            if (_makeUnbreachable) then {
+                _building setVariable ["ROOT_CYBERWARFARE_UNBREACHABLE", true, true];
+            };
+
             _allDoors pushBack [_deviceId, _buildingNetId, _buildingDoors, _linkedComputers, _activationCode, _deactivationCode, _availableToFutureLaptops];
         };
     };
@@ -245,7 +252,8 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_CONNECTED", true, true];
 
 switch (_typeofhackable) do {
     case 1: {
-        [format ["Root Cyber Warfare: Building (%1) added (ID: %2)! %3.", _displayName, _deviceId, _availabilityText]] remoteExec ["systemChat", _execUserId];
+        private _unbreachableText = ["", " [UNBREACHABLE]"] select _makeUnbreachable;
+        [format ["Root Cyber Warfare: Building (%1) added (ID: %2)! %3.%4", _displayName, _deviceId, _availabilityText, _unbreachableText]] remoteExec ["systemChat", _execUserId];
     };
     case 2: {
         [format ["Root Cyber Warfare: Light (%2) Added! ID: %1. %3.", _deviceId, _displayName, _availabilityText]] remoteExec ["systemChat", _execUserId];

@@ -147,23 +147,12 @@ if (_vehicleIDNum != 0) then {
 
                 if (_action == "lights") then {
                     _invalidOption = false;
-                    if ((crew _vehicleObject select { alive _x }) isEqualTo []) then {
-                        if ((_value in ["on", "ON"]) && !(isLightOn _vehicleObject)) then {
-                            private _execId = clientOwner;
-                            [_vehicleObject, _execId] remoteExec ["setOwner", 2];
-                            uiSleep 1;
-                            _vehicleObject setPilotLight true;
-                        } else {
-                            if ((_value in ["off", "OFF"]) && (isLightOn _vehicleObject)) then {
-                                private _execId = clientOwner;
-                                [_vehicleObject, _execId] remoteExec ["setOwner", 2];
-                                uiSleep 1;
-                                _vehicleObject setPilotLight false;
-                            };
-                        };
+                    if ((_value in ["on", "ON"]) && !(isLightOn _vehicleObject)) then {
+                        [_vehicleObject, true] remoteExec ["setPilotLight", _vehicleObject];
                     } else {
-                        _string = format ['Unable to control lights. Physical intervention detected on hack change request.'];
-                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                        if ((_value in ["off", "OFF"]) && (isLightOn _vehicleObject)) then {
+                            [_vehicleObject, false] remoteExec ["setPilotLight", _vehicleObject];
+                        };
                     };
                 };
 

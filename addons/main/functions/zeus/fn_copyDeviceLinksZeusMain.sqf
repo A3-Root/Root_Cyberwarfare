@@ -86,80 +86,63 @@ if (_mergeMode) then {
     _removePreviousLinks = false;
 };
 
-// Get all device arrays
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-private _allDoors = _allDevices select 0;
-private _allLights = _allDevices select 1;
-private _allDrones = _allDevices select 2;
-private _allCustom = _allDevices select 4;
-private _allGPSTrackers = _allDevices select 5;
-private _allVehicles = _allDevices select 6;
-private _allPowerGrids = _allDevices select 7;
+// Get source laptop's device links from link cache
+private _linkCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_LINK_CACHE", createHashMap];
+private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
+
+// Get source laptop's accessible devices (all types)
+private _sourceLinks = _linkCache getOrDefault [_sourceNetId, []];
+private _targetLinks = _linkCache getOrDefault [_targetLaptopNetId, []];
 
 private _devicesModified = 0;
 
-// Helper function to process device links
-private _fnc_updateDeviceLinks = {
-    params ["_deviceArray", "_deviceIndex"];
+// Copy each device link from source to target
+{
+    _x params ["_deviceType", "_deviceId"];
 
-    {
-        private _device = _x;
-        private _linkedComputers = _device select _deviceIndex;
-        private _availableToFuture = _device select (_deviceIndex + 1);
+    // Skip if target already has this device
+    if !([_deviceType, _deviceId] in _targetLinks) then {
+        // Check if device is in public devices (available to future)
+        private _isPublic = _publicDevices findIf {
+            _x params ["_type", "_id", "_excluded"];
+            _type == _deviceType && _id == _deviceId
+        } != -1;
 
-        // Skip devices available to future laptops (they auto-link)
-        if (_availableToFuture) then { continue };
+        // Only copy if not a public device (those auto-link to new laptops)
+        if !(_isPublic) then {
+            _targetLinks pushBack [_deviceType, _deviceId];
+            _devicesModified = _devicesModified + 1;
 
-        // Check if source laptop has access
-        if (_sourceNetId in _linkedComputers) then {
-            // Add target laptop if not already present
-            if !(_targetLaptopNetId in _linkedComputers) then {
-                _linkedComputers pushBack _targetLaptopNetId;
-                _devicesModified = _devicesModified + 1;
-            };
-        } else {
-            // Source doesn't have access - remove target if removing previous links
-            if (_removePreviousLinks && {_targetLaptopNetId in _linkedComputers}) then {
-                _linkedComputers deleteAt (_linkedComputers find _targetLaptopNetId);
-            };
+            // Broadcast device link event
+            ["root_cyberwarfare_deviceLinked", [_targetLaptopNetId, _deviceType, _deviceId]] call CBA_fnc_serverEvent;
         };
+    };
+} forEach _sourceLinks;
 
-        // Update device entry
-        _device set [_deviceIndex, _linkedComputers];
-    } forEach _deviceArray;
+// Remove previous links if requested and not in merge mode
+if (_removePreviousLinks && !_mergeMode) then {
+    private _linksToRemove = [];
+    {
+        _x params ["_deviceType", "_deviceId"];
+
+        // Remove if not in source links
+        if !([_deviceType, _deviceId] in _sourceLinks) then {
+            _linksToRemove pushBack _x;
+
+            // Broadcast device unlink event
+            ["root_cyberwarfare_deviceUnlinked", [_targetLaptopNetId, _deviceType, _deviceId]] call CBA_fnc_serverEvent;
+        };
+    } forEach _targetLinks;
+
+    // Remove links
+    {
+        _targetLinks deleteAt (_targetLinks find _x);
+    } forEach _linksToRemove;
 };
 
-// Process each device type
-// Doors: [_deviceId, _netId, _buildingName, _doorNumbers, _availableToFutureLaptops, _powerCost, _linkedComputers]
-[_allDoors, 6] call _fnc_updateDeviceLinks;
-
-// Lights: [_deviceId, _netId, _lightName, _availableToFutureLaptops, _powerCost, _linkedComputers]
-[_allLights, 5] call _fnc_updateDeviceLinks;
-
-// Drones: [_deviceId, _netId, _droneName, _availableToFutureLaptops, _powerCost, _linkedComputers]
-[_allDrones, 5] call _fnc_updateDeviceLinks;
-
-// Custom: [_deviceId, _netId, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _linkedComputers]
-[_allCustom, 6] call _fnc_updateDeviceLinks;
-
-// GPS Trackers: [_deviceId, _netId, _trackerName, _availableToFutureLaptops, _powerCost, _linkedComputers]
-[_allGPSTrackers, 5] call _fnc_updateDeviceLinks;
-
-// Vehicles: [_deviceId, _netId, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost, _linkedComputers]
-[_allVehicles, 11] call _fnc_updateDeviceLinks;
-
-// PowerGrids: [_deviceId, _netId, _gridName, _radius, _allowExplosionActivate, _allowExplosionDeactivate, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost, _linkedComputers]
-[_allPowerGrids, 10] call _fnc_updateDeviceLinks;
-
-// Update global device storage
-_allDevices set [0, _allDoors];
-_allDevices set [1, _allLights];
-_allDevices set [2, _allDrones];
-_allDevices set [4, _allCustom];
-_allDevices set [5, _allGPSTrackers];
-_allDevices set [6, _allVehicles];
-_allDevices set [7, _allPowerGrids];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
+// Update link cache
+_linkCache set [_targetLaptopNetId, _targetLinks];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_LINK_CACHE", _linkCache, true];
 
 // Handle name change (skip if newly created laptop)
 if (!_createNew) then {
@@ -176,9 +159,6 @@ if (!_createNew) then {
         // else: keep target's current name (nameHandling == 0)
     };
 };
-
-// Trigger device link cache update for target laptop
-[_targetLaptop] call FUNC(cacheDeviceLinks);
 
 // Log and feedback
 private _sourceName = _sourceLaptop getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", "Source"];

@@ -1,9 +1,16 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Server-side function to add a hackable vehicle to the network
+ * Server-side function to add a hackable vehicle or drone to the network
  *
  * Arguments:
+ * For Drones (when called with 4 parameters):
+ * 0: _targetObject <OBJECT> - The drone to make hackable
+ * 1: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
+ * 2: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
+ * 3: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ *
+ * For Vehicles (when called with 12 parameters):
  * 0: _targetObject <OBJECT> - The vehicle to make hackable
  * 1: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
  * 2: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
@@ -22,15 +29,32 @@
  *
  * Example:
  * [_vehicle, 0, [], "Car1", true, true, false, false, true, false, false, 2] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+ * [_drone, 0, [], false] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
  *
  * Public: No
  */
 
-params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], "_vehicleName", ["_allowFuel", false], ["_allowSpeed", false], ["_allowBrakes", false], ["_allowLights", false], ["_allowEngine", true], ["_allowAlarm", false], ["_availableToFutureLaptops", false], ["_powerCost", 2]];
+// Detect if this is a drone call (4 params) or vehicle call (12 params)
+private _isDroneCall = (count _this) <= 4;
 
-if (_execUserId == 0) then {
-    _execUserId = owner _targetObject;
-};
+if (_isDroneCall) then {
+    // Drone: redirect to addDeviceZeusMain
+    params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false]];
+
+    if (_execUserId == 0) then {
+        _execUserId = owner _targetObject;
+    };
+
+    // Call addDeviceZeusMain with treatAsCustom = false (will auto-detect as drone)
+    [_targetObject, _execUserId, _linkedComputers, false, "", "", "", _availableToFutureLaptops] call FUNC(addDeviceZeusMain);
+
+} else {
+    // Vehicle: continue with normal vehicle registration
+    params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], "_vehicleName", ["_allowFuel", false], ["_allowSpeed", false], ["_allowBrakes", false], ["_allowLights", false], ["_allowEngine", true], ["_allowAlarm", false], ["_availableToFutureLaptops", false], ["_powerCost", 2]];
+
+    if (_execUserId == 0) then {
+        _execUserId = owner _targetObject;
+    };
 
 // Load device arrays from global storage
 private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
@@ -164,3 +188,4 @@ if ((_featureString select [(count _featureString) - 2, 2]) isEqualTo "- ") then
 };
 
 [format ["Root Cyber Warfare: Vehicle (%1) of type (%2) added (ID: %3) with hackable %4. %5.", _vehicleName, _vehicleDisplayName, _deviceId, _featureString, _availabilityText]] remoteExec ["systemChat", _execUserId];
+};

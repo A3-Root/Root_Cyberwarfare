@@ -24,17 +24,35 @@ private _logicPos = getPosATL _logic;
 
 if !(hasInterface) exitWith {};
 
-// Get all existing laptops/devices
+// Define valid laptop classnames
+private _validLaptopClasses = [
+    "Land_Laptop_03_black_F_AE3",
+    "Land_Laptop_03_olive_F_AE3",
+    "Land_Laptop_03_sand_F_AE3",
+    "Land_USB_Dongle_01_F_AE3"
+];
+
+// Get all existing laptops/devices (filtered by classname)
 private _allComputers = [];
 {
-    private _displayName = getText (configOf _x >> "displayName");
-    private _computerName = _x getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _displayName];
-    private _netId = netId _x;
-    private _gridPos = mapGridPosition _x;
-    private _hasHackingTools = _x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false];
-    private _hasDeviceLinks = [_x] call FUNC(getAccessibleDevices) select {count _x > 0} isNotEqualTo [];
+    // Only include valid laptop classes
+    if (typeOf _x in _validLaptopClasses) then {
+        private _displayName = getText (configOf _x >> "displayName");
+        private _computerName = _x getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _displayName];
+        private _netId = netId _x;
+        private _gridPos = mapGridPosition _x;
+        private _hasHackingTools = _x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false];
 
-    _allComputers pushBack [_netId, format ["%1 [%2]", _computerName, _gridPos], _hasHackingTools, _hasDeviceLinks, _x];
+        // Check if computer has ANY device links by checking all device types (1-7)
+        private _hasDeviceLinks = false;
+        for "_deviceType" from 1 to 7 do {
+            if (count ([_x, _deviceType] call FUNC(getAccessibleDevices)) > 0) exitWith {
+                _hasDeviceLinks = true;
+            };
+        };
+
+        _allComputers pushBack [_netId, format ["%1 [%2]", _computerName, _gridPos], _hasHackingTools, _hasDeviceLinks, _x];
+    };
 } forEach (24 allObjects 1);
 
 // Filter to only computers with device links (potential sources)
@@ -46,45 +64,56 @@ if (_computersWithLinks isEqualTo []) exitWith {
 };
 
 // METHOD 1: Module placed ON laptop/device WITH existing device links
-if (!isNull _targetObject && {[_targetObject] call FUNC(getAccessibleDevices) select {count _x > 0} isNotEqualTo []}) exitWith {
+// Check if target has any device links across all device types
+private _targetHasLinks = false;
+for "_deviceType" from 1 to 7 do {
+    if (count ([_targetObject, _deviceType] call FUNC(getAccessibleDevices)) > 0) exitWith {
+        _targetHasLinks = true;
+    };
+};
+
+if (!isNull _targetObject && _targetHasLinks) exitWith {
     deleteVehicle _logic;
 
-    // Source laptop detected (has links)
+    // Source laptop detected (has links) - show dropdown to select target
     private _sourceNetId = netId _targetObject;
     private _sourceName = _targetObject getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", getText (configOf _targetObject >> "displayName")];
 
-    [localize "STR_ROOT_CYBERWARFARE_ZEUS_POINT_TO_TARGET"] call zen_common_fnc_showMessage;
+    // Build dropdown for target selection (exclude source)
+    private _targetDropdownOptions = [];
+    private _targetDropdownValues = [];
+    {
+        _x params ["_netId", "_displayText", "", "", "_obj"];
+        if (_netId != _sourceNetId) then {
+            _targetDropdownOptions pushBack _displayText;
+            _targetDropdownValues pushBack _netId;
+        };
+    } forEach _allComputers;
 
-    // Wait for curator to point at target
+    if (_targetDropdownOptions isEqualTo []) exitWith {
+        [localize "STR_ROOT_CYBERWARFARE_ZEUS_INVALID_TARGET"] call zen_common_fnc_showMessage;
+    };
+
     [
+        format ["Copy Device Links FROM %1", _sourceName],
+        [
+            ["COMBO", ["Target Laptop", "Select the laptop to copy device links TO (will merge)"], [_targetDropdownValues, _targetDropdownOptions, 0]]
+        ],
         {
-            params ["_sourceNetId", "_sourceName"];
+            params ["_results", "_args"];
+            _args params ["_sourceNetId"];
+            _results params ["_targetNetId"];
 
-            private _target = cursorObject;
-
-            // Validate target
-            if (isNull _target) exitWith {
-                [localize "STR_ROOT_CYBERWARFARE_ZEUS_INVALID_TARGET"] call zen_common_fnc_showMessage;
-                false
-            };
-
-            private _targetNetId = netId _target;
-
-            // Check not same object
-            if (_sourceNetId == _targetNetId) exitWith {
-                [localize "STR_ROOT_CYBERWARFARE_ZEUS_SAME_LAPTOP_ERROR"] call zen_common_fnc_showMessage;
-                false
-            };
-
-            // Execute copy with merge mode (removePreviousLinks = false)
             private _execUserId = clientOwner;
             [_sourceNetId, _targetNetId, false, 0, "", _execUserId, true] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
             [localize "STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_SUCCESS"] call zen_common_fnc_showMessage;
-
-            true
         },
-        [_sourceNetId, _sourceName]
-    ] call zen_common_fnc_registerObjects;
+        {
+            [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;
+            playSound "FD_Start_F";
+        },
+        [_sourceNetId]
+    ] call zen_dialog_fnc_create;
 };
 
 // METHOD 2: Module placed ON laptop/device WITHOUT device links
@@ -106,8 +135,8 @@ if (!isNull _targetObject) exitWith {
         [
             ["COMBO", ["Source Laptop", "Select the laptop to copy device links FROM"], [_computerDropdownValues, _computerDropdownOptions, 0]],
             ["TOOLBOX:YESNO", ["Replace Existing Links", "Replace all existing links on target (if any)"], false],
-            ["TOOLBOX", ["Name Handling", ["Keep target's current name", "Use source laptop's name", "Specify new name"]], 0],
-            ["EDIT", ["New Name (if 'Specify new name' selected)", "New name for the target laptop"], [""]]
+            ["TOOLBOX", ["Name Handling", ["Keep target's current name", "Use source laptop's name", "Specify New Name"]], 0],
+            ["EDIT", "New Name (Optional)", ""]
         ],
         {
             params ["_results", "_args"];
@@ -154,7 +183,7 @@ private _targetDropdownValues = [-1];
         ["COMBO", ["Target", "Select existing laptop or create new one"], [_targetDropdownValues, _targetDropdownOptions, 0]],
         ["TOOLBOX:YESNO", ["Replace Existing Links", "Replace all existing links on target (if any)"], false],
         ["TOOLBOX", ["Name Handling", ["Keep target's current name", "Use source laptop's name", "Specify new name"]], 0],
-        ["EDIT", ["New Name (if 'Specify new name' or 'Create New' selected)", "New name for the target laptop"], [""]]
+        ["EDIT", "New Name (if 'Specify new name' or 'Create New' selected)", ""]
     ],
     {
         params ["_results", "_args"];

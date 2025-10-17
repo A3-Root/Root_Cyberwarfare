@@ -1,6 +1,6 @@
 /*
  * Author: Root
- * Zeus module to add a hackable device (door/light/drone)
+ * Zeus module to add a hackable door/light
  *
  * Arguments:
  * 0: _logic <OBJECT> - Zeus logic module
@@ -37,9 +37,17 @@ private _allComputers = [];
     };
 } forEach (24 allObjects 1);
 
+// Check if target is a building (for unbreachable option)
+private _isBuilding = _targetObject isKindOf "House" || _targetObject isKindOf "Building";
+
 private _dialogControls = [
     ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false]
 ];
+
+// Add unbreachable option only for buildings with doors
+if (_isBuilding) then {
+    _dialogControls pushBack ["TOOLBOX:YESNO", ["Make Unbreachable", "Prevent door breaching by ACE explosives, lockpicking, and other non-hacking methods"], false];
+};
 
 // Add a checkbox for each computer
 {
@@ -53,15 +61,20 @@ private _dialogControls = [
     // Fix the dialog result handler section:
     {
         params ["_results", "_args"];
-        _args params ["_targetObject", "_execUserId", "_allComputers"];
+        _args params ["_targetObject", "_execUserId", "_allComputers", "_isBuilding"];
 
-        // First result is the availability setting
-        _results params ["_availableToFutureLaptops"];
-
-        // The rest are checkbox values for each computer
-        private _selectedComputers = [];
+        // Extract results based on whether this is a building
+        private _availableToFutureLaptops = _results select 0;
+        private _makeUnbreachable = false;
         private _checkboxStartIndex = 1;
 
+        if (_isBuilding) then {
+            _makeUnbreachable = _results select 1;
+            _checkboxStartIndex = 2;
+        };
+
+        // Process laptop checkboxes
+        private _selectedComputers = [];
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
                 _selectedComputers pushBack (_x select 0);
@@ -74,15 +87,15 @@ private _dialogControls = [
             _selectedComputers = _allComputers apply { _x select 0 };
         };
 
-        // Call addDeviceZeusMain with treatAsCustom = false (doors/lights/drones only)
-        [_targetObject, _execUserId, _selectedComputers, false, "", "", "", _availableToFutureLaptops] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+        // Call addDeviceZeusMain with unbreachable parameter
+        [_targetObject, _execUserId, _selectedComputers, false, "", "", "", _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
         ["Hackable Object Added!"] call zen_common_fnc_showMessage;
     }, 
     {
         ["Aborted"] call zen_common_fnc_showMessage;
         playSound "FD_Start_F";
-    }, 
-    [_targetObject, _execUserId, _allComputers]
+    },
+    [_targetObject, _execUserId, _allComputers, _isBuilding]
 ] call zen_dialog_fnc_create;
 
 deleteVehicle _logic;

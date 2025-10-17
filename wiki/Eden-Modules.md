@@ -4,7 +4,7 @@ This guide covers the 3DEN Editor modules provided by Root's Cyber Warfare for p
 
 ## Overview
 
-Root's Cyber Warfare provides **7 Eden (3DEN) Editor modules** for configuring hacking capabilities directly in the mission editor. These modules allow mission makers to set up devices, laptops, and configurations before the mission starts, without requiring scripting knowledge.
+Root's Cyber Warfare provides **8 Eden (3DEN) Editor modules** for configuring hacking capabilities directly in the mission editor. These modules allow mission makers to set up devices, laptops, and configurations before the mission starts, without requiring scripting knowledge.
 
 **Key Concept**: Eden modules create device links during mission initialization, but devices only become accessible after hacking tools are installed on laptops (either in Eden or via Zeus during the mission).
 
@@ -14,12 +14,13 @@ Root's Cyber Warfare provides **7 Eden (3DEN) Editor modules** for configuring h
 
 | Module | Purpose | Key Features |
 |--------|---------|--------------|
-| **Add Hacking Tools** | Install hacking tools on laptop | Custom paths, backdoor access, laptop naming |
-| **Add Hackable Objects** | Make objects hackable | Doors, lights, drones, custom devices |
+| **Add Hacking Tools** | Install hacking tools on laptop | Custom paths, laptop naming |
+| **Add Hackable Objects** | Make objects hackable | Doors, Lights |
 | **Add GPS Tracker** | Add GPS tracker to object | Configurable tracking time, update frequency |
-| **Add Hackable Vehicle** | Make vehicles hackable | Battery, speed, brakes, lights, engine, alarm control |
+| **Add Hackable Vehicle** | Make vehicles/drones hackable | Vehicle: [Battery, speed, brakes, lights, engine, alarm], Drone: [faction control, disable] |
 | **Add Hackable File** | Create downloadable files | Custom content, execution code |
 | **Add Custom Device** | Create custom hackable device | Custom activation/deactivation scripts |
+| **Add Power Generator** | Control lights within radius | Configurable radius, explosions, light exclusion |
 | **Adjust Power Cost** | Modify per-device power cost | Individual device power consumption |
 
 ---
@@ -52,7 +53,6 @@ Installs hacking tools on a laptop, enabling hacking capabilities for devices li
 3. **Configure module attributes**:
    - **Installation Path**: Default `/rubberducky/tools`
    - **Custom Laptop Name**: Display name for device linking
-   - **Backdoor Prefix**: Special prefix for admin access (optional)
 4. **Preview/Play mission** - Tools are installed on mission start
 
 ### Module Attributes
@@ -61,21 +61,6 @@ Installs hacking tools on a laptop, enabling hacking capabilities for devices li
 |-----------|-------------|---------|---------|
 | Installation Path | Filesystem path where tools are installed | `/rubberducky/tools` | `/network/tools` |
 | Custom Laptop Name | Unique identifier for this laptop | Auto-generated | `HQ_Terminal` |
-| Backdoor Prefix | Path prefix for admin access to all devices | Empty | `/admin` |
-
-### Backdoor System
-
-**Backdoor Access** grants full access to ALL devices, bypassing normal access control.
-
-**How it works**:
-- Set backdoor prefix (e.g., `/admin`)
-- Any command executed from path starting with prefix has full access
-- Example: Commands at `/admin/devices` see all devices
-
-**Use cases**:
-- Admin/GM laptops
-- Special operator equipment
-- Testing/debugging
 
 ### Example Setup
 
@@ -85,7 +70,6 @@ Scenario: Intel team laptop with normal access
 2. Place "Add Hacking Tools" module
 3. Sync module to laptop_intel
 4. Set Custom Laptop Name: "Intel Team Terminal"
-5. Leave backdoor empty
 
 Result: Laptop has tools, can access linked devices only
 ```
@@ -101,7 +85,9 @@ Result: Laptop has tools, can access linked devices only
 
 ## Module 2: Add Hackable Objects
 
-Makes an object hackable (auto-detects doors, lights, drones, or creates custom device).
+Makes an object hackable (auto-detects doors or lights, or creates custom device).
+
+**Note**: For drones and vehicles, use **Module 4: Add Hackable Vehicle** instead, which provides faction control and vehicle-specific features.
 
 ### Usage
 
@@ -111,16 +97,14 @@ Makes an object hackable (auto-detects doors, lights, drones, or creates custom 
    - Auto-detection vs custom device
    - Device linking (which laptops have access)
    - Public access settings
+   - Unbreachable option (ACE breaching)
 4. **Preview/Play mission**
 
 ### Module Attributes
 
 | Attribute | Description | Default |
 |-----------|-------------|---------|
-| **Treat as Custom Device** | Force custom device instead of auto-detection | No |
-| **Custom Device Name** | Display name for custom device | Empty |
-| **Activation Code** | SQF code executed on activation | Empty |
-| **Deactivation Code** | SQF code executed on deactivation | Empty |
+| **Make Unbreachable** | Prevent ACE breaching on doors | No |
 | **Public Device** | Available to all current laptops | Yes |
 
 ### Auto-Detection
@@ -128,9 +112,10 @@ Makes an object hackable (auto-detects doors, lights, drones, or creates custom 
 The module automatically detects:
 - **Buildings with doors** → Door device (locks/unlocks doors)
 - **Lamps** (`Lamps_base_F` inheritance) → Light device (on/off control)
-- **UAVs** (units with `unitIsUAV` true) → Drone device (faction change, disable)
 
-If object doesn't match → Enable "Treat as Custom Device"
+**For drones/vehicles**: Use **Module 4: Add Hackable Vehicle** instead.
+
+**For custom scripted devices**: Use **Module 6: Add Custom Device** for full control over activation/deactivation behavior.
 
 ### Device Linking via Synchronization
 
@@ -177,23 +162,20 @@ Synced: None
 Result: All laptops with hacking tools can hack doors
 ```
 
-**Example 2: Enemy Drone (Private)**
+**Example 2: Compound Lights (Private)**
 ```
-Object: AR-2 Darter (OPFOR)
+Object: Multiple street lamps in compound
 Public Device: No
-Synced: laptop_recon
-Result: Only laptop_recon can hack this drone
+Synced: laptop_infiltrator
+Result: Only laptop_infiltrator can control compound lights
 ```
 
-**Example 3: Custom Generator**
+**Example 3: Training Doors**
 ```
-Object: Land_dp_transformer_F
-Treat as Custom: Yes
-Name: "Backup Generator"
-Activation: [power on script]
-Deactivation: [power off script]
+Object: Training facility building
 Public Device: Yes
-Result: Custom device available to all laptops
+Synced: None
+Result: All laptops with hacking tools can practice on these doors
 ```
 
 ### Notes
@@ -590,7 +572,129 @@ Result: Mission-critical objective device
 
 ---
 
-## Module 7: Adjust Power Cost
+## Module 7: Add Power Generator
+
+Creates a power generator device that controls all lights within a configurable radius with optional explosion effects.
+
+### Usage
+
+1. **Place module** in Eden Editor
+2. **Synchronize** module to generator object(s) and optionally to laptop objects
+3. **Configure module attributes**:
+   - Generator name
+   - Effect radius (lights within range)
+   - Explosion options (activation/deactivation)
+   - Explosion type selection
+   - Excluded light classnames
+   - Power cost
+   - Laptop linking
+4. **Preview/Play mission**
+
+### Module Attributes
+
+| Attribute | Description | Default | Range |
+|-----------|-------------|---------|-------|
+| **Generator Name** | Display name in terminal | `Power Generator` | Any string |
+| **Effect Radius** | Radius in meters to affect lights | 1000 | 100-25000 |
+| **Allow Explosion on Activation** | Create explosion when activated | No | Yes/No |
+| **Allow Explosion on Deactivation** | Create explosion when deactivated | No | Yes/No |
+| **Explosion Type** | Type of explosion to create | `HelicopterExploSmall` | String |
+| **Excluded Light Classnames** | Comma-separated classnames to exclude | Empty | Text field |
+| **Power Cost** | Power consumed per action (Wh) | 10 | 1-100 |
+| **Public Device** | Available to all laptops | Yes | Yes/No |
+
+### Behavior
+
+**Activation** (`powergrid <id> activate`):
+- Turns ON all lights within radius (class: `Lamps_base_F`)
+- Excludes lights with classnames in exclusion list
+- Creates explosion at generator position (if enabled)
+- Reports number of lights affected
+
+**Deactivation** (`powergrid <id> deactivate`):
+- Turns OFF all lights within radius (class: `Lamps_base_F`)
+- Excludes lights with classnames in exclusion list
+- Creates explosion at generator position (if enabled)
+- Reports number of lights affected
+
+### Exclusion List
+
+**Format**: Comma-separated classnames (spaces trimmed automatically)
+
+**Example**:
+```
+Lamp_Street_small_F, Land_LampHalogen_F, Land_LampSolar_F
+```
+
+**Use cases**:
+- Exclude critical lights (helipad markers, runway lights)
+- Exclude specific lamp types
+- Preserve certain areas from power control
+
+### Examples
+
+**Example 1: Town Power Grid**
+```
+Object: Power substation building
+Generator Name: "Town_Power_Grid"
+Effect Radius: 5000m
+Explosion on Activation: No
+Explosion on Deactivation: No
+Excluded: Empty
+Public Device: Yes
+Result: Controls all town lights within 5km, safe operation, all laptops
+```
+
+**Example 2: Military Base with Sabotage**
+```
+Object: Generator unit
+Generator Name: "Base_Generator"
+Effect Radius: 2000m
+Explosion on Activation: Yes
+Explosion on Deactivation: Yes
+Explosion Type: Sh_155mm_AMOS
+Excluded: "Land_LampHalogen_F" (preserve helipad lights)
+Power Cost: 15 Wh
+Public Device: No
+Synced: laptop_saboteur
+Result: Controls base lights, explosions on use, preserves helipad, restricted access
+```
+
+**Example 3: Compound Blackout**
+```
+Object: Power box
+Generator Name: "Compound_Power"
+Effect Radius: 500m
+Explosion on Activation: No
+Explosion on Deactivation: Yes (alarm effect)
+Explosion Type: HelicopterExploSmall
+Excluded: Empty
+Public Device: Yes
+Result: Small radius, deactivation triggers alarm, all laptops
+```
+
+### Device Linking
+
+Power generator uses standard device linking:
+
+| Scenario | Public Device | Synced Laptops | Result |
+|----------|---------------|----------------|--------|
+| **1** | ✅ Yes | None | All laptops with hacking tools |
+| **2** | ❌ No | None | No access (device unusable) |
+| **3** | ❌ No | Some laptops | Only synced laptops |
+| **4** | ✅ Yes | Some laptops | Synced laptops excluded, all others have access |
+
+### Notes
+
+- Generator object does not need to be actual generator (can be any object)
+- Device registered as custom device type with power grid functionality
+- Terminal output shows number of lights affected
+- Module supports multiple generators synced to single module
+- Use `powergrid <id> activate` / `powergrid <id> deactivate` terminal commands
+
+---
+
+## Module 8: Adjust Power Cost
 
 Modifies the power cost for a specific device, overriding global CBA settings.
 

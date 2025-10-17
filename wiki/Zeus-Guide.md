@@ -4,7 +4,7 @@ This guide covers using Root's Cyber Warfare Zeus modules for dynamic mission cr
 
 ## Overview
 
-Root's Cyber Warfare provides **7 Zeus modules** for adding hacking capabilities to your missions on-the-fly. All modules use ZEN (Zeus Enhanced) dialogs for configuration.
+Root's Cyber Warfare provides **8 Zeus modules** for adding hacking capabilities to your missions on-the-fly. All modules use ZEN (Zeus Enhanced) dialogs for configuration.
 
 ---
 
@@ -12,10 +12,11 @@ Root's Cyber Warfare provides **7 Zeus modules** for adding hacking capabilities
 
 | Module | Purpose | Key Features |
 |--------|---------|--------------|
-| **Add Hacking Tools** | Install hacking tools on laptop | Custom paths, backdoor access, laptop naming |
-| **Add Hackable Object** | Make objects hackable | Doors, lights, drones, custom devices |
+| **Add Hacking Tools** | Install hacking tools on laptop | Custom paths, laptop naming |
+| **Add Hackable Object** | Make objects hackable | Doors, lights, custom devices |
+| **Add Hackable Custom Device** | Make custom scripted devices | Custom activation/deactivation code |
 | **Add GPS Tracker** | Add GPS tracker to object | Configurable tracking time, update frequency |
-| **Add Hackable Vehicle** | Make vehicles hackable | Battery, speed, brakes, lights, engine, alarm control |
+| **Add Hackable Vehicle** | Make vehicles and drones hackable | Battery, speed, brakes, lights, engine, alarm, faction control |
 | **Add Hackable File** | Create downloadable files | Custom content, execution code |
 | **Add Power Generator** | Control lights within radius | Configurable radius, explosions, light exclusion |
 | **Modify Power** | Adjust hack costs for operations | Real-time cost modification |
@@ -54,32 +55,7 @@ The module installs these commands:
 - `/path/custom` - Custom device control
 - `/path/gpstrack` - GPS tracking
 - `/path/vehicle` - Vehicle control
-
-### Backdoor System
-
-**Backdoor Access** grants full access to ALL devices, bypassing normal access control.
-
-**How it works**:
-- Set backdoor prefix (e.g., `backdoor`)
-- Any command executed from path starting with prefix has full access
-- Example: `backdoor_door` has access to all doors
-
-**Use cases**:
-- Admin/GM laptops
-- Special operator equipment
-- Testing/debugging
-
-### Example Scenario
-
-```
-Laptop: "Intel Officer Terminal"
-Path: /headquarters/tools
-Backdoor: admin
-
-Result:
-- Player uses: /headquarters/tools/devices → sees only linked devices
-- Admin uses: admin_devices → sees ALL devices
-```
+- `/path/powergrid` - Power grid control
 
 ### Notes
 
@@ -92,7 +68,9 @@ Result:
 
 ## Module 2: Add Hackable Object
 
-Makes an object hackable (doors, lights, drones, or custom devices).
+Makes an object hackable (doors, lights).
+
+**Note**: For drones and vehicles, use **Module 4: Add Hackable Vehicle** instead.
 
 ### Usage
 
@@ -102,6 +80,7 @@ Makes an object hackable (doors, lights, drones, or custom devices).
    - Link to specific laptops (optional)
    - Configure availability to future laptops
    - Set custom device parameters (if applicable)
+   - Set unbreachable option (ACE breaching prevention)
 3. **Click OK**
 
 ### Dialog Options
@@ -112,6 +91,7 @@ Makes an object hackable (doors, lights, drones, or custom devices).
 | **Custom Device Name** | Display name for custom device | Any string |
 | **Activation Code** | SQF code to run on activation | Code block |
 | **Deactivation Code** | SQF code to run on deactivation | Code block |
+| **Make Unbreachable** | Prevent ACE breaching on doors | Yes/No |
 | **Available to Future Laptops** | Available to laptops added later | Yes/No |
 | **Link to Laptops** | Select specific laptops for access | Checkboxes |
 
@@ -120,9 +100,10 @@ Makes an object hackable (doors, lights, drones, or custom devices).
 The module automatically detects:
 - **Buildings with doors** → Door type
 - **Lamps** (`Lamps_base_F`) → Light type
-- **UAVs** (`unitIsUAV`) → Drone type
 
-If not detected → Can mark as custom device
+If not detected → Exit with error
+
+**For drones/vehicles**: Use the dedicated **Add Hackable Vehicle** module (Module 4) instead, which provides faction control, battery, speed, and other vehicle-specific features.
 
 ### Device Linking
 
@@ -166,14 +147,18 @@ Linked: None (available to all)
 Result: All doors hackable by all current laptops
 ```
 
-**Example 2: Enemy Drone**
+**Example 2: Custom Alarm System**
 ```
-Object: AR-2 Darter (OPFOR)
-Linked: "Recon Team Laptop"
-Result: Only Recon Team can hack this drone
+Object: Alarm box or invisible object
+Treat as Custom: Yes
+Name: "Base Alarm System"
+Activation Code: hint "ALARM TRIGGERED!"; [player, -50] call ScorePenalty;
+Deactivation Code: hint "Alarm Disabled";
+Linked: "Infiltrator_Laptop"
+Result: Custom device that triggers alarm with score penalty when activated
 ```
 
-**Example 3: Custom Power Generator**
+**Example 3: Generator Sabotage**
 ```
 Treat as Custom: Yes
 Name: "Power Generator Overload"
