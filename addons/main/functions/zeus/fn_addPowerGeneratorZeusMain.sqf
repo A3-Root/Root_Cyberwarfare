@@ -66,13 +66,17 @@ if (_isDestroyed) exitWith {
     [_computer, 'Error: Generator was destroyed and cannot be reactivated!'] call AE3_armaos_fnc_shell_stdout;
 };
 
-private _radius = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_RADIUS', 50];
+private _radius = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_RADIUS', 5000];
 private _allowExplosion = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_ACTIVATE', false];
 private _explosionType = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_TYPE', 'ClaymoreDirectionalMine_Remote_Ammo_Scripted'];
 private _excludedClassnames = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXCLUDED', []];
 
-private _allObjects = 25 allObjects 0;
+private _allObjects = 9 allObjects 0;
 private _objectsInRadius = _allObjects select {(_x distance _generator) <= _radius};
+
+if (_excludedClassnames isNotEqualTo []) then {
+    _objectsInRadius = _objectsInRadius select {!(getText (configOf _x >> 'classname') in _excludedClassnames)};
+};
 
 private _lightsAffected = count _objectsInRadius;
 
@@ -101,8 +105,12 @@ private _allowExplosion = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_E
 private _explosionType = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_TYPE', 'G_40mm_HE'];
 private _excludedClassnames = _generator getVariable ['ROOT_CYBERWARFARE_GENERATOR_EXCLUDED', []];
 
-private _allObjects = 25 allObjects 0;
+private _allObjects = 9 allObjects 0;
 private _objectsInRadius = _allObjects select {(_x distance _generator) <= _radius};
+
+if (_excludedClassnames isNotEqualTo []) then {
+    _objectsInRadius = _objectsInRadius select {!(getText (configOf _x >> 'classname') in _excludedClassnames)};
+};
 
 private _lightsAffected = count _objectsInRadius;
 

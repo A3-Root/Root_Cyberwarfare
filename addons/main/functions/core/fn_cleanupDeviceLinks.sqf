@@ -1,3 +1,4 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
  * Description: Periodically cleans up device links for deleted/invalid computers and devices
@@ -14,8 +15,6 @@
  *
  * Public: No
  */
-
-#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 
 // Exit if not running on server
 if (!isServer) exitWith {};
