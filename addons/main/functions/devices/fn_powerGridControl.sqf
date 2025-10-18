@@ -99,7 +99,7 @@ private _foundGrid = false;
 
         // Show warning for destructive operations
         if (_action == "overload") then {
-            _string = format ["<t color='%1'>WARNING: This will permanently destroy the power grid generator!</t>", COLOR_WARNING];
+            _string = format ["WARNING: This will permanently destroy the power grid generator!"];
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         };
 
@@ -218,7 +218,7 @@ private _foundGrid = false;
                     _sparkObj hideObjectGlobal true;
 
                     for "_i" from 1 to 5 do {
-                        private _effect = "#particlesource" createVehicleLocal _surround_pos;
+                        private _effect = "#particlesource" createVehicle _surround_pos;
                         _sparkObj setPos _surround_pos;
                         _surround_pos = [(_generatorPosition select 0) + random [-10, 0, 10], (_generatorPosition select 1) + random [-10, 0, 10], (_generatorPosition select 2) + random [0, 1.5, 3]];
                         private _claymore = "ClaymoreDirectionalMine_Remote_Ammo_Scripted" createVehicle _surround_pos;
@@ -227,6 +227,7 @@ private _foundGrid = false;
                             ["\A3\data_f\ParticleEffects\Universal\Universal", 16, 0, 1],
                             "", "Billboard", 1,
                             1.2,
+                            [0, 0, 0],
                             0.15,
                             [0, 0, 0.2],
                             0.1,
