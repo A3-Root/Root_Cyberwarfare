@@ -25,10 +25,10 @@ All hacking operations consume power from the laptop battery (managed by AE3). C
 
 ### Door Operations
 
-**Setting**: `ROOT_CYBERWARFARE_COST_DOOR_EDIT`
-**Default**: 2 Wh
-**Range**: 1-100 Wh
-**Description**: Power cost to lock/unlock a door
+- **Setting**: `ROOT_CYBERWARFARE_COST_DOOR_EDIT`
+- **Default**: 2 Wh
+- **Range**: 1-100 Wh
+- **Description**: Power cost to lock/unlock a door
 
 **Use Cases:**
 - Low (1-2 Wh): Easy missions, plentiful power
@@ -37,33 +37,33 @@ All hacking operations consume power from the laptop battery (managed by AE3). C
 
 ### Light Operations
 
-**Setting**: `ROOT_CYBERWARFARE_COST_LIGHT_EDIT`
-**Default**: 2 Wh
-**Range**: 1-100 Wh
-**Description**: Power cost to control lights (on/off/toggle)
+- **Setting**: `ROOT_CYBERWARFARE_COST_LIGHT_EDIT`
+- **Default**: 2 Wh
+- **Range**: 1-100 Wh
+- **Description**: Power cost to control lights (on/off/toggle)
 
 ### Drone Faction Change
 
-**Setting**: `ROOT_CYBERWARFARE_COST_DRONE_SIDE_EDIT`
-**Default**: 20 Wh
-**Range**: 1-100 Wh
-**Description**: Power cost to change drone faction
+- **Setting**: `ROOT_CYBERWARFARE_COST_DRONE_SIDE_EDIT`
+- **Default**: 20 Wh
+- **Range**: 1-100 Wh
+- **Description**: Power cost to change drone faction
 
 **Rationale**: Higher cost reflects significant impact of faction change
 
 ### Drone Disable
 
-**Setting**: `ROOT_CYBERWARFARE_COST_DRONE_DISABLE_EDIT`
-**Default**: 10 Wh
-**Range**: 1-100 Wh
-**Description**: Power cost to permanently disable a drone
+- **Setting**: `ROOT_CYBERWARFARE_COST_DRONE_DISABLE_EDIT`
+- **Default**: 10 Wh
+- **Range**: 1-100 Wh
+- **Description**: Power cost to permanently disable a drone
 
 ### Custom Device Operations
 
-**Setting**: `ROOT_CYBERWARFARE_COST_CUSTOM_EDIT`
-**Default**: 10 Wh
-**Range**: 1-100 Wh
-**Description**: Default power cost for custom device activation/deactivation
+- **Setting**: `ROOT_CYBERWARFARE_COST_CUSTOM_EDIT`
+- **Default**: 10 Wh
+- **Range**: 1-100 Wh
+- **Description**: Default power cost for custom device activation/deactivation
 
 **Note**: Individual custom devices can override this with their own power cost settings
 
@@ -75,10 +75,10 @@ Vehicle hacking power costs are configured per-vehicle when registered (not via 
 
 ### GPS Tracker Update Interval
 
-**Setting**: `ROOT_CYBERWARFARE_GPS_UPDATE_INTERVAL`
-**Default**: 10 seconds
-**Range**: 5-300 seconds
-**Description**: How often GPS trackers update their position
+- **Setting**: `ROOT_CYBERWARFARE_GPS_UPDATE_INTERVAL`
+- **Default**: 10 seconds
+- **Range**: 5-300 seconds
+- **Description**: How often GPS trackers update their position
 
 ## Advanced Configuration
 
