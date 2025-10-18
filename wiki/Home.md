@@ -1,105 +1,85 @@
-# Root's Cyber Warfare Wiki
+# Root's Cyber Warfare
 
-Welcome to the official documentation for **Root's Cyber Warfare**, an Arma 3 mod that adds cyberwarfare mechanics to missions through the AE3 (Advanced Equipment) filesystem.
+Welcome to the Root's Cyber Warfare documentation wiki! This mod adds comprehensive cyber warfare capabilities to Arma 3, allowing players to hack vehicles, drones, buildings, and custom devices using laptops with hacking tools.
 
-## Overview
+## Quick Links
 
-Root's Cyber Warfare allows players to hack doors, drones, lights, vehicles, GPS trackers, and custom devices using in-game laptops with terminal access. The mod integrates seamlessly with ACE3 for interaction menus and ZEN for dynamic Zeus modules.
+- [Player Guide](Player-Guide.md) - Learn how to use hacking tools in-game
+- [Zeus Guide](Zeus-Guide.md) - How to set up hackable objects as a Zeus/Game Master
+- [Eden Editor Guide](Eden-Editor-Guide.md) - Pre-mission setup in the Eden Editor
+- [Mission Maker Guide](Mission-Maker-Guide.md) - Script-based mission creation
+- [Configuration Guide](Configuration.md) - CBA settings and customization options
+- [Terminal Guide](Terminal-Commands.md) - Complete terminal command reference
+- [API Reference](API-Reference.md) - Function reference for developers
 
-**Current Version**: 2.20.0
+## Features
 
-## Key Features
+### Hackable Devices
 
-- 🚪 **Door Control** - Lock/unlock building doors remotely
-- 💡 **Light Manipulation** - Control streetlights and lamps
-- 🚁 **Drone Hacking** - Change drone factions or disable them
-- 📁 **Database Access** - Download files with progress bars
-- 📍 **GPS Tracking** - Attach and track GPS trackers
-- 🚗 **Vehicle Hacking** - Manipulate vehicle parameters (battery, speed, brakes, lights, engine, alarm)
-- ⚡ **Custom Devices** - Create your own hackable objects with custom scripts
-- 💡 **Power Generators** - Control lights within radius with optional explosions
-- 🔋 **Power Management** - Laptop battery consumption system
-- 🎯 **Zeus Modules** - 7 dynamic modules for mission makers
-- 🏗️ **Eden Modules** - 7 pre-mission configuration modules
-- 🔐 **Access Control** - Device linking and backdoor system
+- **Buildings** - Lock/unlock doors remotely, with optional unbreachable mode
+- **Lights** - Control street lamps and building lights
+- **Vehicles** - Control fuel, speed, brakes, lights, engine, and alarms
+- **Drones/UAVs** - Change faction or disable drones
+- **Custom Devices** - Create scripted devices with custom activation/deactivation code
+- **GPS Trackers** - Attach trackers to units and vehicles for real-time positioning
+- **Power Generators** - Control power grids affecting lights in a radius
+- **Databases** - Downloadable files with customizable content
 
-## Documentation Table of Contents
+### Access Control System
 
-### 1. [Home](Home)
-Welcome page with mod overview and key features
+The mod features a sophisticated 3-tier access control system:
 
-### 2. [Player Guide](Player-Guide)
-Learn how to use hacking tools and interact with devices in-game
+1. **Backdoor Access** - Admin/debug access bypassing all checks
+2. **Public Device Access** - Devices available to all or future laptops
+3. **Private Link Access** - Direct computer-to-device relationships
 
-### 3. [Terminal Commands Reference](Terminal-Commands)
-Complete reference for all terminal commands available to players
+### Power System
 
-### 4. [Zeus/Curator Guide](Zeus-Guide)
-Guide for Zeus/Curator on using 7 dynamic modules to add hackable devices
-
-### 5. [Mission Maker Guide](Mission-Maker-Guide)
-Scripting integration and advanced mission-making techniques
-
-### 6. [Eden Modules Reference](Eden-Modules)
-Pre-mission configuration using 7 Eden Editor modules
-
-### 7. [Configuration Reference](Configuration)
-CBA settings and configuration options
-
-### 8. [Custom Device Tutorial](Custom-Device-Tutorial)
-Step-by-step guide to creating your own custom hackable objects
-
-### 9. [Architecture & Technical Details](Architecture)
-Technical documentation on system design and implementation
-
-### 10. [API Reference](API-Reference)
-Complete function documentation for developers
+All hacking operations consume power from the laptop's battery (managed by AE3 ArmaOS). Power costs are configurable via CBA settings and vary by operation type.
 
 ## Dependencies
 
-Root's Cyber Warfare requires the following mods:
+This mod requires the following dependencies (all are mandatory):
 
-| Dependency | Required | Purpose |
-|------------|----------|---------|
-| [CBA_A3](https://steamcommunity.com/workshop/filedetails/?id=450814997) | **Yes** | Settings, events, function framework |
-| [ACE3](https://steamcommunity.com/workshop/filedetails/?id=463939057) | **Yes** | Interaction menus, GPS tracker placement |
-| [AE3](https://steamcommunity.com/workshop/filedetails/?id=2888888564) | **Yes** | Virtual filesystem and laptop functionality |
-| [ZEN](https://steamcommunity.com/workshop/filedetails/?id=1779063631) | **Yes** | Zeus modules and configuration dialogs |
+- **CBA_A3** - Community Base Addons (framework, macros, events, settings)
+- **ACE3** - Advanced Combat Environment (interaction menu system)
+- **AE3 (Advanced Equipment 3)** - ArmaOS terminal system
+- **ZEN (Zeus Enhanced)** - Zeus module base classes
 
-## What's New in Version 2.20.0
+## Getting Started
 
-Version 2.20.0 includes new features, refactoring, and bug fixes:
+### For Players
 
-- ✨ **Power Generator Module** - New Zeus/Eden module for radius-based light control with optional explosions
-- ✨ **Eden Modules** - Full 3DEN Editor integration with 7 pre-mission configuration modules
-- ✅ **Two-Step Workflow** - Eden modules create device links, hacking tools enable access
-- ✅ **GPS Improvements** - Fixed duplicate position printing, improved null object tracking
-- ✅ **Bug Fixes** - Fixed door control errors, 3DEN module type conversions, cache initialization
-- ✅ **Code Cleanup** - Removed redundant parameter passing, improved code organization
-- ✅ **Documentation** - Comprehensive wiki updates including dedicated Eden Modules page
-- ✅ **Access Control** - Fixed "Available to Future Laptops" functionality with proper cache persistence
+1. Read the [Player Guide](Player-Guide.md) to understand how to use hacking tools
+2. Check the [Terminal Guide](Terminal-Commands.md) for available commands
+3. Access terminals via ACE interaction menu on laptops with hacking tools
 
-### Architecture
+### For Mission Makers
 
-The mod uses a hybrid storage approach:
-- **Array-based device storage** (`ROOT_CYBERWARFARE_ALL_DEVICES`) for simple iteration
-- **HashMap-based link cache** (`ROOT_CYBERWARFARE_LINK_CACHE`) for O(1) computer-to-device lookups
-- **Array-based public devices** with exclusion lists for "Available to Future Laptops" feature
+1. Review the [Zeus Guide](Zeus-Guide.md) for quick in-game setup
+2. Check the [Eden Editor Guide](Eden-Editor-Guide.md) for pre-mission configuration
+3. See the [Mission Maker Guide](Mission-Maker-Guide.md) for scripted setups
 
-## Community & Support
+### For Developers
 
-- **GitHub Repository**: [A3-Root/Root_Cyberwarfare](https://github.com/A3-Root/Root_Cyberwarfare)
-- **Issues & Bug Reports**: [GitHub Issues](https://github.com/A3-Root/Root_Cyberwarfare/issues)
-- **Steam Workshop**: [Root's Cyber Warfare](https://steamcommunity.com/sharedfiles/filedetails/?id=YOUR_ID)
+1. Review the [API Reference](API-Reference.md) for function documentation
+2. Check the [Configuration Guide](Configuration.md) for CBA settings
+3. See the CLAUDE.md file in the repository root for architecture details
 
-## Contributing
+## Support
 
-Contributions are welcome! Please see the repository for contribution guidelines.
+For bug reports, feature requests, or general support, please visit the [GitHub Issues](https://github.com/ROOT/Root_Cyberwarfare/issues) page.
+
+## Version
+
+Current Version: **2.20.1**
 
 ## License
 
-Root's Cyber Warfare is released under Arma 3 Public License - Share Alike (APL-SA). See the repository for full license details.
+[Insert License Information Here]
 
----
+## Credits
 
-**Need help?** Join discord or raise an issue in GitHub.
+- **Author**: Root
+- **Framework**: CBA_A3 by CBA Team
+- **Dependencies**: ACE3 Team, AE3 Team, ZEN Team

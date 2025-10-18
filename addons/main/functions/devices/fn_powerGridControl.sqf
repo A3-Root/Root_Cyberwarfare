@@ -56,9 +56,12 @@ if (_allPowerGrids isEqualTo []) exitWith {
 private _battery = uiNamespace getVariable "AE3_Battery";
 private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
 
+// Get power cost from CBA setting
+private _powerCost = missionNamespace getVariable [SETTING_POWERGRID_COST, 15];
+
 private _foundGrid = false;
 {
-    _x params ["_storedGridId", "_gridNetId", "_gridName", "_radius", "_allowExplosionActivate", "_allowExplosionDeactivate", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops", "_powerCost", "_linkedComputers"];
+    _x params ["_storedGridId", "_gridNetId", "_gridName", "_radius", "_allowExplosionActivate", "_allowExplosionDeactivate", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops", "", "_linkedComputers"];
 
     if (_gridIdNum == _storedGridId) then {
         private _gridObject = objectFromNetId _gridNetId;
@@ -93,6 +96,42 @@ private _foundGrid = false;
         };
 
         _foundGrid = true;
+
+        // Show warning for destructive operations
+        if (_action == "overload") then {
+            _string = format ["<t color='%1'>WARNING: This will permanently destroy the power grid generator!</t>", COLOR_WARNING];
+            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        };
+
+        // Show power cost and ask for confirmation
+        _string = format ["Power Cost: %1Wh", _powerCost];
+        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        _string = "Are you sure? (Y/N): ";
+        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+
+        private _time = time + 10; // 10 second timeout
+        private _continue = false;
+        while {time < _time} do {
+            private _areYouSure = [_computer] call AE3_armaos_fnc_shell_stdin;
+            if ((_areYouSure isEqualTo "y") || (_areYouSure isEqualTo "Y")) then {
+                _continue = true;
+                break;
+            };
+            if ((_areYouSure isEqualTo "n") || (_areYouSure isEqualTo "N")) then {
+                _string = "Operation cancelled by user.";
+                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                missionNamespace setVariable [_nameOfVariable, true, true];
+                _continue = false;
+                breakTo "exit";
+            };
+        };
+
+        if (!_continue) exitWith {
+            _string = "Confirmation timed out. Aborting...";
+            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+            missionNamespace setVariable [_nameOfVariable, true, true];
+            _foundGrid = true;
+        };
 
         // Execute action
         if (_action == "on") then {
@@ -220,9 +259,12 @@ private _foundGrid = false;
         private _newLevel = _currentBatteryLevel - (_changeWh/1000);
         [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
 
-        _string = format ["Power Cost: %1Wh", _changeWh];
-        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-        _string = format ["New Power Level: %1Wh", _newLevel*1000];
+        // Don't show power cost again (already shown before confirmation)
+        private _newLevelWh = _newLevel * 1000;
+        if (isNil "_newLevelWh" || {!finite _newLevelWh}) then {
+            _newLevelWh = 0;
+        };
+        _string = format ["New Power Level: %1Wh", _newLevelWh];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     };
 } forEach _allPowerGrids;

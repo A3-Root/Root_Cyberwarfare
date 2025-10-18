@@ -1,472 +1,256 @@
 # Root's Cyber Warfare
 
-A comprehensive cyberwarfare mod for Arma 3 that adds hacking mechanics, GPS tracking, device control, and network infiltration capabilities to enhance tactical gameplay.
-
-![Version](https://img.shields.io/badge/version-2.20.1-blue)
-![Build](https://img.shields.io/badge/Build-Passing-green)
-
-
-## Overview
-
-Root's Cyber Warfare is a comprehensive modification for Arma 3 that introduces advanced cyber warfare mechanics into the tactical simulation environment. The mod enables players to conduct a range of electronic operations, including network infiltration, remote device control, and electronic surveillance. It is built upon a robust framework that integrates seamlessly with ACE3 for interactions and utilizes the AE3 ArmaOS terminal system to provide an authentic and immersive command-line interface for all hacking operations.
-
-## Features
-
-### Core Hacking Capabilities
-
-- **Building Control**: Lock/unlock doors remotely, control lights
-- **Drone Hacking**: Change drone factions, disable enemy UAVs
-- **Vehicle Manipulation**: Control engine state, manipulate fuel/battery levels, lock/unlock doors, trigger alarms
-- **Power Grid Control**: Control lights within configurable radius with optional explosions
-- **Database Access**: Download classified files from networked computers
-- **Custom Devices**: Support for mission-specific hackable objects with custom activation/deactivation scripts
-
-### GPS Tracking System
-
-- **Covert Tracking**: Attach GPS trackers to units, vehicles, and objects
-- **Detection Mechanics**: Search for hidden trackers with special equipment
-- **Live Positioning**: Real-time tracking through hacked laptops
-- **Map Integration**: Reveal tracker locations on the map
-
-### Network Architecture
-
-- **Access Control**: Device-specific permissions and computer-device linking
-- **Backdoor System**: Bypass restrictions using backdoor paths
-- **Public Devices**: Configure devices accessible to all players
-- **Power Management**: Battery-based hacking with configurable power costs
-
-### Zeus Integration
-
-Curators get full control with 9 dedicated modules:
-- Add hacking tools to any computer
-- Register devices (doors, lights)
-- Register custom devices (custom scripted behaviors)
-- Register vehicles and drones (battery, speed, engine, faction control)
-- Register downloadable files with custom content
-- Attach GPS trackers with configurable tracking parameters
-- Configure power generators with radius-based light control
-- Modify power costs for hacking operations
-- Modify device links between laptops (to prevent arma issues and a failsafe for laptops)
-
-### Eden Editor Integration
-
-Mission makers can pre-configure hacking setups using 8 Eden modules:
-- Pre-install hacking tools on laptops
-- Pre-register hackable objects (doors, lights) and link to specific laptops
-- Pre-register hackable vehicles and drones with configurable controls
-- Pre-register downloadable files with custom content
-- Configure GPS trackers before mission start
-- Set up custom devices with scripted behaviors
-- Configure power generators with radius-based light control
-- Adjust per-device power costs
-- Two-step workflow: Create device links in Eden, enable access in-game
-
-## Requirements
-
-| Mod | Required | Link |
-|-----|----------|------|
-| Community Based Addons (CBA_A3) | **Yes** | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=450814997) |
-| Advanced Combat Environment 3 (ACE3) | **Yes** | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=463939057) |
-| Advanced Equipment (AE3) | **Yes** | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2888888564) |
-| Zeus Enhanced (ZEN) | **Yes** | [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=1779063631) |
-
-**All four dependencies are required** for full mod functionality including Zeus modules and GPS tracker system.
-
-## Installation
-
-### Steam Workshop
-1. Subscribe to Root's Cyber Warfare on Steam Workshop
-2. Subscribe to all **required dependencies**: CBA_A3, ACE3, AE3, and ZEN
-3. Launch Arma 3 with all mods enabled
-4. The mod will load automatically
-
-## Quick Start Guide
-
-### For Players
-
-1. **Access a Computer**: Approach any laptop with hacking tools installed
-2. **Open Terminal**: Use ACE interaction menu → Access Terminal
-3. **View Help**: Type `cat guide` to see all available commands
-4. **List Devices**: Type `devices` to see what you can hack
-5. **Execute Commands**: Follow the syntax shown in the guide
-
-**Example Commands**:
-```bash
-door 1454 2881 lock          # Lock door 2881 in building 1454
-light 3 off                   # Turn off light #3
-changedrone 2 west            # Change drone #2 to BLUFOR
-gpstrack 4219                 # Track GPS device #4219
-vehicle 1337 engine off       # Disable vehicle #1337's engine
-```
-
-### For Zeus/Curators
-
-1. Open Zeus interface
-2. Use custom modules under "Root's Cyberwarfare":
-   - **Add Hacking Tools**: Install hacking capability on a laptop
-   - **Add Hackable Object**: Register doors and lights
-   - **Add Custom Device**: Register custom devices with scripted activation/deactivation
-   - **Add Hackable Vehicle**: Register vehicles and drones with configurable controls (faction, battery, engine, etc.)
-   - **Add Hackable File**: Register downloadable files with custom content
-   - **Add GPS Tracker**: Attach GPS tracker with configurable tracking parameters
-   - **Add Power Generator**: Create radius-based light control with optional explosions
-   - **Modify Power**: Adjust power costs for hacking operations (NOT laptop battery)
-
-### For Mission Makers
-
-```sqf
-// Add hacking tools to a laptop
-[_laptop, "/network/subnet1", 0, "MainHackingStation", ""] call Root_fnc_addHackingToolsZeusMain;
-
-// Register a building with doors for hacking (auto-detects door IDs)
-[_building, 0, [], false, "", "", "", false] call Root_fnc_addDeviceZeusMain;
-
-// Register a power generator (controls lights in radius)
-[_generator, 0, [], "Power Grid", 2000, false, true, "HelicopterExploSmall", [], false] call Root_fnc_addPowerGeneratorZeusMain;
-// Parameters: [object, execUserId, linkedComputers, name, radius, allowExplosionActivate, allowExplosionDeactivate, explosionType, excludedClassnames, availableToFuture]
-
-// Register a custom device
-[_generator, 0, [], true, "Generator", "hint 'Activated'", "hint 'Deactivated'", false] call Root_fnc_addDeviceZeusMain;
-
-// Register a vehicle for hacking
-[_vehicle, 0, [], "Car1", true, false, false, false, true, false, false, 2] call Root_fnc_addVehicleZeusMain;
-// Parameters: [vehicle, execUserId, linkedComputers, name, allowFuel, allowSpeed, allowBrakes, allowLights, allowEngine, allowAlarm, availableToFuture, powerCost]
-
-// Attach GPS tracker to a vehicle (via ACE interaction)
-[_vehicle, player] call Root_fnc_aceAttachGPSTracker;
-
-// Register a database/file for download
-[_object, "secret.txt", 10, "Classified data...", 0, [], "", false] call Root_fnc_addDatabaseZeusMain;
-
-// Link a device to a specific computer (give access)
-private _linkCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_LINK_CACHE", createHashMap];
-private _existingLinks = _linkCache getOrDefault [netId _computer, []];
-_existingLinks pushBack [DEVICE_TYPE_DOOR, 1234];
-_existingLinks pushBack [DEVICE_TYPE_LIGHT, 5678];
-_linkCache set [netId _computer, _existingLinks];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_LINK_CACHE", _linkCache, true];
-```
-
-## Configuration
-
-### CBA Settings
-
-Access via: Main Menu → Options → Addon Options → Root Cyber Warfare
-
-| Setting | Default | Description |
-|---------|---------|-------------|
-| GPS Tracker Item | ACE_Banana | Item classname used as GPS tracker |
-| GPS Detection Devices | ["hgun_esd_01_antenna_01_F", "hgun_esd_01_antenna_02_F", "hgun_esd_01_antenna_03_F", "hgun_esd_01_base_F", "hgun_esd_01_dummy_F", "hgun_esd_01_F"] | Items that speed up tracker detection |
-| Door Power Cost | 2 Wh | Power to lock/unlock a door |
-| Drone Hack Power Cost | 10 Wh | Power to disable a drone |
-| Drone Side Change Cost | 20 Wh | Power to change drone faction |
-| Custom Device Cost | 10 Wh | Power for custom device operations |
-
-### Device Types
-
-| Type ID | Constant | Description |
-|---------|----------|-------------|
-| 1 | DEVICE_TYPE_DOOR | Building doors |
-| 2 | DEVICE_TYPE_LIGHT | Building lights |
-| 3 | DEVICE_TYPE_DRONE | UAVs/Drones |
-| 4 | DEVICE_TYPE_DATABASE | Downloadable files |
-| 5 | DEVICE_TYPE_CUSTOM | Custom scripted devices |
-| 6 | DEVICE_TYPE_GPS_TRACKER | GPS tracking devices |
-| 7 | DEVICE_TYPE_VEHICLE | Vehicles (cars, trucks, etc) |
-
-## Terminal Commands Reference
-
-### Devices Management
-- `devices` - List all accessible devices on the network
-
-### Door Control
-- `door <buildingID> <doorID|a> <lock|unlock>` - Control building doors
-  - Example: `door 1454 2881 lock` - Lock specific door
-  - Example: `door 1454 a unlock` - Unlock all doors in building
-
-### Light Control
-- `light <lightID|a> <on|off>` - Control building lights
-  - Example: `light 3 off` - Turn off light #3
-  - Example: `light a on` - Turn on all accessible lights
-
-### Power Grid Control
-- `powergrid <generatorID> <on|off|overload>` - Control power generators
-  - Example: `powergrid 1234 on` - Activate generator #1234 (turns on lights in radius)
-  - Example: `powergrid 5678 off` - Deactivate generator #5678 (turns off lights in radius)
-  - Example: `powergrid 4514 overload` - Overloads generator and turns off lights in radius (cannot be turned on/off again)
-
-### Drone Hacking
-- `changedrone <droneID|a> <west|east|guer|civ>` - Change drone faction
-  - Example: `changedrone 2 west` - Switch drone #2 to BLUFOR
-- `disabledrone <droneID|a>` - Disable/destroy drone
-  - Example: `disabledrone a` - Destroy all accessible drones
-
-### Database Access
-- `download <databaseID>` - Download file to Downloads folder
-  - Example: `download 4823` - Download database #4823
-
-### Custom Devices
-- `custom <customID> <activate|deactivate>` - Control custom device
-  - Example: `custom 5 activate` - Activate custom device #5
-
-### GPS Tracking
-- `gpstrack <trackerID>` - Start tracking a GPS device
-  - Example: `gpstrack 2421` - Track GPS device #2421
-
-### Vehicle Hacking
-- `vehicle <vehicleID> <action> <value>` - Manipulate vehicle systems
-  - Actions: `engine <on|off>`, `speed <any number>`, `battery <0-200>`, `brakes <apply|release>`, `alarm <any number>`, `lights <on|off>`
-  - Example: `vehicle 1337 engine off` - Turns off vehicle engine
-  - Example: `vehicle 1337 speed 200` - Increases the velocity of the vehicle by 200
-  - Example: `vehicle 1337 battery 50` - Sets the fuel of the vehicle to 50. Anything more than 100 makes the vehicle explode
-  - Example: `vehicle 1337 brakes apply` - Applies the vehicle brakes
-  - Example: `vehicle 1337 alarm 15` - Plays car alarm for 15 seconds
-  - Example: `vehicle 1337 lights on` - Turns on lights (only for EMPTY vehicles)
-
-## Architecture
-
-### Data Storage System
-
-The mod uses a hybrid approach for device storage and access control:
-
-**Device Storage** (Array-based):
-- **`ROOT_CYBERWARFARE_ALL_DEVICES`** - Primary storage for all devices
-  - Structure: `[doors, lights, drones, databases, custom, gpsTrackers, vehicles]`
-  - Each sub-array contains device entries with format specific to device type
-  - Used by all Zeus registration functions (`fn_addDeviceZeusMain`, `fn_addVehicleZeusMain`, etc.)
-  - Provides simple iteration and debugging
-
-**Access Control** (Hybrid Array + HashMap):
-- **`ROOT_CYBERWARFARE_LINK_CACHE`** (HashMap) - Computer-to-device private links
-  - Structure: `computerNetId -> [[deviceType, deviceId], ...]`
-  - O(1) lookup for checking computer access to specific devices
-  - Used by `fn_isDeviceAccessible` for private device checks
-
-- **`ROOT_CYBERWARFARE_PUBLIC_DEVICES`** (Array) - Publicly accessible devices
-  - Structure: `[[deviceType, deviceId, [excludedNetIds]], ...]`
-  - Contains devices available to all/most computers with optional exclusion lists
-  - Used for "Available to Future Laptops" functionality
-
-### Power System
-
-All hacking operations consume power (Watt-hours):
-- Laptops have battery levels (stored in kWh)
-- Each operation has a configurable power cost
-- Operations fail if insufficient power
-- Curators can modify power levels via Zeus
-
-### Access Control
-
-Device accessibility is checked in three priority levels (checked in order by `fn_isDeviceAccessible`):
-
-1. **Backdoor Access** (highest priority)
-   - Special command paths marked as "backdoor" bypass all access checks
-   - Configured via `ROOT_CYBERWARFARE_BACKDOOR_FUNCTION` variable on computer
-   - Used for admin/debug access
-
-2. **Public Device Access**
-   - Devices in `ROOT_CYBERWARFARE_PUBLIC_DEVICES` array
-   - Supports exclusion lists - specific computers can be blocked
-   - Used for "Available to Future Laptops" feature:
-     - New computers added after device registration automatically get access
-     - Current computers at registration time are excluded (unless explicitly linked)
-   - Access check: `!(_computerNetId in _excludedNetIds)`
-
-3. **Private Device Links** (lowest priority)
-   - Direct computer-to-device relationships in `ROOT_CYBERWARFARE_LINK_CACHE` HashMap
-   - Set via Zeus "Link to Computer" checkboxes
-   - O(1) lookup: `_linkCache get [computerNetId]` returns array of `[deviceType, deviceId]` pairs
-
-## Development
-
-### Building from Source
-
-```bash
-# Clone repository
-git clone https://github.com/A3-Root/Root_CyberWarfare.git
-cd Root_CyberWarfare
-
-# Build with HEMTT
-hemtt dev         # Development build with symlink
-hemtt build       # Test the build before signing
-hemtt release     # Production build
-hemtt check -p    # Lint and validate code
-```
-
-### Function Reference
-
-All functions are documented with SQFdoc headers. Key functions:
-
-**Core Functions** (`functions/core/`):
-- `fn_isDeviceAccessible.sqf` - Checks if computer can access a device (3-tier: backdoor → public → private)
-- `fn_cleanup.sqf` - Cleanup handler for destroyed objects
-
-**Utility Functions** (`functions/utility/`):
-- `fn_checkPowerAvailable.sqf` - Check if laptop has sufficient battery
-- `fn_consumePower.sqf` - Consume power and broadcast CBA event
-- `fn_getUserConfirmation.sqf` - Show Y/N confirmation prompt
-- `fn_getAccessibleDevices.sqf` - Get all accessible devices of a type for a computer
-
-**Device Control** (`functions/devices/`):
-- `fn_changeDoorState.sqf` - Lock/unlock building doors
-- `fn_changeLightState.sqf` - Toggle lights on/off
-- `fn_changeDroneFaction.sqf` - Change drone side
-- `fn_disableDrone.sqf` - Disable/destroy drones
-- `fn_changeVehicleParams.sqf` - Manipulate vehicle systems
-- `fn_customDevice.sqf` - Activate/deactivate custom devices
-- `fn_listDevicesInSubnet.sqf` - List accessible devices (for `devices` command)
-
-**GPS Tracking** (`functions/gps/`):
-- `fn_aceAttachGPSTracker.sqf` - ACE interaction to attach tracker (shows config dialog)
-- `fn_gpsTrackerServer.sqf` - Server-side tracking logic
-- `fn_gpsTrackerClient.sqf` - Client-side marker management
-- `fn_displayGPSPosition.sqf` - Display GPS position on map
-- `fn_searchForGPSTracker.sqf` - Search for hidden trackers
-
-**Database** (`functions/database/`):
-- `fn_downloadDatabase.sqf` - Download files to laptop
-
-**Zeus Modules** (`functions/zeus/`):
-- `fn_addHackingToolsZeus.sqf` / `fn_addHackingToolsZeusMain.sqf` - Add hacking tools to computer
-- `fn_addDeviceZeus.sqf` / `fn_addDeviceZeusMain.sqf` - Register doors/lights/drones/custom devices
-- `fn_addVehicleZeus.sqf` / `fn_addVehicleZeusMain.sqf` - Register hackable vehicles
-- `fn_addDatabaseZeus.sqf` / `fn_addDatabaseZeusMain.sqf` - Register downloadable files
-- `fn_addGPSTrackerZeus.sqf` / `fn_addGPSTrackerZeusMain.sqf` - Register GPS trackers
-- `fn_addPowerGeneratorZeus.sqf` / `fn_addPowerGeneratorZeusMain.sqf` - Register power generators (light control)
-- `fn_modifyPowerZeus.sqf` - Modify power costs for hacking operations
-
-### Adding Custom Devices
-
-**Method 1: Using Zeus Module (Recommended)**
-```sqf
-// Use Zeus "Add Hackable Object" module and enable "Treat as Custom Device"
-// Or via script:
-[_myObject, 0, [], true, "My Custom Device",
- "hint 'Device Activated'",
- "hint 'Device Deactivated'",
- false] call Root_fnc_addDeviceZeusMain;
-```
-
-**Method 2: Manual Registration**
-```sqf
-// 1. Load device storage
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
-private _allCustom = _allDevices select 4;
-
-// 2. Generate unique ID
-private _deviceId = (round (random 8999)) + 1000;
-
-// 3. Store activation/deactivation code on object
-_myObject setVariable ["ROOT_CYBERWARFARE_ACTIVATIONCODE", "hint 'Activated'", true];
-_myObject setVariable ["ROOT_CYBERWARFARE_DEACTIVATIONCODE", "hint 'Deactivated'", true];
-
-// 4. Add to device storage
-_allCustom pushBack [_deviceId, netId _myObject, "My Custom Device", "hint 'Activated'", "hint 'Deactivated'", false];
-_allDevices set [4, _allCustom];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
-
-// 5. Link to computer (optional - skip to make it public)
-private _linkCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_LINK_CACHE", createHashMap];
-private _existingLinks = _linkCache getOrDefault [netId _computer, []];
-_existingLinks pushBack [5, _deviceId]; // 5 = DEVICE_TYPE_CUSTOM
-_linkCache set [netId _computer, _existingLinks];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_LINK_CACHE", _linkCache, true];
-```
-
-**Activation/Deactivation Code**:
-- Code is stored on the object and executed when player uses `custom <id> activate/deactivate`
-- Access to: `_this = [_device, _state]` where `_state` is "activate" or "deactivate"
-- Runs in SCHEDULED environment (like `spawn`)
-- Use `_this select 0` to reference the device object
-
-## Contributing
-
-I welcome contributions! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Follow SQF coding standards (see `.hemtt/project.toml`)
-4. Add SQFdoc comments to new functions
-5. Run `hemtt check -p` to validate code
-6. Commit changes (`git commit -m 'Add amazing feature'`)
-7. Push to branch (`git push origin feature/amazing-feature`)
-8. Open a Pull Request
-
-### Code Style
-
-- Use CBA macros (FUNC, QFUNC, GVAR, etc.)
-- Use stringtables for user-facing text
-- Add proper SQFdoc headers to all functions
-- Follow existing code organization patterns
-
-## Troubleshooting
-
-### Common Issues
-
-**"No accessible devices found"**
-- **Cause**: Computer has no linked devices and no public devices exist
-- **Solution**: Use Zeus modules to:
-  - Register devices (doors, vehicles, GPS trackers, etc.)
-  - Enable "Available to Future Laptops" OR select the computer in "Link to Computer" checkboxes
-  - Or use `fn_addDeviceZeusMain` / `fn_addVehicleZeusMain` with appropriate linking parameters
-
-**"Insufficient power"**
-- **Cause**: Laptop battery is empty or below required power for operation
-- **Solution**: Double click on the laptop to modify battery charge, or connect laptop to power generator (if using AE3 power system)
-
-**"Building not found" / "No accessible buildings"**
-- **Cause**: Building ID doesn't exist or computer doesn't have access
-- **Solution**:
-  - Check building ID using `devices` command
-  - Check access: ensure computer is linked or device is public
-
-**Functions not found (RPT errors like "fn_xxx not found")**
-- **Cause**: Missing dependencies or incorrect mod load order
-- **Solution**:
-  - Ensure CBA_A3, ACE3, and AE3 are loaded BEFORE Root's Cyber Warfare
-  - Check launcher mod load order
-  - Verify all 3 required mods are subscribed and enabled
-  - Check RPT file for detailed error messages
-
-**Undefined variable errors (RPT errors like "_variableName is undefined")**
-- **Cause**: Code issue, likely after recent refactoring
-- **Solution**: Report on GitHub Issues with full RPT error message
-
-### Debug Mode
-
-Enable debug logging by defining `DEBUG_ENABLED_ROOT_CYBERWARFARE` in `script_component.hpp`:
-```cpp
-#define DEBUG_ENABLED_ROOT_CYBERWARFARE
-```
-
-Debug logs will appear in the RPT file with `[ROOT_CYBERWARFARE DEBUG]` prefix.
-
-## Credits
-
-**Author**: Root
-**Contributors**: Mister Adrian
-
-**Special Thanks**:
-- Mister Adrian - The original creator of the MACW mod available in steam workshop and for providing permissions to take over his work.
-- CBA Team - Core framework foundation upon which this is built
-- ACE Team - For the ACE interactions in using laptops and GPS attachments 
-- AE3 Team - ArmaOS terminal system
-- ZEN Team - Core foundation for zeus modules and dialogs
-
-## License
-
-This project is licensed under the APL-SA License - see [LICENSE](LICENSE) file for details.
-
-## Links
-
-- **GitHub**: https://github.com/A3-Root/Root_Cyberwarfare
-- **Steam Workshop**: [Link to Workshop]
-- **Discord**: [77th JSOC - Root](https://discord.gg/77th-jsoc-official)
-- **Bug Reports**: https://github.com/A3-Root/Root_Cyberwarfare/issues
-- **Wiki**: https://github.com/A3-Root/Root_Cyberwarfare/wiki
+![Version](https://img.shields.io/badge/version-2.20.1-blue.svg)
+![Arma 3](https://img.shields.io/badge/Arma%203-1.0+-orange.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+
+A comprehensive cyber warfare mod for Arma 3 that adds hacking capabilities for vehicles, drones, buildings, and custom devices.
 
 ---
 
-**Version**: 2.20.1
-**Last Updated**: 2025-10-18
-**Arma 3 Version**: 2.18+
+## Features
+
+### Hackable Devices
+
+- **Buildings** - Lock/unlock doors remotely with optional unbreachable mode
+- **Lights** - Control street lamps and building lights
+- **Vehicles** - Manipulate fuel, speed, brakes, lights, engine, and alarms
+- **Drones/UAVs** - Change faction or permanently disable drones
+- **Custom Devices** - Create scripted devices with custom activation/deactivation code
+- **GPS Trackers** - Real-time position tracking for units and vehicles
+- **Power Generators** - Control power grids affecting lights in a radius
+- **Databases** - Downloadable files with customizable content
+
+### Access Control System
+
+Sophisticated 3-tier access control:
+
+1. **Backdoor Access** - Admin/debug access bypassing all checks
+2. **Public Device Access** - Devices available to all or future laptops
+3. **Private Link Access** - Direct computer-to-device relationships
+
+### Power Management
+
+All hacking operations consume power from the laptop's battery (managed by AE3 ArmaOS). Power costs are fully configurable via CBA settings and vary by operation type.
+
+### Integration
+
+- **Zeus Enhanced (ZEN)** - Runtime device registration via Zeus modules
+- **Eden Editor** - Pre-mission device setup with dedicated modules
+- **Scripting API** - Programmatic device registration for mission makers
+- **ACE3 Integration** - GPS tracker attachment via ACE interaction menu
+- **AE3 ArmaOS** - Terminal interface for all hacking operations
+
+---
+
+## Installation
+
+1. Download the latest release from [Releases](https://github.com/ROOT/Root_Cyberwarfare/releases)
+2. Extract to your Arma 3 mods folder
+3. Enable the mod in the Arma 3 launcher
+
+**Required Dependencies** (all mandatory):
+- [CBA_A3](https://github.com/CBATeam/CBA_A3) - Community Base Addons
+- [ACE3](https://github.com/acemod/ACE3) - Advanced Combat Environment
+- [AE3](https://github.com/WildTangent/Advanced-Equipment) - Advanced Equipment (ArmaOS)
+- [ZEN](https://github.com/zen-mod/ZEN) - Zeus Enhanced
+
+---
+
+## Usage
+
+### For Players
+
+1. Find a laptop with hacking tools installed
+2. Use ACE interaction menu (Windows key) → "Access Terminal"
+3. Use the `devices` command to list hackable devices
+4. Execute commands to control devices (e.g., `door 1234 unlock`)
+
+**See**: [Player Guide](wiki/Player-Guide.md) | [Terminal Commands](wiki/Terminal-Commands.md)
+
+### For Zeus / Game Masters
+
+1. Open Zeus interface (Y key)
+2. Navigate to Modules → Root Cyber Warfare
+3. Use modules to add hacking tools and register devices
+
+**Available Modules**:
+- Add Hacking Tools (Laptop)
+- Add Hackable Building/Light
+- Add Hackable Vehicle (auto-detects drones)
+- Add Custom Device
+- Add Power Generator
+
+**See**: [Zeus Guide](wiki/Zeus-Guide.md)
+
+### For Mission Makers
+
+**Eden Editor**:
+- Place laptop → Add "Add Hacking Tools" module
+- Place devices → Add corresponding modules
+- Sync modules to laptops for access control
+
+**Scripting**:
+```sqf
+// Add hacking tools to laptop
+[laptop1, "", 0, "HQ Terminal", []] call Root_fnc_addHackingToolsZeusMain;
+
+// Register enemy building
+[building1, 0, [netId laptop1], false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+
+// Register vehicle
+[car1, 0, [], "Enemy Transport", true, false, false, false, true, false, false, 5] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+```
+
+**See**: [Eden Editor Guide](wiki/Eden-Editor-Guide.md) | [Mission Maker Guide](wiki/Mission-Maker-Guide.md) | [API Reference](wiki/API-Reference.md)
+
+---
+
+## CBA Configuration
+
+Configure power costs and settings via:
+
+**Main Menu → Options → Addon Options → Root's Cyber Warfare**
+
+**Available Settings**:
+- Power cost for door operations (default: 2 Wh)
+- Power cost for light operations (default: 2 Wh)
+- Power cost for drone faction change (default: 20 Wh)
+- Power cost for drone disable (default: 10 Wh)
+- Power cost for custom devices (default: 10 Wh)
+- GPS tracker update interval (default: 10 seconds)
+- GPS tracker maximum range (default: unlimited)
+
+**See**: [Configuration Guide](wiki/Configuration.md)
+
+---
+
+## Documentation
+
+### Guides
+
+- [Home](wiki/Home.md) - Documentation overview
+- [Player Guide](wiki/Player-Guide.md) - How to use hacking tools in-game
+- [Zeus Guide](wiki/Zeus-Guide.md) - Runtime setup as Zeus/GM
+- [Eden Editor Guide](wiki/Eden-Editor-Guide.md) - Pre-mission setup
+- [Mission Maker Guide](wiki/Mission-Maker-Guide.md) - Script-based mission creation
+- [Configuration Guide](wiki/Configuration.md) - CBA settings and customization
+- [Terminal Commands](wiki/Terminal-Commands.md) - Complete command reference
+- [API Reference](wiki/API-Reference.md) - Function reference for developers
+
+### Architecture
+
+See [CLAUDE.md](CLAUDE.md) for:
+- Build system (HEMTT) usage
+- Code architecture and organization
+- Data storage structure (3-tier hybrid system)
+- Function patterns and naming conventions
+- Development workflows
+
+---
+
+## Building from Source
+
+This mod uses [HEMTT](https://github.com/BrettMayson/HEMTT) for building and packaging.
+
+**Common Commands**:
+```bash
+hemtt dev         # Development build with symlink
+hemtt build       # Test build before signing
+hemtt release     # Production build with signing
+hemtt check -p    # Lint and validate all SQF code
+```
+
+**Requirements**:
+- HEMTT v0.8.0+
+- Arma 3 Tools (for signing)
+
+**See**: [CLAUDE.md](CLAUDE.md) for detailed build instructions
+
+---
+
+## Contributing
+
+Contributions are welcome! Please follow these guidelines:
+
+1. **Code Style**: Follow existing patterns in CLAUDE.md
+2. **Linting**: Run `hemtt check -p` before committing (must pass with no errors)
+3. **Documentation**: Update wiki pages for user-facing changes
+4. **Testing**: Test changes in Arma 3 with all dependencies
+5. **Commits**: Use clear, descriptive commit messages
+
+**Pull Request Process**:
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run `hemtt check -p` and `hemtt build` to validate
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+**Bug Reports**:
+- Use [GitHub Issues](https://github.com/ROOT/Root_Cyberwarfare/issues)
+- Include RPT log excerpts
+- Provide reproduction steps
+- List mod versions and dependencies
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## Credits
+
+- **Author**: Root
+- **Framework**: CBA_A3 by CBA Team
+- **Dependencies**: ACE3 Team, AE3 Team, ZEN Team
+
+---
+
+## Support
+
+- **Issues**: [GitHub Issues](https://github.com/ROOT/Root_Cyberwarfare/issues)
+- **Documentation**: [Wiki](wiki/Home.md)
+- **Discord**: [Link to Discord Server]
+
+---
+
+## Changelog
+
+### 2.20.1 (Current)
+- New modules and todolist
+- Power fixes
+- Bugfixes
+- GPS fix
+
+### Previous Versions
+See [CHANGELOG.md](CHANGELOG.md) for full version history.
+
+---
+
+## Screenshots
+
+[Add screenshots here showing:]
+- Terminal interface with device list
+- Zeus module placement
+- Hacking operations in action
+- GPS tracker display
+- Custom device examples
+
+---
+
+## Roadmap
+
+- [ ] Network packet interception
+- [ ] Firewall bypass mechanics
+- [ ] Multi-stage hacking challenges
+- [ ] Countermeasure systems
+- [ ] Additional device types
+- [ ] Mission templates and examples
+
+---
+
+**Enjoy hacking in Arma 3!**

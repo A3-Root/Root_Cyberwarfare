@@ -1,452 +1,311 @@
 # Player Guide
 
-This guide teaches you how to use Root's Cyber Warfare as a player in-game.
+This guide explains how to use Root's Cyber Warfare mod as a player in-game.
 
-## Overview
+## Table of Contents
 
-As a cyber warfare operator, you'll use laptops equipped with hacking tools to control devices remotely. This includes doors, lights, drones, vehicles, and more. All operations consume laptop battery power, so manage your resources wisely.
-
----
+- [Getting Started](#getting-started)
+- [Accessing the Terminal](#accessing-the-terminal)
+- [Basic Terminal Commands](#basic-terminal-commands)
+- [Hacking Devices](#hacking-devices)
+- [Power Management](#power-management)
+- [GPS Tracking](#gps-tracking)
+- [Tips and Tricks](#tips-and-tricks)
 
 ## Getting Started
 
-### Finding a Hacking Laptop
+### Prerequisites
 
-Mission makers will place laptops in the mission. Look for:
-- Laptop objects on tables or desks
-- Items in your inventory (if pre-equipped)
-- Zeus-placed laptops during dynamic missions
+Before you can start hacking, you need:
 
-### Accessing the Terminal
+1. **A Laptop with Hacking Tools** - Your mission maker or Zeus must add hacking tools to a laptop
+2. **Access to the Laptop** - Physical proximity to interact with it
+3. **Power** - The laptop must have battery charge (managed by AE3)
 
-1. **Approach a laptop** with hacking tools installed
-2. **Use ACE interaction** (default: Windows key)
-3. **Select**: `ArmaOS` → `Use`
-4. **Terminal opens** - You're now in the AE3 virtual filesystem
+### Checking if a Laptop Has Hacking Tools
 
----
+Not all laptops have hacking tools installed. To check:
 
-## Understanding the Terminal
+1. Approach the laptop
+2. Use ACE interaction menu (default: Windows key)
+3. Look for "Access Terminal" option
+4. If available, the laptop has hacking tools
 
-The terminal is a command-line interface similar to Linux/Unix terminals.
+## Accessing the Terminal
 
-### Basic Terminal Navigation
+1. Approach a laptop with hacking tools installed
+2. Open ACE interaction menu (default: Windows key)
+3. Select "Access Terminal"
+4. The AE3 ArmaOS terminal will open
 
-```bash
-# See available commands
-ls /rubberducky/tools
+## Basic Terminal Commands
 
-# View help
-cat /rubberducky/tools/guide.txt
+### Viewing Available Devices
 
-# List all accessible devices
-/rubberducky/tools/devices
+```
+devices
 ```
 
-### Terminal Syntax
+Lists all hackable devices accessible from your current laptop. Devices are organized by type:
+- Doors (Buildings)
+- Lights
+- Vehicles
+- Drones
+- Custom Devices
+- GPS Trackers
+- Databases
 
-All hacking commands follow this pattern:
-```bash
-/path/to/command [arguments]
+Each device shows:
+- Device ID (used for hacking)
+- Device name/description
+- Current status (where applicable)
+
+### Getting Help
+
+```
+help
 ```
 
-Example:
-```bash
-/rubberducky/tools/door 1234 lock
+Shows available terminal commands and their descriptions.
+
+## Hacking Devices
+
+### Buildings (Doors)
+
+**Unlock a door:**
+```
+door <device_id> unlock
 ```
 
----
+**Lock a door:**
+```
+door <device_id> lock
+```
+
+**View door status:**
+```
+door <device_id> status
+```
+
+**Note**: Some doors may be marked as "UNBREACHABLE" meaning they cannot be breached with ACE explosives or lockpicks - only hacking works.
+
+### Lights
+
+**Turn light on:**
+```
+light <device_id> on
+```
+
+**Turn light off:**
+```
+light <device_id> off
+```
+
+**Toggle light:**
+```
+light <device_id> toggle
+```
+
+### Vehicles
+
+Vehicles can have multiple hackable features depending on how they were configured:
+
+**Control fuel/battery:**
+```
+vehicle <device_id> fuel <0-100>
+```
+Example: `vehicle 1234 fuel 50` sets fuel to 50%
+
+**Control speed:**
+```
+vehicle <device_id> speed <value>
+```
+Example: `vehicle 1234 speed 30` limits speed to 30 km/h
+
+**Control brakes:**
+```
+vehicle <device_id> brakes <on|off>
+```
+Example: `vehicle 1234 brakes on` applies brakes
+
+**Control lights:**
+```
+vehicle <device_id> lights <on|off>
+```
+**Note**: Only works on empty/non-AI controlled vehicles
+
+**Control engine:**
+```
+vehicle <device_id> engine <on|off>
+```
+Example: `vehicle 1234 engine off` turns off engine
+
+**Trigger alarm:**
+```
+vehicle <device_id> alarm
+```
+Activates the vehicle's alarm sound
+
+### Drones (UAVs)
+
+**Change drone faction:**
+```
+drone <device_id> side <BLUFOR|OPFOR|INDEPENDENT|CIVILIAN>
+```
+Example: `drone 5678 side OPFOR` changes drone to enemy faction
+
+**Disable drone:**
+```
+drone <device_id> disable
+```
+Permanently disables the drone
+
+### Custom Devices
+
+Custom devices have unique activation/deactivation commands set by the mission maker:
+
+**Activate device:**
+```
+custom <device_id> activate
+```
+
+**Deactivate device:**
+```
+custom <device_id> deactivate
+```
+
+The actual effect depends on the script configured by the mission maker.
+
+### Databases
+
+**Download file:**
+```
+database <device_id> download
+```
+
+Downloads the file from the database to your laptop. File content will be displayed in the terminal.
 
 ## Power Management
 
-Every hacking operation consumes battery power (measured in Wh - Watt-hours).
-
 ### Checking Battery Level
 
-Your laptop's battery level is displayed in the AE3 interface. Before executing commands:
-
-1. **Check power cost** - Commands show power requirements before execution
-2. **Confirm operation** - Most commands prompt "Are you sure? (Y/N)"
-3. **Monitor battery** - If power is insufficient, the command will fail
-
-### Power Consumption Examples
-
-| Operation | Typical Cost |
-|-----------|-------------|
-| Lock/Unlock Door | 2 Wh |
-| Toggle Light | 0 Wh (instant) |
-| Change Drone Faction | 20 Wh |
-| Disable Drone | 10 Wh |
-| GPS Tracking | 2 Wh |
-| Custom Device | 10 Wh |
-| Vehicle Hacking | 2 Wh per action |
-
-**Note**: Mission makers can configure these costs via CBA settings.
-
----
-
-## Basic Commands
-
-### 1. List Devices (`devices`)
-
-Lists all devices you have access to in the network.
-
-**Usage**:
-```bash
-/rubberducky/tools/devices
-```
-
-**Output**:
-```
-Building: 1234 (Land_Cargo_House_V1_F) located at Grid - 123456
-    Door: 1  locked closed
-    Door: 2  unlocked open
-
-Lights:
-    Light: 5678 (Land_LampShabby_F) @ 123457  OFF
-
-Drones:
-    Drone: 9012  'EAST' B_UAV_02_F  @ 123458
-
-Files:
-    File: Secret Intel (ID: 3456)    Est. Transfer Time: 10 seconds
-
-GPS Trackers:
-    Target_Vehicle (ID: 7890) - Track Time: 60s - Frequency: 5s - Untracked
-
-Vehicles:
-    Vehicle: 1111 - Offroad_01 (C_Offroad_01_F) - Battery, Speed, Engine @ 123459
-```
-
-### 2. View Guide (`guide.txt`)
-
-Displays in-game help text.
-
-**Usage**:
-```bash
-cat /rubberducky/tools/guide.txt
-```
-
----
-
-## Door Control
-
-Control building doors (lock/unlock).
-
-### Command: `door`
-
-**Syntax**:
-```bash
-/rubberducky/tools/door <doorID> <state>
-/rubberducky/tools/door <buildingID> <doorNumber> <state>
-```
-
-**Arguments**:
-- `<doorID>`: Building ID from `devices` command
-- `<doorNumber>`: Specific door number (1, 2, 3, etc.)
-- `<state>`: `lock` or `unlock`
-
-**Examples**:
-```bash
-# Lock door 1 of building 1234
-/rubberducky/tools/door 1234 1 lock
-
-# Unlock door 2 of building 1234
-/rubberducky/tools/door 1234 2 unlock
-
-# Lock all doors in building 1234
-/rubberducky/tools/door 1234 a lock
-```
-
-**Power Cost**: 2 Wh per door (default)
-
----
-
-## Light Control
-
-Toggle lights on/off.
-
-### Command: `light`
-
-**Syntax**:
-```bash
-/rubberducky/tools/light <lightID> <state>
-```
-
-**Arguments**:
-- `<lightID>`: Light ID from `devices` command, or `a` for all lights
-- `<state>`: `on` or `off`
-
-**Examples**:
-```bash
-# Turn on light 5678
-/rubberducky/tools/light 5678 on
-
-# Turn off light 5678
-/rubberducky/tools/light 5678 off
-
-# Turn all lights on
-/rubberducky/tools/light a on
-```
-
-**Power Cost**: 0 Wh (instant)
-
----
-
-## Drone Hacking
-
-Control or disable drones.
-
-### Command: `changedrone`
-
-Change a drone's faction/side.
-
-**Syntax**:
-```bash
-/rubberducky/tools/changedrone <droneID> <faction>
-```
-
-**Arguments**:
-- `<droneID>`: Drone ID from `devices`, or `a` for all drones
-- `<faction>`: `west`, `east`, `guer` (independent), or `civ` (civilian)
-
-**Examples**:
-```bash
-# Change drone 9012 to BLUFOR
-/rubberducky/tools/changedrone 9012 west
-
-# Change all drones to OPFOR
-/rubberducky/tools/changedrone a east
-```
-
-**Power Cost**: 20 Wh per drone (default)
-
-### Command: `disabledrone`
-
-Destroy/disable a drone.
-
-**Syntax**:
-```bash
-/rubberducky/tools/disabledrone <droneID>
-```
-
-**Examples**:
-```bash
-# Disable drone 9012
-/rubberducky/tools/disabledrone 9012
-
-# Disable all drones
-/rubberducky/tools/disabledrone a
-```
-
-**Power Cost**: 10 Wh per drone (default)
-
----
-
-## Database/File Access
-
-Download files from the network to your laptop.
-
-### Command: `download`
-
-**Syntax**:
-```bash
-/rubberducky/tools/download <fileID>
-```
-
-**Arguments**:
-- `<fileID>`: Database/file ID from `devices` command
-
-**Example**:
-```bash
-# Download file 3456
-/rubberducky/tools/download 3456
-```
-
-**Output**:
-```
-Downloading File: 050%. [############.............]
-Downloading File: 100%. [#########################]
-File saved to: '/rubberducky/tools/Files/Secret_Intel.txt'
-Exit the terminal and re-open to see the 'Files' directory updated.
-```
-
-**Reading Downloaded Files**:
-```bash
-cat /rubberducky/tools/Files/Secret_Intel.txt
-```
-
-**Power Cost**: 0 Wh (no cost to download)
-
----
+The terminal typically shows your current battery level. All hacking operations consume power.
+
+### Power Costs
+
+Different operations have different power costs (configurable by server):
+- **Door operations**: ~2 Wh (default)
+- **Light operations**: ~2 Wh (default)
+- **Vehicle operations**: Varies (2-30 Wh depending on feature)
+- **Drone faction change**: ~20 Wh (default)
+- **Drone disable**: ~10 Wh (default)
+- **Custom devices**: ~10 Wh (default)
+
+### What Happens When Battery Dies
+
+If your laptop runs out of power:
+- You cannot perform any hacking operations
+- You need to recharge the laptop (via AE3 power management)
+- Already hacked devices remain in their current state
 
 ## GPS Tracking
 
-Track objects with GPS trackers attached.
+### Attaching a GPS Tracker
 
-### Command: `gpstrack`
+1. Approach the target unit/vehicle
+2. Use ACE interaction menu
+3. Select "Attach GPS Tracker" (if available)
+4. The tracker will be registered in your network
 
-**Syntax**:
-```bash
-/rubberducky/tools/gpstrack <trackerID>
+### Viewing Tracker Locations
+
+```
+gps list
 ```
 
-**Arguments**:
-- `<trackerID>`: GPS tracker ID from `devices` command
+Shows all active GPS trackers with:
+- Device ID
+- Target name
+- Last known position
+- Last update time
+- Active status
 
-**Example**:
-```bash
-# Start tracking target 7890
-/rubberducky/tools/gpstrack 7890
+### Locating a Specific Tracker
+
+```
+gps locate <device_id>
 ```
 
-**Output**:
-```
-Power Cost: 2Wh.
-Are you sure? (Y/N): y
-Tracking started for: Target_Vehicle (ID: 7890)
-Power Cost: 2Wh
-New Power Level: 498Wh
-```
+Shows detailed position information for a specific tracker.
 
-**Map Display**:
-- A marker appears on your map showing the target's position
-- Marker updates every 5 seconds (configurable)
-- Tracking stops after 60 seconds (configurable)
-- Red "last ping" marker shows final position for 30 seconds
+### Managing Trackers
 
-**Power Cost**: 2 Wh per tracking session (default)
+GPS trackers update automatically at configured intervals. If a tracked unit is destroyed, the tracker will stop updating.
+
+## Tips and Tricks
+
+### Efficient Power Usage
+
+- Plan your hacking operations to minimize power consumption
+- Prioritize critical targets
+- Check battery level before starting complex operations
+
+### Device ID Management
+
+- Write down important device IDs for quick access
+- Use the `devices` command to refresh the device list
+- Device IDs are unique 4-digit numbers (1000-9999)
+
+### Access Control
+
+- Some devices may not be visible in your device list if they're not linked to your laptop
+- Ask your Zeus/mission maker if you're missing expected devices
+- "Public" devices are available to all laptops
+- "Private" devices are linked to specific laptops only
+
+### Coordination with Team
+
+- Share device IDs with teammates using the same network
+- Coordinate vehicle hacks to disable enemy transport
+- Use GPS trackers on high-value targets
+
+### Troubleshooting
+
+**"Device not found" error:**
+- Check the device ID is correct
+- Ensure the device is still accessible
+- The device may have been destroyed
+
+**"Insufficient power" error:**
+- Your laptop battery is too low
+- Recharge the laptop via AE3 power management
+
+**"Access denied" error:**
+- Your laptop doesn't have permission to access this device
+- Contact your Zeus/mission maker for access
+
+**Command not working:**
+- Check command syntax (use `help` command)
+- Ensure all parameters are correct
+- Some features may be disabled on specific devices
+
+## Advanced Usage
+
+### Backdoor Access
+
+Some laptops may have "backdoor" access configured, allowing them to bypass normal access controls and access all devices on the network. This is typically used for admin/debug purposes.
+
+### Network Subnets
+
+Devices are organized into network subnets. Your laptop is assigned to a specific subnet and can only access devices in the same subnet (unless backdoor access is enabled).
+
+### Future Laptop Access
+
+Some devices may be configured as "Available to Future Laptops," meaning they become accessible to new laptops added after the device registration, but not to existing laptops (unless explicitly linked).
 
 ---
 
-## Vehicle Hacking
-
-Manipulate vehicle parameters remotely.
-
-### Command: `vehicle`
-
-**Syntax**:
-```bash
-/rubberducky/tools/vehicle <vehicleID> <action> <value>
-```
-
-**Arguments**:
-- `<vehicleID>`: Vehicle ID from `devices` command
-- `<action>`: `battery`, `speed`, `brakes`, `lights`, `engine`, `alarm`
-- `<value>`: Action-specific value
-
-**Actions & Values**:
-
-| Action | Value | Description |
-|--------|-------|-------------|
-| `battery` | `0-100` | Set fuel/battery % (101+ = destroy) |
-| `speed` | `number` | Adjust velocity (m/s) |
-| `brakes` | `any` | Apply emergency brakes |
-| `lights` | `on/off` | Toggle vehicle lights (empty vehicles only) |
-| `engine` | `on/off` | Toggle engine |
-| `alarm` | `1-60` | Sound alarm for N seconds |
-
-**Examples**:
-```bash
-# Drain vehicle battery to 10%
-/rubberducky/tools/vehicle 1111 battery 10
-
-# Increase speed by 20 m/s
-/rubberducky/tools/vehicle 1111 speed 20
-
-# Apply brakes
-/rubberducky/tools/vehicle 1111 brakes
-
-# Turn on lights
-/rubberducky/tools/vehicle 1111 lights on
-
-# Sound alarm for 10 seconds
-/rubberducky/tools/vehicle 1111 alarm 10
-```
-
-**Power Cost**: 2 Wh per action (default)
-
----
-
-## Custom Devices
-
-Mission makers can create custom hackable devices. These appear in the `devices` list under "Custom Devices".
-
-### Command: `custom`
-
-**Syntax**:
-```bash
-/rubberducky/tools/custom <deviceID> <state>
-```
-
-**Arguments**:
-- `<deviceID>`: Custom device ID
-- `<state>`: `activate` or `deactivate`
-
-**Example**:
-```bash
-# Activate custom device 4444
-/rubberducky/tools/custom 4444 activate
-```
-
-**Power Cost**: 10 Wh (default)
-
----
-
-## GPS Tracker Placement (ACE Interaction)
-
-You can physically place GPS trackers on objects (including yourself) and search the said tracker on other objects (excluding yourself) using ACE interactions.
-
-### Requirements
-
-- GPS tracker item in inventory (default: `ACE_Banana` - configurable by mission maker)
-- Optional GPS Detection item in inventory (default: `Any Spectrum Device from Contact DLC` - configurable by mission maker)
-- Target object (vehicle, player, etc.)
-
-### Placing a GPS Tracker on another Object/Player/Vehicle
-
-1. **Approach target** with GPS tracker item in inventory
-2. **Use ACE interaction** (Windows key)
-3. **Select**: `Attach GPS Tracker`
-4. **Configure settings** in ZEN dialog:
-   - Tracking Time (seconds)
-   - Update Frequency (seconds)
-5. **Confirm** - GPS tracker is placed and item is consumed
-
-### Placing a GPS Tracker on yourself
-
-1. **Approach target** with GPS tracker item in inventory
-2. **Use ACE Self-Interaction** (Control key + Windows key)
-3. **Select**: `Equipment` → `Attach GPS Tracker`
-4. **Configure settings** in ZEN dialog:
-   - Tracking Time (seconds)
-   - Update Frequency (seconds)
-5. **Confirm** - GPS tracker is placed and item is consumed
-
-### Searching for GPS Trackers
-
-Players can search for trackers:
-
-1. **Use ACE interaction** on suspected object
-2. **Select**: `Search for GPS Tracker`
-3. **Success**: 20% chance to find tracker (without Detection item) and 80% chance to find tracker (with Detection item) - configurable by mission maker
-4. **If found**: Option to disable the tracker (without Detection item) and find position of all laptops linked to this tracker (with Detection item)
-
----
-
-## Multiplayer Considerations
-
-- **Power is per-laptop**: Each laptop has its own battery
-- **Devices update globally**: Door locks, light states, etc. sync to all players
-- **GPS tracking is client-side**: Only the person who initiated the tracking sees the GPS markers
-
----
-
-## See Also
-
-- [Terminal Commands Reference](Terminal-Commands) - Complete command syntax
-- [Configuration Reference](Configuration) - Learn about mission settings
-
----
-
-**Need help?** Contact your mission maker or join discord or raise an issue in GitHub.
+For more information, see:
+- [Terminal Commands](Terminal-Commands.md) - Complete command reference
+- [Zeus Guide](Zeus-Guide.md) - How devices are set up
+- [Configuration Guide](Configuration.md) - Server settings and customization

@@ -149,6 +149,12 @@
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_TRACKER_DEVICE_DESC">
             <English>Classname of item used as GPS tracker</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_POWERGRID_COST">
+            <English>Power Grid Control Power Cost</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_POWERGRID_COST_DESC">
+            <English>Power cost in Wh to control power grid (on/off/overload)</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY">
             <English>Power Cost Settings</English>
         </Key>

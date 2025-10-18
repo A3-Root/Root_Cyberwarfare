@@ -1,500 +1,357 @@
 # Mission Maker Guide
 
-This guide covers integrating Root's Cyber Warfare into your Arma 3 missions using scripting.
+This guide covers programmatic setup of Root's Cyber Warfare using SQF scripts.
 
-# **WARNING: THIS IS A STOP GAP SOLUTION UNTIL A MORE PERMANENT 3DEN FRIENDLY MODULES ARE EVENTUALLY RELEASED.**
+## Table of Contents
+
+- [Overview](#overview)
+- [Function Reference](#function-reference)
+- [Programmatic Setup](#programmatic-setup)
+- [Advanced Techniques](#advanced-techniques)
+- [Examples](#examples)
 
 ## Overview
 
-While Zeus modules are great for dynamic missions, scripted integration gives you more control and allows pre-configuration. This guide shows you how to add hacking tools, devices, and configure access control via scripts.
+Mission makers can bypass Zeus/Eden modules and directly call functions to register devices programmatically. This is useful for:
 
----
+- Dynamic mission generation
+- Conditional device spawning
+- Integration with other scripts
+- Advanced mission logic
 
-## Quick Start
+### Important Notes
 
-### Minimal Setup
+- All `*Main` functions should be called on the **server only**
+- Functions use `remoteExec` to execute on server: `[params] remoteExec ["Root_fnc_functionMain", 2]`
+- Device IDs are auto-generated (random 4-digit numbers 1000-9999)
 
-Add this to your `init.sqf` or object init field:
+## Function Reference
 
-```sqf
-// 1. Add hacking tools to laptop
-[_laptop] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
+### Add Hacking Tools
 
-// 2. Make building hackable
-[_building] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-```
-
-That's it! Players can now use the laptop to hack the building.
-
----
-
-## Adding Hacking Tools
-
-### Function: `Root_fnc_addHackingToolsZeusMain`
-
-Installs hacking tools on a laptop.
+**Function**: `Root_fnc_addHackingToolsZeusMain`
 
 **Syntax**:
 ```sqf
-[_entity, _path, _execUserId, _customLaptopName, _backdoorScriptPrefix] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
+[object, backdoorPath, execUserId, laptopName, linkedComputerNetIds] call Root_fnc_addHackingToolsZeusMain;
 ```
 
 **Parameters**:
-| # | Name | Type | Optional | Default | Description |
-|---|------|------|----------|---------|-------------|
-| 0 | _entity | OBJECT | No | - | The laptop object |
-| 1 | _path | STRING | Yes | "/rubberducky/tools" | Installation path |
-| 2 | _execUserId | NUMBER | Yes | 0 | Owner ID for feedback |
-| 3 | _customLaptopName | STRING | Yes | "" | Display name |
-| 4 | _backdoorScriptPrefix | STRING | Yes | "" | Backdoor prefix |
+- `object` - The laptop object
+- `backdoorPath` - Backdoor access path (empty string "" for none)
+- `execUserId` - User ID for feedback (0 = owner)
+- `laptopName` - Display name for the laptop
+- `linkedComputerNetIds` - Array of netIDs to link (empty [] for none)
 
-**Examples**:
-
+**Example**:
 ```sqf
-// Basic installation
-[_laptop] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
-
-// With custom name
-[_laptop, "/tools", 0, "HQ_Terminal"] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
-
-// With backdoor access
-[_laptop, "/admin", 0, "Admin_Terminal", "/backdoor"] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
+[laptop1, "", 0, "Field Terminal Alpha", []] call Root_fnc_addHackingToolsZeusMain;
 ```
 
-**Backdoor System**:
+### Add Building (Doors/Lights)
 
-Backdoor prefix grants full access to ALL devices:
-
-```sqf
-// Admin laptop with backdoor
-[_laptop, "/admin/tools", 0, "Zeus_Terminal", "/admin"] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
-
-// Regular laptop (no backdoor)
-[_laptop, "/operative/tools", 0, "Field_Laptop", ""] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
-```
-
-Result:
-- Admin terminal: Full access to all devices
-- Field laptop: Only linked devices
-
----
-
-## Adding Devices
-
-### Function: `Root_fnc_addDeviceZeusMain`
-
-Makes an object hackable (auto-detects type or creates custom device).
+**Function**: `Root_fnc_addDeviceZeusMain`
 
 **Syntax**:
 ```sqf
-[_targetObject, _execUserId, _linkedComputers, _treatAsCustom, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[targetObject, execUserId, linkedComputers, availableToFutureLaptops, makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 ```
 
 **Parameters**:
-| # | Name | Type | Optional | Default | Description |
-|---|------|------|----------|---------|-------------|
-| 0 | _targetObject | OBJECT | No | - | Object to make hackable |
-| 1 | _execUserId | Yes | 0 | Owner ID for feedback |
-| 2 | _linkedComputers | ARRAY | Yes | [] | Array of computer netIds |
-| 3 | _treatAsCustom | BOOLEAN | Yes | false | Force custom device |
-| 4 | _customName | STRING | Yes | "" | Custom device name |
-| 5 | _activationCode | STRING | Yes | "" | Activation script |
-| 6 | _deactivationCode | STRING | Yes | "" | Deactivation script |
-| 7 | _availableToFutureLaptops | BOOLEAN | Yes | false | Future laptop access |
+- `targetObject` - Building or light object
+- `execUserId` - User ID (0 = auto)
+- `linkedComputers` - Array of computer netIds
+- `availableToFutureLaptops` - Boolean
+- `makeUnbreachable` - Boolean (doors only)
 
-**Examples**:
-
+**Example**:
 ```sqf
-// Basic device (auto-detected type)
-[_building] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[building1, 0, [netId laptop1], false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+```
 
-// Link to specific laptop
-private _laptopNetId = netId _laptop;
-[_building, 0, [_laptopNetId]] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+### Add Vehicle
 
-// Custom device with code
-[_object, 0, [], true, "Power Generator",
-    "hint 'Generator activated';",
-    "hint 'Generator deactivated';",
+**Function**: `Root_fnc_addVehicleZeusMain`
+
+**Syntax** (Vehicle):
+```sqf
+[vehicle, execUserId, linkedComputers, vehicleName, allowFuel, allowSpeed, allowBrakes, allowLights, allowEngine, allowAlarm, availableToFutureLaptops, powerCost] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+```
+
+**Syntax** (Drone - simplified):
+```sqf
+[drone, execUserId, linkedComputers, availableToFutureLaptops] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+```
+
+**Parameters** (Vehicle):
+- `vehicle` - Vehicle object
+- `execUserId` - User ID (0 = auto)
+- `linkedComputers` - Array of computer netIds
+- `vehicleName` - Display name
+- `allowFuel` - Boolean
+- `allowSpeed` - Boolean
+- `allowBrakes` - Boolean
+- `allowLights` - Boolean (empty vehicles only)
+- `allowEngine` - Boolean
+- `allowAlarm` - Boolean
+- `availableToFutureLaptops` - Boolean
+- `powerCost` - Number (1-30 Wh)
+
+**Example** (Vehicle):
+```sqf
+[car1, 0, [], "Enemy Transport", true, false, false, false, true, false, false, 5] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+```
+
+**Example** (Drone):
+```sqf
+[drone1, 0, [netId laptop1], false] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+```
+
+### Add Custom Device
+
+**Function**: `Root_fnc_addCustomDeviceZeusMain`
+
+**Syntax**:
+```sqf
+[object, execUserId, linkedComputers, customName, activationCode, deactivationCode, availableToFutureLaptops] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
+```
+
+**Parameters**:
+- `object` - Any object
+- `execUserId` - User ID (0 = auto)
+- `linkedComputers` - Array of computer netIds
+- `customName` - Display name
+- `activationCode` - SQF code string (runs on activation)
+- `deactivationCode` - SQF code string (runs on deactivation)
+- `availableToFutureLaptops` - Boolean
+
+**Example**:
+```sqf
+[generator1, 0, [], "Power Generator",
+    "hint 'Generator Online!'",
+    "hint 'Generator Offline!'",
     false
-] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-
-// Available to future laptops only
-[_building, 0, [], false, "", "", "", true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
 ```
 
-**Auto-Detection**:
-- Buildings with doors → Door device
-- `Lamps_base_F` → Light device
-- UAVs → Drone device
+### Add Power Generator
 
-**Device Linking Scenarios**:
-
-```sqf
-// Scenario 1: Public device (all current laptops)
-[_door] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-
-// Scenario 2: Private device (specific laptops)
-private _laptop1 = netId _laptop1;
-private _laptop2 = netId _laptop2;
-[_door, 0, [_laptop1, _laptop2]] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-
-// Scenario 3: Future-only device
-[_door, 0, [], false, "", "", "", true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-
-// Scenario 4: Specific + future laptops
-[_door, 0, [_laptop1], false, "", "", "", true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-```
-
----
-
-## Adding GPS Trackers
-
-### Function: `Root_fnc_addGPSTrackerZeusMain`
-
-Attaches GPS tracker to an object.
+**Function**: `Root_fnc_addPowerGeneratorZeusMain`
 
 **Syntax**:
 ```sqf
-[_targetObject, _execUserId, _linkedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, _sysChat] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
+[object, execUserId, linkedComputers, name, radius, allowExplosionActivate, allowExplosionDeactivate, explosionType, excludedClassnames, availableToFutureLaptops] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
 ```
 
 **Parameters**:
-| # | Name | Type | Optional | Default | Description |
-|---|------|------|----------|---------|-------------|
-| 0 | _targetObject | OBJECT | No | - | Object to track |
-| 1 | _execUserId | NUMBER | Yes | 0 | Owner ID |
-| 2 | _linkedComputers | ARRAY | Yes | [] | Computer netIds |
-| 3 | _trackerName | STRING | Yes | "" | Display name |
-| 4 | _trackingTime | NUMBER | Yes | 60 | Duration (seconds) |
-| 5 | _updateFrequency | NUMBER | Yes | 5 | Ping frequency (seconds) |
-| 6 | _customMarker | STRING | Yes | "" | Custom marker name |
-| 7 | _availableToFutureLaptops | BOOLEAN | Yes | false | Future laptop access |
-| 8 | _allowRetracking | BOOLEAN | Yes | false | Allow re-tracking |
-| 9 | _lastPingTimer | NUMBER | No | - | Last ping duration (seconds) |
-| 10 | _powerCost | NUMBER | No | - | Power cost (Wh) |
-| 11 | _sysChat | BOOLEAN | Yes | true | Show system chat |
+- `object` - Generator object
+- `execUserId` - User ID (0 = auto)
+- `linkedComputers` - Array of computer netIds
+- `name` - Display name
+- `radius` - Area of effect (meters)
+- `allowExplosionActivate` - Boolean
+- `allowExplosionDeactivate` - Boolean
+- `explosionType` - Classname (e.g., "HelicopterExploSmall")
+- `excludedClassnames` - Array of light classnames to exclude
+- `availableToFutureLaptops` - Boolean
 
-**Examples**:
-
+**Example**:
 ```sqf
-// Basic GPS tracker
-[_vehicle, 0, [], "Target_Vehicle", 60, 5, "", false, true, 30, 2, true] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
-
-// Long-duration tracker
-[_hvt, 0, [], "HVT_Commander", 300, 15, "", false, false, 60, 5, true] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
-
-// Link to specific laptop
-private _netId = netId _laptop;
-[_crate, 0, [_netId], "Supply_Cache", 120, 10, "", false, true, 30, 2, true] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
+[powerStation, 0, [], "City Power Grid", 500, false, true, "HelicopterExploSmall", [], false] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
 ```
 
----
+## Programmatic Setup
 
-## Adding Vehicles
-
-### Function: `Root_fnc_addVehicleZeusMain`
-
-Makes a vehicle hackable with configurable control features.
-
-**Syntax**:
-```sqf
-[_targetObject, _execUserId, _linkedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
-```
-
-**Parameters**:
-| # | Name | Type | Optional | Default | Description |
-|---|------|------|----------|---------|-------------|
-| 0 | _targetObject | OBJECT | No | - | Vehicle object |
-| 1 | _execUserId | NUMBER | Yes | 0 | Owner ID |
-| 2 | _linkedComputers | ARRAY | Yes | [] | Computer netIds |
-| 3 | _vehicleName | STRING | No | - | Display name |
-| 4 | _allowFuel | BOOLEAN | Yes | false | Enable battery control |
-| 5 | _allowSpeed | BOOLEAN | Yes | false | Enable speed control |
-| 6 | _allowBrakes | BOOLEAN | Yes | false | Enable brakes |
-| 7 | _allowLights | BOOLEAN | Yes | false | Enable lights |
-| 8 | _allowEngine | BOOLEAN | Yes | true | Enable engine |
-| 9 | _allowAlarm | BOOLEAN | Yes | false | Enable alarm |
-| 10 | _availableToFutureLaptops | BOOLEAN | Yes | false | Future laptop access |
-| 11 | _powerCost | NUMBER | Yes | 2 | Power per action (Wh) |
-
-**Examples**:
+### Basic Mission Setup
 
 ```sqf
-// Full control vehicle
-[_vehicle, 0, [], "Enemy_Transport", true, true, true, true, true, true, false, 2] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+// init.sqf or initServer.sqf
 
-// Limited control (lights and alarm only)
-[_civilianCar, 0, [], "Civ_Car", false, false, false, true, false, true, false, 1] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+if (!isServer) exitWith {};
 
-// Link to specific laptop, enable battery drain only
-private _netId = netId _laptop;
-[_enemyTruck, 0, [_netId], "Supply_Truck", true, false, false, false, false, false, false, 3] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+// Add hacking tools to laptop
+[laptop1, "", 0, "BLUFOR HQ Terminal", []] call Root_fnc_addHackingToolsZeusMain;
+
+// Register enemy building with unbreachable doors
+[enemyHQ, 0, [netId laptop1], false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+
+// Register enemy vehicle
+[enemyCar, 0, [netId laptop1], "Enemy Transport", true, false, false, false, true, false, false, 10] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 ```
-
----
-
-## Adding Files/Databases
-
-### Function: `Root_fnc_addDatabaseZeusMain`
-
-Creates downloadable file in the network.
-
-**Syntax**:
-```sqf
-[_allDatabases, _databaseId, _fileObject, _filename, _filesize, _filecontent, _allDevices, _allDoors, _allLamps, _allDrones, _allCustom, _allGpsTrackers, _allVehicles, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
-```
-
-**Simplified Wrapper**:
-
-```sqf
-// Helper function for easier use
-ROOT_fnc_addDatabase = {
-    params ["_filename", "_filesize", "_content", ["_code", ""], ["_linkedComputers", []], ["_futureAvailable", false]];
-
-    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
-    _allDevices params ["_allDoors", "_allLamps", "_allDrones", "_allDatabases", "_allCustom", "_allGpsTrackers", "_allVehicles"];
-
-    private _fileObject = "Land_HelipadEmpty_F" createVehicle [0,0,0];
-
-    [_allDatabases, 0, _fileObject, _filename, _filesize, _content, _allDevices, _allDoors, _allLamps, _allDrones, _allCustom, _allGpsTrackers, _allVehicles, 0, _linkedComputers, _code, _futureAvailable] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
-};
-
-// Usage
-["Mission_Briefing", 10, "Your objective is...", "hint 'Briefing acquired';"] call ROOT_fnc_addDatabase;
-```
-
-**Examples**:
-
-```sqf
-// Basic file
-["Intel_Report", 5, "Enemy positions: Grid 123456"] call ROOT_fnc_addDatabase;
-
-// File with execution code
-["Secret_Plans", 15, "Operation details...",
-    "['TaskComplete', true] call BIS_fnc_taskSetState;"
-] call ROOT_fnc_addDatabase;
-
-// Link to specific laptop
-private _netId = netId _laptop;
-["Classified_File", 20, "Top secret data", "", [_netId]] call ROOT_fnc_addDatabase;
-```
-
----
-
-## Complete Mission Example
-
-### Scenario: Intel Gathering
-
-```sqf
-// init.sqf
-
-// 1. Setup laptops
-private _hqLaptop = laptop1; // Object name in editor
-private _fieldLaptop = laptop2;
-
-// 2. Add hacking tools
-[_hqLaptop, "/hq/tools", 0, "HQ_Terminal"] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
-[_fieldLaptop, "/field/tools", 0, "Field_Laptop"] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
-
-// 3. Make enemy base buildings hackable (doors)
-private _buildings = [building1, building2, building3];
-{
-    [_x] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-} forEach _buildings;
-
-// 4. Add GPS tracker to enemy commander
-private _commander = enemyCommander;
-[_commander, 0, [netId _fieldLaptop], "HVT_Commander", 120, 10, "", false, false, 60, 3, true] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
-
-// 5. Add enemy plans file (triggers task on download)
-["Enemy_Plans", 15, "Patrol routes and supply schedules...",
-    "['IntelGathered', true] call BIS_fnc_taskSetState; hint 'Intel acquired!';"
-] call ROOT_fnc_addDatabase;
-
-// 6. Add enemy drone for hacking
-private _drone = enemyDrone;
-[_drone] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-
-// 7. Configure power costs (optional)
-// See Configuration Reference
-```
-
-### Scenario: Sabotage Mission
-
-```sqf
-// Custom device that triggers explosion
-
-private _generator = powerGenerator;
-
-[_generator, 0, [], true, "Power Generator",
-    // Activation code (overload)
-    "
-    private _gen = objectFromNetId (netId (_this select 0));
-    'Bo_Mk82' createVehicle (getPos _gen);
-    hint 'GENERATOR OVERLOADED!';
-    deleteVehicle _gen;
-    ",
-    // Deactivation code (unused)
-    "",
-    false
-] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-```
-
----
-
-## Access Control Patterns
-
-### Pattern 1: Public Access
-
-All current laptops can access:
-
-```sqf
-[_device] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-```
-
-### Pattern 2: Role-Based Access
-
-```sqf
-// Intel team laptops
-private _intelTeam = [laptop1, laptop2] apply { netId _x };
-
-// Ops team laptops
-private _opsTeam = [laptop3, laptop4] apply { netId _x };
-
-// Intel-only device
-[_secretFile, 0, _intelTeam] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-
-// Ops-only device
-[_targetDrone, 0, _opsTeam] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-
-// Shared device
-[_door, 0, _intelTeam + _opsTeam] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-```
-
-### Pattern 3: Progressive Access
-
-```sqf
-// Initially: Only HQ has access
-private _hqNetId = netId hqLaptop;
-[_device, 0, [_hqNetId]] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-
-// Later: Grant access to field teams
-// (requires re-implementing device with updated links or using public devices)
-```
-
-### Pattern 4: Future Laptop System
-
-```sqf
-// Device available only to laptops added after mission start
-[_device, 0, [], false, "", "", "", true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-
-// Now add laptops - they automatically have access
-[_newLaptop] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
-```
-
----
-
-## Advanced Techniques
 
 ### Dynamic Device Registration
 
-Register devices during mission based on events:
+```sqf
+// Register all vehicles of a certain type
+{
+    if (_x isKindOf "Car") then {
+        private _vehicleName = getText (configOf _x >> "displayName");
+        [_x, 0, [], _vehicleName, true, false, false, false, true, false, false, 5] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+    };
+} forEach vehicles;
+```
+
+### Conditional Setup
 
 ```sqf
-// When player completes task, add new devices
-if (_taskComplete) then {
-    [_newBuilding] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-    hint "New building access granted!";
+// Only add hacking tools if difficulty is hard
+if (difficulty >= 3) then {
+    [laptop1, "", 0, "Advanced Terminal", []] call Root_fnc_addHackingToolsZeusMain;
+} else {
+    [laptop1, "/admin/root", 0, "Basic Terminal", []] call Root_fnc_addHackingToolsZeusMain; // With backdoor
 };
 ```
 
-### Conditional Access
+## Advanced Techniques
+
+### Subnet Organization
+
+Organize devices into subnets for logical separation:
 
 ```sqf
-// Grant access based on player rank
-if (rank player >= "MAJOR") then {
-    private _adminLaptop = laptop1;
-    [_adminLaptop, "/admin", 0, "Command_Terminal", "/admin"] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
-};
+// BLUFOR network
+[bluforLaptop1, "", 0, "BLUFOR Terminal 1", []] call Root_fnc_addHackingToolsZeusMain;
+
+// OPFOR network (separate devices)
+[opforLaptop1, "", 0, "OPFOR Terminal 1", []] call Root_fnc_addHackingToolsZeusMain;
+
+// Register building to BLUFOR only
+[building1, 0, [netId bluforLaptop1], false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+
+// Register building to OPFOR only
+[building2, 0, [netId opforLaptop1], false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 ```
 
-### Timed Devices
+### Future Laptop Access Pattern
 
 ```sqf
-// Device available for limited time
-[_door] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+// Register devices BEFORE laptops exist
+[building1, 0, [], true, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2]; // Available to future laptops
 
-// Remove after 10 minutes
-[{
-    // Remove device from arrays (custom cleanup code)
-    hint "Access window expired!";
-}, [], 600] call CBA_fnc_waitAndExecute;
+// Later in mission, add laptops - they automatically get access
+[newLaptop, "", 0, "Field Laptop", []] call Root_fnc_addHackingToolsZeusMain;
 ```
 
----
+### Custom Device Advanced Examples
 
-## Performance Considerations
+**Toggle Global Variable:**
+```sqf
+[
+    generator1, 0, [], "Mission Generator",
+    "missionNamespace setVariable ['powerActive', true, true]; hint 'Power Grid Online';",
+    "missionNamespace setVariable ['powerActive', false, true]; hint 'Power Grid Offline';",
+    false
+] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
+```
 
-### Best Practices
+**Spawn Enemy Reinforcements:**
+```sqf
+[
+    alarmPanel, 0, [], "Alarm System",
+    "private _grp = [getPos alarmPanel, EAST, 4] call BIS_fnc_spawnGroup; hint 'ALARM TRIGGERED!';",
+    "hint 'Alarm Disabled';",
+    false
+] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
+```
 
-1. **Batch Operations**: Register multiple devices in sequence, not in loops with delays
-2. **Use remoteExec Properly**: Always target server (2) for device registration
-3. **Limit GPS Trackers**: Too many active trackers can impact performance
-4. **Clean Up**: Remove unused devices when no longer needed
+**Complex Multi-Step Code:**
+```sqf
+private _activationCode = "
+    params ['_computer', '_device', '_player'];
+    private _nearLights = nearestObjects [_device, ['Lamps_base_F'], 200];
+    {_x switchLight 'ON'} forEach _nearLights;
+    [_computer, format ['<t color=''#8ce10b''>Lights activated! %1 lights powered on.</t>', count _nearLights]] call AE3_armaos_fnc_shell_stdout;
+";
 
-### Optimizations
+private _deactivationCode = "
+    params ['_computer', '_device', '_player'];
+    private _nearLights = nearestObjects [_device, ['Lamps_base_F'], 200];
+    {_x switchLight 'OFF'} forEach _nearLights;
+    [_computer, format ['<t color=''#fa4c58''>Lights deactivated! %1 lights powered off.</t>', count _nearLights]] call AE3_armaos_fnc_shell_stdout;
+";
+
+[generator1, 0, [], "Area Lighting Control", _activationCode, _deactivationCode, false] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
+```
+
+### Manual Device Access Management
 
 ```sqf
-// Good: Batch registration
+// Get link cache
+private _linkCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_LINK_CACHE", createHashMap];
+
+// Add device to laptop's access list
+private _computerNetId = netId laptop1;
+private _existingLinks = _linkCache getOrDefault [_computerNetId, []];
+_existingLinks pushBack [7, 1234]; // Vehicle type (7), device ID (1234)
+_linkCache set [_computerNetId, _existingLinks];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_LINK_CACHE", _linkCache, true];
+```
+
+### Device Type Constants
+
+```sqf
+DEVICE_TYPE_DOOR = 1;
+DEVICE_TYPE_LIGHT = 2;
+DEVICE_TYPE_DRONE = 3;
+DEVICE_TYPE_DATABASE = 4;
+DEVICE_TYPE_CUSTOM = 5;
+DEVICE_TYPE_GPS_TRACKER = 6;
+DEVICE_TYPE_VEHICLE = 7;
+```
+
+## Examples
+
+### Complete Stealth Mission Setup
+
+```sqf
+// initServer.sqf
+
+if (!isServer) exitWith {};
+
+// Setup player laptop
+[playerLaptop, "", 0, "Infiltrator Terminal", []] call Root_fnc_addHackingToolsZeusMain;
+
+// Enemy base - unbreachable
+[enemyBase, 0, [netId playerLaptop], false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+
+// Enemy patrol vehicles
 {
-    [_x] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-} forEach _buildings;
+    private _vehName = format ["Patrol %1", _forEachIndex + 1];
+    [_x, 0, [netId playerLaptop], _vehName, true, true, true, false, true, false, false, 15] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+} forEach [patrol1, patrol2, patrol3];
 
-// Bad: Delayed loops
+// Security cameras (custom devices)
 {
-    [_x] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-    sleep 1; // Unnecessary delay
-} forEach _buildings;
+    private _camName = format ["Camera %1", _forEachIndex + 1];
+    [_x, 0, [netId playerLaptop], _camName,
+        "hint 'Camera disabled - 30 sec';",
+        "",
+        false
+    ] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
+} forEach [camera1, camera2, camera3, camera4];
+
+// Power generator objective
+[mainGenerator, 0, [netId playerLaptop], "Main Power Grid", 300, false, true, "HelicopterExploSmall", [], false] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
 ```
 
----
-
-## Testing Your Mission
-
-### Quick Test Script
+### Dynamic Mission with Progressive Access
 
 ```sqf
-// Place in debug console
-private _laptop = cursorObject;
-[_laptop] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
-hint "Tools added to laptop under cursor";
-```
+// Initial setup - limited access
+[laptop1, "", 0, "Basic Terminal", []] call Root_fnc_addHackingToolsZeusMain;
 
-### Verification
+// Register critical devices as future-access only
+[criticalBuilding, 0, [], true, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[criticalVehicle, 0, [], "VIP Transport", true, true, true, false, true, false, true, 20] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 
-```sqf
-// Check if tools installed
-_laptop getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]; // Should be true
-
-// Check device count
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
-hint format ["Doors: %1, Lights: %2, Drones: %3",
-    count (_allDevices select 0),
-    count (_allDevices select 1),
-    count (_allDevices select 2)
-];
+// Later in mission (e.g., on trigger activation)
+// Player finds upgraded laptop - automatically gets access to future devices
+[upgradedLaptop, "/admin/advanced", 0, "Advanced Terminal", []] call Root_fnc_addHackingToolsZeusMain;
 ```
 
 ---
 
-## See Also
-
-- [Zeus Guide](Zeus-Guide) - Module-based setup
-- [Configuration Reference](Configuration) - CBA settings
-- [API Reference](API-Reference) - Function documentation
-- [Custom Device Tutorial](Custom-Device-Tutorial) - Advanced custom devices
-
----
-
-**Need help?** Join discord or raise an issue in GitHub.
+For more information, see:
+- [API Reference](API-Reference.md) - Complete function documentation
+- [Zeus Guide](Zeus-Guide.md) - Runtime module usage
+- [Configuration Guide](Configuration.md) - CBA settings

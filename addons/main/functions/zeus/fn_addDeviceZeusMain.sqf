@@ -1,187 +1,126 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Server-side function to add a hackable device to the network
+ * Description: Server-side function to add a hackable building (doors/lights) to the network.
+ * This function ONLY handles doors and lights. For drones use fn_addVehicleZeusMain,
+ * for custom devices use fn_addCustomDeviceZeusMain, for vehicles use fn_addVehicleZeusMain.
  *
  * Arguments:
- * 0: _targetObject <OBJECT> - The object to make hackable
+ * 0: _targetObject <OBJECT> - The building/light object to make hackable
  * 1: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
  * 2: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
- * 3: _treatAsCustom <BOOLEAN> (Optional) - Treat as custom device, default: false
- * 4: _customName <STRING> (Optional) - Custom device name, default: ""
- * 5: _activationCode <STRING> (Optional) - Code to run on activation, default: ""
- * 6: _deactivationCode <STRING> (Optional) - Code to run on deactivation, default: ""
- * 7: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
- * 8: _makeUnbreachable <BOOLEAN> (Optional) - Prevent non-hacking breaching methods, default: false
+ * 3: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ * 4: _makeUnbreachable <BOOLEAN> (Optional) - Prevent non-hacking breaching methods (doors only), default: false
  *
  * Return Value:
  * None
  *
  * Example:
- * [_obj, 0, [], true, "Generator", "", "", false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+ * [_building, 0, [], false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+ * [_lamp, 0, [], true, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
  *
  * Public: No
  */
 
-params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_treatAsCustom", false], ["_customName", ""], ["_activationCode", ""], ["_deactivationCode", ""], ["_availableToFutureLaptops", false], ["_makeUnbreachable", false]];
+params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false], ["_makeUnbreachable", false]];
 
 if (_execUserId == 0) then {
     _execUserId = owner _targetObject;
 };
 
-private _doorCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_DOOR_EDIT", 2];
-private _droneSideCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_DRONE_SIDE_EDIT", 20];
-private _droneDestructionCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_DRONE_DISABLE_EDIT", 10];
-private _customCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_CUSTOM_EDIT", 10];
-
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_COSTS", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
-
 // Load device arrays from global storage
 private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
 private _allDoors = _allDevices select 0;
 private _allLamps = _allDevices select 1;
-private _allDrones = _allDevices select 2;
-private _allCustom = _allDevices select 4;
 
-private _isCustomObject = false;
+private _isValidObject = false;
 private _netId = netId _targetObject;
-
 private _displayName = getText (configOf _targetObject >> "displayName");
-
 private _typeofhackable = 0;
 private _deviceId = 0;
-
-// Store activation/deactivation code for ALL objects
-_targetObject setVariable ["ROOT_CYBERWARFARE_ACTIVATIONCODE", _activationCode, true];
-_targetObject setVariable ["ROOT_CYBERWARFARE_DEACTIVATIONCODE", _deactivationCode, true];
 
 // Store availability setting
 _targetObject setVariable ["ROOT_CYBERWARFARE_AVAILABLE_FUTURE", _availableToFutureLaptops, true];
 
-if (_treatAsCustom) then {
-    // Treat as custom device
-    _isCustomObject = true;
-    _deviceId = (round (random 8999)) + 1000;
-    if (_allCustom isNotEqualTo []) then {
-        while {true} do {
-            uiSleep 0.01;
-            _deviceId = (round (random 8999)) + 1000;
-            private _customIsNew = true;
-            {
-                if (_x select 0 == _deviceId) then {
-                    _customIsNew = false;
-                };
-            } forEach _allCustom;
-            if (_customIsNew) then { break };
-        };
-    };
-    
-    // Store with availability flag
-    _allCustom pushBack [_deviceId, _netId, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops];
-    _typeofhackable = 5; // Custom device type
-} else {
-    // Existing logic for standard objects
-    if (_targetObject isKindOf "House" || _targetObject isKindOf "Building") then {
-        _isCustomObject = true;
+// Check for buildings with doors
+if (_targetObject isKindOf "House" || _targetObject isKindOf "Building") then {
+    _isValidObject = true;
 
-        private _buildingDoors = [];
-        private _building = _targetObject;
-        // private _config = configFile >> "CfgVehicles" >> typeOf _building;
-        private _config = configOf _building;
-        private _simpleObjects = getArray (_config >> "SimpleObject" >> "animate");
-        {
-            if(count _x == 2) then {
-                private _objectName = _x select 0;
-                if(_objectName regexMatch "door_.*") then {
-                    private _regexFinds = _objectName regexFind ["door_([0-9]+)"];
-                    private _doorNumber = parseNumber (((_regexFinds select 0) select 1) select 0);
+    private _buildingDoors = [];
+    private _building = _targetObject;
+    private _config = configOf _building;
+    private _simpleObjects = getArray (_config >> "SimpleObject" >> "animate");
+    {
+        if (count _x == 2) then {
+            private _objectName = _x select 0;
+            if (_objectName regexMatch "door_.*") then {
+                private _regexFinds = _objectName regexFind ["door_([0-9]+)"];
+                private _doorNumber = parseNumber (((_regexFinds select 0) select 1) select 0);
 
-                    if(!(_doorNumber in _buildingDoors)) then {
-                        if(_buildingDoors isEqualTo []) then {
-                            _buildingDoors pushBack _doorNumber;
-                        };
-                        if((_buildingDoors select -1) != _doorNumber) then {
-                            _buildingDoors pushBack _doorNumber;
-                        };
+                if (!(_doorNumber in _buildingDoors)) then {
+                    if (_buildingDoors isEqualTo []) then {
+                        _buildingDoors pushBack _doorNumber;
+                    };
+                    if ((_buildingDoors select -1) != _doorNumber) then {
+                        _buildingDoors pushBack _doorNumber;
                     };
                 };
             };
-        } forEach _simpleObjects;
-
-        if(_buildingDoors isNotEqualTo []) then {
-            private _buildingNetId = netId _building;
-
-            _deviceId = (round (random 8999)) + 1000;
-            if (count _allDoors > 0) then {
-                while {true} do {
-                    _deviceId = (round (random 8999)) + 1000;
-                    private _buildingIsNew = true;
-                    {
-                        if(_x select 0 == _deviceId) then {
-                            _buildingIsNew = false;
-                        };
-                    } forEach _allDoors;
-
-                    if(_buildingIsNew) then {
-                        break;
-                    };
-                };
-            };
-            _typeofhackable = 1;
-
-            // Store unbreachable flag on building
-            if (_makeUnbreachable) then {
-                _building setVariable ["ROOT_CYBERWARFARE_UNBREACHABLE", true, true];
-            };
-
-            _allDoors pushBack [_deviceId, _buildingNetId, _buildingDoors, _linkedComputers, _activationCode, _deactivationCode, _availableToFutureLaptops];
         };
-    };
+    } forEach _simpleObjects;
 
-    if (_targetObject isKindOf "Lamps_base_F") then {
-        _isCustomObject = true;
+    if (_buildingDoors isNotEqualTo []) then {
+        private _buildingNetId = netId _building;
+
         _deviceId = (round (random 8999)) + 1000;
-        if (count _allLamps > 0) then {
+        if (count _allDoors > 0) then {
             while {true} do {
                 _deviceId = (round (random 8999)) + 1000;
-                private _lampIsNew = true;
+                private _buildingIsNew = true;
                 {
                     if (_x select 0 == _deviceId) then {
-                        _lampIsNew = false;
+                        _buildingIsNew = false;
                     };
-                } forEach _allLamps;
-                if (_lampIsNew) then { break };
-            };
-        };
-        _allLamps pushBack [_deviceId, _netId, _linkedComputers, _activationCode, _deactivationCode, _availableToFutureLaptops];
-        _typeofhackable = 2;    
-    };
+                } forEach _allDoors;
 
-    if (unitIsUAV _targetObject) then {
-        _isCustomObject = true;
-        _deviceId = (round (random 8999)) + 1000;
-        if (count _allDrones > 0) then {
-            while {true} do {
-                _deviceId = (round (random 8999)) + 1000;
-                private _droneIsNew = true;
-                {
-                    if (_x select 0 == _deviceId) then {
-                        _droneIsNew = false;
-                    };
-                } forEach _allDrones;
-
-                if(_droneIsNew) then {
+                if (_buildingIsNew) then {
                     break;
                 };
             };
         };
-        _allDrones pushBack [_deviceId, _netId, _linkedComputers, _activationCode, _deactivationCode, _availableToFutureLaptops];
-        _typeofhackable = 3;
+        _typeofhackable = 1;
+
+        // Store unbreachable flag on building
+        if (_makeUnbreachable) then {
+            _building setVariable ["ROOT_CYBERWARFARE_UNBREACHABLE", true, true];
+        };
+
+        _allDoors pushBack [_deviceId, _buildingNetId, _buildingDoors, _displayName, _availableToFutureLaptops];
     };
 };
 
-if (!_isCustomObject) exitWith {
-    [format ["Object (%1) is not compatible for hacking!", _targetObject]] remoteExec ["systemChat", _execUserId];
+// Check for lamps/lights
+if (_targetObject isKindOf "Lamps_base_F") then {
+    _isValidObject = true;
+    _deviceId = (round (random 8999)) + 1000;
+    if (count _allLamps > 0) then {
+        while {true} do {
+            _deviceId = (round (random 8999)) + 1000;
+            private _lampIsNew = true;
+            {
+                if (_x select 0 == _deviceId) then {
+                    _lampIsNew = false;
+                };
+            } forEach _allLamps;
+            if (_lampIsNew) then { break };
+        };
+    };
+    _allLamps pushBack [_deviceId, _netId, _displayName, _availableToFutureLaptops];
+    _typeofhackable = 2;
+};
+
+if (!_isValidObject) exitWith {
+    [format ["Object (%1) is not a building or light! Use appropriate module for drones, vehicles, or custom devices.", _targetObject]] remoteExec ["systemChat", _execUserId];
 };
 
 private _availabilityText = "";
@@ -244,11 +183,8 @@ if (_availableToFutureLaptops || count _linkedComputers == 0) then {
 // Update global storage with modified device arrays
 _allDevices set [0, _allDoors];
 _allDevices set [1, _allLamps];
-_allDevices set [2, _allDrones];
-_allDevices set [4, _allCustom];
 missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_CONNECTED", true, true];
-
 
 switch (_typeofhackable) do {
     case 1: {
@@ -257,12 +193,6 @@ switch (_typeofhackable) do {
     };
     case 2: {
         [format ["Root Cyber Warfare: Light (%2) Added! ID: %1. %3.", _deviceId, _displayName, _availabilityText]] remoteExec ["systemChat", _execUserId];
-    };
-    case 3: {
-        [format ["Root Cyber Warfare: Drone (%2) Added! ID: %1. %3.", _deviceId, _displayName, _availabilityText]] remoteExec ["systemChat", _execUserId];
-    };
-    case 5: {
-        [format ["Root Cyber Warfare: Custom device '%1' added (ID: %2). %3.", _customName, _deviceId, _availabilityText]] remoteExec ["systemChat", _execUserId];
     };
     default {
         [format ["ERROR! Bad Value: '_typeofhackable' in 'Root_fnc_addDeviceZeusMain'"]] remoteExec ["systemChat", _execUserId];

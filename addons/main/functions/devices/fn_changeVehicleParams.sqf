@@ -148,10 +148,10 @@ if (_vehicleIDNum != 0) then {
                 if (_action == "lights") then {
                     _invalidOption = false;
                     if ((_value in ["on", "ON"]) && !(isLightOn _vehicleObject)) then {
-                        [_vehicleObject, true] remoteExec ["setPilotLight", _vehicleObject];
+                        [_vehicleObject, true] remoteExec ["setPilotLight", 0];
                     } else {
                         if ((_value in ["off", "OFF"]) && (isLightOn _vehicleObject)) then {
-                            [_vehicleObject, false] remoteExec ["setPilotLight", _vehicleObject];
+                            [_vehicleObject, false] remoteExec ["setPilotLight", 0];
                         };
                     };
                 };

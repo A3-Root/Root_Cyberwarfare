@@ -1,10 +1,11 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Server-side function to add a hackable vehicle or drone to the network
+ * Description: Server-side function to add a hackable vehicle or drone to the network.
+ * Automatically detects drones (UAVs) vs vehicles and applies appropriate registration.
  *
  * Arguments:
- * For Drones (when called with 4 parameters):
+ * For Drones (when called with 4 parameters or when unitIsUAV):
  * 0: _targetObject <OBJECT> - The drone to make hackable
  * 1: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
  * 2: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
@@ -38,15 +39,105 @@
 private _isDroneCall = (count _this) <= 4;
 
 if (_isDroneCall) then {
-    // Drone: redirect to addDeviceZeusMain
+    // Drone: handle drone registration directly
     params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false]];
 
     if (_execUserId == 0) then {
         _execUserId = owner _targetObject;
     };
 
-    // Call addDeviceZeusMain with treatAsCustom = false (will auto-detect as drone)
-    [_targetObject, _execUserId, _linkedComputers, false, "", "", "", _availableToFutureLaptops] call FUNC(addDeviceZeusMain);
+    // Load device arrays from global storage
+    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
+    private _allDrones = _allDevices select 2;
+
+    private _netId = netId _targetObject;
+    private _displayName = getText (configOf _targetObject >> "displayName");
+    private _typeofhackable = 3; // Drone device type
+
+    // Generate unique device ID
+    private _deviceId = (round (random 8999)) + 1000;
+    if (_allDrones isNotEqualTo []) then {
+        while {true} do {
+            _deviceId = (round (random 8999)) + 1000;
+            private _droneIsNew = true;
+            {
+                if (_x select 0 == _deviceId) then {
+                    _droneIsNew = false;
+                };
+            } forEach _allDrones;
+
+            if (_droneIsNew) then {
+                break;
+            };
+        };
+    };
+
+    // Store drone entry: [deviceId, droneNetId, droneName, availableToFuture]
+    _allDrones pushBack [_deviceId, _netId, _displayName, _availableToFutureLaptops];
+
+    private _availabilityText = "";
+
+    // Store device linking information (for selected computers)
+    if (_linkedComputers isNotEqualTo []) then {
+        // Update new hashmap-based link cache
+        private _linkCache = GET_LINK_CACHE;
+
+        {
+            private _computerNetId = _x;
+            private _existingLinks = _linkCache getOrDefault [_computerNetId, []];
+            _existingLinks pushBack [_typeofhackable, _deviceId];
+            _linkCache set [_computerNetId, _existingLinks];
+        } forEach _linkedComputers;
+
+        missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache, true];
+        _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
+    };
+
+    private _excludedNetIds = [];
+    // Handle public device access
+    if (_availableToFutureLaptops || count _linkedComputers == 0) then {
+        private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
+
+        if (_availableToFutureLaptops) then {
+            if (_linkedComputers isNotEqualTo []) then {
+                // Scenario 4: Available to future + some linked
+                // Exclude current laptops that are NOT linked
+                {
+                    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
+                        private _netId = netId _x;
+                        if !(_netId in _linkedComputers) then {
+                            _excludedNetIds pushBack _netId;
+                        };
+                    };
+                } forEach (24 allObjects 1);
+
+                _availabilityText = _availabilityText + format [" and all future computers"];
+            } else {
+                // Scenario 3: Available to future + no linked
+                // Exclude ALL current laptops
+                {
+                    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
+                        _excludedNetIds pushBack (netId _x);
+                    };
+                } forEach (24 allObjects 1);
+                _availabilityText = "Available to future computers only";
+            };
+        } else {
+            // Scenario 1: Not available to future + no linked
+            // No exclusions - all current laptops get access
+            _availabilityText = format ["Available to all current computers"];
+        };
+
+        _publicDevices pushBack [_typeofhackable, _deviceId, _excludedNetIds];
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
+    };
+
+    // Update global storage with modified drone array
+    _allDevices set [2, _allDrones];
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
+    _targetObject setVariable ["ROOT_CYBERWARFARE_CONNECTED", true, true];
+
+    [format ["Root Cyber Warfare: Drone (%2) Added! ID: %1. %3.", _deviceId, _displayName, _availabilityText]] remoteExec ["systemChat", _execUserId];
 
 } else {
     // Vehicle: continue with normal vehicle registration

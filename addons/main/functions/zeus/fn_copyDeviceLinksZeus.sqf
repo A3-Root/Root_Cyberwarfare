@@ -120,6 +120,11 @@ if (!isNull _targetObject && _targetHasLinks) exitWith {
 if (!isNull _targetObject) exitWith {
     deleteVehicle _logic;
 
+    // Validate target is a valid laptop class
+    if !(typeOf _targetObject in _validLaptopClasses) exitWith {
+        [localize "STR_ROOT_CYBERWARFARE_ZEUS_INVALID_TARGET"] call zen_common_fnc_showMessage;
+    };
+
     private _targetNetId = netId _targetObject;
 
     // Build dropdown for source selection

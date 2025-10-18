@@ -77,6 +77,18 @@
     false // doesn't require mission restart
 ] call CBA_fnc_addSetting;
 
+// Power Grid Control Power Cost Setting
+[
+    SETTING_POWERGRID_COST,
+    "SLIDER",
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_POWERGRID_COST", localize "STR_ROOT_CYBERWARFARE_SETTING_POWERGRID_COST_DESC"],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY"],
+    [1, 100, 15, 0], // [min, max, default, decimal places]
+    1, // mission-level
+    {},
+    false // doesn't require mission restart
+] call CBA_fnc_addSetting;
+
 // GPS Spectrum Devices Setting
 [
     SETTING_GPS_SPECTRUM_DEVICES,

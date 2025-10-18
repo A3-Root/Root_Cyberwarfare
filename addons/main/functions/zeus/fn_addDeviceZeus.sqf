@@ -1,6 +1,7 @@
 /*
  * Author: Root
- * Zeus module to add a hackable door/light
+ * Zeus module to add a hackable building (door) or light.
+ * For drones, use fn_addVehicleZeus. For custom devices, use fn_addCustomDeviceZeus.
  *
  * Arguments:
  * 0: _logic <OBJECT> - Zeus logic module
@@ -87,9 +88,9 @@ if (_isBuilding) then {
             _selectedComputers = _allComputers apply { _x select 0 };
         };
 
-        // Call addDeviceZeusMain with unbreachable parameter
-        [_targetObject, _execUserId, _selectedComputers, false, "", "", "", _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-        ["Hackable Object Added!"] call zen_common_fnc_showMessage;
+        // Call addDeviceZeusMain (only handles doors/lights now)
+        [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+        ["Hackable Building/Light Added!"] call zen_common_fnc_showMessage;
     }, 
     {
         ["Aborted"] call zen_common_fnc_showMessage;
