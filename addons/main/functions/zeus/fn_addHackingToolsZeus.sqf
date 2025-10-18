@@ -21,7 +21,7 @@ private _entity = attachedTo _logic;
 if !(hasInterface) exitWith {};
 
 private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", 1];
-ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME = format ["HackingPlatform_%1", _index];
+ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME = format ["HackTool_%1", _index];
 
 [
     "Hacking Tools Settings", [

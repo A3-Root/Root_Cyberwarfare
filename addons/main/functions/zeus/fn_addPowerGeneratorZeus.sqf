@@ -35,7 +35,7 @@ private _allComputers = [];
         private _computerName = _x getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _displayName];
         private _netId = netId _x;
         private _gridPos = mapGridPosition _x;
-        _allComputers pushBack [_netId, format ["%1 [%2]", _computerName, _gridPos]];
+        _allComputers pushBack [_netId, format ["%1 [Grid: %2]", _computerName, _gridPos]];
     };
 } forEach (24 allObjects 1);
 

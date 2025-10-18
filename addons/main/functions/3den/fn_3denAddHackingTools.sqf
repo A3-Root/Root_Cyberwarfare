@@ -40,7 +40,7 @@ private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDE
 
 {
 	private _laptop = _x;
-	private _customName = format ["HackingPlatform_%1", _index];
+	private _customName = format ["HackTool_%1", _index];
 	private _execUserId = owner _laptop;
 
 	// Call the existing Zeus main function

@@ -76,7 +76,7 @@ _allPowerGrids pushBack [
     _excludedClassnames,
     _availableToFutureLaptops,
     _powerCost,
-    _linkedComputers apply {netId _x}
+    _linkedComputers
 ];
 
 // Update device array
@@ -97,9 +97,8 @@ if (_availableToFutureLaptops) then {
 
 // Link to specified computers
 {
-    private _computer = _x;
-    if (!isNull _computer) then {
-        private _computerNetId = netId _computer;
+    if (_x != "") then {
+        private _computerNetId = _x;
         private _existingLinks = _linkCache getOrDefault [_computerNetId, []];
         _existingLinks pushBack [DEVICE_TYPE_POWERGRID, _deviceId];
         _linkCache set [_computerNetId, _existingLinks];

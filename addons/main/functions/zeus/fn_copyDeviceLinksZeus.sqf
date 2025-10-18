@@ -24,6 +24,9 @@ private _logicPos = getPosATL _logic;
 
 if !(hasInterface) exitWith {};
 
+private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", 1];
+ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME = format ["HackTool_%1", _index];
+
 // Define valid laptop classnames
 private _validLaptopClasses = [
     "Land_Laptop_03_black_F_AE3",
@@ -140,12 +143,12 @@ if (!isNull _targetObject) exitWith {
         [
             ["COMBO", ["Source Laptop", "Select the laptop to copy device links FROM"], [_computerDropdownValues, _computerDropdownOptions, 0]],
             ["TOOLBOX:YESNO", ["Replace Existing Links", "Replace all existing links on target (if any)"], false],
-            ["TOOLBOX", ["Name Handling", ["Keep target's current name", "Use source laptop's name", "Specify New Name"]], 0],
-            ["EDIT", "New Name (Optional)", ""]
+            ["COMBO", ["Target Name", "Keep current name, Use source laptop's name or Create new one"], [[0, 1, 2], ["Keep target's current name", "Use source laptop's name", "Specify new name"], 0]],
+            ["EDIT", ["New Name (optional)", "New name to be used"], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]]
         ],
         {
             params ["_results", "_args"];
-            _args params ["_computersWithLinks", "_targetNetId"];
+            _args params ["_computersWithLinks", "_targetNetId", "_index"];
             _results params ["_sourceIndex", "_removePreviousLinks", "_nameHandling", "_newName"];
 
             private _sourceNetId = (_computersWithLinks select _sourceIndex) select 0;
@@ -153,12 +156,14 @@ if (!isNull _targetObject) exitWith {
 
             [_sourceNetId, _targetNetId, _removePreviousLinks, _nameHandling, _newName, _execUserId, false] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
             [localize "STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_SUCCESS"] call zen_common_fnc_showMessage;
+            _index = _index + 1;
+		    missionNamespace setVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", _index, true];
         },
         {
             [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;
             playSound "FD_Start_F";
         },
-        [_computersWithLinks, _targetNetId]
+        [_computersWithLinks, _targetNetId, _index]
     ] call zen_dialog_fnc_create;
 };
 
@@ -187,12 +192,12 @@ private _targetDropdownValues = [-1];
         ["COMBO", ["Source Laptop", "Select the laptop to copy device links FROM"], [_sourceDropdownValues, _sourceDropdownOptions, 0]],
         ["COMBO", ["Target", "Select existing laptop or create new one"], [_targetDropdownValues, _targetDropdownOptions, 0]],
         ["TOOLBOX:YESNO", ["Replace Existing Links", "Replace all existing links on target (if any)"], false],
-        ["TOOLBOX", ["Name Handling", ["Keep target's current name", "Use source laptop's name", "Specify new name"]], 0],
-        ["EDIT", "New Name (if 'Specify new name' or 'Create New' selected)", ""]
+        ["COMBO", ["Target Name", "Keep current name, Use source laptop's name or Create new one"], [[0, 1, 2], ["Keep target's current name", "Use source laptop's name", "Specify new name"], 0]],
+        ["EDIT", ["New Name (optional)", "New name to be used if 'Specifiy New Name' or 'Create New' is selected in the fields above"], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]]
     ],
     {
         params ["_results", "_args"];
-        _args params ["_computersWithLinks", "_allComputers", "_logicPos"];
+        _args params ["_computersWithLinks", "_allComputers", "_logicPos", "_index"];
         _results params ["_sourceIndex", "_targetIndex", "_removePreviousLinks", "_nameHandling", "_newName"];
 
         private _sourceNetId = (_computersWithLinks select _sourceIndex) select 0;
@@ -215,10 +220,13 @@ private _targetDropdownValues = [-1];
         };
 
         [localize "STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_SUCCESS"] call zen_common_fnc_showMessage;
+
+        _index = _index + 1;
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", _index, true];
     },
     {
         [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;
         playSound "FD_Start_F";
     },
-    [_computersWithLinks, _allComputers, _logicPos]
+    [_computersWithLinks, _allComputers, _logicPos, _index]
 ] call zen_dialog_fnc_create;

@@ -56,7 +56,7 @@ if (_createNew) then {
             _laptopName = _newName;
         } else {
             // Generate default name
-            _laptopName = format ["HackingPlatform_%1", _laptopIndex];
+            _laptopName = format ["HackTool_%1", _laptopIndex];
         };
     };
 
