@@ -1,262 +1,304 @@
 # Architecture
 
-This document provides a comprehensive overview of Root's Cyber Warfare mod architecture, including system design, data structures, execution flow, and integration patterns.
+Technical architecture and implementation details of Root's Cyber Warfare.
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [System Architecture](#system-architecture)
+- [System Overview](#system-overview)
 - [Data Storage Architecture](#data-storage-architecture)
 - [Access Control System](#access-control-system)
 - [Initialization Flow](#initialization-flow)
-- [Function Architecture](#function-architecture)
-- [Network Architecture](#network-architecture)
 - [Power System](#power-system)
-- [Integration Points](#integration-points)
+- [Function Patterns](#function-patterns)
+- [Network Architecture](#network-architecture)
 - [Performance Considerations](#performance-considerations)
 
-## Overview
+---
 
-Root's Cyber Warfare is built as a **single-addon Arma 3 modification** that integrates with CBA, ACE3, AE3 ArmaOS, and ZEN to provide cyber warfare capabilities. The architecture prioritizes:
+## System Overview
 
-- **Performance**: O(1) device lookups using HashMap structures
-- **Network Efficiency**: CBA events for client-server communication
-- **Modularity**: Device types are extensible without core changes
-- **Reliability**: Automatic cleanup of orphaned device references
+Root's Cyber Warfare uses a **client-server architecture** with the following components:
 
-### Core Design Principles
-
-1. **Single Source of Truth**: All device state is authoritative on the server
-2. **Type Safety**: Strict parameter validation via SQF `params` with type checks
-3. **Fail-Fast**: Early validation with `exitWith` to minimize wasted computation
-4. **Declarative Configuration**: CBA settings for mission-specific customization
-5. **Separation of Concerns**: UI (Zeus/Eden) separated from business logic (Main functions)
-
-## System Architecture
-
-### Component Diagram
+### High-Level Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                     Root's Cyber Warfare Mod                    │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                 │
-│  ┌────────────────┐   ┌─────────────────┐   ┌────────────────┐  │
-│  │  UI Layer      │   │  Business Logic │   │  Data Layer    │  │
-│  ├────────────────┤   ├─────────────────┤   ├────────────────┤  │
-│  │ Zeus Modules   │──>│ Device Control  │──>│ Device Cache   │  │
-│  │ Eden Modules   │   │ GPS Tracking    │   │ Link Cache     │  │
-│  │ ACE Actions    │   │ Power Mgmt      │   │ Public Devices │  │
-│  └────────────────┘   │ Access Control  │   └────────────────┘  │
-│                       └─────────────────┘                       │
-│                                                                 │
-│  ┌────────────────────────────────────────────────────────────┐ │
-│  │              Network Communication Layer                   │ │
-│  │  (CBA Events for Client-Server Communication)              │ │
-│  └────────────────────────────────────────────────────────────┘ │
-│                                                                 │
-└─────────────────────────────────────────────────────────────────┘
-         │                    │                    │
-         ▼                    ▼                    ▼
-     ┌────────┐           ┌────────┐         ┌────────────┐
-     │  CBA   │           │  ACE3  │         │    AE3     │
-     │ (Core) │           │ (Menu) │         │ (Terminal) │
-     └────────┘           └────────┘         └────────────┘
+┌──────────────────────────────────────────────────────────────┐
+│                        SERVER                                │
+├──────────────────────────────────────────────────────────────┤
+│                                                              │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ Global Device Storage (missionNamespace)               │  │
+│  ├────────────────────────────────────────────────────────┤  │
+│  │ • Device Cache (HashMap) - 8 device types              │  │
+│  │ • Link Cache (HashMap) - Computer → Device links       │  │
+│  │ • Public Devices (Array) - Public access registry      │  │
+│  │ • Legacy Array (backward compatibility)                │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                           ↓                                  │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ Access Control System (3-tier priority)                │  │
+│  ├────────────────────────────────────────────────────────┤  │
+│  │ 1. Backdoor Access (admin bypass)                      │  │
+│  │ 2. Public Device Access (future laptops)               │  │
+│  │ 3. Private Link Access (specific computers)            │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                           ↓                                  │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ Device Control Functions                               │  │
+│  ├────────────────────────────────────────────────────────┤  │
+│  │ • Door lock/unlock                                     │  │
+│  │ • Light on/off                                         │  │
+│  │ • Drone faction change/disable                         │  │
+│  │ • Vehicle manipulation                                 │  │
+│  │ • GPS tracking                                         │  │
+│  │ • Custom device activation                             │  │
+│  │ • Power grid control                                   │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                           ↓                                  │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ Power Management System                                │  │
+│  ├────────────────────────────────────────────────────────┤  │
+│  │ • Power availability checks (Wh)                       │  │
+│  │ • Battery consumption (kWh via AE3)                    │  │
+│  │ • Configurable costs (CBA settings)                    │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
+                           ↕
+        ┌──────────────────────────────────────┐
+        │ Network Synchronization              │
+        │ (missionNamespace with public flag)  │
+        └──────────────────────────────────────┘
+                           ↕
+┌──────────────────────────────────────────────────────────────┐
+│                        CLIENT                                │
+├──────────────────────────────────────────────────────────────┤
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ AE3 ArmaOS Terminal Interface                          │  │
+│  ├────────────────────────────────────────────────────────┤  │
+│  │ • Terminal commands (devices, door, light, etc.)       │  │
+│  │ • User confirmation prompts                            │  │
+│  │ • Output formatting (colors, tables)                   │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                           ↓                                  │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ ACE Interaction Menu                                   │  │
+│  ├────────────────────────────────────────────────────────┤  │
+│  │ • GPS tracker attachment (self-interaction)            │  │
+│  │ • GPS tracker search/disable (object interaction)      │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                           ↓                                  │
+│  ┌────────────────────────────────────────────────────────┐  │
+│  │ GPS Marker Visualization                               │  │
+│  ├────────────────────────────────────────────────────────┤  │
+│  │ • Active ping markers (updating position)              │  │
+│  │ • Last ping markers (final position)                   │  │
+│  │ • Side/group/player visibility control                 │  │
+│  └────────────────────────────────────────────────────────┘  │
+│                                                              │
+└──────────────────────────────────────────────────────────────┘
 ```
 
-### File Structure
-
-```
-addons/main/
-├── config.cpp                   # Addon configuration
-├── CfgVehicles.hpp             # Zeus/Eden module definitions
-├── stringtable.xml             # Localization strings
-├── script_component.hpp        # Component identity
-├── script_macros.hpp           # Constants and macros
-├── XEH_preInit.sqf            # Function precompilation
-├── XEH_postInit.sqf           # Server/client initialization
-├── XEH_PREP.hpp               # Function registration
-└── functions/
-    ├── 3den/          # Eden Editor modules (7 functions)
-    ├── core/          # Core system (4 functions)
-    ├── devices/       # Device operations (7 functions)
-    ├── database/      # File downloads (1 function)
-    ├── gps/           # GPS tracking (8 functions)
-    ├── utility/       # Helper functions (7 functions)
-    └── zeus/          # Zeus modules (13 functions)
-```
-
-**Total**: 47 functions precompiled for O(1) access via CBA's PREP system.
+---
 
 ## Data Storage Architecture
 
-The mod uses a **hybrid 3-tier storage system** optimized for different access patterns:
+Root's Cyber Warfare uses a **3-tier hybrid system** for data storage, optimized for O(1) lookups and network efficiency.
 
-### 1. All Devices Array - PRIMARY STORAGE
+### Tier 1: Device Cache (HashMap)
 
-**Purpose**: Centralized storage for all device data
+**Primary storage for all registered devices, organized by type.**
 
-**Global Variable**: `ROOT_CYBERWARFARE_ALL_DEVICES` (Array)
+**Variable:** `ROOT_CYBERWARFARE_DEVICE_CACHE`
 
-**Structure**:
+**Structure:**
+```sqf
+createHashMap with 8 keys:
+├─ "doors"       → Array of door device entries
+├─ "lights"      → Array of light device entries
+├─ "drones"      → Array of drone device entries
+├─ "databases"   → Array of database/file entries
+├─ "custom"      → Array of custom device entries
+├─ "gpsTrackers" → Array of GPS tracker entries
+├─ "vehicles"    → Array of vehicle entries
+└─ "powerGrids"  → Array of power generator entries
+```
+
+**Access Pattern:**
+```sqf
+private _deviceCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_DEVICE_CACHE", createHashMap];
+private _doors = _deviceCache getOrDefault ["doors", []];
+
+// Find specific device by ID
+private _device = _doors select {(_x select 0) == _deviceId};
+```
+
+**Performance:** O(1) for type lookup, O(n) for device search within type (acceptable given small n per type).
+
+**Initialization:**
+```sqf
+// PostInit (server)
+private _deviceCache = createHashMap;
+_deviceCache set ["doors", []];
+_deviceCache set ["lights", []];
+_deviceCache set ["drones", []];
+_deviceCache set ["databases", []];
+_deviceCache set ["custom", []];
+_deviceCache set ["gpsTrackers", []];
+_deviceCache set ["vehicles", []];
+_deviceCache set ["powerGrids", []];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_CACHE", _deviceCache, true];
+```
+
+---
+
+### Tier 2: Link Cache (HashMap)
+
+**Computer-to-device access mapping for private links.**
+
+**Variable:** `ROOT_CYBERWARFARE_LINK_CACHE`
+
+**Structure:**
+```sqf
+createHashMap with computer netIds as keys:
+├─ "76561198123456789" → [[1, 1234], [2, 5678], [7, 9012]]
+├─ "76561198987654321" → [[1, 1234], [3, 4567]]
+└─ ...
+```
+
+**Entry Format:** `[[deviceType, deviceId], ...]`
+
+**Access Pattern:**
+```sqf
+private _linkCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_LINK_CACHE", createHashMap];
+private _computerNetId = netId _computer;
+private _links = _linkCache getOrDefault [_computerNetId, []];
+
+// Check if computer has access to specific device
+private _hasAccess = [_deviceType, _deviceId] in _links;
+```
+
+**Performance:** O(1) for computer lookup, O(n) for device check (acceptable given small n of devices per computer).
+
+**Adding Links:**
+```sqf
+private _linkCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_LINK_CACHE", createHashMap];
+private _existingLinks = _linkCache getOrDefault [_computerNetId, []];
+_existingLinks pushBack [_deviceType, _deviceId];
+_linkCache set [_computerNetId, _existingLinks];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_LINK_CACHE", _linkCache, true];
+```
+
+---
+
+### Tier 3: Public Devices (Array)
+
+**Registry of devices accessible to all or future laptops.**
+
+**Variable:** `ROOT_CYBERWARFARE_PUBLIC_DEVICES`
+
+**Structure:**
 ```sqf
 [
-  doors[],        // Index 0: [[deviceId, buildingNetId, doorIds[], buildingName, availableToFuture], ...]
-  lights[],       // Index 1: [[deviceId, lightNetId, lightName, availableToFuture], ...]
-  drones[],       // Index 2: [[deviceId, droneNetId, droneName, availableToFuture], ...]
-  databases[],    // Index 3: [[deviceId, objectNetId, fileName, fileSize, linkedComputers, availableToFuture], ...]
-  custom[],       // Index 4: [[deviceId, objectNetId, deviceName, activationCode, deactivationCode, availableToFuture], ...]
-  gpsTrackers[],  // Index 5: [[deviceId, targetNetId, trackerName, trackingTime, updateFreq, marker, linkedComputers, availableToFuture, status, allowRetrack, lastPingTimer, powerCost, owners], ...]
-  vehicles[],     // Index 6: [[deviceId, vehicleNetId, name, allowFuel, allowSpeed, allowBrakes, allowLights, allowEngine, allowAlarm, availableToFuture, powerCost, linkedComputers], ...]
-  powerGrids[]    // Index 7: [[deviceId, objectNetId, name, radius, allowExplActivate, allowExplDeactivate, explosionType, excludedClasses, availableToFuture, powerCost, linkedComputers], ...]
+    [deviceType, deviceId, [excludedComputerNetIds]],
+    [deviceType, deviceId, [excludedComputerNetIds]],
+    ...
 ]
 ```
 
-**Access Pattern**:
-```sqf
-// Get all devices
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-private _allDoors = _allDevices select 0;
-
-// Find specific door by ID
-private _doorIndex = _allDoors findIf { (_x select 0) == _deviceId };
-if (_doorIndex != -1) then {
-    private _doorEntry = _allDoors select _doorIndex;
-};
-
-// Filter accessible doors for a computer
-private _accessibleDoors = _allDoors select {
-    [_computer, DEVICE_TYPE_DOOR, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible
-};
-```
-
-**Initialization**: Created in `XEH_postInit.sqf` (server-side only), can be pre-populated by 3DEN modules
-
-### 2. Link Cache (HashMap) - ACCESS CONTROL
-
-**Purpose**: O(1) lookup of computer-specific device access (private links)
-
-**Global Variable**: `ROOT_CYBERWARFARE_LINK_CACHE` (HashMap)
-
-**Structure**:
-```sqf
-createHashMap with keys: computerNetId (string)
-values: [[deviceType, deviceId], ...] (array of [int, int] pairs)
-```
-
-**Example**:
-```sqf
-// Computer with netId "1:23" has access to door 1234 and vehicle 5678
-"1:23" → [[1, 1234], [7, 5678]]
-```
-
-**Access Pattern**:
-```sqf
-private _linkCache = GET_LINK_CACHE;
-private _computerLinks = _linkCache getOrDefault [netId _computer, []];
-private _hasAccess = [_deviceType, _deviceId] in _computerLinks;
-```
-
-**Initialization**: Created in `XEH_postInit.sqf`, can be pre-populated by 3DEN modules
-
-### 3. Public Devices (Array) - GLOBAL ACCESS
-
-**Purpose**: Devices available to all or future laptops with optional exclusions
-
-**Global Variable**: `ROOT_CYBERWARFARE_PUBLIC_DEVICES` (Array)
-
-**Structure**:
-```sqf
-[[deviceType, deviceId, [excludedComputerNetIds]], ...]
-```
-
-**Example**:
+**Example:**
 ```sqf
 [
-    [1, 1234, ["1:23", "1:24"]],  // Door 1234 public except computers "1:23" and "1:24"
-    [7, 5678, []]                 // Vehicle 5678 public to all computers
+    [1, 1234, ["76561198123456789"]],  // Door 1234, all except one computer
+    [7, 5678, []],                      // Vehicle 5678, all computers
+    [6, 9012, ["netId1", "netId2"]]     // GPS tracker 9012, all except two
 ]
 ```
 
-**Access Pattern**:
+**Access Pattern:**
 ```sqf
-private _publicDevices = GET_PUBLIC_DEVICES;
+private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
+private _computerNetId = netId _computer;
+
+// Check if device is public and computer not excluded
 private _isPublic = _publicDevices findIf {
     _x params ["_type", "_id", "_excludedNetIds"];
     _type == _deviceType && _id == _deviceId && !(_computerNetId in _excludedNetIds)
 } != -1;
 ```
 
-**Initialization**: Created in `XEH_postInit.sqf`, can be pre-populated by 3DEN modules
+**Performance:** O(n) linear search (acceptable given relatively small number of public devices).
 
-### 4. Device Cache HashMap (UNUSED - Reserved for Future)
-
-**Global Variable**: `ROOT_CYBERWARFARE_DEVICE_CACHE` (HashMap)
-
-**Status**: **Currently Unused** - initialized in PostInit but not actively used. Reserved for future optimization to replace array-based device lookups with O(1) HashMap lookups.
-
-**Structure** (when implemented):
+**"Available to Future Laptops" Implementation:**
 ```sqf
-createHashMap with keys: "doors", "lights", "drones", etc.
-values: Arrays of device entries (same structure as ALL_DEVICES)
+// When registering device with availableToFutureLaptops = true:
+// 1. Get all current computers
+private _allCurrentComputers = allMissionObjects "Land_Laptop_03_base_F_AE3";
+private _excludedNetIds = _allCurrentComputers apply {netId _x};
+
+// 2. Add to public devices with exclusion list
+private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
+_publicDevices pushBack [_deviceType, _deviceId, _excludedNetIds];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
+
+// Result: Current computers excluded, future computers included
 ```
 
-### Device Type Constants
+---
 
-Defined in `script_macros.hpp`:
+### Legacy Array (Backward Compatibility)
 
-| Constant | Value | Description |
-|----------|-------|-------------|
-| `DEVICE_TYPE_DOOR` | 1 | Building doors (lockable) |
-| `DEVICE_TYPE_LIGHT` | 2 | Building lights (switchable) |
-| `DEVICE_TYPE_DRONE` | 3 | UAVs (faction change, disable) |
-| `DEVICE_TYPE_DATABASE` | 4 | Downloadable files |
-| `DEVICE_TYPE_CUSTOM` | 5 | Custom scripted devices |
-| `DEVICE_TYPE_GPS_TRACKER` | 6 | GPS tracking devices |
-| `DEVICE_TYPE_VEHICLE` | 7 | Vehicles (engine, fuel, alarms) |
-| `DEVICE_TYPE_POWERGRID` | 8 | Power generators (light control) |
+**Variable:** `ROOT_CYBERWARFARE_ALL_DEVICES`
+
+**Structure:**
+```sqf
+[
+    doors[],       // Index 0
+    lights[],      // Index 1
+    drones[],      // Index 2
+    databases[],   // Index 3
+    custom[],      // Index 4
+    gpsTrackers[], // Index 5
+    vehicles[],    // Index 6
+    powerGrids[]   // Index 7
+]
+```
+
+**Note:** Maintained for backward compatibility. New code should use the HashMap-based device cache instead.
+
+---
 
 ## Access Control System
 
-Device accessibility is determined by a **3-tier priority system** implemented in `fn_isDeviceAccessible.sqf`:
+**3-Tier Priority System** (checked in order, first match wins)
 
-### Priority Order (Highest to Lowest)
+### Priority 1: Backdoor Access (Highest)
 
-```
-1. Backdoor Access (Admin/Debug)
-         ↓ (if no backdoor)
-2. Public Device Access
-         ↓ (if not public or excluded)
-3. Private Link Access
-         ↓ (if no link)
-   ACCESS DENIED
-```
+**Purpose:** Admin/debug bypass of all permission checks.
 
-### 1. Backdoor Access (Highest Priority)
-
-**Purpose**: Admin/debug access bypassing all checks
-
-**Implementation**:
+**Implementation:**
 ```sqf
 private _backdoorPath = _computer getVariable ["ROOT_CYBERWARFARE_BACKDOOR_FUNCTION", ""];
-if (_backdoorPath != "") exitWith { true };  // Full access
+if (_backdoorPath != "") exitWith {true}; // Access granted
 ```
 
-**Use Case**: Mission makers can grant specific laptops unrestricted access to all devices
-
-**Configuration**:
+**Set During Tool Installation:**
 ```sqf
-// Add backdoor access to a laptop
-_laptop setVariable ["ROOT_CYBERWARFARE_BACKDOOR_FUNCTION", "/network/admin", true];
+[_laptop, "/tools", 0, "Laptop", "backdoor_"] call Root_fnc_addHackingToolsZeusMain;
+// Sets ROOT_CYBERWARFARE_BACKDOOR_FUNCTION = "backdoor_"
 ```
 
-### 2. Public Device Access
+**Security:** Intended only for testing/debugging. Should not be used in production missions.
 
-**Purpose**: Devices accessible to all or future computers with optional exclusions
+---
 
-**Implementation**:
+### Priority 2: Public Device Access
+
+**Purpose:** Devices accessible to all or future laptops.
+
+**Implementation:**
 ```sqf
-private _publicDevices = GET_PUBLIC_DEVICES;
+private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
 private _computerNetId = netId _computer;
 
 private _isPublic = _publicDevices findIf {
@@ -264,761 +306,542 @@ private _isPublic = _publicDevices findIf {
     _type == _deviceType && _id == _deviceId && !(_computerNetId in _excludedNetIds)
 } != -1;
 
-if (_isPublic) exitWith { true };
+if (_isPublic) exitWith {true}; // Access granted
 ```
 
-**Use Case**: "Available to Future Laptops" checkbox in Zeus modules
+**Exclusion Logic:**
+- Empty exclusion list `[]` → All computers have access
+- Non-empty exclusion list → All computers except those in the list
 
-**Behavior**:
-- Devices added with `availableToFuture = true` are placed in public devices array
-- **Exclusion List**: All computers that existed at registration time are excluded
-- New computers added after registration automatically get access (not in exclusion list)
+---
 
-**Example**:
+### Priority 3: Private Link Access (Lowest)
+
+**Purpose:** Direct computer-to-device relationships.
+
+**Implementation:**
 ```sqf
-// Register vehicle available to future laptops
-[_vehicle, 0, [], "Car1", true, false, false, false, true, false, true, 2]
-    call Root_fnc_addVehicleZeusMain;
-// All computers added AFTER this call will have access
-// Computers that existed at this moment are in exclusion list
-```
+private _linkCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_LINK_CACHE", createHashMap];
+private _computerNetId = netId _computer;
+private _links = _linkCache getOrDefault [_computerNetId, []];
 
-### 3. Private Link Access (Lowest Priority)
-
-**Purpose**: Direct computer-to-device relationships
-
-**Implementation**:
-```sqf
-private _linkCache = GET_LINK_CACHE;
-private _links = _linkCache getOrDefault [netId _computer, []];
 private _hasLink = [_deviceType, _deviceId] in _links;
+if (_hasLink) exitWith {true}; // Access granted
 
-if (_hasLink) exitWith { true };
+false // Access denied
 ```
 
-**Use Case**: Explicit device linking via Zeus "Link to Computer" checkboxes
+---
 
-**Configuration**:
-```sqf
-// Link door 1234 to a specific computer
-private _linkCache = GET_LINK_CACHE;
-private _existingLinks = _linkCache getOrDefault [netId _computer, []];
-_existingLinks pushBack [DEVICE_TYPE_DOOR, 1234];
-_linkCache set [netId _computer, _existingLinks];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_LINK_CACHE", _linkCache, true];
-```
-
-### Access Control Flow Diagram
+### Access Check Flow Diagram
 
 ```
-┌─────────────────────────────────────────┐
-│ Player executes device control command  │
-└──────────────┬──────────────────────────┘
-               │
-               ▼
-┌─────────────────────────────────────────┐
-│  fn_isDeviceAccessible(_computer,       │
-│                        _deviceType,     │
-│                        _deviceId)       │
-└──────────────┬──────────────────────────┘
-               │
-               ▼
-       ┌───────────────┐
-       │ Has backdoor? │──YES──> ALLOW ACCESS
-       └───────┬───────┘
-               │ NO
-               ▼
-       ┌───────────────┐
-       │ Is public &   │──YES──> ALLOW ACCESS
-       │ not excluded? │
-       └───────┬───────┘
-               │ NO
-               ▼
-       ┌───────────────┐
-       │  Has private  │──YES──> ALLOW ACCESS
-       │     link?     │
-       └───────┬───────┘
-               │ NO
-               ▼
-         DENY ACCESS
+Device Access Request
+         ↓
+┌────────────────────┐
+│ Backdoor Enabled?  │ → YES → GRANTED
+└────────┬───────────┘
+         NO
+         ↓
+┌────────────────────┐
+│ Public Device?     │ → YES → Computer Excluded? → NO → GRANTED
+└────────┬───────────┘                    ↓
+         NO                              YES
+         ↓                                ↓
+┌────────────────────┐                  DENIED
+│ Private Link?      │ → YES → GRANTED
+└────────┬───────────┘
+         NO
+         ↓
+      DENIED
 ```
+
+---
 
 ## Initialization Flow
 
-### Phase 1: PreInit (`XEH_preInit.sqf`)
+### PreInit Phase (CBA Macro Compilation)
 
-**Context**: Unscheduled, runs before mission objects spawn
+**File:** `XEH_preInit.sqf`
 
-**Responsibilities**:
-1. Precompile all 47 functions using CBA's PREP macro
-2. Initialize CBA settings (power costs, GPS config, etc.)
-3. Set `ADDON = true` flag
+**Execution:** Before mission start, unscheduled context
 
-**Key Operations**:
+**Tasks:**
+1. **Precompile all functions** using CBA's PREP macro (47 functions)
 ```sqf
-// 1. Precompile functions
-#include "XEH_PREP.hpp"  // Loads all functions into mission namespace
+#include "XEH_PREP.hpp"
+// Expands to:
+// PREP(functionName1);
+// PREP(functionName2);
+// ... (47 functions)
+```
 
-// 2. Initialize settings
-call FUNC(initSettings);  // Registers CBA settings
+2. **Initialize CBA settings**
+```sqf
+call FUNC(initSettings); // Registers 10 CBA settings
+```
 
-// 3. Mark ready
+3. **Set addon loaded flag**
+```sqf
 ADDON = true;
 ```
 
-**Execution Order**: `PreInit → PostInit → Mission Objects → Mission Start`
+**Result:** All functions available as `Root_fnc_functionName` with O(1) access.
 
-### Phase 2: PostInit (`XEH_postInit.sqf`)
+---
 
-**Context**: Scheduled, runs after mission objects created but before mission starts
+### PostInit Phase (Server)
 
-#### Server-Side Initialization
+**File:** `XEH_postInit.sqf`
 
+**Execution:** After mission start, server only
+
+**Tasks:**
+
+1. **Initialize Device Cache (HashMap)**
 ```sqf
 if (isServer) then {
-    // 1. Register CBA event handlers
-    ["root_cyberwarfare_consumePower", {...}] call CBA_fnc_addEventHandler;
-    ["root_cyberwarfare_deviceStateChanged", {...}] call CBA_fnc_addEventHandler;
-    ["root_cyberwarfare_gpsTrackingUpdate", {...}] call CBA_fnc_addEventHandler;
-    ["root_cyberwarfare_deviceLinked", {...}] call CBA_fnc_addEventHandler;
-
-    // 2. Initialize device cache HashMap (8 keys)
     private _deviceCache = createHashMap;
-    _deviceCache set [CACHE_KEY_DOORS, []];
-    _deviceCache set [CACHE_KEY_LIGHTS, []];
-    _deviceCache set [CACHE_KEY_DRONES, []];
-    _deviceCache set [CACHE_KEY_DATABASES, []];
-    _deviceCache set [CACHE_KEY_CUSTOM, []];
-    _deviceCache set [CACHE_KEY_GPS_TRACKERS, []];
-    _deviceCache set [CACHE_KEY_VEHICLES, []];
-    _deviceCache set [CACHE_KEY_POWERGRIDS, []];
-    missionNamespace setVariable [GVAR_DEVICE_CACHE, _deviceCache, true];
-
-    // 3. Initialize link cache (only if not pre-populated by 3DEN)
-    if (isNil GVAR_LINK_CACHE) then {
-        missionNamespace setVariable [GVAR_LINK_CACHE, createHashMap, true];
-    };
-
-    // 4. Initialize public devices array (only if not pre-populated)
-    if (isNil GVAR_PUBLIC_DEVICES) then {
-        missionNamespace setVariable [GVAR_PUBLIC_DEVICES, [], true];
-    };
-
-    // 5. Initialize legacy array (backward compatibility)
-    if (isNil "ROOT_CYBERWARFARE_ALL_DEVICES") then {
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES",
-            [[], [], [], [], [], [], [], []], true];
-    };
-
-    // 6. Start cleanup task
-    call FUNC(cleanupDeviceLinks);
+    _deviceCache set ["doors", []];
+    _deviceCache set ["lights", []];
+    _deviceCache set ["drones", []];
+    _deviceCache set ["databases", []];
+    _deviceCache set ["custom", []];
+    _deviceCache set ["gpsTrackers", []];
+    _deviceCache set ["vehicles", []];
+    _deviceCache set ["powerGrids", []];
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_CACHE", _deviceCache, true];
 };
 ```
 
-#### Client-Side Initialization
+2. **Initialize Link Cache (HashMap)**
+```sqf
+if (isServer) then {
+    private _linkCache = createHashMap;
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_LINK_CACHE", _linkCache, true];
+};
+```
 
+3. **Initialize Public Devices (Array)**
+```sqf
+if (isServer) then {
+    private _publicDevices = [];
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
+};
+```
+
+4. **Register CBA Event Handlers** (for power, device state changes, GPS updates)
+
+5. **Start Background Cleanup Task**
+```sqf
+if (isServer) then {
+    [] spawn {
+        while {true} do {
+            sleep 300; // Every 5 minutes
+            call FUNC(cleanupDeviceLinks); // Remove destroyed objects
+        };
+    };
+};
+```
+
+---
+
+### PostInit Phase (Client)
+
+**Execution:** After mission start, all clients
+
+**Tasks:**
+
+1. **Register ACE Interaction Actions** for GPS tracker operations
 ```sqf
 if (hasInterface) then {
-    // Wait for player and mission time
-    [{(!isNull ACE_player) && (CBA_missionTime > 0)}, {
-        // 1. Create diary entry
-        call FUNC(createDiaryEntry);
-
-        // 2. Register ACE interaction: Attach GPS Tracker
-        private _actionAttach = [...] call ace_interact_menu_fnc_createAction;
-        ["All", 0, ["ACE_MainActions"], _actionAttach, true]
-            call ace_interact_menu_fnc_addActionToClass;
-
-        // 3. Register ACE interaction: Search for GPS Tracker
-        private _actionSearch = [...] call ace_interact_menu_fnc_createAction;
-        ["All", 0, ["ACE_MainActions"], _actionSearch, true]
-            call ace_interact_menu_fnc_addActionToClass;
-    }] call CBA_fnc_waitUntilAndExecute;
+    // Register self-interaction for GPS tracker attachment
+    // Register object-interaction for GPS tracker search/disable
 };
 ```
 
-### Initialization Timeline
+---
 
-```
-Mission Load
-     │
-     ├─> PreInit (Unscheduled)
-     │   ├─> Precompile 47 functions
-     │   ├─> Register CBA settings
-     │   └─> Set ADDON = true
-     │
-     ├─> 3DEN Modules Execute (if in editor)
-     │   └─> Pre-populate link cache & public devices
-     │
-     ├─> Mission Objects Spawn
-     │
-     ├─> PostInit (Scheduled)
-     │   ├─> Server: Initialize device cache (8 device types)
-     │   ├─> Server: Initialize link cache (if not pre-populated)
-     │   ├─> Server: Register CBA event handlers
-     │   ├─> Server: Start cleanup task
-     │   └─> Client: Register ACE interactions (GPS tracker)
-     │
-     └─> Mission Start
-```
+## Power System
 
-## Function Architecture
+### Power Units
 
-### Naming Conventions
+**Two unit systems:**
+- **Watt-hours (Wh)** - Used for operation costs
+- **Kilowatt-hours (kWh)** - Used by AE3 for battery storage
 
-Root's Cyber Warfare follows a **two-function pattern** for Zeus modules:
-
-1. **`fn_functionZeus.sqf`** - UI/dialog handling, parameter collection
-2. **`fn_functionZeusMain.sqf`** - Implementation logic (can be called directly)
-
-**Example**:
+**Conversion:**
 ```sqf
-// Zeus UI function (dialog handling)
-fn_addVehicleZeus.sqf
+#define WH_TO_KWH(wh) (wh / 1000)
+#define KWH_TO_WH(kwh) (kwh * 1000)
 
-// Main implementation (callable from mission scripts)
-fn_addVehicleZeusMain.sqf
+// Example:
+private _powerCostWh = 10;  // 10 Watt-hours
+private _powerCostKwh = WH_TO_KWH(_powerCostWh); // 0.01 Kilowatt-hours
 ```
 
-**Benefit**: Mission makers can bypass Zeus UI and call Main functions directly:
+---
+
+### Power Check Flow
+
+```
+Operation Requested
+         ↓
+┌────────────────────────────────┐
+│ Get Power Cost (Wh)            │
+│ - From CBA settings            │
+│ - Or per-device configuration  │
+└────────┬───────────────────────┘
+         ↓
+┌────────────────────────────────┐
+│ Check Power Available          │
+│ Root_fnc_checkPowerAvailable   │
+└────────┬───────────────────────┘
+         ↓
+    Sufficient? ──NO──→ Error: Insufficient Power
+         │
+        YES
+         ↓
+┌────────────────────────────────┐
+│ Show Confirmation Prompt       │
+│ (if required)                  │
+└────────┬───────────────────────┘
+         ↓
+    Confirmed? ──NO──→ Operation Cancelled
+         │
+        YES
+         ↓
+┌────────────────────────────────┐
+│ Consume Power                  │
+│ Root_fnc_consumePower          │
+└────────┬───────────────────────┘
+         ↓
+┌────────────────────────────────┐
+│ Execute Operation              │
+└────────────────────────────────┘
+```
+
+---
+
+### Power Check Implementation
+
 ```sqf
-// Called programmatically in mission init
-[_vehicle, 0, [], "Car1", true, false, false, false, true, false, false, 2]
-    call Root_fnc_addVehicleZeusMain;
+// fn_checkPowerAvailable.sqf
+params [
+    ["_computer", objNull, [objNull]],
+    ["_powerRequiredWh", 0, [0]]
+];
+
+if (isNull _computer) exitWith {false};
+if (_powerRequiredWh <= 0) exitWith {true};
+
+// Get laptop's internal battery (AE3 object)
+private _battery = _computer getVariable ["AE3_power_internal", objNull];
+if (isNull _battery) exitWith {false};
+
+// Get battery level in kWh
+private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
+
+// Convert required power to kWh and check
+private _powerRequiredKwh = WH_TO_KWH(_powerRequiredWh);
+(_batteryLevel >= _powerRequiredKwh)
 ```
 
-### Function Categories
+---
 
-#### 1. Zeus Functions (`functions/zeus/`)
+### Power Consumption Implementation
 
-**Purpose**: Zeus module UI and device registration
+```sqf
+// fn_consumePower.sqf
+params [
+    ["_computer", objNull, [objNull]],
+    ["_powerWh", 0, [0]]
+];
 
-**Pattern**: Paired functions (Zeus + ZeusMain)
+if (isNull _computer) exitWith {};
+if (_powerWh <= 0) exitWith {};
 
-**Examples**:
-- `fn_addDeviceZeus.sqf` + `fn_addDeviceZeusMain.sqf` (doors/lights)
-- `fn_addVehicleZeus.sqf` + `fn_addVehicleZeusMain.sqf` (vehicles/drones)
-- `fn_addGPSTrackerZeus.sqf` + `fn_addGPSTrackerZeusMain.sqf` (GPS trackers)
+private _battery = _computer getVariable ["AE3_power_internal", objNull];
+if (isNull _battery) exitWith {};
 
-**Execution**: Zeus functions run in **scheduled** context
+private _currentLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
+private _powerKwh = WH_TO_KWH(_powerWh);
+private _newLevel = (_currentLevel - _powerKwh) max 0;
 
-#### 2. 3DEN Functions (`functions/3den/`)
+_battery setVariable ["AE3_power_batteryLevel", _newLevel, true];
+```
 
-**Purpose**: Eden Editor module implementation for pre-mission setup
+---
 
-**Pattern**: Single function per module (no UI, config-driven)
+### Default Power Costs
 
-**Examples**:
-- `fn_3denAddHackingTools.sqf` - Pre-install hacking tools
-- `fn_3denAddDevices.sqf` - Pre-register doors/lights
-- `fn_3denAddVehicle.sqf` - Pre-register vehicles
+| Operation | Default (Wh) | CBA Setting |
+|-----------|--------------|-------------|
+| Door lock/unlock | 2 | ROOT_CYBERWARFARE_DOOR_COST |
+| Drone disable | 10 | ROOT_CYBERWARFARE_DRONE_HACK_COST |
+| Drone faction change | 20 | ROOT_CYBERWARFARE_DRONE_SIDE_COST |
+| Custom device | 10 | ROOT_CYBERWARFARE_CUSTOM_COST |
+| Power grid control | 15 | ROOT_CYBERWARFARE_POWERGRID_COST |
+| Vehicle action | 2 | Per-vehicle configuration |
+| GPS tracking | 2-10 | Per-tracker configuration |
 
-**Execution**: Runs during mission load, before PostInit
+---
 
-#### 3. Device Functions (`functions/devices/`)
+## Function Patterns
 
-**Purpose**: Device control implementation (called from terminal commands)
+### Two-Function Pattern (Zeus Modules)
 
-**Examples**:
-- `fn_changeDoorState.sqf` - Lock/unlock doors
-- `fn_changeLightState.sqf` - Toggle lights
-- `fn_changeVehicleParams.sqf` - Manipulate vehicle systems
-- `fn_customDevice.sqf` - Execute custom device code
+Zeus modules use a UI + implementation pattern:
 
-**Execution**: Unscheduled (called via `call`)
+**UI Function:** `fn_moduleNameZeus.sqf`
+- Opens dialog/prompts
+- Collects parameters from Zeus
+- Calls main function
 
-#### 4. Utility Functions (`functions/utility/`)
+**Implementation Function:** `fn_moduleNameZeusMain.sqf`
+- Contains actual logic
+- Can be called directly from scripts
+- Server-side execution
 
-**Purpose**: Helper functions for common operations
+**Example:**
+```sqf
+// fn_addDeviceZeus.sqf (UI)
+params [["_mode", ""], ["_input", []]];
+// ... Zeus dialog code ...
+[_object, _execUserId, _linkedComputers, ...] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 
-**Examples**:
-- `fn_isDeviceAccessible.sqf` - Check access (3-tier system)
-- `fn_checkPowerAvailable.sqf` - Validate battery level
-- `fn_consumePower.sqf` - Deduct power from battery
-- `fn_getAccessibleDevices.sqf` - Filter devices by access
+// fn_addDeviceZeusMain.sqf (Implementation)
+params ["_object", "_execUserId", "_linkedComputers", ...];
+// ... actual device registration logic ...
+```
 
-**Execution**: Unscheduled (pure functions)
+**Benefits:**
+- UI code separated from logic
+- Logic reusable from scripts
+- Easier testing and maintenance
 
-#### 5. GPS Functions (`functions/gps/`)
-
-**Purpose**: GPS tracker attachment, searching, and positioning
-
-**Examples**:
-- `fn_aceAttachGPSTracker.sqf` - ACE interaction handler
-- `fn_gpsTrackerServer.sqf` - Server-side tracking loop
-- `fn_gpsTrackerClient.sqf` - Client-side marker management
-- `fn_searchForGPSTracker.sqf` - Search for hidden trackers
-
-**Execution**: Mixed (ACE actions scheduled, server loops spawned)
-
-#### 6. Core Functions (`functions/core/`)
-
-**Purpose**: Core system functionality
-
-**Examples**:
-- `fn_initSettings.sqf` - CBA settings registration
-- `fn_cleanupDeviceLinks.sqf` - Cleanup destroyed objects
-- `fn_createDiaryEntry.sqf` - Add briefing entry
-
-**Execution**: Mixed (init unscheduled, cleanup spawned)
+---
 
 ### Parameter Handling Pattern
 
-All functions use **strict type-checked parameters** via SQF `params`:
+All functions use strict type-checked parameters:
 
 ```sqf
 params [
     ["_parameter1", defaultValue, [expectedType]],
-    ["_parameter2", defaultValue, [expectedType, alternateType]]
+    ["_parameter2", defaultValue, [expectedType1, expectedType2]], // Multiple types allowed
+    ["_parameter3", defaultValue, [expectedType], [expectedCondition]]
 ];
 ```
 
-**Example from `fn_changeDoorState.sqf`**:
+**Example:**
 ```sqf
 params [
     ["_computer", objNull, [objNull]],
-    ["_deviceId", -1, [0]],
-    ["_doorIds", [], [[]]],
-    ["_action", "", [""]]
+    ["_powerCost", 0, [0]],
+    ["_deviceName", "", [""]],
+    ["_allowFuel", false, [true]]
 ];
-
-// Early validation
-if (isNull _computer) exitWith { LOG_ERROR("Computer is null"); };
-if (_deviceId < 0) exitWith { LOG_ERROR("Invalid device ID"); };
-if !(_action in ["lock", "unlock"]) exitWith { LOG_ERROR("Invalid action"); };
 ```
+
+---
 
 ### Error Handling Pattern
 
-Functions use `scopeName` and `exitWith` for early returns:
+Functions use `scopeName` and `exitWith` for clean error handling:
 
 ```sqf
 scopeName "exit";
 
-// Validation 1
+// Early validation
 if (!VALIDATE_COMPUTER(_computer)) exitWith {
-    [_computer, format ["<t color='%1'>%2</t>", COLOR_ERROR,
-        localize "STR_ROOT_CYBERWARFARE_ERR_INVALID_COMPUTER"]]
+    [_computer, format ["<t color='%1'>%2</t>", COLOR_ERROR, localize "STR_ROOT_CYBERWARFARE_ERR_INVALID_COMPUTER"]]
         call AE3_armaos_fnc_shell_stdout;
+    false
 };
 
-// Validation 2
+// Power check
 if (!([_computer, _powerCost] call FUNC(checkPowerAvailable))) exitWith {
-    [_computer, format ["<t color='%1'>%2</t>", COLOR_ERROR,
-        localize "STR_ROOT_CYBERWARFARE_ERR_INSUFFICIENT_POWER"]]
+    [_computer, format ["<t color='%1'>%2</t>", COLOR_ERROR, localize "STR_ROOT_CYBERWARFARE_ERR_INSUFFICIENT_POWER"]]
         call AE3_armaos_fnc_shell_stdout;
+    false
 };
 
-// Main logic here
+// Main logic
+// ...
+
+true // Success
 ```
+
+---
+
+### Confirmation Prompt Pattern
+
+Destructive or bulk operations require user confirmation:
+
+```sqf
+// Calculate total cost
+private _totalCost = _affectedCount * _singleCost;
+
+// Show confirmation prompt
+private _promptMessage = format [
+    "This will affect %1 device(s) and consume %2 Wh. Continue? (Y/N) [10s timeout]",
+    _affectedCount,
+    _totalCost
+];
+
+[_computer, _promptMessage, 10, "confirmVar"] call Root_fnc_getUserConfirmation;
+
+// Wait for confirmation
+waitUntil {_computer getVariable ["confirmVar", false] || time > _timeoutTime};
+
+private _confirmed = _computer getVariable ["confirmVar", false];
+if (!_confirmed) exitWith {
+    [_computer, "Operation cancelled."] call AE3_armaos_fnc_shell_stdout;
+};
+
+// Proceed with operation
+```
+
+---
 
 ## Network Architecture
 
-### Communication Strategy
+### Data Synchronization
 
-Root's Cyber Warfare uses **CBA events** instead of `remoteExec` for client-server communication:
-
-**Benefits**:
-- Better bandwidth management
-- Type-safe parameter passing
-- Event queuing and reliability
-- Easier debugging
-
-### Registered Events
-
-Defined in `XEH_postInit.sqf` (server-side):
-
-#### 1. Power Consumption Event
+All global device storage uses `missionNamespace` with public synchronization:
 
 ```sqf
-["root_cyberwarfare_consumePower", {
-    params ["_computer", "_battery", "_newLevel", "_powerWh"];
-    [_computer, _battery, _newLevel] call FUNC(removePower);
+missionNamespace setVariable ["VARIABLE_NAME", _value, true];
+// 3rd parameter = true → Synced to all clients
+```
+
+**Synchronized Variables:**
+- `ROOT_CYBERWARFARE_DEVICE_CACHE` (HashMap)
+- `ROOT_CYBERWARFARE_LINK_CACHE` (HashMap)
+- `ROOT_CYBERWARFARE_PUBLIC_DEVICES` (Array)
+- `ROOT_CYBERWARFARE_ALL_DEVICES` (Array, legacy)
+
+---
+
+### Object Variables
+
+Device metadata stored on objects with public sync:
+
+```sqf
+_object setVariable ["KEY", _value, true];
+// Examples:
+_building setVariable ["ROOT_CYBERWARFARE_DEVICE_ID", 1234, true];
+_tracker setVariable ["ROOT_CYBERWARFARE_GPS_STATUS", "Tracking", true];
+```
+
+---
+
+### CBA Events
+
+Used for one-off network messages instead of `remoteExec`:
+
+```sqf
+// Raise event on server
+["ROOT_CYBERWARFARE_GPS_UPDATE", [_trackerId, _position]] call CBA_fnc_serverEvent;
+
+// Handle event on clients
+["ROOT_CYBERWARFARE_GPS_UPDATE", {
+    params ["_trackerId", "_position"];
+    // Update marker position
 }] call CBA_fnc_addEventHandler;
 ```
 
-**Triggered**: When a hacking operation consumes battery power
-**Direction**: Client → Server
-**Parameters**: Computer object, battery item, new power level (kWh), power consumed (Wh)
-
-#### 2. Device State Change Event
-
-```sqf
-["root_cyberwarfare_deviceStateChanged", {
-    params ["_deviceType", "_deviceId", "_newState"];
-    LOG_DEBUG_3("Device state changed - Type: %1, ID: %2, State: %3", ...);
-}] call CBA_fnc_addEventHandler;
-```
-
-**Triggered**: When a device changes state (door locked, light toggled, etc.)
-**Direction**: Server → Clients (broadcast)
-**Parameters**: Device type constant, device ID, new state description
-
-#### 3. GPS Tracking Update Event
-
-```sqf
-["root_cyberwarfare_gpsTrackingUpdate", {
-    params ["_trackerId", "_status"];
-    LOG_DEBUG_2("GPS tracking update - ID: %1, Status: %2", ...);
-}] call CBA_fnc_addEventHandler;
-```
-
-**Triggered**: When a GPS tracker updates its position
-**Direction**: Server → Clients (broadcast)
-**Parameters**: Tracker device ID, status string
-
-#### 4. Device Linked Event
-
-```sqf
-["root_cyberwarfare_deviceLinked", {
-    params ["_computerNetId", "_deviceType", "_deviceId"];
-    LOG_DEBUG_3("Device linked - Computer: %1, Type: %2, ID: %3", ...);
-}] call CBA_fnc_addEventHandler;
-```
-
-**Triggered**: When a computer is granted access to a device
-**Direction**: Server → Clients (broadcast)
-**Parameters**: Computer netId, device type, device ID
-
-### Network Synchronization
-
-**Global Variables** are synchronized using `publicVariable`:
-
-```sqf
-// Set variable with public sync (3rd param = true)
-missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_CACHE", _deviceCache, true];
-
-// Explicit broadcast
-publicVariable "ROOT_CYBERWARFARE_ALL_DEVICES";
-```
-
-**Object Variables** for device metadata:
-
-```sqf
-// Store metadata on object with public sync
-_object setVariable ["ROOT_CYBERWARFARE_DEVICE_ID", _deviceId, true];
-_building setVariable ["ROOT_CYBERWARFARE_DOOR_IDS", _doorIds, true];
-```
-
-### Network Data Flow
-
-```
-┌────────────┐                          ┌────────────┐
-│   Client   │                          │   Server   │
-└─────┬──────┘                          └──────┬─────┘
-      │                                        │
-      │  1. Player executes terminal command   │
-      ├───────────────────────────────────────>│
-      │     (via AE3 ArmaOS terminal)          │
-      │                                        │
-      │  2. Validate access & power            │
-      │                                   ┌────▼────┐
-      │                                   │ Check:  │
-      │                                   │ - Access│
-      │                                   │ - Power │
-      │                                   └────┬────┘
-      │                                        │
-      │  3. CBA Event: consumePower            │
-      │<───────────────────────────────────────┤
-      │                                        │
-      │  4. Update device state (server)       │
-      │                                   ┌────▼────┐
-      │                                   │ Update: │
-      │                                   │ - Cache │
-      │                                   │ - Object│
-      │                                   └────┬────┘
-      │                                        │
-      │  5. CBA Event: deviceStateChanged      │
-      │<───────────────────────────────────────┤
-      │   (broadcasted to all clients)         │
-      │                                        │
-      │  6. Display result to player           │
-      ├───────────────────────────────────────>│
-      │    (AE3 terminal output)               │
-      │                                        │
-```
-
-## Power System
-
-### Overview
-
-All hacking operations consume **battery power** from laptops. Power is managed by the AE3 power system.
-
-### Power Units
-
-- **Configuration**: Power costs configured in **Watt-hours (Wh)** via CBA settings
-- **Storage**: Laptop battery levels stored in **Kilowatt-hours (kWh)** by AE3
-- **Conversion**: Macros `WH_TO_KWH()` and `KWH_TO_WH()` handle conversion
-
-### Power Costs (CBA Settings)
-
-Defined in `fn_initSettings.sqf`:
-
-| Operation | Setting | Default | Range |
-|-----------|---------|---------|-------|
-| Door lock/unlock | `SETTING_DOOR_COST` | 2 Wh | 0-100 Wh |
-| Drone disable | `SETTING_DRONE_HACK_COST` | 10 Wh | 0-100 Wh |
-| Drone faction change | `SETTING_DRONE_SIDE_COST` | 20 Wh | 0-100 Wh |
-| Custom device | `SETTING_CUSTOM_COST` | 10 Wh | 0-100 Wh |
-| Power grid control | `SETTING_POWERGRID_COST` | 15 Wh | 0-100 Wh |
-| Vehicle control | Per-vehicle | 2 Wh | 0-100 Wh |
-
-### Power Check Flow
-
-```sqf
-// 1. Check if sufficient power available
-if (!([_computer, _powerCost] call FUNC(checkPowerAvailable))) exitWith {
-    // Display error to user
-    [_computer, format ["<t color='%1'>%2</t>", COLOR_ERROR,
-        localize "STR_ROOT_CYBERWARFARE_ERR_INSUFFICIENT_POWER"]]
-        call AE3_armaos_fnc_shell_stdout;
-};
-
-// 2. Consume power
-[_computer, _powerCost] call FUNC(consumePower);
-
-// 3. Execute operation
-// ... device control logic ...
-```
-
-### Power Management Functions
-
-#### `fn_checkPowerAvailable.sqf`
-
-**Purpose**: Check if laptop has sufficient power
-
-**Signature**:
-```sqf
-[_computer, _powerCostWh] call Root_fnc_checkPowerAvailable;
-```
-
-**Implementation**:
-```sqf
-params [
-    ["_computer", objNull, [objNull]],
-    ["_powerCostWh", 0, [0]]
-];
-
-// Get battery item from AE3
-private _battery = _computer getVariable ["AE3_power_battery", objNull];
-if (isNull _battery) exitWith { false };
-
-// Get current charge (kWh)
-private _currentCharge = _battery getVariable ["AE3_power_charge", 0];
-
-// Convert required power to kWh
-private _requiredKWh = WH_TO_KWH(_powerCostWh);
-
-// Check if sufficient
-_currentCharge >= _requiredKWh
-```
-
-#### `fn_consumePower.sqf`
-
-**Purpose**: Consume power from laptop battery
-
-**Signature**:
-```sqf
-[_computer, _powerCostWh] call Root_fnc_consumePower;
-```
-
-**Implementation**:
-```sqf
-params [
-    ["_computer", objNull, [objNull]],
-    ["_powerCostWh", 0, [0]]
-];
-
-private _battery = _computer getVariable ["AE3_power_battery", objNull];
-if (isNull _battery) exitWith {};
-
-private _currentCharge = _battery getVariable ["AE3_power_charge", 0];
-private _requiredKWh = WH_TO_KWH(_powerCostWh);
-private _newCharge = (_currentCharge - _requiredKWh) max 0;
-
-// Broadcast CBA event to update power
-["root_cyberwarfare_consumePower", [_computer, _battery, _newCharge, _powerCostWh]]
-    call CBA_fnc_serverEvent;
-```
-
-## Integration Points
-
-### CBA_A3 Integration
-
-**Purpose**: Core framework for addon development
-
-**Usage**:
-- **Macros**: `FUNC()`, `QFUNC()`, `GVAR()`, `QUOTE()`, `DOUBLES()`, `TRIPLES()`
-- **Function Precompilation**: `PREP()` macro for all 47 functions
-- **Settings System**: CBA mission parameters for power costs, GPS config
-- **Event System**: `CBA_fnc_addEventHandler` for network communication
-- **Wait Functions**: `CBA_fnc_waitUntilAndExecute` for delayed client initialization
-
-**Example**:
-```sqf
-// Function call using FUNC macro
-[_computer, _deviceId] call FUNC(changeDoorState);
-
-// CBA event broadcast
-["root_cyberwarfare_deviceStateChanged", [_deviceType, _deviceId, _newState]]
-    call CBA_fnc_serverEvent;
-```
-
-### ACE3 Integration
-
-**Purpose**: Interaction menu system for GPS tracker operations
-
-**Usage**:
-- **Action Creation**: `ace_interact_menu_fnc_createAction`
-- **Action Registration**: `ace_interact_menu_fnc_addActionToClass`
-- **Progress Bars**: `ace_common_fnc_progressBar` for GPS tracker searches
-- **Display Text**: `ace_common_fnc_displayText` for notifications
-
-**Example**:
-```sqf
-// Create ACE interaction action
-private _actionAttach = [
-    "ROOT_AttachGPSTracker_Object",
-    localize "STR_ROOT_CYBERWARFARE_GPS_ATTACH_OBJECT",
-    "",
-    {
-        params ["_target", "_player", "_params"];
-        [_target, _player] call FUNC(aceAttachGPSTracker);
-    },
-    {
-        // Condition: player has GPS tracker item
-        private _gpsClass = missionNamespace getVariable [SETTING_GPS_TRACKER_DEVICE, "ACE_Banana"];
-        _gpsClass in (items _player);
-    }
-] call ace_interact_menu_fnc_createAction;
-
-// Register action to all objects
-["All", 0, ["ACE_MainActions"], _actionAttach, true]
-    call ace_interact_menu_fnc_addActionToClass;
-```
-
-### AE3 ArmaOS Integration
-
-**Purpose**: Terminal system for executing hacking commands
-
-**Usage**:
-- **Terminal Output**: `AE3_armaos_fnc_shell_stdout` for command feedback
-- **Power System**: Battery management via AE3 power variables
-- **Terminal Access**: Laptops with hacking tools show "Access Terminal" ACE action
-
-**Example**:
-```sqf
-// Output success message to terminal
-[_computer, format ["<t color='%1'>%2</t>", COLOR_SUCCESS,
-    localize "STR_ROOT_CYBERWARFARE_DOOR_LOCKED"]]
-    call AE3_armaos_fnc_shell_stdout;
-
-// Output error message
-[_computer, format ["<t color='%1'>%2</t>", COLOR_ERROR,
-    localize "STR_ROOT_CYBERWARFARE_ERR_INSUFFICIENT_POWER"]]
-    call AE3_armaos_fnc_shell_stdout;
-```
-
-### ZEN Integration
-
-**Purpose**: Zeus module base classes and dialog system
-
-**Usage**:
-- **Module Base Classes**: Zeus modules inherit from `zen_modules_moduleBase`
-- **Dialog Functions**: `zen_dialog_fnc_create` for Zeus UI
-- **Curator Feedback**: `zen_common_fnc_showMessage` for Zeus notifications
-
-**Example**:
-```sqf
-// Zeus module definition (CfgVehicles.hpp)
-class ROOT_CYBERWARFARE_addVehicleZeus: zen_modules_moduleBase {
-    displayName = "Add Hackable Vehicle";
-    function = "Root_fnc_addVehicleZeus";
-    category = "ROOT_CYBERWARFARE";
-};
-```
+**Benefits:**
+- More efficient than `remoteExec` for frequent updates
+- Built-in event system
+- Better performance with many clients
+
+---
 
 ## Performance Considerations
 
-### Array-Based Device Lookup Performance
+### Device ID Generation
 
-**Current Implementation**:
-- **Device Storage**: Array-based (`ROOT_CYBERWARFARE_ALL_DEVICES`)
-- **Device Filtering**: O(n) linear search with `select` and `findIf`
-- **Access Check**: HashMap-based link cache provides O(1) access validation
-
-**Performance Characteristics**:
-- Retrieving all devices of a type: O(1) array index access
-- Finding specific device by ID: O(n) linear search
-- Filtering accessible devices: O(n × m) where n = devices, m = access check complexity
-
-**Future Optimization Potential**:
-- Device Cache HashMap (`ROOT_CYBERWARFARE_DEVICE_CACHE`) is initialized but unused
-- Could provide O(1) device lookups when implemented
-- Current array-based approach is simple and sufficient for typical mission scales (100 - 200 devices)
-
-### Function Precompilation
-
-All 47 functions are precompiled in PreInit using CBA's PREP system:
+Random 4-digit IDs (1000-9999) with collision detection:
 
 ```sqf
-// XEH_PREP.hpp
-PREP(changeDoorState);
-PREP(changeLightState);
-PREP(changeVehicleParams);
-// ... 44 more functions
+private _deviceId = (round (random 8999)) + 1000;
+if (_existingDevices isNotEqualTo []) then {
+    while {true} do {
+        _deviceId = (round (random 8999)) + 1000;
+        private _isNew = true;
+        {
+            if (_x select 0 == _deviceId) then {
+                _isNew = false;
+            };
+        } forEach _existingDevices;
+        if (_isNew) exitWith {};
+    };
+};
 ```
 
-**Benefit**:
-- O(1) function access via `FUNC(name)` macro
-- No runtime compilation overhead
-- Functions stored in `missionNamespace` for fast access
+**Collision Probability:** ~1% with 100 devices, acceptable for typical missions.
 
-### Network Optimization
+---
 
-**Strategy**: Minimize network traffic using:
-1. **CBA Events**: Event queuing and bandwidth management
-2. **Public Variables**: Sync only when necessary (3rd param = `true`)
-3. **Server Authority**: All device state managed server-side
-4. **Client Prediction**: None (simplicity over responsiveness)
+### Background Cleanup Task
 
-### Memory Management
+Removes destroyed objects from caches:
 
-**Cleanup Task** (`fn_cleanupDeviceLinks.sqf`):
-- Runs every 60 seconds (server-side)
-- Removes orphaned device links (destroyed computers/objects)
-- Uses `objectFromNetId` to validate references
-- Prevents memory leaks from deleted objects
-
-**Example**:
 ```sqf
-// Cleanup loop (spawned in PostInit)
-[{
-    private _linkCache = GET_LINK_CACHE;
+// Runs every 5 minutes on server
+[] spawn {
+    while {true} do {
+        sleep 300;
+        call ROOT_fnc_cleanupDeviceLinks;
+    };
+};
+```
 
-    // Remove links for destroyed computers
-    {
-        private _computerNetId = _x;
-        private _computer = objectFromNetId _computerNetId;
+**Cleanup Logic:**
+- Check if netId objects still exist
+- Remove entries for destroyed objects
+- Update caches and sync
 
-        if (isNull _computer) then {
-            _linkCache deleteAt _computerNetId;
-        };
-    } forEach (keys _linkCache);
+---
 
-    missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache, true];
-}, 60, []] call CBA_fnc_addPerFrameHandler;
+### HashMap Performance
+
+**Benefits:**
+- O(1) average case for key lookup
+- Better memory locality than nested arrays
+- Native Arma 3 implementation (optimized)
+
+**When to Use:**
+- Key-value mappings (computer netId → links)
+- Type-based organization (device type → device list)
+- Large datasets (>100 entries)
+
+---
+
+### Network Bandwidth Optimization
+
+**Minimize Syncs:**
+- Batch updates when possible
+- Only sync changed data
+- Use local variables for intermediate calculations
+
+**Example:**
+```sqf
+// Bad: Multiple syncs
+{
+    missionNamespace setVariable [format ["device_%1", _x], _data, true];
+} forEach _devices; // N syncs
+
+// Good: Single sync
+private _deviceCache = createHashMap;
+{
+    _deviceCache set [format ["device_%1", _x], _data];
+} forEach _devices;
+missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_CACHE", _deviceCache, true]; // 1 sync
 ```
 
 ---
 
-## Related Documentation
-
-- [API Reference](API-Reference) - Function reference for developers
-- [Mission Maker Guide](Mission-Maker-Guide) - Programmatic usage examples
-- [Configuration Guide](Configuration) - CBA settings and customization
-
----
-
-**Version**: 2.20.1
-**Last Updated**: 2025-10-18
+**For function reference, see [API Reference](API-Reference.md). For usage examples, see [Mission Maker Guide](Mission-Maker-Guide.md).**

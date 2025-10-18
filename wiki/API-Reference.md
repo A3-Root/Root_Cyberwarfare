@@ -1,331 +1,593 @@
 # API Reference
 
-Essential function reference for mission makers and developers working with Root's Cyber Warfare.
+Complete reference for all public functions in Root's Cyber Warfare, organized by category.
 
 ## Table of Contents
 
+- [Overview](#overview)
 - [Device Registration Functions](#device-registration-functions)
+- [Device Control Functions](#device-control-functions)
 - [Access Control Functions](#access-control-functions)
 - [Power Management Functions](#power-management-functions)
+- [Utility Functions](#utility-functions)
 - [Data Structures](#data-structures)
+- [Constants and Macros](#constants-and-macros)
+
+---
+
+## Overview
+
+### Calling Conventions
+
+**Server-Side Execution:**
+Most functions must run on the server. Use `remoteExec` when calling from client:
+```sqf
+[params...] remoteExec ["Root_fnc_functionName", 2];
+```
+
+**Direct Calls:**
+If already on server:
+```sqf
+[params...] call Root_fnc_functionName;
+```
+
+### Parameter Notation
+
+- `<TYPE>` - Required parameter
+- `<TYPE> (Optional)` - Optional parameter with default value
+- `[defaultValue]` - Default value if parameter omitted
 
 ---
 
 ## Device Registration Functions
 
-These are the main functions mission makers will use to register hackable devices. All functions run on **server only**.
+These functions register devices and make them hackable.
 
 ### Root_fnc_addHackingToolsZeusMain
 
-Install hacking tools on a laptop to enable terminal access.
+Installs hacking tools on an AE3 laptop.
 
-**File**: `functions/zeus/fn_addHackingToolsZeusMain.sqf`
-
-**Signature**:
+**Syntax:**
 ```sqf
-[_laptop, _installPath, _execUserId, _laptopName, _backdoorPrefix] call Root_fnc_addHackingToolsZeusMain;
+[_computer, _path, _execUserId, _laptopName, _backdoorPrefix] call Root_fnc_addHackingToolsZeusMain;
 ```
 
-**Parameters**:
-- `_laptop` (OBJECT) - The laptop object to install hacking tools on
-- `_installPath` (STRING) - Installation path for tools (default: "/rubberducky/tools")
-- `_execUserId` (NUMBER) - User ID for feedback (default: 0)
-- `_laptopName` (STRING) - Custom name for the laptop (default: "")
-- `_backdoorPrefix` (STRING) - Backdoor prefix for admin access (default: "")
+**Parameters:**
 
-**Example**:
+| Index | Name | Type | Default | Description |
+|-------|------|------|---------|-------------|
+| 0 | _computer | OBJECT | - | Laptop/USB object |
+| 1 | _path | STRING | "/rubberducky/tools" | Tool installation path |
+| 2 | _execUserId | NUMBER | 0 | User ID for feedback |
+| 3 | _laptopName | STRING | "" | Custom laptop name |
+| 4 | _backdoorPrefix | STRING | "" | Backdoor prefix (admin access) |
+
+**Return Value:** None
+
+**Example:**
 ```sqf
-// Basic installation
-[_laptop, "/network/tools", 0, "MainTerminal", ""] call Root_fnc_addHackingToolsZeusMain;
-
-// With backdoor access (admin mode)
-[_laptop, "/network/tools", 0, "AdminTerminal", "/admin/"] call Root_fnc_addHackingToolsZeusMain;
+[_laptop1, "/network/tools", 0, "HackStation", ""] call Root_fnc_addHackingToolsZeusMain;
 ```
-
-**Notes**: Creates virtual filesystem entries for all terminal commands (devices, door, light, vehicle, etc.)
 
 ---
 
 ### Root_fnc_addDeviceZeusMain
 
-Register buildings (doors) or lights as hackable devices.
+Registers buildings (doors) or lights as hackable.
 
-**File**: `functions/zeus/fn_addDeviceZeusMain.sqf`
-
-**Signature**:
+**Syntax:**
 ```sqf
-[_building, _execUserId, _linkedComputers, _availableToFuture, _makeUnbreachable] call Root_fnc_addDeviceZeusMain;
+[_targetObject, _execUserId, _linkedComputers, _treatAsCustom, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 ```
 
-**Parameters**:
-- `_building` (OBJECT) - The building or light object
-- `_execUserId` (NUMBER) - User ID for feedback (default: 0)
-- `_linkedComputers` (ARRAY) - Array of computer **netIds** (strings) to link (default: [])
-- `_availableToFuture` (BOOLEAN) - Make available to future laptops (default: false)
-- `_makeUnbreachable` (BOOLEAN) - Prevent breaching (doors only) (default: false)
+**Parameters:**
 
-**Example**:
+| Index | Name | Type | Default | Description |
+|-------|------|------|---------|-------------|
+| 0 | _targetObject | OBJECT | - | Building or lamp object |
+| 1 | _execUserId | NUMBER | 0 | User ID for feedback |
+| 2 | _linkedComputers | ARRAY | [] | Computer netIds array |
+| 3 | _treatAsCustom | BOOLEAN | false | DEPRECATED (leave false) |
+| 4 | _customName | STRING | "" | DEPRECATED (leave "") |
+| 5 | _activationCode | STRING | "" | DEPRECATED (leave "") |
+| 6 | _deactivationCode | STRING | "" | DEPRECATED (leave "") |
+| 7 | _availableToFutureLaptops | BOOLEAN | false | Future access flag |
+| 8 | _makeUnbreachable | BOOLEAN | false | Prevent ACE breaching |
+
+**Return Value:** None
+
+**Example:**
 ```sqf
-// Register building with auto-detected doors
-[_building, 0, [], false, false] call Root_fnc_addDeviceZeusMain;
-
-// Link to specific laptop with unbreachable doors
-[_building, 0, [netId _laptop1], false, true] call Root_fnc_addDeviceZeusMain;
-
-// Available to future laptops only
-[_building, 0, [], true, false] call Root_fnc_addDeviceZeusMain;
-
-// Register light
-[_lamp, 0, [], false, false] call Root_fnc_addDeviceZeusMain;
+[_building1, 0, [netId _laptop1], false, "", "", "", false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 ```
-
-**Notes**:
-- Automatically detects all doors in a building via config parsing
-- For lights, detects objects of type `Lamps_base_F`
-- Unbreachable mode prevents ACE breaching charges from working
 
 ---
 
 ### Root_fnc_addVehicleZeusMain
 
-Register vehicles or drones as hackable devices.
+Registers vehicles or drones as hackable.
 
-**File**: `functions/zeus/fn_addVehicleZeusMain.sqf`
-
-**Signature (Vehicles)**:
+**Syntax (Drones):**
 ```sqf
-[_vehicle, _execUserId, _linkedComputers, _vehicleName, _allowFuel, _allowSpeed,
- _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFuture, _powerCost]
- call Root_fnc_addVehicleZeusMain;
+[_drone, _execUserId, _linkedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 ```
 
-**Parameters (Vehicles)**:
-- `_vehicle` (OBJECT) - The vehicle object
-- `_execUserId` (NUMBER) - User ID (default: 0)
-- `_linkedComputers` (ARRAY) - Array of computer **netIds** (default: [])
-- `_vehicleName` (STRING) - Display name for the vehicle
-- `_allowFuel` (BOOLEAN) - Enable fuel/battery control (default: false)
-- `_allowSpeed` (BOOLEAN) - Enable speed manipulation (default: false)
-- `_allowBrakes` (BOOLEAN) - Enable brake control (default: false)
-- `_allowLights` (BOOLEAN) - Enable lights control (default: false)
-- `_allowEngine` (BOOLEAN) - Enable engine on/off (default: true)
-- `_allowAlarm` (BOOLEAN) - Enable alarm triggering (default: false)
-- `_availableToFuture` (BOOLEAN) - Available to future laptops (default: false)
-- `_powerCost` (NUMBER) - Power cost in Wh per action (default: 2)
-
-**Signature (Drones)**:
+**Syntax (Vehicles):**
 ```sqf
-[_drone, _execUserId, _linkedComputers, _availableToFuture] call Root_fnc_addVehicleZeusMain;
+[_vehicle, _execUserId, _linkedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 ```
 
-**Parameters (Drones)**:
-- `_drone` (OBJECT) - The UAV/drone object
-- `_execUserId` (NUMBER) - User ID (default: 0)
-- `_linkedComputers` (ARRAY) - Array of computer **netIds** (default: [])
-- `_availableToFuture` (BOOLEAN) - Available to future laptops (default: false)
+**Parameters (Drones):**
 
-**Examples**:
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _drone | OBJECT | - |
+| 1 | _execUserId | NUMBER | 0 |
+| 2 | _linkedComputers | ARRAY | [] |
+| 3 | _availableToFutureLaptops | BOOLEAN | false |
+
+**Parameters (Vehicles):**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _vehicle | OBJECT | - |
+| 1 | _execUserId | NUMBER | 0 |
+| 2 | _linkedComputers | ARRAY | [] |
+| 3 | _vehicleName | STRING | - |
+| 4 | _allowFuel | BOOLEAN | false |
+| 5 | _allowSpeed | BOOLEAN | false |
+| 6 | _allowBrakes | BOOLEAN | false |
+| 7 | _allowLights | BOOLEAN | false |
+| 8 | _allowEngine | BOOLEAN | true |
+| 9 | _allowAlarm | BOOLEAN | false |
+| 10 | _availableToFutureLaptops | BOOLEAN | false |
+| 11 | _powerCost | NUMBER | 2 |
+
+**Return Value:** None
+
+**Examples:**
 ```sqf
-// Register vehicle with full control
-[_car, 0, [], "Patrol Car", true, true, true, true, true, true, false, 5]
-    call Root_fnc_addVehicleZeusMain;
+// Drone
+[_uav1, 0, [], true] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 
-// Register vehicle with engine control only (low power cost)
-[_truck, 0, [netId _laptop], "Supply Truck", false, false, false, false, true, false, false, 2]
-    call Root_fnc_addVehicleZeusMain;
-
-// Register drone
-[_uav, 0, [], false] call Root_fnc_addVehicleZeusMain;
+// Vehicle
+[_car1, 0, [], "EnemyCar", true, true, false, true, true, false, false, 3] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 ```
-
-**Notes**:
-- Function automatically detects drones via parameter count (4 params) or `unitIsUAV`
-- Drones support faction change and disable commands
-- Vehicles support: fuel/battery manipulation, speed changes, brake application, lights toggle, engine on/off, alarm triggering
 
 ---
 
 ### Root_fnc_addCustomDeviceZeusMain
 
-Register a custom device with scripted activation/deactivation behavior.
+Registers custom scripted devices.
 
-**File**: `functions/zeus/fn_addCustomDeviceZeusMain.sqf`
-
-**Signature**:
+**Syntax:**
 ```sqf
-[_object, _execUserId, _linkedComputers, _deviceName, _activationCode,
- _deactivationCode, _availableToFuture] call Root_fnc_addCustomDeviceZeusMain;
+[_targetObject, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
 ```
 
-**Parameters**:
-- `_object` (OBJECT) - Any object to register as custom device
-- `_execUserId` (NUMBER) - User ID (default: 0)
-- `_linkedComputers` (ARRAY) - Array of computer **netIds** (default: [])
-- `_deviceName` (STRING) - Display name (default: "Custom Device")
-- `_activationCode` (STRING) - SQF code to execute on activation (default: "")
-- `_deactivationCode` (STRING) - SQF code to execute on deactivation (default: "")
-- `_availableToFuture` (BOOLEAN) - Available to future laptops (default: false)
+**Parameters:**
 
-**Examples**:
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _targetObject | OBJECT | - |
+| 1 | _execUserId | NUMBER | 0 |
+| 2 | _linkedComputers | ARRAY | [] |
+| 3 | _customName | STRING | "Custom Device" |
+| 4 | _activationCode | STRING | "" |
+| 5 | _deactivationCode | STRING | "" |
+| 6 | _availableToFutureLaptops | BOOLEAN | false |
+
+**Code Context:** `_this = [_deviceObject, "activate"|"deactivate"]`
+
+**Return Value:** None
+
+**Example:**
 ```sqf
-// Simple hint device
-[_obj, 0, [], "Alert System",
-    "hint 'Alert Activated!'",
-    "hint 'Alert Deactivated'",
-    false] call Root_fnc_addCustomDeviceZeusMain;
-
-// Generator that spawns explosion
-[_generator, 0, [netId _laptop], "Power Station",
-    "_obj = _this select 0; 'Bo_GBU12_LGB' createVehicle (getPos _obj);",
-    "hint 'Generator offline'",
-    false] call Root_fnc_addCustomDeviceZeusMain;
-
-// Available to all future laptops
-[_terminal, 0, [], "Security Terminal",
-    "systemChat 'Access Granted'",
-    "systemChat 'Access Revoked'",
-    true] call Root_fnc_addCustomDeviceZeusMain;
+[_alarm, 0, [], "Alarm", "playSound3D ['alarm.wss', _this select 0, false, getPosASL (_this select 0), 5, 1, 300];", "hint 'Off';", true] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
 ```
-
-**Notes**:
-- Activation/deactivation code runs in **scheduled** environment
-- Code has access to: `_this = [_computer, _customObject, _playerNetID]`
-- Use `_this select 0` to get the laptop, `_this select 1` to get the device object
 
 ---
 
 ### Root_fnc_addDatabaseZeusMain
 
-Register a downloadable file/database.
+Registers downloadable files.
 
-**File**: `functions/zeus/fn_addDatabaseZeusMain.sqf`
-
-**Signature**:
+**Syntax:**
 ```sqf
-[_object, _filename, _filesize, _filecontent, _execUserId, _linkedComputers,
- _executionCode, _availableToFuture] call Root_fnc_addDatabaseZeusMain;
+[_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
 ```
 
-**Parameters**:
-- `_object` (OBJECT) - Object to store file data on
-- `_filename` (STRING) - Name of the file
-- `_filesize` (NUMBER) - Download time in seconds
-- `_filecontent` (STRING) - Content of the file (displayed after download)
-- `_execUserId` (NUMBER) - User ID (default: 0)
-- `_linkedComputers` (ARRAY) - Array of computer **netIds** (default: [])
-- `_executionCode` (STRING) - Optional code to execute on download (default: "")
-- `_availableToFuture` (BOOLEAN) - Available to future laptops (default: false)
+**Parameters:**
 
-**Examples**:
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _fileObject | OBJECT | - |
+| 1 | _filename | STRING | - |
+| 2 | _filesize | NUMBER | - |
+| 3 | _filecontent | STRING | - |
+| 4 | _execUserId | NUMBER | 0 |
+| 5 | _linkedComputers | ARRAY | [] |
+| 6 | _executionCode | STRING | "" |
+| 7 | _availableToFutureLaptops | BOOLEAN | false |
+
+**Return Value:** None
+
+**Example:**
 ```sqf
-// Simple classified file
-[_laptop, "secrets.txt", 10, "Classified intelligence data...", 0, [], "", false]
-    call Root_fnc_addDatabaseZeusMain;
-
-// File that triggers event on download
-[_computer, "virus.exe", 5, "Malware detected!", 0, [netId _hackingLaptop],
-    "hint 'System compromised!'", false]
-    call Root_fnc_addDatabaseZeusMain;
-
-// Public file available to all
-[_server, "readme.txt", 2, "Welcome to the network.", 0, [], "", false]
-    call Root_fnc_addDatabaseZeusMain;
+[_server, "intel.txt", 10, "Secret data", 0, [], "hint 'Downloaded!';", true] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
 ```
-
-**Notes**: File content is written to laptop's `/Files/` folder via AE3 filesystem
 
 ---
 
 ### Root_fnc_addGPSTrackerZeusMain
 
-Attach a GPS tracker to an object for tracking.
+Attaches GPS trackers to objects.
 
-**File**: `functions/zeus/fn_addGPSTrackerZeusMain.sqf`
-
-**Signature**:
+**Syntax:**
 ```sqf
-[_targetObject, _execUserId, _linkedComputers, _trackerName, _trackingTime,
- _updateFrequency, _customMarker, _availableToFuture, _allowRetracking,
- _lastPingTimer, _powerCost, _sysChat, _ownersSelection] call Root_fnc_addGPSTrackerZeusMain;
+[_targetObject, _execUserId, _linkedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, _sysChat, _ownersSelection] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
 ```
 
-**Parameters**:
-- `_targetObject` (OBJECT) - Object to track
-- `_execUserId` (NUMBER) - User ID (default: 0)
-- `_linkedComputers` (ARRAY) - Array of computer **netIds** (default: [])
-- `_trackerName` (STRING) - Tracker display name (default: "")
-- `_trackingTime` (NUMBER) - Tracking duration in seconds (default: 60)
-- `_updateFrequency` (NUMBER) - Update interval in seconds (default: 5)
-- `_customMarker` (STRING) - Custom marker name (default: "")
-- `_availableToFuture` (BOOLEAN) - Available to future laptops (default: false)
-- `_allowRetracking` (BOOLEAN) - Allow retracking after expiry (default: false)
-- `_lastPingTimer` (NUMBER) - Last ping marker duration in seconds
-- `_powerCost` (NUMBER) - Power cost in Wh per ping
-- `_sysChat` (BOOLEAN) - Show system chat message (default: true)
-- `_ownersSelection` (ARRAY) - Additional sides/groups/players to show markers (default: [[], [], []])
+**Parameters:**
 
-**Examples**:
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _targetObject | OBJECT | - |
+| 1 | _execUserId | NUMBER | 0 |
+| 2 | _linkedComputers | ARRAY | [] |
+| 3 | _trackerName | STRING | "Target_GPS" |
+| 4 | _trackingTime | NUMBER | 60 |
+| 5 | _updateFrequency | NUMBER | 5 |
+| 6 | _customMarker | STRING | "" |
+| 7 | _availableToFutureLaptops | BOOLEAN | false |
+| 8 | _allowRetracking | BOOLEAN | true |
+| 9 | _lastPingTimer | NUMBER | 30 |
+| 10 | _powerCost | NUMBER | 2 |
+| 11 | _sysChat | BOOLEAN | true |
+| 12 | _ownersSelection | ARRAY | [[], [], []] |
+
+**Owners Selection Format:** `[[sides], [groups], [players]]`
+
+**Return Value:** None
+
+**Example:**
 ```sqf
-// Basic GPS tracker on vehicle (60s tracking, 5s updates)
-[_vehicle, 0, [], "Target Vehicle", 60, 5, "", false, true, 30, 2, true, [[], [], []]]
-    call Root_fnc_addGPSTrackerZeusMain;
-
-// Tracker available to future laptops
-[_vip, 0, [], "VIP Target", 120, 10, "vip_marker", true, false, 60, 5, true, [[], [], []]]
-    call Root_fnc_addGPSTrackerZeusMain;
+[_target, 0, [], "HVT", 120, 5, "", true, false, 30, 10, true, [[], [], []]] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
 ```
-
-**Notes**:
-- Players can attach GPS trackers via ACE interaction menu (requires GPS tracker item in inventory)
-- Trackers can be detected/removed by searching (also via ACE interaction)
 
 ---
 
 ### Root_fnc_addPowerGeneratorZeusMain
 
-Register a power generator that controls lights within a radius.
+Registers power generators.
 
-**File**: `functions/zeus/fn_addPowerGeneratorZeusMain.sqf`
-
-**Signature**:
+**Syntax:**
 ```sqf
-[_generator, _execUserId, _linkedComputers, _generatorName, _radius,
- _allowExplosionActivate, _allowExplosionDeactivate, _explosionType,
- _excludedClassnames, _availableToFuture, _powerCost] call Root_fnc_addPowerGeneratorZeusMain;
+[_targetObject, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionActivate, _allowExplosionDeactivate, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
 ```
 
-**Parameters**:
-- `_generator` (OBJECT) - The generator object
-- `_execUserId` (NUMBER) - User ID (default: 0)
-- `_linkedComputers` (ARRAY) - Array of computer **objects** (not netIds!) (default: [])
-- `_generatorName` (STRING) - Generator name (default: "Power Generator")
-- `_radius` (NUMBER) - Radius in meters to affect lights (default: 50)
-- `_allowExplosionActivate` (BOOLEAN) - Create explosion on activation (default: false)
-- `_allowExplosionDeactivate` (BOOLEAN) - Create explosion on deactivation (default: false)
-- `_explosionType` (STRING) - Explosion ammo classname (default: "ClaymoreDirectionalMine_Remote_Ammo_Scripted")
-- `_excludedClassnames` (ARRAY) - Light classnames to exclude from control (default: [])
-- `_availableToFuture` (BOOLEAN) - Available to future laptops (default: false)
-- `_powerCost` (NUMBER) - Power cost in Wh per operation (default: 10)
+**Parameters:**
 
-**Examples**:
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _targetObject | OBJECT | - |
+| 1 | _execUserId | NUMBER | 0 |
+| 2 | _linkedComputers | ARRAY | [] |
+| 3 | _generatorName | STRING | "Power Generator" |
+| 4 | _radius | NUMBER | 50 |
+| 5 | _allowExplosionActivate | BOOLEAN | false |
+| 6 | _allowExplosionDeactivate | BOOLEAN | false |
+| 7 | _explosionType | STRING | "HelicopterExploSmall" |
+| 8 | _excludedClassnames | ARRAY | [] |
+| 9 | _availableToFutureLaptops | BOOLEAN | false |
+| 10 | _powerCost | NUMBER | 10 |
+
+**Return Value:** None
+
+**Example:**
 ```sqf
-// Basic generator controlling 100m radius
-[_gen, 0, [], "City Grid", 100, false, false, "", [], false, 10]
-    call Root_fnc_addPowerGeneratorZeusMain;
-
-// Generator with explosion on overload
-[_powerStation, 0, [_laptop1], "Main Grid", 200, false, true, "HelicopterExploSmall", [], false, 15]
-    call Root_fnc_addPowerGeneratorZeusMain;
-
-// Exclude specific light types
-[_gen, 0, [], "Street Lights", 50, false, false, "", ["Lamp_Street_small_F"], false, 10]
-    call Root_fnc_addPowerGeneratorZeusMain;
+[_gen, 0, [], "Grid", 200, false, true, "HelicopterExploSmall", [], true, 15] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
 ```
 
-**Notes**:
-- Controls all `Lamps_base_F` objects within radius
-- Terminal commands: `powergrid <id> on`, `powergrid <id> off`, `powergrid <id> overload`
-- Overload permanently disables the generator
+---
+
+### Root_fnc_copyDeviceLinksZeusMain
+
+Copies device access from one laptop to another.
+
+**Syntax:**
+```sqf
+[_sourceComputerNetId, _targetComputerNetId, _execUserId] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _sourceComputerNetId | STRING | - |
+| 1 | _targetComputerNetId | STRING | - |
+| 2 | _execUserId | NUMBER | 0 |
+
+**Return Value:** None
+
+**Example:**
+```sqf
+[netId _laptop1, netId _laptop2, 0] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
+```
+
+---
+
+## Device Control Functions
+
+These functions control registered devices.
+
+### Root_fnc_changeDoorState
+
+Controls door lock state.
+
+**Syntax:**
+```sqf
+[_owner, _computer, _nameOfVariable, _buildingId, _doorId, _desiredState] call Root_fnc_changeDoorState;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default | Description |
+|-------|------|------|---------|-------------|
+| 0 | _owner | ANY | nil | Legacy parameter (use nil) |
+| 1 | _computer | OBJECT | - | Laptop object |
+| 2 | _nameOfVariable | STRING | - | Completion variable name |
+| 3 | _buildingId | STRING | - | Building device ID |
+| 4 | _doorId | STRING | - | Door ID or "a" for all |
+| 5 | _desiredState | STRING | - | "lock" or "unlock" |
+
+**Return Value:** None
+
+**Example:**
+```sqf
+[nil, _laptop, "var1", "1234", "2881", "lock"] call Root_fnc_changeDoorState;
+```
+
+---
+
+### Root_fnc_changeLightState
+
+Controls light on/off state.
+
+**Syntax:**
+```sqf
+[_owner, _computer, _nameOfVariable, _lightId, _desiredState] call Root_fnc_changeLightState;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _owner | ANY | nil |
+| 1 | _computer | OBJECT | - |
+| 2 | _nameOfVariable | STRING | - |
+| 3 | _lightId | STRING | - |
+| 4 | _desiredState | STRING | - |
+
+**Valid States:** "on", "off", "a" (all)
+
+**Return Value:** None
+
+**Example:**
+```sqf
+[nil, _laptop, "var1", "5678", "off"] call Root_fnc_changeLightState;
+```
+
+---
+
+### Root_fnc_changeDroneFaction
+
+Changes drone faction/side.
+
+**Syntax:**
+```sqf
+[_owner, _computer, _nameOfVariable, _droneId, _faction] call Root_fnc_changeDroneFaction;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _owner | ANY | nil |
+| 1 | _computer | OBJECT | - |
+| 2 | _nameOfVariable | STRING | - |
+| 3 | _droneId | STRING | - |
+| 4 | _faction | STRING | - |
+
+**Valid Factions:** "west", "east", "guer", "civ", "a" (all)
+
+**Return Value:** None
+
+**Example:**
+```sqf
+[nil, _laptop, "var1", "2", "east"] call Root_fnc_changeDroneFaction;
+```
+
+---
+
+### Root_fnc_disableDrone
+
+Disables (destroys) drone.
+
+**Syntax:**
+```sqf
+[_owner, _computer, _nameOfVariable, _droneId] call Root_fnc_disableDrone;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _owner | ANY | nil |
+| 1 | _computer | OBJECT | - |
+| 2 | _nameOfVariable | STRING | - |
+| 3 | _droneId | STRING | - |
+
+**Return Value:** None
+
+**Example:**
+```sqf
+[nil, _laptop, "var1", "2"] call Root_fnc_disableDrone;
+```
+
+---
+
+### Root_fnc_downloadDatabase
+
+Downloads file from database.
+
+**Syntax:**
+```sqf
+[_owner, _computer, _nameOfVariable, _databaseId] call Root_fnc_downloadDatabase;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _owner | ANY | nil |
+| 1 | _computer | OBJECT | - |
+| 2 | _nameOfVariable | STRING | - |
+| 3 | _databaseId | STRING | - |
+
+**Return Value:** None
+
+**Example:**
+```sqf
+[nil, _laptop, "var1", "1234"] call Root_fnc_downloadDatabase;
+```
+
+---
+
+### Root_fnc_customDevice
+
+Activates or deactivates custom device.
+
+**Syntax:**
+```sqf
+[_owner, _computer, _nameOfVariable, _customId, _customState] call Root_fnc_customDevice;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _owner | ANY | nil |
+| 1 | _computer | OBJECT | - |
+| 2 | _nameOfVariable | STRING | - |
+| 3 | _customId | STRING | - |
+| 4 | _customState | STRING | - |
+
+**Valid States:** "activate", "deactivate"
+
+**Return Value:** None
+
+**Example:**
+```sqf
+[nil, _laptop, "var1", "5", "activate"] call Root_fnc_customDevice;
+```
+
+---
+
+### Root_fnc_displayGPSPosition
+
+Tracks GPS device position.
+
+**Syntax:**
+```sqf
+[_owner, _computer, _nameOfVariable, _trackerId, _path] call Root_fnc_displayGPSPosition;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _owner | ANY | nil |
+| 1 | _computer | OBJECT | - |
+| 2 | _nameOfVariable | STRING | - |
+| 3 | _trackerId | STRING | - |
+| 4 | _path | STRING | - |
+
+**Return Value:** None
+
+**Example:**
+```sqf
+[nil, _laptop, "var1", "2421", "/tools/gpstrack"] call Root_fnc_displayGPSPosition;
+```
+
+---
+
+### Root_fnc_changeVehicleParams
+
+Modifies vehicle parameters.
+
+**Syntax:**
+```sqf
+[_owner, _computer, _nameOfVariable, _vehicleId, _action, _value, _path] call Root_fnc_changeVehicleParams;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _owner | ANY | nil |
+| 1 | _computer | OBJECT | - |
+| 2 | _nameOfVariable | STRING | - |
+| 3 | _vehicleId | STRING | - |
+| 4 | _action | STRING | - |
+| 5 | _value | STRING | - |
+| 6 | _path | STRING | - |
+
+**Valid Actions:**
+- `battery` (value: 0-100)
+- `speed` (value: 0-100)
+- `brakes` (value: 0-1)
+- `lights` (value: 0-1)
+- `engine` (value: 0-1)
+- `alarm` (value: 0-1)
+
+**Return Value:** None
+
+**Example:**
+```sqf
+[nil, _laptop, "var1", "1337", "battery", "50", "/tools/"] call Root_fnc_changeVehicleParams;
+```
+
+---
+
+### Root_fnc_powerGridControl
+
+Controls power generator.
+
+**Syntax:**
+```sqf
+[_owner, _computer, _nameOfVariable, _gridId, _action, _path] call Root_fnc_powerGridControl;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _owner | ANY | nil |
+| 1 | _computer | OBJECT | - |
+| 2 | _nameOfVariable | STRING | - |
+| 3 | _gridId | STRING | - |
+| 4 | _action | STRING | - |
+| 5 | _path | STRING | - |
+
+**Valid Actions:** "on", "off", "overload"
+
+**Return Value:** None
+
+**Example:**
+```sqf
+[nil, _laptop, "var1", "1234", "on", "/tools/"] call Root_fnc_powerGridControl;
+```
 
 ---
 
@@ -333,44 +595,54 @@ Register a power generator that controls lights within a radius.
 
 ### Root_fnc_isDeviceAccessible
 
-Check if a laptop can access a specific device using the 3-tier access control system.
+Checks if computer can access a device.
 
-**File**: `functions/core/fn_isDeviceAccessible.sqf`
-
-**Signature**:
+**Syntax:**
 ```sqf
-private _hasAccess = [_laptop, _deviceType, _deviceId, _commandPath] call Root_fnc_isDeviceAccessible;
+[_computer, _deviceType, _deviceId, _backdoorPath] call Root_fnc_isDeviceAccessible;
 ```
 
-**Parameters**:
-- `_laptop` (OBJECT) - The laptop object
-- `_deviceType` (NUMBER) - Device type constant (1-8)
-- `_deviceId` (NUMBER) - Device ID
-- `_commandPath` (STRING) - Command path for backdoor checking (optional, default: "")
+**Parameters:**
 
-**Return**: BOOLEAN - True if accessible, false otherwise
+| Index | Name | Type | Default | Description |
+|-------|------|------|---------|-------------|
+| 0 | _computer | OBJECT | - | Laptop object |
+| 1 | _deviceType | NUMBER | - | Device type (1-8) |
+| 2 | _deviceId | NUMBER | - | Device ID |
+| 3 | _backdoorPath | STRING | "" | Backdoor function path |
 
-**Example**:
+**Return Value:** BOOLEAN - true if accessible
+
+**Example:**
 ```sqf
-// Check if laptop can access door device
-if ([_laptop, DEVICE_TYPE_DOOR, 1234] call Root_fnc_isDeviceAccessible) then {
-    hint "Access granted";
-} else {
-    hint "Access denied";
-};
-
-// Check with backdoor path
-if ([_laptop, DEVICE_TYPE_VEHICLE, 5678, "/admin/"] call Root_fnc_isDeviceAccessible) then {
-    hint "Admin access granted";
-};
+private _canAccess = [_laptop, 1, 1234, ""] call Root_fnc_isDeviceAccessible;
 ```
 
-**Access Priority**:
-1. **Backdoor Access** - Bypasses all checks if command path matches stored backdoor paths
-2. **Public Device Access** - Device in public devices array and computer not excluded
-3. **Private Link Access** - Direct computer-to-device link in link cache
+---
 
-**Notes**: See [Architecture](Architecture) for detailed explanation of the 3-tier access control system
+### Root_fnc_getAccessibleDevices
+
+Gets all accessible devices of a type.
+
+**Syntax:**
+```sqf
+[_computer, _deviceType, _backdoorPath] call Root_fnc_getAccessibleDevices;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _computer | OBJECT | - |
+| 1 | _deviceType | NUMBER | - |
+| 2 | _backdoorPath | STRING | "" |
+
+**Return Value:** ARRAY - Array of device entries
+
+**Example:**
+```sqf
+private _doors = [_laptop, 1, ""] call Root_fnc_getAccessibleDevices;
+```
 
 ---
 
@@ -378,260 +650,341 @@ if ([_laptop, DEVICE_TYPE_VEHICLE, 5678, "/admin/"] call Root_fnc_isDeviceAccess
 
 ### Root_fnc_checkPowerAvailable
 
-Check if a laptop has sufficient power for an operation.
+Checks if laptop has sufficient power.
 
-**File**: `functions/utility/fn_checkPowerAvailable.sqf`
-
-**Signature**:
+**Syntax:**
 ```sqf
-private _hasPower = [_laptop, _powerCostWh] call Root_fnc_checkPowerAvailable;
+[_computer, _powerRequiredWh] call Root_fnc_checkPowerAvailable;
 ```
 
-**Parameters**:
-- `_laptop` (OBJECT) - The laptop object
-- `_powerCostWh` (NUMBER) - Required power in Watt-hours (Wh)
+**Parameters:**
 
-**Return**: BOOLEAN - True if sufficient power, false otherwise
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _computer | OBJECT | - |
+| 1 | _powerRequiredWh | NUMBER | - |
 
-**Example**:
+**Return Value:** BOOLEAN - true if sufficient power
+
+**Example:**
 ```sqf
-// Check if laptop has 10 Wh available
-if ([_laptop, 10] call Root_fnc_checkPowerAvailable) then {
-    hint "Sufficient power";
-    [_laptop, 10] call Root_fnc_consumePower;
-} else {
-    hint "Insufficient power";
-};
+private _hasPower = [_laptop, 10] call Root_fnc_checkPowerAvailable;
 ```
-
-**Notes**: Integrates with AE3 power system (battery stored in kWh, cost in Wh)
 
 ---
 
 ### Root_fnc_consumePower
 
-Consume power from a laptop's battery.
+Consumes power from laptop battery.
 
-**File**: `functions/utility/fn_consumePower.sqf`
-
-**Signature**:
+**Syntax:**
 ```sqf
-[_laptop, _powerCostWh] call Root_fnc_consumePower;
+[_computer, _powerWh] call Root_fnc_consumePower;
 ```
 
-**Parameters**:
-- `_laptop` (OBJECT) - The laptop object
-- `_powerCostWh` (NUMBER) - Power to consume in Watt-hours (Wh)
+**Parameters:**
 
-**Return**: None
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _computer | OBJECT | - |
+| 1 | _powerWh | NUMBER | - |
 
-**Example**:
+**Return Value:** None
+
+**Example:**
 ```sqf
-// Consume 15 Wh from laptop battery
-[_laptop, 15] call Root_fnc_consumePower;
+[_laptop, 10] call Root_fnc_consumePower;
 ```
 
-**Notes**:
-- Automatically converts Wh to kWh for AE3 power system
-- Broadcasts `root_cyberwarfare_consumePower` CBA event
+---
+
+### Root_fnc_removePower
+
+Alias for consumePower (legacy compatibility).
+
+**Syntax:**
+```sqf
+[_computer, _powerWh] call Root_fnc_removePower;
+```
+
+**Parameters:** Same as consumePower
+
+**Return Value:** None
+
+---
+
+## Utility Functions
+
+### Root_fnc_listDevicesInSubnet
+
+Lists all accessible devices in terminal.
+
+**Syntax:**
+```sqf
+[_owner, _computer, _nameOfVariable, _commandPath, _type] call Root_fnc_listDevicesInSubnet;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _owner | ANY | nil |
+| 1 | _computer | OBJECT | - |
+| 2 | _nameOfVariable | STRING | - |
+| 3 | _commandPath | STRING | - |
+| 4 | _type | STRING | "all" |
+
+**Valid Types:** "doors", "lights", "drones", "files", "custom", "gps", "vehicles", "powergrids", "all", "a"
+
+**Return Value:** None
+
+**Example:**
+```sqf
+[nil, _laptop, "var1", "/tools/", "doors"] call Root_fnc_listDevicesInSubnet;
+```
+
+---
+
+### Root_fnc_getUserConfirmation
+
+Displays confirmation prompt with timeout.
+
+**Syntax:**
+```sqf
+[_computer, _promptMessage, _timeout, _nameOfVariable] call Root_fnc_getUserConfirmation;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _computer | OBJECT | - |
+| 1 | _promptMessage | STRING | - |
+| 2 | _timeout | NUMBER | 10 |
+| 3 | _nameOfVariable | STRING | - |
+
+**Return Value:** None (sets variable to true if confirmed, false if denied/timeout)
+
+**Example:**
+```sqf
+[_laptop, "Continue? (Y/N)", 10, "confirmVar"] call Root_fnc_getUserConfirmation;
+```
 
 ---
 
 ## Data Structures
 
-### Device Type Constants
+### Device Cache (HashMap)
 
-Defined in `script_macros.hpp`:
+**Variable:** `ROOT_CYBERWARFARE_DEVICE_CACHE`
 
-| Constant | Value | Description |
-|----------|-------|-------------|
-| `DEVICE_TYPE_DOOR` | 1 | Building doors |
-| `DEVICE_TYPE_LIGHT` | 2 | Lights/lamps |
-| `DEVICE_TYPE_DRONE` | 3 | UAVs/drones |
-| `DEVICE_TYPE_DATABASE` | 4 | Downloadable files |
-| `DEVICE_TYPE_CUSTOM` | 5 | Custom scripted devices |
-| `DEVICE_TYPE_GPS_TRACKER` | 6 | GPS tracking devices |
-| `DEVICE_TYPE_VEHICLE` | 7 | Vehicles |
-| `DEVICE_TYPE_POWERGRID` | 8 | Power generators |
-
-**Usage**:
+**Structure:**
 ```sqf
-// Use constants instead of magic numbers
-if ([_laptop, DEVICE_TYPE_DOOR, _doorId] call Root_fnc_isDeviceAccessible) then {
-    // Access granted
-};
+createHashMap with keys:
+- "doors" → Array of door entries
+- "lights" → Array of light entries
+- "drones" → Array of drone entries
+- "databases" → Array of database entries
+- "custom" → Array of custom device entries
+- "gpsTrackers" → Array of GPS tracker entries
+- "vehicles" → Array of vehicle entries
+- "powerGrids" → Array of power grid entries
 ```
 
----
-
-### All Devices Array
-
-**Global Variable**: `ROOT_CYBERWARFARE_ALL_DEVICES`
-
-**Structure**:
+**Access:**
 ```sqf
-[
-  doors[],        // Index 0
-  lights[],       // Index 1
-  drones[],       // Index 2
-  databases[],    // Index 3
-  custom[],       // Index 4
-  gpsTrackers[],  // Index 5
-  vehicles[],     // Index 6
-  powerGrids[]    // Index 7
-]
-```
-
-**Device Entry Formats**:
-- **Doors**: `[deviceId, buildingNetId, doorIds[], buildingName, availableToFuture]`
-- **Lights**: `[deviceId, lightNetId, lightName, availableToFuture]`
-- **Drones**: `[deviceId, droneNetId, droneName, availableToFuture]`
-- **Databases**: `[deviceId, objectNetId, fileName, fileSize, linkedComputers, availableToFuture]`
-- **Custom**: `[deviceId, objectNetId, deviceName, activationCode, deactivationCode, availableToFuture]`
-- **GPS Trackers**: `[deviceId, targetNetId, trackerName, trackingTime, updateFreq, marker, linkedComputers, availableToFuture, status, allowRetrack, lastPingTimer, powerCost, owners]`
-- **Vehicles**: `[deviceId, vehicleNetId, name, allowFuel, allowSpeed, allowBrakes, allowLights, allowEngine, allowAlarm, availableToFuture, powerCost, linkedComputers]`
-- **Power Grids**: `[deviceId, objectNetId, name, radius, allowExplActivate, allowExplDeactivate, explosionType, excludedClasses, availableToFuture, powerCost, linkedComputers]`
-
-**Example**:
-```sqf
-// Get all devices
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-private _allDoors = _allDevices select 0;
-
-// Find specific door by ID
-private _doorIndex = _allDoors findIf { (_x select 0) == _deviceId };
-if (_doorIndex != -1) then {
-    private _doorEntry = _allDoors select _doorIndex;
-    _doorEntry params ["_id", "_buildingNetId", "_doorIds", "_buildingName", "_availableToFuture"];
-};
-
-// Filter accessible doors for a computer
-private _accessibleDoors = _allDoors select {
-    [_computer, DEVICE_TYPE_DOOR, _x select 0] call Root_fnc_isDeviceAccessible
-};
-
-// Add new door device
-_allDoors pushBack [_newDeviceId, _buildingNetId, _doorIds, _buildingName, _availableToFuture];
-_allDevices set [0, _allDoors];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
+private _deviceCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_DEVICE_CACHE", createHashMap];
+private _doors = _deviceCache getOrDefault ["doors", []];
 ```
 
 ---
 
 ### Link Cache (HashMap)
 
-**Global Variable**: `ROOT_CYBERWARFARE_LINK_CACHE`
+**Variable:** `ROOT_CYBERWARFARE_LINK_CACHE`
 
-**Access Macro**: `GET_LINK_CACHE`
-
-**Structure**:
+**Structure:**
 ```sqf
-createHashMap with keys: computerNetId (string)
-values: [[deviceType, deviceId], ...] (array of [int, int] pairs)
+createHashMap with keys:
+- computerNetId (STRING) → Array of [deviceType, deviceId] pairs
 ```
 
-**Example**:
+**Format:**
 ```sqf
-// Get laptop's accessible devices
-private _linkCache = GET_LINK_CACHE;
-private _computerNetId = netId _laptop;
-private _accessibleDevices = _linkCache getOrDefault [_computerNetId, []];
+"76561198123456789" → [[1, 1234], [2, 5678], [7, 9012]]
+```
 
-// Add new device link
-_accessibleDevices pushBack [DEVICE_TYPE_DOOR, 1234];
-_linkCache set [_computerNetId, _accessibleDevices];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_LINK_CACHE", _linkCache, true];
+**Access:**
+```sqf
+private _linkCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_LINK_CACHE", createHashMap];
+private _links = _linkCache getOrDefault [netId _computer, []];
 ```
 
 ---
 
 ### Public Devices (Array)
 
-**Global Variable**: `ROOT_CYBERWARFARE_PUBLIC_DEVICES`
+**Variable:** `ROOT_CYBERWARFARE_PUBLIC_DEVICES`
 
-**Access Macro**: `GET_PUBLIC_DEVICES`
-
-**Structure**:
+**Structure:**
 ```sqf
-[[deviceType, deviceId, [excludedComputerNetIds]], ...]
+[
+    [deviceType, deviceId, [excludedComputerNetIds]],
+    ...
+]
 ```
 
-**Example**:
+**Access:**
 ```sqf
-// Get public devices
-private _publicDevices = GET_PUBLIC_DEVICES;
-
-// Add device available to all except specific laptops
-_publicDevices pushBack [DEVICE_TYPE_VEHICLE, 5678, [netId _excludedLaptop1, netId _excludedLaptop2]];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
-
-// Add device available to all (no exclusions)
-_publicDevices pushBack [DEVICE_TYPE_DOOR, 1234, []];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
+private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
 ```
 
 ---
 
-## Macros
+### Device Entry Formats
+
+**Doors:**
+```sqf
+[deviceId, buildingNetId, doorIds[], buildingName, availableToFuture]
+```
+
+**Lights:**
+```sqf
+[deviceId, lightNetId, displayName, availableToFuture]
+```
+
+**Drones:**
+```sqf
+[deviceId, droneNetId, droneName, availableToFuture]
+```
+
+**Databases:**
+```sqf
+[deviceId, objectNetId, filename, filesize, linkedComputers, availableToFuture]
+```
+
+**Custom:**
+```sqf
+[deviceId, objectNetId, deviceName, activationCode, deactivationCode, availableToFuture]
+```
+
+**GPS Trackers:**
+```sqf
+[deviceId, targetNetId, trackerName, trackingTime, updateFrequency, customMarker, linkedComputers, availableToFuture, currentStatus, allowRetracking, lastPingDuration, powerCost, ownersSelection]
+```
+
+**Vehicles:**
+```sqf
+[deviceId, vehicleNetId, vehicleName, allowFuel, allowSpeed, allowBrakes, allowLights, allowEngine, allowAlarm, availableToFutureLaptops, powerCost, linkedComputers]
+```
+
+**Power Grids:**
+```sqf
+[gridId, objectNetId, gridName, radius, allowExplosionActivate, allowExplosionDeactivate, explosionType, excludedClassnames, availableToFutureLaptops, powerCost, linkedComputers]
+```
+
+---
+
+## Constants and Macros
+
+### Device Type Constants
+
+```cpp
+#define DEVICE_TYPE_DOOR 1
+#define DEVICE_TYPE_LIGHT 2
+#define DEVICE_TYPE_DRONE 3
+#define DEVICE_TYPE_DATABASE 4
+#define DEVICE_TYPE_CUSTOM 5
+#define DEVICE_TYPE_GPS_TRACKER 6
+#define DEVICE_TYPE_VEHICLE 7
+#define DEVICE_TYPE_POWERGRID 8
+```
+
+---
 
 ### Cache Access Macros
 
 ```cpp
-GET_LINK_CACHE      // Get link cache HashMap (or create empty)
-GET_PUBLIC_DEVICES  // Get public devices array (or empty array)
+#define GET_DEVICE_CACHE (missionNamespace getVariable ["ROOT_CYBERWARFARE_DEVICE_CACHE", createHashMap])
+#define GET_LINK_CACHE (missionNamespace getVariable ["ROOT_CYBERWARFARE_LINK_CACHE", createHashMap])
+#define GET_PUBLIC_DEVICES (missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []])
 ```
 
-**Note**: `GET_DEVICE_CACHE` macro exists but the Device Cache HashMap is currently unused. Use `ROOT_CYBERWARFARE_ALL_DEVICES` directly for device access.
+---
 
 ### Validation Macros
 
 ```cpp
-VALIDATE_COMPUTER(obj)     // Check if object has hacking tools installed
-VALIDATE_DEVICE_TYPE(n)    // Check if device type is 1-8
+#define VALIDATE_COMPUTER(computer) (!isNull computer && computer getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false])
+#define VALIDATE_DEVICE_TYPE(type) (type >= DEVICE_TYPE_DOOR && type <= DEVICE_TYPE_POWERGRID)
 ```
+
+---
 
 ### Power Conversion Macros
 
 ```cpp
-WH_TO_KWH(wh)    // Convert Watt-hours to Kilowatt-hours
-KWH_TO_WH(kwh)   // Convert Kilowatt-hours to Watt-hours
+#define WH_TO_KWH(wh) (wh / 1000)
+#define KWH_TO_WH(kwh) (kwh * 1000)
 ```
 
-### Logging Macros
-
-```cpp
-LOG_DEBUG(msg)         // Debug log (disabled in release)
-LOG_INFO(msg)          // Info log
-LOG_ERROR(msg)         // Error log
-LOG_DEBUG_1(msg, arg)  // Debug with 1 argument
-LOG_INFO_2(msg, a, b)  // Info with 2 arguments
-```
-
-### Terminal Color Macros
-
-```cpp
-COLOR_SUCCESS    // "#8ce10b" - Green
-COLOR_ERROR      // "#fa4c58" - Red
-COLOR_WARNING    // "#FFD966" - Yellow
-COLOR_INFO       // "#008DF8" - Blue
-COLOR_NEUTRAL    // "#BCBCBC" - Gray
-```
-
-**Usage in Terminal Output**:
+**Usage:**
 ```sqf
-[_computer, format ["<t color='%1'>%2</t>", COLOR_SUCCESS, "Operation successful"]]
-    call AE3_armaos_fnc_shell_stdout;
+private _kwh = WH_TO_KWH(500); // 500 Wh = 0.5 kWh
+private _wh = KWH_TO_WH(0.5);  // 0.5 kWh = 500 Wh
 ```
 
 ---
 
-## Related Documentation
+### Color Constants
 
-- [Architecture](Architecture) - System design and technical details
-- [Mission Maker Guide](Mission-Maker-Guide) - Usage examples and workflows
-- [Configuration](Configuration) - CBA settings reference
+```cpp
+#define COLOR_SUCCESS "#8ce10b"     // Green
+#define COLOR_ERROR "#fa4c58"       // Red
+#define COLOR_WARNING "#FFD966"     // Yellow
+#define COLOR_INFO "#008DF8"        // Blue
+```
+
+**Usage:**
+```sqf
+private _message = format ["<t color='%1'>Success!</t>", COLOR_SUCCESS];
+[_computer, _message] call AE3_armaos_fnc_shell_stdout;
+```
 
 ---
 
-**Version**: 2.20.1
-**Last Updated**: 2025-10-18
+### Global Variable Names
+
+```cpp
+#define GVAR_DEVICE_CACHE "ROOT_CYBERWARFARE_DEVICE_CACHE"
+#define GVAR_LINK_CACHE "ROOT_CYBERWARFARE_LINK_CACHE"
+#define GVAR_PUBLIC_DEVICES "ROOT_CYBERWARFARE_PUBLIC_DEVICES"
+#define GVAR_ALL_DEVICES "ROOT_CYBERWARFARE_ALL_DEVICES"  // Legacy
+```
+
+---
+
+### CBA Setting Names
+
+```cpp
+#define SETTING_DOOR_COST "ROOT_CYBERWARFARE_DOOR_COST"
+#define SETTING_DRONE_HACK_COST "ROOT_CYBERWARFARE_DRONE_HACK_COST"
+#define SETTING_DRONE_SIDE_COST "ROOT_CYBERWARFARE_DRONE_SIDE_COST"
+#define SETTING_CUSTOM_COST "ROOT_CYBERWARFARE_CUSTOM_COST"
+#define SETTING_POWERGRID_COST "ROOT_CYBERWARFARE_POWERGRID_COST"
+#define SETTING_GPS_TRACKER_DEVICE "ROOT_CYBERWARFARE_GPS_TRACKER_DEVICE"
+#define SETTING_GPS_SPECTRUM_DEVICES "ROOT_CYBERWARFARE_GPS_SPECTRUM_DEVICES"
+#define SETTING_GPS_SEARCH_CHANCE_NORMAL "ROOT_CYBERWARFARE_GPS_SEARCH_CHANCE_NORMAL"
+#define SETTING_GPS_SEARCH_CHANCE_TOOL "ROOT_CYBERWARFARE_GPS_SEARCH_CHANCE_TOOL"
+#define SETTING_GPS_MARKER_COLOR_ACTIVE "ROOT_CYBERWARFARE_GPS_MARKER_COLOR_ACTIVE"
+#define SETTING_GPS_MARKER_COLOR_LASTPING "ROOT_CYBERWARFARE_GPS_MARKER_COLOR_LASTPING"
+```
+
+**Access:**
+```sqf
+private _doorCost = missionNamespace getVariable [SETTING_DOOR_COST, 2];
+```
+
+---
+
+**For implementation details, see [Architecture](Architecture.md). For usage examples, see [Mission Maker Guide](Mission-Maker-Guide.md).**
