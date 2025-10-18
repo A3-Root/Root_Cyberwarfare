@@ -170,8 +170,8 @@ private _lights = nearestObjects [_powerStation, ["Lamps_base_F"], _radius];
 2. Configure dialog:
    - **Generator Name**: Display name
    - **Radius**: Area of effect for controlling lights (meters)
-   - **Allow Explosion to Activate**: Can be activated by explosions
-   - **Allow Explosion to Deactivate**: Can be deactivated by explosions
+   - **Allow Explosion on Activate**: Create explosion on activation
+   - **Allow Explosion on Deactivate**: Create explosion on deactivation
    - **Explosion Type**: Type of explosion to create (e.g., "HelicopterExploSmall")
    - **Excluded Classnames**: Light classnames to exclude from control
    - **Available to Future Laptops**: Make accessible to future laptops
@@ -192,7 +192,7 @@ GPS trackers are added via ACE interactions, not Zeus modules. However, Zeus can
 
 **Player Usage:**
 - Players use ACE interaction on target → "Attach GPS Tracker"
-- Trackers appear in terminal via `gps list` command
+- Trackers appear in terminal via `devices gps` command
 
 ## Access Control
 

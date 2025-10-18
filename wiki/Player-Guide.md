@@ -43,7 +43,7 @@ Not all laptops have hacking tools installed. To check:
 ### Viewing Available Devices
 
 ```
-devices
+devices all
 ```
 
 Lists all hackable devices accessible from your current laptop. Devices are organized by type:
@@ -60,13 +60,19 @@ Each device shows:
 - Device name/description
 - Current status (where applicable)
 
+For larger list, devices can be filtered by specific type
+```
+devices <all|doors|lights|vehicles|gps|files|custom>
+```
+Example: `devices gps` will show only GPS devices linked to the laptop.
+
 ### Getting Help
 
 ```
-help
+cat guide
 ```
 
-Shows available terminal commands and their descriptions.
+Shows available cyberwarfare commands and their descriptions.
 
 ## Hacking Devices
 
@@ -74,17 +80,12 @@ Shows available terminal commands and their descriptions.
 
 **Unlock a door:**
 ```
-door <device_id> unlock
+door <building_id> <door_id> unlock
 ```
 
 **Lock a door:**
 ```
-door <device_id> lock
-```
-
-**View door status:**
-```
-door <device_id> status
+door <building_id> <door_id> lock
 ```
 
 **Note**: Some doors may be marked as "UNBREACHABLE" meaning they cannot be breached with ACE explosives or lockpicks - only hacking works.
@@ -110,17 +111,17 @@ light <device_id> toggle
 
 Vehicles can have multiple hackable features depending on how they were configured:
 
-**Control fuel/battery:**
+**Control battery:**
 ```
-vehicle <device_id> fuel <0-100>
+vehicle <device_id> battery <value>
 ```
-Example: `vehicle 1234 fuel 50` sets fuel to 50%
+Example: `vehicle 1234 battery 50` sets fuel to 50%. Values more than 100 will cause the vehicle to explode.
 
 **Control speed:**
 ```
 vehicle <device_id> speed <value>
 ```
-Example: `vehicle 1234 speed 30` limits speed to 30 km/h
+Example: `vehicle 1234 speed 30` **adds** 30 to vehicle's velocity
 
 **Control brakes:**
 ```
@@ -132,7 +133,7 @@ Example: `vehicle 1234 brakes on` applies brakes
 ```
 vehicle <device_id> lights <on|off>
 ```
-**Note**: Only works on empty/non-AI controlled vehicles
+Example: `vehicle 1234 lights on` turns on the lights
 
 **Control engine:**
 ```
@@ -142,23 +143,23 @@ Example: `vehicle 1234 engine off` turns off engine
 
 **Trigger alarm:**
 ```
-vehicle <device_id> alarm
+vehicle <device_id> alarm <value>
 ```
-Activates the vehicle's alarm sound
+Activates the vehicle's alarm sound for the duration specified
 
 ### Drones (UAVs)
 
 **Change drone faction:**
 ```
-drone <device_id> side <BLUFOR|OPFOR|INDEPENDENT|CIVILIAN>
+changedrone <device_id> <west|east|guer|civ>
 ```
-Example: `drone 5678 side OPFOR` changes drone to enemy faction
+Example: `changedrone 5678 east` changes drone to OPFOR faction
 
 **Disable drone:**
 ```
-drone <device_id> disable
+disabledrone <device_id>
 ```
-Permanently disables the drone
+Permanently disables the drone (causes it to explode)
 
 ### Custom Devices
 
@@ -183,7 +184,27 @@ The actual effect depends on the script configured by the mission maker.
 database <device_id> download
 ```
 
-Downloads the file from the database to your laptop. File content will be displayed in the terminal.
+### Power Grids
+
+**Turn off lights:**
+```
+powergrid <device_id> off
+```
+Example: `powergrid 5678 off` turns off all lights in the configured radius.
+
+**Turn on lights:**
+```
+powergrid <device_id> on
+```
+Example: `powergrid 5678 off` turns on all lights in the configured radius.
+
+**Overload Powergrid:**
+```
+powergrid <device_id> overload
+```
+Example: `powergrid 5678 overload` overloads the powergrid and turns of all lights in the configured radius.
+
+**Note:** The overload option creates an explosion (if configured) and will prevent the grid to be useable by laptop to turn on / off again.
 
 ## Power Management
 
@@ -220,7 +241,7 @@ If your laptop runs out of power:
 ### Viewing Tracker Locations
 
 ```
-gps list
+devices gps
 ```
 
 Shows all active GPS trackers with:
@@ -233,7 +254,7 @@ Shows all active GPS trackers with:
 ### Locating a Specific Tracker
 
 ```
-gps locate <device_id>
+gpstrack <device_id>
 ```
 
 Shows detailed position information for a specific tracker.
