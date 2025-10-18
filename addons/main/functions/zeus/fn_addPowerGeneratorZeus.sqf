@@ -42,9 +42,8 @@ private _allComputers = [];
 private _dialogControls = [
     ["EDIT", ["Generator Name", "Name that will appear in the terminal"], ["Power Generator"]],
     ["SLIDER:RADIUS",["Effect Radius","Radius in meters to affect lights"],[100, 25000, 1000, 0, _position, [7,120,32,1]]],
-    ["TOOLBOX:YESNO", ["Allow Explosion on Activation", "Create explosion when generator is activated"], false],
-    ["TOOLBOX:YESNO", ["Allow Explosion on Deactivation", "Create explosion when generator is deactivated"], false],
-    ["LIST", ["Explosion Type", "Choose the type of explosion created"], [
+    ["TOOLBOX:YESNO", ["Allow Explosion on Overload", "Create explosion when generator is overloaded"], false],
+    ["LIST", ["Explosion Type", "Choose the type of explosion created on overload"], [
         ["ClaymoreDirectionalMine_Remote_Ammo_Scripted", "G_40mm_HE", "M_Mo_82mm_AT_LG", "Sh_120mm_APFSDS", "Sh_120mm_HE", "Sh_155mm_AMOS", "HelicopterExploSmall", "HelicopterExploBig", "Bo_GBU12_LGB", "Bo_GBU12_LGB_MI10"],
         ["Claymore", "40mm High Explosive", "82mm High Explosive", "120mm APFSDS Tank Shell", "120mm HE Shell", "155mm HE Shell", "Small Helicopter Explosion", "Large Helicopter Explosion", "500lb GBU-12 (Type I)", "500lb GBU-12 (Type II)"],
         0,
@@ -68,7 +67,7 @@ private _dialogControls = [
         _args params ["_targetObject", "_execUserId", "_allComputers"];
 
         // Parse results
-        _results params ["_generatorName", "_radius", "_allowExplosionActivate", "_allowExplosionDeactivate", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops"];
+        _results params ["_generatorName", "_radius", "_allowExplosionOverload", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops"];
 
         // Parse excluded classnames (convert comma-separated string to array)
         private _excludedArray = [];
@@ -85,7 +84,7 @@ private _dialogControls = [
 
         // Get selected computers
         private _selectedComputers = [];
-        private _checkboxStartIndex = 7;
+        private _checkboxStartIndex = 6;
 
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
@@ -99,7 +98,7 @@ private _dialogControls = [
         };
 
         // Call main function
-        [_targetObject, _execUserId, _selectedComputers, _generatorName, _radius, _allowExplosionActivate, _allowExplosionDeactivate, _explosionType, _excludedArray, _availableToFutureLaptops] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
+        [_targetObject, _execUserId, _selectedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
         ["Power Generator Added!"] call zen_common_fnc_showMessage;
     },
     {

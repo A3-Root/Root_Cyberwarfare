@@ -9,18 +9,17 @@
  * 2: _linkedComputers <ARRAY> (Optional) - Array of computer objects, default: []
  * 3: _generatorName <STRING> (Optional) - Generator name, default: "Power Generator"
  * 4: _radius <NUMBER> (Optional) - Radius in meters to affect lights, default: 50
- * 5: _allowExplosionActivate <BOOLEAN> (Optional) - Create explosion on activation, default: false
- * 6: _allowExplosionDeactivate <BOOLEAN> (Optional) - Create explosion on deactivation, default: false
- * 7: _explosionType <STRING> (Optional) - Explosion ammo type, default: "ClaymoreDirectionalMine_Remote_Ammo_Scripted"
- * 8: _excludedClassnames <ARRAY> (Optional) - Array of classnames to exclude, default: []
- * 9: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
- * 10: _powerCost <NUMBER> (Optional) - Power cost in Wh per operation, default: 10
+ * 5: _allowExplosionOverload <BOOLEAN> (Optional) - Create explosion on overload, default: false
+ * 6: _explosionType <STRING> (Optional) - Explosion ammo type, default: "ClaymoreDirectionalMine_Remote_Ammo_Scripted"
+ * 7: _excludedClassnames <ARRAY> (Optional) - Array of classnames to exclude, default: []
+ * 8: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ * 9: _powerCost <NUMBER> (Optional) - Power cost in Wh per operation, default: 10
  *
  * Return Value:
  * None
  *
  * Example:
- * [_obj, 0, [], "Generator", 100, true, false, "HelicopterExploSmall", ["Lamp_Street_small_F"], false, 15] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
+ * [_obj, 0, [], "Generator", 100, true, "HelicopterExploSmall", ["Lamp_Street_small_F"], false, 15] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
  *
  * Public: No
  */
@@ -31,8 +30,7 @@ params [
     ["_linkedComputers", []],
     ["_generatorName", "Power Generator"],
     ["_radius", 50],
-    ["_allowExplosionActivate", false],
-    ["_allowExplosionDeactivate", false],
+    ["_allowExplosionOverload", false],
     ["_explosionType", "ClaymoreDirectionalMine_Remote_Ammo_Scripted"],
     ["_excludedClassnames", []],
     ["_availableToFutureLaptops", false],
@@ -49,8 +47,7 @@ if (_execUserId == 0) then {
 
 // Store generator configuration on the object
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_RADIUS", _radius, true];
-_targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_ACTIVATE", _allowExplosionActivate, true];
-_targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_DEACTIVATE", _allowExplosionDeactivate, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_OVERLOAD", _allowExplosionOverload, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_TYPE", _explosionType, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXCLUDED", _excludedClassnames, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "OFF", true];
@@ -64,14 +61,13 @@ private _deviceId = (round (random 8999)) + 1000;
 private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
 private _allPowerGrids = _allDevices select 7;
 
-// Store device entry: [gridId, objectNetId, gridName, radius, allowExplosionActivate, allowExplosionDeactivate, explosionType, excludedClassnames, availableToFutureLaptops, powerCost, linkedComputers]
+// Store device entry: [gridId, objectNetId, gridName, radius, allowExplosionOverload, explosionType, excludedClassnames, availableToFutureLaptops, powerCost, linkedComputers]
 _allPowerGrids pushBack [
     _deviceId,
     netId _targetObject,
     _generatorName,
     _radius,
-    _allowExplosionActivate,
-    _allowExplosionDeactivate,
+    _allowExplosionOverload,
     _explosionType,
     _excludedClassnames,
     _availableToFutureLaptops,
@@ -127,5 +123,25 @@ publicVariable "ROOT_CYBERWARFARE_LINK_CACHE";
 if (_availableToFutureLaptops) then {
     publicVariable "ROOT_CYBERWARFARE_PUBLIC_DEVICES";
 };
+
+// Build availability text
+private _availabilityText = "";
+private _linkedComputerCount = count _linkedComputers;
+if (_availableToFutureLaptops) then {
+    if (_linkedComputerCount > 0) then {
+        _availabilityText = format ["Accessible by %1 linked computer(s) and all future computers", _linkedComputerCount];
+    } else {
+        _availabilityText = "Accessible by all future computers";
+    };
+} else {
+    if (_linkedComputerCount > 0) then {
+        _availabilityText = format ["Accessible by %1 linked computer(s)", _linkedComputerCount];
+    } else {
+        _availabilityText = "Not accessible by any computers (add links manually)";
+    };
+};
+
+// Send feedback to Zeus user
+[format ["Root Cyber Warfare: Power Grid added with ID: %1. %2", _deviceId, _availabilityText]] remoteExec ["systemChat", _execUserId];
 
 LOG_INFO_1("Power Grid added: %1",_generatorName);

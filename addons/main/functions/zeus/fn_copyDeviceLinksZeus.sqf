@@ -46,9 +46,9 @@ private _allComputers = [];
         private _gridPos = mapGridPosition _x;
         private _hasHackingTools = _x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false];
 
-        // Check if computer has ANY device links by checking all device types (1-7)
+        // Check if computer has ANY device links by checking all device types (1-8, including power grids)
         private _hasDeviceLinks = false;
-        for "_deviceType" from 1 to 7 do {
+        for "_deviceType" from 1 to 8 do {
             if (count ([_x, _deviceType] call FUNC(getAccessibleDevices)) > 0) exitWith {
                 _hasDeviceLinks = true;
             };
@@ -67,9 +67,9 @@ if (_computersWithLinks isEqualTo []) exitWith {
 };
 
 // METHOD 1: Module placed ON laptop/device WITH existing device links
-// Check if target has any device links across all device types
+// Check if target has any device links across all device types (including power grids)
 private _targetHasLinks = false;
-for "_deviceType" from 1 to 7 do {
+for "_deviceType" from 1 to 8 do {
     if (count ([_targetObject, _deviceType] call FUNC(getAccessibleDevices)) > 0) exitWith {
         _targetHasLinks = true;
     };

@@ -61,7 +61,7 @@ private _powerCost = missionNamespace getVariable [SETTING_POWERGRID_COST, 15];
 
 private _foundGrid = false;
 {
-    _x params ["_storedGridId", "_gridNetId", "_gridName", "_radius", "_allowExplosionActivate", "_allowExplosionDeactivate", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops", "", "_linkedComputers"];
+    _x params ["_storedGridId", "_gridNetId", "_gridName", "_radius", "_allowExplosionOverload", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops", "", "_linkedComputers"];
 
     if (_gridIdNum == _storedGridId) then {
         private _gridObject = objectFromNetId _gridNetId;
@@ -151,14 +151,8 @@ private _foundGrid = false;
             // Update state
             _gridObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "ON", true];
 
-            // Explosion on activation if configured
-            if (_allowExplosionActivate) then {
-                private _generatorPosition = getPosATL _gridObject;
-                _explosionType createVehicle _generatorPosition;
-                _string = format [localize "STR_ROOT_CYBERWARFARE_POWERGRID_ACTIVATED_SURGE", _lightsAffected, _radius];
-            } else {
-                _string = format [localize "STR_ROOT_CYBERWARFARE_POWERGRID_ACTIVATED", _lightsAffected, _radius];
-            };
+            // No explosion on activation - just success message
+            _string = format [localize "STR_ROOT_CYBERWARFARE_POWERGRID_ACTIVATED", _lightsAffected, _radius];
 
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
@@ -186,7 +180,7 @@ private _foundGrid = false;
             } else {
                 if (_action == "overload") then {
                     // Check if overload explosion is allowed
-                    if !(_allowExplosionDeactivate) exitWith {
+                    if !(_allowExplosionOverload) exitWith {
                         _string = localize "STR_ROOT_CYBERWARFARE_ERROR_OVERLOAD_NOT_SUPPORTED";
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     };
@@ -218,7 +212,7 @@ private _foundGrid = false;
                     _sparkObj hideObjectGlobal true;
 
                     for "_i" from 1 to 5 do {
-                        private _effect = "#particlesource" createVehicle _surround_pos;
+                        private _effect = "#particlesource" createVehicleLocal _surround_pos;
                         _sparkObj setPos _surround_pos;
                         _surround_pos = [(_generatorPosition select 0) + random [-10, 0, 10], (_generatorPosition select 1) + random [-10, 0, 10], (_generatorPosition select 2) + random [0, 1.5, 3]];
                         private _claymore = "ClaymoreDirectionalMine_Remote_Ammo_Scripted" createVehicle _surround_pos;

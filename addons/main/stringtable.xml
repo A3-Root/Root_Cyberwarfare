@@ -204,9 +204,6 @@
         <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_ACTIVATED">
             <English>Power grid activated: %1 lights turned ON within %2m radius</English>
         </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_ACTIVATED_SURGE">
-            <English>Power grid activated with surge: %1 lights turned ON within %2m radius</English>
-        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_CANCELLED">
             <English>Operation cancelled by user.</English>
         </Key>
