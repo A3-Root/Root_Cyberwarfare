@@ -105,20 +105,21 @@ private _diaryData = player createDiaryRecord [
 	<font color='#3498DB' face='PuristaSemibold'>File Operations</font><br/>
 
 	<font color='#FFFFFF' face='EtelkaMonospacePro'>
-	The <font color='#3498DB'>download</font> command allows you to retrieve files from remote storage nodes.<br/><br/>
+	The <font color='#3498DB'>download</font> command allows you to retrieve files from remote databases.<br/><br/>
 
 	<font color='#3498DB'>Syntax:</font><br/>
-	download [FileID]<br/><br/>
+	download [DatabaseID]<br/><br/>
 
 	<font color='#3498DB'>Examples:</font><br/>
-	download 1523  // Downloads the file having the ID 1523<br/><br/>
+	download 1523  // Downloads the database file with ID 1523<br/>
+	download 4892  // Downloads the database file with ID 4892<br/><br/>
 
 	<font color='#3498DB'>Beginner Tips</font><br/>
 	<font color='#FFFFFF' face='EtelkaMonospacePro'>
-	• Use <font color='#FFFFFF'>devices files</font> to discover available file nodes and FileIDs.<br/>
-	• Run <font color='#FFFFFF'>download [FileID]</font> to download the file.<br/>
-	• Downloaded files are stored inside the 'Files' folder from where the download was executed.<br/>
-	• You may have to exit and re-enter the terminal if the Folder does not exist.
+	• Use <font color='#FFFFFF'>devices files</font> to discover available databases and their IDs.<br/>
+	• Run <font color='#FFFFFF'>download [DatabaseID]</font> to download the file.<br/>
+	• Downloaded files are stored in the 'Files' folder in the current directory.<br/>
+	• You may need to exit and re-enter the terminal to see the new 'Files' folder.
 	</font>"],
 	taskNull, "", false
 ];
@@ -132,31 +133,32 @@ private _diaryVehicles = player createDiaryRecord [
 	"<font color='#E67E22' size='14' face='PuristaBold'>VEHICLE INTERFACE</font><br/><br/>
 	<font color='#FFFFFF' face='EtelkaMonospacePro'>
 	The <font color='#3498DB'>vehicle</font> command lets the operator modify network-linked vehicle systems.
-	Use it to inspect or change battery level, speed limit, brakes, lights, engine state, and alarm timers.<br/><br/>
+	Use it to inspect or change battery level, speed, brakes, lights, engine state, and alarm timers.<br/><br/>
 
 	<font color='#3498DB'>Syntax:</font><br/>
 	vehicle [VehicleID] [action] [value]<br/><br/>
 
 	<font color='#3498DB'>Actions and values:</font><br/>
-	battery [0-100]   // Set battery percentage<br/>
-	speed [number]    // Set maximum speed or speed limit<br/>
-	brakes [on/off]   // Engage or release electronic brakes<br/>
-	lights [on/off]   // Toggle vehicle lights<br/>
-	engine [on/off]   // Start or stop engine remotely<br/>
-	alarm [seconds]   // Trigger alarm for specified seconds<br/><br/>
+	battery [0-200] // Set battery/fuel percentage (0-100 normal, >100 explodes vehicle)<br/>
+	speed [number]  // Add velocity to vehicle in current direction<br/>
+	brakes [apply|release] // Apply or release brakes<br/>
+	lights [on|off] // Toggle vehicle lights (empty vehicles only)<br/>
+	engine [on|off] // Start or stop engine remotely<br/>
+	alarm [seconds] // Trigger alarm for specified seconds<br/><br/>
 
 	<font color='#3498DB'>Examples:</font><br/>
-	vehicle 1231 battery 20   // Set vehicle 1231 battery to 20%<br/>
+	vehicle 1231 battery 20   // Set vehicle 1231 fuel to 20%<br/>
 	vehicle 5121 alarm 14     // Trigger 14s alarm on vehicle 5121<br/>
-	vehicle 5125 brakes on    // Engage brakes on vehicle 5125<br/>
+	vehicle 5125 brakes apply // Apply brakes on vehicle 5125<br/>
 	vehicle 1512 lights off   // Turn off lights on vehicle 1512<br/>
-	vehicle 9952 speed 12     // Limit vehicle 9952 to speed 12<br/>
+	vehicle 9952 speed 30     // Add 30 to velocity of vehicle 9952<br/>
 	vehicle 2315 engine off   // Stop engine of vehicle 2315<br/><br/>
 
 	<font color='#E74C3C'>CAUTION:</font><br/>
 	• Commands may affect AI and player control of the vehicle.<br/>
-	• Overwriting settings may cause mission issues. Verify VehicleID with <font color='#FFFFFF'>devices vehicles</font> first.<br/>
-	• Use conservative values when testing.</font>"],
+	• Battery values above 100 will destroy the vehicle with an explosion.<br/>
+	• Speed command adds to current velocity, not sets absolute speed.<br/>
+	• Verify VehicleID with <font color='#FFFFFF'>devices vehicles</font> first.</font>"],
 	taskNull,
 	"",
 	false
@@ -323,18 +325,20 @@ private _diaryDevices = player createDiaryRecord [
 	devices [filter]<br/><br/>
 
 	<font color='#3498DB'>Available Filters:</font><br/>
-	all     // Show all connected devices<br/>
-	doors  // List access control systems (buildings and locks)<br/>
-	lights // List environmental lighting units<br/>
-	drones // Show unmanned aerial vehicles<br/>
-	files  // Display storage or data access nodes<br/>
-	gps   // Detect GPS trackers and signal relays<br/>
-	vehicles // Identify vehicles with cyber interface modules<br/>
-	custom // Scan for mission-specific scripted objects<br/><br/>
+	all        // Show all connected devices<br/>
+	doors      // List access control systems (buildings and locks)<br/>
+	lights     // List environmental lighting units<br/>
+	drones     // Show unmanned aerial vehicles<br/>
+	files      // Display storage or data access nodes<br/>
+	gps        // Detect GPS trackers and signal relays<br/>
+	vehicles   // Identify vehicles with cyber interface modules<br/>
+	custom     // Scan for mission-specific scripted objects<br/>
+	powergrids // List power generators and electrical grids<br/><br/>
 
 	<font color='#3498DB'>Examples:</font><br/>
-	devices all    // List every device currently available to this system<br/>
-	devices drones // Show only UAVs controlled by the system<br/><br/>
+	devices all        // List every device currently available to this system<br/>
+	devices drones     // Show only UAVs controlled by the system<br/>
+	devices powergrids // Show only power generators and electrical grids<br/><br/>
 
 	<font color='#3498DB'>Tips for Beginners:</font><br/>
 	• Always start with <font color='#FFFFFF'>devices all</font> to get a full overview of available systems.<br/>

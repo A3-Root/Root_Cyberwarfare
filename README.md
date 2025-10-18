@@ -121,11 +121,14 @@ Mission makers can pre-configure hacking setups using 8 Eden modules:
 
 **Example Commands**:
 ```bash
+devices all                  # List all accessible devices
 door 1454 2881 lock          # Lock door 2881 in building 1454
-light 3 off                   # Turn off light #3
-changedrone 2 west            # Change drone #2 to BLUFOR
-gpstrack 4219                 # Track GPS device #4219
-vehicle 1337 engine off       # Disable vehicle #1337's engine
+light 3 off                  # Turn off light #3
+changedrone 2 west           # Change drone #2 to BLUFOR
+gpstrack 4219                # Track GPS device #4219
+vehicle 1337 engine off      # Disable vehicle #1337's engine
+download 1523                # Download database file #1523
+powergrid 5678 off           # Turn off power grid #5678
 ```
 
 ### For Zeus/Curators
@@ -209,7 +212,10 @@ Access via: Main Menu → Options → Addon Options → Root Cyber Warfare
 ## Terminal Commands Reference
 
 ### Devices Management
-- `devices` - List all accessible devices on the network
+- `devices [filter]` - List accessible devices on the network
+  - Filters: `all`, `doors`, `lights`, `drones`, `files`, `custom`, `gps`, `vehicles`, `powergrids`
+  - Example: `devices all` - List all accessible devices
+  - Example: `devices gps` - List only GPS trackers
 
 ### Door Control
 - `door <buildingID> <doorID|a> <lock|unlock>` - Control building doors
@@ -222,10 +228,10 @@ Access via: Main Menu → Options → Addon Options → Root Cyber Warfare
   - Example: `light a on` - Turn on all accessible lights
 
 ### Power Grid Control
-- `powergrid <generatorID> <on|off|overload>` - Control power generators
+- `powergrid <gridID> <on|off|overload>` - Control power generators
   - Example: `powergrid 1234 on` - Activate generator #1234 (turns on lights in radius)
   - Example: `powergrid 5678 off` - Deactivate generator #5678 (turns off lights in radius)
-  - Example: `powergrid 4514 overload` - Overloads generator and turns off lights in radius (cannot be turned on/off again)
+  - Example: `powergrid 4514 overload` - Overload generator and turn off lights in radius (permanent)
 
 ### Drone Hacking
 - `changedrone <droneID|a> <west|east|guer|civ>` - Change drone faction
@@ -234,7 +240,7 @@ Access via: Main Menu → Options → Addon Options → Root Cyber Warfare
   - Example: `disabledrone a` - Destroy all accessible drones
 
 ### Database Access
-- `download <databaseID>` - Download file to Downloads folder
+- `download <databaseID>` - Download file to Files folder
   - Example: `download 4823` - Download database #4823
 
 ### Custom Devices
@@ -247,13 +253,13 @@ Access via: Main Menu → Options → Addon Options → Root Cyber Warfare
 
 ### Vehicle Hacking
 - `vehicle <vehicleID> <action> <value>` - Manipulate vehicle systems
-  - Actions: `engine <on|off>`, `speed <any number>`, `battery <0-200>`, `brakes <apply|release>`, `alarm <any number>`, `lights <on|off>`
+  - Actions: `engine <on|off>`, `speed <number>`, `battery <0-200>`, `brakes <apply|release>`, `alarm <seconds>`, `lights <on|off>`
   - Example: `vehicle 1337 engine off` - Turns off vehicle engine
-  - Example: `vehicle 1337 speed 200` - Increases the velocity of the vehicle by 200
-  - Example: `vehicle 1337 battery 50` - Sets the fuel of the vehicle to 50. Anything more than 100 makes the vehicle explode
+  - Example: `vehicle 1337 speed 30` - Adds 30 to vehicle's velocity
+  - Example: `vehicle 1337 battery 50` - Sets fuel to 50% (values >100 explode vehicle)
   - Example: `vehicle 1337 brakes apply` - Applies the vehicle brakes
   - Example: `vehicle 1337 alarm 15` - Plays car alarm for 15 seconds
-  - Example: `vehicle 1337 lights on` - Turns on lights (only for EMPTY vehicles)
+  - Example: `vehicle 1337 lights on` - Turns on lights (empty vehicles only)
 
 ## Architecture
 

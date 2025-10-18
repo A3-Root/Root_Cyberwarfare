@@ -62,7 +62,7 @@ Each device shows:
 
 For larger list, devices can be filtered by specific type
 ```
-devices <all|doors|lights|vehicles|gps|files|custom>
+devices <all|doors|lights|drones|files|gps|vehicles|custom|powergrids>
 ```
 Example: `devices gps` will show only GPS devices linked to the laptop.
 
@@ -102,9 +102,10 @@ light <device_id> on
 light <device_id> off
 ```
 
-**Toggle light:**
+**Turn all lights on/off:**
 ```
-light <device_id> toggle
+light a on
+light a off
 ```
 
 ### Vehicles
@@ -121,13 +122,13 @@ Example: `vehicle 1234 battery 50` sets fuel to 50%. Values more than 100 will c
 ```
 vehicle <device_id> speed <value>
 ```
-Example: `vehicle 1234 speed 30` **adds** 30 to vehicle's velocity
+Example: `vehicle 1234 speed 30` **adds** 30 to vehicle's velocity (not sets absolute speed)
 
 **Control brakes:**
 ```
-vehicle <device_id> brakes <on|off>
+vehicle <device_id> brakes <apply|release>
 ```
-Example: `vehicle 1234 brakes on` applies brakes
+Example: `vehicle 1234 brakes apply` applies brakes
 
 **Control lights:**
 ```
@@ -181,7 +182,7 @@ The actual effect depends on the script configured by the mission maker.
 
 **Download file:**
 ```
-database <device_id> download
+download <database_id>
 ```
 
 ### Power Grids
@@ -196,15 +197,15 @@ Example: `powergrid 5678 off` turns off all lights in the configured radius.
 ```
 powergrid <device_id> on
 ```
-Example: `powergrid 5678 off` turns on all lights in the configured radius.
+Example: `powergrid 5678 on` turns on all lights in the configured radius.
 
 **Overload Powergrid:**
 ```
 powergrid <device_id> overload
 ```
-Example: `powergrid 5678 overload` overloads the powergrid and turns of all lights in the configured radius.
+Example: `powergrid 5678 overload` overloads the powergrid and turns off all lights in the configured radius.
 
-**Note:** The overload option creates an explosion (if configured) and will prevent the grid to be useable by laptop to turn on / off again.
+**Note:** The overload option creates an explosion (if configured) and will prevent the grid from being controlled by the laptop again.
 
 ## Power Management
 
