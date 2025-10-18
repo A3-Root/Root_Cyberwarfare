@@ -210,39 +210,13 @@ private _foundGrid = false;
 
                     // Create spark effects
                     private _surround_pos = [(_generatorPosition select 0) + random [-10, 0, 10], (_generatorPosition select 1) + random [-10, 0, 10], (_generatorPosition select 2) + random [0, 1.5, 3]];
-                    private _sparkObj = createVehicle ["Sign_Sphere10cm_F", _surround_pos, [], 0, "CAN_COLLIDE"];
-                    _sparkObj hideObjectGlobal true;
-
                     for "_i" from 1 to 5 do {
-                        private _effect = "#particlesource" createVehicleLocal _surround_pos;
-                        _sparkObj setPos _surround_pos;
-                        _surround_pos = [(_generatorPosition select 0) + random [-10, 0, 10], (_generatorPosition select 1) + random [-10, 0, 10], (_generatorPosition select 2) + random [0, 1.5, 3]];
+                        _surround_pos = [(_generatorPosition select 0) + (floor random (20) - 10), (_generatorPosition select 1) + (floor random (20) - 10), (_generatorPosition select 2) + (floor random (3))];
                         private _claymore = "ClaymoreDirectionalMine_Remote_Ammo_Scripted" createVehicle _surround_pos;
                         _claymore setDamage 1;
-                        _effect setParticleParams [
-                            ["\A3\data_f\ParticleEffects\Universal\Universal", 16, 0, 1, 0, [], [], 0],
-                            "", "Billboard", 1,
-                            1.2,
-                            [0, 0, 0],
-                            0.15,
-                            [0, 0, 0.2],
-                            0.1,
-                            0.05,
-                            0.1,
-                            0.3,
-                            [1, 0.7, 0.2, 1],
-                            [0.1],
-                            0.5,
-                            0.1,
-                            "", "",
-                            _sparkObj
-                        ];
-                        _effect setDropInterval 0.01;
                         uiSleep (random [0.1, 0.2, 0.3]);
-                        deleteVehicle _effect;
                         deleteVehicle _claymore;
                     };
-                    deleteVehicle _sparkObj;
 
                     _string = format [localize "STR_ROOT_CYBERWARFARE_POWERGRID_OVERLOAD_WARNING", _lightsAffected, _radius];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
