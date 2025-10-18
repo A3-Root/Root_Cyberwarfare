@@ -5,6 +5,8 @@ A comprehensive cyberwarfare mod for Arma 3 that adds hacking mechanics, GPS tra
 ![Version](https://img.shields.io/badge/version-2.20.1-blue)
 ![Build](https://img.shields.io/badge/Build-Passing-green)
 
+![License](https://data.bistudio.com/images/license/APL-SA.png)
+
 
 ## Overview
 
@@ -477,7 +479,7 @@ Debug logs will appear in the RPT file with `[ROOT_CYBERWARFARE DEBUG]` prefix.
 **Contributors**: Mister Adrian
 
 **Special Thanks**:
-- Mister Adrian - The original creator of the MACW mod available in steam workshop and for providing permissions to take over his work.
+- Mister Adrian - The original creator of the MACW mod available in steam workshop and for providing permissions to take over their work.
 - CBA Team - Core framework foundation upon which this is built
 - ACE Team - For the ACE interactions in using laptops and GPS attachments
 - AE3 Team - ArmaOS terminal system
@@ -485,7 +487,16 @@ Debug logs will appear in the RPT file with `[ROOT_CYBERWARFARE DEBUG]` prefix.
 
 ## License
 
-This project is licensed under the APL-SA License - see [LICENSE](LICENSE) file for details.
+![License](https://data.bistudio.com/images/license/APL-SA.png)
+
+This project is licensed under the **Arma Public License - Share Alike (APL-SA)**. With this license you are free to adapt (i.e. modify, rework or update) and share (i.e. copy, distribute or transmit) the material under the following conditions:
+
+**Attribution** - You must attribute the material in the manner specified by the author or licensor (but not in any way that suggests that they endorse you or your use of the material).
+**Noncommercial** - You may not use this material for any commercial purposes.
+**Arma Only** - You may not convert or adapt this material to be used in other games than Arma.
+**Share Alike** - If you adapt, or build upon this material, you may distribute the resulting material only under the same license.
+
+See [LICENSE](LICENSE) file for more details.
 
 ## Links
 
