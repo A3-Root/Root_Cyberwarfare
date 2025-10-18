@@ -3,11 +3,10 @@
 hemtt
 hemtt.exe
 *.biprivatekey
-releases/*.zip
-!releases/*-latest.zip
 *.md
 **/*.json
 !README.md
+!CHANGELOG.md
 !wiki/*
 *.exe
 *.txt

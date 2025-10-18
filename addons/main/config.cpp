@@ -46,7 +46,7 @@ class CfgPatches {
 			"Mister Adrian"
 		};
 		url = "https://github.com/A3-Root/Root_CyberWarfare";
-		requiredVersion = VERSION;
+		requiredVersion = REQUIRED_VERSION;
 	};
 };
 
