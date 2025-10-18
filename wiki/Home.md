@@ -11,6 +11,7 @@ Welcome to the Root's Cyber Warfare documentation wiki! This mod adds comprehens
 - [Configuration Guide](Configuration.md) - CBA settings and customization options
 - [Terminal Guide](Terminal-Commands.md) - Complete terminal command reference
 - [API Reference](API-Reference.md) - Function reference for developers
+- [Architecture](Architecture.md) - Technical architecture and system design
 
 ## Features
 
@@ -64,7 +65,6 @@ This mod requires the following dependencies (all are mandatory):
 
 1. Review the [API Reference](API-Reference.md) for function documentation
 2. Check the [Configuration Guide](Configuration.md) for CBA settings
-3. See the CLAUDE.md file in the repository root for architecture details
 
 ## Support
 

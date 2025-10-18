@@ -682,5 +682,4 @@ LOG_ERROR(msg)   // Error log
 
 For more information, see:
 - [Mission Maker Guide](Mission-Maker-Guide.md) - Usage examples
-- [CLAUDE.md](../CLAUDE.md) - Architecture documentation
 - Source code in `addons/main/functions/`
