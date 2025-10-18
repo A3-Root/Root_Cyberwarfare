@@ -147,11 +147,58 @@ if (_vehicleIDNum != 0) then {
 
                 if (_action == "lights") then {
                     _invalidOption = false;
-                    if ((_value in ["on", "ON"]) && !(isLightOn _vehicleObject)) then {
-                        [_vehicleObject, true] remoteExec ["setPilotLight", 0];
-                    } else {
-                        if ((_value in ["off", "OFF"]) && (isLightOn _vehicleObject)) then {
-                            [_vehicleObject, false] remoteExec ["setPilotLight", 0];
+                    private _valueLower = toLower _value;
+                    private _hasAI = (crew _vehicleObject select {alive _x && !isPlayer _x}) isNotEqualTo [];
+                    private _isLightOn = isLightOn _vehicleObject;
+
+                    // Dynamic detection of all light-related hitpoints
+                    private _hitPoints = getAllHitPointsDamage _vehicleObject select 0;
+                    private _lightKeywords = ["light", "lamp", "spot"];
+                    private _lightHitPoints = _hitPoints select {
+                        private _lower = toLower _x;
+                        _lightKeywords findIf {_lower find _x > -1} > -1
+                    };
+
+                    // Functions to destroy or repair light hitpoints
+                    private _destroyVehicleLights = {
+                        params ["_veh", "_hitPoints"];
+                        {
+                            _veh setHitPointDamage [_x, 1];
+                        } forEach _hitPoints;
+                    };
+
+                    private _fixVehicleLights = {
+                        params ["_veh", "_hitPoints"];
+                        {
+                            _veh setHitPointDamage [_x, 0];
+                        } forEach _hitPoints;
+                    };
+
+                    switch (_valueLower) do {
+                        case "on": {
+                            if (!_isLightOn) then {
+                                if (_hasAI) then {
+                                    _vehicleObject enableAI "LIGHTS";
+                                    [_vehicleObject, _lightHitPoints] call _fixVehicleLights;
+                                    [_vehicleObject, true] remoteExec ["setPilotLight", 0];
+                                } else {
+                                    [_vehicleObject, _lightHitPoints] call _fixVehicleLights;
+                                    [_vehicleObject, true] remoteExec ["setPilotLight", _vehicleObject];
+                                };
+                            };
+                        };
+
+                        case "off": {
+                            if (_isLightOn) then {
+                                if (_hasAI) then {
+                                    _vehicleObject disableAI "LIGHTS";
+                                    [_vehicleObject, _lightHitPoints] call _destroyVehicleLights;
+                                    [_vehicleObject, false] remoteExec ["setPilotLight", 0];
+                                } else {
+                                    [_vehicleObject, _lightHitPoints] call _destroyVehicleLights;
+                                    [_vehicleObject, false] remoteExec ["setPilotLight", _vehicleObject];
+                                };
+                            };
                         };
                     };
                 };
