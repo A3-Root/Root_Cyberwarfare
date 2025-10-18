@@ -380,6 +380,6 @@ For manual scripting/debugging:
 ---
 
 For more information, see:
-- [Mission Maker Guide](Mission-Maker-Guide.md) - Scripted setup
-- [Player Guide](Player-Guide.md) - How players use devices
-- [API Reference](API-Reference.md) - Function reference
+- [Mission Maker Guide](Mission-Maker-Guide) - Scripted setup
+- [Player Guide](Player-Guide) - How players use devices
+- [API Reference](API-Reference) - Function reference

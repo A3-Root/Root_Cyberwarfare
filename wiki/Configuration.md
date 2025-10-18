@@ -191,6 +191,6 @@ Result: Sufficient power with buffer
 ---
 
 For more information, see:
-- [Player Guide](Player-Guide.md) - Power management from player perspective
-- [Mission Maker Guide](Mission-Maker-Guide.md) - Scripting custom settings
-- [API Reference](API-Reference.md) - Power-related functions
+- [Player Guide](Player-Guide) - Power management from player perspective
+- [Mission Maker Guide](Mission-Maker-Guide) - Scripting custom settings
+- [API Reference](API-Reference) - Power-related functions

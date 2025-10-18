@@ -459,7 +459,7 @@ I welcome contributions! Please:
   - Check RPT file for detailed error messages
 
 **Undefined variable errors (RPT errors like "_variableName is undefined")**
-- **Cause**: Code issue, likely after recent refactoring
+- **Cause**: Code issue
 - **Solution**: Report on GitHub Issues with full RPT error message
 
 ### Debug Mode

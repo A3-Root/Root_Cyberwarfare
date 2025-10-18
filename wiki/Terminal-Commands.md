@@ -449,6 +449,6 @@ Commands are typically case-insensitive, but parameters (like faction names) may
 ---
 
 For more information, see:
-- [Player Guide](Player-Guide.md) - Usage examples and strategies
-- [Configuration Guide](Configuration.md) - Power costs and settings
-- [API Reference](API-Reference.md) - Function implementation details
+- [Player Guide](Player-Guide) - Usage examples and strategies
+- [Configuration Guide](Configuration) - Power costs and settings
+- [API Reference](API-Reference) - Function implementation details

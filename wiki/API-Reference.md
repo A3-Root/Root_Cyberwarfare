@@ -681,5 +681,5 @@ LOG_ERROR(msg)   // Error log
 ---
 
 For more information, see:
-- [Mission Maker Guide](Mission-Maker-Guide.md) - Usage examples
+- [Mission Maker Guide](Mission-Maker-Guide) - Usage examples
 - Source code in `addons/main/functions/`

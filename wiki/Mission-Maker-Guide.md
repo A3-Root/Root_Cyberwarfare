@@ -352,6 +352,6 @@ if (!isServer) exitWith {};
 ---
 
 For more information, see:
-- [API Reference](API-Reference.md) - Complete function documentation
-- [Zeus Guide](Zeus-Guide.md) - Runtime module usage
-- [Configuration Guide](Configuration.md) - CBA settings
+- [API Reference](API-Reference) - Complete function documentation
+- [Zeus Guide](Zeus-Guide) - Runtime module usage
+- [Configuration Guide](Configuration) - CBA settings

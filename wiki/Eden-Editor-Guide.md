@@ -163,6 +163,6 @@ Enemy Base:
 ---
 
 For more information, see:
-- [Zeus Guide](Zeus-Guide.md) - Runtime setup
-- [Mission Maker Guide](Mission-Maker-Guide.md) - Scripted setup
-- [Player Guide](Player-Guide.md) - How players use devices
+- [Zeus Guide](Zeus-Guide) - Runtime setup
+- [Mission Maker Guide](Mission-Maker-Guide) - Scripted setup
+- [Player Guide](Player-Guide) - How players use devices

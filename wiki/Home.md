@@ -4,14 +4,14 @@ Welcome to the Root's Cyber Warfare documentation wiki! This mod adds comprehens
 
 ## Quick Links
 
-- [Player Guide](Player-Guide.md) - Learn how to use hacking tools in-game
-- [Zeus Guide](Zeus-Guide.md) - How to set up hackable objects as a Zeus/Game Master
-- [Eden Editor Guide](Eden-Editor-Guide.md) - Pre-mission setup in the Eden Editor
-- [Mission Maker Guide](Mission-Maker-Guide.md) - Script-based mission creation
-- [Configuration Guide](Configuration.md) - CBA settings and customization options
-- [Terminal Guide](Terminal-Commands.md) - Complete terminal command reference
-- [API Reference](API-Reference.md) - Function reference for developers
-- [Architecture](Architecture.md) - Technical architecture and system design
+- [Player Guide](Player-Guide) - Learn how to use hacking tools in-game
+- [Zeus Guide](Zeus-Guide) - How to set up hackable objects as a Zeus/Game Master
+- [Eden Editor Guide](Eden-Editor-Guide) - Pre-mission setup in the Eden Editor
+- [Mission Maker Guide](Mission-Maker-Guide) - Script-based mission creation
+- [Configuration Guide](Configuration) - CBA settings and customization options
+- [Terminal Guide](Terminal-Commands) - Complete terminal command reference
+- [API Reference](API-Reference) - Function reference for developers
+- [Architecture](Architecture) - Technical architecture and system design
 
 ## Features
 
@@ -51,24 +51,24 @@ This mod requires the following dependencies (all are mandatory):
 
 ### For Players
 
-1. Read the [Player Guide](Player-Guide.md) to understand how to use hacking tools
-2. Check the [Terminal Guide](Terminal-Commands.md) for available commands
+1. Read the [Player Guide](Player-Guide) to understand how to use hacking tools
+2. Check the [Terminal Guide](Terminal-Commands) for available commands
 3. Access terminals via ACE interaction menu on laptops with hacking tools
 
 ### For Mission Makers
 
-1. Review the [Zeus Guide](Zeus-Guide.md) for quick in-game setup
-2. Check the [Eden Editor Guide](Eden-Editor-Guide.md) for pre-mission configuration
-3. See the [Mission Maker Guide](Mission-Maker-Guide.md) for scripted setups
+1. Review the [Zeus Guide](Zeus-Guide) for quick in-game setup
+2. Check the [Eden Editor Guide](Eden-Editor-Guide) for pre-mission configuration
+3. See the [Mission Maker Guide](Mission-Maker-Guide) for scripted setups
 
 ### For Developers
 
-1. Review the [API Reference](API-Reference.md) for function documentation
-2. Check the [Configuration Guide](Configuration.md) for CBA settings
+1. Review the [API Reference](API-Reference) for function documentation
+2. Check the [Configuration Guide](Configuration) for CBA settings
 
 ## Support
 
-For bug reports, feature requests, or general support, please visit the [GitHub Issues](https://github.com/ROOT/Root_Cyberwarfare/issues) page.
+For bug reports, feature requests, or general support, please visit the [GitHub Issues](https://github.com/A3-Root/Root_Cyberwarfare/issues) page.
 
 ## Version
 

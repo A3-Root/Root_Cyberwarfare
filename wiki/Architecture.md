@@ -999,9 +999,9 @@ PREP(changeVehicleParams);
 
 ## Related Documentation
 
-- [API Reference](API-Reference.md) - Function reference for developers
-- [Mission Maker Guide](Mission-Maker-Guide.md) - Programmatic usage examples
-- [Configuration Guide](Configuration.md) - CBA settings and customization
+- [API Reference](API-Reference) - Function reference for developers
+- [Mission Maker Guide](Mission-Maker-Guide) - Programmatic usage examples
+- [Configuration Guide](Configuration) - CBA settings and customization
 
 ---
 
