@@ -28,9 +28,10 @@ if (isNull _computer) exitWith {
 
 if (_powerWh <= 0) exitWith { true };
 
-private _battery = uiNamespace getVariable ["AE3_Battery", objNull];
+// Get the laptop's internal battery (each laptop has its own battery object)
+private _battery = _computer getVariable ["AE3_power_internal", objNull];
 if (isNull _battery) exitWith {
-    LOG_ERROR("consumePower: Battery not found");
+    LOG_ERROR("consumePower: Battery not found or laptop has no internal battery");
     false
 };
 

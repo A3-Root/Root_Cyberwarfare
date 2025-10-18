@@ -65,6 +65,7 @@ private _foundGrid = false;
 
     if (_gridIdNum == _storedGridId) then {
         private _gridObject = objectFromNetId _gridNetId;
+        private _success = true;
 
         // Check if object still exists
         if (isNull _gridObject) exitWith {
@@ -183,6 +184,7 @@ private _foundGrid = false;
                     if !(_allowExplosionOverload) exitWith {
                         _string = localize "STR_ROOT_CYBERWARFARE_ERROR_OVERLOAD_NOT_SUPPORTED";
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                        _success = false;
                     };
 
                     // Get objects in radius
@@ -218,7 +220,7 @@ private _foundGrid = false;
                         private _claymore = "ClaymoreDirectionalMine_Remote_Ammo_Scripted" createVehicle _surround_pos;
                         _claymore setDamage 1;
                         _effect setParticleParams [
-                            ["\A3\data_f\ParticleEffects\Universal\Universal", 16, 0, 1],
+                            ["\A3\data_f\ParticleEffects\Universal\Universal", 16, 0, 1, 0, [], [], 0],
                             "", "Billboard", 1,
                             1.2,
                             [0, 0, 0],
@@ -236,7 +238,7 @@ private _foundGrid = false;
                             _sparkObj
                         ];
                         _effect setDropInterval 0.01;
-                        uiSleep (random [0.2, 0.3, 0.4]);
+                        uiSleep (random [0.1, 0.2, 0.3]);
                         deleteVehicle _effect;
                         deleteVehicle _claymore;
                     };
@@ -248,19 +250,21 @@ private _foundGrid = false;
             };
         };
 
-        // Consume power
-        private _currentBatteryLevel = _battery getVariable "AE3_power_batteryLevel";
-        private _changeWh = _powerCost;
-        private _newLevel = _currentBatteryLevel - (_changeWh/1000);
-        [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
+        if (_success) then {
+            // Consume power
+            private _currentBatteryLevel = _battery getVariable "AE3_power_batteryLevel";
+            private _changeWh = _powerCost;
+            private _newLevel = _currentBatteryLevel - (_changeWh/1000);
+            [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
 
-        // Don't show power cost again (already shown before confirmation)
-        private _newLevelWh = _newLevel * 1000;
-        if (isNil "_newLevelWh" || {!finite _newLevelWh}) then {
-            _newLevelWh = 0;
+            // Don't show power cost again (already shown before confirmation)
+            private _newLevelWh = _newLevel * 1000;
+            if (isNil "_newLevelWh" || {!finite _newLevelWh}) then {
+                _newLevelWh = 0;
+            };
+            _string = format ["New Power Level: %1Wh", _newLevelWh];
+            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         };
-        _string = format ["New Power Level: %1Wh", _newLevelWh];
-        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     };
 } forEach _allPowerGrids;
 

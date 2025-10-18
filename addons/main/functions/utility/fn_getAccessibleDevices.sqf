@@ -35,10 +35,10 @@ if !(VALIDATE_DEVICE_TYPE(_deviceType)) exitWith {
 };
 
 // Get devices from legacy array (devices are stored here by Zeus registration functions)
-private _allDevicesArray = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
+private _allDevicesArray = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
 
 // Determine array index based on device type
-// Array structure: [doors, lights, drones, databases, custom, gpsTrackers, vehicles]
+// Array structure: [doors, lights, drones, databases, custom, gpsTrackers, vehicles, powerGrids]
 private _arrayIndex = switch (_deviceType) do {
     case DEVICE_TYPE_DOOR: { 0 };
     case DEVICE_TYPE_LIGHT: { 1 };
@@ -47,6 +47,7 @@ private _arrayIndex = switch (_deviceType) do {
     case DEVICE_TYPE_CUSTOM: { 4 };
     case DEVICE_TYPE_GPS_TRACKER: { 5 };
     case DEVICE_TYPE_VEHICLE: { 6 };
+    case DEVICE_TYPE_POWERGRID: { 7 };
     default { -1 };
 };
 
