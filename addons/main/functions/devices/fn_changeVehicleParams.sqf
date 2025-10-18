@@ -31,7 +31,7 @@ if (_vehicleIDNum != 0) then {
     private _allVehicles = _allDevices param [6, []];
 
     if (_allVehicles isEqualTo []) then {
-        _string = "Error! No vehicle found.";
+        _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_VEHICLES";
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         missionNamespace setVariable [_nameOfVariable, true, true];
         breakTo "exit";
@@ -51,7 +51,7 @@ if (_vehicleIDNum != 0) then {
         private _vehicleObject = objectFromNetId _vehicleNetID;
         _powerCost = _vehicleObject getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", 2];
         if(_batteryLevel < ((_powerCost)/1000)) then {
-            _string = format ['Error! Insufficient Power!'];
+            _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             breakTo "exit";
         };
@@ -60,9 +60,9 @@ if (_vehicleIDNum != 0) then {
             if ([_computer, 7, _storedDeviceID, _commandPath] call Root_fnc_isDeviceAccessible) then {
                 _foundVehicle = true;
                 private _changeWh = _powerCost;
-                _string = format ['Power Cost: %1Wh', _changeWh];
+                _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _changeWh];
                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                _string = format ['Are you sure? (Y/N): '];
+                _string = localize "STR_ROOT_CYBERWARFARE_CONFIRM_PROMPT";
                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 private _time = time;
                 _time = _time + 10;
@@ -80,7 +80,7 @@ if (_vehicleIDNum != 0) then {
                     };
                 };
                 if (!_continue) then {
-                    _string = format ['Confirmation Timed Out. Aborting...'];
+                    _string = localize "STR_ROOT_CYBERWARFARE_POWERGRID_CONFIRMATION_TIMEOUT";
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     missionNamespace setVariable [_nameOfVariable, true, true];
                     breakTo "exit";
@@ -140,7 +140,7 @@ if (_vehicleIDNum != 0) then {
                             };
                         };
                     } else {
-                        _string = format ["Vehicle incompatible for applying brakes!"];
+                        _string = localize "STR_ROOT_CYBERWARFARE_VEHICLE_INCOMPATIBLE_BRAKES";
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     };
                 };
@@ -176,7 +176,7 @@ if (_vehicleIDNum != 0) then {
 
             } else {
                 if (alive _vehicleObject) then {
-                    _string = format ["Access denied to Vehicle ID: %1.", _vehicleIDNum];
+                    _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_VEHICLE", _vehicleIDNum];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     _foundVehicle = true;
                 };
@@ -186,21 +186,21 @@ if (_vehicleIDNum != 0) then {
     } forEach _allVehicles;
 
     if (!_foundVehicle) then {
-        _string = format ["Vehicle ID %1 not found.", _vehicleIDNum];
+        _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_VEHICLE_NOT_FOUND", _vehicleIDNum];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     };
     if (_invalidOption) then {
-        _string = format ["Error! Invalid Action/Value specified. Action: %1, Value: %2", _action, _value];
+        _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_ACTION_VALUE", _action, _value];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     };
     private _currentBatteryLevel = _battery getVariable "AE3_power_batteryLevel";
     private _changeWh = _powerCost;
     private _newLevel = _currentBatteryLevel - (_changeWh/1000);
     [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
-    _string = format ['New Power Level: %1Wh', _newLevel*1000];
+    _string = format [localize "STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL", _newLevel*1000];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 } else {
-    _string = format ["Error! Invalid VehicleID - %1.", _vehicleID];
+    _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_VEHICLE_ID", _vehicleID];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 };
 

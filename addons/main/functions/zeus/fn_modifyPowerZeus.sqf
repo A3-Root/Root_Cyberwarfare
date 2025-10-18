@@ -31,9 +31,9 @@ if !(hasInterface) exitWith {};
 		_results params ["_doorCost", "_droneSideCost", "_droneDestructionCost", "_customCost", "_powerGridCost"];
 		missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_COSTS", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
 		missionNamespace setVariable ["ROOT_CYBERWARFARE_POWERGRID_COST", _powerGridCost, true];
-		["Modified Hacking Power Cost!"] call zen_common_fnc_showMessage;
+		[localize "STR_ROOT_CYBERWARFARE_ZEUS_POWER_MODIFIED"] call zen_common_fnc_showMessage;
 	}, {
-		["Aborted"] call zen_common_fnc_showMessage;
+		[localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;
 		playSound "FD_Start_F";
 	}, []
 ] call zen_dialog_fnc_create;

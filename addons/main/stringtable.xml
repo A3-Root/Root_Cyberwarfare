@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project name="Root_Cyberwarfare">
+    <Package name="Custom_Device_Operations">
+        <Key ID="STR_ROOT_CYBERWARFARE_CUSTOM_DEVICE_ACTIVATED">
+            <English>Custom device '%1' (ID: %2) activated.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_CUSTOM_DEVICE_DEACTIVATED">
+            <English>Custom device '%1' (ID: %2) deactivated.</English>
+        </Key>
+    </Package>
     <Package name="Device_Operations">
         <Key ID="STR_ROOT_CYBERWARFARE_DOOR_ALREADY_LOCKED">
             <English>Door already locked.</English>
@@ -17,18 +25,65 @@
             <English>Operation completed on %1 doors.</English>
         </Key>
     </Package>
+    <Package name="Drone_Operations">
+        <Key ID="STR_ROOT_CYBERWARFARE_DRONE_ALREADY_DISABLED">
+            <English>Error! Drone is already disabled or destroyed.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DRONE_ALREADY_FACTION">
+            <English>Error! Drone already of side %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DRONE_DISABLED_SUCCESS">
+            <English>Drone disabled.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DRONE_FACTION_CHANGED">
+            <English>Drone side changed.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_OPERATION_COMPLETED_DRONES">
+            <English>Operation completed on %1 drones.</English>
+        </Key>
+    </Package>
     <Package name="Errors">
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DRONE">
+            <English>Error! Drone ID %1 not found or access denied.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_LIGHT">
+            <English>Error! Light ID %1 not found or access denied.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_POWERGRID">
+            <English>Access denied to Power Grid ID: %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_VEHICLE">
+            <English>Access denied to Vehicle ID: %1.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_BUILDING_NOT_FOUND">
             <English>Error! Building ID %1 not found!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_CUSTOM_DEVICE_NOT_FOUND">
+            <English>Custom device with ID %1 not found.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_DOOR_NOT_IN_BUILDING">
             <English>Error! No such door with ID: %1 in the building (ID: %2)!</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_GENERATOR_DESTROYED">
+            <English>Error! Generator was destroyed and cannot be controlled!</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER">
             <English>Error! Insufficient Power!</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_ACTION">
+            <English>Error! Invalid action - %1. Use: on, off, or overload</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_ACTION_VALUE">
+            <English>Error! Invalid Action/Value specified. Action: %1, Value: %2</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_BUILDING_ID">
             <English>Error! Invalid BuildingID - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_CUSTOM_DEVICE_ID">
+            <English>Invalid input customId: %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_CUSTOM_DEVICE_STATE">
+            <English>Invalid input customState: %1.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DOOR_ID">
             <English>Error! Invalid DoorID - %1.</English>
@@ -36,11 +91,62 @@
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DOOR_STATE">
             <English>Error! Invalid Door State Desired - %1.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DRONE_FACTION">
+            <English>Error! Invalid Drone Faction - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DRONE_ID">
+            <English>Error! Invalid DroneID - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_GRID_ID">
+            <English>Error! Invalid Grid ID - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_INPUT">
+            <English>Error! Invalid Input - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_LIGHT_ID">
+            <English>Error! Invalid LightID - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_LIGHT_STATE">
+            <English>Error! Invalid Light State - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_VEHICLE_ID">
+            <English>Error! Invalid VehicleID - %1.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_BUILDINGS">
             <English>Error! No accessible buildings found or access denied.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DRONES">
+            <English>Error! No accessible drones found or access denied.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DRONES_CHANGE_FACTION">
+            <English>Error! No accessible drones found that need faction change.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DRONES_TO_DISABLE">
+            <English>Error! No accessible drones found to disable.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_LIGHTS">
+            <English>Error! No accessible lights found or access denied.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_VEHICLES">
+            <English>Error! No vehicle found.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_BUILDINGS_CRITERIA">
             <English>Error! No accessible buildings found for the specified criteria.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_POWERGRIDS">
+            <English>Error! No power grids found.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_OVERLOAD_NOT_SUPPORTED">
+            <English>Error! This power grid does not support overload functionality.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_POWERGRID_NOT_FOUND">
+            <English>Power Grid ID %1 not found.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_POWERGRID_OBJECT_NOT_FOUND">
+            <English>Error! Power grid object not found.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_VEHICLE_NOT_FOUND">
+            <English>Vehicle ID %1 not found.</English>
         </Key>
     </Package>
     <Package name="GPS">
@@ -63,6 +169,23 @@
             <English>Unable to attach GPS Tracker!</English>
         </Key>
     </Package>
+    <Package name="Light_Operations">
+        <Key ID="STR_ROOT_CYBERWARFARE_LIGHT_ALREADY_OFF">
+            <English>Light already off.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LIGHT_ALREADY_ON">
+            <English>Light already on.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LIGHT_TURNED_OFF">
+            <English>Light turned off.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LIGHT_TURNED_ON">
+            <English>Light turned on.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_OPERATION_COMPLETED_LIGHTS">
+            <English>Operation completed on %1 lights.</English>
+        </Key>
+    </Package>
     <Package name="Power">
         <Key ID="STR_ROOT_CYBERWARFARE_AFFECTED_DOORS">
             <English>Affected Doors: %1. Power Cost: %2W.</English>
@@ -75,6 +198,26 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_POWER_COST_PREVIEW">
             <English>Power Cost: %1Wh.</English>
+        </Key>
+    </Package>
+    <Package name="PowerGrid">
+        <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_ACTIVATED">
+            <English>Power grid activated: %1 lights turned ON within %2m radius</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_ACTIVATED_SURGE">
+            <English>Power grid activated with surge: %1 lights turned ON within %2m radius</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_CANCELLED">
+            <English>Operation cancelled by user.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_CONFIRMATION_TIMEOUT">
+            <English>Confirmation timed out. Aborting...</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_DEACTIVATED">
+            <English>Power grid deactivated: %1 lights turned OFF within %2m radius</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_OVERLOAD_WARNING">
+            <English>WARNING: Power grid overloaded! Generator destroyed. %1 objects affected within %2m radius.</English>
         </Key>
     </Package>
     <Package name="Prompts">
@@ -159,6 +302,11 @@
             <English>Power Cost Settings</English>
         </Key>
     </Package>
+    <Package name="Vehicle_Operations">
+        <Key ID="STR_ROOT_CYBERWARFARE_VEHICLE_INCOMPATIBLE_BRAKES">
+            <English>Vehicle incompatible for applying brakes!</English>
+        </Key>
+    </Package>
     <Package name="Zeus">
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_ABORTED">
             <English>Aborted</English>
@@ -183,6 +331,9 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_NO_DEVICE_LINKS">
             <English>No laptops with device links found!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_POWER_MODIFIED">
+            <English>Modified Hacking Power Cost!</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_SAME_LAPTOP_ERROR">
             <English>Source and target cannot be the same laptop!</English>

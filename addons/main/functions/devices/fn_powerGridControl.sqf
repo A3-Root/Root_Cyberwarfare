@@ -29,7 +29,7 @@ private _gridIdNum = parseNumber _gridId;
 
 // Validate grid ID
 if (_gridIdNum == 0) exitWith {
-    _string = format ["Error! Invalid Grid ID - %1.", _gridId];
+    _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_GRID_ID", _gridId];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     missionNamespace setVariable [_nameOfVariable, true, true];
 };
@@ -37,7 +37,7 @@ if (_gridIdNum == 0) exitWith {
 // Validate action
 _action = toLower _action;
 if !(_action in ["on", "off", "overload"]) exitWith {
-    _string = format ["Error! Invalid action - %1. Use: on, off, or overload", _action];
+    _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_ACTION", _action];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     missionNamespace setVariable [_nameOfVariable, true, true];
 };
@@ -47,7 +47,7 @@ private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVIC
 private _allPowerGrids = _allDevices select 7;
 
 if (_allPowerGrids isEqualTo []) exitWith {
-    _string = "Error! No power grids found.";
+    _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_POWERGRIDS";
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     missionNamespace setVariable [_nameOfVariable, true, true];
 };
@@ -68,14 +68,14 @@ private _foundGrid = false;
 
         // Check if object still exists
         if (isNull _gridObject) exitWith {
-            _string = format ["Error! Power grid object not found."];
+            _string = localize "STR_ROOT_CYBERWARFARE_ERROR_POWERGRID_OBJECT_NOT_FOUND";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             _foundGrid = true;
         };
 
         // Check access
         if !([_computer, DEVICE_TYPE_POWERGRID, _storedGridId, _commandPath] call FUNC(isDeviceAccessible)) exitWith {
-            _string = format ["Access denied to Power Grid ID: %1.", _gridIdNum];
+            _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_POWERGRID", _gridIdNum];
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             _foundGrid = true;
         };
@@ -83,14 +83,14 @@ private _foundGrid = false;
         // Check if destroyed
         private _isDestroyed = _gridObject getVariable ["ROOT_CYBERWARFARE_GENERATOR_DESTROYED", false];
         if (_isDestroyed) exitWith {
-            _string = "Error! Generator was destroyed and cannot be controlled!";
+            _string = localize "STR_ROOT_CYBERWARFARE_ERROR_GENERATOR_DESTROYED";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             _foundGrid = true;
         };
 
         // Check power availability
         if (_batteryLevel < (_powerCost/1000)) exitWith {
-            _string = format ["Error! Insufficient Power."];
+            _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             _foundGrid = true;
         };
@@ -104,9 +104,9 @@ private _foundGrid = false;
         };
 
         // Show power cost and ask for confirmation
-        _string = format ["Power Cost: %1Wh", _powerCost];
+        _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _powerCost];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-        _string = "Are you sure? (Y/N): ";
+        _string = localize "STR_ROOT_CYBERWARFARE_CONFIRM_PROMPT";
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
         private _time = time + 10; // 10 second timeout
@@ -118,7 +118,7 @@ private _foundGrid = false;
                 break;
             };
             if ((_areYouSure isEqualTo "n") || (_areYouSure isEqualTo "N")) then {
-                _string = "Operation cancelled by user.";
+                _string = localize "STR_ROOT_CYBERWARFARE_POWERGRID_CANCELLED";
                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 missionNamespace setVariable [_nameOfVariable, true, true];
                 _continue = false;
@@ -127,7 +127,7 @@ private _foundGrid = false;
         };
 
         if (!_continue) exitWith {
-            _string = "Confirmation timed out. Aborting...";
+            _string = localize "STR_ROOT_CYBERWARFARE_POWERGRID_CONFIRMATION_TIMEOUT";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             missionNamespace setVariable [_nameOfVariable, true, true];
             _foundGrid = true;
@@ -155,9 +155,9 @@ private _foundGrid = false;
             if (_allowExplosionActivate) then {
                 private _generatorPosition = getPosATL _gridObject;
                 _explosionType createVehicle _generatorPosition;
-                _string = format ["Power grid activated with surge: %1 lights turned ON within %2m radius", _lightsAffected, _radius];
+                _string = format [localize "STR_ROOT_CYBERWARFARE_POWERGRID_ACTIVATED_SURGE", _lightsAffected, _radius];
             } else {
-                _string = format ["Power grid activated: %1 lights turned ON within %2m radius", _lightsAffected, _radius];
+                _string = format [localize "STR_ROOT_CYBERWARFARE_POWERGRID_ACTIVATED", _lightsAffected, _radius];
             };
 
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
@@ -180,14 +180,14 @@ private _foundGrid = false;
                 // Update state
                 _gridObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "OFF", true];
 
-                _string = format ["Power grid deactivated: %1 lights turned OFF within %2m radius", _lightsAffected, _radius];
+                _string = format [localize "STR_ROOT_CYBERWARFARE_POWERGRID_DEACTIVATED", _lightsAffected, _radius];
                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
             } else {
                 if (_action == "overload") then {
                     // Check if overload explosion is allowed
                     if !(_allowExplosionDeactivate) exitWith {
-                        _string = "Error! This power grid does not support overload functionality.";
+                        _string = localize "STR_ROOT_CYBERWARFARE_ERROR_OVERLOAD_NOT_SUPPORTED";
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     };
 
@@ -247,7 +247,7 @@ private _foundGrid = false;
                     };
                     deleteVehicle _sparkObj;
 
-                    _string = format ["WARNING: Power grid overloaded! Generator destroyed. %1 objects affected within %2m radius.", _lightsAffected, _radius];
+                    _string = format [localize "STR_ROOT_CYBERWARFARE_POWERGRID_OVERLOAD_WARNING", _lightsAffected, _radius];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 };
             };
@@ -270,7 +270,7 @@ private _foundGrid = false;
 } forEach _allPowerGrids;
 
 if (!_foundGrid) then {
-    _string = format ["Power Grid ID %1 not found.", _gridIdNum];
+    _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_POWERGRID_NOT_FOUND", _gridIdNum];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 };
 

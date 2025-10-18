@@ -37,7 +37,7 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
     private _allCustom = _allDevices select 4;
 
     if(_batteryLevel < (_powerCostPerCustom/1000)) then {
-        _string = format ['Error! Insufficient Power.'];
+        _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         missionNamespace setVariable [_nameOfVariable, true, true];
         breakTo "exit";
@@ -57,20 +57,20 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
             private _deviceObject = objectFromNetId _deviceNetId;
 
             if(_customState isEqualTo "activate") then {
-                _string = format ["Custom device '%1' (ID: %2) activated.", _customName, _customId];
+                _string = format [localize "STR_ROOT_CYBERWARFARE_CUSTOM_DEVICE_ACTIVATED", _customName, _customId];
                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 if (_activationCode != "") then {
                     [_computer, _deviceObject, _owner] spawn (compile _activationCode);
                 };
             } else {
                 if(_customState isEqualTo "deactivate") then {
-                    _string = format ["Custom device '%1' (ID: %2) deactivated.", _customName, _customId];
+                    _string = format [localize "STR_ROOT_CYBERWARFARE_CUSTOM_DEVICE_DEACTIVATED", _customName, _customId];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     if (_deactivationCode != "") then {
                         [_computer, _deviceObject, _owner] spawn (compile _deactivationCode);
                     };
                 } else {
-                    _string = format ['Error! Invalid Input - %1.', _customState];
+                    _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_INPUT", _customState];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 };
             };
@@ -78,25 +78,25 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
             private _changeWh = _powerCostPerCustom;
             private _newLevel = _batteryLevel - (_changeWh/1000);
             [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
-            _string = format ['Power Cost: %1Wh', _changeWh];
+            _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _changeWh];
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-            _string = format ['New Power Level: %1Wh', _newLevel*1000];
+            _string = format [localize "STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL", _newLevel*1000];
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             break;
         };
     } forEach _allCustom;
-    
+
     if(!_deviceFound) then {
-        _string = format ["Custom device with ID %1 not found.", _customId];
+        _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_CUSTOM_DEVICE_NOT_FOUND", _customId];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     };
 };
 if(_customId == 0) then {
-    _string = format ['Invalid input customId: %1.', _customId];
+    _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_CUSTOM_DEVICE_ID", _customId];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 };
 if(!(_customState isEqualTo "activate" || _customState isEqualTo "deactivate")) then {
-    _string = format ['Invalid input customState: %1.', _customState];
+    _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_CUSTOM_DEVICE_STATE", _customState];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 };
 

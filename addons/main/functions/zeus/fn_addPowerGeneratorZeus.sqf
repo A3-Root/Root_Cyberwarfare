@@ -103,7 +103,7 @@ private _dialogControls = [
         ["Power Generator Added!"] call zen_common_fnc_showMessage;
     },
     {
-        ["Aborted"] call zen_common_fnc_showMessage;
+        [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;
         playSound "FD_Start_F";
     },
     [_targetObject, _execUserId, _allComputers]

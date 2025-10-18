@@ -42,7 +42,7 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
     };
 
     if (_accessibleDrones isEqualTo []) then {
-        _string = "Error! No accessible drones found or access denied.";
+        _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DRONES";
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         missionNamespace setVariable [_nameOfVariable, true, true];
         breakTo "exit";
@@ -78,7 +78,7 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
         } forEach _accessibleDrones;
 
         if (_affectedDrones isEqualTo []) then {
-            _string = "Error! No accessible drones found that need faction change.";
+            _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DRONES_CHANGE_FACTION";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             missionNamespace setVariable [_nameOfVariable, true, true];
             breakTo "exit";
@@ -86,18 +86,18 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
 
         _string = format ['Affected Drones: %1. Power Cost: %2Wh.', _countOfChangingDrones, (_countOfChangingDrones * _powerCostPerDrone)];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-        
+
         if(_batteryLevel < ((_countOfChangingDrones * _powerCostPerDrone)/1000)) then {
-            _string = format ['Error! Insufficient Power!'];
+            _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             missionNamespace setVariable [_nameOfVariable, true, true];
             breakTo "exit";
         };
-        
+
         private _changeWh = (_powerCostPerDrone * _countOfChangingDrones);
-        _string = format ['Power Cost: %1Wh', _changeWh];
+        _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _changeWh];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-        _string = format ['Are you sure? (Y/N): '];
+        _string = localize "STR_ROOT_CYBERWARFARE_CONFIRM_PROMPT";
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
         private _time = time;
@@ -116,7 +116,7 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
             };
         };
         if (!_continue) then {
-            _string = format ['Confirmation Timed Out. Aborting...'];
+            _string = localize "STR_ROOT_CYBERWARFARE_POWERGRID_CONFIRMATION_TIMEOUT";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             missionNamespace setVariable [_nameOfVariable, true, true];
             breakTo "exit";
@@ -124,7 +124,7 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
         private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
         private _newLevel = _batteryLevel - (_changeWh/1000);
         [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
-        _string = format ['New Power Level: %1Wh', _newLevel*1000];
+        _string = format [localize "STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL", _newLevel*1000];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         
         // Apply changes to all affected drones
@@ -133,8 +133,8 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
             private _newGroup = createGroup _side;
             [_drone] joinSilent _newGroup;            
         } forEach _affectedDrones;
-        
-        _string = format ["Operation completed on %1 drones.", _countOfChangingDrones];
+
+        _string = format [localize "STR_ROOT_CYBERWARFARE_OPERATION_COMPLETED_DRONES", _countOfChangingDrones];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     } else {
         private _foundDrone = false;
@@ -147,17 +147,17 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
                 private _currentState = side _drone;
                 
                 if((_side isNotEqualTo _currentState)) then {
-                    _string = format ['Power Cost: %1Wh.', _powerCostPerDrone];
+                    _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _powerCostPerDrone];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    
+
                     if(_batteryLevel < (_powerCostPerDrone/1000)) then {
-                        _string = format ['Error! Insufficient Power!'];
+                        _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                         missionNamespace setVariable [_nameOfVariable, true, true];
                         breakTo "exit";
                     };
-                    
-                    _string = format ['Are you sure? (Y/N): '];
+
+                    _string = localize "STR_ROOT_CYBERWARFARE_CONFIRM_PROMPT";
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     
                     private _time = time;
@@ -177,45 +177,45 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
                     };
 
                     if (!_continue) then {
-                        _string = format ['Confirmation Timed Out. Aborting...'];
+                        _string = localize "STR_ROOT_CYBERWARFARE_POWERGRID_CONFIRMATION_TIMEOUT";
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                         missionNamespace setVariable [_nameOfVariable, true, true];
                         breakTo "exit";
                     };
-                    
+
                     private _newGroup = createGroup _side;
                     [_drone] joinSilent _newGroup;
-                    _string = format ["Drone side changed."];
+                    _string = localize "STR_ROOT_CYBERWARFARE_DRONE_FACTION_CHANGED";
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
                     private _changeWh = _powerCostPerDrone;
                     private _newLevel = _batteryLevel - (_changeWh/1000);
                     [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
-                    _string = format ['Power Cost: %1Wh', _changeWh];
+                    _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _changeWh];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    _string = format ['New Power Level: %1Wh', _newLevel*1000];
+                    _string = format [localize "STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL", _newLevel*1000];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 } else {
-                    _string = format ["Error! Drone already of side %1.", _droneFaction];
+                    _string = format [localize "STR_ROOT_CYBERWARFARE_DRONE_ALREADY_FACTION", _droneFaction];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 };
             };
         } forEach _accessibleDrones;
         
         if (!_foundDrone) then {
-            _string = format ["Error! Drone ID %1 not found or access denied.", _droneIdNum];
+            _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DRONE", _droneIdNum];
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         };
     };
 };
 
 if(!(_droneIdNum != 0 || _droneId isEqualTo "a")) then {
-    _string = format ["Error! Invalid DroneID - %1.", _droneId];
+    _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_DRONE_ID", _droneId];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 };
 
 if(!((_droneFaction isEqualTo "west" || _droneFaction isEqualTo "east" || _droneFaction isEqualTo "guer" || _droneFaction isEqualTo "civ"))) then {
-    _string = format ["Error! Invalid Drone Faction - %1.", _droneFaction];
+    _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_DRONE_FACTION", _droneFaction];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 };
 

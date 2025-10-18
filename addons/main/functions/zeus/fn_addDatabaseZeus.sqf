@@ -79,7 +79,7 @@ private _dialogControls = [
         ["Hackable File Added!"] call zen_common_fnc_showMessage;
     },  
     {
-        ["Aborted"] call zen_common_fnc_showMessage;
+        [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;
         playSound "FD_Start_F";
     }, 
     [_rootcwdatabaseFileObject, _allComputers]

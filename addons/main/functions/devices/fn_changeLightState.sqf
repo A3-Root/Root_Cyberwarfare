@@ -38,7 +38,7 @@ if((_lightIdNum != 0 || _lightId isEqualTo "a") && (_lightState isEqualTo "on" |
     };
 
     if (_accessibleLights isEqualTo []) then {
-        _string = "Error! No accessible lights found or access denied.";
+        _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_LIGHTS";
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         missionNamespace setVariable [_nameOfVariable, true, true];
         breakTo "exit";
@@ -61,8 +61,8 @@ if((_lightIdNum != 0 || _lightId isEqualTo "a") && (_lightState isEqualTo "on" |
                 _countChanged = _countChanged + 1;
             };
         } forEach _accessibleLights;
-        
-        _string = format ["Operation completed on %1 lights.", _countChanged];
+
+        _string = format [localize "STR_ROOT_CYBERWARFARE_OPERATION_COMPLETED_LIGHTS", _countChanged];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     } else {
         private _foundLight = false;
@@ -78,23 +78,23 @@ if((_lightIdNum != 0 || _lightId isEqualTo "a") && (_lightState isEqualTo "on" |
                 
                 if(_lightState isEqualTo "on" && _currentState != "ON") then {
                     [_light, "ON"] remoteExec ["switchLight", 0, true];
-                    _string = format ["Light turned on."];
+                    _string = localize "STR_ROOT_CYBERWARFARE_LIGHT_TURNED_ON";
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 } else {
                     if(_lightState isEqualTo "on" && _currentState == "ON") then {
-                        _string = format ["Light already on."];
+                        _string = localize "STR_ROOT_CYBERWARFARE_LIGHT_ALREADY_ON";
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     } else {
                         if(_lightState isEqualTo "off" && _currentState != "OFF") then {
                             [_light, "OFF"] remoteExec ["switchLight", 0, true];
-                            _string = format ["Light turned off."];
+                            _string = localize "STR_ROOT_CYBERWARFARE_LIGHT_TURNED_OFF";
                             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                         } else {
                             if(_lightState isEqualTo "off" && _currentState == "OFF") then {
-                                _string = format ["Light already off."];
+                                _string = localize "STR_ROOT_CYBERWARFARE_LIGHT_ALREADY_OFF";
                                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                             } else {
-                                _string = format ['Error! Invalid Light State - %1.', _lightState];
+                                _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_LIGHT_STATE", _lightState];
                                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                             };
                         };
@@ -104,19 +104,19 @@ if((_lightIdNum != 0 || _lightId isEqualTo "a") && (_lightState isEqualTo "on" |
         } forEach _accessibleLights;
         
         if (!_foundLight) then {
-            _string = format ["Error! Light ID %1 not found or access denied.", _lightIdNum];
+            _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_LIGHT", _lightIdNum];
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         };
     };
 };
 
 if(!(_lightIdNum != 0 || _lightId isEqualTo "a")) then {
-    _string = format ['Error! Invalid LightID - %1.', _lightId];
+    _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_LIGHT_ID", _lightId];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 };
 
 if(!(_lightState isEqualTo "on" || _lightState isEqualTo "off")) then {
-    _string = format ['Error! Invalid Light State - %1.', _lightState];
+    _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_LIGHT_STATE", _lightState];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 };
 
