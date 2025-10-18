@@ -464,37 +464,56 @@ if ([_laptop, DEVICE_TYPE_DOOR, _doorId] call Root_fnc_isDeviceAccessible) then 
 
 ---
 
-### Device Cache (HashMap)
+### All Devices Array
 
-**Global Variable**: `ROOT_CYBERWARFARE_DEVICE_CACHE`
-
-**Access Macro**: `GET_DEVICE_CACHE`
+**Global Variable**: `ROOT_CYBERWARFARE_ALL_DEVICES`
 
 **Structure**:
 ```sqf
-createHashMap with keys:
-├── "doors"       → [[deviceId, buildingNetId, doorIds[], buildingName, availableToFuture], ...]
-├── "lights"      → [[deviceId, lightNetId, lightName, availableToFuture], ...]
-├── "drones"      → [[deviceId, droneNetId, droneName, availableToFuture], ...]
-├── "databases"   → [[deviceId, objectNetId, fileName, fileSize, linkedComputers, availableToFuture], ...]
-├── "custom"      → [[deviceId, objectNetId, deviceName, activationCode, deactivationCode, availableToFuture], ...]
-├── "gpsTrackers" → [[deviceId, targetNetId, trackerName, trackingTime, updateFreq, marker, linkedComputers, availableToFuture, status, allowRetrack, lastPingTimer, powerCost, owners], ...]
-├── "vehicles"    → [[deviceId, vehicleNetId, name, allowFuel, allowSpeed, allowBrakes, allowLights, allowEngine, allowAlarm, availableToFuture, powerCost, linkedComputers], ...]
-└── "powerGrids"  → [[deviceId, objectNetId, name, radius, allowExplActivate, allowExplDeactivate, explosionType, excludedClasses, availableToFuture, powerCost, linkedComputers], ...]
+[
+  doors[],        // Index 0
+  lights[],       // Index 1
+  drones[],       // Index 2
+  databases[],    // Index 3
+  custom[],       // Index 4
+  gpsTrackers[],  // Index 5
+  vehicles[],     // Index 6
+  powerGrids[]    // Index 7
+]
 ```
+
+**Device Entry Formats**:
+- **Doors**: `[deviceId, buildingNetId, doorIds[], buildingName, availableToFuture]`
+- **Lights**: `[deviceId, lightNetId, lightName, availableToFuture]`
+- **Drones**: `[deviceId, droneNetId, droneName, availableToFuture]`
+- **Databases**: `[deviceId, objectNetId, fileName, fileSize, linkedComputers, availableToFuture]`
+- **Custom**: `[deviceId, objectNetId, deviceName, activationCode, deactivationCode, availableToFuture]`
+- **GPS Trackers**: `[deviceId, targetNetId, trackerName, trackingTime, updateFreq, marker, linkedComputers, availableToFuture, status, allowRetrack, lastPingTimer, powerCost, owners]`
+- **Vehicles**: `[deviceId, vehicleNetId, name, allowFuel, allowSpeed, allowBrakes, allowLights, allowEngine, allowAlarm, availableToFuture, powerCost, linkedComputers]`
+- **Power Grids**: `[deviceId, objectNetId, name, radius, allowExplActivate, allowExplDeactivate, explosionType, excludedClasses, availableToFuture, powerCost, linkedComputers]`
 
 **Example**:
 ```sqf
-// Get all doors
-private _cache = GET_DEVICE_CACHE;
-private _doors = _cache getOrDefault [CACHE_KEY_DOORS, []];
+// Get all devices
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
+private _allDoors = _allDevices select 0;
 
 // Find specific door by ID
-private _doorIndex = _doors findIf { (_x select 0) == _deviceId };
+private _doorIndex = _allDoors findIf { (_x select 0) == _deviceId };
 if (_doorIndex != -1) then {
-    private _doorEntry = _doors select _doorIndex;
+    private _doorEntry = _allDoors select _doorIndex;
     _doorEntry params ["_id", "_buildingNetId", "_doorIds", "_buildingName", "_availableToFuture"];
 };
+
+// Filter accessible doors for a computer
+private _accessibleDoors = _allDoors select {
+    [_computer, DEVICE_TYPE_DOOR, _x select 0] call Root_fnc_isDeviceAccessible
+};
+
+// Add new door device
+_allDoors pushBack [_newDeviceId, _buildingNetId, _doorIds, _buildingName, _availableToFuture];
+_allDevices set [0, _allDoors];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
 ```
 
 ---
@@ -558,10 +577,11 @@ missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices
 ### Cache Access Macros
 
 ```cpp
-GET_DEVICE_CACHE    // Get device cache HashMap (or create empty)
 GET_LINK_CACHE      // Get link cache HashMap (or create empty)
 GET_PUBLIC_DEVICES  // Get public devices array (or empty array)
 ```
+
+**Note**: `GET_DEVICE_CACHE` macro exists but the Device Cache HashMap is currently unused. Use `ROOT_CYBERWARFARE_ALL_DEVICES` directly for device access.
 
 ### Validation Macros
 

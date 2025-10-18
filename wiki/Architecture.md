@@ -92,36 +92,45 @@ addons/main/
 
 The mod uses a **hybrid 3-tier storage system** optimized for different access patterns:
 
-### 1. Device Cache (HashMap) - PRIMARY STORAGE
+### 1. All Devices Array - PRIMARY STORAGE
 
-**Purpose**: Fast device lookup by type with O(1) complexity
+**Purpose**: Centralized storage for all device data
 
-**Global Variable**: `ROOT_CYBERWARFARE_DEVICE_CACHE` (HashMap)
+**Global Variable**: `ROOT_CYBERWARFARE_ALL_DEVICES` (Array)
 
 **Structure**:
 ```sqf
-createHashMap with keys:
-├── "doors"       → [[deviceId, buildingNetId, doorIds[], buildingName, availableToFuture], ...]
-├── "lights"      → [[deviceId, lightNetId, lightName, availableToFuture], ...]
-├── "drones"      → [[deviceId, droneNetId, droneName, availableToFuture], ...]
-├── "databases"   → [[deviceId, objectNetId, fileName, fileSize, fileContent, databaseName, availableToFuture], ...]
-├── "custom"      → [[deviceId, objectNetId, deviceName, activationCode, deactivationCode, availableToFuture], ...]
-├── "gpsTrackers" → [[deviceId, targetNetId, trackerName, updateInterval, isActive, lastPingTime, lastPosition], ...]
-├── "vehicles"    → [[deviceId, vehicleNetId, vehicleName, allowFuel, allowSpeed, allowBrakes, allowLights, allowEngine, allowAlarm, powerCost, availableToFuture], ...]
-└── "powerGrids"  → [[deviceId, objectNetId, name, radius, allowExplActivate, allowExplDeactivate, explosionType, excludedClasses, availableToFuture], ...]
+[
+  doors[],        // Index 0: [[deviceId, buildingNetId, doorIds[], buildingName, availableToFuture], ...]
+  lights[],       // Index 1: [[deviceId, lightNetId, lightName, availableToFuture], ...]
+  drones[],       // Index 2: [[deviceId, droneNetId, droneName, availableToFuture], ...]
+  databases[],    // Index 3: [[deviceId, objectNetId, fileName, fileSize, linkedComputers, availableToFuture], ...]
+  custom[],       // Index 4: [[deviceId, objectNetId, deviceName, activationCode, deactivationCode, availableToFuture], ...]
+  gpsTrackers[],  // Index 5: [[deviceId, targetNetId, trackerName, trackingTime, updateFreq, marker, linkedComputers, availableToFuture, status, allowRetrack, lastPingTimer, powerCost, owners], ...]
+  vehicles[],     // Index 6: [[deviceId, vehicleNetId, name, allowFuel, allowSpeed, allowBrakes, allowLights, allowEngine, allowAlarm, availableToFuture, powerCost, linkedComputers], ...]
+  powerGrids[]    // Index 7: [[deviceId, objectNetId, name, radius, allowExplActivate, allowExplDeactivate, explosionType, excludedClasses, availableToFuture, powerCost, linkedComputers], ...]
+]
 ```
 
 **Access Pattern**:
 ```sqf
-// Get all doors
-private _cache = GET_DEVICE_CACHE;
-private _doors = _cache getOrDefault [CACHE_KEY_DOORS, []];
+// Get all devices
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
+private _allDoors = _allDevices select 0;
 
 // Find specific door by ID
-private _door = _doors findIf { (_x select 0) == _deviceId };
+private _doorIndex = _allDoors findIf { (_x select 0) == _deviceId };
+if (_doorIndex != -1) then {
+    private _doorEntry = _allDoors select _doorIndex;
+};
+
+// Filter accessible doors for a computer
+private _accessibleDoors = _allDoors select {
+    [_computer, DEVICE_TYPE_DOOR, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible
+};
 ```
 
-**Initialization**: Created in `XEH_postInit.sqf` (server-side only)
+**Initialization**: Created in `XEH_postInit.sqf` (server-side only), can be pre-populated by 3DEN modules
 
 ### 2. Link Cache (HashMap) - ACCESS CONTROL
 
@@ -180,16 +189,17 @@ private _isPublic = _publicDevices findIf {
 
 **Initialization**: Created in `XEH_postInit.sqf`, can be pre-populated by 3DEN modules
 
-### 4. Legacy Array (Backward Compatibility)
+### 4. Device Cache HashMap (UNUSED - Reserved for Future)
 
-**Global Variable**: `ROOT_CYBERWARFARE_ALL_DEVICES` (Array)
+**Global Variable**: `ROOT_CYBERWARFARE_DEVICE_CACHE` (HashMap)
 
-**Structure**:
+**Status**: **Currently Unused** - initialized in PostInit but not actively used. Reserved for future optimization to replace array-based device lookups with O(1) HashMap lookups.
+
+**Structure** (when implemented):
 ```sqf
-[doors[], lights[], drones[], databases[], custom[], gpsTrackers[], vehicles[], powerGrids[]]
+createHashMap with keys: "doors", "lights", "drones", etc.
+values: Arrays of device entries (same structure as ALL_DEVICES)
 ```
-
-**Status**: **Deprecated** - maintained for backward compatibility with mission scripts. New code should use the HashMap-based device cache instead.
 
 ### Device Type Constants
 
@@ -930,17 +940,22 @@ class ROOT_CYBERWARFARE_addVehicleZeus: zen_modules_moduleBase {
 
 ## Performance Considerations
 
-### HashMap vs Array Performance
+### Array-Based Device Lookup Performance
 
-**Device Lookup**:
-- **HashMap**: O(1) lookup by device type
-- **Array**: O(n) linear search
+**Current Implementation**:
+- **Device Storage**: Array-based (`ROOT_CYBERWARFARE_ALL_DEVICES`)
+- **Device Filtering**: O(n) linear search with `select` and `findIf`
+- **Access Check**: HashMap-based link cache provides O(1) access validation
 
-**Benchmark** (1000 devices):
-- HashMap: ~0.001ms per lookup
-- Array: ~0.050ms per lookup (50x slower)
+**Performance Characteristics**:
+- Retrieving all devices of a type: O(1) array index access
+- Finding specific device by ID: O(n) linear search
+- Filtering accessible devices: O(n × m) where n = devices, m = access check complexity
 
-**Decision**: Use HashMap for device cache, array for public devices (small size)
+**Future Optimization Potential**:
+- Device Cache HashMap (`ROOT_CYBERWARFARE_DEVICE_CACHE`) is initialized but unused
+- Could provide O(1) device lookups when implemented
+- Current array-based approach is simple and sufficient for typical mission scales (100 - 200 devices)
 
 ### Function Precompilation
 
