@@ -9,7 +9,6 @@ Welcome to the Root's Cyber Warfare documentation wiki! This mod adds comprehens
 - [Eden Editor Guide](Eden-Editor-Guide) - Pre-mission setup in the Eden Editor
 - [Mission Maker Guide](Mission-Maker-Guide) - Script-based mission creation
 - [Configuration Guide](Configuration) - CBA settings and customization options
-- [Terminal Guide](Terminal-Commands) - Complete terminal command reference
 - [API Reference](API-Reference) - Function reference for developers
 - [Architecture](Architecture) - Technical architecture and system design
 

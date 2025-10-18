@@ -327,6 +327,5 @@ Some devices may be configured as "Available to Future Laptops," meaning they be
 ---
 
 For more information, see:
-- [Terminal Commands](Terminal-Commands) - Complete command reference
 - [Zeus Guide](Zeus-Guide) - How devices are set up
 - [Configuration Guide](Configuration) - Server settings and customization

@@ -204,6 +204,7 @@ Access via: Main Menu → Options → Addon Options → Root Cyber Warfare
 | 5 | DEVICE_TYPE_CUSTOM | Custom scripted devices |
 | 6 | DEVICE_TYPE_GPS_TRACKER | GPS tracking devices |
 | 7 | DEVICE_TYPE_VEHICLE | Vehicles (cars, trucks, etc) |
+| 8 | DEVICE_TYPE_POWERGRID | Power Grids |
 
 ## Terminal Commands Reference
 

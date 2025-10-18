@@ -376,6 +376,7 @@ For manual scripting/debugging:
 - `5` = Custom
 - `6` = GPS Tracker
 - `7` = Vehicle
+- `8` = Power Grids
 
 ---
 
