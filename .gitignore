@@ -5,7 +5,7 @@ hemtt.exe
 *.biprivatekey
 *.md
 **/*.json
-!README.md
+!README*.md
 !CHANGELOG.md
 !wiki/*
 *.exe

@@ -8,7 +8,7 @@ include = [
     "meta.cpp",       
     "LICENSE",
     "root_cyberwarfare_logo.paa",
-    "README.md",
+    "README*.md",
 ]
 exclude = [
     ".gitignore",
