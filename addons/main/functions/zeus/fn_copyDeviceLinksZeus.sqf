@@ -82,14 +82,16 @@ if (!isNull _targetObject && _targetHasLinks) exitWith {
     private _sourceNetId = netId _targetObject;
     private _sourceName = _targetObject getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", getText (configOf _targetObject >> "displayName")];
 
-    // Build dropdown for target selection (exclude source)
+    // Build dropdown for target selection (exclude source) and track hacking tools status
     private _targetDropdownOptions = [];
     private _targetDropdownValues = [];
+    private _targetComputersData = []; // Store [netId, hasHackingTools] for each option
     {
-        _x params ["_netId", "_displayText", "", "", "_obj"];
+        _x params ["_netId", "_displayText", "_hasTools", "", "_obj"];
         if (_netId != _sourceNetId) then {
             _targetDropdownOptions pushBack _displayText;
             _targetDropdownValues pushBack _netId;
+            _targetComputersData pushBack [_netId, _hasTools];
         };
     } forEach _allComputers;
 
@@ -97,25 +99,33 @@ if (!isNull _targetObject && _targetHasLinks) exitWith {
         [localize "STR_ROOT_CYBERWARFARE_ZEUS_INVALID_TARGET"] call zen_common_fnc_showMessage;
     };
 
+    // Build dialog fields
+    private _dialogFields = [
+        ["COMBO", ["Target Laptop", "Select the laptop to copy device links TO (will merge)"], [_targetDropdownValues, _targetDropdownOptions, 0]],
+        ["EDIT", ["Hacking Tools Path", "Path for hacking tools (will be installed if target doesn't have them). Example: /rubberducky/tools"], ["/rubberducky/tools"]]
+    ];
+
     [
         format ["Copy Device Links FROM %1", _sourceName],
-        [
-            ["COMBO", ["Target Laptop", "Select the laptop to copy device links TO (will merge)"], [_targetDropdownValues, _targetDropdownOptions, 0]]
-        ],
+        _dialogFields,
         {
             params ["_results", "_args"];
-            _args params ["_sourceNetId"];
-            _results params ["_targetNetId"];
+            _args params ["_sourceNetId", "_targetComputersData"];
+            _results params ["_targetNetId", "_hackingToolsPath"];
+
+            // Check if selected target has hacking tools
+            private _targetData = _targetComputersData select {(_x select 0) == _targetNetId};
+            private _targetHasTools = if (_targetData isNotEqualTo []) then {(_targetData select 0) select 1} else {false};
 
             private _execUserId = clientOwner;
-            [_sourceNetId, _targetNetId, false, 0, "", _execUserId, true] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
+            [_sourceNetId, _targetNetId, false, 0, "", _execUserId, true, false, [], !_targetHasTools, _hackingToolsPath] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
             [localize "STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_SUCCESS"] call zen_common_fnc_showMessage;
         },
         {
             [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;
             playSound "FD_Start_F";
         },
-        [_sourceNetId]
+        [_sourceNetId, _targetComputersData]
     ] call zen_dialog_fnc_create;
 };
 
@@ -129,6 +139,7 @@ if (!isNull _targetObject) exitWith {
     };
 
     private _targetNetId = netId _targetObject;
+    private _targetHasTools = _targetObject getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false];
 
     // Build dropdown for source selection
     private _computerDropdownOptions = [];
@@ -138,32 +149,45 @@ if (!isNull _targetObject) exitWith {
         _computerDropdownValues pushBack _forEachIndex;
     } forEach _computersWithLinks;
 
+    // Build dialog fields
+    private _dialogFields = [
+        ["COMBO", ["Source Laptop", "Select the laptop to copy device links FROM"], [_computerDropdownValues, _computerDropdownOptions, 0]],
+        ["TOOLBOX:YESNO", ["Replace Existing Links", "Replace all existing links on target (if any)"], false],
+        ["COMBO", ["Target Name", "Keep current name, Use source laptop's name or Create new one"], [[0, 1, 2], ["Keep target's current name", "Use source laptop's name", "Specify new name"], 0]],
+        ["EDIT", ["New Name (optional)", "New name to be used"], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]]
+    ];
+
+    // Add hacking tools path field if target doesn't have tools
+    if (!_targetHasTools) then {
+        _dialogFields pushBack ["EDIT", ["Hacking Tools Path", "Path for hacking tools (will be installed on target laptop). Example: /rubberducky/tools"], ["/rubberducky/tools"]];
+    };
+
     [
         format ["Copy Device Links TO %1", getText (configOf _targetObject >> "displayName")],
-        [
-            ["COMBO", ["Source Laptop", "Select the laptop to copy device links FROM"], [_computerDropdownValues, _computerDropdownOptions, 0]],
-            ["TOOLBOX:YESNO", ["Replace Existing Links", "Replace all existing links on target (if any)"], false],
-            ["COMBO", ["Target Name", "Keep current name, Use source laptop's name or Create new one"], [[0, 1, 2], ["Keep target's current name", "Use source laptop's name", "Specify new name"], 0]],
-            ["EDIT", ["New Name (optional)", "New name to be used"], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]]
-        ],
+        _dialogFields,
         {
             params ["_results", "_args"];
-            _args params ["_computersWithLinks", "_targetNetId", "_index"];
-            _results params ["_sourceIndex", "_removePreviousLinks", "_nameHandling", "_newName"];
+            _args params ["_computersWithLinks", "_targetNetId", "_index", "_targetHasTools"];
+
+            // Extract hacking tools path if present (field added only when target doesn't have tools)
+            private _hackingToolsPath = "/rubberducky/tools";
+            if (!_targetHasTools && count _results > 4) then {
+                _results params ["_sourceIndex", "_removePreviousLinks", "_nameHandling", "_newName", "_hackingToolsPath"];
+            } else {
+                _results params ["_sourceIndex", "_removePreviousLinks", "_nameHandling", "_newName"];
+            };
 
             private _sourceNetId = (_computersWithLinks select _sourceIndex) select 0;
             private _execUserId = clientOwner;
 
-            [_sourceNetId, _targetNetId, _removePreviousLinks, _nameHandling, _newName, _execUserId, false] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
+            [_sourceNetId, _targetNetId, _removePreviousLinks, _nameHandling, _newName, _execUserId, false, false, [], !_targetHasTools, _hackingToolsPath] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
             [localize "STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_SUCCESS"] call zen_common_fnc_showMessage;
-            _index = _index + 1;
-		    missionNamespace setVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", _index, true];
         },
         {
             [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;
             playSound "FD_Start_F";
         },
-        [_computersWithLinks, _targetNetId, _index]
+        [_computersWithLinks, _targetNetId, _index, _targetHasTools]
     ] call zen_dialog_fnc_create;
 };
 
@@ -178,35 +202,41 @@ private _sourceDropdownValues = [];
     _sourceDropdownValues pushBack _forEachIndex;
 } forEach _computersWithLinks;
 
-// Build dropdown for existing target selection
+// Build dropdown for existing target selection and track hacking tools status
 private _targetDropdownOptions = ["<Create New Laptop>"];
 private _targetDropdownValues = [-1];
+private _targetComputersData = []; // Store [index, hasHackingTools]
 {
     _targetDropdownOptions pushBack (_x select 1);
     _targetDropdownValues pushBack _forEachIndex;
+    _targetComputersData pushBack [_forEachIndex, _x select 2]; // index and hasHackingTools status
 } forEach _allComputers;
+
+// Build dialog fields - always include hacking tools path (needed for new laptops or existing ones without tools)
+private _dialogFields = [
+    ["COMBO", ["Source Laptop", "Select the laptop to copy device links FROM"], [_sourceDropdownValues, _sourceDropdownOptions, 0]],
+    ["COMBO", ["Target", "Select existing laptop or create new one"], [_targetDropdownValues, _targetDropdownOptions, 0]],
+    ["TOOLBOX:YESNO", ["Replace Existing Links", "Replace all existing links on target (if any)"], false],
+    ["COMBO", ["Target Name", "Keep current name, Use source laptop's name or Create new one"], [[0, 1, 2], ["Keep target's current name", "Use source laptop's name", "Specify new name"], 0]],
+    ["EDIT", ["New Name (optional)", "New name to be used if 'Specifiy New Name' or 'Create New' is selected in the fields above"], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]],
+    ["EDIT", ["Hacking Tools Path", "Path for hacking tools (will be installed if creating new laptop or target doesn't have them). Example: /rubberducky/tools"], ["/rubberducky/tools"]]
+];
 
 [
     "Copy Device Links",
-    [
-        ["COMBO", ["Source Laptop", "Select the laptop to copy device links FROM"], [_sourceDropdownValues, _sourceDropdownOptions, 0]],
-        ["COMBO", ["Target", "Select existing laptop or create new one"], [_targetDropdownValues, _targetDropdownOptions, 0]],
-        ["TOOLBOX:YESNO", ["Replace Existing Links", "Replace all existing links on target (if any)"], false],
-        ["COMBO", ["Target Name", "Keep current name, Use source laptop's name or Create new one"], [[0, 1, 2], ["Keep target's current name", "Use source laptop's name", "Specify new name"], 0]],
-        ["EDIT", ["New Name (optional)", "New name to be used if 'Specifiy New Name' or 'Create New' is selected in the fields above"], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]]
-    ],
+    _dialogFields,
     {
         params ["_results", "_args"];
-        _args params ["_computersWithLinks", "_allComputers", "_logicPos", "_index"];
-        _results params ["_sourceIndex", "_targetIndex", "_removePreviousLinks", "_nameHandling", "_newName"];
+        _args params ["_computersWithLinks", "_allComputers", "_logicPos", "_index", "_targetComputersData"];
+        _results params ["_sourceIndex", "_targetIndex", "_removePreviousLinks", "_nameHandling", "_newName", "_hackingToolsPath"];
 
         private _sourceNetId = (_computersWithLinks select _sourceIndex) select 0;
         private _execUserId = clientOwner;
 
         // Check if creating new laptop
         if (_targetIndex == -1) then {
-            // Create new laptop at module position
-            [_sourceNetId, "", _removePreviousLinks, _nameHandling, _newName, _execUserId, false, true, _logicPos] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
+            // Create new laptop at module position (always needs hacking tools)
+            [_sourceNetId, "", _removePreviousLinks, _nameHandling, _newName, _execUserId, false, true, _logicPos, true, _hackingToolsPath] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
         } else {
             // Use existing laptop
             private _targetNetId = (_allComputers select _targetIndex) select 0;
@@ -216,17 +246,19 @@ private _targetDropdownValues = [-1];
                 [localize "STR_ROOT_CYBERWARFARE_ZEUS_SAME_LAPTOP_ERROR"] call zen_common_fnc_showMessage;
             };
 
-            [_sourceNetId, _targetNetId, _removePreviousLinks, _nameHandling, _newName, _execUserId, false] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
+            // Check if target has hacking tools
+            private _targetData = _targetComputersData select {(_x select 0) == _targetIndex};
+            private _targetHasTools = if (_targetData isNotEqualTo []) then {(_targetData select 0) select 1} else {false};
+
+            [_sourceNetId, _targetNetId, _removePreviousLinks, _nameHandling, _newName, _execUserId, false, false, [], !_targetHasTools, _hackingToolsPath] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
         };
 
         [localize "STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_SUCCESS"] call zen_common_fnc_showMessage;
 
-        _index = _index + 1;
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", _index, true];
     },
     {
         [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;
         playSound "FD_Start_F";
     },
-    [_computersWithLinks, _allComputers, _logicPos, _index]
+    [_computersWithLinks, _allComputers, _logicPos, _index, _targetComputersData]
 ] call zen_dialog_fnc_create;

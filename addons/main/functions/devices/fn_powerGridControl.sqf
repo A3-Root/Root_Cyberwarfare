@@ -53,8 +53,13 @@ if (_allPowerGrids isEqualTo []) exitWith {
 };
 
 // Get battery and check power
-private _battery = uiNamespace getVariable "AE3_Battery";
-private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
+private _battery = _computer getVariable ["AE3_power_internal", objNull];
+if (isNull _battery) exitWith {
+    _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_BATTERY";
+    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+    missionNamespace setVariable [_nameOfVariable, true, true];
+};
+private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
 
 // Get power cost from CBA setting
 private _powerCost = missionNamespace getVariable [SETTING_POWERGRID_COST, 15];

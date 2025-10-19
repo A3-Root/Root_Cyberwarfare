@@ -13,17 +13,19 @@
  * 6: _mergeMode <BOOL> - If true, always merge (never remove previous links)
  * 7: _createNew <BOOL> (Optional) - If true, create new laptop at position
  * 8: _createPos <ARRAY> (Optional) - Position to create new laptop [x,y,z]
+ * 9: _installHackingTools <BOOL> (Optional) - If true, install hacking tools on target laptop (if not already installed)
+ * 10: _hackingToolsPath <STRING> (Optional) - Path for hacking tools installation (default: /rubberducky/tools)
  *
  * Return Value:
  * None
  *
  * Example:
- * ["123", "456", true, 1, "", 0, false] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
+ * ["123", "456", true, 1, "", 0, false, false, [], true, "/rubberducky/tools"] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
  *
  * Public: No
  */
 
-params ["_sourceNetId", "_targetNetId", "_removePreviousLinks", "_nameHandling", "_newName", "_execUserId", ["_mergeMode", false], ["_createNew", false], ["_createPos", []]];
+params ["_sourceNetId", "_targetNetId", "_removePreviousLinks", "_nameHandling", "_newName", "_execUserId", ["_mergeMode", false], ["_createNew", false], ["_createPos", []], ["_installHackingTools", false], ["_hackingToolsPath", "/rubberducky/tools"]];
 
 private _sourceLaptop = objectFromNetId _sourceNetId;
 
@@ -61,7 +63,7 @@ if (_createNew) then {
     };
 
     // Install hacking tools on new laptop
-    [_targetLaptop, "/rubberducky/tools", _execUserId, _laptopName] call FUNC(addHackingToolsZeusMain);
+    [_targetLaptop, _hackingToolsPath, _execUserId, _laptopName] call FUNC(addHackingToolsZeusMain);
 
     _laptopIndex = _laptopIndex + 1;
     missionNamespace setVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", _laptopIndex, true];
@@ -80,6 +82,16 @@ if (_createNew) then {
 };
 
 private _targetLaptopNetId = netId _targetLaptop;
+
+// Install hacking tools if requested and not already installed
+if (_installHackingTools && !_createNew) then {
+    private _hasTools = _targetLaptop getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false];
+    if (!_hasTools) then {
+        private _targetName = _targetLaptop getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", ""];
+        [_targetLaptop, _hackingToolsPath, _execUserId, _targetName] call FUNC(addHackingToolsZeusMain);
+        LOG_INFO_1("Installed hacking tools on existing laptop %1",_targetName);
+    };
+};
 
 // Override removePreviousLinks if in merge mode
 if (_mergeMode) then {

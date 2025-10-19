@@ -39,11 +39,18 @@ if (_vehicleIDNum != 0) then {
 
     private _foundVehicle = false;
     private _invalidOption = true;
-    private _battery = uiNamespace getVariable "AE3_Battery";
-    private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
+
+    // Get battery from computer
+    private _battery = _computer getVariable ["AE3_power_internal", objNull];
+    if (isNull _battery) then {
+        _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_BATTERY";
+        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        missionNamespace setVariable [_nameOfVariable, true, true];
+        breakTo "exit";
+    };
+    private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
     private _powerCost = 2;
 
-      
     {
         // [_deviceId, _netId, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost];
 

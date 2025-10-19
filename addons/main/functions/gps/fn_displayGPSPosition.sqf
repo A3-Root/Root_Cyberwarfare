@@ -49,9 +49,17 @@ if (_trackerIdNum != 0) then {
                 _foundTracker = true;
 
                 if ((isNil "_powerCost") || (_powerCost < 1)) then { _powerCost = _trackerObject getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_COST", 10] };
-                private _battery = uiNamespace getVariable "AE3_Battery";
-                private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
-                
+
+                // Get battery from computer
+                private _battery = _computer getVariable ["AE3_power_internal", objNull];
+                if (isNull _battery) then {
+                    _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_BATTERY";
+                    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                    missionNamespace setVariable [_nameOfVariable, true, true];
+                    breakTo "exit";
+                };
+                private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
+
                 // Check if already being tracked by this computer
                 if ((_currentStatus select 0) == "Tracking") then {
                     _string = format ["Tracker '%1' (ID: %2) is already being tracked.", _trackerName, _trackerIdNum];

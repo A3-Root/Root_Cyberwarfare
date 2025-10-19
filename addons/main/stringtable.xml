@@ -130,6 +130,9 @@
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_VEHICLES">
             <English>Error! No vehicle found.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_BATTERY">
+            <English>Error! Battery not found or laptop has no internal battery!</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_BUILDINGS_CRITERIA">
             <English>Error! No accessible buildings found for the specified criteria.</English>
         </Key>

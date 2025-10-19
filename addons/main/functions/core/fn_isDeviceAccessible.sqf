@@ -5,7 +5,7 @@
  *
  * Arguments:
  * 0: _computer <OBJECT> - The laptop/computer object
- * 1: _deviceType <NUMBER> - Device type (1-7)
+ * 1: _deviceType <NUMBER> - Device type (1-8)
  * 2: _deviceId <NUMBER> - Device ID
  * 3: _commandPath <STRING> (Optional) - Command path for backdoor checking, default: ""
  *

@@ -24,8 +24,15 @@ params['_owner', '_computer', '_nameOfVariable', '_customId', "_customState", "_
 
 private _string = "";
 
-private _battery = uiNamespace getVariable 'AE3_Battery';
-private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
+// Get battery from computer
+private _battery = _computer getVariable ["AE3_power_internal", objNull];
+if (isNull _battery) then {
+    _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_BATTERY";
+    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+    missionNamespace setVariable [_nameOfVariable, true, true];
+    breakTo "exit";
+};
+private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
 
 _customState = toLower _customState;
 _customId = parseNumber _customId;
@@ -74,7 +81,7 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 };
             };
-            private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
+            private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
             private _changeWh = _powerCostPerCustom;
             private _newLevel = _batteryLevel - (_changeWh/1000);
             [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];

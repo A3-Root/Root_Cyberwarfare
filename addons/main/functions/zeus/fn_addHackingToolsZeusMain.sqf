@@ -465,7 +465,7 @@ _content = "
     private _nameOfVariable = 'ROOT_CYBERWARFARE_POWERGRID-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _gridId, _action, _commandName] remoteExec ['Root_fnc_powerGridControl', 2];
+    [_owner, _computer, _nameOfVariable, _gridId, _action, _commandName] remoteExec ['Root_fnc_powerGridControl', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
