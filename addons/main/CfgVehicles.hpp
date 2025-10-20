@@ -182,7 +182,7 @@ class CfgVehicles {
 			};
 			class ROOT_CYBERWARFARE_3DEN_DEVICES_UNBREACHABLE: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_DEVICES_UNBREACHABLE";
-				displayName = "Make Unbreachable";
+				displayName = "Make Unbreachable [WIP]";
 				tooltip = "If checked, building doors cannot be breached by ACE explosives or lockpicking (only hackable)";
 				typeName = "BOOL";
 				defaultValue = 0;
@@ -190,7 +190,7 @@ class CfgVehicles {
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {
-			description = "Synchronize this module to buildings (with doors), drones, and lights to make them hackable.";
+			description = "Synchronize this module to buildings (with doors), and lights to make them hackable.";
 			sync[] = {"House", "Building", "UAV", "Lamps_base_F", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};
@@ -532,7 +532,7 @@ hint 'Custom device deactivated';""";
         class ACE_SelfActions {
 			class ACE_Equipment {
 				class ROOT_AttachGPSTracker_Self {
-					displayName = "Attach GPS Tracker";
+					displayName = "Attach GPS Tracker (Self)";
 					condition = "private _gpsTrackerClass = missionNamespace getVariable ['ROOT_CYBERWARFARE_GPS_TRACKER_DEVICE', 'ACE_Banana']; _gpsTrackerClass in (uniformItems _player + vestItems _player + backpackItems _player + items _player)";
 					exceptions[] = {};
 					statement = "[vehicle _player, _player] call ROOT_fnc_aceAttachGPSTracker;";

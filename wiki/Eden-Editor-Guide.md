@@ -151,7 +151,7 @@ Custom Device Cost: 20
 | Attribute | Type | Default | Description |
 |-----------|------|---------|-------------|
 | **Add to Public Device List** | Checkbox | ✓ Checked | If checked, devices are accessible by all laptops (current and future). |
-| **Make Unbreachable** | Checkbox | Unchecked | If checked, building doors cannot be breached with ACE explosives or lockpicking (doors only). |
+| **Make Unbreachable [WIP]** | Checkbox | Unchecked | Experimental. If checked, building doors cannot be breached with ACE explosives, lockpicking, or other means except using the linked laptop. |
 
 **Synchronization:**
 
@@ -168,7 +168,7 @@ Custom Device Cost: 20
 2. Place "Add Devices" module
 3. Sync module to building1
 4. Set "Add to Public Device List": ✓ (checked)
-5. Set "Make Unbreachable": ✓ (checked)
+5. Set "Make Unbreachable [WIP]": ✓ (checked)
 Result: All laptops can access this building's doors, which cannot be breached
 ```
 
@@ -752,7 +752,7 @@ Add comments in the editor:
 3. Sync to barracks, hq, warehouse, and laptop1
 4. Attributes:
    - Add to Public Device List: (unchecked)
-   - Make Unbreachable: ✓ (checked)
+   - Make Unbreachable [WIP]: ✓ (checked)
 Result: Only laptop1 can access doors, ACE breaching disabled
 ```
 

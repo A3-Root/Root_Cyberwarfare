@@ -47,7 +47,7 @@ private _dialogControls = [
 
 // Add unbreachable option only for buildings with doors
 if (_isBuilding) then {
-    _dialogControls pushBack ["TOOLBOX:YESNO", ["Make Unbreachable", "Prevent door breaching by ACE explosives, lockpicking, and other non-hacking methods"], false];
+    _dialogControls pushBack ["TOOLBOX:YESNO", ["Make Unbreachable [WIP]", "Prevent door breaching by ACE explosives, lockpicking, and other non-hacking methods"], false];
 };
 
 // Add a checkbox for each computer
