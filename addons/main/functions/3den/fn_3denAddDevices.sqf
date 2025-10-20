@@ -61,8 +61,8 @@ if (_addToPublic) then {
 	private _execUserId = 2; // Server
 
 	// Call the existing Zeus main function
-	// Parameters: _targetObject, _execUserId, _linkedComputers, _treatAsCustom, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _makeUnbreachable
-	[_device, _execUserId, _linkedComputers, false, "", "", "", _availableToFutureLaptops, _makeUnbreachable] call FUNC(addDeviceZeusMain);
+	// Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable
+	[_device, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] call FUNC(addDeviceZeusMain);
 
 } forEach _devices;
 

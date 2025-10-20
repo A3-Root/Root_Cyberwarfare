@@ -95,7 +95,7 @@ if (_isDroneCall) then {
 
     private _excludedNetIds = [];
     // Handle public device access
-    if (_availableToFutureLaptops || count _linkedComputers == 0) then {
+    if (_availableToFutureLaptops || _linkedComputers isEqualTo []) then {
         private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
 
         if (_availableToFutureLaptops) then {

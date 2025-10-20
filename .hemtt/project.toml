@@ -52,3 +52,6 @@ enabled = true
 
 [sqf.short_circuit_bool_var]
 enabled = true
+
+[version]
+git_hash = 0 # Disabled

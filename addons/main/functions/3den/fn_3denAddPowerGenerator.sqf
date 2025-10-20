@@ -22,9 +22,8 @@ if (!isServer) exitWith {};
 // Get module attributes
 private _generatorName = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_NAME", "Power Generator"];
 private _radius = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_RADIUS", 1000];
-private _allowExplosionActivate = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_ACTIVATE", 0]) isEqualTo 1;
-private _allowExplosionDeactivate = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_DEACTIVATE", 0]) isEqualTo 1;
-private _explosionType = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_TYPE", "HelicopterExploSmall"];
+private _allowExplosionOverload = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_OVERLOAD", 0]) isEqualTo 1;
+private _explosionType = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_TYPE", "ClaymoreDirectionalMine_Remote_Ammo_Scripted"];
 private _excludedClassnames = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXCLUDED", ""];
 private _powerCost = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_COST", 10];
 private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_PUBLIC", 1]) isEqualTo 1;
@@ -74,8 +73,8 @@ if (_addToPublic) then {
 	private _execUserId = 2; // Server
 
 	// Call the existing Zeus main function
-	// Parameters: _targetObject, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionActivate, _allowExplosionDeactivate, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost
-	[_generator, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionActivate, _allowExplosionDeactivate, _explosionType, _excludedArray, _availableToFutureLaptops, _powerCost] call FUNC(addPowerGeneratorZeusMain);
+	// Parameters: _targetObject, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost
+	[_generator, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, _powerCost] call FUNC(addPowerGeneratorZeusMain);
 
 } forEach _generators;
 

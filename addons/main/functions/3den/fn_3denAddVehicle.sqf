@@ -67,9 +67,16 @@ if (_addToPublic) then {
 	private _vehicle = _x;
 	private _execUserId = 2; // Server
 
-	// Call the existing Zeus main function
-	// Parameters: _targetObject, _execUserId, _linkedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost
-	[_vehicle, _execUserId, _linkedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost] call FUNC(addVehicleZeusMain);
+	// Check if this is a UAV/drone
+	if (unitIsUAV _vehicle) then {
+		// Call as drone with 4 parameters
+		// Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops
+		[_vehicle, _execUserId, _linkedComputers, _availableToFutureLaptops] call FUNC(addVehicleZeusMain);
+	} else {
+		// Call as vehicle with 12 parameters
+		// Parameters: _targetObject, _execUserId, _linkedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost
+		[_vehicle, _execUserId, _linkedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost] call FUNC(addVehicleZeusMain);
+	};
 
 } forEach _vehicles;
 

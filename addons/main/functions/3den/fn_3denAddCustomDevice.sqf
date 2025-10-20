@@ -62,9 +62,9 @@ if (_addToPublic) then {
 	private _target = _x;
 	private _execUserId = 2; // Server
 
-	// Call the existing Zeus main function with treatAsCustom = true
-	// Parameters: _targetObject, _execUserId, _linkedComputers, _treatAsCustom, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops
-	[_target, _execUserId, _linkedComputers, true, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops] call FUNC(addDeviceZeusMain);
+	// Call the custom device Zeus main function
+	// Parameters: _targetObject, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops
+	[_target, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops] call FUNC(addCustomDeviceZeusMain);
 
 } forEach _targets;
 

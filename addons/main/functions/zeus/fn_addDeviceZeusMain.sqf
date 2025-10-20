@@ -22,7 +22,13 @@
  * Public: No
  */
 
-params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false], ["_makeUnbreachable", false]];
+params [
+    ["_targetObject", objNull, [objNull]],
+    ["_execUserId", 0, [0]],
+    ["_linkedComputers", [], [[]]],
+    ["_availableToFutureLaptops", false, [false]],
+    ["_makeUnbreachable", false, [false]]
+];
 
 if (_execUserId == 0) then {
     _execUserId = owner _targetObject;
@@ -143,7 +149,7 @@ if (_linkedComputers isNotEqualTo []) then {
 
 private _excludedNetIds = [];
 /// Handle public device access
-if (_availableToFutureLaptops || count _linkedComputers == 0) then {
+if (_availableToFutureLaptops || _linkedComputers isEqualTo []) then {
     private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
 
     if (_availableToFutureLaptops) then {

@@ -484,26 +484,19 @@ hint 'Custom device deactivated';""";
 				typeName = "NUMBER";
 				defaultValue = 1000;
 			};
-			class ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_ACTIVATE: Checkbox {
-				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_ACTIVATE";
-				displayName = "Allow Explosion on Activation";
-				tooltip = "Create explosion when the generator is activated";
-				typeName = "BOOL";
-				defaultValue = 0;
-			};
-			class ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_DEACTIVATE: Checkbox {
-				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_DEACTIVATE";
-				displayName = "Allow Explosion on Deactivation";
-				tooltip = "Create explosion when the generator is deactivated";
+			class ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_OVERLOAD: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_OVERLOAD";
+				displayName = "Create Explosion on Overload";
+				tooltip = "Create explosion when the generator is overloaded";
 				typeName = "BOOL";
 				defaultValue = 0;
 			};
 			class ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_TYPE: Edit {
 				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_TYPE";
 				displayName = "Explosion Type";
-				tooltip = "Ammo classname for explosion (e.g., HelicopterExploSmall, Bo_GBU12_LGB, Sh_155mm_AMOS)";
+				tooltip = "Ammo classname for explosion on overload (e.g., ClaymoreDirectionalMine_Remote_Ammo_Scripted, HelicopterExploSmall, Bo_GBU12_LGB)";
 				typeName = "STRING";
-				defaultValue = """HelicopterExploSmall""";
+				defaultValue = """ClaymoreDirectionalMine_Remote_Ammo_Scripted""";
 			};
 			class ROOT_CYBERWARFARE_3DEN_POWERGRID_EXCLUDED: Edit {
 				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_EXCLUDED";

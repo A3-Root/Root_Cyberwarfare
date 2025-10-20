@@ -39,7 +39,7 @@ private _allComputers = [];
 } forEach (24 allObjects 1);
 
 // Check if target is a building (for unbreachable option)
-private _isBuilding = _targetObject isKindOf "House" || _targetObject isKindOf "Building";
+private _isBuilding = _targetObject isKindOf "House";
 
 private _dialogControls = [
     ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false]
