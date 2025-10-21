@@ -56,8 +56,8 @@ def update_readme_version(version, status="success"):
         content = old_content
         
         # Update version badge
-        version_badge_pattern = r'!\[Version\]\(https://img\.shields\.io/badge/version-[^-]+-blue\)'
-        new_version_badge = f'![Version](https://img.shields.io/badge/version-{version}-blue)'
+        version_badge_pattern = r'!\[version\]\(https://img\.shields\.io/badge/version-[^-]+-blue\)'
+        new_version_badge = f'![version](https://img.shields.io/badge/version-{version}-blue)'
         content = re.sub(version_badge_pattern, new_version_badge, content)
         
         # Update build status badge
