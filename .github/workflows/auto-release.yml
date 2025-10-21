@@ -1,4 +1,4 @@
-name: Auto Release with Smart Version Retention
+name: release
 
 on:
   push:

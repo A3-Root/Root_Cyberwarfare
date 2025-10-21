@@ -1,8 +1,7 @@
 # Root's Cyber Warfare
 
-![version](https://img.shields.io/badge/version-1.0.0-blue)
+![version](https://img.shields.io/badge/version-0.1.0-blue)
 [![build](https://github.com/A3-Root/Root_Cyberwarfare/actions/workflows/auto-release.yml/badge.svg?branch=master)](https://github.com/A3-Root/Root_Cyberwarfare/actions/workflows/auto-release.yml)
-[![release](https://img.shields.io/github/release/A3-Root/Root_Cyberwarfare.svg)](https://github.com/A3-Root/Root_Cyberwarfare/releases)
 [![license](https://img.shields.io/badge/License-APL--SA-blue.svg)](https://github.com/A3-Root/Root_Cyberwarfare/blob/master/LICENSE)
 
 ![License](https://data.bistudio.com/images/license/APL-SA.png)
