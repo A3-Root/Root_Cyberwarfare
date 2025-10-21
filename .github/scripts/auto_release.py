@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import subprocess
 from pathlib import Path
-from packaging.version import Version
+from packaging.version import Version # type: ignore
 from collections import defaultdict
 
 def main():
@@ -12,11 +12,17 @@ def main():
         print("📁 Releases directory does not exist, nothing to process")
         return
     
+    # Get all zip files but separate latest from versioned files
     all_zips = list(releases_dir.glob("root_cyberwarfare-*.zip"))
+    latest_zip = releases_dir / "root_cyberwarfare-latest.zip"
+    
+    # Filter out latest.zip from version processing
+    versioned_zips = [z for z in all_zips if z != latest_zip]
+    
     version_map = defaultdict(list)
 
     # Extract version from filename (e.g., root_cyberwarfare-1.2.3.4.zip)
-    for zip_file in all_zips:
+    for zip_file in versioned_zips:
         name = zip_file.name
         try:
             version_str = name.split("root_cyberwarfare-")[1].split(".zip")[0]
@@ -58,19 +64,30 @@ def main():
 
     print("🔒 Keeping versions:", kept_versions)
 
-    # Delete unused zips
-    for zip_file in all_zips:
+    # Delete unused zips (only versioned ones, never delete latest.zip)
+    for zip_file in versioned_zips:
         version_str = zip_file.name.split("root_cyberwarfare-")[1].split(".zip")[0]
         if version_str not in kept_versions:
             print(f"🗑️  Deleting old archive: {zip_file}")
             zip_file.unlink()
 
-    # Commit deletion
-    subprocess.run(["git", "config", "user.name", "github-actions"], check=True)
-    subprocess.run(["git", "config", "user.email", "github-actions@github.com"], check=True)
-    subprocess.run(["git", "add", "releases"], check=True)
-    subprocess.run(["git", "commit", "-m", "Cleanup: remove old mod archives"], check=True)
-    subprocess.run(["git", "push"], check=True)
+    # Always keep latest.zip - let the user know
+    if latest_zip.exists():
+        print(f"🔒 Preserving latest.zip: {latest_zip}")
+
+    # Check if there are any changes to commit (only if files were deleted)
+    result = subprocess.run(["git", "status", "--porcelain", "releases/"], 
+                          stdout=subprocess.PIPE, text=True)
+    if result.stdout.strip():
+        # Commit deletion only if there are changes
+        subprocess.run(["git", "config", "user.name", "github-actions"], check=True)
+        subprocess.run(["git", "config", "user.email", "github-actions@github.com"], check=True)
+        subprocess.run(["git", "add", "releases"], check=True)
+        subprocess.run(["git", "commit", "-m", "Cleanup: remove old mod archives"], check=True)
+        subprocess.run(["git", "push"], check=True)
+        print("✅ Committed and pushed cleanup changes")
+    else:
+        print("✅ No changes to commit")
 
     # Create or update releases for kept versions
     kept_files = [f for v in kept_versions for f in version_map[v]]
@@ -140,7 +157,7 @@ def main():
         else:
             subprocess.run([
                 "gh", "release", "create", version, str(zip_file),
-                "--title", f"root_cyberwarfare {version}",
+                "--title", f"Root's Cyber Warfare v{version}",
                 "--notes", notes
             ], check=True)
 
@@ -151,7 +168,6 @@ def main():
             latest_version_obj = v_obj
 
     # Attach latest.zip if exists
-    latest_zip = releases_dir / "root_cyberwarfare-latest.zip"
     if latest_version and latest_zip.exists():
         print(f"📦 Attaching latest.zip to {latest_version}")
         subprocess.run([

@@ -1,9 +1,20 @@
 # Changelog
 
-## Initial Public Release [1.0.0]
+## Initial Public Release v1.0.0
 
 ### Added
 - Initial release featuring 8 zeus and 3den modules.
+
+### Fixed
+- 
+
+### Changed
+-
+
+## Draft Private Release v0.5.0
+
+### Added
+- Initial release featuring 3 zeus and 3den modules.
 
 ### Fixed
 - 
