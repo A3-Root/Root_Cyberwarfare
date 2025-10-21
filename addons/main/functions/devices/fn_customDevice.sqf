@@ -55,6 +55,27 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
         private _storedCustomId = _x select 0;
         if(_customId == _storedCustomId) then {
             _deviceFound = true;
+            private _time = time;
+            _time = _time + 10;
+            private _continue = false;
+            while{time < _time} do {
+                private _areYouSure = [_computer] call AE3_armaos_fnc_shell_stdin;
+                if((_areYouSure isEqualTo "y") || (_areYouSure isEqualTo "Y")) then {
+                    _continue = true;
+                    break;
+                };
+                if((_areYouSure isEqualTo "n") || (_areYouSure isEqualTo "N")) then {
+                    missionNamespace setVariable [_nameOfVariable, true, true];
+                    _continue = false;
+                    breakTo "exit";
+                };
+            };
+            if (!_continue) then {
+                _string = localize "STR_ROOT_CYBERWARFARE_POWERGRID_CONFIRMATION_TIMEOUT";
+                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                missionNamespace setVariable [_nameOfVariable, true, true];
+                breakTo "exit";
+            };
             private _deviceNetId = _x select 1;
             private _customName = _x select 2;
             private _activationCode = _x select 3;
@@ -81,19 +102,19 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 };
             };
-            private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
-            private _changeWh = _powerCostPerCustom;
-            private _newLevel = _batteryLevel - (_changeWh/1000);
-            [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
-            _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _changeWh];
-            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-            _string = format [localize "STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL", _newLevel*1000];
-            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-            break;
         };
     } forEach _allCustom;
 
-    if(!_deviceFound) then {
+    if(_deviceFound) then {
+        private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
+        private _changeWh = _powerCostPerCustom;
+        private _newLevel = _batteryLevel - (_changeWh/1000);
+        [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
+        _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _changeWh];
+        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        _string = format [localize "STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL", _newLevel*1000];
+        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+    } else {
         _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_CUSTOM_DEVICE_NOT_FOUND", _customId];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     };
@@ -107,4 +128,5 @@ if(!(_customState isEqualTo "activate" || _customState isEqualTo "deactivate")) 
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 };
 
+scopeName "exit";
 missionNamespace setVariable [_nameOfVariable, true, true];

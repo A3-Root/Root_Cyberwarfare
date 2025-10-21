@@ -50,7 +50,7 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_RADIUS", _radius, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_OVERLOAD", _allowExplosionOverload, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_TYPE", _explosionType, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXCLUDED", _excludedClassnames, true];
-_targetObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "OFF", true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "ON", true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_DESTROYED", false, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_COST", _powerCost, true];
 

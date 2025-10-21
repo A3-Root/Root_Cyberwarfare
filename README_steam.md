@@ -1,5 +1,3 @@
-[img]SCREENSHOT_URL_HERO_TERMINAL[/img]
-
 [h1]Root's Cyber Warfare[/h1]
 
 [b]Advanced hacking mod for Arma 3 with terminal-based control over doors, lights, vehicles, drones, and more.[/b]
@@ -63,7 +61,7 @@ Designed for tactical missions requiring infiltration, sabotage, and electronic 
 [*]Laptop must have hacking tools (configured by Zeus/mission maker)
 [/olist]
 
-[img]GIF_URL_ACE_INTERACTION_TERMINAL_OPEN[/img]
+[img]https://i.postimg.cc/ncKcTqxP/Home-Screen.png[/img]
 
 [h3]In-Game Guide[/h3]
 A detailed terminal usage guide is available in-game for all players. Open your map and navigate to the [b]Cyberwarfare Guide[/b] section for comprehensive command reference and examples.
@@ -112,7 +110,7 @@ gpstrack <ID>                        # Start tracking (creates marker)
 custom <ID> on/off
 [/code]
 
-[img]SCREENSHOT_URL_DEVICES_ALL_OUTPUT[/img]
+[img]https://i.postimg.cc/bN0NL1PH/20251020193947-1.jpg[/img]
 
 [h3]Power Management[/h3]
 Operations consume battery (Watt-hours). Commands fail if insufficient power. Recharge using AE3 power sources.
@@ -121,10 +119,11 @@ Operations consume battery (Watt-hours). Commands fail if insufficient power. Re
 [list]
 [*]Attach via ACE Self-Interact → Equipment → Attach GPS Tracker
 [*]Search others via ACE Interaction menu
-[*]Detection is chance-based (improved with spectrum devices)
+[*]Detection is chance-based (improved with detection devices)
+[*][img]https://i.postimg.cc/zXYGn0sx/20251020193610-1.jpg[/img]
 [/list]
 
-[img]SCREENSHOT_URL_GPS_MAP_MARKERS[/img]
+[img]https://i.postimg.cc/BQ5QN23g/20251020194006-1.jpg[/img]
 
 [hr][/hr]
 
@@ -137,7 +136,7 @@ Operations consume battery (Watt-hours). Commands fail if insufficient power. Re
 [*]Place device modules on objects to make hackable
 [/olist]
 
-[img]SCREENSHOT_URL_ZEUS_MODULES_MENU[/img]
+[img]https://i.postimg.cc/8PdPwLG4/20251020194128-1.jpg[/img]
 
 [h3]Zeus Modules[/h3]
 
@@ -210,6 +209,8 @@ Operations consume battery (Watt-hours). Commands fail if insufficient power. Re
 
 [h2]CBA Settings[/h2]
 
+[img]https://i.postimg.cc/VLPkjDxR/20251020192844-1.jpg[/img]
+
 Configure in Main Menu → Options → Addon Options → Root Cyber Warfare:
 [list]
 [*]Power costs for all device types
@@ -236,7 +237,7 @@ Configure in Main Menu → Options → Addon Options → Root Cyber Warfare:
 [*][b][url=https://github.com/A3-Root/Root_Cyberwarfare]Github[/url][/b]
 [*][b][url=https://github.com/A3-Root/Root_Cyberwarfare/wiki]Github Wiki[/url][/b]
 [*][b][url=https://github.com/A3-Root/Root_Cyberwarfare/issues]Issues / Suggestions[/url][/b]
-[*][b][url=https://discord.gg/77th-jsoc-official]Discord[/url][/b]
+[*][b][url=https://discord.gg/77th-jsoc-official]Discord - 77th JSOC[/url][/b]
 [/list]
 
 [hr][/hr]

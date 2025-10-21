@@ -11,7 +11,6 @@ Technical architecture and implementation details of Root's Cyber Warfare.
 - [Power System](#power-system)
 - [Function Patterns](#function-patterns)
 - [Network Architecture](#network-architecture)
-- [Performance Considerations](#performance-considerations)
 
 ---
 
@@ -844,4 +843,4 @@ missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_CACHE", _deviceCache, tr
 
 ---
 
-**For function reference, see [API Reference](API-Reference.md). For usage examples, see [Mission Maker Guide](Mission-Maker-Guide.md).**
+**For function reference, see [API Reference](API-Reference). For usage examples, see [Mission Maker Guide](Mission-Maker-Guide).**

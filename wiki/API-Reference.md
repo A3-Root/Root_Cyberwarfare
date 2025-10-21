@@ -987,4 +987,4 @@ private _doorCost = missionNamespace getVariable [SETTING_DOOR_COST, 2];
 
 ---
 
-**For implementation details, see [Architecture](Architecture.md). For usage examples, see [Mission Maker Guide](Mission-Maker-Guide.md).**
+**For implementation details, see [Architecture](Architecture). For usage examples, see [Mission Maker Guide](Mission-Maker-Guide).**

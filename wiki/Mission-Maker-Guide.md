@@ -597,7 +597,7 @@ _ownersSelection = [[sides], [groups], [players]]
 **Returns:** None (feedback message sent to execUserId)
 
 **Notes:**
-- Marker colors configured via CBA settings (see [Configuration](Configuration.md))
+- Marker colors configured via CBA settings (see [Configuration](Configuration))
 - Tracking creates two markers: Active Ping (updates) and Last Ping (final position)
 - If target is destroyed, tracking status changes to "Dead"
 - Players can physically search for and disable trackers
@@ -1256,4 +1256,4 @@ systemChat format ["Registered %1 buildings.", count _buildings];
 
 ---
 
-**Need lower-level details?** Check the [API Reference](API-Reference.md) for complete function signatures and the [Architecture](Architecture.md) guide for internal data structures.
+**Need lower-level details?** Check the [API Reference](API-Reference) for complete function signatures and the [Architecture](Architecture) guide for internal data structures, or ask in [Discord](https://discord.gg/77th-jsoc-official).

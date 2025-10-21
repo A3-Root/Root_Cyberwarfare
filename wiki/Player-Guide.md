@@ -421,7 +421,7 @@ Power costs for hacking operations are configured in **Watt-hours (Wh)**:
 | GPS tracking | 2-10 (configurable per tracker) |
 | Light control | Included in CBA settings |
 
-All power costs can be adjusted via CBA settings (see [Configuration](Configuration.md)).
+All power costs can be adjusted via CBA settings (see [Configuration](Configuration)).
 
 ### Checking Battery Level
 
@@ -483,7 +483,7 @@ Two types of markers are created:
    - Remains for the configured duration after tracking ends
    - Helps locate the target even after tracking stops
 
-Marker colors can be customized via CBA settings (see [Configuration](Configuration.md)).
+Marker colors can be customized via CBA settings (see [Configuration](Configuration)).
 
 ### Physically Searching for GPS Trackers
 
@@ -514,7 +514,7 @@ If you have a GPS tracker item in your inventory (default: `ACE_Banana`, configu
 2. Navigate to **Equipment** → **Attach GPS Tracker**
 3. This attaches a tracker to yourself
 
-Mission makers can configure which item acts as the GPS tracker (see [Configuration](Configuration.md)).
+Mission makers can configure which item acts as the GPS tracker (see [Configuration](Configuration)).
 
 ### Disabling GPS Trackers
 
@@ -675,4 +675,4 @@ Check:
 
 ---
 
-**Need more help?** Check the [Zeus Guide](Zeus-Guide.md) or [Mission Maker Guide](Mission-Maker-Guide.md) for setup information, or visit the [GitHub Issues](https://github.com/A3-Root/Root_Cyberwarfare/issues) page to report bugs.
+**Need more help?** Check the [Zeus Guide](Zeus-Guide) or [Mission Maker Guide](Mission-Maker-Guide) for setup information, or visit the [GitHub Issues](https://github.com/A3-Root/Root_Cyberwarfare/issues) page to report bugs, or ask in [Discord](https://discord.gg/77th-jsoc-official).

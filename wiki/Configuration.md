@@ -39,8 +39,8 @@ Root's Cyber Warfare uses **CBA (Community Base Addons) Settings** for runtime c
 ### Categories
 
 Settings are organized into categories:
-- **Power Cost Settings** - Energy costs for hacking operations
 - **GPS Settings** - GPS tracker configuration and detection
+- **Power Cost Settings** - Energy costs for hacking operations
 
 ---
 
@@ -631,25 +631,4 @@ switch (_difficulty) do {
 
 ---
 
-## Performance Impact
-
-### Power Cost Settings
-**Performance Impact:** Negligible
-- Settings checked at operation time
-- No background processing
-- Minimal CPU/memory footprint
-
-### GPS Settings
-**Performance Impact:** Low to Moderate
-- GPS tracking creates periodic position updates
-- Map marker updates (every X seconds)
-- More trackers + higher frequency = higher impact
-
-**Optimization Tips:**
-- Use reasonable update frequencies (5-10 seconds)
-- Limit concurrent tracking (disable completed trackers)
-- Avoid very short tracking intervals (<3 seconds)
-
----
-
-**For gameplay impact, see [Player Guide](Player-Guide.md). For implementation details, see [Architecture](Architecture.md).**
+**For gameplay impact, see [Player Guide](Player-Guide). For implementation details, see [Architecture](Architecture).**

@@ -257,7 +257,7 @@ if (_type in ["powergrids", "all", "a"]) then {
             private _gridObject = objectFromNetId _objectNetId;
             private _mapGridPos = mapGridPosition _gridObject;
             private _displayName = getText (configOf _gridObject >> "displayName");
-            private _currentState = _gridObject getVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "OFF"];
+            private _currentState = _gridObject getVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "ON"];
             private _currentStateColor = ["#fa4c58", "#8ce10b"] select (_currentState == "ON");
             _string = format ["    %1 - %2 (%3) - Radius: %4m @ %5 - ", _gridId, _gridName, _displayName, _radius, _mapGridPos];
             [_computer, [[_string, [_currentState, _currentStateColor]]]] call AE3_armaos_fnc_shell_stdout;

@@ -95,21 +95,22 @@ if (_vehicleIDNum != 0) then {
                 if (_action == "battery") then {
                     _value = parseNumber _value;
                     if (_value < 1) then {
-                        [_vehicleObject, 0] remoteExec ["setFuel", _vehicleObject];
                         _invalidOption = false;
+                        [_vehicleObject, 0] remoteExec ["setFuel", _vehicleObject];
                     } else {
                         if (_value < 101) then {
+                            _invalidOption = false;
                             _value = _value / 100;
                             [_vehicleObject, _value] remoteExec ["setFuel", _vehicleObject];
-                            _invalidOption = false;
                         } else {
-                            [_vehicleObject, 1] remoteExec ["setDamage", _vehicleObject];
                             _invalidOption = false;
+                            [_vehicleObject, 1] remoteExec ["setDamage", _vehicleObject];
                         };
                     };
                 };
 
                 if (_action == "speed") then {
+                    _invalidOption = false;
                     _value = parseNumber _value;
                     private _vel = velocity _vehicleObject;
                     private _dir = getDir _vehicleObject;
@@ -118,7 +119,6 @@ if (_vehicleIDNum != 0) then {
                         (_vel select 1) + (cos _dir * _value),
                         (_vel select 2)
                     ]] remoteExec ["setVelocity", _vehicleObject];
-                    _invalidOption = false;
                 };
 
                 if (_action == "brakes") then {
@@ -242,20 +242,24 @@ if (_vehicleIDNum != 0) then {
     if (!_foundVehicle) then {
         _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_VEHICLE_NOT_FOUND", _vehicleIDNum];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        breakTo "exit";
     };
     if (_invalidOption) then {
         _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_ACTION_VALUE", _action, _value];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        breakTo "exit";
+    } else {
+        private _currentBatteryLevel = _battery getVariable "AE3_power_batteryLevel";
+        private _changeWh = _powerCost;
+        private _newLevel = _currentBatteryLevel - (_changeWh/1000);
+        [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
+        _string = format [localize "STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL", _newLevel*1000];
+        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     };
-    private _currentBatteryLevel = _battery getVariable "AE3_power_batteryLevel";
-    private _changeWh = _powerCost;
-    private _newLevel = _currentBatteryLevel - (_changeWh/1000);
-    [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
-    _string = format [localize "STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL", _newLevel*1000];
-    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 } else {
     _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_VEHICLE_ID", _vehicleID];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+    breakTo "exit";
 };
 
 scopeName "exit";

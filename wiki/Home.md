@@ -27,7 +27,7 @@ The mod supports the following hackable devices:
 
 ### For Players
 
-**[Player Guide](Player-Guide.md)** - Learn how to use the terminal and control devices
+**[Player Guide](Player-Guide)** - Learn how to use the terminal and control devices
 
 Topics covered:
 - Accessing the terminal via ACE interaction menu
@@ -38,7 +38,7 @@ Topics covered:
 
 ### For Zeus Curators
 
-**[Zeus Guide](Zeus-Guide.md)** - Use Zeus modules to set up cyber warfare scenarios
+**[Zeus Guide](Zeus-Guide)** - Use Zeus modules to set up cyber warfare scenarios
 
 Topics covered:
 - All 9 Zeus modules with detailed parameters
@@ -49,7 +49,7 @@ Topics covered:
 
 ### For Mission Makers
 
-**[Mission Maker Guide](Mission-Maker-Guide.md)** - Programmatically create cyber warfare scenarios
+**[Mission Maker Guide](Mission-Maker-Guide)** - Programmatically create cyber warfare scenarios
 
 Topics covered:
 - Device registration functions for all 8 device types
@@ -58,7 +58,7 @@ Topics covered:
 - initServer.sqf templates
 - Dynamic device registration during gameplay
 
-**[Eden Editor Guide](Eden-Editor-Guide.md)** - Use 3DEN modules for visual mission editing
+**[Eden Editor Guide](Eden-Editor-Guide)** - Use 3DEN modules for visual mission editing
 
 Topics covered:
 - All 8 3DEN editor modules with attributes
@@ -66,7 +66,7 @@ Topics covered:
 - Best practices for mission design
 - Example mission setup walkthrough
 
-**[API Reference](API-Reference.md)** - Complete function reference for scripters
+**[API Reference](API-Reference)** - Complete function reference for scripters
 
 Topics covered:
 - All public functions with signatures and examples
@@ -76,7 +76,7 @@ Topics covered:
 
 ### Technical Documentation
 
-**[Architecture](Architecture.md)** - Technical implementation details
+**[Architecture](Architecture)** - Technical implementation details
 
 Topics covered:
 - Data storage architecture (3-tier hybrid system)
@@ -85,7 +85,7 @@ Topics covered:
 - Power system mechanics (Wh/kWh conversion)
 - Function patterns and network architecture
 
-**[Configuration](Configuration.md)** - CBA settings reference
+**[Configuration](Configuration)** - CBA settings reference
 
 Topics covered:
 - All 10 CBA settings with defaults
@@ -156,7 +156,7 @@ powergrid 1234 overload   # Destroy generator and lights
 - **Questions?** Check the relevant guide pages above
 - **Found a bug?** Report it on [GitHub Issues](https://github.com/A3-Root/Root_Cyberwarfare/issues)
 - **Feature request?** Open an issue with the `enhancement` label
-- **Need support?** Join our [Discord](https://discord.gg/XXXXXX) <!-- Update if Discord exists -->
+- **Need support?** Join our [Discord](https://discord.gg/77th-jsoc-official)
 
 ## Version Information
 
@@ -172,4 +172,4 @@ powergrid 1234 overload   # Destroy generator and lights
 
 ---
 
-**Ready to start?** Jump to the **[Player Guide](Player-Guide.md)** to learn the basics, or explore the **[Zeus Guide](Zeus-Guide.md)** if you're setting up missions!
+**Ready to start?** Jump to the **[Player Guide](Player-Guide)** to learn the basics, or explore the **[Zeus Guide](Zeus-Guide)** if you're setting up missions!

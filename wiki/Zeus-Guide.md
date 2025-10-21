@@ -208,7 +208,7 @@ Available to Future Laptops: ✓ (checked)
 **Notes:**
 - Code executes in a scheduled environment
 - Be cautious with infinite loops or performance-heavy code
-- Code runs on the server (use `remoteExec` if you need client-side effects)
+- Code runs on the player machine executing the command
 - Device object is passed to code, so you can reference its position, variables, etc.
 
 **Feedback Message:**
@@ -283,7 +283,7 @@ Available to Future Laptops: (leave unchecked)
 **Notes:**
 - Download time is literal seconds (e.g., 10 = 10 real seconds)
 - File content supports newlines and special characters
-- Execution code runs on the server (use `remoteExec` for client-side)
+- Execution code runs on the player machine executing the command.
 - Players can read the file with `cat /home/user/Downloads/<filename>`
 
 **Feedback Message:**
@@ -372,9 +372,9 @@ Examples:
 - **Counter-surveillance**: Players can physically search for and disable trackers
 
 **Notes:**
-- Trackers can be physically searched for and disabled by players (see [Player Guide - GPS Tracker Mechanics](Player-Guide.md#gps-tracker-mechanics))
+- Trackers can be physically searched for and disabled by players (see [Player Guide - GPS Tracker Mechanics](Player-Guide#gps-tracker-mechanics))
 - If "Allow Retracking" is unchecked, tracker becomes single-use
-- Marker colors are configurable via CBA settings (see [Configuration](Configuration.md))
+- Marker colors are configurable via CBA settings (see [Configuration](Configuration))
 - Tracking stops if target is destroyed (status changes to "Dead")
 
 **Feedback Message:**
@@ -908,7 +908,7 @@ Result:
 
 **Solution**:
 - Adjust "Marker Visibility (Owners)" parameter
-- Check CBA settings for GPS marker colors (see [Configuration](Configuration.md))
+- Check CBA settings for GPS marker colors (see [Configuration](Configuration))
 
 ---
 
@@ -950,7 +950,7 @@ Result:
 **Solution**:
 - Test code in debug console first
 - Add `hint` or `systemChat` for debugging
-- Check if code runs on server vs client (use `remoteExec` if needed)
+- Check the intended recepient. The code by default runs on the player machine who executed the command.
 
 ---
 
@@ -969,4 +969,4 @@ Result:
 
 ---
 
-**Need more help?** Check the [Mission Maker Guide](Mission-Maker-Guide.md) for scripting solutions, or visit [GitHub Issues](https://github.com/A3-Root/Root_Cyberwarfare/issues) to report bugs.
+**Need more help?** Check the [Mission Maker Guide](Mission-Maker-Guide) for scripting solutions, or visit [GitHub Issues](https://github.com/A3-Root/Root_Cyberwarfare/issues) to report bugs, or ask in [Discord](https://discord.gg/77th-jsoc-official).

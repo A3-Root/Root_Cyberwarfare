@@ -396,7 +396,7 @@ Result: Only laptop1 can track enemyCommander
   - **Last Ping**: Shows final position after tracking ends
 
 **Marker Visibility:**
-- Configured globally via CBA settings (see [Configuration](Configuration.md))
+- Configured globally via CBA settings (see [Configuration](Configuration))
 - Can be set to specific sides, groups, or players
 
 **Common Use Cases:**
@@ -409,7 +409,7 @@ Result: Only laptop1 can track enemyCommander
 - Tracking stops if target is destroyed
 - If "Allow Retracking" is unchecked, tracker is single-use
 - Marker colors configured via CBA settings
-- Players can physically search for and disable trackers (see [Player Guide](Player-Guide.md#gps-tracker-mechanics))
+- Players can physically search for and disable trackers (see [Player Guide](Player-Guide#gps-tracker-mechanics))
 
 ---
 
@@ -704,16 +704,7 @@ Instead of complex scripting in `init.sqf`, use custom devices:
 - Control mission flow with device states
 - Create interactive elements (alarms, switches, terminals)
 
-### 9. Consider Performance with Power Grids
-
-Large radius power grids affect many lights:
-- **Small bases**: 50-200m radius
-- **Medium bases**: 200-500m radius
-- **Large bases**: 500-1000m radius
-
-Test performance in preview mode!
-
-### 10. Document Your Setup
+### 9. Document Your Setup
 
 Add comments in the editor:
 - Use Eden Editor's comment markers
@@ -850,4 +841,4 @@ Result: Only laptop1 can access doors, ACE breaching disabled
 
 ---
 
-**Need more advanced scripting?** Check the [Mission Maker Guide](Mission-Maker-Guide.md) for programmatic device registration and the [API Reference](API-Reference.md) for function documentation.
+**Need more advanced scripting?** Check the [Mission Maker Guide](Mission-Maker-Guide) for programmatic device registration and the [API Reference](API-Reference) for function documentation, or ask in [Discord](https://discord.gg/77th-jsoc-official).
