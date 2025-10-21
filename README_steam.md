@@ -4,7 +4,7 @@
 
 Designed for tactical missions requiring infiltration, sabotage, and electronic warfare. Fully integrated with ACE3, AE3 ArmaOS terminal, and Zeus/Eden editors. Tested with 67+ players on dedicated servers.
 
-[b]Current version - 1.0.0[/b]
+[b]Current version - 1.0.0.0[/b]
 
 [img]https://i.imgur.com/EWy3dQc.gif[/img]
 
@@ -120,9 +120,8 @@ Operations consume battery (Watt-hours). Commands fail if insufficient power. Re
 [*]Attach via ACE Self-Interact → Equipment → Attach GPS Tracker
 [*]Search others via ACE Interaction menu
 [*]Detection is chance-based (improved with detection devices)
-[*][img]https://i.postimg.cc/zXYGn0sx/20251020193610-1.jpg[/img]
 [/list]
-
+[img]https://i.postimg.cc/zXYGn0sx/20251020193610-1.jpg[/img]
 [img]https://i.postimg.cc/BQ5QN23g/20251020194006-1.jpg[/img]
 
 [hr][/hr]

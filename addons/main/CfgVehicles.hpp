@@ -182,8 +182,8 @@ class CfgVehicles {
 			};
 			class ROOT_CYBERWARFARE_3DEN_DEVICES_UNBREACHABLE: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_DEVICES_UNBREACHABLE";
-				displayName = "Make Unbreachable [WIP]";
-				tooltip = "If checked, building doors cannot be breached by ACE explosives or lockpicking (only hackable)";
+				displayName = "Make Unbreachable";
+				tooltip = "If checked, none of the building doors can be breached by ACE explosives or lockpicking. It is only openable via hacking.";
 				typeName = "BOOL";
 				defaultValue = 0;
 			};
