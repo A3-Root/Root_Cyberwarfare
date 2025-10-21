@@ -1,0 +1,12 @@
+*.pbo
+.hemttout
+hemtt
+hemtt.exe
+*.biprivatekey
+*.md
+**/*.json
+!README*.md
+!releases/CHANGELOG.md
+!wiki/*
+*.exe
+*.txt

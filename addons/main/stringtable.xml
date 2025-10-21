@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project name="Root_Cyberwarfare">
+    <Package name="Custom_Device_Operations">
+        <Key ID="STR_ROOT_CYBERWARFARE_CUSTOM_DEVICE_ACTIVATED">
+            <English>Custom device '%1' (ID: %2) activated.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_CUSTOM_DEVICE_DEACTIVATED">
+            <English>Custom device '%1' (ID: %2) deactivated.</English>
+        </Key>
+    </Package>
+    <Package name="Device_Operations">
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_ALREADY_LOCKED">
+            <English>Door already locked.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_ALREADY_UNLOCKED">
+            <English>Door already unlocked.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_LOCKED_SUCCESS">
+            <English>Door locked.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_UNLOCKED_SUCCESS">
+            <English>Door unlocked.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_OPERATION_COMPLETED_DOORS">
+            <English>Operation completed on %1 doors.</English>
+        </Key>
+    </Package>
+    <Package name="Drone_Operations">
+        <Key ID="STR_ROOT_CYBERWARFARE_DRONE_ALREADY_DISABLED">
+            <English>Error! Drone is already disabled or destroyed.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DRONE_ALREADY_FACTION">
+            <English>Error! Drone already of side %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DRONE_DISABLED_SUCCESS">
+            <English>Drone disabled.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DRONE_FACTION_CHANGED">
+            <English>Drone side changed.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_OPERATION_COMPLETED_DRONES">
+            <English>Operation completed on %1 drones.</English>
+        </Key>
+    </Package>
+    <Package name="Errors">
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DRONE">
+            <English>Error! Drone ID %1 not found or access denied.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_LIGHT">
+            <English>Error! Light ID %1 not found or access denied.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_POWERGRID">
+            <English>Access denied to Power Grid ID: %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_VEHICLE">
+            <English>Access denied to Vehicle ID: %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_BUILDING_NOT_FOUND">
+            <English>Error! Building ID %1 not found!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_CUSTOM_DEVICE_NOT_FOUND">
+            <English>Custom device with ID %1 not found.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_DOOR_NOT_IN_BUILDING">
+            <English>Error! No such door with ID: %1 in the building (ID: %2)!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_GENERATOR_DESTROYED">
+            <English>Error! Generator was destroyed and cannot be controlled!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER">
+            <English>Error! Insufficient Power!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_ACTION">
+            <English>Error! Invalid action - %1. Use: on, off, or overload</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_ACTION_VALUE">
+            <English>Error! Invalid Action/Value specified. Action: %1, Value: %2</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_BUILDING_ID">
+            <English>Error! Invalid BuildingID - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_CUSTOM_DEVICE_ID">
+            <English>Invalid input customId: %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_CUSTOM_DEVICE_STATE">
+            <English>Invalid input customState: %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DOOR_ID">
+            <English>Error! Invalid DoorID - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DOOR_STATE">
+            <English>Error! Invalid Door State Desired - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DRONE_FACTION">
+            <English>Error! Invalid Drone Faction - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DRONE_ID">
+            <English>Error! Invalid DroneID - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_GRID_ID">
+            <English>Error! Invalid Grid ID - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_INPUT">
+            <English>Error! Invalid Input - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_LIGHT_ID">
+            <English>Error! Invalid LightID - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_LIGHT_STATE">
+            <English>Error! Invalid Light State - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_VEHICLE_ID">
+            <English>Error! Invalid VehicleID - %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_BUILDINGS">
+            <English>Error! No accessible buildings found or access denied.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DRONES">
+            <English>Error! No accessible drones found or access denied.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DRONES_CHANGE_FACTION">
+            <English>Error! No accessible drones found that need faction change.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DRONES_TO_DISABLE">
+            <English>Error! No accessible drones found to disable.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_LIGHTS">
+            <English>Error! No accessible lights found or access denied.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_VEHICLES">
+            <English>Error! No vehicle found.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_BATTERY">
+            <English>Error! Battery not found or laptop has no internal battery!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_BUILDINGS_CRITERIA">
+            <English>Error! No accessible buildings found for the specified criteria.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_POWERGRIDS">
+            <English>Error! No power grids found.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_OVERLOAD_NOT_SUPPORTED">
+            <English>Error! This power grid does not support overload functionality.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_POWERGRID_NOT_FOUND">
+            <English>Power Grid ID %1 not found.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_POWERGRID_OBJECT_NOT_FOUND">
+            <English>Error! Power grid object not found.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_VEHICLE_NOT_FOUND">
+            <English>Vehicle ID %1 not found.</English>
+        </Key>
+    </Package>
+    <Package name="GPS">
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACHING_OBJECT">
+            <English>Attaching GPS Tracker to %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_OBJECT">
+            <English>Attach GPS Tracker</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_CANNOT_SEARCH_SELF">
+            <English>Cannot search yourself!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_SEARCH">
+            <English>Search for GPS Tracker</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_SEARCHING">
+            <English>Searching %1 for GPS Tracker</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_UNABLE_ATTACH">
+            <English>Unable to attach GPS Tracker!</English>
+        </Key>
+    </Package>
+    <Package name="Light_Operations">
+        <Key ID="STR_ROOT_CYBERWARFARE_LIGHT_ALREADY_OFF">
+            <English>Light already off.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LIGHT_ALREADY_ON">
+            <English>Light already on.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LIGHT_TURNED_OFF">
+            <English>Light turned off.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LIGHT_TURNED_ON">
+            <English>Light turned on.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_OPERATION_COMPLETED_LIGHTS">
+            <English>Operation completed on %1 lights.</English>
+        </Key>
+    </Package>
+    <Package name="Power">
+        <Key ID="STR_ROOT_CYBERWARFARE_AFFECTED_DOORS">
+            <English>Affected Doors: %1. Power Cost: %2W.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL">
+            <English>New Power Level: %1Wh</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_POWER_COST">
+            <English>Power Cost: %1Wh</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_POWER_COST_PREVIEW">
+            <English>Power Cost: %1Wh.</English>
+        </Key>
+    </Package>
+    <Package name="PowerGrid">
+        <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_ACTIVATED">
+            <English>Power grid activated: %1 lights turned ON within %2m radius</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_CANCELLED">
+            <English>Operation cancelled by user.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_CONFIRMATION_TIMEOUT">
+            <English>Confirmation timed out. Aborting...</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_DEACTIVATED">
+            <English>Power grid deactivated: %1 lights turned OFF within %2m radius</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_OVERLOAD_WARNING">
+            <English>WARNING: Power grid overloaded! Generator destroyed. %1 objects affected within %2m radius.</English>
+        </Key>
+    </Package>
+    <Package name="Prompts">
+        <Key ID="STR_ROOT_CYBERWARFARE_CONFIRM_PROMPT">
+            <English>Are you sure? (Y/N):</English>
+        </Key>
+    </Package>
+    <Package name="Settings">
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_CATEGORY">
+            <English>Root Cyber Warfare</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_CUSTOM_COST">
+            <English>Custom Device Power Cost</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_CUSTOM_COST_DESC">
+            <English>Power cost in Wh to hack a custom device</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DOOR_COST">
+            <English>Door Lock/Unlock Power Cost</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DOOR_COST_DESC">
+            <English>Power cost in Wh to lock or unlock a door</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DRONE_HACK_COST">
+            <English>Drone Hacking Power Cost</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DRONE_HACK_COST_DESC">
+            <English>Power cost in Wh to disable a drone</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DRONE_SIDE_COST">
+            <English>Drone Side Change Power Cost</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DRONE_SIDE_COST_DESC">
+            <English>Power cost in Wh to change a drone's faction</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY">
+            <English>GPS Settings</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_ACTIVE">
+            <English>GPS Marker Color (Active Ping)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_ACTIVE_DESC">
+            <English>Color of the GPS tracker marker while actively tracking</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_LASTPING">
+            <English>GPS Marker Color (Last Ping)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_LASTPING_DESC">
+            <English>Color of the GPS tracker marker after tracking ends (last known position)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_NORMAL">
+            <English>GPS Search Success Chance (Normal)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_NORMAL_DESC">
+            <English>Probability (0.0 to 1.0) of detecting a GPS tracker without spectrum device</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_TOOL">
+            <English>GPS Search Success Chance (With Tool)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_TOOL_DESC">
+            <English>Probability (0.0 to 1.0) of detecting a GPS tracker with spectrum device equipped</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SPECTRUM_DEVICES">
+            <English>GPS Spectrum Detection Devices</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SPECTRUM_DEVICES_DESC">
+            <English>Comma-separated classnames of spectrum devices that improve GPS tracker detection success rate</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_TRACKER_DEVICE">
+            <English>GPS Tracker Item</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_TRACKER_DEVICE_DESC">
+            <English>Classname of item used as GPS tracker</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_POWERGRID_COST">
+            <English>Power Grid Control Power Cost</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_POWERGRID_COST_DESC">
+            <English>Power cost in Wh to control power grid (on/off/overload)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY">
+            <English>Power Cost Settings</English>
+        </Key>
+    </Package>
+    <Package name="Vehicle_Operations">
+        <Key ID="STR_ROOT_CYBERWARFARE_VEHICLE_INCOMPATIBLE_BRAKES">
+            <English>Vehicle incompatible for applying brakes!</English>
+        </Key>
+    </Package>
+    <Package name="Zeus">
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_ABORTED">
+            <English>Aborted</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_COMPLETE">
+            <English>Copied %1 device links from %2 to %3</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_SUCCESS">
+            <English>Device Links Copied!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_ADDED">
+            <English>Root Cyber Warfare: Added Hacking Tools to Path: %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_SUCCESS">
+            <English>Hacking Tool Added to the Device!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_INVALID_PATH_TYPE">
+            <English>Invalid path parameter type. Expected string, got %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_INVALID_TARGET">
+            <English>Invalid target! Please point at a laptop or device.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_NO_DEVICE_LINKS">
+            <English>No laptops with device links found!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_POWER_MODIFIED">
+            <English>Modified Hacking Power Cost!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_SAME_LAPTOP_ERROR">
+            <English>Source and target cannot be the same laptop!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_SOURCE_LAPTOP_NOT_FOUND">
+            <English>Source laptop not found!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_TARGET_LAPTOP_NOT_FOUND">
+            <English>Target laptop not found!</English>
+        </Key>
+    </Package>
+</Project>

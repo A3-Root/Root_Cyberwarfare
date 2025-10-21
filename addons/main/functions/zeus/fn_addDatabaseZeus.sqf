@@ -1,0 +1,86 @@
+/*
+ * Author: Root
+ * Zeus module to add a hackable database/file
+ *
+ * Arguments:
+ * 0: _logic <OBJECT> - Zeus logic module
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [_logic] call Root_fnc_addDatabaseZeus;
+ *
+ * Public: No
+ */
+
+params ["_logic"];
+
+if !(hasInterface) exitWith {};
+
+private _rootcwdatabaseFileObject = "Land_HelipadEmpty_F" createVehicle getPosATL _logic;
+deleteVehicle _logic;
+
+// Get all existing laptops with hacking tools
+private _allComputers = [];
+{
+    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
+        private _computerName = _x getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME];
+        private _netId = netId _x;
+        private _gridPos = mapGridPosition _x;
+        _allComputers pushBack [_netId, format ["%1 [Grid: %2]", _computerName, _gridPos]];
+    };
+} forEach (24 allObjects 1);
+
+private _dialogControls = [
+    ["EDIT", ["File Name", "Name of the File"], ["My Other Projects"]],
+    ["SLIDER", ["File Hack Time (in seconds)", "Time taken to hack and download the file (in seconds)"], [1, 300, 10, 0]],
+    ["EDIT:MULTI", ["File Contents", "Content of the file that could be read after downloading via the command 'cat <filename>"], ["Check out my other projects that could interest you here: https://github.com/A3-Root/", {}, 7]],
+    ["EDIT:CODE", ["Code to Execute on Download", "Code that will be executed in a SCHEDULED environment (spawn) when file is successfully downloaded. The code is run on the player who downloaded the file. Default parameters ['_computer', '_playerNetID']"], ["hint str format ['File Downloaded ON: %1 ---- BY %2', getText (configOf (_this select 0) >> 'displayName'), (_this select 1)];", {}, 7]],
+    ["TOOLBOX:ENABLED", ["Available to Future Laptops", "Should this database be available to laptops that are added later?"], false]
+];
+
+{
+    _x params ["_netId", "_computerName"];
+    _dialogControls pushBack ["CHECKBOX", [_computerName, format ["Link File to this computer for download?"]], false];
+} forEach _allComputers;
+
+[
+    "Add Hackable File", 
+    _dialogControls,
+    // Fix the dialog result handler section:
+    {
+        params ["_results", "_args"];
+        _args params ["_fileObject", "_allComputers"];
+        
+        // First 5 results are the original controls + new code field + availability
+        _results params ["_filename", "_filesize", "_filecontent", "_executionCode", "_availableToFutureLaptops"];
+        
+        // The rest are checkbox values for each computer
+        private _linkedComputers = [];
+        private _checkboxStartIndex = 5;
+        
+        {
+            if (_results select (_checkboxStartIndex + _forEachIndex)) then {
+                _linkedComputers pushBack (_x select 0); // Push the netId
+            };
+        } forEach _allComputers;
+
+        // If available to future laptops, keep the selected computers but mark for future availability
+        // If not available to future laptops and no computers selected, use all current computers
+        if (!_availableToFutureLaptops && _linkedComputers isEqualTo []) then {
+            _linkedComputers = _allComputers apply { _x select 0 };
+        };
+
+        if (_filesize < 1) then {_filesize = 1};
+
+        private _execUserId = clientOwner;
+        [_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
+        ["Hackable File Added!"] call zen_common_fnc_showMessage;
+    },  
+    {
+        [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;
+        playSound "FD_Start_F";
+    }, 
+    [_rootcwdatabaseFileObject, _allComputers]
+] call zen_dialog_fnc_create;
