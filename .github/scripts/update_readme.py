@@ -47,11 +47,13 @@ def update_readme_version(version, status="success"):
     readme_path = Path("README.md")
     if not readme_path.exists():
         print("❌ README.md not found")
-        return False
+        return False, None
     
     try:
         with open(readme_path, 'r', encoding='utf-8') as f:
-            content = f.read()
+            old_content = f.read()
+        
+        content = old_content
         
         # Update version badge
         version_badge_pattern = r'!\[Version\]\(https://img\.shields\.io/badge/version-[^-]+-blue\)'
@@ -60,30 +62,42 @@ def update_readme_version(version, status="success"):
         
         # Update build status badge
         if status == "success":
-            build_badge = '![Build](https://img.shields.io/badge/Build-Passing-green)'
+            build_badge = '![build](https://img.shields.io/badge/build-passing-green)'
         else:
-            build_badge = '![Build](https://img.shields.io/badge/Build-Failing-red)'
+            build_badge = '![build](https://img.shields.io/badge/build-failing-red)'
         
-        build_badge_pattern = r'!\[Build\]\(https://img\.shields\.io/badge/Build-(Passing|Failing)-(green|red)\)'
+        build_badge_pattern = r'!\[build\]\(https://img\.shields\.io/badge/build-(passing|failing)-(green|red)\)'
         content = re.sub(build_badge_pattern, build_badge, content)
         
-        # Update version in the main title if present
-        version_in_title_pattern = r'# Root\'s Cyber Warfare\n\n!\[Version\].*?version-([\d.]+)-blue'
-        content = re.sub(version_in_title_pattern, f'# Root\'s Cyber Warfare\n\n{new_version_badge}', content)
+        # Check if content actually changed
+        if content == old_content:
+            print("ℹ️  No changes needed in README")
+            return True, False  # Success, but no changes
         
         with open(readme_path, 'w', encoding='utf-8') as f:
             f.write(content)
         
         print(f"✅ Updated README with version {version} and status: {status}")
-        return True
+        return True, True  # Success with changes
         
     except Exception as e:
         print(f"❌ Failed to update README: {e}")
-        return False
+        return False, False
 
 def commit_readme_changes(version, status):
-    """Commit the updated README back to the repository"""
+    """Commit the updated README back to the repository if there are changes"""
     try:
+        # Check if there are any changes to README.md
+        result = subprocess.run(
+            ["git", "diff", "--quiet", "README.md"], 
+            capture_output=True
+        )
+        
+        # If returncode is 1, there are changes
+        if result.returncode == 0:
+            print("ℹ️  No changes to README.md, skipping commit")
+            return True
+        
         # Configure git
         subprocess.run(["git", "config", "user.name", "github-actions"], check=True)
         subprocess.run(["git", "config", "user.email", "github-actions@github.com"], check=True)
@@ -102,6 +116,9 @@ def commit_readme_changes(version, status):
         print(f"✅ Committed README changes to repository")
         return True
         
+    except subprocess.CalledProcessError as e:
+        print(f"❌ Git command failed: {e}")
+        return False
     except Exception as e:
         print(f"❌ Failed to commit README changes: {e}")
         return False
@@ -122,9 +139,15 @@ def main():
     print(f"📝 Updating README - Version: {latest_version}, Status: {status}")
     
     # Update README
-    if update_readme_version(latest_version, status):
-        # Commit changes back to repository
-        commit_readme_changes(latest_version, status)
+    success, changes_made = update_readme_version(latest_version, status)
+    
+    if success:
+        if changes_made:
+            # Commit changes back to repository
+            if not commit_readme_changes(latest_version, status):
+                sys.exit(1)
+        else:
+            print("✅ README is already up to date, no commit needed")
     else:
         print("❌ Failed to update README")
         sys.exit(1)
