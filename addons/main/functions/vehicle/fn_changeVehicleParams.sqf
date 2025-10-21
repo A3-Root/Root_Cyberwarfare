@@ -185,26 +185,20 @@ if (_vehicleIDNum != 0) then {
                         case "on": {
                             if (!_isLightOn) then {
                                 if (_hasAI) then {
-                                    _vehicleObject enableAI "LIGHTS";
-                                    [_vehicleObject, _lightHitPoints] call _fixVehicleLights;
-                                    [_vehicleObject, true] remoteExec ["setPilotLight", 0];
-                                } else {
-                                    [_vehicleObject, _lightHitPoints] call _fixVehicleLights;
-                                    [_vehicleObject, true] remoteExec ["setPilotLight", _vehicleObject];
+                                    [_vehicleObject, "LIGHTS"] remoteExec ["enableAI", 0];
                                 };
+                                [_vehicleObject, _lightHitPoints] call _fixVehicleLights;
+                                [_vehicleObject, true] remoteExec ["setPilotLight", _vehicleObject];
                             };
                         };
 
                         case "off": {
                             if (_isLightOn) then {
                                 if (_hasAI) then {
-                                    _vehicleObject disableAI "LIGHTS";
-                                    [_vehicleObject, _lightHitPoints] call _destroyVehicleLights;
-                                    [_vehicleObject, false] remoteExec ["setPilotLight", 0];
-                                } else {
-                                    [_vehicleObject, _lightHitPoints] call _destroyVehicleLights;
-                                    [_vehicleObject, false] remoteExec ["setPilotLight", _vehicleObject];
+                                    [_vehicleObject, "LIGHTS"] remoteExec ["disableAI", 0];
                                 };
+                                [_vehicleObject, _lightHitPoints] call _destroyVehicleLights;
+                                [_vehicleObject, false] remoteExec ["setPilotLight", _vehicleObject];
                             };
                         };
                     };
