@@ -1,8 +1,8 @@
 # Root's Cyber Warfare
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![Build](https://img.shields.io/badge/Build-Passing-green)
-[![GitHub release](https://img.shields.io/github/release/A3-Root/Root_Cyberwarfare.svg)](https://github.com/A3-Root/Root_Cyberwarfare/releases)
+![version](https://img.shields.io/badge/version-1.0.0-blue)
+[![build](https://github.com/A3-Root/Root_Cyberwarfare/workflows/Auto%20Release%20with%20Smart%20Version%20Retention/badge.svg)](https://github.com/A3-Root/Root_Cyberwarfare/actions)
+[![release](https://img.shields.io/github/release/A3-Root/Root_Cyberwarfare.svg)](https://github.com/A3-Root/Root_Cyberwarfare/releases)
 [![License](https://img.shields.io/badge/License-APL--SA-blue.svg)](https://github.com/A3-Root/Root_Cyberwarfare/blob/master/LICENSE)
 
 ![License](https://data.bistudio.com/images/license/APL-SA.png)
@@ -190,7 +190,3 @@ See [LICENSE](LICENSE) file for full terms.
 - [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=XXXXXX)
 - [Issue Tracker](https://github.com/A3-Root/Root_Cyberwarfare/issues)
 - [Discord](https://discord.gg/77th-jsoc-official)
-
----
-
-**Improved adaptation and expansion of the original Cyber Warfare mod created by Mister Adrian.**
