@@ -168,7 +168,7 @@ powergrid 1234 overload   # Destroy generator and lights
 
 - **Root** (xMidnightSnowx) - Development and maintenance
 - **Mister Adrian** - Original Cyber Warfare mod creator
-- **Community** - Bug reports, feature suggestions, and testing
+- **77th JSOC** - Bug reports, feature suggestions, and testing
 
 ---
 

@@ -1,0 +1,15 @@
+name = "Root's Cyber Warfare";
+author = "Root";
+tooltip = "Root's Cyber Warfare";
+tooltipOwned = "Root's Cyber Warfare";
+picture = "root_cyberwarfare_logo.paa";
+logo = "root_cyberwarfare_logo.paa";
+logoOver = "root_cyberwarfare_logo.paa";
+logoSmall = "root_cyberwarfare_logo.paa";
+action = "https://github.com/A3-Root/Root_CyberWarfare";
+actionName = "Website";
+overview = "Root's Cyber Warfare";
+hidePicture = 0;
+hideName = 0;
+overviewText = "Root's Cyber Warfare";
+overviewFootnote = "Improved adaptation and expansion of the original Cyber Warfare mod created by Mister Adrian.";

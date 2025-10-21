@@ -196,4 +196,15 @@ if (hasInterface) then {
     }, []] call CBA_fnc_waitUntilAndExecute;
 };
 
+// ============================================================================
+// Initialize Breach Mod Integration
+// ============================================================================
+// Wait for TSP Breach mod to load, then override its functions to prevent
+// breaching of cyber-locked doors. Runs on all machines since breach effects
+// are client-side.
+
+[{!isNil "tsp_fnc_breach_adjust"}, {
+    call FUNC(initBreachIntegration);
+}] call CBA_fnc_waitUntilAndExecute;
+
 LOG_INFO("Post-init complete");

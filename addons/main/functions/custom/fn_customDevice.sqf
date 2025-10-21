@@ -55,6 +55,8 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
         private _storedCustomId = _x select 0;
         if(_customId == _storedCustomId) then {
             _deviceFound = true;
+            _string = localize "STR_ROOT_CYBERWARFARE_CONFIRM_PROMPT";
+            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             private _time = time;
             _time = _time + 10;
             private _continue = false;

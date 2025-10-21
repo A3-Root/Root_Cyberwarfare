@@ -2,7 +2,7 @@
 import subprocess
 import os
 from pathlib import Path
-from packaging.version import Version
+from packaging.version import Version # type: ignore
 from collections import defaultdict
 
 def get_changelog_notes():
@@ -71,7 +71,7 @@ def main():
 
         # Get release notes from changelog
         notes = get_changelog_notes()
-        title = f"Root's Cyber Warfare v{version}"
+        title = f"Version {version}"
 
         # Check if release already exists
         result = subprocess.run(
@@ -127,7 +127,7 @@ def main():
     if latest_zip.exists():
         print("🔁 Processing latest release...")
         notes = get_changelog_notes()
-        title = "Root's Cyber Warfare Latest Release"
+        title = "[Latest]"
         
         # Check if latest release exists
         result = subprocess.run(

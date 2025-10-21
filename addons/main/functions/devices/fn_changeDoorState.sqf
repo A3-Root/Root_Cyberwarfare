@@ -121,6 +121,12 @@ if (_doorId isEqualTo "a") then {
     private _newState = parseNumber (_doorDesiredState isEqualTo "lock");
     {
         _building setVariable [format ["bis_disabled_Door_%1", _x], _newState, true];
+        // Mark/unmark door as cyber-locked for breach mod integration
+        if (_doorDesiredState isEqualTo "lock") then {
+            _building setVariable [format ["ROOT_CYBERWARFARE_CYBER_LOCKED_%1", _x], true, true];
+        } else {
+            _building setVariable [format ["ROOT_CYBERWARFARE_CYBER_LOCKED_%1", _x], nil, true];
+        };
     } forEach _doorsOfBuilding;
 
     // Broadcast event
@@ -166,6 +172,13 @@ if (_doorId isEqualTo "a") then {
 
     // Apply change
     _building setVariable [format ["bis_disabled_Door_%1", _doorIdNum], _targetState, true];
+
+    // Mark/unmark door as cyber-locked for breach mod integration
+    if (_doorDesiredState isEqualTo "lock") then {
+        _building setVariable [format ["ROOT_CYBERWARFARE_CYBER_LOCKED_%1", _doorIdNum], true, true];
+    } else {
+        _building setVariable [format ["ROOT_CYBERWARFARE_CYBER_LOCKED_%1", _doorIdNum], nil, true];
+    };
 
     // Broadcast event
     ["root_cyberwarfare_deviceStateChanged", [DEVICE_TYPE_DOOR, _buildingIdNum, _doorDesiredState]] call CBA_fnc_serverEvent;
