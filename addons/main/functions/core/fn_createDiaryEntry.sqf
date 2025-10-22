@@ -142,7 +142,7 @@ private _diaryVehicles = player createDiaryRecord [
 	battery [0-200] // Set battery/fuel percentage (0-100 normal, >100 explodes vehicle)<br/>
 	speed [number]  // Add velocity to vehicle in current direction<br/>
 	brakes [apply|release] // Apply or release brakes<br/>
-	lights [on|off] // Toggle vehicle lights (empty vehicles only)<br/>
+	lights [on|off] // Toggle vehicle lights<br/>
 	engine [on|off] // Start or stop engine remotely<br/>
 	alarm [seconds] // Trigger alarm for specified seconds<br/><br/>
 
