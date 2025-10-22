@@ -4,7 +4,7 @@
  * Description: Modifies vehicle parameters (battery, speed, brakes, lights, engine, alarm)
  *
  * Arguments:
- * 0: _owner <ANY> - Owner parameter (legacy compatibility)
+ * 0: _owner <NUMBER> - Machine ID (ownerID) of the client executing this command
  * 1: _computer <OBJECT> - The laptop/computer object
  * 2: _nameOfVariable <STRING> - Variable name for completion flag
  * 3: _vehicleID <STRING> - Vehicle ID
@@ -16,7 +16,7 @@
  * None
  *
  * Example:
- * [nil, _laptop, "var1", "1234", "battery", "50", "/tools/"] call Root_fnc_changeVehicleParams;
+ * [123, _laptop, "var1", "1234", "battery", "50", "/tools/"] call Root_fnc_changeVehicleParams;
  *
  * Public: No
  */

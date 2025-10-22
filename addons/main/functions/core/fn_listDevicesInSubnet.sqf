@@ -4,7 +4,7 @@
  * Description: Lists all accessible devices in the subnet for a computer
  *
  * Arguments:
- * 0: _owner <ANY> - Owner parameter (legacy compatibility)
+ * 0: _owner <NUMBER> - Machine ID (ownerID) of the client executing this command
  * 1: _computer <OBJECT> - The laptop/computer object
  * 2: _nameOfVariable <STRING> - Variable name for completion flag
  * 3: _commandPath <STRING> - Command path for access checking
@@ -13,7 +13,7 @@
  * None
  *
  * Example:
- * [nil, _laptop, "var1", "/tools/"] call Root_fnc_listDevicesInSubnet;
+ * [123, _laptop, "var1", "/tools/"] call Root_fnc_listDevicesInSubnet;
  *
  * Public: No
  */
@@ -253,7 +253,7 @@ if (_type in ["powergrids", "all", "a"]) then {
         _string = format ["Power Grids:"];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         {
-            _x params ["_gridId", "_objectNetId", "_gridName", "_radius", "_allowExplosionActivate", "_allowExplosionDeactivate", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops", "_powerCost", "_linkedComputers"];
+            _x params ["_gridId", "_objectNetId", "_gridName", "_radius", "_allowExplosionOverload", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops", "_powerCost", "_linkedComputers"];
             private _gridObject = objectFromNetId _objectNetId;
             private _mapGridPos = mapGridPosition _gridObject;
             private _displayName = getText (configOf _gridObject >> "displayName");

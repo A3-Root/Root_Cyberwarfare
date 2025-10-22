@@ -64,7 +64,7 @@ if (_spectrumDevices isEqualTo []) then {
 };
 
 // Check if target actually has a GPS tracker
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
 private _allGpsTrackers = _allDevices select 5;
 
 private _targetNetId = netId _target;

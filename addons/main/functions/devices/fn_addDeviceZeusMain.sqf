@@ -35,7 +35,7 @@ if (_execUserId == 0) then {
 };
 
 // Load device arrays from global storage
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
 private _allDoors = _allDevices select 0;
 private _allLamps = _allDevices select 1;
 

@@ -4,7 +4,7 @@
  * Description: Starts tracking a GPS tracker and displays its position on the map
  *
  * Arguments:
- * 0: _owner <ANY> - Owner parameter (legacy compatibility)
+ * 0: _owner <NUMBER> - Machine ID (ownerID) of the client executing this command
  * 1: _computer <OBJECT> - The laptop/computer object
  * 2: _nameOfVariable <STRING> - Variable name for completion flag
  * 3: _trackerId <STRING> - Tracker ID to display
@@ -14,7 +14,7 @@
  * None
  *
  * Example:
- * [nil, _laptop, "var1", "1234", "/backdoor_gpstrack"] call Root_fnc_displayGPSPosition;
+ * [123, _laptop, "var1", "1234", "/backdoor_gpstrack"] call Root_fnc_displayGPSPosition;
  *
  * Public: No
  */

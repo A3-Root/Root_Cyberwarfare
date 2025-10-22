@@ -155,7 +155,7 @@
         #define LOG_DEBUG_3(msg,arg1,arg2,arg3) diag_log text format ["[ROOT_CYBERWARFARE DEBUG] " + msg, arg1, arg2, arg3]
     #endif
 #else
-    // No-op when debug disabled (zero performance impact)
+    // No-op when debug disabled
     #ifndef LOG_DEBUG
         #define LOG_DEBUG(msg)
     #endif

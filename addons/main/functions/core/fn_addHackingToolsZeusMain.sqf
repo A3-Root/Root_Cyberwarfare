@@ -320,11 +320,12 @@ _content = "
     private _databaseId = (_ae3OptsThings select 0);
 
     private _owner = clientOwner;
+    private _playerObject = player;
 
     private _nameOfVariable = 'ROOT_CYBERWARFARE_DOWNLOAD_DATABASE-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _databaseId, _commandName] remoteExec ['Root_fnc_downloadDatabase', _owner];
+    [_owner, _computer, _nameOfVariable, _databaseId, _playerObject, _commandName] remoteExec ['Root_fnc_downloadDatabase', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
@@ -356,11 +357,12 @@ _content = "
     private _customState = (_ae3OptsThings select 1);
 
     private _owner = clientOwner;
+    private _playerObject = player;
 
     private _nameOfVariable = 'ROOT_CYBERWARFARE_CUSTOM_DEVICE-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _customId, _customState, _commandName] remoteExec ['Root_fnc_customDevice', _owner];
+    [_owner, _computer, _nameOfVariable, _customId, _customState, _playerObject, _commandName] remoteExec ['Root_fnc_customDevice', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {

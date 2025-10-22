@@ -4,13 +4,14 @@ class CfgFunctions {
 
 		class Eden {
 			file = "\z\root_cyberwarfare\addons\main\functions\3den";
-			class 3denAddHackingTools {};
-			class 3denAdjustPowerCost {};
-			class 3denAddDevices {};
-			class 3denAddDatabase {};
-			class 3denAddVehicle {};
-			class 3denAddGPSTracker {};
 			class 3denAddCustomDevice {};
+			class 3denAddDatabase {};
+			class 3denAddDevices {};
+			class 3denAddGPSTracker {};
+			class 3denAddHackingTools {};
+			class 3denAddPowerGenerator {};
+			class 3denAddVehicle {};
+			class 3denAdjustPowerCost {};
 		};
 
 		class Core {

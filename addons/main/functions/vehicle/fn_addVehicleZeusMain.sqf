@@ -47,7 +47,7 @@ if (_isDroneCall) then {
     };
 
     // Load device arrays from global storage
-    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
+    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
     private _allDrones = _allDevices select 2;
 
     private _netId = netId _targetObject;
@@ -148,7 +148,7 @@ if (_isDroneCall) then {
     };
 
 // Load device arrays from global storage
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
 private _allVehicles = _allDevices select 6;
 
 private _netId = netId _targetObject;

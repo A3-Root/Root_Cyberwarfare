@@ -29,7 +29,7 @@ if (_execUserId == 0) then {
 };
 
 // Load device arrays from global storage
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
 private _allDatabases = _allDevices select 3;
 
 // Generate unique database ID

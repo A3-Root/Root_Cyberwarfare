@@ -4,7 +4,7 @@
  * Description: Changes the state of a light or all accessible lights
  *
  * Arguments:
- * 0: _owner <ANY> - Owner parameter (legacy compatibility)
+ * 0: _owner <NUMBER> - Machine ID (ownerID) of the client executing this command
  * 1: _computer <OBJECT> - The laptop/computer object
  * 2: _nameOfVariable <STRING> - Variable name for completion flag
  * 3: _lightId <STRING> - Light ID or "a" for all lights
@@ -15,7 +15,7 @@
  * None
  *
  * Example:
- * [nil, _laptop, "var1", "1234", "on", "/tools/"] call Root_fnc_changeLightState;
+ * [123, _laptop, "var1", "1234", "on", "/tools/"] call Root_fnc_changeLightState;
  *
  * Public: No
  */

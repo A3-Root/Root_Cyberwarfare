@@ -4,7 +4,7 @@
  * Description: Controls power grid devices (on/off/overload)
  *
  * Arguments:
- * 0: _owner <ANY> - Owner parameter (legacy compatibility)
+ * 0: _owner <NUMBER> - Machine ID (ownerID) of the client executing this command
  * 1: _computer <OBJECT> - The laptop/computer object
  * 2: _nameOfVariable <STRING> - Variable name for completion flag
  * 3: _gridId <STRING> - Power grid ID
@@ -15,7 +15,7 @@
  * None
  *
  * Example:
- * [nil, _laptop, "var1", "1234", "on", "/tools/"] call Root_fnc_powerGridControl;
+ * [123, _laptop, "var1", "1234", "on", "/tools/"] call Root_fnc_powerGridControl;
  *
  * Public: No
  */
@@ -214,9 +214,9 @@ private _foundGrid = false;
                     _gridObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "DESTROYED", true];
 
                     // Create spark effects
-                    private _surround_pos = [(_generatorPosition select 0) + random [-10, 0, 10], (_generatorPosition select 1) + random [-10, 0, 10], (_generatorPosition select 2) + random [0, 1.5, 3]];
+                    private _surround_pos = [(_generatorPosition select 0) + (floor random (10) - 5), (_generatorPosition select 1) + (floor random (10) - 5), (_generatorPosition select 2) + (floor random (3))];
                     for "_i" from 1 to 5 do {
-                        _surround_pos = [(_generatorPosition select 0) + (floor random (20) - 10), (_generatorPosition select 1) + (floor random (20) - 10), (_generatorPosition select 2) + (floor random (3))];
+                        _surround_pos = [(_generatorPosition select 0) + (floor random (10) - 5), (_generatorPosition select 1) + (floor random (10) - 5), (_generatorPosition select 2) + (floor random (3))];
                         private _claymore = "ClaymoreDirectionalMine_Remote_Ammo_Scripted" createVehicle _surround_pos;
                         _claymore setDamage 1;
                         uiSleep (random [0.1, 0.2, 0.3]);

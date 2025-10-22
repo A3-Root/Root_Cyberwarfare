@@ -334,7 +334,7 @@ Controls door lock state.
 
 | Index | Name | Type | Default | Description |
 |-------|------|------|---------|-------------|
-| 0 | _owner | ANY | nil | Legacy parameter (use nil) |
+| 0 | _owner | NUMBER | nil | Legacy parameter (use nil) |
 | 1 | _computer | OBJECT | - | Laptop object |
 | 2 | _nameOfVariable | STRING | - | Completion variable name |
 | 3 | _buildingId | STRING | - | Building device ID |
@@ -345,7 +345,7 @@ Controls door lock state.
 
 **Example:**
 ```sqf
-[nil, _laptop, "var1", "1234", "2881", "lock"] call Root_fnc_changeDoorState;
+[123, _laptop, "var1", "1234", "2881", "lock"] call Root_fnc_changeDoorState;
 ```
 
 ---
@@ -363,7 +363,7 @@ Controls light on/off state.
 
 | Index | Name | Type | Default |
 |-------|------|------|---------|
-| 0 | _owner | ANY | nil |
+| 0 | _owner | NUMBER | nil |
 | 1 | _computer | OBJECT | - |
 | 2 | _nameOfVariable | STRING | - |
 | 3 | _lightId | STRING | - |
@@ -375,7 +375,7 @@ Controls light on/off state.
 
 **Example:**
 ```sqf
-[nil, _laptop, "var1", "5678", "off"] call Root_fnc_changeLightState;
+[123, _laptop, "var1", "5678", "off"] call Root_fnc_changeLightState;
 ```
 
 ---
@@ -393,7 +393,7 @@ Changes drone faction/side.
 
 | Index | Name | Type | Default |
 |-------|------|------|---------|
-| 0 | _owner | ANY | nil |
+| 0 | _owner | NUMBER | nil |
 | 1 | _computer | OBJECT | - |
 | 2 | _nameOfVariable | STRING | - |
 | 3 | _droneId | STRING | - |
@@ -405,7 +405,7 @@ Changes drone faction/side.
 
 **Example:**
 ```sqf
-[nil, _laptop, "var1", "2", "east"] call Root_fnc_changeDroneFaction;
+[123, _laptop, "var1", "2", "east"] call Root_fnc_changeDroneFaction;
 ```
 
 ---
@@ -423,7 +423,7 @@ Disables (destroys) drone.
 
 | Index | Name | Type | Default |
 |-------|------|------|---------|
-| 0 | _owner | ANY | nil |
+| 0 | _owner | NUMBER | nil |
 | 1 | _computer | OBJECT | - |
 | 2 | _nameOfVariable | STRING | - |
 | 3 | _droneId | STRING | - |
@@ -432,7 +432,7 @@ Disables (destroys) drone.
 
 **Example:**
 ```sqf
-[nil, _laptop, "var1", "2"] call Root_fnc_disableDrone;
+[123, _laptop, "var1", "2"] call Root_fnc_disableDrone;
 ```
 
 ---
@@ -450,7 +450,7 @@ Downloads file from database.
 
 | Index | Name | Type | Default |
 |-------|------|------|---------|
-| 0 | _owner | ANY | nil |
+| 0 | _owner | NUMBER | nil |
 | 1 | _computer | OBJECT | - |
 | 2 | _nameOfVariable | STRING | - |
 | 3 | _databaseId | STRING | - |
@@ -459,7 +459,7 @@ Downloads file from database.
 
 **Example:**
 ```sqf
-[nil, _laptop, "var1", "1234"] call Root_fnc_downloadDatabase;
+[123, _laptop, "var1", "1234"] call Root_fnc_downloadDatabase;
 ```
 
 ---
@@ -470,14 +470,14 @@ Activates or deactivates custom device.
 
 **Syntax:**
 ```sqf
-[_owner, _computer, _nameOfVariable, _customId, _customState] call Root_fnc_customDevice;
+[_owner, _computer, _nameOfVariable, _customId, _customState, _playerObject, _commandPath]; call Root_fnc_customDevice;
 ```
 
 **Parameters:**
 
 | Index | Name | Type | Default |
 |-------|------|------|---------|
-| 0 | _owner | ANY | nil |
+| 0 | _owner | NUMBER | nil |
 | 1 | _computer | OBJECT | - |
 | 2 | _nameOfVariable | STRING | - |
 | 3 | _customId | STRING | - |
@@ -489,7 +489,7 @@ Activates or deactivates custom device.
 
 **Example:**
 ```sqf
-[nil, _laptop, "var1", "5", "activate"] call Root_fnc_customDevice;
+[123, _laptop, "var1", "5", "activate"] call Root_fnc_customDevice;
 ```
 
 ---
@@ -507,7 +507,7 @@ Tracks GPS device position.
 
 | Index | Name | Type | Default |
 |-------|------|------|---------|
-| 0 | _owner | ANY | nil |
+| 0 | _owner | NUMBER | nil |
 | 1 | _computer | OBJECT | - |
 | 2 | _nameOfVariable | STRING | - |
 | 3 | _trackerId | STRING | - |
@@ -517,7 +517,7 @@ Tracks GPS device position.
 
 **Example:**
 ```sqf
-[nil, _laptop, "var1", "2421", "/tools/gpstrack"] call Root_fnc_displayGPSPosition;
+[123, _laptop, "var1", "2421", "/tools/gpstrack"] call Root_fnc_displayGPSPosition;
 ```
 
 ---
@@ -535,7 +535,7 @@ Modifies vehicle parameters.
 
 | Index | Name | Type | Default |
 |-------|------|------|---------|
-| 0 | _owner | ANY | nil |
+| 0 | _owner | NUMBER | nil |
 | 1 | _computer | OBJECT | - |
 | 2 | _nameOfVariable | STRING | - |
 | 3 | _vehicleId | STRING | - |
@@ -555,7 +555,7 @@ Modifies vehicle parameters.
 
 **Example:**
 ```sqf
-[nil, _laptop, "var1", "1337", "battery", "50", "/tools/"] call Root_fnc_changeVehicleParams;
+[123, _laptop, "var1", "1337", "battery", "50", "/tools/"] call Root_fnc_changeVehicleParams;
 ```
 
 ---
@@ -573,7 +573,7 @@ Controls power generator.
 
 | Index | Name | Type | Default |
 |-------|------|------|---------|
-| 0 | _owner | ANY | nil |
+| 0 | _owner | NUMBER | nil |
 | 1 | _computer | OBJECT | - |
 | 2 | _nameOfVariable | STRING | - |
 | 3 | _gridId | STRING | - |
@@ -586,7 +586,7 @@ Controls power generator.
 
 **Example:**
 ```sqf
-[nil, _laptop, "var1", "1234", "on", "/tools/"] call Root_fnc_powerGridControl;
+[123, _laptop, "var1", "1234", "on", "/tools/"] call Root_fnc_powerGridControl;
 ```
 
 ---
@@ -728,7 +728,7 @@ Lists all accessible devices in terminal.
 
 | Index | Name | Type | Default |
 |-------|------|------|---------|
-| 0 | _owner | ANY | nil |
+| 0 | _owner | NUMBER | nil |
 | 1 | _computer | OBJECT | - |
 | 2 | _nameOfVariable | STRING | - |
 | 3 | _commandPath | STRING | - |
@@ -740,7 +740,7 @@ Lists all accessible devices in terminal.
 
 **Example:**
 ```sqf
-[nil, _laptop, "var1", "/tools/", "doors"] call Root_fnc_listDevicesInSubnet;
+[123, _laptop, "var1", "/tools/", "doors"] call Root_fnc_listDevicesInSubnet;
 ```
 
 ---

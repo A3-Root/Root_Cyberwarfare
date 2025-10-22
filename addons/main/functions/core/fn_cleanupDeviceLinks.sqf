@@ -81,8 +81,8 @@ LOG_INFO_1(format ["Regular Device Cleanup script started! Running periodically 
         };
 
         // Clean up invalid devices from the main device list (legacy array structure)
-        private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
-        private _cleanedDevices = [[], [], [], [], [], []];
+        private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
+        private _cleanedDevices = [[], [], [], [], [], [], [], []];
 
         {
             private _deviceList = _allDevices select _forEachIndex;

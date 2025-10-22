@@ -328,7 +328,7 @@ class CfgVehicles {
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {
-			description = "Makes a vehicle hackable. Synchronize to vehicle objects and optionally to AE3 Laptop objects.";
+			description = "Makes a vehicle hackable. Synchronize to vehicles and drones and optionally to AE3 Laptop objects.";
 			sync[] = {"Car", "Tank", "Air", "Ship", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};
@@ -432,8 +432,7 @@ class CfgVehicles {
 				displayName = "Activation Code";
 				tooltip = "Code to run when device is activated. Use (_this select 0) to reference the computer object.";
 				typeName = "STRING";
-				defaultValue = """// Example: Display Hint when triggered
-hint 'Custom device activated';""";
+				defaultValue = """hint 'Custom device activated';""";
 			};
 			class ROOT_CYBERWARFARE_3DEN_CUSTOM_DEACTIVATE: Edit {
 				property = "ROOT_CYBERWARFARE_3DEN_CUSTOM_DEACTIVATE";
@@ -441,8 +440,7 @@ hint 'Custom device activated';""";
 				displayName = "Deactivation Code";
 				tooltip = "Code to run when device is deactivated. Use (_this select 0) to reference the computer object.";
 				typeName = "STRING";
-				defaultValue = """// Example: Display Hint when triggered
-hint 'Custom device deactivated';""";
+				defaultValue = """hint 'Custom device deactivated';""";
 			};
 			class ROOT_CYBERWARFARE_3DEN_CUSTOM_PUBLIC: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_CUSTOM_PUBLIC";

@@ -17,7 +17,9 @@
 
 params ["_logic"];
 
-if (!isServer) exitWith {};
+if (!isServer) exitWith {
+	LOG_ERROR("3DEN Add Power Generator: Not running on server, exiting");
+};
 
 // Get module attributes
 private _generatorName = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_NAME", "Power Generator"];
@@ -53,7 +55,7 @@ if (_generators isEqualTo []) exitWith {
 };
 
 // Get laptop netIds for linking
-private _linkedComputers = _laptops;
+private _linkedComputers = _laptops apply { netId _x };
 
 // Determine availability setting
 private _availableToFutureLaptops = false;

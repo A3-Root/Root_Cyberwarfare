@@ -2,7 +2,7 @@
 
 [b]Advanced hacking mod for Arma 3 with terminal-based control over doors, lights, vehicles, drones, and more.[/b]
 
-Designed for tactical missions requiring infiltration, sabotage, and electronic warfare. Fully integrated with ACE3, AE3 ArmaOS terminal, and Zeus/Eden editors. Tested with 67+ players on dedicated servers.
+Designed for tactical missions requiring infiltration, sabotage, and electronic warfare. Fully integrated with ACE3, AE3 ArmaOS terminal, and Zeus/Eden editors. Tested with 67+ players on dedicated servers. Requires both server and clients to have this mod.
 
 [b]Current version - 1.0.0.0[/b]
 
@@ -224,21 +224,28 @@ Configure in Main Menu → Options → Addon Options → Root Cyber Warfare:
 [h2]Credits[/h2]
 
 [b]Author:[/b] Root (xMidnightSnowx)
-[b]Original Cyber Warfare Mod Author:[/b] Mister Adrian
-[b]77th JSOC[/b]
-[b]License:[/b] Arma Public License - Share Alike (APL-SA)
+[b]Mister Adrian[/b] - Author of the [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3454525813]original Cyber Warfare mod[/url]
+[url=77th-jsoc.com][b]77th JSOC[/b][/url]
 
-[img]https://i.imgur.com/jUUdDUu.png[/img]
+[hr][/hr]
+
+[h2]License[/h2]
+[b]APL-SA:[/b] Arma Public License Share Alike
+[url=https://www.bohemia.net/community/licenses/arma-public-license-share-alike]Read Full License here[/url]
+[img]https://www.bohemia.net/assets/img/licenses/APL-SA.png[/img]
+
+TL;DR - What am I allowed to do?
+✔️ Redistribute this mod in part or whole publicly [b]ONLY[/b] with clear credit towards the author and with credits linking to this page.
+❌ Redistribute this mod in part or whole privately / within a unit [b]WITHOUT[/b] giving any credit.
+❌ Port this mod in part or whole to games other than ArmA.
+
+If you have any issues with the content presented in this mod, PLEASE CONTACT ME FIRST!
 
 [hr][/hr]
 
 [h2]Links[/h2]
-[list]
-[*][b][url=https://github.com/A3-Root/Root_Cyberwarfare]Github[/url][/b]
-[*][b][url=https://github.com/A3-Root/Root_Cyberwarfare/wiki]Github Wiki[/url][/b]
-[*][b][url=https://github.com/A3-Root/Root_Cyberwarfare/issues]Issues / Suggestions[/url][/b]
-[*][b][url=https://discord.gg/77th-jsoc-official]Discord - 77th JSOC[/url][/b]
-[/list]
+[url=https://github.com/A3-Root/Root_Cyberwarfare][img]https://i.imgur.com/lPLHihO.gif[/img][/url]
+[url=https://discord.gg/77th-jsoc-official][img]https://i.imgur.com/8B7UcQ2.gif[/img][/url]
 
 [hr][/hr]
 

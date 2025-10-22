@@ -1,5 +1,17 @@
 # Changelog
 
+## Hotfix 1
+
+### Added
+- N/A
+
+### Fixed
+- Power Generator in 3DEN not initializing
+- All Devices array initialized incorrectly with wrong number of parameters
+
+### Changed
+- Added player object as additional reference to activation/deactivation blocks in File download and Custom devices
+
 ## Initial Public Release
 
 ### Added

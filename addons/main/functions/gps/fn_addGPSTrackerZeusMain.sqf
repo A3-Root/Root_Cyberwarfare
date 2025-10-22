@@ -33,7 +33,7 @@ if (_execUserId == 0) then {
     _execUserId = owner _targetObject;
 };
 
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], []]];
+private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
 private _allGpsTrackers = _allDevices select 5;
 
 private _netId = netId _targetObject;

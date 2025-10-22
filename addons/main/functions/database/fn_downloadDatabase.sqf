@@ -4,22 +4,23 @@
  * Description: Downloads a database file to the computer's filesystem
  *
  * Arguments:
- * 0: _owner <ANY> - Owner parameter (legacy compatibility)
+ * 0: _owner <NUMBER> - Machine ID (ownerID) of the client executing this command
  * 1: _computer <OBJECT> - The laptop/computer object
  * 2: _nameOfVariable <STRING> - Variable name for completion flag
  * 3: _databaseId <STRING> - Database ID to download
- * 4: _commandPath <STRING> - Command path for access checking
+ * 4: _playerObject <OBJECT> - Object of the _owner
+ * 5: _commandPath <STRING> - Command path for access checking
  *
  * Return Value:
  * None
  *
  * Example:
- * [nil, _laptop, "var1", "1234", "/tools/"] call Root_fnc_downloadDatabase;
+ * [123, _laptop, "var1", "1234", User1, "/tools/"] call Root_fnc_downloadDatabase;
  *
  * Public: No
  */
 
-params['_owner', '_computer', '_nameOfVariable', '_databaseId', "_commandPath"];
+params['_owner', '_computer', '_nameOfVariable', '_databaseId', '_playerObject', "_commandPath"];
 
 private _string = "";
 private _databaseIdNum = parseNumber _databaseId;
@@ -90,7 +91,7 @@ if (_databaseIdNum != 0) then {
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             // Execute the custom code after successful download
             if (_executionCode != "") then {
-                [_computer, _owner] spawn (compile _executionCode);
+                [_computer, _playerObject, _owner] spawn (compile _executionCode);
             };
         };
     } forEach _accessibleDatabases;

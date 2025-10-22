@@ -4,23 +4,24 @@
  * Description: Activates or deactivates a custom device
  *
  * Arguments:
- * 0: _owner <ANY> - Owner parameter (legacy compatibility)
+ * 0: _owner <NUMBER> - Machine ID (ownerID) of the client executing this command
  * 1: _computer <OBJECT> - The laptop/computer object
  * 2: _nameOfVariable <STRING> - Variable name for completion flag
  * 3: _customId <STRING> - Custom device ID
  * 4: _customState <STRING> - State to set (activate/deactivate)
- * 5: _commandPath <STRING> - Command path for access checking
+ * 5: _playerObject <OBJECT> - Object of the _owner
+ * 6: _commandPath <STRING> - Command path for access checking
  *
  * Return Value:
  * None
  *
  * Example:
- * [nil, _laptop, "var1", "1234", "activate", "/tools/"] call Root_fnc_customDevice;
+ * [123, _laptop, "var1", "1234", "activate", User1, "/tools/"] call Root_fnc_customDevice;
  *
  * Public: No
  */
 
-params['_owner', '_computer', '_nameOfVariable', '_customId', "_customState", "_commandPath"];
+params["_owner", "_computer", "_nameOfVariable", "_customId", "_customState", "_playerObject", "_commandPath"];
 
 private _string = "";
 
@@ -90,14 +91,14 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
                 _string = format [localize "STR_ROOT_CYBERWARFARE_CUSTOM_DEVICE_ACTIVATED", _customName, _customId];
                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 if (_activationCode != "") then {
-                    [_computer, _deviceObject, _owner] spawn (compile _activationCode);
+                    [_computer, _deviceObject, _playerObject, _owner] spawn (compile _activationCode);
                 };
             } else {
                 if(_customState isEqualTo "deactivate") then {
                     _string = format [localize "STR_ROOT_CYBERWARFARE_CUSTOM_DEVICE_DEACTIVATED", _customName, _customId];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     if (_deactivationCode != "") then {
-                        [_computer, _deviceObject, _owner] spawn (compile _deactivationCode);
+                        [_computer, _deviceObject, _playerObject, _owner] spawn (compile _deactivationCode);
                     };
                 } else {
                     _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_INPUT", _customState];
