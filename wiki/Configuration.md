@@ -42,6 +42,8 @@ Settings are organized into categories:
 - **GPS Settings** - GPS tracker configuration and detection
 - **Power Cost Settings** - Energy costs for hacking operations
 
+![CBA Settings Menu](../images/Root_Cyberwarfare_CBASettings.jpg)
+
 ---
 
 ## Power Cost Settings

@@ -4,7 +4,7 @@
 [![build](https://github.com/A3-Root/Root_Cyberwarfare/actions/workflows/auto-release.yml/badge.svg?branch=master)](https://github.com/A3-Root/Root_Cyberwarfare/actions/workflows/auto-release.yml)
 [![license](https://img.shields.io/badge/License-APL--SA-blue.svg)](https://github.com/A3-Root/Root_Cyberwarfare/blob/master/LICENSE)
 
-![License](https://data.bistudio.com/images/license/APL-SA.png)
+![License](images/APL-SA.png)
 
 An improved adaptation and expansion of the original Cyber Warfare mod, adding advanced hacking capabilities to Arma 3 missions. Control doors, lights, vehicles, drones, and more through a terminal interface powered by AE3 ArmaOS.
 

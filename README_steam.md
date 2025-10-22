@@ -2,16 +2,14 @@
 
 [b]Advanced hacking mod for Arma 3 with terminal-based control over doors, lights, vehicles, drones, and more.[/b]
 
-Designed for tactical missions requiring infiltration, sabotage, and electronic warfare. Fully integrated with ACE3, AE3 ArmaOS terminal, and Zeus/Eden editors. Tested with 67+ players on dedicated servers. Requires both server and clients to have this mod.
+Fully integrated with ACE3, AE3 ArmaOS terminal, and Zeus/Eden editors. Tested with 67+ players on dedicated servers. Requires both server and clients to have this mod.
 
-[b]Current version - 1.0.0.0[/b]
+[b]Current version - 1.0.1.1[/b]
 
 [img]https://i.imgur.com/EWy3dQc.gif[/img]
 
 [hr][/hr]
-
 [h2]Device Types[/h2]
-
 [table]
 [tr]
 [th]Device[/th]
@@ -52,22 +50,19 @@ Designed for tactical missions requiring infiltration, sabotage, and electronic 
 [/table]
 
 [hr][/hr]
-
 [h2]For Players[/h2]
-
 [h3]Terminal Access[/h3]
 [olist]
 [*]ACE Interact on AE3 laptop → ArmaOS → Use
 [*]Laptop must have hacking tools (configured by Zeus/mission maker)
 [/olist]
 
-[img]https://i.postimg.cc/ncKcTqxP/Home-Screen.png[/img]
+[img]https://i.postimg.cc/8cf7DQYx/Root-Cyberwarfare-Home-Screen.jpg[/img]
 
 [h3]In-Game Guide[/h3]
 A detailed terminal usage guide is available in-game for all players. Open your map and navigate to the [b]Cyberwarfare Guide[/b] section for comprehensive command reference and examples.
 
 [h3]Commands[/h3]
-
 [b]List Devices:[/b]
 [code]
 devices all              # List all accessible devices
@@ -110,24 +105,25 @@ gpstrack <ID>                        # Start tracking (creates marker)
 custom <ID> on/off
 [/code]
 
-[img]https://i.postimg.cc/bN0NL1PH/20251020193947-1.jpg[/img]
+[img]https://i.postimg.cc/8507qPyg/Root-Cyberwarfare-File-Download.jpg[/img]
 
 [h3]Power Management[/h3]
 Operations consume battery (Watt-hours). Commands fail if insufficient power. Recharge using AE3 power sources.
 
 [h3]GPS Trackers[/h3]
 [list]
-[*]Attach via ACE Self-Interact → Equipment → Attach GPS Tracker
-[*]Search others via ACE Interaction menu
-[*]Detection is chance-based (improved with detection devices)
+[*]Attach via ACE Self-Interact → Equipment → Attach GPS Tracker (Self) to attach onto self
+[*]Attach via ACE Interact → Equipment → Attach GPS Tracker to attach to other object, player, vehicle or entity.
+[*]Search for active GPS Trackers via ACE Interaction menu
+[*]Detection is chance-based (improved with configurable detection tool) and provides multiple options based on the search criteria
 [/list]
-[img]https://i.postimg.cc/zXYGn0sx/20251020193610-1.jpg[/img]
-[img]https://i.postimg.cc/BQ5QN23g/20251020194006-1.jpg[/img]
+[img]https://i.postimg.cc/Tw4KZYkX/Root-Cyberwarfare-GPSContext.jpg[/img]
+[img]https://i.postimg.cc/3RckPJL5/Root-Cyberwarfare-GPSAttach.jpg[/img]
+[img]https://i.postimg.cc/7hJ5D8Rt/Root-Cyberwarfare-GPSDetect-Normal.jpg[/img]
+[img]https://i.postimg.cc/MHfnx2Lr/Root-Cyberwarfare-GPSDetect-Tool.jpg[/img]
 
 [hr][/hr]
-
 [h2]For Zeus Curators[/h2]
-
 [h3]Quick Setup[/h3]
 [olist]
 [*]Zeus interface (Y key) → Modules → Root's Cyber Warfare
@@ -135,13 +131,12 @@ Operations consume battery (Watt-hours). Commands fail if insufficient power. Re
 [*]Place device modules on objects to make hackable
 [/olist]
 
-[img]https://i.postimg.cc/8PdPwLG4/20251020194128-1.jpg[/img]
+[img]https://i.postimg.cc/zvHy5ZQ9/Root-Cyberwarfare-Zeus-Modules.jpg[/img]
 
 [h3]Zeus Modules[/h3]
-
 [b]Add Hacking Tools[/b] - Enable laptop hacking capability
 
-[b]Add Hackable Object[/b] - Buildings (auto-detects doors/lights), drones
+[b]Add Hackable Object[/b] - Buildings (auto-detects doors/lights only)
 
 [b]Add Hackable Vehicle[/b] - Configure controllable systems
 
@@ -163,52 +158,16 @@ Operations consume battery (Watt-hours). Commands fail if insufficient power. Re
 [/list]
 
 [hr][/hr]
-
 [h2]For Mission Makers[/h2]
-
-[h3]SQF Examples[/h3]
-
-[b]Add Hacking Tools:[/b]
-[code]
-[_laptop, "/network/tools", 0, "HackStation", ""]
-    call Root_fnc_addHackingToolsZeusMain;
-[/code]
-
-[b]Register Building:[/b]
-[code]
-[_building, 0, [_laptop1, _laptop2], false, "", "", "", false]
-    call Root_fnc_addDeviceZeusMain;
-[/code]
-
-[b]Register Vehicle:[/b]
-[code]
-[_vehicle, 0, [_laptop1], "TargetCar", true, false, false, true, true, false, false, 2]
-    call Root_fnc_addVehicleZeusMain;
-[/code]
-
-[b]Custom Device (Alarm):[/b]
-[code]
-[_alarmBox, 0, [_laptop1], "Base_Alarm",
-    "playSound3D ['a3\sounds_f\sfx\alarm.wss', _this select 0];",
-    "hint 'Alarm off';",
-    false]
-    call Root_fnc_addCustomDeviceZeusMain;
-[/code]
-
-[b]Power Grid:[/b]
-[code]
-[_generator, 0, [_laptop1], "City_Grid", 2000, false, true, "HelicopterExploSmall", [], false]
-    call Root_fnc_addPowerGeneratorZeusMain;
-[/code]
-
 [h3]Eden Editor[/h3]
 8 modules available under [b]Systems (F5) → Root's Cyber Warfare[/b]. Use synchronization (F5) to link modules to objects.
 
-[hr][/hr]
+[img]https://i.postimg.cc/fLrV6T8F/Root-Cyberwarfare-3-DENModules.jpg[/img]
 
+[hr][/hr]
 [h2]CBA Settings[/h2]
 
-[img]https://i.postimg.cc/VLPkjDxR/20251020192844-1.jpg[/img]
+[img]https://i.postimg.cc/Tw4KZYts/Root-Cyberwarfare-CBASettings.jpg[/img]
 
 Configure in Main Menu → Options → Addon Options → Root Cyber Warfare:
 [list]
@@ -220,34 +179,27 @@ Configure in Main Menu → Options → Addon Options → Root Cyber Warfare:
 [/list]
 
 [hr][/hr]
-
 [h2]Credits[/h2]
-
 [b]Author:[/b] Root (xMidnightSnowx)
 [b]Mister Adrian[/b] - Author of the [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3454525813]original Cyber Warfare mod[/url]
 [url=77th-jsoc.com][b]77th JSOC[/b][/url]
 
 [hr][/hr]
-
 [h2]License[/h2]
 [b]APL-SA:[/b] Arma Public License Share Alike
 [url=https://www.bohemia.net/community/licenses/arma-public-license-share-alike]Read Full License here[/url]
-[img]https://www.bohemia.net/assets/img/licenses/APL-SA.png[/img]
+[img]https://i.postimg.cc/pTxntLMW/APL-SA.png[/img]
 
 TL;DR - What am I allowed to do?
 ✔️ Redistribute this mod in part or whole publicly [b]ONLY[/b] with clear credit towards the author and with credits linking to this page.
 ❌ Redistribute this mod in part or whole privately / within a unit [b]WITHOUT[/b] giving any credit.
 ❌ Port this mod in part or whole to games other than ArmA.
 
-If you have any issues with the content presented in this mod, PLEASE CONTACT ME FIRST!
-
 [hr][/hr]
-
 [h2]Links[/h2]
 [url=https://github.com/A3-Root/Root_Cyberwarfare][img]https://i.imgur.com/lPLHihO.gif[/img][/url]
 [url=https://discord.gg/77th-jsoc-official][img]https://i.imgur.com/8B7UcQ2.gif[/img][/url]
 
 [hr][/hr]
-
-[b]Tags:[/b] #Arma 3 #Steam #Workshop #Mod #Root #Script #Zeus #Editor #Eden
+Tags: #Arma 3 #Steam #Workshop #Mod #Root #Script #Zeus #Editor #Eden
 gaming,game,video,videos,epic,arma,arma 3,cod,call of duty,modern,warfare,drone,uav,terminal,uplink,connect,satcom,satellite,antenna,control,remote,tool,mod,modding,script,code,sqf,signal,targeting,virtual,reality,awesome,guidance,software,source,steam,workshop,mods,best,top,ten,new,manual,gps,Cyber,war,cyberwar,warfare,electronic,ewo,electronic warfare officer,hacking,terminal,armaos,linux,gui,hacknet,milsim,military,signals,officer

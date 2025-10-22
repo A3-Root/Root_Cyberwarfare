@@ -32,6 +32,8 @@ Root's Cyber Warfare provides 9 Zeus modules in the **ROOT_CYBERWARFARE** catego
 
 All modules (except "Modify Power Costs") can be placed on specific objects or entities.
 
+![Zeus Modules Interface](../images/Root_Cyberwarfare_ZeusModules.jpg)
+
 ## Zeus Modules Overview
 
 | Module Name | Purpose | Attach to Object? |

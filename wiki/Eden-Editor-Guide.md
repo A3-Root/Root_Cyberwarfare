@@ -37,6 +37,8 @@ Root's Cyber Warfare provides **8 modules for the 3DEN Editor** (Arma 3's built-
 3. Navigate to **ROOT_CYBERWARFARE** category
 4. Drag modules into the scene
 
+![3DEN Modules Browser](../images/Root_Cyberwarfare_3DENModules.jpg)
+
 ## 3DEN Modules Overview
 
 | Module Name | Purpose | Synchronize To |
@@ -83,6 +85,8 @@ Root's Cyber Warfare provides **8 modules for the 3DEN Editor** (Arma 3's built-
 4. Set Tool Path: /network/hackertools
 5. Leave Backdoor Function Prefix empty
 ```
+
+![Add Hacking Tools Module](../images/Root_Cyberwarfare_3DEN_Tools.jpg)
 
 **What It Does:**
 - Installs hacking tools on all synchronized laptops when mission starts
@@ -172,6 +176,8 @@ Custom Device Cost: 20
 Result: All laptops can access this building's doors, which cannot be breached
 ```
 
+![Add Devices Module](../images/Root_Cyberwarfare_3DEN_Devices.jpg)
+
 **Example Setup 2: Private Drone (Specific Laptops)**
 ```
 1. Place drone1 and laptop1 in scene
@@ -240,6 +246,8 @@ Execution Code:
 Add to Public Device List: (unchecked)
 Sync to: laptop1, laptop2
 ```
+
+![Add Hackable File Module](../images/Root_Cyberwarfare_3DEN_File.jpg)
 
 **What It Does:**
 - Registers a downloadable file in the database system
@@ -310,6 +318,8 @@ Sync to: laptop1, laptop2
    Allow Alarm: (unchecked)
    Add to Public Device List: ✓
 ```
+
+![Add Hackable Vehicle Module](../images/Root_Cyberwarfare_3DEN_Vehicle.jpg)
 
 **What It Does:**
 - Registers vehicle(s) with unique IDs
@@ -387,6 +397,8 @@ Sync to: laptop1, laptop2
    Add to Public Device List: (unchecked)
 Result: Only laptop1 can track enemyCommander
 ```
+
+![Add GPS Tracker Module](../images/Root_Cyberwarfare_3DEN_GPS.jpg)
 
 **What It Does:**
 - Attaches virtual GPS tracker to synchronized object(s)
@@ -475,6 +487,8 @@ private _action = _this select 1; // "activate" or "deactivate"
    Add to Public Device List: ✓
 ```
 
+![Add Custom Device Module](../images/Root_Cyberwarfare_3DEN_Custom.jpg)
+
 **What It Does:**
 - Registers object as a custom hackable device
 - Players use `custom <DeviceID> activate/deactivate` to trigger code
@@ -545,6 +559,8 @@ private _action = _this select 1; // "activate" or "deactivate"
    Power Cost: 20
    Add to Public Device List: ✓
 ```
+
+![Add Power Generator Module](../images/Root_Cyberwarfare_3DEN_PowerGenerator.jpg)
 
 **What It Does:**
 - Registers object as a power generator

@@ -35,6 +35,8 @@ Once in the terminal, you can use standard ArmaOS commands:
 
 The hacking tools add specialized commands for device control.
 
+![Terminal Home Screen](../images/Root_Cyberwarfare_HomeScreen.jpg)
+
 ## Terminal Commands
 
 ### 1. devices - List Accessible Devices
@@ -241,6 +243,8 @@ download 1234        # Download file 1234
 - Some files execute code automatically upon download completion
 - Download progress is shown in the terminal
 
+![File Download in Progress](../images/Root_Cyberwarfare_FileDownload.jpg)
+
 ---
 
 ### 7. custom - Control Custom Devices
@@ -304,6 +308,8 @@ gpstrack 2421         # Track GPS device 2421
 - If "Allow Retracking" is enabled, you can track the same device again after completion
 - Power is consumed at the start of tracking
 - Tracking statuses: `Untracked`, `Tracking`, `Completed`, `Dead`, `Disabled`
+
+![GPS Tracking Interface](../images/Root_Cyberwarfare_GPSTracking.jpg)
 
 See [GPS Tracker Mechanics](#gps-tracker-mechanics) for more details.
 
@@ -493,11 +499,15 @@ Players can search for hidden GPS trackers on objects using ACE interactions:
 2. Open **ACE Interaction Menu** on the object
 3. Look for **GPS Tracker Detection** options (if available)
 
+![GPS Tracker Context Menu](../images/Root_Cyberwarfare_GPSContext.jpg)
+
 #### Using ESD (Electronic Spectrum Device) Tools
 
 Detection success chance is higher when holding spectrum detection devices:
 - **Normal detection chance**: 20% (default, configurable)
 - **With ESD tool**: 80% (default, configurable)
+
+![Normal Detection Chance](../images/Root_Cyberwarfare_GPSDetectNormal.jpg)
 
 Default ESD devices (configurable in CBA settings):
 - `hgun_esd_01_antenna_01_F`
@@ -506,6 +516,8 @@ Default ESD devices (configurable in CBA settings):
 - `hgun_esd_01_base_F`
 - `hgun_esd_01_F`
 
+![Detection With ESD Tool](../images/Root_Cyberwarfare_GPSDetectTool.jpg)
+
 ### Attaching GPS Trackers (Player Action)
 
 If you have a GPS tracker item in your inventory (default: `ACE_Banana`, configurable):
@@ -513,6 +525,8 @@ If you have a GPS tracker item in your inventory (default: `ACE_Banana`, configu
 1. Open **ACE Self-Interaction Menu**
 2. Navigate to **Equipment** → **Attach GPS Tracker**
 3. This attaches a tracker to yourself
+
+![Attach GPS Tracker Menu](../images/Root_Cyberwarfare_GPSAttach.jpg)
 
 Mission makers can configure which item acts as the GPS tracker (see [Configuration](Configuration)).
 
