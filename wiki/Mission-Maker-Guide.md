@@ -142,7 +142,7 @@ params ["_laptops", "_buildings"];
 
 **Syntax:**
 ```sqf
-[_targetObject, _execUserId, _linkedComputers, _treatAsCustom, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 ```
 
 **Parameters:**
@@ -152,31 +152,27 @@ params ["_laptops", "_buildings"];
 | 0 | `_targetObject` | OBJECT | (required) | Building or lamp object |
 | 1 | `_execUserId` | NUMBER | `0` | User ID for feedback |
 | 2 | `_linkedComputers` | ARRAY | `[]` | Array of computer netIds (NOT objects) |
-| 3 | `_treatAsCustom` | BOOLEAN | `false` | DEPRECATED - leave as false |
-| 4 | `_customName` | STRING | `""` | DEPRECATED - leave as "" |
-| 5 | `_activationCode` | STRING | `""` | DEPRECATED - leave as "" |
-| 6 | `_deactivationCode` | STRING | `""` | DEPRECATED - leave as "" |
-| 7 | `_availableToFutureLaptops` | BOOLEAN | `false` | Auto-grant access to future laptops |
-| 8 | `_makeUnbreachable` | BOOLEAN | `false` | Prevent ACE breaching (doors only) |
+| 3 | `_availableToFutureLaptops` | BOOLEAN | `false` | Auto-grant access to future laptops |
+| 4 | `_makeUnbreachable` | BOOLEAN | `false` | Prevent ACE breaching (doors only) |
 
 **Examples:**
 ```sqf
 // Public building (all laptops)
-[_building1, 0, [], false, "", "", "", true, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_building1, 0, [], true, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 
 // Private building (specific laptops)
-[_building2, 0, [netId _laptop1, netId _laptop2], false, "", "", "", false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_building2, 0, [netId _laptop1, netId _laptop2], false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 
 // Unbreachable building (future laptops only)
-[_building3, 0, [], false, "", "", "", true, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_building3, 0, [], true, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 
 // Register multiple buildings
 {
-    [_x, 0, [netId _laptop1], false, "", "", "", false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [_x, 0, [netId _laptop1], false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 } forEach [_building1, _building2, _building3];
 
 // Light registration
-[_streetLamp1, 0, [], false, "", "", "", true, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_streetLamp1, 0, [], true, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 ```
 
 **Auto-Detection:**
@@ -524,6 +520,7 @@ _ownersSelection = [[sides], [groups], [players]]
 **Examples:**
 ```sqf
 // Basic tracking (all laptops, all players see markers)
+// Parameters 9 and 10 are REQUIRED (lastPingTimer=30, powerCost=10)
 [
     _enemyCommander,
     0,
@@ -612,7 +609,7 @@ _ownersSelection = [[sides], [groups], [players]]
 
 **Syntax:**
 ```sqf
-[_targetObject, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionActivate, _allowExplosionDeactivate, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
+[_targetObject, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
 ```
 
 **Parameters:**
@@ -624,12 +621,11 @@ _ownersSelection = [[sides], [groups], [players]]
 | 2 | `_linkedComputers` | ARRAY | `[]` | Array of computer netIds |
 | 3 | `_generatorName` | STRING | `"Power Generator"` | Display name |
 | 4 | `_radius` | NUMBER | `50` | Effect radius in meters |
-| 5 | `_allowExplosionActivate` | BOOLEAN | `false` | Create explosion on activation |
-| 6 | `_allowExplosionDeactivate` | BOOLEAN | `false` | Create explosion on deactivation/overload |
-| 7 | `_explosionType` | STRING | `"HelicopterExploSmall"` | Ammo classname for explosion |
-| 8 | `_excludedClassnames` | ARRAY | `[]` | Light classnames to exclude |
-| 9 | `_availableToFutureLaptops` | BOOLEAN | `false` | Auto-grant access to future laptops |
-| 10 | `_powerCost` | NUMBER | `10` | Power cost in Wh per operation |
+| 5 | `_allowExplosionOverload` | BOOLEAN | `false` | Create explosion on overload action |
+| 6 | `_explosionType` | STRING | `"ClaymoreDirectionalMine_Remote_Ammo_Scripted"` | Ammo classname for explosion |
+| 7 | `_excludedClassnames` | ARRAY | `[]` | Light classnames to exclude |
+| 8 | `_availableToFutureLaptops` | BOOLEAN | `false` | Auto-grant access to future laptops |
+| 9 | `_powerCost` | NUMBER | `10` | Power cost in Wh per operation |
 
 **Examples:**
 ```sqf
@@ -641,21 +637,19 @@ _ownersSelection = [[sides], [groups], [players]]
     "Base Power Grid",
     200,
     false,
-    false,
     "HelicopterExploSmall",
     [],
     true,
     15
 ] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
 
-// Dangerous generator with explosion
+// Dangerous generator with explosion on overload
 [
     _unstableGenerator,
     0,
     [netId _laptop1],
     "Unstable Generator",
     100,
-    false,
     true,
     "Bo_GBU12_LGB",
     [],
@@ -670,7 +664,6 @@ _ownersSelection = [[sides], [groups], [players]]
     [],
     "City Power",
     500,
-    false,
     true,
     "HelicopterExploSmall",
     ["Land_LampDecor_F", "Land_LampHalogen_F"],
@@ -687,7 +680,6 @@ _ownersSelection = [[sides], [groups], [players]]
         [netId _laptop1],
         _name,
         300,
-        false,
         true,
         "HelicopterExploSmall",
         [],
@@ -1045,18 +1037,18 @@ private _opforLaptops = [laptop_opfor_1];
 // BLUFOR base (private to BLUFOR laptops)
 private _bluforNetIds = _bluforLaptops apply {netId _x};
 {
-    [_x, 0, _bluforNetIds, false, "", "", "", false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [_x, 0, _bluforNetIds, false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 } forEach [blufor_hq, blufor_barracks];
 
 // OPFOR base (private to OPFOR laptops)
 private _opforNetIds = _opforLaptops apply {netId _x};
 {
-    [_x, 0, _opforNetIds, false, "", "", "", false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [_x, 0, _opforNetIds, false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 } forEach [opfor_hq, opfor_barracks];
 
 // Neutral buildings (public)
 {
-    [_x, 0, [], false, "", "", "", true, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [_x, 0, [], true, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 } forEach [civilian_building_1, civilian_building_2];
 
 // ===========================
@@ -1152,7 +1144,6 @@ private _opforNetIds = _opforLaptops apply {netId _x};
     [],
     "Main Power Grid",
     300,
-    false,
     true,
     "HelicopterExploSmall",
     [],

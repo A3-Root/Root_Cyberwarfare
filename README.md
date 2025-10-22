@@ -74,7 +74,7 @@ Root's Cyber Warfare introduces 8 distinct device types that can be hacked and c
 
 ```sqf
 // Add hacking tools to a laptop
-[_laptop, "/network/tools", 0, "HackStation", ""] call Root_fnc_addHackingToolsZeusMain;
+[_laptop, "/network/tools", 0, "HackStation", ""] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
 
 // Register a building with doors as hackable
 [_building, 0, [], false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
@@ -92,11 +92,11 @@ Root's Cyber Warfare introduces 8 distinct device types that can be hacked and c
 // initServer.sqf
 // Setup hacking laptop
 private _laptop = _laptop1; // Reference to AE3 laptop placed in editor
-[_laptop, "/home/hacker/tools", 0, "HackingStation", ""] call Root_fnc_addHackingToolsZeusMain;
+[_laptop, "/home/hacker/tools", 0, "HackingStation", ""] remoteExec ["Root_fnc_addHackingToolsZeusMain", 2];
 
 // Make a building hackable
 private _building = nearestBuilding player;
-[_building, 0, [_laptop], false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_building, 0, [netId _laptop], false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 
 // Players can now use the laptop to lock/unlock doors:
 // door <BuildingID> <DoorID> lock/unlock
@@ -107,7 +107,7 @@ private _building = nearestBuilding player;
 ```sqf
 // Attach GPS tracker to enemy vehicle
 private _enemyVehicle = _vehicle1;
-[_enemyVehicle, 0, [_laptop1], "Enemy_Car", 120, 5, "", false, true, 30, 5, true, [[], [], []]]
+[_enemyVehicle, 0, [netId _laptop1], "Enemy_Car", 120, 5, "", false, true, 30, 5, true, [[], [], []]]
     remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
 
 // Players use: gpstrack <TrackerID>
@@ -122,7 +122,7 @@ private _alarmBox = _object1;
 [
     _alarmBox,
     0,
-    [_laptop1],
+    [netId _laptop1],
     "Base Alarm",
     "playSound3D ['a3\sounds_f\sfx\alarm.wss', _this select 0, false, getPosASL (_this select 0), 5, 1, 300];",
     "hint 'Alarm deactivated';",

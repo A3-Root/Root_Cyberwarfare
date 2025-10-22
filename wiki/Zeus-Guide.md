@@ -95,10 +95,10 @@ Hacking tools installed successfully on laptop at /network/hackertools
 
 ### 2. Add Hackable Object
 
-**Purpose:** Register buildings (with doors), lights, or drones as hackable devices.
+**Purpose:** Register buildings (with doors) or lights as hackable devices. **Note:** For drones, use the "Add Hackable Vehicle" module instead.
 
 **How to Use:**
-1. Place module on a building, lamp, or drone
+1. Place module on a building or lamp
 2. Configure parameters in the dialog
 3. Click OK
 
@@ -113,7 +113,6 @@ Hacking tools installed successfully on laptop at /network/hackertools
 **Auto-Detection:**
 - **Buildings**: Automatically detects all doors and registers them
 - **Lamps**: Registers as a single light device
-- **Drones**: Registered as hackable drones (faction change/disable)
 
 **Device ID Assignment:**
 - Automatically generates a unique 4-digit ID (1000-9999)
@@ -128,7 +127,6 @@ Make Unbreachable: ✓ (checked)
 **What It Does:**
 - **For Buildings**: Registers all doors with unique door IDs
 - **For Lights**: Registers the lamp object with on/off control
-- **For Drones**: Registers the drone for faction change and disable operations
 - If "Make Unbreachable" is checked (doors only), prevents ACE breaching/lockpicking
 
 **Access Control:**
@@ -146,7 +144,7 @@ Unbreachable: Yes
 **Notes:**
 - For buildings, ALL doors are automatically detected (no need to specify door IDs)
 - Lights can be building lights or standalone lamp objects
-- Drones are auto-detected as vehicles with UAV behavior
+- For drones/UAVs, use the "Add Hackable Vehicle" module
 
 ---
 
@@ -315,8 +313,8 @@ Available to future laptops: No
 | **Custom Marker Name** | String | (empty) | Optional custom name for map markers. If empty, uses GPS Tracker Name. |
 | **Available to Future Laptops** | Checkbox | Checked | Auto-grant access to future laptops. |
 | **Allow Retracking** | Checkbox | Unchecked | If checked, tracking can be restarted after completion. |
-| **Last Ping Duration (seconds)** | Number | `30` | How long the "last ping" marker remains visible after tracking ends. |
-| **Power Cost to Track** | Number | `10` | Power cost in Wh to start tracking. |
+| **Last Ping Duration (seconds)** | Number | **REQUIRED** | How long the "last ping" marker remains visible after tracking ends. |
+| **Power Cost to Track** | Number | **REQUIRED** | Power cost in Wh to start tracking. |
 | **Show System Chat Message** | Checkbox | Checked | Show system chat notification when tracking starts. |
 | **Marker Visibility (Owners)** | Array | `[[], [], []]` | Which sides/groups/players can see markers (advanced). Format: `[[sides], [groups], [players]]`. |
 
@@ -372,6 +370,7 @@ Examples:
 - **Counter-surveillance**: Players can physically search for and disable trackers
 
 **Notes:**
+- **IMPORTANT:** "Last Ping Duration" and "Power Cost to Track" are REQUIRED parameters with no defaults. You must specify values.
 - Trackers can be physically searched for and disabled by players (see [Player Guide - GPS Tracker Mechanics](Player-Guide#gps-tracker-mechanics))
 - If "Allow Retracking" is unchecked, tracker becomes single-use
 - Marker colors are configurable via CBA settings (see [Configuration](Configuration))
@@ -499,8 +498,8 @@ Available to future laptops: Yes
 | **Linked Computers** | Array | (empty) | Specific laptops with access. |
 | **Generator Name** | String | `Power Generator` | Display name in terminal. |
 | **Effect Radius (meters)** | Number | `50` | Radius in meters to affect lights. |
-| **Allow Explosion on Overload** | Checkbox | Unchecked | If checked, `overload` action creates an explosion. |
-| **Explosion Type** | String | `HelicopterExploSmall` | Ammo classname for explosion (e.g., `Bo_GBU12_LGB`, `Sh_155mm_AMOS`). |
+| **Allow Explosion on Overload** | Checkbox | Unchecked | If checked, the `overload` action creates an explosion and destroys the generator. |
+| **Explosion Type** | String | `ClaymoreDirectionalMine_Remote_Ammo_Scripted` | Ammo classname for explosion (e.g., `HelicopterExploSmall`, `Bo_GBU12_LGB`, `Sh_155mm_AMOS`). |
 | **Excluded Light Classnames** | Array | (empty) | Light classnames to exclude from control (comma-separated). |
 | **Available to Future Laptops** | Checkbox | Unchecked | Auto-grant access to future laptops. |
 | **Power Cost** | Number | `10` | Power cost in Wh per operation. |

@@ -73,11 +73,11 @@ Installs hacking tools on an AE3 laptop.
 
 ### Root_fnc_addDeviceZeusMain
 
-Registers buildings (doors) or lights as hackable.
+Registers buildings (doors) or lights as hackable. **Note:** For custom devices, use `Root_fnc_addCustomDeviceZeusMain` instead.
 
 **Syntax:**
 ```sqf
-[_targetObject, _execUserId, _linkedComputers, _treatAsCustom, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 ```
 
 **Parameters:**
@@ -86,19 +86,15 @@ Registers buildings (doors) or lights as hackable.
 |-------|------|------|---------|-------------|
 | 0 | _targetObject | OBJECT | - | Building or lamp object |
 | 1 | _execUserId | NUMBER | 0 | User ID for feedback |
-| 2 | _linkedComputers | ARRAY | [] | Computer netIds array |
-| 3 | _treatAsCustom | BOOLEAN | false | DEPRECATED (leave false) |
-| 4 | _customName | STRING | "" | DEPRECATED (leave "") |
-| 5 | _activationCode | STRING | "" | DEPRECATED (leave "") |
-| 6 | _deactivationCode | STRING | "" | DEPRECATED (leave "") |
-| 7 | _availableToFutureLaptops | BOOLEAN | false | Future access flag |
-| 8 | _makeUnbreachable | BOOLEAN | false | Prevent ACE breaching |
+| 2 | _linkedComputers | ARRAY | [] | Array of computer netIds (strings) |
+| 3 | _availableToFutureLaptops | BOOLEAN | false | Auto-grant access to future laptops |
+| 4 | _makeUnbreachable | BOOLEAN | false | Prevent ACE breaching (doors only) |
 
 **Return Value:** None
 
 **Example:**
 ```sqf
-[_building1, 0, [netId _laptop1], false, "", "", "", false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_building1, 0, [netId _laptop1], false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 ```
 
 ---
@@ -221,7 +217,7 @@ Registers downloadable files.
 
 ### Root_fnc_addGPSTrackerZeusMain
 
-Attaches GPS trackers to objects.
+Attaches GPS trackers to objects for real-time position tracking.
 
 **Syntax:**
 ```sqf
@@ -230,21 +226,21 @@ Attaches GPS trackers to objects.
 
 **Parameters:**
 
-| Index | Name | Type | Default |
-|-------|------|------|---------|
-| 0 | _targetObject | OBJECT | - |
-| 1 | _execUserId | NUMBER | 0 |
-| 2 | _linkedComputers | ARRAY | [] |
-| 3 | _trackerName | STRING | "Target_GPS" |
-| 4 | _trackingTime | NUMBER | 60 |
-| 5 | _updateFrequency | NUMBER | 5 |
-| 6 | _customMarker | STRING | "" |
-| 7 | _availableToFutureLaptops | BOOLEAN | false |
-| 8 | _allowRetracking | BOOLEAN | true |
-| 9 | _lastPingTimer | NUMBER | 30 |
-| 10 | _powerCost | NUMBER | 2 |
-| 11 | _sysChat | BOOLEAN | true |
-| 12 | _ownersSelection | ARRAY | [[], [], []] |
+| Index | Name | Type | Default | Description |
+|-------|------|------|---------|-------------|
+| 0 | _targetObject | OBJECT | - | Object to track |
+| 1 | _execUserId | NUMBER | 0 | User ID for feedback |
+| 2 | _linkedComputers | ARRAY | [] | Array of computer netIds |
+| 3 | _trackerName | STRING | "" | Tracker display name |
+| 4 | _trackingTime | NUMBER | 60 | Tracking duration in seconds |
+| 5 | _updateFrequency | NUMBER | 5 | Position update interval in seconds |
+| 6 | _customMarker | STRING | "" | Custom marker name (optional) |
+| 7 | _availableToFutureLaptops | BOOLEAN | false | Auto-grant access to future laptops |
+| 8 | _allowRetracking | BOOLEAN | false | Allow tracking again after completion |
+| 9 | _lastPingTimer | NUMBER | **REQUIRED** | Last ping marker duration in seconds |
+| 10 | _powerCost | NUMBER | **REQUIRED** | Power cost in Wh to start tracking |
+| 11 | _sysChat | BOOLEAN | true | Show system chat message |
+| 12 | _ownersSelection | ARRAY | [[], [], []] | Marker visibility: [[sides], [groups], [players]] |
 
 **Owners Selection Format:** `[[sides], [groups], [players]]`
 
@@ -255,38 +251,39 @@ Attaches GPS trackers to objects.
 [_target, 0, [], "HVT", 120, 5, "", true, false, 30, 10, true, [[], [], []]] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
 ```
 
+**Important:** Parameters 9 and 10 are **REQUIRED** and have no default values. Always specify them explicitly.
+
 ---
 
 ### Root_fnc_addPowerGeneratorZeusMain
 
-Registers power generators.
+Registers power generators that control lights within a radius.
 
 **Syntax:**
 ```sqf
-[_targetObject, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionActivate, _allowExplosionDeactivate, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
+[_targetObject, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
 ```
 
 **Parameters:**
 
-| Index | Name | Type | Default |
-|-------|------|------|---------|
-| 0 | _targetObject | OBJECT | - |
-| 1 | _execUserId | NUMBER | 0 |
-| 2 | _linkedComputers | ARRAY | [] |
-| 3 | _generatorName | STRING | "Power Generator" |
-| 4 | _radius | NUMBER | 50 |
-| 5 | _allowExplosionActivate | BOOLEAN | false |
-| 6 | _allowExplosionDeactivate | BOOLEAN | false |
-| 7 | _explosionType | STRING | "HelicopterExploSmall" |
-| 8 | _excludedClassnames | ARRAY | [] |
-| 9 | _availableToFutureLaptops | BOOLEAN | false |
-| 10 | _powerCost | NUMBER | 10 |
+| Index | Name | Type | Default | Description |
+|-------|------|------|---------|-------------|
+| 0 | _targetObject | OBJECT | - | Generator object |
+| 1 | _execUserId | NUMBER | 0 | User ID for feedback |
+| 2 | _linkedComputers | ARRAY | [] | Array of computer netIds |
+| 3 | _generatorName | STRING | "Power Generator" | Display name |
+| 4 | _radius | NUMBER | 50 | Radius in meters to affect lights |
+| 5 | _allowExplosionOverload | BOOLEAN | false | Create explosion on overload action |
+| 6 | _explosionType | STRING | "ClaymoreDirectionalMine_Remote_Ammo_Scripted" | Ammo classname for explosion |
+| 7 | _excludedClassnames | ARRAY | [] | Light classnames to exclude from control |
+| 8 | _availableToFutureLaptops | BOOLEAN | false | Auto-grant access to future laptops |
+| 9 | _powerCost | NUMBER | 10 | Power cost in Wh per operation |
 
 **Return Value:** None
 
 **Example:**
 ```sqf
-[_gen, 0, [], "Grid", 200, false, true, "HelicopterExploSmall", [], true, 15] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
+[_gen, 0, [], "Grid", 200, true, "HelicopterExploSmall", [], true, 15] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
 ```
 
 ---
@@ -843,44 +840,57 @@ private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC
 
 ### Device Entry Formats
 
+These are the array formats used when devices are stored in `ROOT_CYBERWARFARE_ALL_DEVICES`:
+
 **Doors:**
 ```sqf
 [deviceId, buildingNetId, doorIds[], buildingName, availableToFuture]
+// Example: [1234, "76561198123456789", [0, 1, 2], "Land_Cargo_House_V1_F", false]
 ```
 
 **Lights:**
 ```sqf
 [deviceId, lightNetId, displayName, availableToFuture]
+// Example: [5678, "76561198987654321", "Land_LampStreet_small_F", true]
 ```
 
 **Drones:**
 ```sqf
 [deviceId, droneNetId, droneName, availableToFuture]
+// Example: [9012, "76561198111111111", "B_UAV_02_F", false]
 ```
 
 **Databases:**
 ```sqf
 [deviceId, objectNetId, filename, filesize, linkedComputers, availableToFuture]
+// Example: [3456, "76561198222222222", "intel.txt", 10, ["76561198333333333"], false]
+// Note: File content and execution code are stored as object variables, not in this array
 ```
 
 **Custom:**
 ```sqf
 [deviceId, objectNetId, deviceName, activationCode, deactivationCode, availableToFuture]
+// Example: [7890, "76561198444444444", "Generator", "hint 'ON'", "hint 'OFF'", true]
 ```
 
 **GPS Trackers:**
 ```sqf
-[deviceId, targetNetId, trackerName, trackingTime, updateFrequency, customMarker, linkedComputers, availableToFuture, currentStatus, allowRetracking, lastPingDuration, powerCost, ownersSelection]
+[deviceId, targetNetId, trackerName, trackingTime, updateFrequency, customMarker, linkedComputers, availableToFuture, currentStatus, allowRetracking, lastPingTimer, powerCost, ownersSelection]
+// Example: [2421, "76561198555555555", "HVT", 120, 5, "", [], false, ["Untracked", 0, ""], true, 30, 10, [[], [], []]]
+// currentStatus format: [status, lastUpdateTime, lastPosition]
+// ownersSelection format: [[sides], [groups], [players]]
 ```
 
 **Vehicles:**
 ```sqf
 [deviceId, vehicleNetId, vehicleName, allowFuel, allowSpeed, allowBrakes, allowLights, allowEngine, allowAlarm, availableToFutureLaptops, powerCost, linkedComputers]
+// Example: [1337, "76561198666666666", "Enemy APC", true, true, false, true, true, false, false, 5, ["76561198777777777"]]
 ```
 
 **Power Grids:**
 ```sqf
-[gridId, objectNetId, gridName, radius, allowExplosionActivate, allowExplosionDeactivate, explosionType, excludedClassnames, availableToFutureLaptops, powerCost, linkedComputers]
+[gridId, objectNetId, gridName, radius, allowExplosionOverload, explosionType, excludedClassnames, availableToFutureLaptops, powerCost, linkedComputers]
+// Example: [5000, "76561198888888888", "Main Grid", 200, true, "HelicopterExploSmall", [], true, 15, []]
 ```
 
 ---
