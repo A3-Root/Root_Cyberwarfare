@@ -33,6 +33,6 @@ missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true
     };
 } forEach _linkedComputers;
 
-LOG_INFO_1(format ["GPS Tracker ID %1 has been disabled by player search.",_trackerId]);
+ROOT_CYBERWARFARE_LOG_INFO_1(format ["GPS Tracker ID %1 has been disabled by player search.",_trackerId]);
 
 true

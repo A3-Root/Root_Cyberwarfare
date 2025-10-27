@@ -19,37 +19,54 @@ params ["_logic"];
 
 if (!isServer) exitWith {};
 
-// Get module attributes
-private _toolPath = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_HACK_TOOL_PATH", "/rubberducky/tools"];
-private _backdoorPrefix = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_HACK_TOOL_BACKDOOR", ""];
-
-// Get all synchronized objects
+// Get synchronized laptops early for the condition check
 private _syncedObjects = synchronizedObjects _logic;
-
-// Filter for AE3 laptop objects
 private _laptops = _syncedObjects select {
 	typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"]
 };
 
-if (_laptops isEqualTo []) exitWith {
-	LOG_ERROR("3DEN Add Hacking Tools: No AE3 Laptop objects synchronized to this module!");
-};
+// Wait for mission time AND all laptops to have AE3 initialized before executing
+[
+	{
+		params ["_laptops"];
+		CBA_missionTime >= 10
+		&& {_laptops findIf {isNil {_x getVariable "AE3_filesystem"}} == -1}
+	},
+	{
+		params ["_laptops", "_logic"];
 
-// Generate custom laptop name
-private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", 1];
+		// Early exit if no laptops
+		if (_laptops isEqualTo []) exitWith {
+			ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Hacking Tools: No AE3 Laptop objects synchronized to this module!");
+		};
 
-{
-	private _laptop = _x;
-	private _customName = format ["HackTool_%1", _index];
-	private _execUserId = owner _laptop;
+		// Get module attributes
+		private _toolPath = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_HACK_TOOL_PATH", "/rubberducky/tools"];
+		private _backdoorPrefix = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_HACK_TOOL_BACKDOOR", ""];
 
-	// Call the existing Zeus main function
-	[_laptop, _toolPath, _execUserId, _customName, _backdoorPrefix] call FUNC(addHackingToolsZeusMain);
+		// Generate custom laptop name
+		private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", 1];
 
-	_index = _index + 1;
-} forEach _laptops;
+		{
+			private _laptop = _x;
+			private _customName = format ["HackTool_%1", _index];
+			private _execUserId = owner _laptop;
 
-missionNamespace setVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", _index, true];
+			// Call the existing Zeus main function
+			[_laptop, _toolPath, _execUserId, _customName, _backdoorPrefix] call FUNC(addHackingToolsZeusMain);
 
-// Delete the logic module after execution
-deleteVehicle _logic;
+			_index = _index + 1;
+		} forEach _laptops;
+
+		missionNamespace setVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", _index, true];
+
+		// Notify admins of success
+		if (serverCommandAvailable "#kick") then {
+			systemChat "[ROOT Cyberwarfare] Add Hacking Tools module initialized successfully";
+		};
+
+		// Delete the logic module after execution
+		deleteVehicle _logic;
+	},
+	[_laptops, _logic]
+] call CBA_fnc_waitUntilAndExecute;

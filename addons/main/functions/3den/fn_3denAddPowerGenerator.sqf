@@ -18,7 +18,7 @@
 params ["_logic"];
 
 if (!isServer) exitWith {
-	LOG_ERROR("3DEN Add Power Generator: Not running on server, exiting");
+	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Power Generator: Not running on server, exiting");
 };
 
 // Get module attributes
@@ -50,7 +50,7 @@ private _generators = _syncedObjects select {
 };
 
 if (_generators isEqualTo []) exitWith {
-	LOG_ERROR("3DEN Add Power Generator: No generator objects synchronized to this module!");
+	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Power Generator: No generator objects synchronized to this module!");
 	deleteVehicle _logic;
 };
 

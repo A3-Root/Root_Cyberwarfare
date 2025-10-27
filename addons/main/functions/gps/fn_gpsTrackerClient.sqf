@@ -29,8 +29,8 @@ private _trackerPos = getPos _trackerObject;
 private _lastKnownPos = _trackerPos; // Store last known position
 
 // Get marker colors from CBA settings
-private _activeColor = missionNamespace getVariable [SETTING_GPS_MARKER_COLOR_ACTIVE, "ColorRed"];
-private _lastPingColor = missionNamespace getVariable [SETTING_GPS_MARKER_COLOR_LASTPING, "ColorCIV"];
+private _activeColor = missionNamespace getVariable [SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE, "ColorRed"];
+private _lastPingColor = missionNamespace getVariable [SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_LASTPING, "ColorCIV"];
 
 private _marker = createMarkerLocal [_markerName, _trackerPos];
 _marker setMarkerTypeLocal "mil_dot";

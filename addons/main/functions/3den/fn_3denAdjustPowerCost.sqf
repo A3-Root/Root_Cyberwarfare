@@ -24,7 +24,7 @@ private _existingModules = allMissionObjects "ROOT_Module3DEN_AdjustPowerCost";
 private _firstModule = _existingModules select 0;
 
 if (_logic != _firstModule) exitWith {
-	LOG_INFO("3DEN Adjust Power Cost: Multiple power cost modules detected. Using the first placed module only.");
+	ROOT_CYBERWARFARE_LOG_INFO("3DEN Adjust Power Cost: Multiple power cost modules detected. Using the first placed module only.");
 	deleteVehicle _logic;
 };
 
@@ -44,7 +44,7 @@ missionNamespace setVariable ["ROOT_CYBERWARFARE_POWERGRID_COST", _powerGridCost
 missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_COSTS", [_doorCost, _droneSideCost, _droneDisableCost, _customCost], true];
 
 private _msg = format ["3DEN Adjust Power Cost: Power costs configured - Door: %1Wh, Drone Side: %2Wh, Drone Disable: %3Wh, Custom: %4Wh, Power Grid: %5Wh", _doorCost, _droneSideCost, _droneDisableCost, _customCost, _powerGridCost];
-LOG_INFO(_msg);
+ROOT_CYBERWARFARE_LOG_INFO(_msg);
 
 // Delete the logic module after execution
 deleteVehicle _logic;

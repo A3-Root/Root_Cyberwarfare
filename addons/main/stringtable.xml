@@ -256,16 +256,16 @@
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY">
             <English>GPS Settings</English>
         </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_ACTIVE">
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE">
             <English>GPS Marker Color (Active Ping)</English>
         </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_ACTIVE_DESC">
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE_DESC">
             <English>Color of the GPS tracker marker while actively tracking</English>
         </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_LASTPING">
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_LASTPING">
             <English>GPS Marker Color (Last Ping)</English>
         </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_COLOR_LASTPING_DESC">
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_LASTPING_DESC">
             <English>Color of the GPS tracker marker after tracking ends (last known position)</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_NORMAL">

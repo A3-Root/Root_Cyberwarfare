@@ -357,7 +357,7 @@ private _toolChance = missionNamespace getVariable ["ROOT_CYBERWARFARE_GPS_SEARC
 
 ### 10. GPS Marker Color (Active Ping)
 
-**Setting Name:** `ROOT_CYBERWARFARE_GPS_MARKER_COLOR_ACTIVE`
+**Setting Name:** `ROOT_CYBERWARFARE_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE`
 
 **Type:** List (Dropdown)
 
@@ -401,14 +401,14 @@ private _toolChance = missionNamespace getVariable ["ROOT_CYBERWARFARE_GPS_SEARC
 
 **Access in Script:**
 ```sqf
-private _activeColor = missionNamespace getVariable ["ROOT_CYBERWARFARE_GPS_MARKER_COLOR_ACTIVE", "ColorRed"];
+private _activeColor = missionNamespace getVariable ["ROOT_CYBERWARFARE_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE", "ColorRed"];
 ```
 
 ---
 
 ### 11. GPS Marker Color (Last Ping)
 
-**Setting Name:** `ROOT_CYBERWARFARE_GPS_MARKER_COLOR_LASTPING`
+**Setting Name:** `ROOT_CYBERWARFARE_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_LASTPING`
 
 **Type:** List (Dropdown)
 
@@ -438,7 +438,7 @@ Use a different color from Active Ping to clearly distinguish:
 
 **Access in Script:**
 ```sqf
-private _lastPingColor = missionNamespace getVariable ["ROOT_CYBERWARFARE_GPS_MARKER_COLOR_LASTPING", "ColorUNKNOWN"];
+private _lastPingColor = missionNamespace getVariable ["ROOT_CYBERWARFARE_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_LASTPING", "ColorUNKNOWN"];
 ```
 
 ---
@@ -544,8 +544,8 @@ missionNamespace setVariable ["ROOT_CYBERWARFARE_POWERGRID_COST", 25, true];
 missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_DEVICE", "ItemGPS", true];
 missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_SEARCH_CHANCE_NORMAL", 0.3, true];
 missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_SEARCH_CHANCE_TOOL", 0.9, true];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_MARKER_COLOR_ACTIVE", "ColorOrange", true];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_MARKER_COLOR_LASTPING", "ColorYellow", true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE", "ColorOrange", true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_LASTPING", "ColorYellow", true];
 ```
 
 **Note:** Overrides apply only to current mission session.

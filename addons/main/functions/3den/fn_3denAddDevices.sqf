@@ -36,7 +36,7 @@ private _devices = _syncedObjects select {
 };
 
 if (_devices isEqualTo []) exitWith {
-	LOG_ERROR("3DEN Add Devices: No devices synchronized to this module!");
+	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Devices: No devices synchronized to this module!");
 	deleteVehicle _logic;
 };
 

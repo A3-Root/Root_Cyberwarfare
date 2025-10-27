@@ -22,7 +22,7 @@ params [
 ];
 
 if (isNull _computer) exitWith {
-    LOG_ERROR("consumePower: Invalid computer object");
+    ROOT_CYBERWARFARE_LOG_ERROR("consumePower: Invalid computer object");
     false
 };
 
@@ -31,7 +31,7 @@ if (_powerWh <= 0) exitWith { true };
 // Get the laptop's internal battery (each laptop has its own battery object)
 private _battery = _computer getVariable ["AE3_power_internal", objNull];
 if (isNull _battery) exitWith {
-    LOG_ERROR("consumePower: Battery not found or laptop has no internal battery");
+    ROOT_CYBERWARFARE_LOG_ERROR("consumePower: Battery not found or laptop has no internal battery");
     false
 };
 

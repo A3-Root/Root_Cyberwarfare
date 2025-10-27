@@ -25,12 +25,12 @@ params [
 ];
 
 if (isNull _computer) exitWith {
-    LOG_ERROR("getAccessibleDevices: Invalid computer object");
+    ROOT_CYBERWARFARE_LOG_ERROR("getAccessibleDevices: Invalid computer object");
     []
 };
 
 if !(VALIDATE_DEVICE_TYPE(_deviceType)) exitWith {
-    LOG_ERROR_1("getAccessibleDevices: Invalid device type %1",_deviceType);
+    ROOT_CYBERWARFARE_LOG_ERROR_1("getAccessibleDevices: Invalid device type %1",_deviceType);
     []
 };
 
@@ -52,7 +52,7 @@ private _arrayIndex = switch (_deviceType) do {
 };
 
 if (_arrayIndex == -1) exitWith {
-    LOG_ERROR_1("getAccessibleDevices: Failed to get array index for type %1",_deviceType);
+    ROOT_CYBERWARFARE_LOG_ERROR_1("getAccessibleDevices: Failed to get array index for type %1",_deviceType);
     []
 };
 

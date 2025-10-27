@@ -38,7 +38,7 @@ params [
 ];
 
 if (isNull _targetObject) exitWith {
-    LOG_ERROR("addPowerGeneratorZeusMain: Invalid target object");
+    ROOT_CYBERWARFARE_LOG_ERROR("addPowerGeneratorZeusMain: Invalid target object");
 };
 
 if (_execUserId == 0) then {
@@ -144,4 +144,4 @@ if (_availableToFutureLaptops) then {
 // Send feedback to Zeus user
 [format ["Root Cyber Warfare: Power Grid added with ID: %1. %2", _deviceId, _availabilityText]] remoteExec ["systemChat", _execUserId];
 
-LOG_INFO_1("Power Grid added: %1",_generatorName);
+ROOT_CYBERWARFARE_LOG_INFO_1("Power Grid added: %1",_generatorName);

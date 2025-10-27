@@ -23,7 +23,7 @@ params [
 
 if !(_lightState in ["on", "off", "ON", "OFF"]) exitWith {
     private _string = format ["powerGeneratorLights: Invalid light state '%1'", _lightState];
-    LOG_ERROR(_string);
+    ROOT_CYBERWARFARE_LOG_ERROR(_string);
 };
 
 if (_lightState in ["on", "ON"]) then {
@@ -39,4 +39,4 @@ if (_lightState in ["on", "ON"]) then {
 
 
 private _string = format ["powerGeneratorLights: Set light state to '%1' on %2 objects", _lightState, count _objects];
-LOG_INFO(_string);
+ROOT_CYBERWARFARE_LOG_INFO(_string);

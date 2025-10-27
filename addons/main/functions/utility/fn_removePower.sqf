@@ -26,7 +26,7 @@ params [
 
 // Validate battery object
 if (isNull _battery) exitWith {
-    LOG_ERROR("removePower: Invalid battery object");
+    ROOT_CYBERWARFARE_LOG_ERROR("removePower: Invalid battery object");
 };
 
 // Clamp new level to non-negative values

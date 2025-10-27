@@ -21,7 +21,7 @@ if (!isServer) exitWith {};
 
 // Only run if not already running
 if (missionNamespace getVariable ["ROOT_CYBERWARFARE_CLEANUP_STARTED", false]) exitWith {
-    LOG_ERROR("Device cleanup task already running, aborting duplicate initialization.");
+    ROOT_CYBERWARFARE_LOG_ERROR("Device cleanup task already running, aborting duplicate initialization.");
 };
 if (isNil "ROOT_CYBERWARFARE_CLEANUP_TIME") then { ROOT_CYBERWARFARE_CLEANUP_TIME = 60 };
 
@@ -44,13 +44,13 @@ private _customCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_CUST
 // Store costs globally (legacy support)
 missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_COSTS", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
 
-LOG_INFO_1(format ["Regular Device Cleanup script started! Running periodically every %1 seconds. You can change this value by modifying the 'ROOT_CYBERWARFARE_CLEANUP_TIME' variable. Set the variable value to 0 to disable/stop the clean up.",ROOT_CYBERWARFARE_CLEANUP_TIME]);
+ROOT_CYBERWARFARE_LOG_INFO_1(format ["Regular Device Cleanup script started! Running periodically every %1 seconds. You can change this value by modifying the 'ROOT_CYBERWARFARE_CLEANUP_TIME' variable. Set the variable value to 0 to disable/stop the clean up.",ROOT_CYBERWARFARE_CLEANUP_TIME]);
 
 // Main cleanup loop
 [] spawn {
     while {ROOT_CYBERWARFARE_CLEANUP_TIME != 0} do {
         uiSleep ROOT_CYBERWARFARE_CLEANUP_TIME;
-        LOG_INFO("Running periodic device link cleanup...");
+        ROOT_CYBERWARFARE_LOG_INFO("Running periodic device link cleanup...");
 
         // Get current device links (legacy array structure)
         private _deviceLinks = missionNamespace getVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", []];
@@ -69,7 +69,7 @@ LOG_INFO_1(format ["Regular Device Cleanup script started! Running periodically 
             } else {
                 // Computer is deleted or no longer has hacking tools
                 _removedCount = _removedCount + 1;
-                LOG_INFO_1(format ["Periodic Cleanup: Removed device links for deleted computer: %1",_computerNetId]);
+                ROOT_CYBERWARFARE_LOG_INFO_1(format ["Periodic Cleanup: Removed device links for deleted computer: %1",_computerNetId]);
             };
         } forEach _deviceLinks;
 
@@ -77,7 +77,7 @@ LOG_INFO_1(format ["Regular Device Cleanup script started! Running periodically 
         missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", _cleanLinks, true];
 
         if (_removedCount > 0) then {
-            LOG_INFO_2(format ["Cleanup removed %1 computer links. %2 links active in the server.",_removedCount,count _cleanLinks]);
+            ROOT_CYBERWARFARE_LOG_INFO_2(format ["Cleanup removed %1 computer links. %2 links active in the server.",_removedCount,count _cleanLinks]);
         };
 
         // Clean up invalid devices from the main device list (legacy array structure)
@@ -95,7 +95,7 @@ LOG_INFO_1(format ["Regular Device Cleanup script started! Running periodically 
                 private _deviceObject = objectFromNetId _deviceNetId;
 
                 if (isNull _deviceObject) then {
-                    LOG_INFO_2(format ["[Root Cyber Warfare] Removing Invalid/Null/Deleted Device: Type %1, NetId %2",_forEachIndex,_deviceNetId]);
+                    ROOT_CYBERWARFARE_LOG_INFO_2(format ["[Root Cyber Warfare] Removing Invalid/Null/Deleted Device: Type %1, NetId %2",_forEachIndex,_deviceNetId]);
                 } else {
                     _cleanedList pushBack _deviceData;
                 };

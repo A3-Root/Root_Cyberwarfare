@@ -113,11 +113,11 @@
 #ifndef SETTING_GPS_SPECTRUM_DEVICES
     #define SETTING_GPS_SPECTRUM_DEVICES "ROOT_CYBERWARFARE_GPS_SPECTRUM_DEVICES"
 #endif
-#ifndef SETTING_GPS_MARKER_COLOR_ACTIVE
-    #define SETTING_GPS_MARKER_COLOR_ACTIVE "ROOT_CYBERWARFARE_GPS_MARKER_COLOR_ACTIVE"
+#ifndef SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE
+    #define SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE "ROOT_CYBERWARFARE_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE"
 #endif
-#ifndef SETTING_GPS_MARKER_COLOR_LASTPING
-    #define SETTING_GPS_MARKER_COLOR_LASTPING "ROOT_CYBERWARFARE_GPS_MARKER_COLOR_LASTPING"
+#ifndef SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_LASTPING
+    #define SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_LASTPING "ROOT_CYBERWARFARE_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_LASTPING"
 #endif
 
 // ============================================================================
@@ -142,56 +142,56 @@
 // Set in script_component.hpp via #define DEBUG_ENABLED_MAIN
 
 #ifdef DEBUG_MODE_FULL
-    #ifndef LOG_DEBUG
-        #define LOG_DEBUG(msg) diag_log text format ["[ROOT_CYBERWARFARE DEBUG] %1", msg]
+    #ifndef ROOT_CYBERWARFARE_LOG_DEBUG
+        #define ROOT_CYBERWARFARE_LOG_DEBUG(msg) diag_log text format ["[ROOT_CYBERWARFARE DEBUG] %1", msg]
     #endif
-    #ifndef LOG_DEBUG_1
-        #define LOG_DEBUG_1(msg,arg1) diag_log text format ["[ROOT_CYBERWARFARE DEBUG] " + msg, arg1]
+    #ifndef ROOT_CYBERWARFARE_LOG_DEBUG_1
+        #define ROOT_CYBERWARFARE_LOG_DEBUG_1(msg,arg1) diag_log text format ["[ROOT_CYBERWARFARE DEBUG] " + msg, arg1]
     #endif
-    #ifndef LOG_DEBUG_2
-        #define LOG_DEBUG_2(msg,arg1,arg2) diag_log text format ["[ROOT_CYBERWARFARE DEBUG] " + msg, arg1, arg2]
+    #ifndef ROOT_CYBERWARFARE_LOG_DEBUG_2
+        #define ROOT_CYBERWARFARE_LOG_DEBUG_2(msg,arg1,arg2) diag_log text format ["[ROOT_CYBERWARFARE DEBUG] " + msg, arg1, arg2]
     #endif
-    #ifndef LOG_DEBUG_3
-        #define LOG_DEBUG_3(msg,arg1,arg2,arg3) diag_log text format ["[ROOT_CYBERWARFARE DEBUG] " + msg, arg1, arg2, arg3]
+    #ifndef ROOT_CYBERWARFARE_LOG_DEBUG_3
+        #define ROOT_CYBERWARFARE_LOG_DEBUG_3(msg,arg1,arg2,arg3) diag_log text format ["[ROOT_CYBERWARFARE DEBUG] " + msg, arg1, arg2, arg3]
     #endif
 #else
     // No-op when debug disabled
-    #ifndef LOG_DEBUG
-        #define LOG_DEBUG(msg)
+    #ifndef ROOT_CYBERWARFARE_LOG_DEBUG
+        #define ROOT_CYBERWARFARE_LOG_DEBUG(msg)
     #endif
-    #ifndef LOG_DEBUG_1
-        #define LOG_DEBUG_1(msg,arg1)
+    #ifndef ROOT_CYBERWARFARE_LOG_DEBUG_1
+        #define ROOT_CYBERWARFARE_LOG_DEBUG_1(msg,arg1)
     #endif
-    #ifndef LOG_DEBUG_2
-        #define LOG_DEBUG_2(msg,arg1,arg2)
+    #ifndef ROOT_CYBERWARFARE_LOG_DEBUG_2
+        #define ROOT_CYBERWARFARE_LOG_DEBUG_2(msg,arg1,arg2)
     #endif
-    #ifndef LOG_DEBUG_3
-        #define LOG_DEBUG_3(msg,arg1,arg2,arg3)
+    #ifndef ROOT_CYBERWARFARE_LOG_DEBUG_3
+        #define ROOT_CYBERWARFARE_LOG_DEBUG_3(msg,arg1,arg2,arg3)
     #endif
 #endif
 
 // Error and info logging (always enabled)
-#ifndef LOG_ERROR
-    #define LOG_ERROR(msg) diag_log text format ["[ROOT_CYBERWARFARE ERROR] %1", msg]
+#ifndef ROOT_CYBERWARFARE_LOG_ERROR
+    #define ROOT_CYBERWARFARE_LOG_ERROR(msg) diag_log text format ["[ROOT_CYBERWARFARE ERROR] %1", msg]
 #endif
-#ifndef LOG_ERROR_1
-    #define LOG_ERROR_1(msg,arg1) diag_log text format ["[ROOT_CYBERWARFARE ERROR] " + msg, arg1]
+#ifndef ROOT_CYBERWARFARE_LOG_ERROR_1
+    #define ROOT_CYBERWARFARE_LOG_ERROR_1(msg,arg1) diag_log text format ["[ROOT_CYBERWARFARE ERROR] " + msg, arg1]
 #endif
-#ifndef LOG_ERROR_2
-    #define LOG_ERROR_2(msg,arg1,arg2) diag_log text format ["[ROOT_CYBERWARFARE ERROR] " + msg, arg1, arg2]
+#ifndef ROOT_CYBERWARFARE_LOG_ERROR_2
+    #define ROOT_CYBERWARFARE_LOG_ERROR_2(msg,arg1,arg2) diag_log text format ["[ROOT_CYBERWARFARE ERROR] " + msg, arg1, arg2]
 #endif
 
-#ifndef LOG_INFO
-    #define LOG_INFO(msg) diag_log text format ["[ROOT_CYBERWARFARE INFO] %1", msg]
+#ifndef ROOT_CYBERWARFARE_LOG_INFO
+    #define ROOT_CYBERWARFARE_LOG_INFO(msg) diag_log text format ["[ROOT_CYBERWARFARE INFO] %1", msg]
 #endif
-#ifndef LOG_INFO_1
-    #define LOG_INFO_1(msg,arg1) diag_log text format ["[ROOT_CYBERWARFARE INFO] " + msg, arg1]
+#ifndef ROOT_CYBERWARFARE_LOG_INFO_1
+    #define ROOT_CYBERWARFARE_LOG_INFO_1(msg,arg1) diag_log text format ["[ROOT_CYBERWARFARE INFO] " + msg, arg1]
 #endif
-#ifndef LOG_INFO_2
-    #define LOG_INFO_2(msg,arg1,arg2) diag_log text format ["[ROOT_CYBERWARFARE INFO] " + msg, arg1, arg2]
+#ifndef ROOT_CYBERWARFARE_LOG_INFO_2
+    #define ROOT_CYBERWARFARE_LOG_INFO_2(msg,arg1,arg2) diag_log text format ["[ROOT_CYBERWARFARE INFO] " + msg, arg1, arg2]
 #endif
-#ifndef LOG_INFO_3
-    #define LOG_INFO_3(msg,arg1,arg2,arg3) diag_log text format ["[ROOT_CYBERWARFARE INFO] " + msg, arg1, arg2, arg3]
+#ifndef ROOT_CYBERWARFARE_LOG_INFO_3
+    #define ROOT_CYBERWARFARE_LOG_INFO_3(msg,arg1,arg2,arg3) diag_log text format ["[ROOT_CYBERWARFARE INFO] " + msg, arg1, arg2, arg3]
 #endif
 
 // ============================================================================
@@ -247,32 +247,32 @@
 // ============================================================================
 // HTML color codes for AE3 ArmaOS terminal output formatting
 
-#ifndef COLOR_SUCCESS
-    #define COLOR_SUCCESS "#8ce10b"     // Green - success messages
+#ifndef ROOT_CYBERWARFARE_COLOR_SUCCESS
+    #define ROOT_CYBERWARFARE_COLOR_SUCCESS "#8ce10b"     // Green - success messages
 #endif
-#ifndef COLOR_ERROR
-    #define COLOR_ERROR "#fa4c58"       // Red - error messages
+#ifndef ROOT_CYBERWARFARE_COLOR_ERROR
+    #define ROOT_CYBERWARFARE_COLOR_ERROR "#fa4c58"       // Red - error messages
 #endif
-#ifndef COLOR_WARNING
-    #define COLOR_WARNING "#FFD966"     // Yellow - warning messages
+#ifndef ROOT_CYBERWARFARE_COLOR_WARNING
+    #define ROOT_CYBERWARFARE_COLOR_WARNING "#FFD966"     // Yellow - warning messages
 #endif
-#ifndef COLOR_INFO
-    #define COLOR_INFO "#008DF8"        // Blue - informational messages
+#ifndef ROOT_CYBERWARFARE_COLOR_INFO
+    #define ROOT_CYBERWARFARE_COLOR_INFO "#008DF8"        // Blue - informational messages
 #endif
-#ifndef COLOR_NEUTRAL
-    #define COLOR_NEUTRAL "#BCBCBC"     // Gray - neutral text
+#ifndef ROOT_CYBERWARFARE_COLOR_NEUTRAL
+    #define ROOT_CYBERWARFARE_COLOR_NEUTRAL "#BCBCBC"     // Gray - neutral text
 #endif
 
 // Side-specific colors (matches Arma 3 UI conventions)
-#ifndef COLOR_SIDE_WEST
-    #define COLOR_SIDE_WEST "#008DF8"   // Blue - BLUFOR/NATO
+#ifndef ROOT_CYBERWARFARE_COLOR_SIDE_WEST
+    #define ROOT_CYBERWARFARE_COLOR_SIDE_WEST "#008DF8"   // Blue - BLUFOR/NATO
 #endif
-#ifndef COLOR_SIDE_EAST
-    #define COLOR_SIDE_EAST "#FA4C58"   // Red - OPFOR/CSAT
+#ifndef ROOT_CYBERWARFARE_COLOR_SIDE_EAST
+    #define ROOT_CYBERWARFARE_COLOR_SIDE_EAST "#FA4C58"   // Red - OPFOR/CSAT
 #endif
-#ifndef COLOR_SIDE_GUER
-    #define COLOR_SIDE_GUER "#8CE10B"   // Green - Independent/AAF
+#ifndef ROOT_CYBERWARFARE_COLOR_SIDE_GUER
+    #define ROOT_CYBERWARFARE_COLOR_SIDE_GUER "#8CE10B"   // Green - Independent/AAF
 #endif
-#ifndef COLOR_SIDE_CIV
-    #define COLOR_SIDE_CIV "#FFD966"    // Yellow - Civilian
+#ifndef ROOT_CYBERWARFARE_COLOR_SIDE_CIV
+    #define ROOT_CYBERWARFARE_COLOR_SIDE_CIV "#FFD966"    // Yellow - Civilian
 #endif

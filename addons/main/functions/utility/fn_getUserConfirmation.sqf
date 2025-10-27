@@ -23,7 +23,7 @@ params [
 ];
 
 if (isNull _computer) exitWith {
-    LOG_ERROR("getUserConfirmation: Invalid computer object");
+    ROOT_CYBERWARFARE_LOG_ERROR("getUserConfirmation: Invalid computer object");
     false
 };
 

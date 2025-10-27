@@ -38,7 +38,7 @@ private _targets = _syncedObjects select {
 };
 
 if (_targets isEqualTo []) exitWith {
-	LOG_ERROR("3DEN Add Custom Device: No target objects synchronized to this module!");
+	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Custom Device: No target objects synchronized to this module!");
 	deleteVehicle _logic;
 };
 

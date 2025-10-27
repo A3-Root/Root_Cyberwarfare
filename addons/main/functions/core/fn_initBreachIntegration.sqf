@@ -19,10 +19,10 @@
 
 // Exit if breach mod is not loaded
 if (isNil "tsp_fnc_breach_adjust") exitWith {
-    LOG_INFO("Breach mod not detected - skipping integration");
+    ROOT_CYBERWARFARE_LOG_INFO("Breach mod not detected - skipping integration");
 };
 
-LOG_INFO("Initializing Breach mod integration");
+ROOT_CYBERWARFARE_LOG_INFO("Initializing Breach mod integration");
 
 // Store original breach adjust function
 GVAR(original_breach_adjust) = tsp_fnc_breach_adjust;
@@ -37,7 +37,7 @@ tsp_fnc_breach_adjust = {
 
     // If trying to break (_lock == 3) a cyber-locked door, block it completely
     if (_lock == 3 && _isCyberLocked) exitWith {
-        LOG_DEBUG_1("Blocked breach attempt on cyber-locked door %1",_id);
+        ROOT_CYBERWARFARE_LOG_DEBUG_1("Blocked breach attempt on cyber-locked door %1",_id);
         // Play failure sound if position is available
         if (!isNil "_pos") then {
             playSound3D ["tsp_breach\snd\fail.ogg", _pos, false, _pos, 2, 1, 40];
@@ -68,7 +68,7 @@ tsp_fnc_breach_effectiveness = {
     // If building has cyber-locked doors, return 0 (unbreachable)
     // This affects ALL doors in the building, which is intentional security behavior
     if (_hasCyberLockedDoors) exitWith {
-        LOG_DEBUG_1("Building %1 has cyber-locked doors - breach effectiveness set to 0",typeOf _house);
+        ROOT_CYBERWARFARE_LOG_DEBUG_1("Building %1 has cyber-locked doors - breach effectiveness set to 0",typeOf _house);
         0
     };
 
@@ -76,4 +76,4 @@ tsp_fnc_breach_effectiveness = {
     [_house, _damage] call GVAR(original_breach_effectiveness)
 };
 
-LOG_INFO("Breach mod integration initialized successfully");
+ROOT_CYBERWARFARE_LOG_INFO("Breach mod integration initialized successfully");

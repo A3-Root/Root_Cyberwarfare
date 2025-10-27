@@ -32,7 +32,7 @@ private _sourceLaptop = objectFromNetId _sourceNetId;
 // Validate source
 if (isNull _sourceLaptop) exitWith {
     [localize "STR_ROOT_CYBERWARFARE_ZEUS_SOURCE_LAPTOP_NOT_FOUND"] remoteExec ["systemChat", _execUserId];
-    LOG_ERROR("Source laptop not found");
+    ROOT_CYBERWARFARE_LOG_ERROR("Source laptop not found");
 };
 
 private _targetLaptop = objNull;
@@ -70,14 +70,14 @@ if (_createNew) then {
 
     _targetNetId = netId _targetLaptop;
 
-    LOG_INFO_2("Created new laptop %1 at position %2",_laptopName,_createPos);
+    ROOT_CYBERWARFARE_LOG_INFO_2("Created new laptop %1 at position %2",_laptopName,_createPos);
 } else {
     // Use existing laptop
     _targetLaptop = objectFromNetId _targetNetId;
 
     if (isNull _targetLaptop) exitWith {
         [localize "STR_ROOT_CYBERWARFARE_ZEUS_TARGET_LAPTOP_NOT_FOUND"] remoteExec ["systemChat", _execUserId];
-        LOG_ERROR("Target laptop not found");
+        ROOT_CYBERWARFARE_LOG_ERROR("Target laptop not found");
     };
 };
 
@@ -89,7 +89,7 @@ if (_installHackingTools && !_createNew) then {
     if (!_hasTools) then {
         private _targetName = _targetLaptop getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", ""];
         [_targetLaptop, _hackingToolsPath, _execUserId, _targetName] call FUNC(addHackingToolsZeusMain);
-        LOG_INFO_1("Installed hacking tools on existing laptop %1",_targetName);
+        ROOT_CYBERWARFARE_LOG_INFO_1("Installed hacking tools on existing laptop %1",_targetName);
     };
 };
 
@@ -176,5 +176,5 @@ if (!_createNew) then {
 private _sourceName = _sourceLaptop getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", "Source"];
 private _targetName = _targetLaptop getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", "Target"];
 
-LOG_INFO_2("Copied device links from %1 to %2",_sourceName,_targetName);
+ROOT_CYBERWARFARE_LOG_INFO_2("Copied device links from %1 to %2",_sourceName,_targetName);
 [format [localize "STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_COMPLETE", _devicesModified, _sourceName, _targetName]] remoteExec ["systemChat", _execUserId];

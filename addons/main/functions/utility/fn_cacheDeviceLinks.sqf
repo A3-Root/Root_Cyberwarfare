@@ -22,7 +22,7 @@ params [
 ];
 
 if (_computerNetId == "") exitWith {
-    LOG_ERROR("cacheDeviceLinks: Invalid computer netId");
+    ROOT_CYBERWARFARE_LOG_ERROR("cacheDeviceLinks: Invalid computer netId");
 };
 
 // Get or create link cache
@@ -34,4 +34,4 @@ _linkCache set [_computerNetId, _deviceArray];
 // Update global variable
 missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache, true];
 
-LOG_DEBUG_2("Cached device links for computer %1: %2 devices",_computerNetId,count _deviceArray);
+ROOT_CYBERWARFARE_LOG_DEBUG_2("Cached device links for computer %1: %2 devices",_computerNetId,count _deviceArray);

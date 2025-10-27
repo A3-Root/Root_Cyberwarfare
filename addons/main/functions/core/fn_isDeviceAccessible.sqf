@@ -27,12 +27,12 @@ params [
 ];
 
 if (isNull _computer) exitWith {
-    LOG_ERROR("isDeviceAccessible: Invalid computer object");
+    ROOT_CYBERWARFARE_LOG_ERROR("isDeviceAccessible: Invalid computer object");
     false
 };
 
 if !(VALIDATE_DEVICE_TYPE(_deviceType)) exitWith {
-    LOG_ERROR_1("isDeviceAccessible: Invalid device type %1",_deviceType);
+    ROOT_CYBERWARFARE_LOG_ERROR_1("isDeviceAccessible: Invalid device type %1",_deviceType);
     false
 };
 
@@ -46,7 +46,7 @@ if (_commandPath != "" && {_backdoorPaths isNotEqualTo []}) then {
 
 // Check if hacking tools are installed
 if !(_computer getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) exitWith {
-    LOG_DEBUG("isDeviceAccessible: Hacking tools not installed");
+    ROOT_CYBERWARFARE_LOG_DEBUG("isDeviceAccessible: Hacking tools not installed");
     false
 };
 
@@ -78,7 +78,7 @@ private _linkCache = GET_LINK_CACHE;
 // Get this computer's device links from cache
 private _allowedDevices = _linkCache getOrDefault [_computerNetId, []];
 if (_allowedDevices isEqualTo []) exitWith {
-    LOG_DEBUG_1("isDeviceAccessible: No device links for computer %1",_computerNetId);
+    ROOT_CYBERWARFARE_LOG_DEBUG_1("isDeviceAccessible: No device links for computer %1",_computerNetId);
     false
 };
 
@@ -88,6 +88,6 @@ private _isAllowed = _allowedDevices findIf {
     _type == _deviceType && {_id == _deviceId}
 } != -1;
 
-LOG_DEBUG_3("isDeviceAccessible: Computer %1, Device %2 = %3",_computerNetId,_deviceId,_isAllowed);
+ROOT_CYBERWARFARE_LOG_DEBUG_3("isDeviceAccessible: Computer %1, Device %2 = %3",_computerNetId,_deviceId,_isAllowed);
 
 _isAllowed

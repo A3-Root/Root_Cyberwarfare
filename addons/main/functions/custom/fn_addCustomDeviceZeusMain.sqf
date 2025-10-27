@@ -32,7 +32,7 @@ params [
 ];
 
 if (isNull _targetObject) exitWith {
-    LOG_ERROR("addCustomDeviceZeusMain: Invalid target object");
+    ROOT_CYBERWARFARE_LOG_ERROR("addCustomDeviceZeusMain: Invalid target object");
 };
 
 if (_execUserId == 0) then {
@@ -111,4 +111,4 @@ if (_availableToFutureLaptops) then {
     publicVariable "ROOT_CYBERWARFARE_PUBLIC_DEVICES";
 };
 
-LOG_INFO_1("Custom Device added: %1",_customName);
+ROOT_CYBERWARFARE_LOG_INFO_1("Custom Device added: %1",_customName);

@@ -43,7 +43,7 @@ private _vehicles = _syncedObjects select {
 };
 
 if (_vehicles isEqualTo []) exitWith {
-	LOG_ERROR("3DEN Add Vehicle: No vehicles synchronized to this module!");
+	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Vehicle: No vehicles synchronized to this module!");
 	deleteVehicle _logic;
 };
 

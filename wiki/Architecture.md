@@ -654,14 +654,14 @@ scopeName "exit";
 
 // Early validation
 if (!VALIDATE_COMPUTER(_computer)) exitWith {
-    [_computer, format ["<t color='%1'>%2</t>", COLOR_ERROR, localize "STR_ROOT_CYBERWARFARE_ERR_INVALID_COMPUTER"]]
+    [_computer, format ["<t color='%1'>%2</t>", ROOT_CYBERWARFARE_COLOR_ERROR, localize "STR_ROOT_CYBERWARFARE_ERR_INVALID_COMPUTER"]]
         call AE3_armaos_fnc_shell_stdout;
     false
 };
 
 // Power check
 if (!([_computer, _powerCost] call FUNC(checkPowerAvailable))) exitWith {
-    [_computer, format ["<t color='%1'>%2</t>", COLOR_ERROR, localize "STR_ROOT_CYBERWARFARE_ERR_INSUFFICIENT_POWER"]]
+    [_computer, format ["<t color='%1'>%2</t>", ROOT_CYBERWARFARE_COLOR_ERROR, localize "STR_ROOT_CYBERWARFARE_ERR_INSUFFICIENT_POWER"]]
         call AE3_armaos_fnc_shell_stdout;
     false
 };

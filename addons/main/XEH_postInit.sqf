@@ -28,28 +28,28 @@ if (isServer) then {
     ["root_cyberwarfare_consumePower", {
         params ["_computer", "_battery", "_newLevel", "_powerWh"];
         [_computer, _battery, _newLevel] call FUNC(removePower);
-        LOG_DEBUG_2("Power consumed: %1 Wh, new level: %2 kWh",_powerWh,_newLevel);
+        ROOT_CYBERWARFARE_LOG_DEBUG_2("Power consumed: %1 Wh, new level: %2 kWh",_powerWh,_newLevel);
     }] call CBA_fnc_addEventHandler;
 
     // Device state change event
     // Triggered when a device changes state (door locked, light toggled, etc.)
     ["root_cyberwarfare_deviceStateChanged", {
         params ["_deviceType", "_deviceId", "_newState"];
-        LOG_DEBUG_3("Device state changed - Type: %1, ID: %2, State: %3",_deviceType,_deviceId,_newState);
+        ROOT_CYBERWARFARE_LOG_DEBUG_3("Device state changed - Type: %1, ID: %2, State: %3",_deviceType,_deviceId,_newState);
     }] call CBA_fnc_addEventHandler;
 
     // GPS tracking event
     // Triggered when a GPS tracker updates its tracking status
     ["root_cyberwarfare_gpsTrackingUpdate", {
         params ["_trackerId", "_status"];
-        LOG_DEBUG_2("GPS tracking update - ID: %1, Status: %2",_trackerId,_status);
+        ROOT_CYBERWARFARE_LOG_DEBUG_2("GPS tracking update - ID: %1, Status: %2",_trackerId,_status);
     }] call CBA_fnc_addEventHandler;
 
     // Device linked event
     // Triggered when a computer is granted access to a device
     ["root_cyberwarfare_deviceLinked", {
         params ["_computerNetId", "_deviceType", "_deviceId"];
-        LOG_DEBUG_3("Device linked - Computer: %1, Type: %2, ID: %3",_computerNetId,_deviceType,_deviceId);
+        ROOT_CYBERWARFARE_LOG_DEBUG_3("Device linked - Computer: %1, Type: %2, ID: %3",_computerNetId,_deviceType,_deviceId);
     }] call CBA_fnc_addEventHandler;
 };
 
@@ -110,7 +110,7 @@ if (isServer) then {
     publicVariable GVAR_LINK_CACHE;
     publicVariable GVAR_PUBLIC_DEVICES;
 
-    LOG_INFO("Device cache initialized");
+    ROOT_CYBERWARFARE_LOG_INFO("Device cache initialized");
 };
 
 if (hasInterface) then {
@@ -137,7 +137,8 @@ if (hasInterface) then {
                 [_actionTarget, _actionPlayer] call FUNC(aceAttachGPSTracker);
             },
             {
-                // Action condition - only show if player has GPS tracker item
+                // Action condition - only show if player has GPS tracker item AND target is not a weapon holder
+                if (_target isKindOf "WeaponHolder") exitWith {false};
                 private _gpsTrackerClass = missionNamespace getVariable [SETTING_GPS_TRACKER_DEVICE, "ACE_Banana"];
                 _gpsTrackerClass in (uniformItems _player + vestItems _player + backpackItems _player + items _player);
             }
@@ -185,8 +186,8 @@ if (hasInterface) then {
                 ] call ace_common_fnc_progressBar;
             },
             {
-                // Action condition - always available
-                true
+                // Action condition - available on all objects except weapon holders
+                !(_target isKindOf "WeaponHolder")
             }
         ] call ace_interact_menu_fnc_createAction;
 
@@ -199,12 +200,16 @@ if (hasInterface) then {
 // ============================================================================
 // Initialize Breach Mod Integration
 // ============================================================================
-// Wait for TSP Breach mod to load, then override its functions to prevent
-// breaching of cyber-locked doors. Runs on all machines since breach effects
-// are client-side.
+// Check if TSP Breach mod is loaded, then wait for its functions to initialize
+// and override them to prevent breaching of cyber-locked doors.
+// Runs on all machines since breach effects are client-side.
 
-[{!isNil "tsp_fnc_breach_adjust"}, {
-    call FUNC(initBreachIntegration);
-}] call CBA_fnc_waitUntilAndExecute;
+if (isClass (configFile >> "CfgPatches" >> "tsp_breach")) then {
+    [{!isNil "tsp_fnc_breach_adjust"}, {
+        call FUNC(initBreachIntegration);
+    }] call CBA_fnc_waitUntilAndExecute;
+} else {
+    ROOT_CYBERWARFARE_LOG_INFO("TSP Breach mod not loaded - skipping breach integration");
+};
 
-LOG_INFO("Post-init complete");
+ROOT_CYBERWARFARE_LOG_INFO("Post-init complete");
