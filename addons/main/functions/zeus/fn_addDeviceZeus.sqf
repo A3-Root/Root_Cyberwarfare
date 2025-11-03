@@ -18,13 +18,27 @@
 params ["_logic"];
 private _targetObject = attachedTo _logic;
 private _execUserId = clientOwner;
+
+// If no attached object (Zeus-placed), try to find terrain object at logic position
+if (isNull _targetObject) then {
+    private _logicPos = getPosATL _logic;
+    private _nearObjects = nearestObjects [_logicPos, [], 5];
+
+    // Find the closest object that isn't the logic itself
+    {
+        if (_x != _logic && !(_x isKindOf "Logic")) exitWith {
+            _targetObject = _x;
+        };
+    } forEach _nearObjects;
+};
+
 private _useRadiusMode = isNull _targetObject;
 
 if !(hasInterface) exitWith {};
 
 // In direct mode, validate that the target object is compatible (building or light)
 if (!_useRadiusMode) then {
-    private _isBuilding = _targetObject isKindOf "House" || _targetObject isKindOf "Building";
+    private _isBuilding = ((_targetObject isKindOf "House") || (_targetObject isKindOf "Building"));
     private _isLight = _targetObject isKindOf "Lamps_base_F";
 
     if !(_isBuilding || _isLight) exitWith {

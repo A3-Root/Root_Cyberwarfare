@@ -70,9 +70,20 @@ if (_execUserId == 0) then {
 if (_radiusMode) exitWith {
     private _registeredCount = 0;
 
-    // Find all buildings and lights in radius
-    private _buildings = nearestObjects [_centerPos, ["House", "Building"], _radius];
-    private _lights = nearestObjects [_centerPos, ["Lamps_base_F"], _radius];
+    // Find all objects in radius and filter by type
+    private _allObjects = nearestObjects [_centerPos, [], _radius];
+    private _buildings = [];
+    private _lights = [];
+
+    // Filter objects into buildings and lights
+    {
+        if ((_x isKindOf "House") || (_x isKindOf "Building")) then {
+            _buildings pushBack _x;
+        };
+        if (_x isKindOf "Lamps_base_F") then {
+            _lights pushBack _x;
+        };
+    } forEach _allObjects;
 
     // Register each building
     {

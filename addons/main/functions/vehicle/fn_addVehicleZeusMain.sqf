@@ -55,8 +55,25 @@ if (_isRadiusMode) then {
     // Radius mode: Register all vehicles/drones within radius
     params ["_centerPos", "_radius", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false]];
 
+    // Get all objects in radius and filter by vehicle type
+    private _allObjects = nearestObjects [_centerPos, [], _radius];
+    private _foundObjects = [];
     private _compatibleVehicles = ["Car", "Motorcycle", "Tank", "Helicopter", "Plane", "Ship"];
-    private _foundObjects = nearestObjects [_centerPos, _compatibleVehicles, _radius];
+
+    // Filter to only include compatible vehicles
+    {
+        private _obj = _x;
+        private _isCompatible = false;
+        {
+            if (_obj isKindOf _x) exitWith {
+                _isCompatible = true;
+            };
+        } forEach _compatibleVehicles;
+
+        if (_isCompatible) then {
+            _foundObjects pushBack _obj;
+        };
+    } forEach _allObjects;
 
     private _vehicleCount = 0;
     private _droneCount = 0;
