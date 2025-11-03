@@ -4,7 +4,7 @@
 
 ### Added
 - Direct placement of zeus modules on terrain objects like buildings, streetlamps, etc.
-- Added 'Radius' mode for bulk registration of buildings, lamps, and custom devices using zeus module.
+- Added 'Radius' mode for bulk registration for Hackable Objects, Custom Devices, and Vehicles zeus modules.
 
 ### Fixed
 - ACE GPS Seach/Attach interaction to use a more whitelist based object class identification before adding its functions.
