@@ -62,16 +62,20 @@ private _allComputers = [];
 // Check if target is a building (for unbreachable option)
 private _isBuilding = !_useRadiusMode && {_targetObject isKindOf "House"};
 
+// Capture logic position before dialog (needed for radius mode callback after logic is deleted)
+private _logicPosition = getPosATL _logic;
+
 private _dialogControls = [];
 
 // Add radius slider if in radius mode
 if (_useRadiusMode) then {
-    _dialogControls pushBack ["SLIDER:RADIUS", [localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS", localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS_DESC"], [10, 3000, 1000, 0, getPosATL _logic, [7,120,32,1]]];
+    _dialogControls pushBack ["SLIDER:RADIUS", [localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS", localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS_DESC"], [10, 3000, 1000, 0, _logicPosition, [7,120,32,1]]];
+    _dialogControls pushBack ["TOOLBOX:YESNO", ["Make Unbreachable", "Prevent door breaching by ACE explosives for all buildings with doors in radius"], false];
 };
 
 _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false];
 
-// Add unbreachable option only for buildings with doors
+// Add unbreachable option only for buildings in direct mode
 if (_isBuilding) then {
     _dialogControls pushBack ["TOOLBOX:YESNO", ["Make Unbreachable", "Prevent door breaching by ACE explosives, lockpicking, and other non-hacking methods"], false];
 };
@@ -87,14 +91,17 @@ if (_isBuilding) then {
     _dialogControls,
     {
         params ["_results", "_args"];
-        _args params ["_logic", "_targetObject", "_execUserId", "_allComputers", "_isBuilding", "_useRadiusMode"];
+        _args params ["_logicPosition", "_targetObject", "_execUserId", "_allComputers", "_isBuilding", "_useRadiusMode"];
 
         private _resultIndex = 0;
         private _radius = 0;
+        private _makeUnbreachable = false;
 
-        // Extract radius if in radius mode
+        // Extract radius and unbreachable flag if in radius mode
         if (_useRadiusMode) then {
             _radius = _results select _resultIndex;
+            _resultIndex = _resultIndex + 1;
+            _makeUnbreachable = _results select _resultIndex;
             _resultIndex = _resultIndex + 1;
         };
 
@@ -103,7 +110,6 @@ if (_isBuilding) then {
         _resultIndex = _resultIndex + 1;
 
         // Extract unbreachable setting (only for buildings in direct mode)
-        private _makeUnbreachable = false;
         if (_isBuilding) then {
             _makeUnbreachable = _results select _resultIndex;
             _resultIndex = _resultIndex + 1;
@@ -125,9 +131,8 @@ if (_isBuilding) then {
 
         // Handle radius mode or direct mode
         if (_useRadiusMode) then {
-            // Radius mode: Pass position array instead of logic object
-            private _centerPos = getPosATL _logic;
-            [_centerPos, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+            // Radius mode: Use captured position (logic is already deleted)
+            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
         } else {
             // Direct mode: Register single object
             [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
@@ -138,7 +143,7 @@ if (_isBuilding) then {
         [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;
         playSound "FD_Start_F";
     },
-    [_logic, _targetObject, _execUserId, _allComputers, _isBuilding, _useRadiusMode]
+    [_logicPosition, _targetObject, _execUserId, _allComputers, _isBuilding, _useRadiusMode]
 ] call zen_dialog_fnc_create;
 
 deleteVehicle _logic;

@@ -19,6 +19,7 @@
  * 2: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
  * 3: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
  * 4: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ * 5: _makeUnbreachable <BOOLEAN> (Optional) - Prevent non-hacking breaching methods (doors only), default: false
  *
  * Return Value:
  * None
@@ -52,6 +53,7 @@ if (typeName _firstParam == "ARRAY") then {
     _execUserId = param [2, 0, [0]];
     _linkedComputers = param [3, [], [[]]];
     _availableToFutureLaptops = param [4, false, [false]];
+    _makeUnbreachable = param [5, false, [false]];
 } else {
     // Direct mode: object passed
     _radiusMode = false;
@@ -102,7 +104,7 @@ if (_radiusMode) exitWith {
         } forEach _simpleObjects;
 
         if (_hasDoors) then {
-            [_building, _execUserId, _linkedComputers, _availableToFutureLaptops, false] call FUNC(addDeviceZeusMain);
+            [_building, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] call FUNC(addDeviceZeusMain);
             _registeredCount = _registeredCount + 1;
         };
     } forEach _buildings;

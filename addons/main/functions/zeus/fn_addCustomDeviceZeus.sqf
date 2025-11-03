@@ -17,6 +17,20 @@
 params ["_logic"];
 private _targetObject = attachedTo _logic;
 private _execUserId = clientOwner;
+
+// If no attached object (Zeus-placed), try to find terrain object at logic position
+if (isNull _targetObject) then {
+    private _logicPos = getPosATL _logic;
+    private _nearObjects = nearestObjects [_logicPos, [], 5];
+
+    // Find the closest object that isn't the logic itself
+    {
+        if (_x != _logic && !(_x isKindOf "Logic")) exitWith {
+            _targetObject = _x;
+        };
+    } forEach _nearObjects;
+};
+
 private _useRadiusMode = isNull _targetObject;
 
 if !(hasInterface) exitWith {};

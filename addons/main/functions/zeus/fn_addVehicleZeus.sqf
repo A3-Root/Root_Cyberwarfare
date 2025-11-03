@@ -70,6 +70,9 @@ private _allComputers = [];
     };
 } forEach (24 allObjects 1);
 
+// Capture logic position before dialog (needed for radius mode callback after logic is deleted)
+private _logicPosition = getPosATL _logic;
+
 // Build dialog controls based on object type
 private _dialogControls = [];
 private _dialogTitle = "";
@@ -77,7 +80,7 @@ private _dialogTitle = "";
 // Add radius slider if in radius mode
 if (_useRadiusMode) then {
     _dialogTitle = "Add Hackable Vehicles/Drones - Radius Mode";
-    _dialogControls pushBack ["SLIDER:RADIUS", [localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS", localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS_DESC"], [10, 3000, 1000, 0, getPosATL _logic, [7,120,32,1]]];
+    _dialogControls pushBack ["SLIDER:RADIUS", [localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS", localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS_DESC"], [10, 3000, 1000, 0, _logicPosition, [7,120,32,1]]];
 } else {
     if (_isDrone) then {
         // Simplified dialog for drones - only availability and laptop selection
@@ -112,7 +115,7 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Shou
     _dialogControls,
     {
         params ["_results", "_args"];
-        _args params ["_logic", "_targetObject", "_execUserId", "_allComputers", "_index", "_isDrone", "_useRadiusMode"];
+        _args params ["_logicPosition", "_targetObject", "_execUserId", "_allComputers", "_index", "_isDrone", "_useRadiusMode"];
 
         private _resultIndex = 0;
         private _radius = 0;
@@ -145,9 +148,8 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Shou
                 _selectedComputers = _allComputers apply { _x select 0 };
             };
 
-            // Radius mode: Pass position array instead of logic object
-            private _centerPos = getPosATL _logic;
-            [_centerPos, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+            // Radius mode: Use captured position (logic is already deleted)
+            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 
         } else {
             if (_isDrone) then {
@@ -205,7 +207,7 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Shou
         [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;
         playSound "FD_Start_F";
     },
-    [_logic, _targetObject, _execUserId, _allComputers, _index, _isDrone, _useRadiusMode]
+    [_logicPosition, _targetObject, _execUserId, _allComputers, _index, _isDrone, _useRadiusMode]
 ] call zen_dialog_fnc_create;
 
 deleteVehicle _logic;
