@@ -23,10 +23,23 @@ if (isNull _targetObject) then {
     private _logicPos = getPosATL _logic;
     private _nearObjects = nearestObjects [_logicPos, [], 5];
 
-    // Find the closest object that isn't the logic itself
+    // Find the closest compatible object (vehicle or drone)
+    private _compatibleVehicles = ["Car", "Motorcycle", "Tank", "Helicopter", "Plane", "Ship"];
     {
-        if (_x != _logic && !(_x isKindOf "Logic")) exitWith {
-            _targetObject = _x;
+        if (_x != _logic && !(_x isKindOf "Logic")) then {
+            // Only accept vehicles or drones
+            private _obj = _x;
+            private _isVehicle = false;
+            {
+                if (_obj isKindOf _x) exitWith {
+                    _isVehicle = true;
+                };
+            } forEach _compatibleVehicles;
+            private _isDrone = unitIsUAV _obj;
+
+            if (_isVehicle || _isDrone) exitWith {
+                _targetObject = _obj;
+            };
         };
     } forEach _nearObjects;
 };

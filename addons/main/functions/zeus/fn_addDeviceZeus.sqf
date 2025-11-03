@@ -24,10 +24,16 @@ if (isNull _targetObject) then {
     private _logicPos = getPosATL _logic;
     private _nearObjects = nearestObjects [_logicPos, [], 5];
 
-    // Find the closest object that isn't the logic itself
+    // Find the closest compatible object (building or light)
     {
-        if (_x != _logic && !(_x isKindOf "Logic")) exitWith {
-            _targetObject = _x;
+        if (_x != _logic && !(_x isKindOf "Logic")) then {
+            // Only accept buildings or lights
+            private _isBuilding = ((_x isKindOf "House") || (_x isKindOf "Building"));
+            private _isLight = _x isKindOf "Lamps_base_F";
+
+            if (_isBuilding || _isLight) exitWith {
+                _targetObject = _x;
+            };
         };
     } forEach _nearObjects;
 };
