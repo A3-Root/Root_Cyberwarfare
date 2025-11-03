@@ -98,7 +98,7 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
 private _computerNetIdString = str (netId _entity);
 
 private _content = "
-    Type 'devices' to list all devices you can hack into.
+    Type 'devices <type>' to list devices. Use 'devices doors' for buildings, then 'devices doors <buildingId>' for door details.
             .
     Type 'door BuildingID DoorID (ID or 'a' for all) lock/unlock' to lock/unlock doors. Ex: 'door 1454 2881 lock' or 'door 1454 a unlock'
             .
@@ -130,7 +130,8 @@ private _menuContent = "
     [
         [
             ['command', _commandName, true, false],
-            ['path', 'type', true, false]
+            ['path', 'type', true, false],
+            ['path', 'deviceId', false, false]
         ]
     ];
     private _commandSettings = [_commandName, _commandOpts, _commandSyntax];
@@ -140,13 +141,14 @@ private _menuContent = "
     if (!_ae3OptsSuccess) exitWith {};
 
     private _type = (_ae3OptsThings select 0);
+    private _deviceId = if (count _ae3OptsThings > 1) then { _ae3OptsThings select 1 } else { '' };
 
     private _owner = clientOwner;
 
     private _nameOfVariable = 'ROOT_CYBERWARFARE_LIST_DEVICES-' + "+ _computerNetIdString +";
 
     missionNamespace setVariable [_nameOfVariable, false, true];
-    [_owner, _computer, _nameOfVariable, _commandName, _type] remoteExec ['Root_fnc_listDevicesInSubnet', _owner];
+    [_owner, _computer, _nameOfVariable, _commandName, _type, _deviceId] remoteExec ['Root_fnc_listDevicesInSubnet', _owner];
     private _tStart = time;
     waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
     if (!(missionNamespace getVariable [_nameOfVariable, false])) then {

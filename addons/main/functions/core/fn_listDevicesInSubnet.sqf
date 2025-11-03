@@ -8,17 +8,20 @@
  * 1: _computer <OBJECT> - The laptop/computer object
  * 2: _nameOfVariable <STRING> - Variable name for completion flag
  * 3: _commandPath <STRING> - Command path for access checking
+ * 4: _type <STRING> - Device type to list (doors, lights, etc.)
+ * 5: _deviceId <STRING> (Optional) - Specific device ID to show details for, default: ""
  *
  * Return Value:
  * None
  *
  * Example:
- * [123, _laptop, "var1", "/tools/"] call Root_fnc_listDevicesInSubnet;
+ * [123, _laptop, "var1", "/tools/", "doors"] call Root_fnc_listDevicesInSubnet;
+ * [123, _laptop, "var1", "/tools/", "doors", "1234"] call Root_fnc_listDevicesInSubnet;
  *
  * Public: No
  */
 
-params['_owner', '_computer', '_nameOfVariable', '_commandPath', '_type'];
+params['_owner', '_computer', '_nameOfVariable', '_commandPath', '_type', ['_deviceId', '', ['']]];
 
 private _string = "";
 private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
@@ -68,40 +71,78 @@ private _accessiblePowerGrids = _allPowerGrids select {
 
 if (_type in ["doors", "all", "a"]) then {
     if (_accessibleDoors isNotEqualTo []) then {
-        {
-            private _building = objectFromNetId (_x select 1);
-            private _buildingDisplayName = getText (configOf _building >> "displayName");
-            private _mapGridPos = mapGridPosition _building;
-            private _doorsOfBuilding = _x select 2;
-            _string = format ["Building: %1 (%2) located at Grid - %3", (_x select 0), _buildingDisplayName, _mapGridPos];
-            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        // Check if a specific building ID was provided
+        if (_deviceId != "") then {
+            // Detailed view for specific building
+            private _buildingIdNum = parseNumber _deviceId;
+            private _foundBuilding = false;
+
             {
-                private _currentState = _building getVariable [format ['bis_disabled_Door_%1', _x], 5];
-                private _currentStateString = "";
-                private _currentStateStringColor = "#8ce10b";
-                if(_currentState == 1) then {
-                    _currentStateString = "locked ";
-                    _currentStateStringColor = "#fa4c58";
-                } else {
-                    _currentStateString = "unlocked ";
+                private _currentBuildingId = _x select 0;
+                if (_currentBuildingId == _buildingIdNum) exitWith {
+                    _foundBuilding = true;
+                    private _building = objectFromNetId (_x select 1);
+                    private _buildingDisplayName = getText (configOf _building >> "displayName");
+                    private _mapGridPos = mapGridPosition _building;
+                    private _doorsOfBuilding = _x select 2;
+                    private _doorCount = count _doorsOfBuilding;
+
+                    _string = format ["Building: %1 (%2) - %3 door(s) - Grid: %4", _currentBuildingId, _buildingDisplayName, _doorCount, _mapGridPos];
+                    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+
+                    {
+                        private _currentState = _building getVariable [format ['bis_disabled_Door_%1', _x], 5];
+                        private _currentStateString = "";
+                        private _currentStateStringColor = "#8ce10b";
+                        if(_currentState == 1) then {
+                            _currentStateString = "locked ";
+                            _currentStateStringColor = "#fa4c58";
+                        } else {
+                            _currentStateString = "unlocked ";
+                        };
+
+                        private _doorAnim = format ["Door_%1_rot", _x];
+                        private _phase = _building animationPhase _doorAnim;
+
+                        private _phaseString = "";
+                        private _phaseStringColor = "#8ce10b";
+                        if(_phase > 0.5) then {
+                            _phaseString = "open";
+                        } else {
+                            _phaseString = "closed";
+                            _phaseStringColor = "#fa4c58";
+                        };
+
+                        _string = format ["    Door: %1 ", _x];
+                        [_computer, [[_string, [_currentStateString, _currentStateStringColor], [_phaseString, _phaseStringColor]]]] call AE3_armaos_fnc_shell_stdout;
+                    } forEach _doorsOfBuilding;
                 };
+            } forEach _accessibleDoors;
 
-                private _doorAnim = format ["Door_%1_rot", _x];
-                private _phase = _building animationPhase _doorAnim;
+            if (!_foundBuilding) then {
+                _string = format ["<t color='%1'>Building ID %2 not found or not accessible!</t>", "#fa4c58", _deviceId];
+                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+            };
+        } else {
+            // Summary view - show building count and IDs only
+            private _buildingCount = count _accessibleDoors;
+            _string = format ["Buildings with doors: %1", _buildingCount];
+            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
-                private _phaseString = "";
-                private _phaseStringColor = "#8ce10b";
-                if(_phase > 0.5) then { 
-                    _phaseString = "open";
-                } else {
-                    _phaseString = "closed";
-                    _phaseStringColor = "#fa4c58";
-                };
+            {
+                private _buildingId = _x select 0;
+                private _building = objectFromNetId (_x select 1);
+                private _buildingDisplayName = getText (configOf _building >> "displayName");
+                private _mapGridPos = mapGridPosition _building;
+                private _doorCount = count (_x select 2);
 
-                _string = format ["    Door: %1 ", _x];
-                [_computer, [[_string, [_currentStateString, _currentStateStringColor], [_phaseString, _phaseStringColor]]]] call AE3_armaos_fnc_shell_stdout;
-            } forEach _doorsOfBuilding;
-        } forEach _accessibleDoors;
+                _string = format ["    ID: %1 - %2 (%3 door(s)) @ %4", _buildingId, _buildingDisplayName, _doorCount, _mapGridPos];
+                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+            } forEach _accessibleDoors;
+
+            _string = format ["Type 'devices doors <buildingId>' for detailed door information."];
+            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        };
     };
 };
 
