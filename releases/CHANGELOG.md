@@ -1,5 +1,18 @@
 # Changelog
 
+## Update 2 (v1.0.3.1)
+
+### Added
+- Direct placement of zeus modules on terrain objects like buildings, streetlamps, etc.
+- Added 'Radius' mode for bulk registration of buildings, lamps, and custom devices using zeus module.
+
+### Fixed
+- ACE GPS Seach/Attach interaction to use a more whitelist based object class identification before adding its functions.
+
+### Changed
+- Added an additional 5 seconds of wait time before GPS functions are initialized in the server. Only when the uiTime and serverTime are atleast 10 seconds are the GPS functions initialized on players and objects.
+- Added blacklist of 'WeaponHolder' and 'WeaponHolderSimulated' object types to be ignored by the GPS search/attach function.
+
 ## Update 1 (v1.0.2.1)
 
 ### Added

@@ -190,7 +190,7 @@ class CfgVehicles {
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {
-			description = "Synchronize this module to buildings (with doors), and lights to make them hackable.";
+			description = "Synchronize this module to buildings (with doors), lights, or triggers to make them hackable. Triggers enable batch-registration of terrain buildings/lights within an area.";
 			sync[] = {"House", "Building", "UAV", "Lamps_base_F", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};
@@ -328,7 +328,7 @@ class CfgVehicles {
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {
-			description = "Makes a vehicle hackable. Synchronize to vehicles and drones and optionally to AE3 Laptop objects.";
+			description = "Makes a vehicle hackable. Synchronize to vehicles and drones and optionally to AE3 Laptop objects. Triggers enable batch-registration of vehicles and drones within the area.";
 			sync[] = {"Car", "Tank", "Air", "Ship", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};
@@ -452,7 +452,7 @@ class CfgVehicles {
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {
-			description = "Creates a custom hackable device with programmable activation/deactivation code.";
+			description = "Creates a custom hackable device with programmable activation/deactivation code. Triggers enable batch-registration of custom devices within the area.";
 			sync[] = {"All", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};
@@ -520,7 +520,7 @@ class CfgVehicles {
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {
-			description = "Creates a power generator that controls lights within a radius. Synchronize to generator object and optionally to AE3 Laptop objects.";
+			description = "Creates a power generator that controls lights within a radius. Synchronize to generator object and optionally to AE3 Laptop objects. Triggers enable batch-registration of powergrids within the area.";
 			sync[] = {"All", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};

@@ -18,12 +18,27 @@
 params ["_logic"];
 private _targetObject = attachedTo _logic;
 private _execUserId = clientOwner;
-private _position = getPosATL _targetObject;
 
-if (isNull _targetObject) exitWith {
-    deleteVehicle _logic;
-    ["Place the module on an object!"] call zen_common_fnc_showMessage;
+// If no attached object (Zeus-placed), try to find terrain object at logic position
+if (isNull _targetObject) then {
+    private _logicPos = getPosATL _logic;
+    private _nearObjects = nearestObjects [_logicPos, [], 5];
+
+    // Find the closest object that isn't the logic itself
+    {
+        if (_x != _logic && !(_x isKindOf "Logic")) exitWith {
+            _targetObject = _x;
+        };
+    } forEach _nearObjects;
+
+    // If still no object found, show error
+    if (isNull _targetObject) exitWith {
+        deleteVehicle _logic;
+        ["Place the module on an object!"] call zen_common_fnc_showMessage;
+    };
 };
+
+private _position = getPosATL _targetObject;
 
 if !(hasInterface) exitWith {};
 

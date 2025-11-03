@@ -114,7 +114,7 @@ if (isServer) then {
 };
 
 if (hasInterface) then {
-    [{(!isNull ACE_player) && (CBA_missionTime > 0)}, {
+    [{(!isNull ACE_player) && (uiTime > 10) && (serverTime > 10)}, {
         call FUNC(createDiaryEntry);
         // ========================================================================
         // ACE Action: Attach GPS Tracker to Object
@@ -139,13 +139,18 @@ if (hasInterface) then {
             {
                 // Action condition - only show if player has GPS tracker item AND target is not a weapon holder
                 if (_target isKindOf "WeaponHolder") exitWith {false};
+                if (_target isKindOf "WeaponHolderSimulated") exitWith {false};
                 private _gpsTrackerClass = missionNamespace getVariable [SETTING_GPS_TRACKER_DEVICE, "ACE_Banana"];
                 _gpsTrackerClass in (uniformItems _player + vestItems _player + backpackItems _player + items _player);
             }
         ] call ace_interact_menu_fnc_createAction;
 
-        // Add action to all objects (class "All")
-        ["All", 0, ["ACE_MainActions"], _actionAttach, true] call ace_interact_menu_fnc_addActionToClass;
+        // Add action to specific object classes (whitelist approach to avoid conflicts with ACE items)
+        // Includes: All vehicle types, units, static weapons, buildings, lights, and PhysX objects
+        private _validClasses = ["Car", "Tank", "Helicopter", "Plane", "Ship", "Motorcycle", "Man", "House", "Building", "Lamps_base_F", "ThingX"];
+        {
+            [_x, 0, ["ACE_MainActions"], _actionAttach, true] call ace_interact_menu_fnc_addActionToClass;
+        } forEach _validClasses;
 
         // ========================================================================
         // ACE Action: Search for GPS Tracker on Object
@@ -187,14 +192,19 @@ if (hasInterface) then {
             },
             {
                 // Action condition - available on all objects except weapon holders
-                !(_target isKindOf "WeaponHolder")
+                if (_target isKindOf "WeaponHolder") exitWith {false};
+                if (_target isKindOf "WeaponHolderSimulated") exitWith {false};
+                true
             }
         ] call ace_interact_menu_fnc_createAction;
 
-        // Add action to all objects (class "All")
-        ["All", 0, ["ACE_MainActions"], _actionSearch, true] call ace_interact_menu_fnc_addActionToClass;
+        // Add action to specific object classes (whitelist approach to avoid conflicts with ACE items)
+        // Uses same class list as attach action to maintain consistency
+        {
+            [_x, 0, ["ACE_MainActions"], _actionSearch, true] call ace_interact_menu_fnc_addActionToClass;
+        } forEach _validClasses;
 
-    }, []] call CBA_fnc_waitUntilAndExecute;
+    }, [], 5] call CBA_fnc_waitUntilAndExecute;
 };
 
 // ============================================================================

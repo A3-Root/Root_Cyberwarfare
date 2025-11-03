@@ -18,13 +18,20 @@
 params ["_logic"];
 private _targetObject = attachedTo _logic;
 private _execUserId = clientOwner;
-
-if (isNull _targetObject) exitWith {
-    deleteVehicle _logic;
-    ["Place the module on an object!"] call zen_common_fnc_showMessage;
-};
+private _useRadiusMode = isNull _targetObject;
 
 if !(hasInterface) exitWith {};
+
+// In direct mode, validate that the target object is compatible (building or light)
+if (!_useRadiusMode) then {
+    private _isBuilding = _targetObject isKindOf "House" || _targetObject isKindOf "Building";
+    private _isLight = _targetObject isKindOf "Lamps_base_F";
+
+    if !(_isBuilding || _isLight) exitWith {
+        deleteVehicle _logic;
+        ["Object is not a building or light!"] call zen_common_fnc_showMessage;
+    };
+};
 
 // Get all existing laptops with hacking tools
 private _allComputers = [];
@@ -39,11 +46,16 @@ private _allComputers = [];
 } forEach (24 allObjects 1);
 
 // Check if target is a building (for unbreachable option)
-private _isBuilding = _targetObject isKindOf "House";
+private _isBuilding = !_useRadiusMode && {_targetObject isKindOf "House"};
 
-private _dialogControls = [
-    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false]
-];
+private _dialogControls = [];
+
+// Add radius slider if in radius mode
+if (_useRadiusMode) then {
+    _dialogControls pushBack ["SLIDER:RADIUS", [localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS", localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS_DESC"], [10, 3000, 1000, 0, getPosATL _logic, [7,120,32,1]]];
+};
+
+_dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false];
 
 // Add unbreachable option only for buildings with doors
 if (_isBuilding) then {
@@ -57,27 +69,36 @@ if (_isBuilding) then {
 } forEach _allComputers;
 
 [
-    format ["Add Hackable Object - %1", getText (configOf _targetObject >> "displayName")], 
+    if (_useRadiusMode) then {"Add Hackable Objects - Radius Mode"} else {format ["Add Hackable Object - %1", getText (configOf _targetObject >> "displayName")]},
     _dialogControls,
-    // Fix the dialog result handler section:
     {
         params ["_results", "_args"];
-        _args params ["_targetObject", "_execUserId", "_allComputers", "_isBuilding"];
+        _args params ["_logic", "_targetObject", "_execUserId", "_allComputers", "_isBuilding", "_useRadiusMode"];
 
-        // Extract results based on whether this is a building
-        private _availableToFutureLaptops = _results select 0;
+        private _resultIndex = 0;
+        private _radius = 0;
+
+        // Extract radius if in radius mode
+        if (_useRadiusMode) then {
+            _radius = _results select _resultIndex;
+            _resultIndex = _resultIndex + 1;
+        };
+
+        // Extract availability setting
+        private _availableToFutureLaptops = _results select _resultIndex;
+        _resultIndex = _resultIndex + 1;
+
+        // Extract unbreachable setting (only for buildings in direct mode)
         private _makeUnbreachable = false;
-        private _checkboxStartIndex = 1;
-
         if (_isBuilding) then {
-            _makeUnbreachable = _results select 1;
-            _checkboxStartIndex = 2;
+            _makeUnbreachable = _results select _resultIndex;
+            _resultIndex = _resultIndex + 1;
         };
 
         // Process laptop checkboxes
         private _selectedComputers = [];
         {
-            if (_results select (_checkboxStartIndex + _forEachIndex)) then {
+            if (_results select (_resultIndex + _forEachIndex)) then {
                 _selectedComputers pushBack (_x select 0);
             };
         } forEach _allComputers;
@@ -88,15 +109,22 @@ if (_isBuilding) then {
             _selectedComputers = _allComputers apply { _x select 0 };
         };
 
-        // Call addDeviceZeusMain (only handles doors/lights now)
-        [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
-        ["Hackable Building/Light Added!"] call zen_common_fnc_showMessage;
-    }, 
+        // Handle radius mode or direct mode
+        if (_useRadiusMode) then {
+            // Radius mode: Pass position array instead of logic object
+            private _centerPos = getPosATL _logic;
+            [_centerPos, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+        } else {
+            // Direct mode: Register single object
+            [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+            ["Hackable Building/Light Added!"] call zen_common_fnc_showMessage;
+        };
+    },
     {
         [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;
         playSound "FD_Start_F";
     },
-    [_targetObject, _execUserId, _allComputers, _isBuilding]
+    [_logic, _targetObject, _execUserId, _allComputers, _isBuilding, _useRadiusMode]
 ] call zen_dialog_fnc_create;
 
 deleteVehicle _logic;

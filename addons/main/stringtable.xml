@@ -311,6 +311,15 @@
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_ABORTED">
             <English>Aborted</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS">
+            <English>Bulk Registration Radius</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS_DESC">
+            <English>Radius in meters to search for compatible objects (100-3000m)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_BULK_SUCCESS">
+            <English>Registered %1 device(s) successfully!</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_COMPLETE">
             <English>Copied %1 device links from %2 to %3</English>
         </Key>

@@ -20,13 +20,40 @@ private _execUserId = clientOwner;
 
 if !(hasInterface) exitWith {};
 
-if (isNull _targetObject) exitWith {
-    deleteVehicle _logic;
-    ["Place the module on an object!"] call zen_common_fnc_showMessage;
+// If no attached object (Zeus-placed), try to find terrain object at logic position
+if (isNull _targetObject) then {
+    private _logicPos = getPosATL _logic;
+    private _nearObjects = nearestObjects [_logicPos, [], 5];
+
+    // Find the closest object that isn't the logic itself
+    {
+        if (_x != _logic && !(_x isKindOf "Logic")) exitWith {
+            _targetObject = _x;
+        };
+    } forEach _nearObjects;
+
+    // If still no object found, show error
+    if (isNull _targetObject) exitWith {
+        deleteVehicle _logic;
+        ["Place the module on an object!"] call zen_common_fnc_showMessage;
+    };
 };
 
-// Detect if target is a drone
+// Validate that the target object is a vehicle or drone
+private _isVehicle = false;
+private _compatibleVehicles = ["Car", "Motorcycle", "Tank", "Helicopter", "Plane", "Ship"];
+{
+    if (_targetObject isKindOf _x) then {
+        _isVehicle = true;
+        break;
+    };
+} forEach _compatibleVehicles;
 private _isDrone = unitIsUAV _targetObject;
+
+if !((_isVehicle) || (_isDrone)) exitWith {
+    deleteVehicle _logic;
+    ["Object is not a vehicle or drone! Use 'Add Device' for buildings/lights or 'Add Custom Device' for other objects."] call zen_common_fnc_showMessage;
+};
 
 private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_VEHICLE_INDEX", 1];
 ROOT_hackingVehicleName = format ["Vehicle_%1", _index];

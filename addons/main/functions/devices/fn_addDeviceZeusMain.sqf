@@ -1,16 +1,24 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Server-side function to add a hackable building (doors/lights) to the network.
+ * Description: Server-side function to add hackable building(s) (doors/lights) to the network.
  * This function ONLY handles doors and lights. For drones use fn_addVehicleZeusMain,
  * for custom devices use fn_addCustomDeviceZeusMain, for vehicles use fn_addVehicleZeusMain.
  *
  * Arguments:
+ * DIRECT MODE (single object):
  * 0: _targetObject <OBJECT> - The building/light object to make hackable
  * 1: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
  * 2: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
  * 3: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
  * 4: _makeUnbreachable <BOOLEAN> (Optional) - Prevent non-hacking breaching methods (doors only), default: false
+ *
+ * RADIUS MODE (multiple objects):
+ * 0: _centerPosition <ARRAY> - Position array [x, y, z] for search center
+ * 1: _radius <NUMBER> - Search radius in meters
+ * 2: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
+ * 3: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
+ * 4: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
  *
  * Return Value:
  * None
@@ -18,23 +26,88 @@
  * Example:
  * [_building, 0, [], false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
  * [_lamp, 0, [], true, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+ * [[100, 200, 0], 500, 0, [], true] remoteExec ["Root_fnc_addDeviceZeusMain", 2]; // Radius mode with position
  *
  * Public: No
  */
 
-params [
-    ["_targetObject", objNull, [objNull]],
-    ["_execUserId", 0, [0]],
-    ["_linkedComputers", [], [[]]],
-    ["_availableToFutureLaptops", false, [false]],
-    ["_makeUnbreachable", false, [false]]
-];
+// Detect mode based on first parameter type
+private _radiusMode = false;
+private _centerPos = [];
+private _targetObject = objNull;
+private _radius = 0;
+private _execUserId = 0;
+private _linkedComputers = [];
+private _availableToFutureLaptops = false;
+private _makeUnbreachable = false;
+
+private _firstParam = _this select 0;
+
+// Check if first parameter is an array (position array for radius mode) or object (direct mode)
+if (typeName _firstParam == "ARRAY") then {
+    // Radius mode: position array passed
+    _radiusMode = true;
+    _centerPos = _firstParam;
+    _radius = param [1, 1000, [0]];
+    _execUserId = param [2, 0, [0]];
+    _linkedComputers = param [3, [], [[]]];
+    _availableToFutureLaptops = param [4, false, [false]];
+} else {
+    // Direct mode: object passed
+    _radiusMode = false;
+    _targetObject = _firstParam;
+    _execUserId = param [1, 0, [0]];
+    _linkedComputers = param [2, [], [[]]];
+    _availableToFutureLaptops = param [3, false, [false]];
+    _makeUnbreachable = param [4, false, [false]];
+};
 
 if (_execUserId == 0) then {
     _execUserId = owner _targetObject;
 };
 
-// Load device arrays from global storage
+// Handle radius mode
+if (_radiusMode) exitWith {
+    private _registeredCount = 0;
+
+    // Find all buildings and lights in radius
+    private _buildings = nearestObjects [_centerPos, ["House", "Building"], _radius];
+    private _lights = nearestObjects [_centerPos, ["Lamps_base_F"], _radius];
+
+    // Register each building
+    {
+        private _building = _x;
+        // Check if building has doors by checking config
+        private _config = configOf _building;
+        private _simpleObjects = getArray (_config >> "SimpleObject" >> "animate");
+        private _hasDoors = false;
+        {
+            if (count _x == 2) then {
+                private _objectName = _x select 0;
+                if (_objectName regexMatch "door_.*") exitWith {
+                    _hasDoors = true;
+                };
+            };
+        } forEach _simpleObjects;
+
+        if (_hasDoors) then {
+            [_building, _execUserId, _linkedComputers, _availableToFutureLaptops, false] call FUNC(addDeviceZeusMain);
+            _registeredCount = _registeredCount + 1;
+        };
+    } forEach _buildings;
+
+    // Register each light
+    {
+        [_x, _execUserId, _linkedComputers, _availableToFutureLaptops, false] call FUNC(addDeviceZeusMain);
+        _registeredCount = _registeredCount + 1;
+    } forEach _lights;
+
+    // Send feedback to user
+    [format [localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_SUCCESS", _registeredCount]] remoteExec ["zen_common_fnc_showMessage", _execUserId];
+    [format ["Root Cyber Warfare: Registered %1 device(s) in %2m radius", _registeredCount, _radius]] remoteExec ["systemChat", _execUserId];
+};
+
+// Load device arrays from global storage (direct mode)
 private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
 private _allDoors = _allDevices select 0;
 private _allLamps = _allDevices select 1;
