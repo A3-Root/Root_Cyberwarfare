@@ -34,19 +34,49 @@ All modules (except "Modify Power Costs") can be placed on specific objects or e
 
 ![Zeus Modules Interface](../images/Root_Cyberwarfare_ZeusModules.jpg)
 
+### Module Placement Modes
+
+Most Zeus modules support two placement modes:
+
+**1. Terrain Object Mode (Direct Placement)**
+- Place the module directly on a terrain object (building, vehicle, lamp, etc.)
+- The module will register that specific object immediately
+- Best for precisely targeting individual objects
+- Example: Place "Add Hackable Object" on a specific building to register only that building
+
+**2. Radius Mode (Area Registration)**
+- Place the module on empty ground or where no compatible object is detected
+- A dialog appears with a **radius slider** (10-3000m range)
+- All compatible objects within the radius are registered automatically
+- Best for bulk registration of multiple objects at once
+- Example: Place "Add Hackable Vehicle" on empty ground with 500m radius to register all vehicles in that area
+
+**Module Support:**
+- **Add Hackable Object**: Supports both modes (registers buildings and lights)
+- **Add Hackable Vehicle**: Supports both modes (registers vehicles and drones)
+- **Add Custom Device**: Supports only direct placement mode
+- **Add GPS Tracker**: Supports only direct placement mode
+- **Add Power Generator**: Supports only direct placement mode
+
+**Benefits of Radius Mode:**
+- Quickly register dozens of objects without clicking each one
+- Perfect for setting up entire bases or towns
+- Radius is configurable from 10m to 3000m (3km)
+- Can combine with "Make Unbreachable" option for doors
+
 ## Zeus Modules Overview
 
-| Module Name | Purpose | Attach to Object? |
-|-------------|---------|-------------------|
-| Add Hacking Tools | Install hacking software on laptops | Yes |
-| Add Hackable Object | Register doors/lights in buildings | Yes |
-| Add Custom Device | Create scripted devices | Yes |
-| Add Hackable File | Add downloadable files | No |
-| Add GPS Tracker | Attach GPS tracker to objects | Yes |
-| Add Hackable Vehicle | Register vehicles/drones | Yes |
-| Add Power Generator | Create power grid control | Yes |
-| Copy Device Links | Transfer laptop permissions | No |
-| Modify Power Costs | Adjust power consumption | No |
+| Module Name | Purpose | Placement Modes |
+|-------------|---------|-----------------|
+| Add Hacking Tools | Install hacking software on laptops | Direct only |
+| Add Hackable Object | Register doors/lights in buildings | Direct + Radius |
+| Add Custom Device | Create scripted devices | Direct only |
+| Add Hackable File | Add downloadable files | Dialog only |
+| Add GPS Tracker | Attach GPS tracker to objects | Direct only |
+| Add Hackable Vehicle | Register vehicles/drones | Direct + Radius |
+| Add Power Generator | Create power grid control | Direct only |
+| Copy Device Links | Transfer laptop permissions | Dialog only |
+| Modify Power Costs | Adjust power consumption | Dialog only |
 
 ---
 

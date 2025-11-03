@@ -12,6 +12,7 @@
 ### Changed
 - Added an additional 5 seconds of wait time before GPS functions are initialized in the server. Only when the uiTime and serverTime are atleast 10 seconds are the GPS functions initialized on players and objects.
 - Added blacklist of 'WeaponHolder' and 'WeaponHolderSimulated' object types to be ignored by the GPS search/attach function.
+- Modified the dive listings to show a high level list with optional command to show detailed list. Helps prevent the display from being cut off.
 
 ## Update 1 (v1.0.2.1)
 

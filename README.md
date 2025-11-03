@@ -70,6 +70,11 @@ Root's Cyber Warfare introduces 8 distinct device types that can be hacked and c
 4. Use **Add Hackable Object/Vehicle/etc.** modules to register devices
 5. Players can now hack those devices from the laptop
 
+**Zeus Module Features:**
+- **Terrain Object Placement**: Place modules directly on terrain objects (buildings, vehicles, etc.) to register them
+- **Radius Mode**: Place modules on empty ground to register all compatible objects within a configurable radius
+- **Bulk Registration**: Use radius mode to quickly register multiple devices at once (buildings, lights, vehicles, drones)
+
 ### For Mission Makers
 
 ```sqf

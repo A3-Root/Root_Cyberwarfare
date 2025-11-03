@@ -43,14 +43,14 @@ The hacking tools add specialized commands for device control.
 
 **Syntax:**
 ```bash
-devices [type]
+devices [type] [deviceId]
 ```
 
 **Description:**
-Lists all devices you have access to hack. Optionally filter by device type.
+Lists all devices you have access to hack. Optionally filter by device type. When a device ID is provided, shows detailed information for that specific device.
 
 **Type Filters:**
-- `doors` - Show only doors
+- `doors` - Show only doors/buildings
 - `lights` - Show only lights
 - `drones` - Show only drones/UAVs
 - `files` - Show only downloadable files
@@ -60,23 +60,53 @@ Lists all devices you have access to hack. Optionally filter by device type.
 - `powergrids` - Show only power generators
 - `all` or `a` - Show all devices (default)
 
-**Examples:**
+**Examples (Summary View):**
 ```bash
-devices              # List all accessible devices
-devices doors        # List only doors
-devices vehicles     # List only vehicles
-devices a            # List all devices
+devices              # List all accessible devices (summary)
+devices doors        # List only doors (summary: ID, name, location)
+devices vehicles     # List only vehicles (summary: ID, name, location)
+devices a            # List all devices (summary)
+```
+
+**Examples (Detailed View):**
+```bash
+devices doors 1234      # Show detailed door information for building 1234
+devices vehicles 5678   # Show all hackable features for vehicle 5678
+devices drones 9101     # Show detailed drone status and faction
+devices gps 1122        # Show GPS tracker status and location history
+devices powergrids 3344 # Show affected lights in power grid 3344
 ```
 
 **Output Format:**
-- **Doors**: Building ID, display name, grid location, individual door IDs with lock status (locked/unlocked) and state (open/closed)
-- **Lights**: Light ID, display name, grid location, status (ON/OFF)
-- **Drones**: Drone ID, faction (color-coded), display name, grid location
-- **Files**: File ID, filename, estimated transfer time (seconds)
-- **Custom**: Device ID, custom name
-- **GPS Trackers**: Tracker ID, name, track time, update frequency, power cost, status (Untracked/Tracking/Completed/Dead)
-- **Vehicles**: Vehicle ID, name, display name, enabled features (Battery, Speed, Brakes, Lights, Engine, Alarm), grid location
-- **Power Grids**: Grid ID, name, display name, radius, grid location, status (ON/OFF)
+
+**Summary View** (no device ID provided):
+- **Doors**: `<Building ID> - <Building Name> - <Grid Location>` with aggregate lock status (Locked/Unlocked/Partially Locked)
+- **Lights**: `<Light ID> - <Building Name> - <Grid Location>`
+- **Drones**: `<Drone ID> - <Drone Name> - <Grid Location>`
+- **Files**: `<File ID> - <File Name> - <Download Time>`
+- **Custom**: `<Device ID> - <Device Name> - <Grid Location>`
+- **GPS Trackers**: `<Tracker ID> - <Tracker Name> - <Grid Location>`
+- **Vehicles**: `<Vehicle ID> - <Vehicle Name> - <Grid Location>`
+- **Power Grids**: `<Grid ID> - <Grid Name> - <Grid Location>`
+
+**Detailed View** (device ID provided):
+- **Doors**: Individual door IDs with lock status (Locked/Unlocked) and state (Open/Closed)
+- **Lights**: Individual light IDs with status (ON/OFF)
+- **Drones**: Faction (color-coded), display name, grid location, status
+- **Files**: File name, size, estimated transfer time, file content
+- **Custom**: Device information and status (if supported)
+- **GPS Trackers**: Track time, update frequency, power cost, status, last position
+- **Vehicles**: Hackable features with allowed/not allowed indicators, current vehicle status (fuel, engine, lights, damage)
+- **Power Grids**: Radius, state (ON/OFF), count of affected lights with their IDs
+
+**Color Coding:**
+Device status information is color-coded for quick identification:
+- **Green** - Active, On, Unlocked, Allowed, or Tracking
+- **Red** - Inactive, Off, Locked, Not Allowed, or Failed
+- **Yellow** - Partially Locked or Completed
+- **Blue** - BLUFOR faction or Untracked (available)
+- **Purple** - Civilian faction
+- **Dark Red** - OPFOR faction (drones)
 
 ---
 

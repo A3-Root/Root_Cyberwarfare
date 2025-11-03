@@ -133,6 +133,13 @@ Operations consume battery (Watt-hours). Commands fail if insufficient power. Re
 
 [img]https://i.postimg.cc/zvHy5ZQ9/Root-Cyberwarfare-Zeus-Modules.jpg[/img]
 
+[h3]Module Placement Modes[/h3]
+[list]
+[*][b]Terrain Object Mode:[/b] Place modules directly on terrain objects (buildings, vehicles, etc.) to register them instantly
+[*][b]Radius Mode:[/b] Place modules on empty ground to register all compatible objects within a configurable radius (10-3000m)
+[*][b]Bulk Registration:[/b] Use radius mode to quickly register multiple devices at once (buildings, lights, vehicles, drones)
+[/list]
+
 [h3]Zeus Modules[/h3]
 [b]Add Hacking Tools[/b] - Enable laptop hacking capability
 

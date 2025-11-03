@@ -322,10 +322,10 @@ private _diaryDevices = player createDiaryRecord [
 	This includes doors, lighting, drones, GPS systems, vehicles, and any custom mission-specific network-enabled units.<br/><br/>
 
 	<font color='#3498DB'>Syntax:</font><br/>
-	devices [filter]<br/><br/>
+	devices [filter] [deviceId]<br/><br/>
 
 	<font color='#3498DB'>Available Filters:</font><br/>
-	all        // Show all connected devices<br/>
+	all        // Show all connected devices (summary view)<br/>
 	doors      // List access control systems (buildings and locks)<br/>
 	lights     // List environmental lighting units<br/>
 	drones     // Show unmanned aerial vehicles<br/>
@@ -335,16 +335,32 @@ private _diaryDevices = player createDiaryRecord [
 	custom     // Scan for mission-specific scripted objects<br/>
 	powergrids // List power generators and electrical grids<br/><br/>
 
-	<font color='#3498DB'>Examples:</font><br/>
+	<font color='#3498DB'>Examples (Summary View):</font><br/>
 	devices all        // List every device currently available to this system<br/>
-	devices drones     // Show only UAVs controlled by the system<br/>
-	devices powergrids // Show only power generators and electrical grids<br/><br/>
+	devices drones     // Show only UAVs with basic info (ID, name, location)<br/>
+	devices vehicles   // Show vehicles with basic info (ID, name, location)<br/>
+	devices powergrids // Show power grids with basic info (ID, name, location)<br/><br/>
+
+	<font color='#3498DB'>Examples (Detailed View):</font><br/>
+	devices doors 1234      // Show detailed door information for building 1234<br/>
+	devices vehicles 5678   // Show all hackable features for vehicle 5678<br/>
+	devices drones 9101     // Show detailed drone status and faction<br/>
+	devices gps 1122        // Show GPS tracker status and location history<br/><br/>
+
+	<font color='#3498DB'>Color Coding:</font><br/>
+	Device status information is color-coded for quick identification:<br/>
+	<font color='#8ce10b'>Green</font>   - Active, On, Unlocked, Allowed, or Tracking<br/>
+	<font color='#fa4c58'>Red</font>     - Inactive, Off, Locked, Not Allowed, or Failed<br/>
+	<font color='#FFD966'>Yellow</font>  - Partially Locked or Completed<br/>
+	<font color='#008DF8'>Blue</font>    - BLUFOR faction or Untracked (available)<br/>
+	<font color='#9B59B6'>Purple</font>  - Civilian faction<br/><br/>
 
 	<font color='#3498DB'>Tips for Beginners:</font><br/>
-	• Always start with <font color='#FFFFFF'>devices all</font> to get a full overview of available systems.<br/>
-	• If a category returns no results, it means no compatible targets are nearby.<br/>
+	• Start with <font color='#FFFFFF'>devices [type]</font> to see a summary of available devices.<br/>
+	• Use <font color='#FFFFFF'>devices [type] [deviceId]</font> to view detailed information about a specific device.<br/>
+	• If a category returns no results, no compatible targets are linked to your terminal.<br/>
 	• Scanning does not affect gameplay — it only gathers information.<br/>
-	• Device IDs shown in scan results are used by other commands (like <font color='#FFFFFF'>door</font> or <font color='#FFFFFF'>light</font>).
+	• Device IDs shown in scan results are used by control commands (like <font color='#FFFFFF'>door</font>, <font color='#FFFFFF'>light</font>, <font color='#FFFFFF'>vehicle</font>).
 	</font>"],
 	taskNull, "", false
 ];
