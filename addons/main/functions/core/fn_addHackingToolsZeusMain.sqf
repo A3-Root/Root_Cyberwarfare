@@ -122,7 +122,7 @@ private _content = "
 [_entity, _guide, _content, false, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
 
 
-private _menuContent = "
+_content = "
     params['_computer', '_options', '_commandName'];
 
     private _commandOpts = [];
@@ -130,8 +130,12 @@ private _menuContent = "
     [
         [
             ['command', _commandName, true, false],
+            ['path', 'type', true, false]
+        ],
+        [
+            ['command', _commandName, true, false],
             ['path', 'type', true, false],
-            ['path', 'deviceId', false, false]
+            ['path', 'deviceId', true, false]
         ]
     ];
     private _commandSettings = [_commandName, _commandOpts, _commandSyntax];
@@ -140,7 +144,7 @@ private _menuContent = "
 
     if (!_ae3OptsSuccess) exitWith {};
 
-    private _type = (_ae3OptsThings select 0);
+    private _type = if (count _ae3OptsThings > 0) then { _ae3OptsThings select 0 } else { '' };
     private _deviceId = if (count _ae3OptsThings > 1) then { _ae3OptsThings select 1 } else { '' };
 
     private _owner = clientOwner;
@@ -155,7 +159,7 @@ private _menuContent = "
         [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
     };
 ";
-[_entity, _devices, _menuContent, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+[_entity, _devices, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
 
 
 _content = "

@@ -346,7 +346,7 @@ if (_type in ["custom", "all", "a"]) then {
                     private _displayName = getText (configOf _customObject >> "displayName");
 
                     // Header
-                    _string = format ["Custom Device %1 - %2 (%3) @ %4", _customId, _customName, _displayName, _mapGridPos];
+                    _string = format ["%1 - %2 (%3) @ %4", _customId, _customName, _displayName, _mapGridPos];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
                     // Status (if device has state tracking)
@@ -518,17 +518,16 @@ if (_type in ["vehicles", "all", "a"]) then {
                     private _fuelLevel = fuel _vehicle;
                     private _engineOn = isEngineOn _vehicle;
                     private _lightsOn = isLightOn _vehicle;
-                    private _damage = damage _vehicle;
 
                     _string = format ["    Current Status:"];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    _string = format ["        Fuel: %1%2", round (_fuelLevel * 100), "%"];
+                    _string = format ["        Battery: %1%2", round (_fuelLevel * 100), "%"];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     _string = format ["        Engine: %1", ["OFF", "ON"] select _engineOn];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     _string = format ["        Lights: %1", ["OFF", "ON"] select _lightsOn];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    _string = format ["        Damage: %1%2", round (_damage * 100), "%"];
+                    _string = format ["        Speed: %1kmph", speed _vehicle];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 };
             } forEach _accessibleVehicles;
@@ -579,44 +578,6 @@ if (_type in ["powergrids", "all", "a"]) then {
                     private _stateColor = ["#fa4c58", "#8ce10b"] select (_currentState == "ON");
                     _string = "    State: ";
                     [_computer, [[_string, [_currentState, _stateColor]]]] call AE3_armaos_fnc_shell_stdout;
-
-                    // Find all lights in radius that are registered as devices
-                    private _gridPos = getPosATL _gridObject;
-                    private _affectedLights = [];
-
-                    // Check all accessible lights to see if they're within radius
-                    {
-                        _x params ["_lightId", "_buildingNetId", "_lightIds", "_buildingName", "_availableToFuture"];
-                        private _lightBuilding = objectFromNetId _buildingNetId;
-
-                        if (!isNull _lightBuilding) then {
-                            private _distance = _lightBuilding distance _gridPos;
-                            if (_distance <= _radius) then {
-                                // Check if building class is excluded
-                                private _isExcluded = false;
-                                {
-                                    if (_lightBuilding isKindOf _x) exitWith {
-                                        _isExcluded = true;
-                                    };
-                                } forEach _excludedClassnames;
-
-                                if (!_isExcluded) then {
-                                    _affectedLights pushBack [_lightId, _buildingName, mapGridPosition _lightBuilding];
-                                };
-                            };
-                        };
-                    } forEach _accessibleLights;
-
-                    // Display affected lights count
-                    _string = format ["    Affected Lights: %1", count _affectedLights];
-                    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-
-                    // List light device IDs
-                    {
-                        _x params ["_affectedLightId", "_affectedBuildingName", "_affectedGridPos"];
-                        _string = format ["        Light %1 - %2 @ %3", _affectedLightId, _affectedBuildingName, _affectedGridPos];
-                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    } forEach _affectedLights;
                 };
             } forEach _accessiblePowerGrids;
 
