@@ -4,7 +4,7 @@
 
 Fully integrated with ACE3, AE3 ArmaOS terminal, and Zeus/Eden editors. Tested with 67+ players on dedicated servers. Requires both server and clients to have this mod.
 
-[b]Current version - 1.0.1.1[/b]
+[b]Current version - 1.1.0.1[/b]
 
 [img]https://i.imgur.com/EWy3dQc.gif[/img]
 
@@ -63,6 +63,15 @@ Fully integrated with ACE3, AE3 ArmaOS terminal, and Zeus/Eden editors. Tested w
 A detailed terminal usage guide is available in-game for all players. Open your map and navigate to the [b]Cyberwarfare Guide[/b] section for comprehensive command reference and examples.
 
 [h3]Commands[/h3]
+[b]Getting Help:[/b]
+[code]
+<command> help          # Display detailed help for any command
+<command> -h            # Same as help
+devices help            # List device types and usage
+door help               # Lock/unlock doors syntax
+vehicle help            # Vehicle control options
+[/code]
+
 [b]List Devices:[/b]
 [code]
 devices all              # List all accessible devices

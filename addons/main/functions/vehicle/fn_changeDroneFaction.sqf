@@ -22,6 +22,34 @@
 
 params['_owner', '_computer', '_nameOfVariable', '_droneId', "_droneFaction", "_commandPath"];
 
+// Check for help request
+if ((_droneId in ["-h", "help"]) || (_droneFaction in ["-h", "help"])) exitWith {
+    [_computer, [[["CHANGEDRONE COMMAND HELP", "#8ce10b"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Description:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Change the faction/side of a drone remotely by hacking its IFF system."]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Syntax:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["changedrone <DroneID> <faction>"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Parameters:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["DroneID", "#008DF8"], ["  - ID of the drone (use 'a' for all accessible drones)", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["faction", "#008DF8"], ["  - Target faction: 'west', 'east', 'guer', or 'civ'", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Examples:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  changedrone 1234 west   - Change drone #1234 to BLUFOR (NATO)"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  changedrone 1234 east   - Change drone #1234 to OPFOR (CSAT)"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  changedrone 1234 guer   - Change drone #1234 to Independent (AAF)"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  changedrone 1234 civ    - Change drone #1234 to Civilian"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  changedrone a east      - Change all accessible drones to OPFOR"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Note:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Requires power confirmation"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Only affects drones not already in target faction"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- 'a' affects all accessible drones"]]]] call AE3_armaos_fnc_shell_stdout;
+    missionNamespace setVariable [_nameOfVariable, true, true];
+};
+
 private _string = "";
 
 private _droneIdNum = parseNumber _droneId;

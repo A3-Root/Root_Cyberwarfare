@@ -21,6 +21,32 @@
 
 params['_owner', '_computer', '_nameOfVariable', '_trackerId', '_commandPath'];
 
+// Check for help request
+if (_trackerId in ["-h", "help"]) exitWith {
+    [_computer, [[["GPSTRACK COMMAND HELP", "#8ce10b"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Description:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Track GPS-enabled devices or targets in real-time on your map."]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Syntax:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["gpstrack <TrackerID>"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Parameters:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["TrackerID", "#008DF8"], ["  - ID of the GPS tracker device", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Examples:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  gpstrack 1234   - Start tracking GPS device #1234"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Note:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Creates a map marker showing target's position"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Updates at configured intervals"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Some trackers may have limited duration"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Tracking continues until duration expires or tracker is disabled"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Requires power confirmation"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Check if tracker allows re-tracking after completion"]]]] call AE3_armaos_fnc_shell_stdout;
+    missionNamespace setVariable [_nameOfVariable, true, true];
+};
+
 private _string = "";
 private _trackerIdNum = parseNumber _trackerId;
 

@@ -39,6 +39,41 @@ The hacking tools add specialized commands for device control.
 
 ## Terminal Commands
 
+### Getting Help
+
+All commands support built-in help documentation. To view detailed syntax, available actions, and examples for any command:
+
+**Syntax:**
+```bash
+<command> help
+<command> -h
+<command> --help
+```
+
+**Examples:**
+```bash
+devices help       # Show all device types and usage
+door help          # Show door command syntax with examples
+vehicle help       # Show all vehicle actions (battery, speed, brakes, etc.)
+powergrid help     # Show power grid control options
+gpstrack help      # Show GPS tracking command details
+```
+
+**What Help Includes:**
+- Command description and purpose
+- Complete syntax with required/optional parameters
+- Available actions and their values
+- Multiple usage examples
+- Important notes and warnings
+- Power consumption requirements
+
+All help text is color-coded:
+- **Green** - Command titles and headers
+- **Yellow** - Section labels (Description, Syntax, Examples)
+- **Cyan** - Parameter names and key terms
+- **Red** - Warnings for destructive operations
+- **White** - Regular explanatory text
+
 ### 1. devices - List Accessible Devices
 
 **Syntax:**

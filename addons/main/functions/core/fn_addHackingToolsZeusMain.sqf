@@ -125,6 +125,18 @@ private _content = "
 _content = "
     params['_computer', '_options', '_commandName'];
 
+    if ((count _options > 0) && {(_options select 0) in ['-h', '--help', 'help']}) exitWith {
+        private _owner = clientOwner;
+        private _nameOfVariable = 'ROOT_CYBERWARFARE_LIST_DEVICES-' + "+ _computerNetIdString +";
+        missionNamespace setVariable [_nameOfVariable, false, true];
+        [_owner, _computer, _nameOfVariable, _commandName, 'help', ''] remoteExec ['Root_fnc_listDevicesInSubnet', _owner];
+        private _tStart = time;
+        waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
+        if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
+            [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
+        };
+    };
+
     private _commandOpts = [];
     private _commandSyntax =
     [
@@ -165,6 +177,18 @@ _content = "
 _content = "
     params['_computer', '_options', '_commandName'];
 
+    if ((count _options > 0) && {(_options select 0) in ['-h', '--help', 'help']}) exitWith {
+        private _owner = clientOwner;
+        private _nameOfVariable = 'ROOT_CYBERWARFARE_DOOR-' + "+ _computerNetIdString +";
+        missionNamespace setVariable [_nameOfVariable, false, true];
+        [_owner, _computer, _nameOfVariable, 'help', '', '', _commandName] remoteExec ['Root_fnc_changeDoorState', _owner];
+        private _tStart = time;
+        waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
+        if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
+            [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
+        };
+    };
+
     private _commandOpts = [];
     private _commandSyntax =
     [
@@ -203,6 +227,18 @@ _content = "
 _content = "
     params['_computer', '_options', '_commandName'];
 
+    if ((count _options > 0) && {(_options select 0) in ['-h', '--help', 'help']}) exitWith {
+        private _owner = clientOwner;
+        private _nameOfVariable = 'ROOT_CYBERWARFARE_LIGHT-' + "+ _computerNetIdString +";
+        missionNamespace setVariable [_nameOfVariable, false, true];
+        [_owner, _computer, _nameOfVariable, 'help', '', _commandName] remoteExec ['Root_fnc_changeLightState', _owner];
+        private _tStart = time;
+        waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
+        if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
+            [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
+        };
+    };
+
     private _commandOpts = [];
     private _commandSyntax =
     [
@@ -239,6 +275,18 @@ _content = "
 _content = "
     params['_computer', '_options', '_commandName'];
 
+    if ((count _options > 0) && {(_options select 0) in ['-h', '--help', 'help']}) exitWith {
+        private _owner = clientOwner;
+        private _nameOfVariable = 'ROOT_CYBERWARFARE_DISABLE_DRONE>-' + "+ _computerNetIdString +";
+        missionNamespace setVariable [_nameOfVariable, false, true];
+        [_owner, _computer, _nameOfVariable, 'help', _commandName] remoteExec ['Root_fnc_disableDrone', _owner];
+        private _tStart = time;
+        waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
+        if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
+            [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
+        };
+    };
+
     private _commandOpts = [];
     private _commandSyntax =
     [
@@ -272,6 +320,18 @@ _content = "
 
 _content = "
     params['_computer', '_options', '_commandName'];
+
+    if ((count _options > 0) && {(_options select 0) in ['-h', '--help', 'help']}) exitWith {
+        private _owner = clientOwner;
+        private _nameOfVariable = 'ROOT_CYBERWARFARE_CHANGE_DRONE-' + "+ _computerNetIdString +";
+        missionNamespace setVariable [_nameOfVariable, false, true];
+        [_owner, _computer, _nameOfVariable, 'help', '', _commandName] remoteExec ['Root_fnc_changeDroneFaction', _owner];
+        private _tStart = time;
+        waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
+        if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
+            [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
+        };
+    };
 
     private _commandOpts = [];
     private _commandSyntax =
@@ -309,6 +369,19 @@ _content = "
 _content = "
     params['_computer', '_options', '_commandName'];
 
+    if ((count _options > 0) && {(_options select 0) in ['-h', '--help', 'help']}) exitWith {
+        private _owner = clientOwner;
+        private _playerObject = player;
+        private _nameOfVariable = 'ROOT_CYBERWARFARE_DOWNLOAD_DATABASE-' + "+ _computerNetIdString +";
+        missionNamespace setVariable [_nameOfVariable, false, true];
+        [_owner, _computer, _nameOfVariable, 'help', _playerObject, _commandName] remoteExec ['Root_fnc_downloadDatabase', _owner];
+        private _tStart = time;
+        waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
+        if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
+            [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
+        };
+    };
+
     private _commandOpts = [];
     private _commandSyntax =
     [
@@ -343,6 +416,19 @@ _content = "
 
 _content = "
     params['_computer', '_options', '_commandName'];
+
+    if ((count _options > 0) && {(_options select 0) in ['-h', '--help', 'help']}) exitWith {
+        private _owner = clientOwner;
+        private _playerObject = player;
+        private _nameOfVariable = 'ROOT_CYBERWARFARE_CUSTOM_DEVICE-' + "+ _computerNetIdString +";
+        missionNamespace setVariable [_nameOfVariable, false, true];
+        [_owner, _computer, _nameOfVariable, 'help', '', _playerObject, _commandName] remoteExec ['Root_fnc_customDevice', _owner];
+        private _tStart = time;
+        waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
+        if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
+            [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
+        };
+    };
 
     private _commandOpts = [];
     private _commandSyntax =
@@ -380,6 +466,18 @@ _content = "
 _content = "
     params['_computer', '_options', '_commandName'];
 
+    if ((count _options > 0) && {(_options select 0) in ['-h', '--help', 'help']}) exitWith {
+        private _owner = clientOwner;
+        private _nameOfVariable = 'ROOT_CYBERWARFARE_GPS_TRACK-' + "+ _computerNetIdString +";
+        missionNamespace setVariable [_nameOfVariable, false, true];
+        [_owner, _computer, _nameOfVariable, 'help', _commandName] remoteExec ['Root_fnc_displayGPSPosition', _owner];
+        private _tStart = time;
+        waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
+        if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
+            [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
+        };
+    };
+
     private _commandOpts = [];
     private _commandSyntax =
     [
@@ -412,6 +510,18 @@ _content = "
 
 _content = "
     params['_computer', '_options', '_commandName'];
+
+    if ((count _options > 0) && {(_options select 0) in ['-h', '--help', 'help']}) exitWith {
+        private _owner = clientOwner;
+        private _nameOfVariable = 'ROOT_CYBERWARFARE_VEHICLE-' + "+ _computerNetIdString +";
+        missionNamespace setVariable [_nameOfVariable, false, true];
+        [_owner, _computer, _nameOfVariable, 'help', '', '', _commandName] remoteExec ['Root_fnc_changeVehicleParams', _owner];
+        private _tStart = time;
+        waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
+        if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
+            [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
+        };
+    };
 
     private _commandOpts = [];
     private _commandSyntax =
@@ -449,6 +559,18 @@ _content = "
 
 _content = "
     params['_computer', '_options', '_commandName'];
+
+    if ((count _options > 0) && {(_options select 0) in ['-h', '--help', 'help']}) exitWith {
+        private _owner = clientOwner;
+        private _nameOfVariable = 'ROOT_CYBERWARFARE_POWERGRID-' + "+ _computerNetIdString +";
+        missionNamespace setVariable [_nameOfVariable, false, true];
+        [_owner, _computer, _nameOfVariable, 'help', '', _commandName] remoteExec ['Root_fnc_powerGridControl', _owner];
+        private _tStart = time;
+        waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
+        if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
+            [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
+        };
+    };
 
     private _commandOpts = [];
     private _commandSyntax =

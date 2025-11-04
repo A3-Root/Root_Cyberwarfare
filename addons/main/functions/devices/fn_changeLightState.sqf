@@ -22,6 +22,32 @@
 
 params['_owner', '_computer', '_nameOfVariable', '_lightId', "_lightState", "_commandPath"];
 
+// Check for help request
+if ((_lightId in ["-h", "help"]) || (_lightState in ["-h", "help"])) exitWith {
+    [_computer, [[["LIGHT COMMAND HELP", "#8ce10b"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Description:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Control lights in buildings or structures remotely."]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Syntax:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["light <LightID> <state>"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Parameters:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["LightID", "#008DF8"], ["  - ID of the light (use 'a' for all accessible lights)", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["state", "#008DF8"], ["    - 'on' or 'off'", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Examples:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  light 1234 on      - Turn on light #1234"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  light 1234 off     - Turn off light #1234"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  light a on         - Turn on all accessible lights"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  light a off        - Turn off all accessible lights"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Note:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Operations on individual lights are instant"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- 'a' affects all lights you have access to"]]]] call AE3_armaos_fnc_shell_stdout;
+    missionNamespace setVariable [_nameOfVariable, true, true];
+};
+
 private _string = "";
 
 private _lightIdNum = parseNumber _lightId;

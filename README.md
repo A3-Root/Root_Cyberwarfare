@@ -61,6 +61,19 @@ Root's Cyber Warfare introduces 8 distinct device types that can be hacked and c
 2. Select **ArmaOS** -> **Use**
 3. Type `devices all` to list all hackable devices you have access to
 4. Use specific commands to control devices (e.g., `door 1234 a unlock`)
+5. Type `<command> help` or `<command> -h` for detailed command syntax and examples
+
+**Available Commands:**
+- `devices help` - List device types and usage
+- `door help` - Lock/unlock doors
+- `light help` - Control lights
+- `vehicle help` - Manipulate vehicles
+- `changedrone help` - Change drone faction
+- `disabledrone help` - Destroy drones
+- `download help` - Download database files
+- `custom help` - Activate custom devices
+- `gpstrack help` - Track GPS devices
+- `powergrid help` - Control power grids
 
 ### For Zeus Curators
 

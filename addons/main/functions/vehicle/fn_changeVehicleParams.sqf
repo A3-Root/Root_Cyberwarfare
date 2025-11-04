@@ -23,6 +23,39 @@
 
 params ["_owner", "_computer", "_nameOfVariable", "_vehicleID", "_action", "_value", "_commandPath"];
 
+// Check for help request
+if ((_vehicleID in ["-h", "help"]) || (_action in ["-h", "help"])) exitWith {
+    [_computer, [[["VEHICLE COMMAND HELP", "#8ce10b"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Description:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Hack vehicles to modify their parameters and control various systems."]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Syntax:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["vehicle <VehicleID> <action> <value>"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Available Actions:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["battery", "#008DF8"], [" <0-100+>    - Set fuel level (0-100%), values >100 destroy vehicle", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["                      Example: vehicle 1234 battery 50"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["speed", "#008DF8"], [" <number>      - Increase vehicle speed by given value", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["                      Example: vehicle 1234 speed 20"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["brakes", "#008DF8"], [" <any>        - Apply emergency brakes (land vehicles only)", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["                      Example: vehicle 1234 brakes 1"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["lights", "#008DF8"], [" <on/off>    - Toggle vehicle lights", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["                      Example: vehicle 1234 lights on"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["engine", "#008DF8"], [" <on/off>    - Start or stop engine", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["                      Example: vehicle 1234 engine on"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["alarm", "#008DF8"], [" <seconds>    - Trigger vehicle alarm for specified duration", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["                      Example: vehicle 1234 alarm 5"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Note:", "#FFD966"], [" Each operation requires power confirmation.", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    missionNamespace setVariable [_nameOfVariable, true, true];
+};
+
 private _string = "";
 private _vehicleIDNum = parseNumber _vehicleID;
 

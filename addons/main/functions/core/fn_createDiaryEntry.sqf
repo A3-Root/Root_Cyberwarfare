@@ -528,9 +528,19 @@ private _diaryBasics = player createDiaryRecord [
 
 	<font color='#3498DB' face='PuristaSemibold'>HELP AND MANUAL ACCESS</font><br/>
 	<font color='#FFFFFF' face='EtelkaMonospacePro'>
+	[command] help  // Display detailed help for any cyberwarfare command<br/>
+	[command] -h    // Same as help (shows syntax, actions, examples)<br/>
+	[command] --help // Same as help and -h<br/><br/>
+
 	cat guide      // Displays the short local manual about cyberwarfare commands<br/>
 	help           // Displays list of available system commands<br/>
-	man [command]  // Displays detailed manual entry for system commands<br/>
+	man [command]  // Displays detailed manual entry for system commands<br/><br/>
+
+	<font color='#3498DB'>Examples:</font><br/>
+	devices help   // Show device types and usage<br/>
+	door help      // Show door command syntax with examples<br/>
+	vehicle help   // Show all vehicle actions (battery, speed, etc.)<br/>
+	powergrid help // Show power grid control options<br/>
 	</font>"],
 	taskNull, "", false
 ];

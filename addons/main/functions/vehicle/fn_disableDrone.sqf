@@ -21,6 +21,33 @@
 
 params['_owner', '_computer', '_nameOfVariable', '_droneId', "_commandPath"];
 
+// Check for help request
+if (_droneId in ["-h", "help"]) exitWith {
+    [_computer, [[["DISABLEDRONE COMMAND HELP", "#8ce10b"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Description:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Permanently disable (destroy) a drone by causing critical system failure."]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Syntax:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["disabledrone <DroneID>"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Parameters:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["DroneID", "#008DF8"], ["  - ID of the drone to disable (use 'a' for all accessible drones)", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Examples:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  disabledrone 1234   - Destroy drone #1234"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  disabledrone a      - Destroy all accessible drones"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Warning:", "#fa4c58"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["This operation is PERMANENT and will destroy the drone."]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Note:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Requires power confirmation"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Only affects drones that are still operational"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- 'a' affects all accessible drones"]]]] call AE3_armaos_fnc_shell_stdout;
+    missionNamespace setVariable [_nameOfVariable, true, true];
+};
+
 private _string = "";
 
 private _droneIdNum = parseNumber _droneId;

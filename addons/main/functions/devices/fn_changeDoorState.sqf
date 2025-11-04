@@ -33,6 +33,34 @@ params [
 
 scopeName "exit";
 
+// Check for help request
+if ((_buildingId in ["-h", "help"]) || (_doorId in ["-h", "help"])) exitWith {
+    [_computer, [[["DOOR COMMAND HELP", "#8ce10b"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Description:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Lock or unlock doors in buildings using this function."]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Syntax:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["door <BuildingID> <DoorID> <state>"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Parameters:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["BuildingID", "#008DF8"], ["  - ID of the building containing the door", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["DoorID", "#008DF8"], ["      - ID of the specific door (use 'a' for all doors)", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["state", "#008DF8"], ["       - 'lock' or 'unlock'", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Examples:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  door 1234 1 lock       - Lock door #1 in building #1234"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  door 1234 a lock       - Lock all doors in building #1234"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  door 1234 2 unlock     - Unlock door #2 in building #1234"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  door 1234 a unlock     - Unlock all doors in building #1234"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Note:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Each door operation costs power"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- 'a' affects all doors in the specified building"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Requires power confirmation for bulk operations"]]]] call AE3_armaos_fnc_shell_stdout;
+    missionNamespace setVariable [_nameOfVariable, true, true];
+};
+
 // Get power cost from CBA settings
 private _powerCostPerDoor = missionNamespace getVariable [SETTING_DOOR_COST, 2];
 

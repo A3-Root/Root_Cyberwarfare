@@ -22,6 +22,30 @@
 
 params['_owner', '_computer', '_nameOfVariable', '_databaseId', '_playerObject', "_commandPath"];
 
+// Check for help request
+if (_databaseId in ["-h", "help"]) exitWith {
+    [_computer, [[["DOWNLOAD COMMAND HELP", "#8ce10b"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Description:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Download files from accessible database servers to your computer."]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Syntax:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["download <DatabaseID>"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Parameters:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["DatabaseID", "#008DF8"], ["  - ID of the database to download", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Examples:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  download 1234   - Download database file #1234"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Note:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Download time depends on file size"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Files are saved to /Files/ directory"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Re-open terminal after download to see updated files"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Some files may trigger automatic execution after download"]]]] call AE3_armaos_fnc_shell_stdout;
+    missionNamespace setVariable [_nameOfVariable, true, true];
+};
+
 private _string = "";
 private _databaseIdNum = parseNumber _databaseId;
 

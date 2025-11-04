@@ -24,6 +24,40 @@ params ["_owner", "_computer", "_nameOfVariable", "_gridId", "_action", "_comman
 
 scopeName "exit";
 
+// Check for help request
+if ((_gridId in ["-h", "help"]) || (_action in ["-h", "help"])) exitWith {
+    [_computer, [[["POWERGRID COMMAND HELP", "#8ce10b"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Description:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Control power grid generators to manage lights and electrical systems in an area."]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Syntax:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["powergrid <GridID> <action>"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Parameters:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["GridID", "#008DF8"], ["  - ID of the power grid generator", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["action", "#008DF8"], ["  - Action to perform: 'on', 'off', or 'overload'", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Examples:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  powergrid 1234 on         - Turn on power grid #1234"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  powergrid 1234 off        - Turn off power grid #1234"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  powergrid 1234 overload   - Overload and destroy grid #1234 (if enabled)"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Actions:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["on", "#008DF8"], ["       - Activate lights in radius", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["off", "#008DF8"], ["      - Deactivate lights in radius", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["overload", "#008DF8"], [" - Cause explosion and permanent destruction (if allowed)", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Warning:", "#fa4c58"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["OVERLOAD is PERMANENT and will destroy the generator!"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Note:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Affects all lights within configured radius"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Requires power confirmation"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Once destroyed, grid cannot be repaired"]]]] call AE3_armaos_fnc_shell_stdout;
+    missionNamespace setVariable [_nameOfVariable, true, true];
+};
+
 private _string = "";
 private _gridIdNum = parseNumber _gridId;
 

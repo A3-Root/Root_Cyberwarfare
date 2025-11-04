@@ -23,6 +23,53 @@
 
 params['_owner', '_computer', '_nameOfVariable', '_commandPath', '_type', ['_deviceId', '', ['']]];
 
+// Help system
+if ((_type in ["-h", "help"]) || (_deviceId in ["-h", "help"])) exitWith {
+    [_computer, [[["DEVICES COMMAND HELP", "#8ce10b"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Description:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["List all hackable devices accessible from this computer. Shows device IDs, names, and status."]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Syntax:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["devices <type> [deviceId]"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Parameters:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["type", "#008DF8"], ["      - Device category to list (required)", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["deviceId", "#008DF8"], ["  - (Optional) Show detailed info for specific device", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Device Types:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["doors", "#008DF8"], ["      - Buildings with hackable doors (lock/unlock)", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["lights", "#008DF8"], ["     - Controllable lights (on/off)", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["drones", "#008DF8"], ["     - UAVs and drones (faction change, disable)", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["files", "#008DF8"], ["      - Downloadable database files", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["custom", "#008DF8"], ["     - Custom scripted devices (mission-specific)", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["gps", "#008DF8"], ["        - GPS tracking devices", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["vehicles", "#008DF8"], ["   - Hackable vehicles (battery, engine, alarms, etc.)", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["powergrids", "#008DF8"], [" - Power grid generators (control area lights)", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["all", "#008DF8"], [" or ", ""], ["a", "#008DF8"], ["  - Show all device types at once", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Examples:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  devices doors           - List all accessible buildings with doors"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  devices doors 1234      - Show detailed door list for building #1234"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  devices lights          - List all accessible lights"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  devices vehicles        - List all accessible vehicles"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  devices files 5678      - Show detailed info for file #5678"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  devices all             - List all device types"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  devices a               - Same as 'devices all' (shorthand)"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Status Colors:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["GREEN", "#8ce10b"], ["  - Active/unlocked/available", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["RED", "#fa4c58"], ["    - Inactive/locked/disabled", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["YELLOW", "#FFD966"], [" - Partial (some doors/lights in mixed state)", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Note:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Use the device IDs shown here with other commands (door, light, vehicle, etc.)"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Only devices you have access to are shown"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Some devices may require power to operate"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Use 'devices <type> <deviceId>' to see detailed information before acting"]]]] call AE3_armaos_fnc_shell_stdout;
+    missionNamespace setVariable [_nameOfVariable, true, true];
+};
+
 private _string = "";
 private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
 private _allDoors = _allDevices select 0;

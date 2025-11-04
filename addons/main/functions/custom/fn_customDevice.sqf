@@ -23,6 +23,32 @@
 
 params["_owner", "_computer", "_nameOfVariable", "_customId", "_customState", "_playerObject", "_commandPath"];
 
+// Check for help request
+if ((_customId in ["-h", "help"]) || (_customState in ["-h", "help"])) exitWith {
+    [_computer, [[["CUSTOM COMMAND HELP", "#8ce10b"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Description:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Activate or deactivate custom scripted devices with special functionality."]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Syntax:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["custom <DeviceID> <state>"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Parameters:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["DeviceID", "#008DF8"], ["  - ID of the custom device", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  ", ""], ["state", "#008DF8"], ["     - 'activate' or 'deactivate'", ""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Examples:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  custom 1234 activate     - Activate custom device #1234"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["  custom 1234 deactivate   - Deactivate custom device #1234"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["Note:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Custom devices execute mission-specific scripts"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Effects depend on how the device was configured"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Requires power confirmation"]]]] call AE3_armaos_fnc_shell_stdout;
+    [_computer, [[["- Check device description for specific behavior"]]]] call AE3_armaos_fnc_shell_stdout;
+    missionNamespace setVariable [_nameOfVariable, true, true];
+};
+
 private _string = "";
 
 // Get battery from computer
