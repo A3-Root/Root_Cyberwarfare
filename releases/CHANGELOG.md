@@ -1,6 +1,6 @@
 # Changelog
 
-## Minor Update (v1.1.0.1)
+## Update 2 (v1.1.0.1)
 
 ### Added
 - Built-in help system for all terminal commands - Type `<command> help`, `<command> -h`, or `<command> --help` to display detailed syntax, available actions, examples, and usage notes with color-coded formatting
