@@ -5,27 +5,44 @@ from pathlib import Path
 from packaging.version import Version # type: ignore
 from collections import defaultdict
 
-def get_changelog_notes():
-    """Extract the top section from CHANGELOG.md"""
+def get_changelog_notes(version=None):
+    """Extract changelog section from CHANGELOG.md for a specific version.
+    If version is None, returns the top section.
+    """
     changelog_path = Path("releases/CHANGELOG.md")
     if not changelog_path.exists():
         return "Automated release"
-    
+
     try:
         with open(changelog_path, 'r', encoding='utf-8') as f:
             lines = f.readlines()
 
         section = []
         in_section = False
+        found_version = False
+
         for line in lines:
             if line.startswith("## "):
                 if in_section:
+                    # We've hit the next section, stop
                     break
-                else:
+
+                # Check if this is the section we're looking for
+                if version is None:
+                    # No version specified, grab the first section
                     in_section = True
+                    section.append(line.strip())
+                elif f"(v{version})" in line or f"v{version}" in line:
+                    # Found the matching version section
+                    in_section = True
+                    found_version = True
                     section.append(line.strip())
             elif in_section:
                 section.append(line.rstrip())
+
+        # If we were looking for a specific version and didn't find it, return None
+        if version is not None and not found_version:
+            return None
 
         return "\n".join(section) if section else "Automated release"
     except Exception as e:
@@ -69,8 +86,14 @@ def main():
 
         print(f"🚀 Processing version: {version}")
 
-        # Get release notes from changelog
-        notes = get_changelog_notes()
+        # Get release notes from changelog for this specific version
+        notes = get_changelog_notes(version)
+
+        # If no specific changelog found, skip updating the notes
+        if notes is None:
+            print(f"⚠️  No changelog entry found for version {version}, skipping release note update")
+            continue
+
         title = f"Version {version}"
 
         # Check if release already exists
@@ -83,14 +106,14 @@ def main():
 
         if release_exists:
             print(f"🔄 Release {version} exists, updating...")
-            
+
             # Delete existing assets
             assets_proc = subprocess.run(
                 ["gh", "release", "view", version, "--json", "assets", "--jq", ".assets[].name"],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE
             )
-            
+
             if assets_proc.returncode == 0:
                 assets = assets_proc.stdout.decode().strip().splitlines()
                 for asset in assets:
@@ -108,11 +131,11 @@ def main():
             ], check=True)
 
             subprocess.run([
-                "gh", "release", "edit", version, 
+                "gh", "release", "edit", version,
                 "--title", title,
                 "--notes", notes
             ], check=True)
-            
+
             print(f"✅ Updated release: {version}")
         else:
             print(f"🆕 Creating new release: {version}")

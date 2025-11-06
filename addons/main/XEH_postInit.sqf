@@ -137,9 +137,12 @@ if (hasInterface) then {
                 [_actionTarget, _actionPlayer] call FUNC(aceAttachGPSTracker);
             },
             {
-                // Action condition - only show if player has GPS tracker item AND target is not a weapon holder
+                // Action condition - only show if player has GPS tracker item AND target is not a weapon holder or ACE item
                 if (_target isKindOf "WeaponHolder") exitWith {false};
                 if (_target isKindOf "WeaponHolderSimulated") exitWith {false};
+                // Exclude all ACE items to prevent conflicts with ACE interaction menus
+                private _typeOf = typeOf _target;
+                if ((_typeOf select [0, 4]) in ["ACE_", "ace_"] || (_typeOf select [0, 5]) == "acex_") exitWith {false};
                 private _gpsTrackerClass = missionNamespace getVariable [SETTING_GPS_TRACKER_DEVICE, "ACE_Banana"];
                 _gpsTrackerClass in (uniformItems _player + vestItems _player + backpackItems _player + items _player);
             }
@@ -191,9 +194,12 @@ if (hasInterface) then {
                 ] call ace_common_fnc_progressBar;
             },
             {
-                // Action condition - available on all objects except weapon holders
+                // Action condition - available on all objects except weapon holders and ACE items
                 if (_target isKindOf "WeaponHolder") exitWith {false};
                 if (_target isKindOf "WeaponHolderSimulated") exitWith {false};
+                // Exclude all ACE items to prevent conflicts with ACE interaction menus
+                private _typeOf = typeOf _target;
+                if ((_typeOf select [0, 4]) in ["ACE_", "ace_"] || (_typeOf select [0, 5]) == "acex_") exitWith {false};
                 true
             }
         ] call ace_interact_menu_fnc_createAction;
