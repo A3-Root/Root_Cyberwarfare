@@ -64,12 +64,8 @@ def main():
         print("📁 Releases directory does not exist, nothing to process")
         return
     
-    # Get all versioned zip files (excluding latest.zip)
-    all_zips = list(releases_dir.glob("root_cyberwarfare-*.zip"))
-    latest_zip = releases_dir / "root_cyberwarfare-latest.zip"
-    
-    # Separate versioned files from latest
-    versioned_zips = [z for z in all_zips if z != latest_zip]
+    # Get all versioned zip files
+    versioned_zips = list(releases_dir.glob("root_cyberwarfare-*.zip"))
     
     if not versioned_zips:
         print("📭 No versioned release files found")
@@ -146,62 +142,46 @@ def main():
             ], check=True)
             print(f"✅ Created new release: {version}")
 
-    # Handle latest release
-    if latest_zip.exists():
-        print("🔁 Processing latest release...")
-        notes = get_changelog_notes()
-        title = "[Latest]"
-        
-        # Check if latest release exists
-        result = subprocess.run(
-            ["gh", "release", "view", "latest"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
-        release_exists = result.returncode == 0
+    # Tag the newest version as "latest"
+    if versioned_zips:
+        # Find the newest version
+        newest_version = None
+        newest_version_obj = None
 
-        if release_exists:
-            print("🔄 Latest release exists, updating...")
-            
-            # Delete existing assets from latest release
-            assets_proc = subprocess.run(
-                ["gh", "release", "view", "latest", "--json", "assets", "--jq", ".assets[].name"],
+        for zip_file in versioned_zips:
+            version = get_version_from_filename(zip_file.name)
+            if version:
+                try:
+                    version_obj = Version(version)
+                    if newest_version_obj is None or version_obj > newest_version_obj:
+                        newest_version = version
+                        newest_version_obj = version_obj
+                except:
+                    continue
+
+        if newest_version:
+            print(f"🏷️  Marking {newest_version} as latest...")
+
+            # Check if release exists before marking as latest
+            result = subprocess.run(
+                ["gh", "release", "view", newest_version],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE
             )
-            
-            if assets_proc.returncode == 0:
-                assets = assets_proc.stdout.decode().strip().splitlines()
-                for asset in assets:
-                    if asset:
-                        print(f"🗑️  Deleting old asset from latest: {asset}")
-                        subprocess.run(
-                            ["gh", "release", "delete-asset", "latest", asset, "--yes"],
-                            stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE
-                        )
 
-            # Upload latest.zip
-            subprocess.run([
-                "gh", "release", "upload", "latest", str(latest_zip), "--clobber"
-            ], check=True)
-
-            subprocess.run([
-                "gh", "release", "edit", "latest",
-                "--title", title,
-                "--notes", notes
-            ], check=True)
+            if result.returncode == 0:
+                # Mark this release as latest
+                subprocess.run([
+                    "gh", "release", "edit", newest_version,
+                    "--latest"
+                ], check=True)
+                print(f"✅ Marked {newest_version} as latest release")
+            else:
+                print(f"⚠️  Release {newest_version} does not exist, cannot mark as latest")
         else:
-            print("🆕 Creating latest release...")
-            subprocess.run([
-                "gh", "release", "create", "latest", str(latest_zip),
-                "--title", title,
-                "--notes", notes
-            ], check=True)
-        
-        print("✅ Latest release updated")
+            print("⚠️  Could not determine newest version")
     else:
-        print("⚠️  latest.zip not found, skipping latest release")
+        print("⚠️  No versioned releases to mark as latest")
 
     # Clean up old releases (retention policy)
     print("🧹 Applying retention policy...")
