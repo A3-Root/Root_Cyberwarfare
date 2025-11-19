@@ -138,9 +138,51 @@
 // ============================================================================
 // Debug Logging Macros
 // ============================================================================
-// Conditionally compiled based on DEBUG_MODE_FULL flag
-// Set in script_component.hpp via #define DEBUG_ENABLED_MAIN
+// Runtime debug logging controlled by CBA setting ROOT_CYBERWARFARE_DEBUG_MODE
+// Logs to RPT file with file name and formatted message
 
+// Check if debug mode is enabled (runtime check)
+#ifndef DEBUG_MODE
+    #define DEBUG_MODE (missionNamespace getVariable ["ROOT_CYBERWARFARE_DEBUG_MODE", false])
+#endif
+
+// Debug logging macros - only log if DEBUG_MODE is enabled
+#ifndef DEBUG_LOG
+    #define DEBUG_LOG(msg) \
+        if (DEBUG_MODE) then { \
+            diag_log format ["[ROOT_CW] %1 | %2", __FILE__, msg]; \
+        }
+#endif
+
+#ifndef DEBUG_LOG_1
+    #define DEBUG_LOG_1(msg,arg1) \
+        if (DEBUG_MODE) then { \
+            diag_log format ["[ROOT_CW] %1 | " + msg, __FILE__, arg1]; \
+        }
+#endif
+
+#ifndef DEBUG_LOG_2
+    #define DEBUG_LOG_2(msg,arg1,arg2) \
+        if (DEBUG_MODE) then { \
+            diag_log format ["[ROOT_CW] %1 | " + msg, __FILE__, arg1, arg2]; \
+        }
+#endif
+
+#ifndef DEBUG_LOG_3
+    #define DEBUG_LOG_3(msg,arg1,arg2,arg3) \
+        if (DEBUG_MODE) then { \
+            diag_log format ["[ROOT_CW] %1 | " + msg, __FILE__, arg1, arg2, arg3]; \
+        }
+#endif
+
+#ifndef DEBUG_LOG_4
+    #define DEBUG_LOG_4(msg,arg1,arg2,arg3,arg4) \
+        if (DEBUG_MODE) then { \
+            diag_log format ["[ROOT_CW] %1 | " + msg, __FILE__, arg1, arg2, arg3, arg4]; \
+        }
+#endif
+
+// Legacy debug macros (kept for compatibility, but deprecated)
 #ifdef DEBUG_MODE_FULL
     #ifndef ROOT_CYBERWARFARE_LOG_DEBUG
         #define ROOT_CYBERWARFARE_LOG_DEBUG(msg) diag_log text format ["[ROOT_CYBERWARFARE DEBUG] %1", msg]
@@ -207,6 +249,23 @@
 // Validates that a device type number is within valid range (1-8)
 #ifndef VALIDATE_DEVICE_TYPE
     #define VALIDATE_DEVICE_TYPE(type) (type >= DEVICE_TYPE_DOOR && type <= DEVICE_TYPE_POWERGRID)
+#endif
+
+// ============================================================================
+// Device Setup Mode Macros
+// ============================================================================
+// Macros for checking the current device setup mode (Simple vs Experimental)
+// Simple: Uses laptop object netId for link cache (default)
+// Experimental: Uses player UID for link cache (supports AE3 portable laptops)
+
+// Get current device setup mode
+#ifndef GET_DEVICE_MODE
+    #define GET_DEVICE_MODE (missionNamespace getVariable ["ROOT_CYBERWARFARE_DEVICE_SETUP_MODE", "SIMPLE"])
+#endif
+
+// Check if experimental mode is enabled
+#ifndef IS_EXPERIMENTAL_MODE
+    #define IS_EXPERIMENTAL_MODE (GET_DEVICE_MODE == "EXPERIMENTAL")
 #endif
 
 // ============================================================================

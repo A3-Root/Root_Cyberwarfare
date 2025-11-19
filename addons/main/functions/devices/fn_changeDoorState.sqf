@@ -31,10 +31,14 @@ params [
     ["_commandPath", "", [""]]
 ];
 
+DEBUG_LOG_4("changeDoorState - Computer: %1, Building: %2, Door: %3, State: %4",_computer,_buildingId,_doorId,_doorDesiredState);
+
 scopeName "exit";
 
 // Check for help request
 if ((_buildingId in ["-h", "help"]) || (_doorId in ["-h", "help"])) exitWith {
+    DEBUG_LOG("Showing help text");
+
     [_computer, [[["DOOR COMMAND HELP", "#8ce10b"]]]] call AE3_armaos_fnc_shell_stdout;
     [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
     [_computer, [[["Description:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
@@ -90,7 +94,10 @@ if !(_doorDesiredState in ["lock", "unlock"]) exitWith {
 
 // Get accessible doors
 private _accessibleDoors = [_computer, DEVICE_TYPE_DOOR, _commandPath] call FUNC(getAccessibleDevices);
+DEBUG_LOG_1("Accessible doors found: %1",count _accessibleDoors);
+
 if (_accessibleDoors isEqualTo []) exitWith {
+    DEBUG_LOG("No accessible doors - operation failed");
     [_computer, localize "STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_BUILDINGS"] call AE3_armaos_fnc_shell_stdout;
     missionNamespace setVariable [_nameOfVariable, true, true];
 };
@@ -100,7 +107,10 @@ private _targetDoors = _accessibleDoors select {
     (_x select 0) == _buildingIdNum
 };
 
+DEBUG_LOG_2("Target building %1 - matching doors: %2",_buildingIdNum,count _targetDoors);
+
 if (_targetDoors isEqualTo []) exitWith {
+    DEBUG_LOG_1("Building %1 not found or not accessible",_buildingIdNum);
     private _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_BUILDING_NOT_FOUND", _buildingIdNum];
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
     missionNamespace setVariable [_nameOfVariable, true, true];

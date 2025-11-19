@@ -22,8 +22,12 @@
 
 params['_owner', '_computer', '_nameOfVariable', '_lightId', "_lightState", "_commandPath"];
 
+DEBUG_LOG_3("changeLightState - Computer: %1, LightID: %2, State: %3",_computer,_lightId,_lightState);
+
 // Check for help request
 if ((_lightId in ["-h", "help"]) || (_lightState in ["-h", "help"])) exitWith {
+    DEBUG_LOG("Showing help text");
+
     [_computer, [[["LIGHT COMMAND HELP", "#8ce10b"]]]] call AE3_armaos_fnc_shell_stdout;
     [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
     [_computer, [[["Description:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;

@@ -75,7 +75,9 @@ class CfgFunctions {
 			class consumePower {};
 			class copyDeviceLinksZeusMain {};
 			class getAccessibleDevices {};
+			class getComputerIdentifier {};
 			class getObjectsInTriggerArea {};
+			class getPlayerFromComputer {};
 			class getUserConfirmation {};
 			class localSoundBroadcast {};
 			class removePower {};

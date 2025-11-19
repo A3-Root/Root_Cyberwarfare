@@ -75,33 +75,54 @@ if (_linkedComputers isNotEqualTo []) then {
     _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
 };
 
-private _excludedNetIds = [];
+private _excludedIdentifiers = [];
 // Handle public device access
 if ((_availableToFutureLaptops) || (count _linkedComputers == 0)) then {
     private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
 
+    DEBUG_LOG_2("Device setup mode: %1, Future laptops: %2",GET_DEVICE_MODE,_availableToFutureLaptops);
+
     if (_availableToFutureLaptops) then {
         if (_linkedComputers isNotEqualTo []) then {
-            // Scenario: Available to future + some linked            
+            // Scenario: Available to future + some linked
+            DEBUG_LOG("Available to future + some linked computers");
             _availabilityText = format ["Accessible by %1 linked computer(s) and all future computers", count _linkedComputers];
         } else {
             // Scenario: Available to future + no linked
             // Exclude ALL current laptops - only future ones get access
-            private _allObjects = 24 allObjects 1; // All objects
-            private _allHackingLaptops = _allObjects select {_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]};
-            {
-                _excludedNetIds pushBack (netId _x);
-            } forEach _allHackingLaptops;
+            DEBUG_LOG("Scenario 3: Excluding all current computers");
+
+            if (IS_EXPERIMENTAL_MODE) then {
+                {
+                    private _nearLaptops = nearestObjects [_x, [], 3] select {
+                        _x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]
+                    };
+                    if (_nearLaptops isNotEqualTo []) then {
+                        _excludedIdentifiers pushBack (getPlayerUID _x);
+                        DEBUG_LOG_2("Excluding player %1 (UID: %2)",name _x,getPlayerUID _x);
+                    };
+                } forEach allPlayers;
+            } else {
+                private _allObjects = 24 allObjects 1;
+                private _allHackingLaptops = _allObjects select {_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]};
+                {
+                    _excludedIdentifiers pushBack (netId _x);
+                    DEBUG_LOG_1("Excluding laptop netId: %1",netId _x);
+                } forEach _allHackingLaptops;
+            };
+
             _availabilityText = "Available to future computers only";
         };
     } else {
         // Scenario: Not available to future + no linked
         // No exclusions - all current laptops get access
+        DEBUG_LOG("Scenario 1: All current computers get access");
         _availabilityText = "Available to all current computers";
     };
 
-    // Store [type, id, excludedNetIds] 
-    _publicDevices pushBack [4, _databaseId, _excludedNetIds]; // 4 = database type
+    DEBUG_LOG_1("Excluded identifiers: %1",_excludedIdentifiers);
+    // Store [type, id, excludedIdentifiers]
+    _publicDevices pushBack [4, _databaseId, _excludedIdentifiers]; // 4 = database type
     missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
 };
 

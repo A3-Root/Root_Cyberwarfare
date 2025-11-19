@@ -15,6 +15,30 @@
  * Public: No
  */
 
+// Device Setup Mode Setting
+[
+    "ROOT_CYBERWARFARE_DEVICE_SETUP_MODE",
+    "LIST",
+    ["Device Setup Mode", "Simple: Uses laptop object directly for logic checking and verification. Experimental: Uses variables for logic checking and verification. Recommened only when using AE3's Experimental Deployment Type"],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Core Settings"],
+    [["SIMPLE", "EXPERIMENTAL"], ["Simple (Default)", "Experimental (AE3 Portable)"], 0],
+    1, // mission-level
+    {},
+    true // requires mission restart
+] call CBA_fnc_addSetting;
+
+// Debug Mode Setting
+[
+    "ROOT_CYBERWARFARE_DEBUG_MODE",
+    "CHECKBOX",
+    ["Debug Mode", "Enable comprehensive logging to RPT file for troubleshooting."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Core Settings"],
+    false, // default OFF
+    1, // mission-level
+    {},
+    false // can toggle during mission
+] call CBA_fnc_addSetting;
+
 // GPS Tracker Device Setting
 [
     SETTING_GPS_TRACKER_DEVICE,

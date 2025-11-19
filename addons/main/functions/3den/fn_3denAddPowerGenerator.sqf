@@ -18,7 +18,7 @@
 params ["_logic"];
 
 if (!isServer) exitWith {
-	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Power Generator: Not running on server, exiting");
+	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Power Generator: Not running on server,exiting");
 };
 
 // Get module attributes

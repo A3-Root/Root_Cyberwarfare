@@ -4,7 +4,7 @@
 
 Fully integrated with ACE3, AE3 ArmaOS terminal, and Zeus/Eden editors. Tested with 67+ players on dedicated servers. Requires both server and clients to have this mod.
 
-[b]Current version - 1.1.2.1[/b]
+[b]Current version - 1.1.3.1[/b]
 
 [img]https://i.imgur.com/EWy3dQc.gif[/img]
 

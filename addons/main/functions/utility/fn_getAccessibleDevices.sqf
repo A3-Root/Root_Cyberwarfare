@@ -24,13 +24,17 @@ params [
     ["_commandPath", "", [""]]
 ];
 
+DEBUG_LOG_2("getAccessibleDevices called - Computer: %1, DeviceType: %2",_computer,_deviceType);
+
 if (isNull _computer) exitWith {
     ROOT_CYBERWARFARE_LOG_ERROR("getAccessibleDevices: Invalid computer object");
+    DEBUG_LOG("Computer object is null");
     []
 };
 
 if !(VALIDATE_DEVICE_TYPE(_deviceType)) exitWith {
     ROOT_CYBERWARFARE_LOG_ERROR_1("getAccessibleDevices: Invalid device type %1",_deviceType);
+    DEBUG_LOG_1("Invalid device type: %1",_deviceType);
     []
 };
 
@@ -53,15 +57,19 @@ private _arrayIndex = switch (_deviceType) do {
 
 if (_arrayIndex == -1) exitWith {
     ROOT_CYBERWARFARE_LOG_ERROR_1("getAccessibleDevices: Failed to get array index for type %1",_deviceType);
+    DEBUG_LOG_1("Failed to get array index for device type: %1",_deviceType);
     []
 };
 
 // Get all devices of this type
 private _allDevices = _allDevicesArray select _arrayIndex;
+DEBUG_LOG_2("Total devices of type %1: %2",_deviceType,count _allDevices);
 
 // Filter to only accessible devices
 private _accessibleDevices = _allDevices select {
     [_computer, _deviceType, _x select 0, _commandPath] call FUNC(isDeviceAccessible)
 };
+
+DEBUG_LOG_2("Accessible devices found: %1 out of %2",count _accessibleDevices,count _allDevices);
 
 _accessibleDevices
