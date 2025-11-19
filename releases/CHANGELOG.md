@@ -6,7 +6,7 @@
 - Seperate 3DEN Modules for Doors and Lights
 
 ### Removed
-- N/A
+- Deprecated "Add Devices" module in lieu of Add Doors and Add Lights module. For backwards compatibility, this module is kept in the mod for the next 6 months giving ample time for people to safely switch to the new modules.
 
 ### Changed
 - Even more fixes (FFS) on GPS Search interfering with ACE Interaction
