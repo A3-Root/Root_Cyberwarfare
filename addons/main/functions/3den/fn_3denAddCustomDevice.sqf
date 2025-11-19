@@ -28,17 +28,32 @@ private _addToPublic = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_PUBLIC
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;
 
-// Separate laptops from target objects
+// Separate triggers, laptops, and target objects
+private _triggers = _syncedObjects select {
+	_x isKindOf "EmptyDetector"
+};
+
 private _laptops = _syncedObjects select {
 	typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"]
 };
 
-private _targets = _syncedObjects select {
-	!(_x in _laptops)
+private _directTargets = _syncedObjects select {
+	!(_x in _laptops) && !(_x in _triggers)
 };
 
-if (_targets isEqualTo []) exitWith {
-	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Custom Device: No target objects synchronized to this module!");
+private _allTargets = [];
+
+// If triggers exist, get objects from trigger areas
+if (_triggers isNotEqualTo []) then {
+	private _objectsInArea = [_triggers] call FUNC(getObjectsInTriggerArea);
+	_allTargets append _objectsInArea;
+};
+
+// Add directly synchronized targets
+_allTargets append _directTargets;
+
+if (_allTargets isEqualTo []) exitWith {
+	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Custom Device: No target objects synchronized or found in trigger areas!");
 	deleteVehicle _logic;
 };
 
@@ -66,7 +81,7 @@ if (_addToPublic) then {
 	// Parameters: _targetObject, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops
 	[_target, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops] call FUNC(addCustomDeviceZeusMain);
 
-} forEach _targets;
+} forEach _allTargets;
 
 // Delete the logic module after execution
 deleteVehicle _logic;

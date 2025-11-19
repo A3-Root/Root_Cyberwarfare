@@ -1,5 +1,17 @@
 # Changelog
 
+## Update 4 (v1.1.2.1)
+
+### Added
+- Seperate 3DEN Modules for Doors and Lights
+
+### Removed
+- N/A
+
+### Changed
+- Even more fixes (FFS) on GPS Search interfering with ACE Interaction
+- Proper trigger shape detection for synchronized objects in 3DEN Editor
+
 ## Update 3 (v1.1.1.1)
 
 ### Added

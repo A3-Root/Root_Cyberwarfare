@@ -162,6 +162,9 @@
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_CANNOT_SEARCH_SELF">
             <English>Cannot search yourself!</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_MENU">
+            <English>GPS Tracker</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_SEARCH">
             <English>Search for GPS Tracker</English>
         </Key>

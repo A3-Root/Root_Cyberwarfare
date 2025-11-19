@@ -7,8 +7,10 @@ class CfgFunctions {
 			class 3denAddCustomDevice {};
 			class 3denAddDatabase {};
 			class 3denAddDevices {};
+			class 3denAddDoors {};
 			class 3denAddGPSTracker {};
 			class 3denAddHackingTools {};
+			class 3denAddLights {};
 			class 3denAddPowerGenerator {};
 			class 3denAddVehicle {};
 			class 3denAdjustPowerCost {};
@@ -40,6 +42,8 @@ class CfgFunctions {
 		class Devices {
 			file = "\z\root_cyberwarfare\addons\main\functions\devices";
 			class addDeviceZeusMain {};
+			class addDoorsZeusMain {};
+			class addLightsZeusMain {};
 			class changeDoorState {};
 			class changeLightState {};
 		};
@@ -71,6 +75,7 @@ class CfgFunctions {
 			class consumePower {};
 			class copyDeviceLinksZeusMain {};
 			class getAccessibleDevices {};
+			class getObjectsInTriggerArea {};
 			class getUserConfirmation {};
 			class localSoundBroadcast {};
 			class removePower {};
@@ -87,6 +92,8 @@ class CfgFunctions {
 		class Zeus {
 			file = "\z\root_cyberwarfare\addons\main\functions\zeus";
 			class addDeviceZeus {};
+			class addDoorsZeus {};
+			class addLightsZeus {};
 			class addCustomDeviceZeus {};
 			class addDatabaseZeus {};
 			class addGPSTrackerZeus {};

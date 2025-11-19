@@ -40,17 +40,32 @@ if (_excludedClassnames != "") then {
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;
 
-// Separate laptops from generator objects
+// Separate triggers, laptops, and generator objects
+private _triggers = _syncedObjects select {
+	_x isKindOf "EmptyDetector"
+};
+
 private _laptops = _syncedObjects select {
 	typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"]
 };
 
-private _generators = _syncedObjects select {
-	!(_x in _laptops)
+private _directGenerators = _syncedObjects select {
+	!(_x in _laptops) && !(_x in _triggers)
 };
 
-if (_generators isEqualTo []) exitWith {
-	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Power Generator: No generator objects synchronized to this module!");
+private _allGenerators = [];
+
+// If triggers exist, get objects from trigger areas
+if (_triggers isNotEqualTo []) then {
+	private _objectsInArea = [_triggers] call FUNC(getObjectsInTriggerArea);
+	_allGenerators append _objectsInArea;
+};
+
+// Add directly synchronized generators
+_allGenerators append _directGenerators;
+
+if (_allGenerators isEqualTo []) exitWith {
+	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Power Generator: No generator objects synchronized or found in trigger areas!");
 	deleteVehicle _logic;
 };
 
@@ -78,7 +93,7 @@ if (_addToPublic) then {
 	// Parameters: _targetObject, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost
 	[_generator, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, _powerCost] call FUNC(addPowerGeneratorZeusMain);
 
-} forEach _generators;
+} forEach _allGenerators;
 
 // Delete the logic module after execution
 deleteVehicle _logic;

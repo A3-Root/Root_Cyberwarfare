@@ -14,7 +14,23 @@ class CfgVehicles {
 		curatorCanAttach = 1;
 		category = "ROOT_CYBERWARFARE";
 		function = "Root_fnc_addDeviceZeus";
-		displayName = "Add Hackable Object";
+		displayName = "Add Hackable Object (DEPRECATED - Use Add Doors/Lights)";
+	};
+	class ROOT_CyberWarfareAddDoorsZeus: zen_modules_moduleBase {
+		author = "Root";
+		_generalMacro = "ROOT_CyberWarfareAddDoorsZeus";
+		curatorCanAttach = 1;
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_addDoorsZeus";
+		displayName = "Add Hackable Doors";
+	};
+	class ROOT_CyberWarfareAddLightsZeus: zen_modules_moduleBase {
+		author = "Root";
+		_generalMacro = "ROOT_CyberWarfareAddLightsZeus";
+		curatorCanAttach = 1;
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_addLightsZeus";
+		displayName = "Add Hackable Lights";
 	};
 	class ROOT_CyberWarfareAddCustomDeviceZeus: zen_modules_moduleBase {
 		author = "Root";
@@ -164,7 +180,7 @@ class CfgVehicles {
 
 	class ROOT_Module3DEN_AddDevices: Module_F {
 		scope = 2;
-		displayName = "Add Devices";
+		displayName = "Add Devices (DEPRECATED - Use Add Doors/Lights)";
 		category = "ROOT_CYBERWARFARE";
 		function = "Root_fnc_3denAddDevices";
 		functionPriority = 4;
@@ -190,8 +206,67 @@ class CfgVehicles {
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {
-			description = "Synchronize this module to buildings (with doors), lights, or triggers to make them hackable. Triggers enable batch-registration of terrain buildings/lights within an area.";
+			description = "DEPRECATED: Use Add Doors or Add Lights modules. Synchronize this module to buildings (with doors), lights, or triggers to make them hackable. Triggers enable batch-registration of terrain buildings/lights within an area.";
 			sync[] = {"House", "Building", "UAV", "Lamps_base_F", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
+		};
+	};
+
+	class ROOT_Module3DEN_AddDoors: Module_F {
+		scope = 2;
+		displayName = "Add Hackable Doors";
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_3denAddDoors";
+		functionPriority = 4;
+		isGlobal = 0;
+		isTriggerActivated = 0;
+		isDisposable = 1;
+		is3DEN = 0;
+		class Attributes: AttributesBase {
+			class ROOT_CYBERWARFARE_3DEN_DOORS_PUBLIC: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_DOORS_PUBLIC";
+				displayName = "Add to Public Device List";
+				tooltip = "If checked, these devices will be accessible by all laptops (current and future)";
+				typeName = "BOOL";
+				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_DOORS_UNBREACHABLE: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_DOORS_UNBREACHABLE";
+				displayName = "Make Unbreachable";
+				tooltip = "If checked, building doors cannot be breached by ACE explosives or lockpicking. Only openable via hacking.";
+				typeName = "BOOL";
+				defaultValue = 0;
+			};
+			class ModuleDescription: ModuleDescription{};
+		};
+		class ModuleDescription: ModuleDescription {
+			description = "Synchronize this module to buildings (with doors) or triggers to make doors hackable. Triggers enable batch-registration of terrain buildings within an area.";
+			sync[] = {"House", "Building", "EmptyDetector", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
+		};
+	};
+
+	class ROOT_Module3DEN_AddLights: Module_F {
+		scope = 2;
+		displayName = "Add Hackable Lights";
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_3denAddLights";
+		functionPriority = 4;
+		isGlobal = 0;
+		isTriggerActivated = 0;
+		isDisposable = 1;
+		is3DEN = 0;
+		class Attributes: AttributesBase {
+			class ROOT_CYBERWARFARE_3DEN_LIGHTS_PUBLIC: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_LIGHTS_PUBLIC";
+				displayName = "Add to Public Device List";
+				tooltip = "If checked, these lights will be accessible by all laptops (current and future)";
+				typeName = "BOOL";
+				defaultValue = 1;
+			};
+			class ModuleDescription: ModuleDescription{};
+		};
+		class ModuleDescription: ModuleDescription {
+			description = "Synchronize this module to lights or triggers to make them hackable. Triggers enable batch-registration of lampposts within an area.";
+			sync[] = {"Lamps_base_F", "EmptyDetector", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};
 

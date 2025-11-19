@@ -33,17 +33,38 @@ private _addToPublic = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_PUBLI
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;
 
-// Separate laptops from vehicles
+// Separate triggers, laptops, and vehicles
+private _triggers = _syncedObjects select {
+	_x isKindOf "EmptyDetector"
+};
+
 private _laptops = _syncedObjects select {
 	typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"]
 };
 
-private _vehicles = _syncedObjects select {
-	!(_x in _laptops) && {_x isKindOf "AllVehicles"}
+private _directVehicles = _syncedObjects select {
+	!(_x in _laptops) && !(_x in _triggers) && {_x isKindOf "AllVehicles"}
 };
 
-if (_vehicles isEqualTo []) exitWith {
-	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Vehicle: No vehicles synchronized to this module!");
+private _allVehicles = [];
+
+// If triggers exist, get objects from trigger areas
+if (_triggers isNotEqualTo []) then {
+	private _objectsInArea = [_triggers] call FUNC(getObjectsInTriggerArea);
+
+	// Filter for vehicles and drones only
+	private _vehiclesInTrigger = _objectsInArea select {
+		_x isKindOf "AllVehicles"
+	};
+
+	_allVehicles append _vehiclesInTrigger;
+};
+
+// Add directly synchronized vehicles
+_allVehicles append _directVehicles;
+
+if (_allVehicles isEqualTo []) exitWith {
+	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Vehicle: No vehicles synchronized or found in trigger areas!");
 	deleteVehicle _logic;
 };
 
@@ -78,7 +99,7 @@ if (_addToPublic) then {
 		[_vehicle, _execUserId, _linkedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost] call FUNC(addVehicleZeusMain);
 	};
 
-} forEach _vehicles;
+} forEach _allVehicles;
 
 // Delete the logic module after execution
 deleteVehicle _logic;

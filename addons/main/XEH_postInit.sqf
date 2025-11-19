@@ -116,6 +116,27 @@ if (isServer) then {
 if (hasInterface) then {
     [{(!isNull ACE_player) && (uiTime > 10) && (serverTime > 10)}, {
         call FUNC(createDiaryEntry);
+
+        // ========================================================================
+        // ACE Action: GPS Tracker Operations (Parent Menu)
+        // ========================================================================
+        // Creates a submenu to group all GPS tracker related actions
+        // This prevents overlap with ACE's "Take Item" action
+        private _actionGPSParent = [
+            "ROOT_GPSTracker_Menu",
+            localize "STR_ROOT_CYBERWARFARE_GPS_MENU",
+            "",
+            {},
+            {true}  // Always show parent menu
+        ] call ace_interact_menu_fnc_createAction;
+
+        // Add parent action to specific object classes (whitelist approach to avoid conflicts with ACE items)
+        // Includes: All vehicle types, units, static weapons, buildings, lights, and PhysX objects
+        private _validClasses = ["Car", "Tank", "Helicopter", "Plane", "Ship", "Motorcycle", "Man", "House", "Building", "Lamps_base_F", "ThingX"];
+        {
+            [_x, 0, ["ACE_MainActions"], _actionGPSParent, true] call ace_interact_menu_fnc_addActionToClass;
+        } forEach _validClasses;
+
         // ========================================================================
         // ACE Action: Attach GPS Tracker to Object
         // ========================================================================
@@ -148,11 +169,9 @@ if (hasInterface) then {
             }
         ] call ace_interact_menu_fnc_createAction;
 
-        // Add action to specific object classes (whitelist approach to avoid conflicts with ACE items)
-        // Includes: All vehicle types, units, static weapons, buildings, lights, and PhysX objects
-        private _validClasses = ["Car", "Tank", "Helicopter", "Plane", "Ship", "Motorcycle", "Man", "House", "Building", "Lamps_base_F", "ThingX"];
+        // Add as child action to GPS Tracker menu
         {
-            [_x, 0, ["ACE_MainActions"], _actionAttach, true] call ace_interact_menu_fnc_addActionToClass;
+            [_x, 0, ["ACE_MainActions", "ROOT_GPSTracker_Menu"], _actionAttach, true] call ace_interact_menu_fnc_addActionToClass;
         } forEach _validClasses;
 
         // ========================================================================
@@ -204,10 +223,9 @@ if (hasInterface) then {
             }
         ] call ace_interact_menu_fnc_createAction;
 
-        // Add action to specific object classes (whitelist approach to avoid conflicts with ACE items)
-        // Uses same class list as attach action to maintain consistency
+        // Add as child action to GPS Tracker menu
         {
-            [_x, 0, ["ACE_MainActions"], _actionSearch, true] call ace_interact_menu_fnc_addActionToClass;
+            [_x, 0, ["ACE_MainActions", "ROOT_GPSTracker_Menu"], _actionSearch, true] call ace_interact_menu_fnc_addActionToClass;
         } forEach _validClasses;
 
     }, [], 5] call CBA_fnc_waitUntilAndExecute;

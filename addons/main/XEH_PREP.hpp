@@ -5,6 +5,8 @@
 PREP(3denAddHackingTools);
 PREP(3denAdjustPowerCost);
 PREP(3denAddDevices);
+PREP(3denAddDoors);
+PREP(3denAddLights);
 PREP(3denAddDatabase);
 PREP(3denAddVehicle);
 PREP(3denAddGPSTracker);
@@ -42,6 +44,8 @@ PREP(downloadDatabase);
 #define PREP(fncName) [QPATHTOF(functions\devices\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
 
 PREP(addDeviceZeusMain);
+PREP(addDoorsZeusMain);
+PREP(addLightsZeusMain);
 PREP(changeDoorState);
 PREP(changeLightState);
 
@@ -76,6 +80,7 @@ PREP(checkPowerAvailable);
 PREP(consumePower);
 PREP(copyDeviceLinksZeusMain);
 PREP(getAccessibleDevices);
+PREP(getObjectsInTriggerArea);
 PREP(getUserConfirmation);
 PREP(localSoundBroadcast);
 PREP(removePower);
@@ -96,6 +101,8 @@ PREP(disableDrone);
 PREP(addCustomDeviceZeus);
 PREP(addDatabaseZeus);
 PREP(addDeviceZeus);
+PREP(addDoorsZeus);
+PREP(addLightsZeus);
 PREP(addGPSTrackerZeus);
 PREP(addHackingToolsZeus);
 PREP(addPowerGeneratorZeus);
