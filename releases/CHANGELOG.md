@@ -1,5 +1,16 @@
 # Changelog
 
+## Update 5 (v1.1.3.1)
+
+### Added
+- N/A
+
+### Removed
+- N/A
+
+### Changed
+- Optimizations and bugfixes
+
 ## Update 4 (v1.1.2.1)
 
 ### Added
