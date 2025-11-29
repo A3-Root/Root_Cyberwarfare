@@ -3,6 +3,7 @@
 ## Update 6 (v1.1.4.1)
 
 ### Added
+- Added separate Doors and Lights zeus modules which were previously missing due to a commented line I forgot to 'uncomment'
 - **Customizable Vehicle Operation Limits** - Mission makers can now configure min/max ranges for all vehicle operations:
   - Battery/Fuel: Min/Max percentage limits (0-100%)
   - Speed: Min/Max boost values in km/h (supports negative for slowdown)
@@ -14,7 +15,6 @@
 - 12 new attribute fields in 3DEN "Add Hackable Vehicle" module for setting operation limits
 - Runtime validation that rejects operations outside configured limits with detailed error messages
 - Persistent toggle counters and cooldown timers for lights and engine operations
-- 9 new localization strings for limit violation error messages
 
 ### Removed
 - N/A

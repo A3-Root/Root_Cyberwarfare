@@ -155,13 +155,9 @@ if (_vehicleIDNum != 0) then {
                     private _fuelMax = _vehicleObject getVariable ["ROOT_CYBERWARFARE_FUEL_MAX", 100];
 
                     // Validate against limits
-                    if (_value < _fuelMin || _value > _fuelMax) exitWith {
-                        _string = format [
-                            "<t color='%1'>%2</t>",
-                            ROOT_CYBERWARFARE_COLOR_ERROR,
-                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_FUEL_OUT_OF_RANGE", _value, _fuelMin, _fuelMax]
-                        ];
-                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                    if (_value < _fuelMin || _value > _fuelMax) then {
+                        _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_FUEL_OUT_OF_RANGE", _value, _fuelMin, _fuelMax];
+                        [_computer, [[[_string, ROOT_CYBERWARFARE_COLOR_ERROR]]]] call AE3_armaos_fnc_shell_stdout;
                         breakTo "exit";
                     };
 
@@ -187,13 +183,9 @@ if (_vehicleIDNum != 0) then {
                     private _speedMax = _vehicleObject getVariable ["ROOT_CYBERWARFARE_SPEED_MAX", 50];
 
                     // Validate against limits
-                    if (_value < _speedMin || _value > _speedMax) exitWith {
-                        _string = format [
-                            "<t color='%1'>%2</t>",
-                            ROOT_CYBERWARFARE_COLOR_ERROR,
-                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_SPEED_OUT_OF_RANGE", _value, _speedMin, _speedMax]
-                        ];
-                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                    if (_value < _speedMin || _value > _speedMax) then {
+                        _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_SPEED_OUT_OF_RANGE", _value, _speedMin, _speedMax];
+                        [_computer, [[[_string, ROOT_CYBERWARFARE_COLOR_ERROR]]]] call AE3_armaos_fnc_shell_stdout;
                         breakTo "exit";
                     };
 
@@ -210,13 +202,9 @@ if (_vehicleIDNum != 0) then {
                 if (_action == "brakes") then {
                     _invalidOption = false;
 
-                    if !(_vehicleObject isKindOf "LandVehicle") exitWith {
-                        _string = format [
-                            "<t color='%1'>%2</t>",
-                            ROOT_CYBERWARFARE_COLOR_ERROR,
-                            localize "STR_ROOT_CYBERWARFARE_BRAKES_LAND_ONLY"
-                        ];
-                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                    if !(_vehicleObject isKindOf "LandVehicle") then {
+                        _string = localize "STR_ROOT_CYBERWARFARE_BRAKES_LAND_ONLY";
+                        [_computer, [[[_string, ROOT_CYBERWARFARE_COLOR_ERROR]]]] call AE3_armaos_fnc_shell_stdout;
                         breakTo "exit";
                     };
 
@@ -227,13 +215,9 @@ if (_vehicleIDNum != 0) then {
                     private _brakesMax = _vehicleObject getVariable ["ROOT_CYBERWARFARE_BRAKES_MAX", 10];
 
                     // Validate against limits
-                    if (_decelRate < _brakesMin || _decelRate > _brakesMax) exitWith {
-                        _string = format [
-                            "<t color='%1'>%2</t>",
-                            ROOT_CYBERWARFARE_COLOR_ERROR,
-                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_BRAKES_OUT_OF_RANGE", _decelRate, _brakesMin, _brakesMax]
-                        ];
-                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                    if (_decelRate < _brakesMin || _decelRate > _brakesMax) then {
+                        _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_BRAKES_OUT_OF_RANGE", _decelRate, _brakesMin, _brakesMax];
+                        [_computer, [[[_string, ROOT_CYBERWARFARE_COLOR_ERROR]]]] call AE3_armaos_fnc_shell_stdout;
                         breakTo "exit";
                     };
 
@@ -272,25 +256,17 @@ if (_vehicleIDNum != 0) then {
                     private _lastToggle = _vehicleObject getVariable ["ROOT_CYBERWARFARE_LIGHTS_LAST_TOGGLE", -999];
 
                     // Check max toggle limit
-                    if (_maxToggles >= 0 && _currentCount >= _maxToggles) exitWith {
-                        _string = format [
-                            "<t color='%1'>%2</t>",
-                            ROOT_CYBERWARFARE_COLOR_ERROR,
-                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_LIGHTS_MAX_TOGGLES", _maxToggles, _currentCount]
-                        ];
-                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                    if (_maxToggles >= 0 && _currentCount >= _maxToggles) then {
+                        _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_LIGHTS_MAX_TOGGLES", _maxToggles, _currentCount];
+                        [_computer, [[[_string, ROOT_CYBERWARFARE_COLOR_ERROR]]]] call AE3_armaos_fnc_shell_stdout;
                         breakTo "exit";
                     };
 
                     // Check cooldown
-                    if (_cooldown > 0 && (time - _lastToggle) < _cooldown) exitWith {
+                    if (_cooldown > 0 && (time - _lastToggle) < _cooldown) then {
                         private _remainingTime = (_cooldown - (time - _lastToggle)) toFixed 1;
-                        _string = format [
-                            "<t color='%1'>%2</t>",
-                            ROOT_CYBERWARFARE_COLOR_ERROR,
-                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_LIGHTS_COOLDOWN", _remainingTime]
-                        ];
-                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                        _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_LIGHTS_COOLDOWN", _remainingTime];
+                        [_computer, [[[_string, ROOT_CYBERWARFARE_COLOR_ERROR]]]] call AE3_armaos_fnc_shell_stdout;
                         breakTo "exit";
                     };
 
@@ -357,13 +333,9 @@ if (_vehicleIDNum != 0) then {
                     private _alarmMax = _vehicleObject getVariable ["ROOT_CYBERWARFARE_ALARM_MAX", 30];
 
                     // Validate against limits
-                    if (_value < _alarmMin || _value > _alarmMax) exitWith {
-                        _string = format [
-                            "<t color='%1'>%2</t>",
-                            ROOT_CYBERWARFARE_COLOR_ERROR,
-                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_ALARM_OUT_OF_RANGE", _value, _alarmMin, _alarmMax]
-                        ];
-                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                    if (_value < _alarmMin || _value > _alarmMax) then {
+                        _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_ALARM_OUT_OF_RANGE", _value, _alarmMin, _alarmMax];
+                        [_computer, [[[_string, ROOT_CYBERWARFARE_COLOR_ERROR]]]] call AE3_armaos_fnc_shell_stdout;
                         breakTo "exit";
                     };
 
@@ -384,25 +356,17 @@ if (_vehicleIDNum != 0) then {
                     private _lastToggle = _vehicleObject getVariable ["ROOT_CYBERWARFARE_ENGINE_LAST_TOGGLE", -999];
 
                     // Check max toggle limit
-                    if (_maxToggles >= 0 && _currentCount >= _maxToggles) exitWith {
-                        _string = format [
-                            "<t color='%1'>%2</t>",
-                            ROOT_CYBERWARFARE_COLOR_ERROR,
-                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_ENGINE_MAX_TOGGLES", _maxToggles, _currentCount]
-                        ];
-                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                    if (_maxToggles >= 0 && _currentCount >= _maxToggles) then {
+                        _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_ENGINE_MAX_TOGGLES", _maxToggles, _currentCount];
+                        [_computer, [[[_string, ROOT_CYBERWARFARE_COLOR_ERROR]]]] call AE3_armaos_fnc_shell_stdout;
                         breakTo "exit";
                     };
 
                     // Check cooldown
-                    if (_cooldown > 0 && (time - _lastToggle) < _cooldown) exitWith {
+                    if (_cooldown > 0 && (time - _lastToggle) < _cooldown) then {
                         private _remainingTime = (_cooldown - (time - _lastToggle)) toFixed 1;
-                        _string = format [
-                            "<t color='%1'>%2</t>",
-                            ROOT_CYBERWARFARE_COLOR_ERROR,
-                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_ENGINE_COOLDOWN", _remainingTime]
-                        ];
-                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                        _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_ENGINE_COOLDOWN", _remainingTime];
+                        [_computer, [[[_string, ROOT_CYBERWARFARE_COLOR_ERROR]]]] call AE3_armaos_fnc_shell_stdout;
                         breakTo "exit";
                     };
 

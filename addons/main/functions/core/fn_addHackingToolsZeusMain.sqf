@@ -522,26 +522,16 @@ _content = "
             [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
         };
     };
+    
+    if (count _options < 3) exitWith {
+        [_computer, 'Error: Invalid syntax. Use: vehicle <VehicleID> <action> <value>'] call AE3_armaos_fnc_shell_stdout;
+    };
 
-    private _commandOpts = [];
-    private _commandSyntax =
-    [
-        [
-            ['command', _commandName, true, false],
-            ['path', 'vehicleID', true, false],
-            ['path', 'action', true, false],
-            ['path', 'value', true, false]
-        ]
-    ];
-    private _commandSettings = [_commandName, _commandOpts, _commandSyntax];
+    private _vehicleID = _options select 0;
+    private _action = _options select 1;
 
-    [] params ([_computer, _options, _commandSettings] call AE3_armaos_fnc_shell_getOpts);
-
-    if (!_ae3OptsSuccess) exitWith {};
-
-    private _vehicleID = (_ae3OptsThings select 0);
-    private _action = (_ae3OptsThings select 1);
-    private _value = (_ae3OptsThings select 2);
+    private _remainingOptions = _options select [2, count _options - 2];
+    private _value = _remainingOptions joinString '';
 
     private _owner = clientOwner;
 
