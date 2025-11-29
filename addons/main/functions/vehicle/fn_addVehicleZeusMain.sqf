@@ -19,7 +19,7 @@
  * 2: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
  * 3: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
  *
- * For Vehicles (when called with 12 parameters):
+ * For Vehicles (when called with 24 parameters):
  * 0: _targetObject <OBJECT> - The vehicle to make hackable
  * 1: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
  * 2: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
@@ -32,13 +32,33 @@
  * 9: _allowAlarm <BOOLEAN> (Optional) - Allow alarm control, default: false
  * 10: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
  * 11: _powerCost <NUMBER> (Optional) - Power cost per action, default: 2
+ * 12: _fuelMinPercent <NUMBER> (Optional) - Minimum fuel percentage (0-100%), default: 0
+ * 13: _fuelMaxPercent <NUMBER> (Optional) - Maximum fuel percentage (0-100%), default: 100
+ * 14: _speedMinValue <NUMBER> (Optional) - Minimum speed boost in km/h, default: -50
+ * 15: _speedMaxValue <NUMBER> (Optional) - Maximum speed boost in km/h, default: 50
+ * 16: _brakesMinDecel <NUMBER> (Optional) - Minimum deceleration rate in m/s², default: 1
+ * 17: _brakesMaxDecel <NUMBER> (Optional) - Maximum deceleration rate in m/s², default: 10
+ * 18: _lightsMaxToggles <NUMBER> (Optional) - Maximum light toggles (-1 = unlimited), default: -1
+ * 19: _lightsCooldown <NUMBER> (Optional) - Light toggle cooldown in seconds, default: 0
+ * 20: _engineMaxToggles <NUMBER> (Optional) - Maximum engine toggles (-1 = unlimited), default: -1
+ * 21: _engineCooldown <NUMBER> (Optional) - Engine toggle cooldown in seconds, default: 0
+ * 22: _alarmMinDuration <NUMBER> (Optional) - Minimum alarm duration in seconds, default: 1
+ * 23: _alarmMaxDuration <NUMBER> (Optional) - Maximum alarm duration in seconds, default: 30
  *
  * Return Value:
  * None
  *
  * Example:
+ * // Basic vehicle registration
  * [_vehicle, 0, [], "Car1", true, true, false, false, true, false, false, 2] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+ *
+ * // Vehicle with custom limits
+ * [_vehicle, 0, [], "Car1", true, true, true, true, true, false, false, 2, 20, 80, -30, 30, 2, 8, 5, 10, 3, 5, 2, 20] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+ *
+ * // Drone registration
  * [_drone, 0, [], false] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+ *
+ * // Radius mode
  * [[0, 0, 0], 1000, 0, [], false] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
  *
  * Public: No
@@ -93,7 +113,7 @@ if (_isRadiusMode) then {
             private _defaultPowerCost = 2;
             private _allowAllFeatures = true;
 
-            [_obj, _execUserId, _linkedComputers, _vehicleName, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _availableToFutureLaptops, _defaultPowerCost] call FUNC(addVehicleZeusMain);
+            [_obj, _execUserId, _linkedComputers, _vehicleName, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _availableToFutureLaptops, _defaultPowerCost, 0, 100, -50, 50, 1, 10, -1, 0, -1, 0, 1, 30] call FUNC(addVehicleZeusMain);
             _vehicleCount = _vehicleCount + 1;
             _index = _index + 1;
         };
@@ -246,7 +266,18 @@ if (_isRadiusMode) then {
 
     } else {
         // Vehicle: continue with normal vehicle registration
-        params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], "_vehicleName", ["_allowFuel", false], ["_allowSpeed", false], ["_allowBrakes", false], ["_allowLights", false], ["_allowEngine", true], ["_allowAlarm", false], ["_availableToFutureLaptops", false], ["_powerCost", 2]];
+        params [
+            "_targetObject", ["_execUserId", 0], ["_linkedComputers", []], "_vehicleName",
+            ["_allowFuel", false], ["_allowSpeed", false], ["_allowBrakes", false],
+            ["_allowLights", false], ["_allowEngine", true], ["_allowAlarm", false],
+            ["_availableToFutureLaptops", false], ["_powerCost", 2],
+            ["_fuelMinPercent", 0], ["_fuelMaxPercent", 100],
+            ["_speedMinValue", -50], ["_speedMaxValue", 50],
+            ["_brakesMinDecel", 1], ["_brakesMaxDecel", 10],
+            ["_lightsMaxToggles", -1], ["_lightsCooldown", 0],
+            ["_engineMaxToggles", -1], ["_engineCooldown", 0],
+            ["_alarmMinDuration", 1], ["_alarmMaxDuration", 30]
+        ];
 
         if (_execUserId == 0) then {
             _execUserId = owner _targetObject;
@@ -273,6 +304,26 @@ if (_isRadiusMode) then {
         _targetObject setVariable ["ROOT_CYBERWARFARE_AVAILABLE_FUTURE", _availableToFutureLaptops, true];
         _targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", _powerCost, true];
 
+        // Store configuration limits
+        _targetObject setVariable ["ROOT_CYBERWARFARE_FUEL_MIN", _fuelMinPercent, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_FUEL_MAX", _fuelMaxPercent, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_SPEED_MIN", _speedMinValue, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_SPEED_MAX", _speedMaxValue, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_BRAKES_MIN", _brakesMinDecel, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_BRAKES_MAX", _brakesMaxDecel, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_LIGHTS_MAX_TOGGLES", _lightsMaxToggles, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_LIGHTS_COOLDOWN", _lightsCooldown, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_ENGINE_MAX_TOGGLES", _engineMaxToggles, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_ENGINE_COOLDOWN", _engineCooldown, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_ALARM_MIN", _alarmMinDuration, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_ALARM_MAX", _alarmMaxDuration, true];
+
+        // Initialize runtime state
+        _targetObject setVariable ["ROOT_CYBERWARFARE_LIGHTS_TOGGLE_COUNT", 0, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_ENGINE_TOGGLE_COUNT", 0, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_LIGHTS_LAST_TOGGLE", -999, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_ENGINE_LAST_TOGGLE", -999, true];
+
         _deviceId = (round (random 8999)) + 1000;
         if (_allVehicles isNotEqualTo []) then {
             while {true} do {
@@ -288,7 +339,15 @@ if (_isRadiusMode) then {
         };
 
         // Store with availability flag
-        _allVehicles pushBack [_deviceId, _netId, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost, _linkedComputers];
+        _allVehicles pushBack [
+            _deviceId, _netId, _vehicleName,
+            _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm,
+            _availableToFutureLaptops, _powerCost, _linkedComputers,
+            _fuelMinPercent, _fuelMaxPercent, _speedMinValue, _speedMaxValue,
+            _brakesMinDecel, _brakesMaxDecel, _lightsMaxToggles, _lightsCooldown,
+            _engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration,
+            nil, nil, nil, nil, nil, nil  // Reserved slots
+        ];
 
         private _availabilityText = "";
         private _availableHacks = "";

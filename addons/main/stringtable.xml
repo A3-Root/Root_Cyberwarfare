@@ -43,6 +43,9 @@
         </Key>
     </Package>
     <Package name="Errors">
+        <Key ID="STR_ROOT_CYBERWARFARE_BRAKES_LAND_ONLY">
+            <English>Error! Brakes can only be applied to land vehicles.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DRONE">
             <English>Error! Drone ID %1 not found or access denied.</English>
         </Key>
@@ -55,6 +58,12 @@
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_VEHICLE">
             <English>Access denied to Vehicle ID: %1.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ALARM_OUT_OF_RANGE">
+            <English>Error! Alarm duration %1 seconds is outside allowed range [%2 - %3 seconds].</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_BRAKES_OUT_OF_RANGE">
+            <English>Error! Brake deceleration %1 m/s² is outside allowed range [%2 - %3 m/s²].</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_BUILDING_NOT_FOUND">
             <English>Error! Building ID %1 not found!</English>
         </Key>
@@ -63,6 +72,15 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_DOOR_NOT_IN_BUILDING">
             <English>Error! No such door with ID: %1 in the building (ID: %2)!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ENGINE_COOLDOWN">
+            <English>Error! Engine toggle on cooldown. Wait %1 seconds.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ENGINE_MAX_TOGGLES">
+            <English>Error! Engine toggle limit reached. Maximum: %1, Current count: %2.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_FUEL_OUT_OF_RANGE">
+            <English>Error! Fuel value %1%% is outside allowed range [%2%% - %3%%].</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_GENERATOR_DESTROYED">
             <English>Error! Generator was destroyed and cannot be controlled!</English>
@@ -112,6 +130,12 @@
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_VEHICLE_ID">
             <English>Error! Invalid VehicleID - %1.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_LIGHTS_COOLDOWN">
+            <English>Error! Light toggle on cooldown. Wait %1 seconds.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_LIGHTS_MAX_TOGGLES">
+            <English>Error! Light toggle limit reached. Maximum: %1, Current count: %2.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_BUILDINGS">
             <English>Error! No accessible buildings found or access denied.</English>
         </Key>
@@ -147,6 +171,9 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_POWERGRID_OBJECT_NOT_FOUND">
             <English>Error! Power grid object not found.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_SPEED_OUT_OF_RANGE">
+            <English>Error! Speed value %1 km/h is outside allowed range [%2 - %3 km/h].</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_VEHICLE_NOT_FOUND">
             <English>Vehicle ID %1 not found.</English>
@@ -303,11 +330,6 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY">
             <English>Power Cost Settings</English>
-        </Key>
-    </Package>
-    <Package name="Vehicle_Operations">
-        <Key ID="STR_ROOT_CYBERWARFARE_VEHICLE_INCOMPATIBLE_BRAKES">
-            <English>Vehicle incompatible for applying brakes!</English>
         </Key>
     </Package>
     <Package name="Zeus">

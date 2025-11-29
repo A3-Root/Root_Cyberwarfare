@@ -11,6 +11,8 @@ class CfgPatches {
 			"ROOT_ModuleAddHackingTools",
 			"ROOT_ModuleAddDatabase",
 			"ROOT_CyberWarfareAddDeviceZeus",
+			"ROOT_CyberWarfareAddDoorsZeus",
+			"ROOT_CyberWarfareAddLightsZeus",
 			"ROOT_CyberWarfareAddHackingToolsZeus",
 			"ROOT_CyberWarfareModifyPowerZeus",
 			"ROOT_CyberWarfareAddFileZeus",

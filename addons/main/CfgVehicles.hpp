@@ -400,6 +400,90 @@ class CfgVehicles {
 				typeName = "BOOL";
 				defaultValue = 1;
 			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_FUEL_MIN: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_FUEL_MIN";
+				displayName = "Min Fuel/Battery %";
+				tooltip = "Minimum fuel percentage allowed (0-100%)";
+				typeName = "NUMBER";
+				defaultValue = 0;
+			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_FUEL_MAX: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_FUEL_MAX";
+				displayName = "Max Fuel/Battery %";
+				tooltip = "Maximum fuel percentage allowed (0-100%)";
+				typeName = "NUMBER";
+				defaultValue = 100;
+			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED_MIN: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED_MIN";
+				displayName = "Min Speed Boost (km/h)";
+				tooltip = "Minimum speed boost allowed (negative = slowdown)";
+				typeName = "NUMBER";
+				defaultValue = -50;
+			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED_MAX: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED_MAX";
+				displayName = "Max Speed Boost (km/h)";
+				tooltip = "Maximum speed boost allowed";
+				typeName = "NUMBER";
+				defaultValue = 50;
+			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_BRAKES_MIN: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_BRAKES_MIN";
+				displayName = "Min Brake Decel (m/s²)";
+				tooltip = "Minimum deceleration rate";
+				typeName = "NUMBER";
+				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_BRAKES_MAX: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_BRAKES_MAX";
+				displayName = "Max Brake Decel (m/s²)";
+				tooltip = "Maximum deceleration rate";
+				typeName = "NUMBER";
+				defaultValue = 10;
+			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_LIGHTS_MAX_TOGGLES: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_LIGHTS_MAX_TOGGLES";
+				displayName = "Max Light Toggles";
+				tooltip = "Maximum toggle count (-1 = unlimited)";
+				typeName = "NUMBER";
+				defaultValue = -1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_LIGHTS_COOLDOWN: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_LIGHTS_COOLDOWN";
+				displayName = "Light Cooldown (sec)";
+				tooltip = "Seconds between light toggles";
+				typeName = "NUMBER";
+				defaultValue = 0;
+			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_ENGINE_MAX_TOGGLES: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_ENGINE_MAX_TOGGLES";
+				displayName = "Max Engine Toggles";
+				tooltip = "Maximum toggle count (-1 = unlimited)";
+				typeName = "NUMBER";
+				defaultValue = -1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_ENGINE_COOLDOWN: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_ENGINE_COOLDOWN";
+				displayName = "Engine Cooldown (sec)";
+				tooltip = "Seconds between engine toggles";
+				typeName = "NUMBER";
+				defaultValue = 0;
+			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_ALARM_MIN: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_ALARM_MIN";
+				displayName = "Min Alarm Duration (sec)";
+				tooltip = "Minimum alarm duration";
+				typeName = "NUMBER";
+				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_ALARM_MAX: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_ALARM_MAX";
+				displayName = "Max Alarm Duration (sec)";
+				tooltip = "Maximum alarm duration";
+				typeName = "NUMBER";
+				defaultValue = 30;
+			};
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {

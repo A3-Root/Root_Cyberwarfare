@@ -399,34 +399,51 @@ Manipulate various vehicle parameters remotely.
 
 | Action | Value Range | Description |
 |--------|-------------|-------------|
-| `battery` | 0-100 | Set fuel/battery percentage (0=empty, 100=full) |
-| `speed` | 0-100 | Limit maximum speed percentage (0=immobile, 100=full speed) |
-| `brakes` | 0-1 | Disable/enable brakes (0=disabled, 1=enabled) |
-| `lights` | 0-1 | Disable/enable lights (0=disabled, 1=enabled) |
-| `engine` | 0-1 | Stop/start engine (0=off, 1=on) |
-| `alarm` | 0-1 | Disable/enable car alarm (0=disabled, 1=enabled) |
+| `battery` | Configured Min-Max % | Set fuel/battery percentage (mission-maker configurable range, e.g., 0-100%) |
+| `speed` | Configured Min-Max km/h | Adjust speed boost (supports negative for slowdown, e.g., -50 to 50 km/h) |
+| `brakes` | Configured Min-Max m/s² | Apply brakes with deceleration rate (e.g., 1-10 m/s²) |
+| `lights` | 0-1 | Toggle lights (subject to max toggle count and cooldown timer) |
+| `engine` | 0-1 | Toggle engine (subject to max toggle count and cooldown timer) |
+| `alarm` | Configured Min-Max seconds | Activate alarm for duration (e.g., 1-30 seconds) |
 
 **Power Cost:** Per vehicle (configurable, default: **2 Wh per action**)
 
 **Examples:**
 ```bash
-vehicle 1337 battery 50    # Set fuel to 50%
-vehicle 1337 battery 0     # Empty the tank
-vehicle 1337 speed 30      # Limit speed to 30%
-vehicle 1337 brakes 0      # Disable brakes
-vehicle 1337 lights 0      # Disable lights
-vehicle 1337 engine 0      # Stop engine
-vehicle 1337 alarm 0       # Disable car alarm
+vehicle 1337 battery 50    # Set fuel to 50% (if within allowed range)
+vehicle 1337 battery 0     # Empty the tank (if min limit allows)
+vehicle 1337 speed 30      # Boost speed by 30 km/h (if within allowed range)
+vehicle 1337 speed -20     # Slow down by 20 km/h (if negative values allowed)
+vehicle 1337 brakes 5      # Apply brakes at 5 m/s² deceleration (if within allowed range)
+vehicle 1337 lights 0      # Toggle lights (if toggle limit not reached and cooldown expired)
+vehicle 1337 engine 0      # Stop engine (if toggle limit not reached and cooldown expired)
+vehicle 1337 alarm 10      # Activate alarm for 10 seconds (if within allowed range)
 ```
+
+**Limit Violations:**
+If you attempt an operation outside the configured limits, you'll receive an error message:
+
+- **Fuel/Battery**: `Error! Fuel value 120% is outside allowed range [0% - 100%].`
+- **Speed**: `Error! Speed value 80 km/h is outside allowed range [-50 - 50 km/h].`
+- **Brakes**: `Error! Brake deceleration 15 m/s² is outside allowed range [1 - 10 m/s²].`
+- **Lights Toggles**: `Error! Light toggle limit reached. Maximum: 5, Current count: 5.`
+- **Lights Cooldown**: `Error! Light toggle on cooldown. Wait 3.5 seconds.`
+- **Engine Toggles**: `Error! Engine toggle limit reached. Maximum: 3, Current count: 3.`
+- **Engine Cooldown**: `Error! Engine toggle on cooldown. Wait 2.1 seconds.`
+- **Alarm Duration**: `Error! Alarm duration 60 seconds is outside allowed range [1 - 30 seconds].`
 
 **Confirmation Required:** Yes
 
 **Notes:**
 - Not all actions are available for all vehicles (depends on mission maker configuration)
 - Check `devices vehicles` to see which features are enabled (e.g., "Battery, Speed, Lights, Engine")
-- Setting battery to 0 completely drains the vehicle's fuel
-- Disabling brakes makes the vehicle unable to slow down
-- Stopping the engine forces the vehicle to turn off
+- Each vehicle has configured min/max limits for operation values
+- Operations outside these limits are rejected with error messages showing the allowed range
+- Toggle operations (lights, engine) may have maximum usage counts and cooldown timers
+- Toggle counters reset when the vehicle respawns
+- Brakes now use configurable deceleration rates instead of simple on/off
+- Speed values can be negative to slow down vehicles
+- Error messages display current value and allowed range for debugging
 
 ---
 

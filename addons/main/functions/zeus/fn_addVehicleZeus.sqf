@@ -1,9 +1,27 @@
 /*
  * Author: Root
- * Zeus module to add a hackable vehicle or drone
+ * Zeus module to add a hackable vehicle or drone with customizable operation limits
  *
  * Arguments:
  * 0: _logic <OBJECT> - Zeus logic module
+ *
+ * Dialog Controls (for vehicles):
+ * - Vehicle Name: Custom name for terminal display
+ * - Power Cost: Energy cost per hacking action (1-30 Wh)
+ * - Operation Toggles: Enable/disable fuel, speed, brakes, lights, engine, alarm
+ * - Fuel Limits: Min/Max percentage (0-100%)
+ * - Speed Limits: Min/Max boost in km/h (-100 to 100)
+ * - Brakes Limits: Min/Max deceleration rate (0.5-20 m/s²)
+ * - Lights: Max toggles (-1 = unlimited) and cooldown (0-300 sec)
+ * - Engine: Max toggles (-1 = unlimited) and cooldown (0-300 sec)
+ * - Alarm: Min/Max duration (1-300 seconds)
+ * - Future Laptops: Make accessible to future laptops
+ * - Computer Selection: Link to specific laptops
+ *
+ * Modes:
+ * - Direct Mode: Attach to a specific vehicle/drone
+ * - Radius Mode: No attached object - registers all vehicles/drones in area
+ * - Drone Mode: Simplified dialog for UAVs (no vehicle-specific options)
  *
  * Return Value:
  * None
@@ -109,7 +127,19 @@ if (_useRadiusMode) then {
             ["TOOLBOX:YESNO", ["Allow Brakes Control", "Allow the vehicle brakes to be hacked and applied."], true],
             ["TOOLBOX:YESNO", ["Allow Lights Control", "Allow the vehicle lights to be hacked and modified."], true],
             ["TOOLBOX:YESNO", ["Allow Engine Control", "Allow the vehicle engine to be hacked and turned on/off."], true],
-            ["TOOLBOX:YESNO", ["Allow Car Alarm", "Allow the vehicle alarm to be hacked to produce its sound."], true]
+            ["TOOLBOX:YESNO", ["Allow Car Alarm", "Allow the vehicle alarm to be hacked to produce its sound."], true],
+            ["SLIDER", ["Min Fuel %", "Minimum fuel percentage (0-100%)"], [0, 100, 0, 0]],
+            ["SLIDER", ["Max Fuel %", "Maximum fuel percentage (0-100%)"], [0, 100, 100, 0]],
+            ["SLIDER", ["Min Speed Boost (km/h)", "Minimum speed boost (negative = slowdown)"], [-100, 100, -50, 0]],
+            ["SLIDER", ["Max Speed Boost (km/h)", "Maximum speed boost"], [-100, 100, 50, 0]],
+            ["SLIDER", ["Min Brake Decel (m/s²)", "Minimum deceleration rate"], [0.5, 20, 1, 1]],
+            ["SLIDER", ["Max Brake Decel (m/s²)", "Maximum deceleration rate"], [0.5, 20, 10, 1]],
+            ["SLIDER", ["Max Light Toggles", "Maximum toggle count (-1 = unlimited)"], [-1, 100, -1, 0]],
+            ["SLIDER", ["Light Cooldown (sec)", "Seconds between light toggles"], [0, 300, 0, 0]],
+            ["SLIDER", ["Max Engine Toggles", "Maximum toggle count (-1 = unlimited)"], [-1, 100, -1, 0]],
+            ["SLIDER", ["Engine Cooldown (sec)", "Seconds between engine toggles"], [0, 300, 0, 0]],
+            ["SLIDER", ["Min Alarm Duration (sec)", "Minimum alarm duration"], [1, 300, 1, 0]],
+            ["SLIDER", ["Max Alarm Duration (sec)", "Maximum alarm duration"], [1, 300, 30, 0]]
         ];
     };
 };
@@ -190,8 +220,18 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Shou
 
             } else {
                 // Vehicle: full configuration
-                _results params ["_vehicleName", "_powerCost", "_allowFuel", "_allowSpeed", "_allowBrakes", "_allowLights", "_allowEngine", "_allowAlarm", "_availableToFutureLaptops"];
-                _checkboxStartIndex = 9;
+                _results params [
+                    "_vehicleName", "_powerCost",
+                    "_allowFuel", "_allowSpeed", "_allowBrakes", "_allowLights", "_allowEngine", "_allowAlarm",
+                    "_fuelMinPercent", "_fuelMaxPercent",
+                    "_speedMinValue", "_speedMaxValue",
+                    "_brakesMinDecel", "_brakesMaxDecel",
+                    "_lightsMaxToggles", "_lightsCooldown",
+                    "_engineMaxToggles", "_engineCooldown",
+                    "_alarmMinDuration", "_alarmMaxDuration",
+                    "_availableToFutureLaptops"
+                ];
+                _checkboxStartIndex = 21;
 
                 // Process laptop checkboxes
                 {
@@ -209,7 +249,14 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Shou
                 // Validate power cost
                 if (_powerCost < 1) then { _powerCost = 1; };
 
-                [_targetObject, _execUserId, _selectedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+                [
+                    _targetObject, _execUserId, _selectedComputers, _vehicleName,
+                    _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm,
+                    _availableToFutureLaptops, _powerCost,
+                    _fuelMinPercent, _fuelMaxPercent, _speedMinValue, _speedMaxValue,
+                    _brakesMinDecel, _brakesMaxDecel, _lightsMaxToggles, _lightsCooldown,
+                    _engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration
+                ] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
                 ["Hackable Vehicle Added!"] call zen_common_fnc_showMessage;
                 _index = _index + 1;
                 missionNamespace setVariable ["ROOT_CYBERWARFARE_VEHICLE_INDEX", _index, true];

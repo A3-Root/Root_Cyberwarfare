@@ -445,14 +445,26 @@ Drones use the `changedrone` and `disabledrone` commands (see [Add Hackable Obje
 |-----------|------|---------|-------------|
 | **Linked Computers** | Array | (empty) | Specific laptops with access. |
 | **Vehicle Name** | String | (auto-generated) | Display name in terminal. |
-| **Allow Fuel/Battery Hacking** | Checkbox | Checked | Enable fuel/battery manipulation (0-100%). |
-| **Allow Speed Hacking** | Checkbox | Checked | Enable max speed limitation (0-100%). |
-| **Allow Brakes Hacking** | Checkbox | Unchecked | Enable brake disabling (0=disabled, 1=enabled). |
-| **Allow Lights Hacking** | Checkbox | Checked | Enable light control (0=off, 1=on). |
-| **Allow Engine Hacking** | Checkbox | Checked | Enable engine stop/start (0=off, 1=on). |
-| **Allow Alarm Hacking** | Checkbox | Unchecked | Enable car alarm control (0=off, 1=on). |
+| **Power Cost per Action** | Slider | `2` Wh | Power cost in Wh for each hacking action (1-30 Wh). |
+| **Allow Fuel/Battery Hacking** | Checkbox | Checked | Enable fuel/battery manipulation. |
+| **Allow Speed Hacking** | Checkbox | Checked | Enable speed boost/slowdown control. |
+| **Allow Brakes Hacking** | Checkbox | Unchecked | Enable brake control with configurable deceleration. |
+| **Allow Lights Hacking** | Checkbox | Checked | Enable light control (on/off). |
+| **Allow Engine Hacking** | Checkbox | Checked | Enable engine stop/start. |
+| **Allow Alarm Hacking** | Checkbox | Unchecked | Enable car alarm control. |
+| **Min Fuel %** | Slider | `0` | Minimum fuel percentage allowed (0-100%). |
+| **Max Fuel %** | Slider | `100` | Maximum fuel percentage allowed (0-100%). |
+| **Min Speed Boost (km/h)** | Slider | `-50` | Minimum speed boost value (-100 to 100 km/h). |
+| **Max Speed Boost (km/h)** | Slider | `50` | Maximum speed boost value (-100 to 100 km/h). |
+| **Min Brake Decel (m/s²)** | Slider | `1` | Minimum deceleration rate (0.5-20 m/s²). |
+| **Max Brake Decel (m/s²)** | Slider | `10` | Maximum deceleration rate (0.5-20 m/s²). |
+| **Max Light Toggles** | Slider | `-1` | Maximum times lights can be toggled (-1 = unlimited). |
+| **Light Cooldown (sec)** | Slider | `0` | Cooldown in seconds between light toggles (0-300). |
+| **Max Engine Toggles** | Slider | `-1` | Maximum times engine can be toggled (-1 = unlimited). |
+| **Engine Cooldown (sec)** | Slider | `0` | Cooldown in seconds between engine toggles (0-300). |
+| **Min Alarm Duration (sec)** | Slider | `1` | Minimum alarm duration in seconds (1-300). |
+| **Max Alarm Duration (sec)** | Slider | `30` | Maximum alarm duration in seconds (1-300). |
 | **Available to Future Laptops** | Checkbox | Unchecked | Auto-grant access to future laptops. |
-| **Power Cost per Action** | Number | `2` | Power cost in Wh for each hacking action. |
 
 **Example Configuration (Vehicle):**
 ```

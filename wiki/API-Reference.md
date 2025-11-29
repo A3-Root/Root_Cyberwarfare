@@ -110,7 +110,7 @@ Registers vehicles or drones as hackable.
 
 **Syntax (Vehicles):**
 ```sqf
-[_vehicle, _execUserId, _linkedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+[_vehicle, _execUserId, _linkedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost, _fuelMinPercent, _fuelMaxPercent, _speedMinValue, _speedMaxValue, _brakesMinDecel, _brakesMaxDecel, _lightsMaxToggles, _lightsCooldown, _engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 ```
 
 **Parameters (Drones):**
@@ -124,30 +124,46 @@ Registers vehicles or drones as hackable.
 
 **Parameters (Vehicles):**
 
-| Index | Name | Type | Default |
-|-------|------|------|---------|
-| 0 | _vehicle | OBJECT | - |
-| 1 | _execUserId | NUMBER | 0 |
-| 2 | _linkedComputers | ARRAY | [] |
-| 3 | _vehicleName | STRING | - |
-| 4 | _allowFuel | BOOLEAN | false |
-| 5 | _allowSpeed | BOOLEAN | false |
-| 6 | _allowBrakes | BOOLEAN | false |
-| 7 | _allowLights | BOOLEAN | false |
-| 8 | _allowEngine | BOOLEAN | true |
-| 9 | _allowAlarm | BOOLEAN | false |
-| 10 | _availableToFutureLaptops | BOOLEAN | false |
-| 11 | _powerCost | NUMBER | 2 |
+| Index | Name | Type | Default | Description |
+|-------|------|------|---------|-------------|
+| 0 | _vehicle | OBJECT | - | Vehicle object |
+| 1 | _execUserId | NUMBER | 0 | User ID for feedback |
+| 2 | _linkedComputers | ARRAY | [] | Array of computer netIds |
+| 3 | _vehicleName | STRING | - | Display name |
+| 4 | _allowFuel | BOOLEAN | false | Enable fuel/battery control |
+| 5 | _allowSpeed | BOOLEAN | false | Enable speed boost control |
+| 6 | _allowBrakes | BOOLEAN | false | Enable brake control |
+| 7 | _allowLights | BOOLEAN | false | Enable lights control |
+| 8 | _allowEngine | BOOLEAN | true | Enable engine control |
+| 9 | _allowAlarm | BOOLEAN | false | Enable car alarm control |
+| 10 | _availableToFutureLaptops | BOOLEAN | false | Auto-grant access to future laptops |
+| 11 | _powerCost | NUMBER | 2 | Power cost in Wh per action |
+| 12 | _fuelMinPercent | NUMBER | 0 | Minimum fuel percentage (0-100%) |
+| 13 | _fuelMaxPercent | NUMBER | 100 | Maximum fuel percentage (0-100%) |
+| 14 | _speedMinValue | NUMBER | -50 | Minimum speed boost in km/h (-100 to 100) |
+| 15 | _speedMaxValue | NUMBER | 50 | Maximum speed boost in km/h (-100 to 100) |
+| 16 | _brakesMinDecel | NUMBER | 1 | Minimum deceleration rate in m/s² (0.5-20) |
+| 17 | _brakesMaxDecel | NUMBER | 10 | Maximum deceleration rate in m/s² (0.5-20) |
+| 18 | _lightsMaxToggles | NUMBER | -1 | Maximum light toggles (-1 = unlimited) |
+| 19 | _lightsCooldown | NUMBER | 0 | Cooldown between light toggles (seconds, 0-300) |
+| 20 | _engineMaxToggles | NUMBER | -1 | Maximum engine toggles (-1 = unlimited) |
+| 21 | _engineCooldown | NUMBER | 0 | Cooldown between engine toggles (seconds, 0-300) |
+| 22 | _alarmMinDuration | NUMBER | 1 | Minimum alarm duration (seconds, 1-300) |
+| 23 | _alarmMaxDuration | NUMBER | 30 | Maximum alarm duration (seconds, 1-300) |
 
 **Return Value:** None
 
 **Examples:**
 ```sqf
-// Drone
+// Drone (4 parameters)
 [_uav1, 0, [], true] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 
-// Vehicle
-[_car1, 0, [], "EnemyCar", true, true, false, true, true, false, false, 3] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+// Vehicle with default limits (24 parameters)
+[_car1, 0, [], "EnemyCar", true, true, false, true, true, false, false, 3, 0, 100, -50, 50, 1, 10, -1, 0, -1, 0, 1, 30] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+
+// Vehicle with custom limits
+[_hvtVehicle, 0, [], "HVT Transport", true, true, true, true, true, true, false, 10, 0, 50, -30, 30, 2, 8, 5, 10, 3, 5, 2, 20] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+// Limits: Fuel 0-50%, Speed -30 to 30 km/h, Brakes 2-8 m/s², Lights max 5/10s, Engine max 3/5s, Alarm 2-20s
 ```
 
 ---
@@ -541,12 +557,18 @@ Modifies vehicle parameters.
 | 6 | _path | STRING | - |
 
 **Valid Actions:**
-- `battery` (value: 0-100)
-- `speed` (value: 0-100)
-- `brakes` (value: 0-1)
-- `lights` (value: 0-1)
-- `engine` (value: 0-1)
-- `alarm` (value: 0-1)
+- `battery` (value: configured min-max percentage)
+- `speed` (value: configured min-max km/h, supports negative)
+- `brakes` (value: configured min-max m/s² deceleration rate)
+- `lights` (value: 0-1, subject to toggle limits and cooldown)
+- `engine` (value: 0-1, subject to toggle limits and cooldown)
+- `alarm` (value: configured min-max seconds)
+
+**Limit Validation:**
+- All operations validate against configured min/max ranges
+- Operations outside limits are rejected with detailed error messages
+- Toggle operations check max usage count and cooldown timers
+- Error messages include current value and allowed range
 
 **Return Value:** None
 
@@ -883,8 +905,9 @@ These are the array formats used when devices are stored in `ROOT_CYBERWARFARE_A
 
 **Vehicles:**
 ```sqf
-[deviceId, vehicleNetId, vehicleName, allowFuel, allowSpeed, allowBrakes, allowLights, allowEngine, allowAlarm, availableToFutureLaptops, powerCost, linkedComputers]
-// Example: [1337, "76561198666666666", "Enemy APC", true, true, false, true, true, false, false, 5, ["76561198777777777"]]
+[deviceId, vehicleNetId, vehicleName, allowFuel, allowSpeed, allowBrakes, allowLights, allowEngine, allowAlarm, availableToFutureLaptops, powerCost, linkedComputers, fuelMinPercent, fuelMaxPercent, speedMinValue, speedMaxValue, brakesMinDecel, brakesMaxDecel, lightsMaxToggles, lightsCooldown, engineMaxToggles, engineCooldown, alarmMinDuration, alarmMaxDuration, ...reserved]
+// Example: [1337, "76561198666666666", "Enemy APC", true, true, false, true, true, false, false, 5, ["76561198777777777"], 0, 100, -50, 50, 1, 10, -1, 0, -1, 0, 1, 30, nil, nil, nil, nil, nil, nil]
+// Note: Array has 30 elements total (24 parameters + 6 reserved slots for future expansion)
 ```
 
 **Power Grids:**

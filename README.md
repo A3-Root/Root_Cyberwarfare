@@ -15,7 +15,7 @@ Root's Cyber Warfare introduces 8 distinct device types that can be hacked and c
 - **Building Doors** - Lock and unlock doors remotely, prevent ACE breaching
 - **Lights** - Control building and street lights on/off
 - **Drones (UAVs)** - Change faction allegiance or disable enemy drones
-- **Vehicles** - Manipulate fuel, speed, brakes, lights, engine, and alarms
+- **Vehicles** - Manipulate fuel, speed, brakes, lights, engine, and alarms with customizable limits
 - **Databases** - Download files with optional code execution
 - **Custom Devices** - Create custom scripted devices with activation/deactivation code
 - **GPS Trackers** - Track objects in real-time with configurable update frequencies
@@ -25,6 +25,7 @@ Root's Cyber Warfare introduces 8 distinct device types that can be hacked and c
 
 - **Power Management System** - All operations consume battery power (configurable costs in Wh)
 - **Flexible Access Control** - Link devices to specific computers or make them public
+- **Customizable Operation Limits** - Set min/max ranges for vehicle operations, toggle counts, and cooldown timers
 - **Zeus & 3DEN Support** - 9 Zeus modules and 8 3DEN editor modules for easy setup
 - **ACE Integration** - GPS tracker attachment via ACE interaction menu
 - **Programmable Devices** - Custom devices with SQF activation/deactivation scripts
@@ -97,9 +98,10 @@ Root's Cyber Warfare introduces 8 distinct device types that can be hacked and c
 // Register a building with doors as hackable
 [_building, 0, [], false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 
-// Register a vehicle with full control
-[_vehicle, 0, [], "TargetCar", true, true, false, true, true, false, false, 2]
+// Register a vehicle with full control and custom limits
+[_vehicle, 0, [], "TargetCar", true, true, false, true, true, false, false, 2, 20, 80, -30, 30, 2, 8, 5, 10, 3, 5, 2, 20]
     remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+// Limits: Fuel 20-80%, Speed -30 to 30 km/h, Brakes 2-8 m/s², Lights max 5 toggles/10s cooldown, Engine max 3 toggles/5s cooldown, Alarm 2-20s
 ```
 
 ## Examples

@@ -1,5 +1,31 @@
 # Changelog
 
+## Update 6 (v1.1.4.1)
+
+### Added
+- **Customizable Vehicle Operation Limits** - Mission makers can now configure min/max ranges for all vehicle operations:
+  - Battery/Fuel: Min/Max percentage limits (0-100%)
+  - Speed: Min/Max boost values in km/h (supports negative for slowdown)
+  - Brakes: Min/Max deceleration rate in m/s² with configurable braking strength
+  - Lights: Maximum toggle count and cooldown timer between toggles
+  - Engine: Maximum toggle count and cooldown timer between toggles
+  - Alarm: Min/Max duration in seconds
+- 12 new slider controls in Zeus "Add Hackable Vehicle" module for setting operation limits
+- 12 new attribute fields in 3DEN "Add Hackable Vehicle" module for setting operation limits
+- Runtime validation that rejects operations outside configured limits with detailed error messages
+- Persistent toggle counters and cooldown timers for lights and engine operations
+- 9 new localization strings for limit violation error messages
+
+### Removed
+- N/A
+
+### Changed
+- Vehicle data structure expanded from 12 to 30 elements (18 new limit parameters + 6 reserved slots)
+- Brakes operation now uses configurable deceleration rate instead of hardcoded 6 m/s²
+- `fn_addVehicleZeusMain` now accepts 24 parameters for vehicles (was 12)
+- All vehicle operation functions now validate against configured limits before execution
+- Updated SQFdoc headers for all modified functions to reflect new parameters
+
 ## Update 5 (v1.1.3.1)
 
 ### Added

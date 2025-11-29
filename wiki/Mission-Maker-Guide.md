@@ -200,9 +200,9 @@ params ["_laptops", "_buildings"];
 [_drone, _execUserId, _linkedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 ```
 
-**Syntax (Vehicles - 12 parameters):**
+**Syntax (Vehicles - 24 parameters):**
 ```sqf
-[_vehicle, _execUserId, _linkedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+[_vehicle, _execUserId, _linkedComputers, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost, _fuelMinPercent, _fuelMaxPercent, _speedMinValue, _speedMaxValue, _brakesMinDecel, _brakesMaxDecel, _lightsMaxToggles, _lightsCooldown, _engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 ```
 
 **Parameters (Drones):**
@@ -222,14 +222,26 @@ params ["_laptops", "_buildings"];
 | 1 | `_execUserId` | NUMBER | `0` | User ID for feedback |
 | 2 | `_linkedComputers` | ARRAY | `[]` | Array of computer netIds |
 | 3 | `_vehicleName` | STRING | (required) | Display name |
-| 4 | `_allowFuel` | BOOLEAN | `false` | Enable fuel/battery control (0-100%) |
-| 5 | `_allowSpeed` | BOOLEAN | `false` | Enable max speed control (0-100%) |
-| 6 | `_allowBrakes` | BOOLEAN | `false` | Enable brake control (0-1) |
-| 7 | `_allowLights` | BOOLEAN | `false` | Enable lights control (0-1) |
-| 8 | `_allowEngine` | BOOLEAN | `true` | Enable engine control (0-1) |
-| 9 | `_allowAlarm` | BOOLEAN | `false` | Enable car alarm control (0-1) |
+| 4 | `_allowFuel` | BOOLEAN | `false` | Enable fuel/battery control |
+| 5 | `_allowSpeed` | BOOLEAN | `false` | Enable speed boost control |
+| 6 | `_allowBrakes` | BOOLEAN | `false` | Enable brake control |
+| 7 | `_allowLights` | BOOLEAN | `false` | Enable lights control |
+| 8 | `_allowEngine` | BOOLEAN | `true` | Enable engine control |
+| 9 | `_allowAlarm` | BOOLEAN | `false` | Enable car alarm control |
 | 10 | `_availableToFutureLaptops` | BOOLEAN | `false` | Auto-grant access to future laptops |
 | 11 | `_powerCost` | NUMBER | `2` | Power cost in Wh per action |
+| 12 | `_fuelMinPercent` | NUMBER | `0` | Minimum fuel percentage (0-100%) |
+| 13 | `_fuelMaxPercent` | NUMBER | `100` | Maximum fuel percentage (0-100%) |
+| 14 | `_speedMinValue` | NUMBER | `-50` | Minimum speed boost in km/h (-100 to 100) |
+| 15 | `_speedMaxValue` | NUMBER | `50` | Maximum speed boost in km/h (-100 to 100) |
+| 16 | `_brakesMinDecel` | NUMBER | `1` | Minimum deceleration rate in m/s² (0.5-20) |
+| 17 | `_brakesMaxDecel` | NUMBER | `10` | Maximum deceleration rate in m/s² (0.5-20) |
+| 18 | `_lightsMaxToggles` | NUMBER | `-1` | Maximum light toggles (-1 = unlimited) |
+| 19 | `_lightsCooldown` | NUMBER | `0` | Cooldown between light toggles (seconds) |
+| 20 | `_engineMaxToggles` | NUMBER | `-1` | Maximum engine toggles (-1 = unlimited) |
+| 21 | `_engineCooldown` | NUMBER | `0` | Cooldown between engine toggles (seconds) |
+| 22 | `_alarmMinDuration` | NUMBER | `1` | Minimum alarm duration (seconds) |
+| 23 | `_alarmMaxDuration` | NUMBER | `30` | Maximum alarm duration (seconds) |
 
 **Examples:**
 ```sqf
@@ -239,32 +251,40 @@ params ["_laptops", "_buildings"];
 // Drone with specific laptop access
 [_uav2, 0, [netId _laptop1], false] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 
-// Vehicle with full control
-[_enemyCar, 0, [], "Enemy Sedan", true, true, false, true, true, false, true, 2]
+// Vehicle with full control and default limits
+[_enemyCar, 0, [], "Enemy Sedan", true, true, false, true, true, false, true, 2, 0, 100, -50, 50, 1, 10, -1, 0, -1, 0, 1, 30]
     remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 
-// Vehicle with limited control (fuel and engine only)
-[_truck1, 0, [netId _laptop1], "Supply Truck", true, false, false, false, true, false, false, 5]
+// Vehicle with limited control (fuel and engine only) and tight fuel limits
+[_truck1, 0, [netId _laptop1], "Supply Truck", true, false, false, false, true, false, false, 5, 20, 80, -50, 50, 1, 10, -1, 0, -1, 0, 1, 30]
     remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+// Limits: Fuel 20-80%, Engine unlimited toggles
 
-// High-value target with expensive operations
-[_commanderVehicle, 0, [], "HVT Transport", true, true, true, true, true, true, true, 10]
+// High-value target with expensive operations and strict limits
+[_commanderVehicle, 0, [], "HVT Transport", true, true, true, true, true, true, true, 10, 0, 50, -30, 30, 2, 8, 5, 10, 3, 5, 2, 20]
     remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+// Limits: Fuel 0-50%, Speed -30 to 30 km/h, Brakes 2-8 m/s², Lights max 5 toggles/10s cooldown, Engine max 3 toggles/5s cooldown, Alarm 2-20s
 
-// Register all vehicles in an array
+// Register all vehicles in an array with custom speed limits
 {
-    [_x, 0, [netId _laptop1], "Enemy Vehicle", true, false, false, true, true, false, false, 3]
+    [_x, 0, [netId _laptop1], "Enemy Vehicle", true, true, false, true, true, false, false, 3, 10, 90, -40, 40, 1, 10, 10, 5, 5, 3, 1, 30]
         remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 } forEach [_car1, _car2, _car3];
+// Limits: Fuel 10-90%, Speed -40 to 40 km/h, Lights max 10 toggles/5s cooldown, Engine max 5 toggles/3s cooldown
 ```
 
 **Returns:** None (feedback message sent to execUserId)
 
 **Notes:**
-- Function auto-detects drone vs vehicle based on parameter count (4 vs 12)
+- Function auto-detects drone vs vehicle based on parameter count (4 vs 24)
 - Drones use `changedrone` and `disabledrone` commands
 - Vehicles use `vehicle` command with enabled actions only
 - Power cost applies to each individual vehicle action
+- All limit parameters are optional with sensible defaults
+- Operations outside configured limits are rejected with detailed error messages
+- Toggle counters reset on vehicle respawn
+- Cooldown timers prevent rapid toggling of lights/engine
+- Backward compatible: old 12-element arrays still work with default limit values
 
 ---
 

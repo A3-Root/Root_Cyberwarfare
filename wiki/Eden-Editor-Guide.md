@@ -287,12 +287,24 @@ Sync to: laptop1, laptop2
 |-----------|------|---------|-------------|
 | **Vehicle Name** | String | `Target Vehicle` | Display name in terminal listings. |
 | **Power Cost per Action** | Number | `2` | Power cost in Wh for each hacking action. |
-| **Allow Fuel/Battery Hacking** | Checkbox | ✓ Checked | Enable fuel/battery manipulation (0-100%). |
-| **Allow Speed Hacking** | Checkbox | ✓ Checked | Enable max speed limitation (0-100%). |
-| **Allow Brakes Hacking** | Checkbox | Unchecked | Enable brake control (0=off, 1=on). |
-| **Allow Lights Hacking** | Checkbox | ✓ Checked | Enable light control (0=off, 1=on). |
-| **Allow Engine Hacking** | Checkbox | ✓ Checked | Enable engine stop/start (0=off, 1=on). |
-| **Allow Alarm Hacking** | Checkbox | Unchecked | Enable car alarm control (0=off, 1=on). |
+| **Allow Fuel/Battery Hacking** | Checkbox | ✓ Checked | Enable fuel/battery manipulation. |
+| **Allow Speed Hacking** | Checkbox | ✓ Checked | Enable speed boost control. |
+| **Allow Brakes Hacking** | Checkbox | Unchecked | Enable brake control with configurable deceleration rate. |
+| **Allow Lights Hacking** | Checkbox | ✓ Checked | Enable light control with optional toggle limits and cooldown. |
+| **Allow Engine Hacking** | Checkbox | ✓ Checked | Enable engine stop/start with optional toggle limits and cooldown. |
+| **Allow Alarm Hacking** | Checkbox | Unchecked | Enable car alarm control with configurable duration limits. |
+| **Min Fuel/Battery %** | Number | `0` | Minimum fuel percentage allowed (0-100%). |
+| **Max Fuel/Battery %** | Number | `100` | Maximum fuel percentage allowed (0-100%). |
+| **Min Speed Boost (km/h)** | Number | `-50` | Minimum speed boost value (negative = slowdown, -100 to 100 km/h). |
+| **Max Speed Boost (km/h)** | Number | `50` | Maximum speed boost value (-100 to 100 km/h). |
+| **Min Brake Decel (m/s²)** | Number | `1` | Minimum deceleration rate for brakes (0.5-20 m/s²). |
+| **Max Brake Decel (m/s²)** | Number | `10` | Maximum deceleration rate for brakes (0.5-20 m/s²). |
+| **Max Light Toggles** | Number | `-1` | Maximum times lights can be toggled (-1 = unlimited, 0-100). |
+| **Light Cooldown (sec)** | Number | `0` | Cooldown in seconds between light toggles (0-300). |
+| **Max Engine Toggles** | Number | `-1` | Maximum times engine can be toggled (-1 = unlimited, 0-100). |
+| **Engine Cooldown (sec)** | Number | `0` | Cooldown in seconds between engine toggles (0-300). |
+| **Min Alarm Duration (sec)** | Number | `1` | Minimum alarm duration in seconds (1-300). |
+| **Max Alarm Duration (sec)** | Number | `30` | Maximum alarm duration in seconds (1-300). |
 | **Add to Public Device List** | Checkbox | ✓ Checked | If checked, vehicle is accessible by all laptops. |
 
 **Synchronization:**
@@ -329,14 +341,20 @@ Sync to: laptop1, laptop2
 
 **Vehicle Actions:**
 
-| Action | Value | Example Command |
-|--------|-------|-----------------|
-| `battery` | 0-100 | `vehicle 1337 battery 0` |
-| `speed` | 0-100 | `vehicle 1337 speed 30` |
-| `brakes` | 0-1 | `vehicle 1337 brakes 0` |
-| `lights` | 0-1 | `vehicle 1337 lights 0` |
-| `engine` | 0-1 | `vehicle 1337 engine 0` |
-| `alarm` | 0-1 | `vehicle 1337 alarm 0` |
+| Action | Value Range | Example Command |
+|--------|-------------|-----------------|
+| `battery` | Min-Max % (configured) | `vehicle 1337 battery 50` |
+| `speed` | Min-Max km/h (configured) | `vehicle 1337 speed 30` |
+| `brakes` | Min-Max m/s² (configured) | `vehicle 1337 brakes 5` |
+| `lights` | 0-1 (subject to toggle limits/cooldown) | `vehicle 1337 lights 0` |
+| `engine` | 0-1 (subject to toggle limits/cooldown) | `vehicle 1337 engine 0` |
+| `alarm` | Min-Max seconds (configured) | `vehicle 1337 alarm 10` |
+
+**Limit Enforcement:**
+- All operations are validated against configured min/max limits
+- Operations outside limits are rejected with detailed error messages
+- Toggle operations (lights, engine) enforce max usage counts and cooldown timers
+- Brakes use configurable deceleration rate instead of simple on/off
 
 **Drones:**
 - If synchronized object is a UAV/drone, it's registered with simplified parameters
@@ -346,6 +364,10 @@ Sync to: laptop1, laptop2
 - Power cost applies to each individual action
 - Only enabled features appear in `devices vehicles` listing
 - Can sync one module to multiple vehicles (all get the same settings)
+- Limit parameters allow fine-grained control over what values hackers can use
+- Toggle counters reset on vehicle respawn
+- Cooldown timers prevent rapid toggling of lights/engine
+- Error messages show current value and allowed range for easy debugging
 
 ---
 

@@ -1,7 +1,8 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Modifies vehicle parameters (battery, speed, brakes, lights, engine, alarm)
+ * Description: Modifies vehicle parameters (battery, speed, brakes, lights, engine, alarm).
+ * All operations validate against configured min/max limits and enforce cooldowns/toggle counts.
  *
  * Arguments:
  * 0: _owner <NUMBER> - Machine ID (ownerID) of the client executing this command
@@ -12,11 +13,21 @@
  * 5: _value <STRING> - Value for the action
  * 6: _commandPath <STRING> - Command path for access checking
  *
+ * Actions and Validation:
+ * - battery: Validates fuel percentage against configured min/max (default 0-100%)
+ * - speed: Validates speed boost (km/h) against configured min/max (default -50 to 50)
+ * - brakes: Validates deceleration rate (m/s²) against configured min/max (default 1-10)
+ * - lights: Checks toggle count limit and cooldown timer before toggling
+ * - engine: Checks toggle count limit and cooldown timer before toggling
+ * - alarm: Validates duration (seconds) against configured min/max (default 1-30)
+ *
  * Return Value:
  * None
  *
  * Example:
  * [123, _laptop, "var1", "1234", "battery", "50", "/tools/"] call Root_fnc_changeVehicleParams;
+ * [123, _laptop, "var1", "1234", "speed", "20", "/tools/"] call Root_fnc_changeVehicleParams;
+ * [123, _laptop, "var1", "1234", "brakes", "5", "/tools/"] call Root_fnc_changeVehicleParams;
  *
  * Public: No
  */
@@ -87,7 +98,17 @@ if (_vehicleIDNum != 0) then {
     {
         // [_deviceId, _netId, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost];
 
-        _x params ["_storedDeviceID", "_vehicleNetID", "_vehicleName", "_allowFuel", "_allowSpeed", "_allowBrakes", "_allowLights", "_allowEngine", "_allowAlarm", "_linkedComputers", "_availableToFutureLaptops", "_powerCost"];
+        _x params [
+            "_storedDeviceID", "_vehicleNetID", "_vehicleName",
+            "_allowFuel", "_allowSpeed", "_allowBrakes", "_allowLights", "_allowEngine", "_allowAlarm",
+            "_linkedComputers", "_availableToFutureLaptops", "_powerCost",
+            ["_fuelMinPercent", 0], ["_fuelMaxPercent", 100],
+            ["_speedMinValue", -50], ["_speedMaxValue", 50],
+            ["_brakesMinDecel", 1], ["_brakesMaxDecel", 10],
+            ["_lightsMaxToggles", -1], ["_lightsCooldown", 0],
+            ["_engineMaxToggles", -1], ["_engineCooldown", 0],
+            ["_alarmMinDuration", 1], ["_alarmMaxDuration", 30]
+        ];
         private _vehicleObject = objectFromNetId _vehicleNetID;
         _powerCost = _vehicleObject getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", 2];
         if(_batteryLevel < ((_powerCost)/1000)) then {
@@ -126,17 +147,32 @@ if (_vehicleIDNum != 0) then {
                     breakTo "exit";
                 };
                 if (_action == "battery") then {
+                    _invalidOption = false;
                     _value = parseNumber _value;
+
+                    // Retrieve configured limits
+                    private _fuelMin = _vehicleObject getVariable ["ROOT_CYBERWARFARE_FUEL_MIN", 0];
+                    private _fuelMax = _vehicleObject getVariable ["ROOT_CYBERWARFARE_FUEL_MAX", 100];
+
+                    // Validate against limits
+                    if (_value < _fuelMin || _value > _fuelMax) exitWith {
+                        _string = format [
+                            "<t color='%1'>%2</t>",
+                            ROOT_CYBERWARFARE_COLOR_ERROR,
+                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_FUEL_OUT_OF_RANGE", _value, _fuelMin, _fuelMax]
+                        ];
+                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                        breakTo "exit";
+                    };
+
+                    // Apply fuel change
                     if (_value < 1) then {
-                        _invalidOption = false;
                         [_vehicleObject, 0] remoteExec ["setFuel", _vehicleObject];
                     } else {
                         if (_value < 101) then {
-                            _invalidOption = false;
                             _value = _value / 100;
                             [_vehicleObject, _value] remoteExec ["setFuel", _vehicleObject];
                         } else {
-                            _invalidOption = false;
                             [_vehicleObject, 1] remoteExec ["setDamage", _vehicleObject];
                         };
                     };
@@ -145,6 +181,23 @@ if (_vehicleIDNum != 0) then {
                 if (_action == "speed") then {
                     _invalidOption = false;
                     _value = parseNumber _value;
+
+                    // Retrieve configured limits
+                    private _speedMin = _vehicleObject getVariable ["ROOT_CYBERWARFARE_SPEED_MIN", -50];
+                    private _speedMax = _vehicleObject getVariable ["ROOT_CYBERWARFARE_SPEED_MAX", 50];
+
+                    // Validate against limits
+                    if (_value < _speedMin || _value > _speedMax) exitWith {
+                        _string = format [
+                            "<t color='%1'>%2</t>",
+                            ROOT_CYBERWARFARE_COLOR_ERROR,
+                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_SPEED_OUT_OF_RANGE", _value, _speedMin, _speedMax]
+                        ];
+                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                        breakTo "exit";
+                    };
+
+                    // Apply speed change
                     private _vel = velocity _vehicleObject;
                     private _dir = getDir _vehicleObject;
                     [_vehicleObject, [
@@ -156,37 +209,91 @@ if (_vehicleIDNum != 0) then {
 
                 if (_action == "brakes") then {
                     _invalidOption = false;
-                    if (_vehicleObject isKindOf "LandVehicle") then {
-                        [_vehicleObject] spawn {
-                            params ["_vehicleObject"];
-                            private _targetSpeed = 0.01;
-                            private _lastTime = time;
-                            private _vel = velocity _vehicleObject;
-                            private _hVel = [_vel select 0, _vel select 1, 0];
-                            private _speed = sqrt ((_hVel select 0)^2 + (_hVel select 1)^2);
-                            while {_speed > _targetSpeed} do {
-                                private _now = time;
-                                private _dt = _now - _lastTime;
-                                _lastTime = _now;
-                                _vel = velocity _vehicleObject;
-                                _hVel = [_vel select 0, _vel select 1, 0];
-                                _speed = sqrt ((_hVel select 0)^2 + (_hVel select 1)^2);
-                                private _newSpeed = _speed - (6 * _dt);
-                                if (_newSpeed < _targetSpeed) then {_newSpeed = _targetSpeed};
-                                private _dir = if (_speed > 0.001) then { [(_hVel select 0) / _speed, (_hVel select 1) / _speed, 0] } else { [0,0,0] };
-                                private _newVel = [(_dir select 0) * _newSpeed, (_dir select 1) * _newSpeed, _vel select 2];
-                                [_vehicleObject, _newVel] remoteExec ["setVelocity", _vehicleObject];
-                                uiSleep 0.02;
-                            };
-                        };
-                    } else {
-                        _string = localize "STR_ROOT_CYBERWARFARE_VEHICLE_INCOMPATIBLE_BRAKES";
+
+                    if !(_vehicleObject isKindOf "LandVehicle") exitWith {
+                        _string = format [
+                            "<t color='%1'>%2</t>",
+                            ROOT_CYBERWARFARE_COLOR_ERROR,
+                            localize "STR_ROOT_CYBERWARFARE_BRAKES_LAND_ONLY"
+                        ];
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                        breakTo "exit";
+                    };
+
+                    private _decelRate = parseNumber _value;
+
+                    // Retrieve configured limits
+                    private _brakesMin = _vehicleObject getVariable ["ROOT_CYBERWARFARE_BRAKES_MIN", 1];
+                    private _brakesMax = _vehicleObject getVariable ["ROOT_CYBERWARFARE_BRAKES_MAX", 10];
+
+                    // Validate against limits
+                    if (_decelRate < _brakesMin || _decelRate > _brakesMax) exitWith {
+                        _string = format [
+                            "<t color='%1'>%2</t>",
+                            ROOT_CYBERWARFARE_COLOR_ERROR,
+                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_BRAKES_OUT_OF_RANGE", _decelRate, _brakesMin, _brakesMax]
+                        ];
+                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                        breakTo "exit";
+                    };
+
+                    // Apply brakes with configured deceleration rate
+                    [_vehicleObject, _decelRate] spawn {
+                        params ["_vehicleObject", "_decelRate"];
+                        private _targetSpeed = 0.01;
+                        private _lastTime = time;
+                        private _vel = velocity _vehicleObject;
+                        private _hVel = [_vel select 0, _vel select 1, 0];
+                        private _speed = sqrt ((_hVel select 0)^2 + (_hVel select 1)^2);
+                        while {_speed > _targetSpeed} do {
+                            private _now = time;
+                            private _dt = _now - _lastTime;
+                            _lastTime = _now;
+                            _vel = velocity _vehicleObject;
+                            _hVel = [_vel select 0, _vel select 1, 0];
+                            _speed = sqrt ((_hVel select 0)^2 + (_hVel select 1)^2);
+                            private _newSpeed = _speed - (_decelRate * _dt);
+                            if (_newSpeed < _targetSpeed) then {_newSpeed = _targetSpeed};
+                            private _dir = if (_speed > 0.001) then { [(_hVel select 0) / _speed, (_hVel select 1) / _speed, 0] } else { [0,0,0] };
+                            private _newVel = [(_dir select 0) * _newSpeed, (_dir select 1) * _newSpeed, _vel select 2];
+                            [_vehicleObject, _newVel] remoteExec ["setVelocity", _vehicleObject];
+                            uiSleep 0.02;
+                        };
                     };
                 };
 
                 if (_action == "lights") then {
                     _invalidOption = false;
+
+                    // Retrieve configuration and state
+                    private _maxToggles = _vehicleObject getVariable ["ROOT_CYBERWARFARE_LIGHTS_MAX_TOGGLES", -1];
+                    private _cooldown = _vehicleObject getVariable ["ROOT_CYBERWARFARE_LIGHTS_COOLDOWN", 0];
+                    private _currentCount = _vehicleObject getVariable ["ROOT_CYBERWARFARE_LIGHTS_TOGGLE_COUNT", 0];
+                    private _lastToggle = _vehicleObject getVariable ["ROOT_CYBERWARFARE_LIGHTS_LAST_TOGGLE", -999];
+
+                    // Check max toggle limit
+                    if (_maxToggles >= 0 && _currentCount >= _maxToggles) exitWith {
+                        _string = format [
+                            "<t color='%1'>%2</t>",
+                            ROOT_CYBERWARFARE_COLOR_ERROR,
+                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_LIGHTS_MAX_TOGGLES", _maxToggles, _currentCount]
+                        ];
+                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                        breakTo "exit";
+                    };
+
+                    // Check cooldown
+                    if (_cooldown > 0 && (time - _lastToggle) < _cooldown) exitWith {
+                        private _remainingTime = (_cooldown - (time - _lastToggle)) toFixed 1;
+                        _string = format [
+                            "<t color='%1'>%2</t>",
+                            ROOT_CYBERWARFARE_COLOR_ERROR,
+                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_LIGHTS_COOLDOWN", _remainingTime]
+                        ];
+                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                        breakTo "exit";
+                    };
+
                     private _valueLower = toLower _value;
                     private _hasAI = (crew _vehicleObject select {alive _x && !isPlayer _x}) isNotEqualTo [];
                     private _isLightOn = isLightOn _vehicleObject;
@@ -235,24 +342,81 @@ if (_vehicleIDNum != 0) then {
                             };
                         };
                     };
+
+                    // Update counter and timestamp AFTER successful toggle
+                    _vehicleObject setVariable ["ROOT_CYBERWARFARE_LIGHTS_TOGGLE_COUNT", _currentCount + 1, true];
+                    _vehicleObject setVariable ["ROOT_CYBERWARFARE_LIGHTS_LAST_TOGGLE", time, true];
                 };
 
                 if (_action == "alarm") then {
-                    _value = parseNumber _value;
-                    if (_value < 1) then { _value = 1; };
-                    [_vehicleObject, _value] remoteExec ["Root_fnc_localSoundBroadcast", [0, -2] select isDedicated, false];
                     _invalidOption = false;
+                    _value = parseNumber _value;
+
+                    // Retrieve configured limits
+                    private _alarmMin = _vehicleObject getVariable ["ROOT_CYBERWARFARE_ALARM_MIN", 1];
+                    private _alarmMax = _vehicleObject getVariable ["ROOT_CYBERWARFARE_ALARM_MAX", 30];
+
+                    // Validate against limits
+                    if (_value < _alarmMin || _value > _alarmMax) exitWith {
+                        _string = format [
+                            "<t color='%1'>%2</t>",
+                            ROOT_CYBERWARFARE_COLOR_ERROR,
+                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_ALARM_OUT_OF_RANGE", _value, _alarmMin, _alarmMax]
+                        ];
+                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                        breakTo "exit";
+                    };
+
+                    // Enforce minimum value
+                    if (_value < 1) then { _value = 1; };
+
+                    // Trigger alarm
+                    [_vehicleObject, _value] remoteExec ["Root_fnc_localSoundBroadcast", [0, -2] select isDedicated, false];
                 };
 
                 if (_action == "engine") then {
+                    _invalidOption = false;
+
+                    // Retrieve configuration and state
+                    private _maxToggles = _vehicleObject getVariable ["ROOT_CYBERWARFARE_ENGINE_MAX_TOGGLES", -1];
+                    private _cooldown = _vehicleObject getVariable ["ROOT_CYBERWARFARE_ENGINE_COOLDOWN", 0];
+                    private _currentCount = _vehicleObject getVariable ["ROOT_CYBERWARFARE_ENGINE_TOGGLE_COUNT", 0];
+                    private _lastToggle = _vehicleObject getVariable ["ROOT_CYBERWARFARE_ENGINE_LAST_TOGGLE", -999];
+
+                    // Check max toggle limit
+                    if (_maxToggles >= 0 && _currentCount >= _maxToggles) exitWith {
+                        _string = format [
+                            "<t color='%1'>%2</t>",
+                            ROOT_CYBERWARFARE_COLOR_ERROR,
+                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_ENGINE_MAX_TOGGLES", _maxToggles, _currentCount]
+                        ];
+                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                        breakTo "exit";
+                    };
+
+                    // Check cooldown
+                    if (_cooldown > 0 && (time - _lastToggle) < _cooldown) exitWith {
+                        private _remainingTime = (_cooldown - (time - _lastToggle)) toFixed 1;
+                        _string = format [
+                            "<t color='%1'>%2</t>",
+                            ROOT_CYBERWARFARE_COLOR_ERROR,
+                            format [localize "STR_ROOT_CYBERWARFARE_ERROR_ENGINE_COOLDOWN", _remainingTime]
+                        ];
+                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                        breakTo "exit";
+                    };
+
+                    // Apply engine toggle
                     if (_value in ["on", "ON"]) then {
                         [_vehicleObject, true] remoteExec ["engineOn", _vehicleObject];
-                        _invalidOption = false;
                     };
                     if (_value in ["OFF", "off"]) then {
                         [_vehicleObject, false] remoteExec ["engineOn", _vehicleObject];
-                        _invalidOption = false;
                     };
+
+                    // Update counter and timestamp
+                    _vehicleObject setVariable ["ROOT_CYBERWARFARE_ENGINE_TOGGLE_COUNT", _currentCount + 1, true];
+                    _vehicleObject setVariable ["ROOT_CYBERWARFARE_ENGINE_LAST_TOGGLE", time, true];
                 };
 
             } else {
