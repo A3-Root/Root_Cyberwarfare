@@ -85,20 +85,10 @@ if (_radiusMode) exitWith {
     // Register each building
     {
         private _building = _x;
-        // Check if building has doors by checking config
-        private _config = configOf _building;
-        private _simpleObjects = getArray (_config >> "SimpleObject" >> "animate");
-        private _hasDoors = false;
-        {
-            if (count _x == 2) then {
-                private _objectName = _x select 0;
-                if (_objectName regexMatch "door_.*") exitWith {
-                    _hasDoors = true;
-                };
-            };
-        } forEach _simpleObjects;
+        // Check if building has doors using enhanced detection (vanilla + modded)
+        private _detectedDoors = [_building] call FUNC(detectBuildingDoors);
 
-        if (_hasDoors) then {
+        if (_detectedDoors isNotEqualTo []) then {
             [_building, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] call FUNC(addDoorsZeusMain);
             _registeredCount = _registeredCount + 1;
         };
@@ -125,28 +115,9 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_AVAILABLE_FUTURE", _availableToFut
 if (_targetObject isKindOf "House" || _targetObject isKindOf "Building") then {
     _isValidObject = true;
 
-    private _buildingDoors = [];
     private _building = _targetObject;
-    private _config = configOf _building;
-    private _simpleObjects = getArray (_config >> "SimpleObject" >> "animate");
-    {
-        if (count _x == 2) then {
-            private _objectName = _x select 0;
-            if (_objectName regexMatch "door_.*") then {
-                private _regexFinds = _objectName regexFind ["door_([0-9]+)"];
-                private _doorNumber = parseNumber (((_regexFinds select 0) select 1) select 0);
-
-                if (!(_doorNumber in _buildingDoors)) then {
-                    if (_buildingDoors isEqualTo []) then {
-                        _buildingDoors pushBack _doorNumber;
-                    };
-                    if ((_buildingDoors select -1) != _doorNumber) then {
-                        _buildingDoors pushBack _doorNumber;
-                    };
-                };
-            };
-        };
-    } forEach _simpleObjects;
+    // Use enhanced door detection (vanilla + modded buildings)
+    private _buildingDoors = [_building] call FUNC(detectBuildingDoors);
 
     if (_buildingDoors isNotEqualTo []) then {
         private _buildingNetId = netId _building;

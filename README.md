@@ -206,6 +206,6 @@ See [LICENSE](LICENSE) file for full terms.
 ## Links
 
 - [GitHub Repository](https://github.com/A3-Root/Root_Cyberwarfare)
-- [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=XXXXXX)
+- [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3591608460)
 - [Issue Tracker](https://github.com/A3-Root/Root_Cyberwarfare/issues)
 - [Discord](https://discord.gg/77th-jsoc-official)

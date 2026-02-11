@@ -74,6 +74,7 @@ class CfgFunctions {
 			class checkPowerAvailable {};
 			class consumePower {};
 			class copyDeviceLinksZeusMain {};
+			class detectBuildingDoors {};
 			class getAccessibleDevices {};
 			class getComputerIdentifier {};
 			class getObjectsInTriggerArea {};

@@ -7,9 +7,6 @@ class CfgPatches {
 	class ROOT_CyberWarfare {
 		name = "Root's Cyber Warfare";
 		units[] = {
-			"ROOT_ModuleAddDevices",
-			"ROOT_ModuleAddHackingTools",
-			"ROOT_ModuleAddDatabase",
 			"ROOT_CyberWarfareAddDeviceZeus",
 			"ROOT_CyberWarfareAddDoorsZeus",
 			"ROOT_CyberWarfareAddLightsZeus",

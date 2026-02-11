@@ -79,6 +79,7 @@ PREP(cacheDeviceLinks);
 PREP(checkPowerAvailable);
 PREP(consumePower);
 PREP(copyDeviceLinksZeusMain);
+PREP(detectBuildingDoors);
 PREP(getAccessibleDevices);
 PREP(getComputerIdentifier);
 PREP(getObjectsInTriggerArea);

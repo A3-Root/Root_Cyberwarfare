@@ -1,5 +1,17 @@
 # Changelog
 
+## Update 7 (v1.1.4.2)
+
+### Added
+- N/A
+
+### Removed
+- N/A
+
+### Changed
+- Doors will now be compatible with CUP and Cytech Assets
+- Added GPS Tracker Icon whitelist / blacklist in the CBA settings
+
 ## Update 6 (v1.1.4.1)
 
 ### Added

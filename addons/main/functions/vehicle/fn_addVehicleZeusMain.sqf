@@ -475,6 +475,8 @@ if (_isRadiusMode) then {
         private _enabledNames = _enabledFeatures apply { _x select 0 };
         private _featureString = if (_enabledNames isNotEqualTo []) then {
             _enabledNames joinString ", "
+        } else {
+            ""
         };
         if ((_featureString select [(count _featureString) - 2, 2]) isEqualTo "- ") then {
             _featureString = (_featureString select [0, (count _featureString) - 2]) + " ";
