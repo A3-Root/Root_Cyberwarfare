@@ -3,14 +3,14 @@
 ## Update 7 (v1.1.4.2)
 
 ### Added
-- N/A
+- Added GPS Tracker Icon whitelist / blacklist in the CBA settings
+- Added "Enable GPS Tracker Search" option to enable/disable search for GPS on objects (configurable via CBA settings)
 
 ### Removed
 - N/A
 
 ### Changed
 - Doors will now be compatible with CUP and Cytech Assets
-- Added GPS Tracker Icon whitelist / blacklist in the CBA settings
 
 ## Update 6 (v1.1.4.1)
 

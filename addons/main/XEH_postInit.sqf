@@ -121,18 +121,42 @@ if (hasInterface) then {
         // ACE Action: GPS Tracker Operations (Parent Menu)
         // ========================================================================
         // Creates a submenu to group all GPS tracker related actions
-        // This prevents overlap with ACE's "Take Item" action
+        // Large downward position offset creates significant gap below default actions like "Take Item"
         private _actionGPSParent = [
-            "ROOT_GPSTracker_Menu",
-            localize "STR_ROOT_CYBERWARFARE_GPS_MENU",
-            "",
-            {},
-            {true}  // Always show parent menu
+            "ROOT_GPSTracker_Menu",                              // 0: Action name
+            localize "STR_ROOT_CYBERWARFARE_GPS_MENU",          // 1: Display name
+            "",                                                  // 2: Icon
+            {},                                                  // 3: Statement
+            {                                                    // 4: Condition (check search mode setting)
+                private _mode = missionNamespace getVariable [SETTING_GPS_INTERACTION_MODE, "SEARCH_MODE"];
+                if (_mode == "ALWAYS") exitWith {true};
+                _player getVariable ["ROOT_CYBERWARFARE_GPS_SEARCH_MODE", false]
+            },
+            {},                                                  // 5: Insert children
+            [],                                                  // 6: Action parameters
+            {[0, 0, -0.3]},                                      // 7: Position (offset downward 0.3m for clear separation)
+            4                                                    // 8: Distance
         ] call ace_interact_menu_fnc_createAction;
 
-        // Add parent action to specific object classes (whitelist approach to avoid conflicts with ACE items)
-        // Includes: All vehicle types, units, static weapons, buildings, lights, and PhysX objects
-        private _validClasses = ["Car", "Tank", "Helicopter", "Plane", "Ship", "Motorcycle", "Man", "House", "Building", "Lamps_base_F", "ThingX"];
+        // Add parent action to classes specified in CBA settings whitelist
+        // Robust parsing: handles spaces, quotes, empty entries, and other user formatting errors
+        private _whitelistString = missionNamespace getVariable [SETTING_GPS_INTERACTION_WHITELIST, "Car,Tank,Helicopter,Plane,Ship,Motorcycle,Man,House,Building,Lamps_base_F,ThingX"];
+        ROOT_CYBERWARFARE_LOG_DEBUG_1("GPS whitelist raw input: %1",_whitelistString);
+
+        private _validClasses = (_whitelistString splitString ",") apply {
+            // Trim whitespace
+            private _cleaned = [_x] call CBA_fnc_trim;
+            // Remove all double quotes and single quotes that users might add
+            _cleaned = _cleaned splitString """'" joinString "";
+            // Trim again after quote removal
+            [_cleaned] call CBA_fnc_trim
+        };
+        // Filter out empty strings
+        _validClasses = _validClasses select {_x != ""};
+
+        ROOT_CYBERWARFARE_LOG_INFO_1("GPS interaction menu enabled for classes: %1",_validClasses);
+
+        // Add GPS actions to whitelisted classes
         {
             [_x, 0, ["ACE_MainActions"], _actionGPSParent, true] call ace_interact_menu_fnc_addActionToClass;
         } forEach _validClasses;
@@ -169,7 +193,7 @@ if (hasInterface) then {
             }
         ] call ace_interact_menu_fnc_createAction;
 
-        // Add as child action to GPS Tracker menu
+        // Add as child action to GPS Tracker menu (using same whitelist as parent)
         {
             [_x, 0, ["ACE_MainActions", "ROOT_GPSTracker_Menu"], _actionAttach, true] call ace_interact_menu_fnc_addActionToClass;
         } forEach _validClasses;
@@ -223,10 +247,54 @@ if (hasInterface) then {
             }
         ] call ace_interact_menu_fnc_createAction;
 
-        // Add as child action to GPS Tracker menu
+        // Add as child action to GPS Tracker menu (using same whitelist as parent)
         {
             [_x, 0, ["ACE_MainActions", "ROOT_GPSTracker_Menu"], _actionSearch, true] call ace_interact_menu_fnc_addActionToClass;
         } forEach _validClasses;
+
+        // ========================================================================
+        // ACE Self-Actions: GPS Tracker Search Mode Toggle
+        // ========================================================================
+        // Only added when GPS Interaction Mode is set to "Search Mode"
+        // Allows players to toggle GPS tracker visibility on interaction targets
+
+        private _gpsInteractionMode = missionNamespace getVariable [SETTING_GPS_INTERACTION_MODE, "SEARCH_MODE"];
+
+        if (_gpsInteractionMode == "SEARCH_MODE") then {
+            // Enable GPS Tracker Search action
+            private _actionEnableSearch = [
+                "ROOT_GPSTracker_EnableSearch",
+                localize "STR_ROOT_CYBERWARFARE_GPS_ENABLE_SEARCH",
+                "",
+                {
+                    params ["_target", "_player", "_params"];
+                    _player setVariable ["ROOT_CYBERWARFARE_GPS_SEARCH_MODE", true];
+                    [localize "STR_ROOT_CYBERWARFARE_GPS_SEARCH_MODE_ON", true, 1.5, 2] call ace_common_fnc_displayText;
+                },
+                {
+                    !(_player getVariable ["ROOT_CYBERWARFARE_GPS_SEARCH_MODE", false])
+                }
+            ] call ace_interact_menu_fnc_createAction;
+
+            [player, 1, ["ACE_SelfActions"], _actionEnableSearch] call ace_interact_menu_fnc_addActionToObject;
+
+            // Disable GPS Tracker Search action
+            private _actionDisableSearch = [
+                "ROOT_GPSTracker_DisableSearch",
+                localize "STR_ROOT_CYBERWARFARE_GPS_DISABLE_SEARCH",
+                "",
+                {
+                    params ["_target", "_player", "_params"];
+                    _player setVariable ["ROOT_CYBERWARFARE_GPS_SEARCH_MODE", false];
+                    [localize "STR_ROOT_CYBERWARFARE_GPS_SEARCH_MODE_OFF", true, 1.5, 2] call ace_common_fnc_displayText;
+                },
+                {
+                    _player getVariable ["ROOT_CYBERWARFARE_GPS_SEARCH_MODE", false]
+                }
+            ] call ace_interact_menu_fnc_createAction;
+
+            [player, 1, ["ACE_SelfActions"], _actionDisableSearch] call ace_interact_menu_fnc_addActionToObject;
+        };
 
     }, [], 5] call CBA_fnc_waitUntilAndExecute;
 };

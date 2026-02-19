@@ -189,6 +189,12 @@
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_CANNOT_SEARCH_SELF">
             <English>Cannot search yourself!</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_DISABLE_SEARCH">
+            <English>Disable GPS Tracker Search</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_ENABLE_SEARCH">
+            <English>Enable GPS Tracker Search</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_MENU">
             <English>GPS Tracker</English>
         </Key>
@@ -197,6 +203,12 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_SEARCHING">
             <English>Searching %1 for GPS Tracker</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_SEARCH_MODE_OFF">
+            <English>GPS Tracker search mode disabled</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_SEARCH_MODE_ON">
+            <English>GPS Tracker search mode enabled</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_UNABLE_ATTACH">
             <English>Unable to attach GPS Tracker!</English>
@@ -285,6 +297,18 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY">
             <English>GPS Settings</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_MODE">
+            <English>GPS Interaction Mode</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_MODE_DESC">
+            <English>Search Mode: GPS tracker interactions only appear when search mode is activated via ACE Self-Interact. Always Visible: GPS tracker interactions are always shown (legacy behavior). Requires mission restart.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_WHITELIST">
+            <English>GPS Interaction Menu Whitelist</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_WHITELIST_DESC">
+            <English>Comma-separated list of base classes that will show GPS tracker interaction menu (uses isKindOf). Extra spaces and quotes are automatically handled. Example: Car,Tank,Helicopter,Man or "Car", "Tank", "Man"</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE">
             <English>GPS Marker Color (Active Ping)</English>

@@ -175,4 +175,30 @@
     false // doesn't require mission restart
 ] call CBA_fnc_addSetting;
 
+// GPS Interaction Mode Setting
+[
+    SETTING_GPS_INTERACTION_MODE,
+    "LIST",
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_MODE", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_MODE_DESC"],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
+    [["SEARCH_MODE", "ALWAYS"], ["Search Mode (Default)", "Always Visible"], 0],
+    1, // mission-level
+    {},
+    true // requires mission restart (ACE action conditions are set at init)
+] call CBA_fnc_addSetting;
+
+// GPS Interaction Whitelist Setting
+[
+    SETTING_GPS_INTERACTION_WHITELIST,
+    "EDITBOX",
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_WHITELIST", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_WHITELIST_DESC"],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
+    "Car,Tank,Helicopter,Plane,Ship,Motorcycle,Man,House,Building,Lamps_base_F",
+    1, // mission-level
+    {
+        missionNamespace setVariable [SETTING_GPS_INTERACTION_WHITELIST, _this, true];
+    },
+    true // requires mission restart (ACE actions are added at mission start)
+] call CBA_fnc_addSetting;
+
 ROOT_CYBERWARFARE_LOG_INFO("CBA settings initialized");
