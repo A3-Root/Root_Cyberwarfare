@@ -71,7 +71,8 @@ if (_linkedComputers isNotEqualTo []) then {
         _linkCache set [_computerNetId, _existingLinks];
     } forEach _linkedComputers;
 
-    missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache, true];
+    missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache];
+call Root_fnc_syncDeviceData;
     _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
 };
 
@@ -128,6 +129,7 @@ if ((_availableToFutureLaptops) || (count _linkedComputers == 0)) then {
 
 // Update global storage with new database
 _allDevices set [3, _allDatabases];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+call Root_fnc_syncDeviceData;
 
 [format ["Root Cyber Warfare: File added with ID: %1. %2.", _databaseId, _availabilityText]] remoteExec ["systemChat", _execUserId];

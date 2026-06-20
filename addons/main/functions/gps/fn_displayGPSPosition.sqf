@@ -117,7 +117,12 @@ if (_trackerIdNum != 0) then {
                                 _powerCost
                             ]];
                             _allDevices set [5, _allGpsTrackers];
-                            missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
+
+                            // local copy update only - the server applies and broadcasts the authoritative change
+
+                            missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+
+                            ["root_cyberwarfare_updateTrackerStatus", [_storedTrackerId, (_allGpsTrackers select _forEachIndex) select 8]] call CBA_fnc_serverEvent;
                         } else {
                             private _changeWh = _powerCost;
                             _string = format ['Power Cost: %1Wh', _changeWh];
@@ -182,7 +187,12 @@ if (_trackerIdNum != 0) then {
                                 _powerCost
                             ]];
                             _allDevices set [5, _allGpsTrackers];
-                            missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
+
+                            // local copy update only - the server applies and broadcasts the authoritative change
+
+                            missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+
+                            ["root_cyberwarfare_updateTrackerStatus", [_storedTrackerId, (_allGpsTrackers select _forEachIndex) select 8]] call CBA_fnc_serverEvent;
                             
                             _string = format ["Tracking '%1' (ID: %2) for %3 seconds.", _trackerName, _trackerIdNum, _trackingTime];
                             [_computer, _string] call AE3_armaos_fnc_shell_stdout;

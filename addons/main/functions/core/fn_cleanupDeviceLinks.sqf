@@ -77,9 +77,10 @@ ROOT_CYBERWARFARE_LOG_INFO_1(format ["Regular Device Cleanup script started! Run
         } forEach _deviceLinks;
 
         // Update the device links
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", _cleanLinks, true];
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_DEVICE_LINKS", _cleanLinks];
 
         if (_removedCount > 0) then {
+            call Root_fnc_syncDeviceData;
             ROOT_CYBERWARFARE_LOG_INFO_2(format ["Cleanup removed %1 computer links. %2 links active in the server.",_removedCount,count _cleanLinks]);
         };
 
@@ -132,7 +133,8 @@ ROOT_CYBERWARFARE_LOG_INFO_1(format ["Regular Device Cleanup script started! Run
         } forEach _identifiersToRemove;
 
         if (_identifiersToRemove isNotEqualTo []) then {
-            missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache, true];
+            missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache];
+            call Root_fnc_syncDeviceData;
             ROOT_CYBERWARFARE_LOG_INFO_2(format ["Cleanup removed %1 link cache entries. %2 entries remain.",count _identifiersToRemove,count keys _linkCache]);
             DEBUG_LOG_2("Cleanup: Removed %1 cache entries, %2 remain",count _identifiersToRemove,count keys _linkCache);
         };
@@ -161,8 +163,32 @@ ROOT_CYBERWARFARE_LOG_INFO_1(format ["Regular Device Cleanup script started! Run
             _cleanedDevices set [_forEachIndex, _cleanedList];
         } forEach _allDevices;
 
-        // Update cleaned device list
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _cleanedDevices, true];
+        // Update cleaned device list (broadcast only when devices were actually removed)
+
+
+        private _devicesRemoved = false;
+
+
+        {
+
+
+            if (count _x != count (_cleanedDevices select _forEachIndex)) exitWith { _devicesRemoved = true; };
+
+
+        } forEach _allDevices;
+
+
+
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _cleanedDevices];
+
+
+        if (_devicesRemoved) then {
+
+
+            call Root_fnc_syncDeviceData;
+
+
+        };
     };
 };
 

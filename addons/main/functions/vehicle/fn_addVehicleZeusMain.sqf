@@ -176,7 +176,8 @@ if (_isRadiusMode) then {
                 _linkCache set [_computerNetId, _existingLinks];
             } forEach _linkedComputers;
 
-            missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache, true];
+            missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache];
+call Root_fnc_syncDeviceData;
             _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
         };
 
@@ -259,7 +260,8 @@ if (_isRadiusMode) then {
 
         // Update global storage with modified drone array
         _allDevices set [2, _allDrones];
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+call Root_fnc_syncDeviceData;
         _targetObject setVariable ["ROOT_CYBERWARFARE_CONNECTED", true, true];
 
         [format ["Root Cyber Warfare: Drone (%2) Added! ID: %1. %3.", _deviceId, _displayName, _availabilityText]] remoteExec ["systemChat", _execUserId];
@@ -364,7 +366,8 @@ if (_isRadiusMode) then {
                 _linkCache set [_computerNetId, _existingLinks];
             } forEach _linkedComputers;
 
-            missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache, true];
+            missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache];
+call Root_fnc_syncDeviceData;
             _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
         };
 
@@ -447,7 +450,8 @@ if (_isRadiusMode) then {
 
         // Update global storage with modified vehicle array
         _allDevices set [6, _allVehicles];
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+call Root_fnc_syncDeviceData;
         _targetObject setVariable ["ROOT_CYBERWARFARE_CONNECTED", true, true];
 
         if (_allowFuel) then { _availableHacks = _availableHacks + "Battery, "};

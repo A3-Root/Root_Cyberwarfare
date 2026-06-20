@@ -48,6 +48,30 @@ class CfgFunctions {
 			class changeLightState {};
 		};
 
+		class GUI {
+			file = "\z\root_cyberwarfare\addons\main\functions\gui";
+			class gui_registerApps {};
+			class gui_requestDevices {};
+			class gui_sendDeviceList {};
+			class gui_buildListApp {};
+			class gui_doorAction {};
+			class gui_lightAction {};
+			class gui_droneAction {};
+			class gui_powergridAction {};
+			class gui_databaseAction {};
+			class gui_customAction {};
+			class gui_vehicleAction {};
+			class gui_appDoors {};
+			class gui_appLights {};
+			class gui_appDrones {};
+			class gui_appPowergrid {};
+			class gui_appDatabases {};
+			class gui_appCustom {};
+			class gui_appVehicles {};
+			class gui_appGps {};
+			class gui_appGpsMap {};
+		};
+
 		class GPS {
 			file = "\z\root_cyberwarfare\addons\main\functions\gps";
 			class aceAttachGPSTracker {};
@@ -71,6 +95,7 @@ class CfgFunctions {
 		class Utility {
 			file = "\z\root_cyberwarfare\addons\main\functions\utility";
 			class cacheDeviceLinks {};
+			class syncDeviceData {};
 			class checkPowerAvailable {};
 			class consumePower {};
 			class copyDeviceLinksZeusMain {};

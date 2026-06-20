@@ -57,7 +57,8 @@ _allGpsTrackers pushBack [_deviceId, _netId, _trackerName, _trackingTime, _updat
 
 // Update the allDevices array with the new GPS trackers category
 _allDevices set [5, _allGpsTrackers];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+call Root_fnc_syncDeviceData;
 
 
 // Store variables on the target object
@@ -86,7 +87,8 @@ if (_linkedComputers isNotEqualTo []) then {
         _linkCache set [_computerNetId, _existingLinks];
     } forEach _linkedComputers;
 
-    missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache, true];
+    missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache];
+call Root_fnc_syncDeviceData;
     _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
 };
 

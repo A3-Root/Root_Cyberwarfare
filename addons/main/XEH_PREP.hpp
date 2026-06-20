@@ -76,6 +76,7 @@ PREP(powerGridControl);
 #define PREP(fncName) [QPATHTOF(functions\utility\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
 
 PREP(cacheDeviceLinks);
+PREP(syncDeviceData);
 PREP(checkPowerAvailable);
 PREP(consumePower);
 PREP(copyDeviceLinksZeusMain);
@@ -96,6 +97,31 @@ PREP(addVehicleZeusMain);
 PREP(changeDroneFaction);
 PREP(changeVehicleParams);
 PREP(disableDrone);
+
+// Redefine PREP macro for subdirectory: gui
+#undef PREP
+#define PREP(fncName) [QPATHTOF(functions\gui\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
+
+PREP(gui_registerApps);
+PREP(gui_requestDevices);
+PREP(gui_sendDeviceList);
+PREP(gui_buildListApp);
+PREP(gui_doorAction);
+PREP(gui_lightAction);
+PREP(gui_droneAction);
+PREP(gui_powergridAction);
+PREP(gui_databaseAction);
+PREP(gui_customAction);
+PREP(gui_vehicleAction);
+PREP(gui_appDoors);
+PREP(gui_appLights);
+PREP(gui_appDrones);
+PREP(gui_appPowergrid);
+PREP(gui_appDatabases);
+PREP(gui_appCustom);
+PREP(gui_appVehicles);
+PREP(gui_appGps);
+PREP(gui_appGpsMap);
 
 // Redefine PREP macro for subdirectory: zeus
 #undef PREP

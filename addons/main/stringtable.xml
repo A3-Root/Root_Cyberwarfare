@@ -46,6 +46,9 @@
         <Key ID="STR_ROOT_CYBERWARFARE_BRAKES_LAND_ONLY">
             <English>Error! Brakes can only be applied to land vehicles.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DATABASE">
+            <English>Error! Database ID %1 not found or access denied.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DRONE">
             <English>Error! Drone ID %1 not found or access denied.</English>
         </Key>
@@ -139,6 +142,9 @@
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_BUILDINGS">
             <English>Error! No accessible buildings found or access denied.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DATABASES">
+            <English>Error! No accessible databases found or access denied.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DRONES">
             <English>Error! No accessible drones found or access denied.</English>
         </Key>
@@ -212,6 +218,128 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_UNABLE_ATTACH">
             <English>Unable to attach GPS Tracker!</English>
+        </Key>
+    </Package>
+    <Package name="GUI">
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_ACTIVATE">
+            <English>Activate</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM">
+            <English>Custom Devices</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_DATABASES">
+            <English>Databases</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_DOORS">
+            <English>Doors</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_DRONES">
+            <English>Drones</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_GPS">
+            <English>GPS</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_LIGHTS">
+            <English>Lights</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID">
+            <English>Power Grid</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES">
+            <English>Vehicles</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_BUILDING_ENTRY">
+            <English>Building %1 (%2 doors)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_CUSTOM_ENTRY">
+            <English>%1 (ID %2)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_DATABASE_ENTRY">
+            <English>%1 (ID %2)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_DEACTIVATE">
+            <English>Deactivate</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_DOOR">
+            <English>DOOR</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_DOORS_HINT">
+            <English>Select a building, then Lock or Unlock its doors.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_DOWNLOAD">
+            <English>Download</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_DOWNLOADED">
+            <English>Downloaded '%1'.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_DRONE_ENTRY">
+            <English>Drone %1 (%2)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_ENGINE_OFF">
+            <English>Engine Off</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_GPS_ENTRY">
+            <English>%1 (#%2) [%3]</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_GRID_ENTRY">
+            <English>%1 (#%2) [%3]</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_LIGHT_ENTRY">
+            <English>Light %1 [%2]</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_LOCK">
+            <English>Lock</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_OVERLOAD">
+            <English>Overload</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_OVERLOAD_CONFIRM">
+            <English>Click Overload again to confirm - this permanently destroys the generator.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_REFRESH">
+            <English>Refresh</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_SIDE_CIV">
+            <English>Civilian</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_SIDE_EAST">
+            <English>OPFOR</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_SIDE_GUER">
+            <English>Independent</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_SIDE_WEST">
+            <English>BLUFOR</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_STATE_OFF">
+            <English>OFF</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_STATE_ON">
+            <English>ON</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_TRACK">
+            <English>Track</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_TURN_OFF">
+            <English>Turn Off</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_TURN_ON">
+            <English>Turn On</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_UNLOCK">
+            <English>Unlock</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_VEHICLE_ENGINE_OFF">
+            <English>Engine disabled.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_VEHICLE_ENTRY">
+            <English>Vehicle %1 - %2</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_VEHICLE_LOCKED">
+            <English>Vehicle locked.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_VEHICLE_UNLOCKED">
+            <English>Vehicle unlocked.</English>
         </Key>
     </Package>
     <Package name="Light_Operations">

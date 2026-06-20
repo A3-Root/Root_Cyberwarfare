@@ -125,7 +125,8 @@ _allCustom pushBack [
 
 // Update device array
 _allDevices set [4, _allCustom];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+call Root_fnc_syncDeviceData;
 
 // Handle device linking
 private _linkCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_LINK_CACHE", createHashMap];
@@ -168,7 +169,7 @@ if (_availableToFutureLaptops) then {
 };
 
 // Sync variables
-publicVariable "ROOT_CYBERWARFARE_ALL_DEVICES";
+call Root_fnc_syncDeviceData;
 publicVariable "ROOT_CYBERWARFARE_LINK_CACHE";
 if (_availableToFutureLaptops) then {
     publicVariable "ROOT_CYBERWARFARE_PUBLIC_DEVICES";

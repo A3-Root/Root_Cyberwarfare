@@ -186,7 +186,7 @@ private _foundGrid = false;
             private _lightsAffected = count _objectsInRadius;
 
             // Turn lights ON
-            ["ON", _objectsInRadius] remoteExec ["Root_fnc_powerGeneratorLights", 0, true];
+            ["ON", _objectsInRadius] remoteExec ["Root_fnc_powerGeneratorLights", 0, format ["rcw_grid_%1", netId _gridObject]];
 
             // Update state
             _gridObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "ON", true];
@@ -209,7 +209,7 @@ private _foundGrid = false;
                 private _lightsAffected = count _objectsInRadius;
 
                 // Turn lights OFF
-                ["OFF", _objectsInRadius] remoteExec ["Root_fnc_powerGeneratorLights", 0, true];
+                ["OFF", _objectsInRadius] remoteExec ["Root_fnc_powerGeneratorLights", 0, format ["rcw_grid_%1", netId _gridObject]];
 
                 // Update state
                 _gridObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "OFF", true];
@@ -237,7 +237,7 @@ private _foundGrid = false;
                     private _lightsAffected = count _objectsInRadius;
 
                     // Turn lights OFF first
-                    ["OFF", _objectsInRadius] remoteExec ["Root_fnc_powerGeneratorLights", 0, true];
+                    ["OFF", _objectsInRadius] remoteExec ["Root_fnc_powerGeneratorLights", 0, format ["rcw_grid_%1", netId _gridObject]];
 
                     // Create explosion and effects
                     private _generatorPosition = getPosATL _gridObject;

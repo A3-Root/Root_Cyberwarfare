@@ -51,6 +51,37 @@ if (isServer) then {
         params ["_computerNetId", "_deviceType", "_deviceId"];
         ROOT_CYBERWARFARE_LOG_DEBUG_3("Device linked - Computer: %1, Type: %2, ID: %3",_computerNetId,_deviceType,_deviceId);
     }] call CBA_fnc_addEventHandler;
+
+    // GPS tracker status update from a client (replaces client-side full-array broadcasts)
+    // The server applies the change to the authoritative array and broadcasts it (debounced)
+    ["root_cyberwarfare_updateTrackerStatus", {
+        params ["_trackerId", "_status"];
+
+        private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
+        private _allGpsTrackers = _allDevices param [5, []];
+
+        {
+            if ((_x select 0) == _trackerId) exitWith {
+                _x set [8, _status];
+            };
+        } forEach _allGpsTrackers;
+
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+        call FUNC(syncDeviceData);
+    }] call CBA_fnc_addEventHandler;
+
+    // ------------------------------------------------------------------------
+    // GUI (desktop app) server handlers: clients never read the device registry
+    // directly; they request lists and submit actions which the server validates.
+    // ------------------------------------------------------------------------
+    ["root_cyberwarfare_gui_reqDevices", { _this call FUNC(gui_sendDeviceList); }] call CBA_fnc_addEventHandler;
+    ["root_cyberwarfare_gui_doorAction", { _this call FUNC(gui_doorAction); }] call CBA_fnc_addEventHandler;
+    ["root_cyberwarfare_gui_lightAction", { _this call FUNC(gui_lightAction); }] call CBA_fnc_addEventHandler;
+    ["root_cyberwarfare_gui_droneAction", { _this call FUNC(gui_droneAction); }] call CBA_fnc_addEventHandler;
+    ["root_cyberwarfare_gui_powergridAction", { _this call FUNC(gui_powergridAction); }] call CBA_fnc_addEventHandler;
+    ["root_cyberwarfare_gui_databaseAction", { _this call FUNC(gui_databaseAction); }] call CBA_fnc_addEventHandler;
+    ["root_cyberwarfare_gui_customAction", { _this call FUNC(gui_customAction); }] call CBA_fnc_addEventHandler;
+    ["root_cyberwarfare_gui_vehicleAction", { _this call FUNC(gui_vehicleAction); }] call CBA_fnc_addEventHandler;
 };
 
 // ============================================================================
@@ -106,11 +137,17 @@ if (isServer) then {
         missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []], true];
     };
 
-    publicVariable "ROOT_CYBERWARFARE_ALL_DEVICES";
-    publicVariable GVAR_LINK_CACHE;
-    publicVariable GVAR_PUBLIC_DEVICES;
+    // Single debounced broadcast instead of three immediate publicVariable calls - the
+    // initial setVariable calls above already used the public flag where needed, and any
+    // 3DEN module registrations that ran before this point are included in this broadcast
+    call FUNC(syncDeviceData);
 
     ROOT_CYBERWARFARE_LOG_INFO("Device cache initialized");
+};
+
+// Register the RootCW desktop GUI apps + client reply handlers (no-op if AE3 desktop absent).
+if (hasInterface) then {
+    call FUNC(gui_registerApps);
 };
 
 if (hasInterface) then {

@@ -83,11 +83,11 @@ if((_lightIdNum != 0 || _lightId isEqualTo "a") && (_lightState isEqualTo "on" |
             private _currentState = lightIsOn _light;
             
             if(_lightState isEqualTo "on" && _currentState != "ON") then {
-                [_light, "ON"] remoteExec ["switchLight", 0, true];
+                [_light, "ON"] remoteExec ["switchLight", 0, format ["rcw_light_%1", netId _light]];
                 _countChanged = _countChanged + 1;
             };
             if(_lightState isEqualTo "off" && _currentState != "OFF") then {
-                [_light, "OFF"] remoteExec ["switchLight", 0, true];
+                [_light, "OFF"] remoteExec ["switchLight", 0, format ["rcw_light_%1", netId _light]];
                 _countChanged = _countChanged + 1;
             };
         } forEach _accessibleLights;
@@ -107,7 +107,7 @@ if((_lightIdNum != 0 || _lightId isEqualTo "a") && (_lightState isEqualTo "on" |
                 private _currentState = lightIsOn _light;
                 
                 if(_lightState isEqualTo "on" && _currentState != "ON") then {
-                    [_light, "ON"] remoteExec ["switchLight", 0, true];
+                    [_light, "ON"] remoteExec ["switchLight", 0, format ["rcw_light_%1", netId _light]];
                     _string = localize "STR_ROOT_CYBERWARFARE_LIGHT_TURNED_ON";
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                 } else {
@@ -116,7 +116,7 @@ if((_lightIdNum != 0 || _lightId isEqualTo "a") && (_lightState isEqualTo "on" |
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                     } else {
                         if(_lightState isEqualTo "off" && _currentState != "OFF") then {
-                            [_light, "OFF"] remoteExec ["switchLight", 0, true];
+                            [_light, "OFF"] remoteExec ["switchLight", 0, format ["rcw_light_%1", netId _light]];
                             _string = localize "STR_ROOT_CYBERWARFARE_LIGHT_TURNED_OFF";
                             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                         } else {

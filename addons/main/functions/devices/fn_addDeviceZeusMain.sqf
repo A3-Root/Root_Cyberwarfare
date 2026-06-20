@@ -206,7 +206,8 @@ if (_linkedComputers isNotEqualTo []) then {
         _linkCache set [_computerNetId, _existingLinks];
     } forEach _linkedComputers;
 
-    missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache, true];
+    missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache];
+call Root_fnc_syncDeviceData;
     _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
 };
 
@@ -294,7 +295,8 @@ if (_availableToFutureLaptops || _linkedComputers isEqualTo []) then {
 // Update global storage with modified device arrays
 _allDevices set [0, _allDoors];
 _allDevices set [1, _allLamps];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
+missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+call Root_fnc_syncDeviceData;
 _targetObject setVariable ["ROOT_CYBERWARFARE_CONNECTED", true, true];
 
 switch (_typeofhackable) do {

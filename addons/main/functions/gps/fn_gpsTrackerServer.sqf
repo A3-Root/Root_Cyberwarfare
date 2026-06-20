@@ -52,7 +52,8 @@ private _allGpsTrackers = _allDevices param [5, []];
             _x select 11
         ]];
         _allDevices set [5, _allGpsTrackers];
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+call Root_fnc_syncDeviceData;
     };
 } forEach _allGpsTrackers;
 
@@ -133,7 +134,8 @@ _allGpsTrackers = _allDevices param [5, []];
             _x select 11
         ]];
         _allDevices set [5, _allGpsTrackers];
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices, true];
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+call Root_fnc_syncDeviceData;
     };
 } forEach _allGpsTrackers;
 

@@ -37,7 +37,8 @@ private _linkCache = GET_LINK_CACHE;
 _linkCache set [_computerIdentifier, _deviceArray];
 
 // Update global variable
-missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache, true];
+missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache];
+call Root_fnc_syncDeviceData;
 
 DEBUG_LOG_2("Successfully cached device links for identifier %1: %2 devices",_computerIdentifier,count _deviceArray);
 ROOT_CYBERWARFARE_LOG_DEBUG_2("Cached device links for computer %1: %2 devices",_computerIdentifier,count _deviceArray);
