@@ -36,7 +36,8 @@ class CfgPatches {
 			"ace_interact_menu",
 			"zen_custom_modules",
 			"ae3_main",
-			"ae3_filesystem"
+			"ae3_filesystem",
+			"ae3_desktop"
 		};
 		weapons[] = {};
 		author = "Root";

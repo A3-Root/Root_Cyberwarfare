@@ -46,6 +46,8 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 	_items
 };
 
+ROOT_CYBERWARFARE_LOG_DEBUG_2("gui_registerApps: hasWeb=%1 hasNative=%2",_hasWeb,_hasNative);
+
 if (_hasWeb) then
 {
 	// Register each device type as a generic CEF device-list app. extra carries the device type
@@ -72,13 +74,16 @@ if (_hasWeb) then
 	// dev_request: browser asks for a device type -> reuse the MP-safe request path.
 	["dev_request", {
 		params ["_computer", "_user", "_data"];
+		private _reqType = _data getOrDefault ["type", 0];
+		ROOT_CYBERWARFARE_LOG_DEBUG_1("gui dev_request type=%1",_reqType);
 		if (isNull _computer) exitWith {};
-		[_computer, _data getOrDefault ["type", 0]] call Root_fnc_gui_requestDevices;
+		[_computer, _reqType] call Root_fnc_gui_requestDevices;
 	}] call AE3_desktop_fnc_registerCmd;
 
 	// dev_action: browser triggers an action on a device -> the matching server action event.
 	["dev_action", {
 		params ["_computer", "_user", "_data"];
+		ROOT_CYBERWARFARE_LOG_DEBUG_1("gui dev_action data=%1",_data);
 		if (isNull _computer) exitWith {};
 		private _type = _data getOrDefault ["type", 0];
 		private _id = _data getOrDefault ["id", 0];
@@ -111,6 +116,7 @@ else
 // Server reply: device list for an open app. Feed the native control (if any) AND the browser.
 ["root_cyberwarfare_gui_devList", {
 	params ["_deviceType", "_list"];
+	ROOT_CYBERWARFARE_LOG_DEBUG_2("gui devList type=%1 count=%2",_deviceType,count _list);
 
 	private _open = uiNamespace getVariable [format ["ROOT_gui_open_%1", _deviceType], []];
 	if (_open isNotEqualTo []) then {
