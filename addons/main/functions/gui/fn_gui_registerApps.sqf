@@ -31,17 +31,41 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 	private _items = [];
 	{
 		private _id = _x param [0, _forEachIndex];
-		private _label = switch (_type) do {
-			case DEVICE_TYPE_DOOR:      { format ["Building %1 (%2 doors)", _id, count (_x param [2, []])] };
-			case DEVICE_TYPE_LIGHT:     { format ["Light %1", _id] };
-			case DEVICE_TYPE_POWERGRID: { format ["Power grid %1", _id] };
-			case DEVICE_TYPE_DATABASE:  { format ["Database %1", _id] };
-			case DEVICE_TYPE_DRONE:     { format ["Drone %1", _id] };
-			case DEVICE_TYPE_VEHICLE:   { format ["Vehicle %1", _id] };
-			case DEVICE_TYPE_GPS_TRACKER: { format ["Tracker %1", _id] };
-			default                     { format ["Device %1", _id] };
+		private _obj = objectFromNetId (_x param [1, ""]);
+		private _label = "";
+		private _status = ""; // current device state shown next to the label in the GUI (#2/#3/#4...)
+		switch (_type) do {
+			case DEVICE_TYPE_DOOR: {
+				private _doorIds = _x param [2, []];
+				_label = format ["Building %1 (%2 doors)", _id, count _doorIds];
+				if (!isNull _obj) then {
+					private _locked = {(_obj getVariable [format ["bis_disabled_Door_%1", _x], 0]) == 1} count _doorIds;
+					_status = format ["%1/%2 locked", _locked, count _doorIds];
+				};
+			};
+			case DEVICE_TYPE_LIGHT:     { _label = format ["Light %1", _id]; };
+			case DEVICE_TYPE_POWERGRID: {
+				_label = format ["Power grid %1", _id];
+				if (!isNull _obj) then { _status = _obj getVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "OFF"]; };
+			};
+			case DEVICE_TYPE_DATABASE:  {
+				// Label by the database's filename rather than its numeric id (#5).
+				private _fn = "";
+				if (!isNull _obj) then { _fn = _obj getVariable ["ROOT_CYBERWARFARE_DATABASE_NAME_EDIT", ""]; };
+				_label = [format ["Database %1", _id], _fn + ".txt"] select (_fn isNotEqualTo "" && {_fn isEqualType ""});
+			};
+			case DEVICE_TYPE_DRONE: {
+				_label = format ["Drone %1", _id];
+				if (!isNull _obj) then { _status = str (side _obj); };
+			};
+			case DEVICE_TYPE_VEHICLE: {
+				_label = [format ["Vehicle %1", _id], getText (configOf _obj >> "displayName")] select (!isNull _obj);
+				if (!isNull _obj) then { _status = ["unlocked", "locked"] select ((locked _obj) > 0); };
+			};
+			case DEVICE_TYPE_GPS_TRACKER: { _label = format ["Tracker %1", _id]; };
+			default                     { _label = format ["Device %1", _id]; };
 		};
-		_items pushBack createHashMapFromArray [["id", _id], ["label", _label]];
+		_items pushBack createHashMapFromArray [["id", _id], ["label", _label], ["status", _status]];
 	} forEach _list;
 	_items
 };
@@ -55,20 +79,22 @@ if (_hasWeb) then
 	private _act = { params ["_id", "_label"]; createHashMapFromArray [["id", _id], ["label", _label]] };
 
 	{
-		_x params ["_id", "_titleKey", "_glyph", "_icon", "_type", "_actions"];
+		_x params ["_id", "_titleKey", "_glyph", "_icon", "_type", "_actions", "_menu"];
 		[
 			_id, localize _titleKey, _glyph, "deviceList",
-			createHashMapFromArray [["type", _type], ["actions", _actions], ["icon", _icon]]
+			createHashMapFromArray [["type", _type], ["actions", _actions], ["icon", _icon], ["menu", _menu]]
 		] call AE3_desktop_fnc_registerExtApp;
 	} forEach [
-		["RootCW_Doors",     "STR_ROOT_CYBERWARFARE_GUI_APP_DOORS",     "&#128682;", "door",     DEVICE_TYPE_DOOR,      [["lock", "Lock"] call _act, ["unlock", "Unlock"] call _act]],
-		["RootCW_Lights",    "STR_ROOT_CYBERWARFARE_GUI_APP_LIGHTS",    "&#128161;", "light",    DEVICE_TYPE_LIGHT,     [["on", "On"] call _act, ["off", "Off"] call _act]],
-		["RootCW_PowerGrid", "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID", "&#9889;",   "power",    DEVICE_TYPE_POWERGRID, [["overload", "Overload"] call _act]],
-		["RootCW_Databases", "STR_ROOT_CYBERWARFARE_GUI_APP_DATABASES", "&#128451;", "database", DEVICE_TYPE_DATABASE,  [["access", "Access"] call _act]],
-		["RootCW_Drones",    "STR_ROOT_CYBERWARFARE_GUI_APP_DRONES",    "&#128760;", "drone",    DEVICE_TYPE_DRONE,     []],
-		["RootCW_Vehicles",  "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES",  "&#128663;", "vehicle",  DEVICE_TYPE_VEHICLE,   []],
-		["RootCW_Custom",    "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM",    "&#129513;", "device",   DEVICE_TYPE_CUSTOM,    []],
-		["RootCW_Gps",       "STR_ROOT_CYBERWARFARE_GUI_APP_GPS",       "&#128205;", "gps",      DEVICE_TYPE_GPS_TRACKER, []]
+		// _menu nests the app in the AE3 Applications menu under a Tools folder (#1/#10), keeping the
+		// left dock clear. Action buttons let the operator drive each device from the GUI (#3-#9).
+		["RootCW_Doors",     "STR_ROOT_CYBERWARFARE_GUI_APP_DOORS",     "&#128682;", "door",     DEVICE_TYPE_DOOR,      [["lock", "Lock"] call _act, ["unlock", "Unlock"] call _act], "Tools/Hack"],
+		["RootCW_Lights",    "STR_ROOT_CYBERWARFARE_GUI_APP_LIGHTS",    "&#128161;", "light",    DEVICE_TYPE_LIGHT,     [["on", "On"] call _act, ["off", "Off"] call _act], "Tools/Hack"],
+		["RootCW_Gps",       "STR_ROOT_CYBERWARFARE_GUI_APP_GPS",       "&#128205;", "gps",      DEVICE_TYPE_GPS_TRACKER, [], "Tools/Hack"],
+		["RootCW_PowerGrid", "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID", "&#9889;",   "power",    DEVICE_TYPE_POWERGRID, [["on", "On"] call _act, ["off", "Off"] call _act, ["overload", "Overload"] call _act], "Tools/Devices"],
+		["RootCW_Databases", "STR_ROOT_CYBERWARFARE_GUI_APP_DATABASES", "&#128451;", "database", DEVICE_TYPE_DATABASE,  [["access", "Download"] call _act], "Tools/Devices"],
+		["RootCW_Drones",    "STR_ROOT_CYBERWARFARE_GUI_APP_DRONES",    "&#128760;", "drone",    DEVICE_TYPE_DRONE,     [["west", "WEST"] call _act, ["east", "EAST"] call _act, ["guer", "GUER"] call _act, ["civ", "CIV"] call _act], "Tools/Devices"],
+		["RootCW_Vehicles",  "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES",  "&#128663;", "vehicle",  DEVICE_TYPE_VEHICLE,   [["lock", "Lock"] call _act, ["unlock", "Unlock"] call _act, ["engineoff", "Engine Off"] call _act], "Tools/Devices"],
+		["RootCW_Custom",    "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM",    "&#129513;", "device",   DEVICE_TYPE_CUSTOM,    [["activate", "Activate"] call _act, ["deactivate", "Deactivate"] call _act], "Tools/Devices"]
 	];
 
 	// dev_request: browser asks for a device type -> reuse the MP-safe request path.
@@ -95,6 +121,9 @@ if (_hasWeb) then
 			case DEVICE_TYPE_LIGHT:     { ["root_cyberwarfare_gui_lightAction",     [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_POWERGRID: { ["root_cyberwarfare_gui_powergridAction", [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_DATABASE:  { ["root_cyberwarfare_gui_databaseAction",  [_co, _nid, _id, netId player, ""]] call CBA_fnc_serverEvent; };
+			case DEVICE_TYPE_DRONE:     { ["root_cyberwarfare_gui_droneAction",     [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
+			case DEVICE_TYPE_VEHICLE:   { ["root_cyberwarfare_gui_vehicleAction",   [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
+			case DEVICE_TYPE_CUSTOM:    { ["root_cyberwarfare_gui_customAction",    [_co, _nid, _id, _action, netId player, ""]] call CBA_fnc_serverEvent; };
 			default {};
 		};
 	}] call AE3_desktop_fnc_registerCmd;

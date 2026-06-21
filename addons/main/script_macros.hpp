@@ -160,31 +160,34 @@
         }
 #endif
 
+// NOTE: __FILE__ prefix and the user message are formatted SEPARATELY then concatenated. A single
+// combined format string ("[ROOT_CW] %1 | " + msg) would make msg's own %1..%n re-bind to __FILE__,
+// printing the file path in place of every argument (the cause of the garbled logs).
 #ifndef DEBUG_LOG_1
     #define DEBUG_LOG_1(msg,arg1) \
         if (DEBUG_MODE) then { \
-            diag_log format ["[ROOT_CW] %1 | " + msg, __FILE__, arg1]; \
+            diag_log ((format ["[ROOT_CW] %1 | ", __FILE__]) + (format [msg, arg1])); \
         }
 #endif
 
 #ifndef DEBUG_LOG_2
     #define DEBUG_LOG_2(msg,arg1,arg2) \
         if (DEBUG_MODE) then { \
-            diag_log format ["[ROOT_CW] %1 | " + msg, __FILE__, arg1, arg2]; \
+            diag_log ((format ["[ROOT_CW] %1 | ", __FILE__]) + (format [msg, arg1, arg2])); \
         }
 #endif
 
 #ifndef DEBUG_LOG_3
     #define DEBUG_LOG_3(msg,arg1,arg2,arg3) \
         if (DEBUG_MODE) then { \
-            diag_log format ["[ROOT_CW] %1 | " + msg, __FILE__, arg1, arg2, arg3]; \
+            diag_log ((format ["[ROOT_CW] %1 | ", __FILE__]) + (format [msg, arg1, arg2, arg3])); \
         }
 #endif
 
 #ifndef DEBUG_LOG_4
     #define DEBUG_LOG_4(msg,arg1,arg2,arg3,arg4) \
         if (DEBUG_MODE) then { \
-            diag_log format ["[ROOT_CW] %1 | " + msg, __FILE__, arg1, arg2, arg3, arg4]; \
+            diag_log ((format ["[ROOT_CW] %1 | ", __FILE__]) + (format [msg, arg1, arg2, arg3, arg4])); \
         }
 #endif
 

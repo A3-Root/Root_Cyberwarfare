@@ -44,12 +44,16 @@ private _databaseName = _database getVariable ["ROOT_CYBERWARFARE_DATABASE_NAME_
 private _databaseContent = _database getVariable ["ROOT_CYBERWARFARE_DATABASE_DATA_EDIT", ""];
 private _executionCode = _database getVariable ["ROOT_CYBERWARFARE_DATABASE_EXECUTIONCODE", ""];
 
-private _pointer = _computer getVariable ["AE3_filepointer", []];
+// Save to a fixed, discoverable Downloads folder so the operator always knows where the file landed
+// (#5) - the old path followed the laptop's current working dir, which the GUI user cannot see.
 private _fileName = (_databaseName splitString " ") joinString "_";
-private _newDirectory = (_pointer joinString "/") + format ["/Files/%1.txt", _fileName];
+private _savePath = format ["/root/%1.txt", _fileName];
 
-[_computer, _newDirectory, _databaseContent, false, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExecCall ["AE3_filesystem_fnc_device_addFile", 2];
+[_computer, _savePath, _databaseContent, false, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExecCall ["AE3_filesystem_fnc_device_addFile", 2];
 
 if (_executionCode != "") then { [_computer, objectFromNetId _playerNetId, _owner] spawn (compile _executionCode); };
 
-[_owner, format [localize "STR_ROOT_CYBERWARFARE_GUI_DOWNLOADED", _databaseName], true] call _reply;
+// Report the exact path so the GUI can tell the user where to open it (it is caesar-1 encrypted -
+// the operator can read it with the Crypto app, key 1).
+private _msg = (format [localize "STR_ROOT_CYBERWARFARE_GUI_DOWNLOADED", _databaseName]) + format [" -> %1 (caesar key 1)", _savePath];
+[_owner, _msg, true] call _reply;
