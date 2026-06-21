@@ -74,6 +74,7 @@ if (_useRadiusMode) then {
 };
 
 _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false];
+_dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true];
 
 // Add a checkbox for each computer
 {
@@ -101,6 +102,10 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Shou
         private _availableToFutureLaptops = _results select _resultIndex;
         _resultIndex = _resultIndex + 1;
 
+        // Extract "Allow Location View"
+        private _allowLocation = _results select _resultIndex;
+        _resultIndex = _resultIndex + 1;
+
         // Process laptop checkboxes
         private _selectedComputers = [];
         {
@@ -118,10 +123,10 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Shou
         // Handle radius mode or direct mode
         if (_useRadiusMode) then {
             // Radius mode: Use captured position (logic is already deleted)
-            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addLightsZeusMain", 2];
+            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation] remoteExec ["Root_fnc_addLightsZeusMain", 2];
         } else {
             // Direct mode: Register single object
-            [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addLightsZeusMain", 2];
+            [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation] remoteExec ["Root_fnc_addLightsZeusMain", 2];
             ["Hackable Light Added!"] call zen_common_fnc_showMessage;
         };
     },

@@ -24,6 +24,7 @@ private _customName = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_NAME", 
 private _activationCode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_ACTIVATE", "// Example: Display Hint when triggered\nhint 'Custom device activated';"];
 private _deactivationCode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_DEACTIVATE", "// Example: Display Hint when triggered\nhint 'Custom device deactivated';"];
 private _addToPublic = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_PUBLIC", true];
+private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_ALLOWLOCATION", 1]) isEqualTo 1;
 
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;
@@ -80,6 +81,7 @@ if (_addToPublic) then {
 	// Call the custom device Zeus main function
 	// Parameters: _targetObject, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops
 	[_target, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops] call FUNC(addCustomDeviceZeusMain);
+	_target setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // General #3
 
 } forEach _allTargets;
 

@@ -21,6 +21,7 @@ if (!isServer) exitWith {};
 
 // Get module attributes (convert number to boolean)
 private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_LIGHTS_PUBLIC", 1]) isEqualTo 1;
+private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_LIGHTS_ALLOWLOCATION", 1]) isEqualTo 1;
 
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;
@@ -82,7 +83,7 @@ if (_allDevices isEqualTo []) exitWith {
 
     // Call the lights-specific main function
     // Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops
-    [_device, _execUserId, _linkedComputers, _availableToFutureLaptops] call FUNC(addLightsZeusMain);
+    [_device, _execUserId, _linkedComputers, _availableToFutureLaptops, _allowLocation] call FUNC(addLightsZeusMain);
 
 } forEach _allDevices;
 

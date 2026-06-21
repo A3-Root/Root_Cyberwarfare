@@ -75,6 +75,7 @@ if (_useRadiusMode) then {
 };
 
 _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false];
+_dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true];
 
 // Add unbreachable option for buildings (always available in this module)
 if (!_useRadiusMode) then {
@@ -110,6 +111,10 @@ if (!_useRadiusMode) then {
         private _availableToFutureLaptops = _results select _resultIndex;
         _resultIndex = _resultIndex + 1;
 
+        // Extract "Allow Location View" (pushed right after availability)
+        private _allowLocation = _results select _resultIndex;
+        _resultIndex = _resultIndex + 1;
+
         // Extract unbreachable setting (for direct mode)
         if (!_useRadiusMode) then {
             _makeUnbreachable = _results select _resultIndex;
@@ -133,10 +138,10 @@ if (!_useRadiusMode) then {
         // Handle radius mode or direct mode
         if (_useRadiusMode) then {
             // Radius mode: Use captured position (logic is already deleted)
-            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
         } else {
             // Direct mode: Register single object
-            [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+            [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
             ["Hackable Doors Added!"] call zen_common_fnc_showMessage;
         };
     },

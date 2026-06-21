@@ -27,6 +27,27 @@ private _reply = {
 };
 
 if (isNull _computer) exitWith {};
+
+// Whole-network All On / All Off (#1): apply to every accessible light, then report a summary.
+if (_state in ["allon", "alloff"]) exitWith {
+	private _want = _state isEqualTo "allon";
+	private _lights = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [1, []];
+	private _n = 0;
+	{
+		_x params ["_lid", "_lnetId"];
+		if ([_computer, DEVICE_TYPE_LIGHT, _lid, _commandPath] call FUNC(isDeviceAccessible)) then {
+			private _light = objectFromNetId _lnetId;
+			if (!isNull _light) then {
+				[_light, [toUpper "off", toUpper "on"] select _want] remoteExec ["switchLight", 0, format ["rcw_light_%1", netId _light]];
+				_light setVariable ["ROOT_CYBERWARFARE_LIGHT_ON", _want, true];
+				["root_cyberwarfare_deviceStateChanged", [DEVICE_TYPE_LIGHT, _lid, ["off", "on"] select _want]] call CBA_fnc_serverEvent;
+				_n = _n + 1;
+			};
+		};
+	} forEach _lights;
+	[_owner, format ["%1 lights switched %2", _n, ["off", "on"] select _want], true] call _reply;
+};
+
 if !(_state in ["on", "off"]) exitWith {};
 
 if !([_computer, DEVICE_TYPE_LIGHT, _lightId, _commandPath] call FUNC(isDeviceAccessible)) exitWith
@@ -44,6 +65,7 @@ if (isNull _light) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_E
 
 private _target = toUpper _state; // "ON" / "OFF"
 [_light, _target] remoteExec ["switchLight", 0, format ["rcw_light_%1", netId _light]];
+_light setVariable ["ROOT_CYBERWARFARE_LIGHT_ON", (_state isEqualTo "on"), true]; // for GUI status (#3)
 
 ["root_cyberwarfare_deviceStateChanged", [DEVICE_TYPE_LIGHT, _lightId, _state]] call CBA_fnc_serverEvent;
 

@@ -18,12 +18,12 @@
  * Public: No
  */
 
-params ["_owner", "_computerNetId", "_databaseId", "_playerNetId", ["_commandPath", ""]];
+params ["_owner", "_computerNetId", "_databaseId", "_playerNetId", ["_commandPath", ""], ["_savePath", ""]];
 
 private _computer = objectFromNetId _computerNetId;
 private _reply = {
-	params ["_owner", "_msg", "_ok"];
-	["root_cyberwarfare_gui_actionResult", [DEVICE_TYPE_DATABASE, _msg, _ok], _owner] call CBA_fnc_ownerEvent;
+	params ["_owner", "_msg", "_ok", ["_path", ""]];
+	["root_cyberwarfare_gui_actionResult", [DEVICE_TYPE_DATABASE, _msg, _ok, _path], _owner] call CBA_fnc_ownerEvent;
 };
 
 if (isNull _computer) exitWith {};
@@ -44,16 +44,14 @@ private _databaseName = _database getVariable ["ROOT_CYBERWARFARE_DATABASE_NAME_
 private _databaseContent = _database getVariable ["ROOT_CYBERWARFARE_DATABASE_DATA_EDIT", ""];
 private _executionCode = _database getVariable ["ROOT_CYBERWARFARE_DATABASE_EXECUTIONCODE", ""];
 
-// Save to a fixed, discoverable Downloads folder so the operator always knows where the file landed
-// (#5) - the old path followed the laptop's current working dir, which the GUI user cannot see.
+// Save to the operator-chosen location (file picker, #5); fall back to a discoverable default.
 private _fileName = (_databaseName splitString " ") joinString "_";
-private _savePath = format ["/root/%1.txt", _fileName];
+if (_savePath isEqualTo "") then { _savePath = format ["/root/%1.txt", _fileName]; };
 
 [_computer, _savePath, _databaseContent, false, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExecCall ["AE3_filesystem_fnc_device_addFile", 2];
 
 if (_executionCode != "") then { [_computer, objectFromNetId _playerNetId, _owner] spawn (compile _executionCode); };
 
-// Report the exact path so the GUI can tell the user where to open it (it is caesar-1 encrypted -
-// the operator can read it with the Crypto app, key 1).
+// Report the exact path so the GUI can open it (caesar-1 encrypted - read via the Crypto app, key 1).
 private _msg = (format [localize "STR_ROOT_CYBERWARFARE_GUI_DOWNLOADED", _databaseName]) + format [" -> %1 (caesar key 1)", _savePath];
-[_owner, _msg, true] call _reply;
+[_owner, _msg, true, _savePath] call _reply;

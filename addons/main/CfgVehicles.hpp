@@ -229,6 +229,13 @@ class CfgVehicles {
 				typeName = "BOOL";
 				defaultValue = 1;
 			};
+			class ROOT_CYBERWARFARE_3DEN_DOORS_ALLOWLOCATION: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_DOORS_ALLOWLOCATION";
+				displayName = "Allow Location View";
+				tooltip = "If checked (default), the device's grid location is shown on the laptop (CLI + GUI). Uncheck to hide it.";
+				typeName = "BOOL";
+				defaultValue = 1;
+			};
 			class ROOT_CYBERWARFARE_3DEN_DOORS_UNBREACHABLE: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_DOORS_UNBREACHABLE";
 				displayName = "Make Unbreachable";
@@ -259,6 +266,13 @@ class CfgVehicles {
 				property = "ROOT_CYBERWARFARE_3DEN_LIGHTS_PUBLIC";
 				displayName = "Add to Public Device List";
 				tooltip = "If checked, these lights will be accessible by all laptops (current and future)";
+				typeName = "BOOL";
+				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_LIGHTS_ALLOWLOCATION: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_LIGHTS_ALLOWLOCATION";
+				displayName = "Allow Location View";
+				tooltip = "If checked (default), the device's grid location is shown on the laptop (CLI + GUI). Uncheck to hide it.";
 				typeName = "BOOL";
 				defaultValue = 1;
 			};
@@ -397,6 +411,13 @@ class CfgVehicles {
 				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_PUBLIC";
 				displayName = "Add to Public Device List";
 				tooltip = "If checked, this vehicle will be accessible by all laptops (current and future)";
+				typeName = "BOOL";
+				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_ALLOWLOCATION: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_ALLOWLOCATION";
+				displayName = "Allow Location View";
+				tooltip = "If checked (default), the device's grid location is shown on the laptop (CLI + GUI). Uncheck to hide it.";
 				typeName = "BOOL";
 				defaultValue = 1;
 			};
@@ -608,6 +629,13 @@ class CfgVehicles {
 				typeName = "BOOL";
 				defaultValue = 1;
 			};
+			class ROOT_CYBERWARFARE_3DEN_CUSTOM_ALLOWLOCATION: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_CUSTOM_ALLOWLOCATION";
+				displayName = "Allow Location View";
+				tooltip = "If checked (default), the device's grid location is shown on the laptop (CLI + GUI). Uncheck to hide it.";
+				typeName = "BOOL";
+				defaultValue = 1;
+			};
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {
@@ -673,6 +701,13 @@ class CfgVehicles {
 				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_PUBLIC";
 				displayName = "Add to Public Device List";
 				tooltip = "If checked, this power generator will be accessible by all laptops (current and future)";
+				typeName = "BOOL";
+				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_POWERGRID_ALLOWLOCATION: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_ALLOWLOCATION";
+				displayName = "Allow Location View";
+				tooltip = "If checked (default), the device's grid location is shown on the laptop (CLI + GUI). Uncheck to hide it.";
 				typeName = "BOOL";
 				defaultValue = 1;
 			};

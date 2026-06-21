@@ -40,6 +40,7 @@ private _execUserId = 0;
 private _linkedComputers = [];
 private _availableToFutureLaptops = false;
 private _makeUnbreachable = false;
+private _allowLocation = true; // "Allow Location View" (General #3); default on
 
 private _firstParam = _this select 0;
 
@@ -53,6 +54,7 @@ if (typeName _firstParam == "ARRAY") then {
     _linkedComputers = param [3, [], [[]]];
     _availableToFutureLaptops = param [4, false, [false]];
     _makeUnbreachable = param [5, false, [false]];
+    _allowLocation = param [6, true, [false]];
 } else {
     // Direct mode: object passed
     _radiusMode = false;
@@ -61,6 +63,7 @@ if (typeName _firstParam == "ARRAY") then {
     _linkedComputers = param [2, [], [[]]];
     _availableToFutureLaptops = param [3, false, [false]];
     _makeUnbreachable = param [4, false, [false]];
+    _allowLocation = param [5, true, [false]];
 };
 
 if (_execUserId == 0) then {
@@ -89,7 +92,7 @@ if (_radiusMode) exitWith {
         private _detectedDoors = [_building] call FUNC(detectBuildingDoors);
 
         if (_detectedDoors isNotEqualTo []) then {
-            [_building, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] call FUNC(addDoorsZeusMain);
+            [_building, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation] call FUNC(addDoorsZeusMain);
             _registeredCount = _registeredCount + 1;
         };
     } forEach _buildings;
@@ -110,6 +113,8 @@ private _deviceId = 0;
 
 // Store availability setting
 _targetObject setVariable ["ROOT_CYBERWARFARE_AVAILABLE_FUTURE", _availableToFutureLaptops, true];
+// Store "Allow Location View" so CLI/GUI can hide the grid when disabled (General #3).
+_targetObject setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true];
 
 // Check for buildings with doors
 if (_targetObject isKindOf "House" || _targetObject isKindOf "Building") then {

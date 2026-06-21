@@ -37,6 +37,7 @@ private _radius = 0;
 private _execUserId = 0;
 private _linkedComputers = [];
 private _availableToFutureLaptops = false;
+private _allowLocation = true; // "Allow Location View" (General #3); default on
 
 private _firstParam = _this select 0;
 
@@ -49,6 +50,7 @@ if (typeName _firstParam == "ARRAY") then {
     _execUserId = param [2, 0, [0]];
     _linkedComputers = param [3, [], [[]]];
     _availableToFutureLaptops = param [4, false, [false]];
+    _allowLocation = param [5, true, [false]];
 } else {
     // Direct mode: object passed
     _radiusMode = false;
@@ -56,6 +58,7 @@ if (typeName _firstParam == "ARRAY") then {
     _execUserId = param [1, 0, [0]];
     _linkedComputers = param [2, [], [[]]];
     _availableToFutureLaptops = param [3, false, [false]];
+    _allowLocation = param [4, true, [false]];
 };
 
 if (_execUserId == 0) then {
@@ -79,7 +82,7 @@ if (_radiusMode) exitWith {
 
     // Register each light
     {
-        [_x, _execUserId, _linkedComputers, _availableToFutureLaptops] call FUNC(addLightsZeusMain);
+        [_x, _execUserId, _linkedComputers, _availableToFutureLaptops, _allowLocation] call FUNC(addLightsZeusMain);
         _registeredCount = _registeredCount + 1;
     } forEach _lights;
 
@@ -100,6 +103,7 @@ private _deviceId = 0;
 
 // Store availability setting
 _targetObject setVariable ["ROOT_CYBERWARFARE_AVAILABLE_FUTURE", _availableToFutureLaptops, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // General #3
 
 // Check for lamps/lights
 if (_targetObject isKindOf "Lamps_base_F") then {

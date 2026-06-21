@@ -22,6 +22,7 @@ if (!isServer) exitWith {};
 // Get module attributes (convert number to boolean)
 private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_PUBLIC", 1]) isEqualTo 1;
 private _makeUnbreachable = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_UNBREACHABLE", 0]) isEqualTo 1;
+private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_ALLOWLOCATION", 1]) isEqualTo 1;
 
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;
@@ -83,7 +84,7 @@ if (_allDevices isEqualTo []) exitWith {
 
     // Call the doors-specific main function
     // Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable
-    [_device, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] call FUNC(addDoorsZeusMain);
+    [_device, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation] call FUNC(addDoorsZeusMain);
 
 } forEach _allDevices;
 

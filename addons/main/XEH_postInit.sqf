@@ -82,6 +82,7 @@ if (isServer) then {
     ["root_cyberwarfare_gui_databaseAction", { _this call FUNC(gui_databaseAction); }] call CBA_fnc_addEventHandler;
     ["root_cyberwarfare_gui_customAction", { _this call FUNC(gui_customAction); }] call CBA_fnc_addEventHandler;
     ["root_cyberwarfare_gui_vehicleAction", { _this call FUNC(gui_vehicleAction); }] call CBA_fnc_addEventHandler;
+    ["root_cyberwarfare_gui_gpsAction", { _this call FUNC(gui_gpsAction); }] call CBA_fnc_addEventHandler;
 };
 
 // ============================================================================

@@ -19,7 +19,7 @@
  * Public: No
  */
 
-params ["_owner", "_computerNetId", "_buildingId", "_state", ["_commandPath", ""]];
+params ["_owner", "_computerNetId", "_buildingId", "_state", ["_commandPath", ""], ["_doorId", ""]];
 
 private _computer = objectFromNetId _computerNetId;
 private _reply = {
@@ -41,6 +41,11 @@ private _building = objectFromNetId _bNetId;
 if (isNull _building) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_BUILDING_NOT_FOUND", false] call _reply; };
 
 private _newState = parseNumber (_state isEqualTo "lock");
+// A specific door id (#2) restricts the operation to that single door; otherwise the whole building.
+if (_doorId isNotEqualTo "") then {
+	private _d = parseNumber _doorId;
+	_doorIds = _doorIds select { _x == _d };
+};
 private _changing = _doorIds select { (_building getVariable [format ["bis_disabled_Door_%1", _x], 5]) != _newState };
 
 if (_changing isEqualTo []) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_NO_BUILDINGS_CRITERIA", false] call _reply; };

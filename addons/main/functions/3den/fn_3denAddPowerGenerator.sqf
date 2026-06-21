@@ -29,6 +29,7 @@ private _explosionType = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_E
 private _excludedClassnames = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXCLUDED", ""];
 private _powerCost = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_COST", 10];
 private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_PUBLIC", 1]) isEqualTo 1;
+private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_ALLOWLOCATION", 1]) isEqualTo 1;
 
 // Parse excluded classnames (comma-separated string to array)
 private _excludedArray = [];
@@ -92,6 +93,7 @@ if (_addToPublic) then {
 	// Call the existing Zeus main function
 	// Parameters: _targetObject, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost
 	[_generator, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, _powerCost] call FUNC(addPowerGeneratorZeusMain);
+	_generator setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // General #3
 
 } forEach _allGenerators;
 

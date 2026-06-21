@@ -68,12 +68,14 @@
 // - Radius mode: 5 params starting with position array
 // - Drone call: 4 params or less
 // - Vehicle call: 12 params
-private _isRadiusMode = (count _this) == 5 && {(_this select 0) isEqualType []};
+// Radius mode is a position-array first arg (>=5 params allows an optional _allowLocation tail
+// without breaking the count-based dispatch). Drone call is <=4 params (object first).
+private _isRadiusMode = (count _this) >= 5 && {(_this select 0) isEqualType []};
 private _isDroneCall = !_isRadiusMode && {(count _this) <= 4};
 
 if (_isRadiusMode) then {
     // Radius mode: Register all vehicles/drones within radius
-    params ["_centerPos", "_radius", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false]];
+    params ["_centerPos", "_radius", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false], ["_allowLocation", true]];
 
     // Get all objects in radius and filter by vehicle type
     private _allObjects = nearestObjects [_centerPos, [], _radius];
@@ -113,10 +115,12 @@ if (_isRadiusMode) then {
             private _defaultPowerCost = 2;
             private _allowAllFeatures = true;
 
-            [_obj, _execUserId, _linkedComputers, _vehicleName, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _availableToFutureLaptops, _defaultPowerCost, 0, 100, -50, 50, 1, 10, -1, 0, -1, 0, 1, 30] call FUNC(addVehicleZeusMain);
+            [_obj, _execUserId, _linkedComputers, _vehicleName, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _availableToFutureLaptops, _defaultPowerCost, 0, 100, -50, 50, 1, 10, -1, 0, -1, 0, 1, 30, _allowLocation] call FUNC(addVehicleZeusMain);
             _vehicleCount = _vehicleCount + 1;
             _index = _index + 1;
         };
+        // Apply the location-view choice to whatever was just registered (General #3).
+        _obj setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true];
     } forEach _foundObjects;
 
     missionNamespace setVariable ["ROOT_CYBERWARFARE_VEHICLE_INDEX", _index, true];
@@ -263,6 +267,10 @@ call Root_fnc_syncDeviceData;
         missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
 call Root_fnc_syncDeviceData;
         _targetObject setVariable ["ROOT_CYBERWARFARE_CONNECTED", true, true];
+        // Default location-view on; the 3DEN/Zeus caller overrides via setVariable after this call.
+        if (isNil {_targetObject getVariable "ROOT_CYBERWARFARE_ALLOW_LOCATION"}) then {
+            _targetObject setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", true, true];
+        };
 
         [format ["Root Cyber Warfare: Drone (%2) Added! ID: %1. %3.", _deviceId, _displayName, _availabilityText]] remoteExec ["systemChat", _execUserId];
 
@@ -278,7 +286,8 @@ call Root_fnc_syncDeviceData;
             ["_brakesMinDecel", 1], ["_brakesMaxDecel", 10],
             ["_lightsMaxToggles", -1], ["_lightsCooldown", 0],
             ["_engineMaxToggles", -1], ["_engineCooldown", 0],
-            ["_alarmMinDuration", 1], ["_alarmMaxDuration", 30]
+            ["_alarmMinDuration", 1], ["_alarmMaxDuration", 30],
+            ["_allowLocation", true]
         ];
 
         if (_execUserId == 0) then {
@@ -304,6 +313,7 @@ call Root_fnc_syncDeviceData;
         _targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_ENGINE", _allowEngine, true];
         _targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_DOOR", _allowAlarm, true];
         _targetObject setVariable ["ROOT_CYBERWARFARE_AVAILABLE_FUTURE", _availableToFutureLaptops, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // General #3
         _targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", _powerCost, true];
 
         // Store configuration limits

@@ -23,6 +23,7 @@ PREP(createDiaryEntry);
 PREP(initBreachIntegration);
 PREP(initSettings);
 PREP(isDeviceAccessible);
+PREP(gridLabel);
 PREP(listDevicesInSubnet);
 
 // Redefine PREP macro for subdirectory: custom
@@ -113,6 +114,7 @@ PREP(gui_powergridAction);
 PREP(gui_databaseAction);
 PREP(gui_customAction);
 PREP(gui_vehicleAction);
+PREP(gui_gpsAction);
 PREP(gui_appDoors);
 PREP(gui_appLights);
 PREP(gui_appDrones);

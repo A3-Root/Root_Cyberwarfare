@@ -65,7 +65,8 @@ private _dialogControls = [
         11
     ]],
     ["EDIT", ["Excluded Light Classnames", "Comma-separated list of classnames to exclude (e.g., Lamp_Street_small_F,Land_LampHalogen_F)"], [""]],
-    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false]
+    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false],
+    ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true]
 ];
 
 // Add a checkbox for each computer
@@ -82,7 +83,7 @@ private _dialogControls = [
         _args params ["_targetObject", "_execUserId", "_allComputers"];
 
         // Parse results
-        _results params ["_generatorName", "_radius", "_allowExplosionOverload", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops"];
+        _results params ["_generatorName", "_radius", "_allowExplosionOverload", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops", "_allowLocation"];
 
         // Parse excluded classnames (convert comma-separated string to array)
         private _excludedArray = [];
@@ -99,7 +100,7 @@ private _dialogControls = [
 
         // Get selected computers
         private _selectedComputers = [];
-        private _checkboxStartIndex = 6;
+        private _checkboxStartIndex = 7;
 
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
@@ -114,6 +115,7 @@ private _dialogControls = [
 
         // Call main function
         [_targetObject, _execUserId, _selectedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
+        [_targetObject, ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]] remoteExec ["setVariable", 2]; // General #3
         ["Power Generator Added!"] call zen_common_fnc_showMessage;
     },
     {

@@ -146,6 +146,8 @@ if (_useRadiusMode) then {
 
 // Add availability setting (common to all modes)
 _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false];
+// Allow Location View (common to all modes, #3) - pushed right after availability.
+_dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true];
 
 // Add a checkbox for each computer
 {
@@ -176,6 +178,8 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Shou
             // Radius mode: Extract availability flag and process computers
             private _availableToFutureLaptops = _results select _resultIndex;
             _resultIndex = _resultIndex + 1;
+            private _allowLocation = _results select _resultIndex;
+            _resultIndex = _resultIndex + 1;
             _checkboxStartIndex = _resultIndex;
 
             // Process laptop checkboxes
@@ -192,12 +196,14 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Shou
             };
 
             // Radius mode: Use captured position (logic is already deleted)
-            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 
         } else {
             if (_isDrone) then {
                 // Drone: only availability flag
                 private _availableToFutureLaptops = _results select _resultIndex;
+                _resultIndex = _resultIndex + 1;
+                private _allowLocation = _results select _resultIndex;
                 _resultIndex = _resultIndex + 1;
                 _checkboxStartIndex = _resultIndex;
 
@@ -216,6 +222,8 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Shou
 
                 // Call addVehicleZeusMain which will detect drone and redirect to addDeviceZeusMain
                 [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+                // Drone path can't carry the flag through the 4-param call; apply it on the object (#3).
+                [_targetObject, ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]] remoteExec ["setVariable", 2];
                 ["Hackable Drone Added!"] call zen_common_fnc_showMessage;
 
             } else {
@@ -229,9 +237,9 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Shou
                     "_lightsMaxToggles", "_lightsCooldown",
                     "_engineMaxToggles", "_engineCooldown",
                     "_alarmMinDuration", "_alarmMaxDuration",
-                    "_availableToFutureLaptops"
+                    "_availableToFutureLaptops", "_allowLocation"
                 ];
-                _checkboxStartIndex = 21;
+                _checkboxStartIndex = 22;
 
                 // Process laptop checkboxes
                 {
@@ -255,7 +263,7 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Shou
                     _availableToFutureLaptops, _powerCost,
                     _fuelMinPercent, _fuelMaxPercent, _speedMinValue, _speedMaxValue,
                     _brakesMinDecel, _brakesMaxDecel, _lightsMaxToggles, _lightsCooldown,
-                    _engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration
+                    _engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration, _allowLocation
                 ] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
                 ["Hackable Vehicle Added!"] call zen_common_fnc_showMessage;
                 _index = _index + 1;

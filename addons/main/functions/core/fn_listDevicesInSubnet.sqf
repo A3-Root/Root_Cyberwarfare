@@ -130,7 +130,7 @@ if (_type in ["doors", "all", "a"]) then {
                     _foundBuilding = true;
                     private _building = objectFromNetId (_x select 1);
                     private _buildingDisplayName = getText (configOf _building >> "displayName");
-                    private _mapGridPos = mapGridPosition _building;
+                    private _mapGridPos = [_building] call FUNC(gridLabel);
                     private _doorsOfBuilding = _x select 2;
                     private _doorCount = count _doorsOfBuilding;
 
@@ -182,7 +182,7 @@ if (_type in ["doors", "all", "a"]) then {
                 private _buildingId = _x select 0;
                 private _building = objectFromNetId (_x select 1);
                 private _buildingDisplayName = getText (configOf _building >> "displayName");
-                private _mapGridPos = mapGridPosition _building;
+                private _mapGridPos = [_building] call FUNC(gridLabel);
                 private _doorsOfBuilding = _x select 2;
 
                 // Calculate aggregate lock status
@@ -227,7 +227,7 @@ if (_type in ["lights", "all", "a"]) then {
                     _foundLight = true;
                     private _light = objectFromNetId (_x select 1);
                     private _lightDisplayName = getText (configOf _light >> "displayName");
-                    private _mapGridPos = mapGridPosition _light;
+                    private _mapGridPos = [_light] call FUNC(gridLabel);
                     private _currentState = lightIsOn _light;
                     private _currentStateStringColor = "#8ce10b"; // GREEN for ON
                     if (_currentState isEqualTo "OFF") then {
@@ -255,7 +255,7 @@ if (_type in ["lights", "all", "a"]) then {
                 private _lightId = _x select 0;
                 private _light = objectFromNetId (_x select 1);
                 private _lightDisplayName = getText (configOf _light >> "displayName");
-                private _mapGridPos = mapGridPosition _light;
+                private _mapGridPos = [_light] call FUNC(gridLabel);
                 private _currentState = lightIsOn _light;
                 private _currentStateStringColor = "#8ce10b"; // GREEN for ON
                 if (_currentState isEqualTo "OFF") then {
@@ -283,7 +283,7 @@ if (_type in ["drones", "all", "a"]) then {
                     _foundDrone = true;
                     private _drone = objectFromNetId (_x select 1);
                     private _droneName = getText (configOf (vehicle _drone) >> "displayName");
-                    private _mapGridPos = mapGridPosition _drone;
+                    private _mapGridPos = [_drone] call FUNC(gridLabel);
                     private _droneSide = side _drone;
                     private _droneSideString = str _droneSide;
                     private _damage = damage (vehicle _drone);
@@ -334,7 +334,7 @@ if (_type in ["drones", "all", "a"]) then {
                 private _droneId = _x select 0;
                 private _drone = objectFromNetId (_x select 1);
                 private _droneName = getText (configOf (vehicle _drone) >> "displayName");
-                private _mapGridPos = mapGridPosition _drone;
+                private _mapGridPos = [_drone] call FUNC(gridLabel);
                 private _droneSide = side _drone;
                 private _damage = damage (vehicle _drone);
                 private _droneSideColor = "#8CE10B"; // Default green
@@ -389,7 +389,7 @@ if (_type in ["custom", "all", "a"]) then {
                 if (str _customId == _deviceId) exitWith {
                     _foundCustom = true;
                     private _customObject = objectFromNetId _objectNetId;
-                    private _mapGridPos = mapGridPosition _customObject;
+                    private _mapGridPos = [_customObject] call FUNC(gridLabel);
                     private _displayName = getText (configOf _customObject >> "displayName");
 
                     // Header
@@ -417,7 +417,7 @@ if (_type in ["custom", "all", "a"]) then {
             {
                 _x params ["_customId", "_objectNetId", "_customName"];
                 private _customObject = objectFromNetId _objectNetId;
-                private _mapGridPos = mapGridPosition _customObject;
+                private _mapGridPos = [_customObject] call FUNC(gridLabel);
 
                 // Get device state and determine color
                 private _deviceState = _customObject getVariable ["ROOT_CYBERWARFARE_CUSTOM_DEVICE_STATE", "INACTIVE"];
@@ -523,7 +523,7 @@ if (_type in ["vehicles", "all", "a"]) then {
                 if (str _vehicleId == _deviceId) exitWith {
                     _foundVehicle = true;
                     private _vehicle = objectFromNetId _netId;
-                    private _mapGridPos = mapGridPosition _vehicle;
+                    private _mapGridPos = [_vehicle] call FUNC(gridLabel);
                     private _displayName = getText (configOf _vehicle >> "displayName");
 
                     // Header
@@ -590,7 +590,7 @@ if (_type in ["vehicles", "all", "a"]) then {
             {
                 _x params ["_vehicleId", "_netId", "_vehicleName"];
                 private _vehicle = objectFromNetId _netId;
-                private _mapGridPos = mapGridPosition _vehicle;
+                private _mapGridPos = [_vehicle] call FUNC(gridLabel);
                 _string = format ["    %1 - %2 - %3", _vehicleId, _vehicleName, _mapGridPos];
                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             } forEach _accessibleVehicles;
@@ -609,7 +609,7 @@ if (_type in ["powergrids", "all", "a"]) then {
                 if (str _gridId == _deviceId) exitWith {
                     _foundGrid = true;
                     private _gridObject = objectFromNetId _objectNetId;
-                    private _mapGridPos = mapGridPosition _gridObject;
+                    private _mapGridPos = [_gridObject] call FUNC(gridLabel);
                     private _displayName = getText (configOf _gridObject >> "displayName");
                     private _currentState = _gridObject getVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "ON"];
 
@@ -639,7 +639,7 @@ if (_type in ["powergrids", "all", "a"]) then {
             {
                 _x params ["_gridId", "_objectNetId", "_gridName"];
                 private _gridObject = objectFromNetId _objectNetId;
-                private _mapGridPos = mapGridPosition _gridObject;
+                private _mapGridPos = [_gridObject] call FUNC(gridLabel);
 
                 // Get grid state and determine color
                 private _currentState = _gridObject getVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "OFF"];

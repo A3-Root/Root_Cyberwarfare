@@ -46,6 +46,7 @@ private _allowLights = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_LIGHT
 private _allowEngine = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ENGINE", true];
 private _allowAlarm = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ALARM", false];
 private _addToPublic = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_PUBLIC", true];
+private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ALLOWLOCATION", 1]) isEqualTo 1;
 
 // Get limit attributes
 private _fuelMinPercent = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_FUEL_MIN", 0];
@@ -123,7 +124,7 @@ if (_addToPublic) then {
 	if (unitIsUAV _vehicle) then {
 		// Call as drone with 4 parameters
 		// Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops
-		[_vehicle, _execUserId, _linkedComputers, _availableToFutureLaptops] call FUNC(addVehicleZeusMain);
+		[_vehicle, _execUserId, _linkedComputers, _availableToFutureLaptops] call FUNC(addVehicleZeusMain); _vehicle setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // drone flag (#3)
 	} else {
 		// Call as vehicle with all parameters including limits
 		[
@@ -132,7 +133,7 @@ if (_addToPublic) then {
 			_availableToFutureLaptops, _powerCost,
 			_fuelMinPercent, _fuelMaxPercent, _speedMinValue, _speedMaxValue,
 			_brakesMinDecel, _brakesMaxDecel, _lightsMaxToggles, _lightsCooldown,
-			_engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration
+			_engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration, _allowLocation
 		] call FUNC(addVehicleZeusMain);
 	};
 

@@ -44,6 +44,7 @@ private _customName = "Custom Device";
 private _activationCode = "";
 private _deactivationCode = "";
 private _availableToFutureLaptops = false;
+private _allowLocation = true; // "Allow Location View" (General #3); default on
 
 private _firstParam = _this select 0;
 
@@ -59,6 +60,7 @@ if (typeName _firstParam == "ARRAY") then {
     _activationCode = param [5, "", [""]];
     _deactivationCode = param [6, "", [""]];
     _availableToFutureLaptops = param [7, false, [false]];
+    _allowLocation = param [8, true, [false]];
 } else {
     // Direct mode: object passed
     _radiusMode = false;
@@ -69,6 +71,7 @@ if (typeName _firstParam == "ARRAY") then {
     _activationCode = param [4, "", [""]];
     _deactivationCode = param [5, "", [""]];
     _availableToFutureLaptops = param [6, false, [false]];
+    _allowLocation = param [7, true, [false]];
 };
 
 // Validate object in direct mode
@@ -92,7 +95,7 @@ if (_radiusMode) exitWith {
         private _obj = _x;
         // Register each object (skip logic modules)
         if (typeOf _obj find "Logic" < 0) then {
-            [_obj, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops] call FUNC(addCustomDeviceZeusMain);
+            [_obj, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation] call FUNC(addCustomDeviceZeusMain);
             _registeredCount = _registeredCount + 1;
         };
     } forEach _allObjects;
@@ -103,6 +106,7 @@ if (_radiusMode) exitWith {
 };
 
 // Store activation/deactivation code on the object
+_targetObject setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // General #3
 _targetObject setVariable ["ROOT_CYBERWARFARE_ACTIVATIONCODE", _activationCode, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_DEACTIVATIONCODE", _deactivationCode, true];
 

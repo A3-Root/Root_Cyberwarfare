@@ -24,6 +24,7 @@ class CfgFunctions {
 			class initBreachIntegration {};
 			class initSettings {};
 			class isDeviceAccessible {};
+			class gridLabel {};
 			class listDevicesInSubnet {};
 		};
 
@@ -61,6 +62,7 @@ class CfgFunctions {
 			class gui_databaseAction {};
 			class gui_customAction {};
 			class gui_vehicleAction {};
+			class gui_gpsAction {};
 			class gui_appDoors {};
 			class gui_appLights {};
 			class gui_appDrones {};

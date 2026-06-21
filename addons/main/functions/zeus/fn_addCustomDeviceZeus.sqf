@@ -58,7 +58,8 @@ _dialogControls append [
     ["EDIT", ["Custom Device Name", "Name that will appear in the terminal for this device"], ["Custom Device"]],
     ["EDIT:CODE", ["Activation Code", "Code to run in a SCHEDULED environment (spawn) when device is activated. The code is run on the player who activated the device. Default parameters ['_computer', '_customObject', '_playerNetID']"], ["hint str format ['Custom Activation triggered USING: %1 ---- ON: %2 ---- BY: %3 (Client ID: %4)', getText (configOf (_this select 0) >> 'displayName'), getText (configOf (_this select 1) >> 'displayName'), name (_this select 2), _this select 3];", {}, 7]],
     ["EDIT:CODE", ["Deactivation Code", "Code to run in a SCHEDULED environment (spawn) when device is deactivated. The code is run on the player who deactivated the device. Default parameters ['_computer', '_customObject', '_playerNetID']"], ["hint str format ['Custom Deactivation triggered USING: %1 ---- ON: %2 ---- BY: %3 (Client ID: %4)', getText (configOf (_this select 0) >> 'displayName'), getText (configOf (_this select 1) >> 'displayName'), name (_this select 2), _this select 3];", {}, 7]],
-    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false]
+    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false],
+    ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true]
 ];
 
 // Add a checkbox for each computer
@@ -92,6 +93,8 @@ _dialogControls append [
         _resultIndex = _resultIndex + 1;
         private _availableToFutureLaptops = _results select _resultIndex;
         _resultIndex = _resultIndex + 1;
+        private _allowLocation = _results select _resultIndex;
+        _resultIndex = _resultIndex + 1;
 
         // Process laptop checkboxes
         private _selectedComputers = [];
@@ -111,10 +114,10 @@ _dialogControls append [
         if (_useRadiusMode) then {
             // Radius mode: Pass position array instead of logic object
             private _centerPos = getPosATL _logic;
-            [_centerPos, _radius, _execUserId, _selectedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
+            [_centerPos, _radius, _execUserId, _selectedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
         } else {
             // Direct mode: Register single object
-            [_targetObject, _execUserId, _selectedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
+            [_targetObject, _execUserId, _selectedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
             ["Custom Device Added!"] call zen_common_fnc_showMessage;
         };
     },
