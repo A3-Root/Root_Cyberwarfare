@@ -17,7 +17,7 @@
  * Public: No
  */
 
-params ["_owner", "_computerNetId", "_vehicleId", "_action", ["_commandPath", ""]];
+params ["_owner", "_computerNetId", "_vehicleId", "_action", ["_commandPath", ""], ["_value", 0]];
 
 private _computer = objectFromNetId _computerNetId;
 private _reply = {
@@ -27,7 +27,9 @@ private _reply = {
 
 if (isNull _computer) exitWith {};
 _action = toLower _action;
-private _valid = ["lock", "unlock", "engineon", "engineoff", "lightson", "lightsoff", "brakes", "alarm", "refuel", "drain", "speedup", "slowdown"];
+if (!(_value isEqualType 0)) then { _value = parseNumber (str _value); };
+// setfuel/setspeed/setalarm carry a numeric slider value matching the CLI's fine-tuning (Vehicles #1).
+private _valid = ["lock", "unlock", "engineon", "engineoff", "lightson", "lightsoff", "brakes", "alarm", "refuel", "drain", "speedup", "slowdown", "setfuel", "setspeed", "setalarm"];
 if !(_action in _valid) exitWith {};
 
 if !([_computer, DEVICE_TYPE_VEHICLE, _vehicleId, _commandPath] call FUNC(isDeviceAccessible)) exitWith
@@ -47,9 +49,9 @@ private _needFlag = switch (_action) do {
 	case "engineon"; case "engineoff": { "ROOT_CYBERWARFARE_VEHICLE_ENGINE" };
 	case "lightson"; case "lightsoff": { "ROOT_CYBERWARFARE_VEHICLE_LIGHTS" };
 	case "brakes": { "ROOT_CYBERWARFARE_VEHICLE_BRAKES" };
-	case "alarm": { "ROOT_CYBERWARFARE_VEHICLE_DOOR" };
-	case "refuel"; case "drain": { "ROOT_CYBERWARFARE_VEHICLE_FUEL" };
-	case "speedup"; case "slowdown": { "ROOT_CYBERWARFARE_VEHICLE_SPEED" };
+	case "alarm"; case "setalarm": { "ROOT_CYBERWARFARE_VEHICLE_DOOR" };
+	case "refuel"; case "drain"; case "setfuel": { "ROOT_CYBERWARFARE_VEHICLE_FUEL" };
+	case "speedup"; case "slowdown"; case "setspeed": { "ROOT_CYBERWARFARE_VEHICLE_SPEED" };
 	default { "" };
 };
 if (_needFlag isNotEqualTo "" && {!(_vehicle getVariable [_needFlag, false])}) exitWith {
@@ -77,6 +79,32 @@ switch (_action) do
 	case "lightsoff": { [_vehicle, false] remoteExec ["setPilotLight", _vehicle]; _msg = "Lights off."; };
 	case "refuel":    { [_vehicle, 1] remoteExec ["setFuel", _vehicle]; _msg = "Fuel/battery set to 100%."; };
 	case "drain":     { [_vehicle, 0] remoteExec ["setFuel", _vehicle]; _msg = "Fuel/battery drained."; };
+	case "setfuel": {
+		private _fmin = _vehicle getVariable ["ROOT_CYBERWARFARE_FUEL_MIN", 0];
+		private _fmax = _vehicle getVariable ["ROOT_CYBERWARFARE_FUEL_MAX", 100];
+		if (_value < _fmin || _value > _fmax) exitWith { [_owner, format ["Fuel must be %1-%2%3.", _fmin, _fmax, "%"], false] call _reply; };
+		// Mirror the CLI: >100 destroys the vehicle, otherwise set the fuel fraction.
+		if (_value > 100) then { [_vehicle, 1] remoteExec ["setDamage", _vehicle]; }
+		else { [_vehicle, (_value / 100) max 0] remoteExec ["setFuel", _vehicle]; };
+		_msg = format ["Fuel set to %1%2.", round _value, "%"];
+	};
+	case "setspeed": {
+		private _smin = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_MIN", -50];
+		private _smax = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_MAX", 50];
+		if (_value < _smin || _value > _smax) exitWith { [_owner, format ["Speed must be %1 to %2 km/h.", _smin, _smax], false] call _reply; };
+		private _vel = velocity _vehicle;
+		private _dir = getDir _vehicle;
+		[_vehicle, [(_vel select 0) + (sin _dir * _value), (_vel select 1) + (cos _dir * _value), _vel select 2]] remoteExec ["setVelocity", _vehicle];
+		_msg = format ["Speed adjusted by %1 km/h.", round _value];
+	};
+	case "setalarm": {
+		private _amin = _vehicle getVariable ["ROOT_CYBERWARFARE_ALARM_MIN", 1];
+		private _amax = _vehicle getVariable ["ROOT_CYBERWARFARE_ALARM_MAX", 30];
+		if (_value < _amin || _value > _amax) exitWith { [_owner, format ["Alarm must be %1-%2 s.", _amin, _amax], false] call _reply; };
+		if (_value < 1) then { _value = 1; };
+		[_vehicle, _value] remoteExec ["Root_fnc_localSoundBroadcast", [0, -2] select isDedicated, false];
+		_msg = format ["Alarm triggered for %1s.", round _value];
+	};
 	case "alarm": {
 		private _dur = _vehicle getVariable ["ROOT_CYBERWARFARE_ALARM_MIN", 5];
 		[_vehicle, _dur] remoteExec ["Root_fnc_localSoundBroadcast", [0, -2] select isDedicated, false];

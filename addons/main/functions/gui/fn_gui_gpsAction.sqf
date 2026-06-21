@@ -33,7 +33,10 @@ if !([_computer, DEVICE_TYPE_GPS_TRACKER, _gpsId, _commandPath] call FUNC(isDevi
 	[_owner, format ["Access denied to tracker %1", _gpsId], false] call _reply;
 };
 
-private _trackers = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [DEVICE_TYPE_GPS_TRACKER, []];
+// ALL_DEVICES is ordered [doors,lights,drones,databases,custom,gps,vehicles,powergrids] = type-1, so
+// GPS trackers live at index 5, NOT DEVICE_TYPE_GPS_TRACKER (6). Using the type as the index pulled the
+// vehicles array, so the tracker was never found -> "Access denied" despite access being granted (GPS #1).
+private _trackers = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [5, []];
 private _idx = _trackers findIf { (_x select 0) == _gpsId };
 if (_idx == -1) exitWith { [_owner, format ["Access denied to tracker %1", _gpsId], false] call _reply; };
 
