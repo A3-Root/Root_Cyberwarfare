@@ -76,16 +76,6 @@ if (_trackerIdNum != 0) then {
 
                 if ((isNil "_powerCost") || (_powerCost < 1)) then { _powerCost = _trackerObject getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_COST", 10] };
 
-                // Get battery from computer
-                private _battery = _computer getVariable ["AE3_power_internal", objNull];
-                if (isNull _battery) then {
-                    _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_BATTERY";
-                    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    missionNamespace setVariable [_nameOfVariable, true, true];
-                    breakTo "exit";
-                };
-                private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
-
                 // Check if already being tracked by this computer
                 if ((_currentStatus select 0) == "Tracking") then {
                     _string = format ["Tracker '%1' (ID: %2) is already being tracked.", _trackerName, _trackerIdNum];
@@ -124,45 +114,18 @@ if (_trackerIdNum != 0) then {
 
                             ["root_cyberwarfare_updateTrackerStatus", [_storedTrackerId, (_allGpsTrackers select _forEachIndex) select 8]] call CBA_fnc_serverEvent;
                         } else {
-                            private _changeWh = _powerCost;
-                            _string = format ['Power Cost: %1Wh', _changeWh];
-                            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                            _string = format ['Are you sure? (Y/N): '];
-                            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-
-                            private _time = time;
-                            _time = _time + 10;
-                            private _continue = false;
-                            while{time < _time} do {
-                                private _areYouSure = [_computer] call AE3_armaos_fnc_shell_stdin;
-                                if((_areYouSure isEqualTo "y") || (_areYouSure isEqualTo "Y")) then {
-                                    _continue = true;
-                                    break;
-                                };
-                                if((_areYouSure isEqualTo "n") || (_areYouSure isEqualTo "N")) then {
-                                    missionNamespace setVariable [_nameOfVariable, true, true];
-                                    _continue = false;
-                                    breakTo "exit";
-                                };
-                            };
-
-                            if (!_continue) then {
-                                _string = format ['Confirmation Timed Out. Aborting...'];
-                                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                                missionNamespace setVariable [_nameOfVariable, true, true];
-                                breakTo "exit";
-                            };
-                            if(_batteryLevel < ((_powerCost)/1000)) then {
+                            if !([_computer, _powerCost] call FUNC(checkPowerAvailable)) then {
                                 _string = format ['Error! Insufficient Power!'];
                                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                                 breakTo "exit";
                             };
-                            
-                            private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
-                            private _newLevel = _batteryLevel - (_changeWh/1000);
-                            [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
-                            _string = format ['New Power Level: %1Wh', _newLevel*1000];
-                            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+
+                            if !([_computer, _powerCost] call FUNC(getUserConfirmation)) then {
+                                missionNamespace setVariable [_nameOfVariable, true, true];
+                                breakTo "exit";
+                            };
+
+                            [_computer, _powerCost] call FUNC(consumePower);
 
                             // Start tracking
                             private _markerName = if (_customMarker != "") then { _customMarker } else { format ["ROOT_GpsTracker_%1_%2", _trackerIdNum, round(random 10000)] };

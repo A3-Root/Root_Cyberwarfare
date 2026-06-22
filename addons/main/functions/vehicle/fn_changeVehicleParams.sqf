@@ -84,15 +84,6 @@ if (_vehicleIDNum != 0) then {
     private _foundVehicle = false;
     private _invalidOption = true;
 
-    // Get battery from computer
-    private _battery = _computer getVariable ["AE3_power_internal", objNull];
-    if (isNull _battery) then {
-        _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_BATTERY";
-        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-        missionNamespace setVariable [_nameOfVariable, true, true];
-        breakTo "exit";
-    };
-    private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
     private _powerCost = 2;
 
     {
@@ -111,7 +102,7 @@ if (_vehicleIDNum != 0) then {
         ];
         private _vehicleObject = objectFromNetId _vehicleNetID;
         _powerCost = _vehicleObject getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", 2];
-        if(_batteryLevel < ((_powerCost)/1000)) then {
+        if !([_computer, _powerCost] call FUNC(checkPowerAvailable)) then {
             _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             breakTo "exit";
@@ -120,29 +111,7 @@ if (_vehicleIDNum != 0) then {
         if ((_vehicleIDNum == _storedDeviceID) && (alive _vehicleObject)) then {
             if ([_computer, 7, _storedDeviceID, _commandPath] call Root_fnc_isDeviceAccessible) then {
                 _foundVehicle = true;
-                private _changeWh = _powerCost;
-                _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _changeWh];
-                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                _string = localize "STR_ROOT_CYBERWARFARE_CONFIRM_PROMPT";
-                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                private _time = time;
-                _time = _time + 10;
-                private _continue = false;
-                while{time < _time} do {
-                    private _areYouSure = [_computer] call AE3_armaos_fnc_shell_stdin;
-                    if((_areYouSure isEqualTo "y") || (_areYouSure isEqualTo "Y")) then {
-                        _continue = true;
-                        break;
-                    };
-                    if((_areYouSure isEqualTo "n") || (_areYouSure isEqualTo "N")) then {
-                        missionNamespace setVariable [_nameOfVariable, true, true];
-                        _continue = false;
-                        breakTo "exit";
-                    };
-                };
-                if (!_continue) then {
-                    _string = localize "STR_ROOT_CYBERWARFARE_POWERGRID_CONFIRMATION_TIMEOUT";
-                    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                if !([_computer, _powerCost] call FUNC(getUserConfirmation)) then {
                     missionNamespace setVariable [_nameOfVariable, true, true];
                     breakTo "exit";
                 };
@@ -404,12 +373,7 @@ if (_vehicleIDNum != 0) then {
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         breakTo "exit";
     } else {
-        private _currentBatteryLevel = _battery getVariable "AE3_power_batteryLevel";
-        private _changeWh = _powerCost;
-        private _newLevel = _currentBatteryLevel - (_changeWh/1000);
-        [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
-        _string = format [localize "STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL", _newLevel*1000];
-        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        [_computer, _powerCost] call FUNC(consumePower);
     };
 } else {
     _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_VEHICLE_ID", _vehicleID];

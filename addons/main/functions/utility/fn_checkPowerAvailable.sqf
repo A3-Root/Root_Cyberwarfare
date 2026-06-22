@@ -34,22 +34,19 @@ if (_powerRequiredWh <= 0) exitWith {
     true
 };
 
-// Get the laptop's internal battery (each laptop has its own battery object)
-private _battery = _computer getVariable ["AE3_power_internal", objNull];
+private _batteryStatus = [_computer, _powerRequiredWh] call FUNC(getBatteryStatus);
+_batteryStatus params ["_hasBattery", "_battery", "_batteryLevelWh", "_batteryPercent", "_batteryCapacityWh", "_remainingWh"];
 DEBUG_LOG_1("Battery object: %1",_battery);
 
-if (isNull _battery) exitWith {
+if (!_hasBattery) exitWith {
     ROOT_CYBERWARFARE_LOG_ERROR("checkPowerAvailable: Battery not found or laptop has no internal battery");
     DEBUG_LOG("Battery is null - no power available");
     false
 };
 
-private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
-private _powerRequiredKwh = WH_TO_KWH(_powerRequiredWh);
+DEBUG_LOG_3("Battery level: %1 Wh, Required: %2 Wh, Remaining: %3 Wh",_batteryLevelWh,_powerRequiredWh,_remainingWh);
 
-DEBUG_LOG_3("Battery level: %1 kWh, Required: %2 kWh (%3 Wh)",_batteryLevel,_powerRequiredKwh,_powerRequiredWh);
-
-private _hasPower = _batteryLevel >= _powerRequiredKwh;
+private _hasPower = _batteryLevelWh >= _powerRequiredWh;
 DEBUG_LOG_1("Power check result: %1",_hasPower);
 
 _hasPower

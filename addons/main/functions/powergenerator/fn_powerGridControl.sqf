@@ -86,15 +86,6 @@ if (_allPowerGrids isEqualTo []) exitWith {
     missionNamespace setVariable [_nameOfVariable, true, true];
 };
 
-// Get battery and check power
-private _battery = _computer getVariable ["AE3_power_internal", objNull];
-if (isNull _battery) exitWith {
-    _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_BATTERY";
-    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-    missionNamespace setVariable [_nameOfVariable, true, true];
-};
-private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
-
 // Get power cost from CBA setting
 private _powerCost = missionNamespace getVariable [SETTING_POWERGRID_COST, 15];
 
@@ -129,7 +120,7 @@ private _foundGrid = false;
         };
 
         // Check power availability
-        if (_batteryLevel < (_powerCost/1000)) exitWith {
+        if !([_computer, _powerCost] call FUNC(checkPowerAvailable)) exitWith {
             _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             _foundGrid = true;
@@ -143,31 +134,8 @@ private _foundGrid = false;
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         };
 
-        // Show power cost and ask for confirmation
-        _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _powerCost];
-        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-        _string = localize "STR_ROOT_CYBERWARFARE_CONFIRM_PROMPT";
-        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-
-        private _time = time + 10; // 10 second timeout
-        private _continue = false;
-        while {time < _time} do {
-            private _areYouSure = [_computer] call AE3_armaos_fnc_shell_stdin;
-            if ((_areYouSure isEqualTo "y") || (_areYouSure isEqualTo "Y")) then {
-                _continue = true;
-                break;
-            };
-            if ((_areYouSure isEqualTo "n") || (_areYouSure isEqualTo "N")) then {
-                _string = localize "STR_ROOT_CYBERWARFARE_POWERGRID_CANCELLED";
-                [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                missionNamespace setVariable [_nameOfVariable, true, true];
-                _continue = false;
-                breakTo "exit";
-            };
-        };
-
-        if (!_continue) exitWith {
-            _string = localize "STR_ROOT_CYBERWARFARE_POWERGRID_CONFIRMATION_TIMEOUT";
+        if !([_computer, _powerCost] call FUNC(getUserConfirmation)) exitWith {
+            _string = localize "STR_ROOT_CYBERWARFARE_POWERGRID_CANCELLED";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             missionNamespace setVariable [_nameOfVariable, true, true];
             _foundGrid = true;
@@ -264,19 +232,7 @@ private _foundGrid = false;
         };
 
         if (_success) then {
-            // Consume power
-            private _currentBatteryLevel = _battery getVariable "AE3_power_batteryLevel";
-            private _changeWh = _powerCost;
-            private _newLevel = _currentBatteryLevel - (_changeWh/1000);
-            [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
-
-            // Don't show power cost again (already shown before confirmation)
-            private _newLevelWh = _newLevel * 1000;
-            if (isNil "_newLevelWh" || {!finite _newLevelWh}) then {
-                _newLevelWh = 0;
-            };
-            _string = format ["New Power Level: %1Wh", _newLevelWh];
-            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+            [_computer, _powerCost] call FUNC(consumePower);
         };
     };
 } forEach _allPowerGrids;

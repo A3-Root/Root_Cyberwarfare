@@ -160,9 +160,6 @@
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_VEHICLES">
             <English>Error! No vehicle found.</English>
         </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_BATTERY">
-            <English>Error! Battery not found or laptop has no internal battery!</English>
-        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_BUILDINGS_CRITERIA">
             <English>Error! No accessible buildings found for the specified criteria.</English>
         </Key>
@@ -366,11 +363,11 @@
         <Key ID="STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL">
             <English>New Power Level: %1Wh</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_POWER_CONFIRM_DETAILS">
+            <English>Power Cost: %1 Wh. Current Battery: %2 Wh (%3%4). Remaining After Action: %5 Wh (%6%4).</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_POWER_COST">
             <English>Power Cost: %1Wh</English>
-        </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_POWER_COST_PREVIEW">
-            <English>Power Cost: %1Wh.</English>
         </Key>
     </Package>
     <Package name="PowerGrid">
@@ -379,9 +376,6 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_CANCELLED">
             <English>Operation cancelled by user.</English>
-        </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_CONFIRMATION_TIMEOUT">
-            <English>Confirmation timed out. Aborting...</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_DEACTIVATED">
             <English>Power grid deactivated: %1 lights turned OFF within %2m radius</English>

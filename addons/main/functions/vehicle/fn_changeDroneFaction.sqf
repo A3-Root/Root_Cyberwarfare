@@ -54,16 +54,6 @@ private _string = "";
 
 private _droneIdNum = parseNumber _droneId;
 
-// Get battery from computer
-private _battery = _computer getVariable ["AE3_power_internal", objNull];
-if (isNull _battery) then {
-    _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_BATTERY";
-    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-    missionNamespace setVariable [_nameOfVariable, true, true];
-    breakTo "exit";
-};
-private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
-
 _droneFaction = toLower _droneFaction;
 
 if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "west" || _droneFaction isEqualTo "east" || _droneFaction isEqualTo "guer" || _droneFaction isEqualTo "civ")) then {
@@ -123,45 +113,19 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
         _string = format ['Affected Drones: %1. Power Cost: %2Wh.', _countOfChangingDrones, (_countOfChangingDrones * _powerCostPerDrone)];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
-        if(_batteryLevel < ((_countOfChangingDrones * _powerCostPerDrone)/1000)) then {
+        private _changeWh = (_powerCostPerDrone * _countOfChangingDrones);
+        if !([_computer, _changeWh] call FUNC(checkPowerAvailable)) then {
             _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             missionNamespace setVariable [_nameOfVariable, true, true];
             breakTo "exit";
         };
 
-        private _changeWh = (_powerCostPerDrone * _countOfChangingDrones);
-        _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _changeWh];
-        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-        _string = localize "STR_ROOT_CYBERWARFARE_CONFIRM_PROMPT";
-        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-
-        private _time = time;
-        _time = _time + 10;
-        private _continue = false;
-        while{time < _time} do {
-            private _areYouSure = [_computer] call AE3_armaos_fnc_shell_stdin;
-            if((_areYouSure isEqualTo "y") || (_areYouSure isEqualTo "Y")) then {
-                _continue = true;
-                break;
-            };
-            if((_areYouSure isEqualTo "n") || (_areYouSure isEqualTo "N")) then {
-                missionNamespace setVariable [_nameOfVariable, true, true];
-                _continue = false;
-                breakTo "exit";
-            };
-        };
-        if (!_continue) then {
-            _string = localize "STR_ROOT_CYBERWARFARE_POWERGRID_CONFIRMATION_TIMEOUT";
-            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        if !([_computer, _changeWh] call FUNC(getUserConfirmation)) then {
             missionNamespace setVariable [_nameOfVariable, true, true];
             breakTo "exit";
         };
-        private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
-        private _newLevel = _batteryLevel - (_changeWh/1000);
-        [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
-        _string = format [localize "STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL", _newLevel*1000];
-        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        [_computer, _changeWh] call FUNC(consumePower);
         
         // Apply changes to all affected drones
         {
@@ -186,35 +150,14 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
                     _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _powerCostPerDrone];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
-                    if(_batteryLevel < (_powerCostPerDrone/1000)) then {
+                    if !([_computer, _powerCostPerDrone] call FUNC(checkPowerAvailable)) then {
                         _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                         missionNamespace setVariable [_nameOfVariable, true, true];
                         breakTo "exit";
                     };
 
-                    _string = localize "STR_ROOT_CYBERWARFARE_CONFIRM_PROMPT";
-                    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    
-                    private _time = time;
-                    _time = _time + 10;
-                    private _continue = false;
-                    while{time < _time} do {
-                        private _areYouSure = [_computer] call AE3_armaos_fnc_shell_stdin;
-                        if((_areYouSure isEqualTo "y") || (_areYouSure isEqualTo "Y")) then {
-                            _continue = true;
-                            break;
-                        };
-                        if((_areYouSure isEqualTo "n") || (_areYouSure isEqualTo "N")) then {
-                            missionNamespace setVariable [_nameOfVariable, true, true];
-                            _continue = false;
-                            breakTo "exit";
-                        };
-                    };
-
-                    if (!_continue) then {
-                        _string = localize "STR_ROOT_CYBERWARFARE_POWERGRID_CONFIRMATION_TIMEOUT";
-                        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                    if !([_computer, _powerCostPerDrone] call FUNC(getUserConfirmation)) then {
                         missionNamespace setVariable [_nameOfVariable, true, true];
                         breakTo "exit";
                     };
@@ -223,14 +166,7 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
                     [_drone] joinSilent _newGroup;
                     _string = localize "STR_ROOT_CYBERWARFARE_DRONE_FACTION_CHANGED";
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    private _batteryLevel = _battery getVariable "AE3_power_batteryLevel";
-                    private _changeWh = _powerCostPerDrone;
-                    private _newLevel = _batteryLevel - (_changeWh/1000);
-                    [_computer, _battery, _newLevel] remoteExec ["Root_fnc_removePower", 2];
-                    _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _changeWh];
-                    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    _string = format [localize "STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL", _newLevel*1000];
-                    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+                    [_computer, _powerCostPerDrone] call FUNC(consumePower);
                 } else {
                     _string = format [localize "STR_ROOT_CYBERWARFARE_DRONE_ALREADY_FACTION", _droneFaction];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;

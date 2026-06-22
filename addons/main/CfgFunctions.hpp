@@ -103,6 +103,7 @@ class CfgFunctions {
 			class copyDeviceLinksZeusMain {};
 			class detectBuildingDoors {};
 			class getAccessibleDevices {};
+			class getBatteryStatus {};
 			class getComputerIdentifier {};
 			class getObjectsInTriggerArea {};
 			class getPlayerFromComputer {};

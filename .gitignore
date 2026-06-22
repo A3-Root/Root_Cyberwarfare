@@ -1,14 +1,59 @@
+# =========================
+# HEMTT
+# =========================
+*.biprivatekey
+*.hemttprivatekey
 *.pbo
 .hemttout
 hemtt
 hemtt.exe
-*.biprivatekey
-.hemttprivatekey
+
+# =========================
+# Documentation / Wiki / Text
+# =========================
 *.md
+*.txt
 **/*.json
 !README*.md
-!releases/CHANGELOG.md
 !wiki/*
+TODO
+!releases/CHANGELOG.md
+!NOTEPAD.txt
+logs/**/*
+.code*
+.bak
+reference_files
+
+# =========================
+# Python
+# =========================
+__pycache__/
+
+# =========================
+# Dependencies / Scripts
+# =========================
+!.sh
+!.bat
+!requirements.txt
+
+# =========================
+# System / Environment
+# =========================
+build/.env
+!.env.example
+*.code-workspace
+.vscode/**/*
+.env
 *.exe
-*.txt
+
+# =========================
+# General / Miscellaneous
+# =========================
+
 releases/@root_cyberwarfare
+
+# =========================
+# Build artifacts / Logs
+# =========================
+*.log
+*.rpt

@@ -34,18 +34,18 @@ if (_powerWh <= 0) exitWith {
     true
 };
 
-// Get the laptop's internal battery (each laptop has its own battery object)
-private _battery = _computer getVariable ["AE3_power_internal", objNull];
+private _batteryStatus = [_computer, _powerWh] call FUNC(getBatteryStatus);
+_batteryStatus params ["_hasBattery", "_battery", "_batteryLevelWh", "_batteryPercent", "_batteryCapacityWh", "_remainingWh", "_remainingPercent"];
 DEBUG_LOG_1("Battery object: %1",_battery);
 
-if (isNull _battery) exitWith {
+if (!_hasBattery) exitWith {
     ROOT_CYBERWARFARE_LOG_ERROR("consumePower: Battery not found or laptop has no internal battery");
     DEBUG_LOG("Battery is null - cannot consume power");
     false
 };
 
-private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
 private _powerKwh = WH_TO_KWH(_powerWh);
+private _batteryLevel = _batteryLevelWh / 1000;
 private _newLevel = _batteryLevel - _powerKwh;
 
 DEBUG_LOG_4("Power consumption - Old level: %1 kWh, Consuming: %2 kWh (%3 Wh), New level: %4 kWh",_batteryLevel,_powerKwh,_powerWh,_newLevel);

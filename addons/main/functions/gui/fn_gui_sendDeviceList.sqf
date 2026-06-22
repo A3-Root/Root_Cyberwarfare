@@ -25,4 +25,4 @@ if (isNull _computer) exitWith {};
 private _list = [_computer, _deviceType, _commandPath] call FUNC(getAccessibleDevices);
 
 // Registry entries are already lightweight (ids + netIds). Reply to the requesting client only.
-["root_cyberwarfare_gui_devList", [_deviceType, _list], _owner] call CBA_fnc_ownerEvent;
+["root_cyberwarfare_gui_devList", [_deviceType, _list, _computerNetId], _owner] call CBA_fnc_ownerEvent;

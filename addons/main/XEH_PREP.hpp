@@ -83,6 +83,7 @@ PREP(consumePower);
 PREP(copyDeviceLinksZeusMain);
 PREP(detectBuildingDoors);
 PREP(getAccessibleDevices);
+PREP(getBatteryStatus);
 PREP(getComputerIdentifier);
 PREP(getObjectsInTriggerArea);
 PREP(getPlayerFromComputer);

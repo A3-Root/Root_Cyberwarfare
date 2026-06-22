@@ -27,11 +27,28 @@ if (isNull _computer) exitWith {
     false
 };
 
-// Display power cost if provided
+private _canConfirm = true;
 if (_powerCost > 0) then {
-    private _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST_PREVIEW", _powerCost];
-    [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+    private _batteryStatus = [_computer, _powerCost] call FUNC(getBatteryStatus);
+    _batteryStatus params ["_hasBattery", "_battery", "_currentWh", "_currentPercent", "_capacityWh", "_remainingWh", "_remainingPercent"];
+    if (_hasBattery isEqualTo false) then {
+        ROOT_CYBERWARFARE_LOG_ERROR("getUserConfirmation: Battery not found or laptop has no internal battery");
+        _canConfirm = false;
+    } else {
+        private _string = format [
+            localize "STR_ROOT_CYBERWARFARE_POWER_CONFIRM_DETAILS",
+            round _powerCost,
+            round _currentWh,
+            round _currentPercent,
+            "%",
+            round _remainingWh,
+            round _remainingPercent
+        ];
+        [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+    };
 };
+
+if (!_canConfirm) exitWith { false };
 
 // Display confirmation prompt
 private _string = localize "STR_ROOT_CYBERWARFARE_CONFIRM_PROMPT";
