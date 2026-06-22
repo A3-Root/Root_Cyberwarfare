@@ -28,7 +28,7 @@ private _reply = {
 if (isNull _computer) exitWith {};
 _action = toLower _action;
 if (!(_value isEqualType 0)) then { _value = parseNumber (str _value); };
-// setfuel/setspeed/setalarm carry a numeric slider value matching the CLI's fine-tuning (Vehicles #1).
+// setfuel/setspeed/setalarm carry a numeric slider value matching the CLI's fine-tuning.
 private _valid = ["lock", "unlock", "engineon", "engineoff", "lightson", "lightsoff", "brakes", "alarm", "refuel", "drain", "speedup", "slowdown", "setfuel", "setspeed", "setalarm"];
 if !(_action in _valid) exitWith {};
 
@@ -44,7 +44,7 @@ if (_idx == -1) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERRO
 private _vehicle = objectFromNetId ((_vehicles select _idx) select 1);
 if (isNull _vehicle || {!alive _vehicle}) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_VEHICLE", _vehicleId], false] call _reply; };
 
-// Feature gating: the action must be permitted for this vehicle (set at registration). Clear UX (#2).
+// Feature gating ensures the action is permitted for this vehicle.
 private _needFlag = switch (_action) do {
 	case "engineon"; case "engineoff": { "ROOT_CYBERWARFARE_VEHICLE_ENGINE" };
 	case "lightson"; case "lightsoff": { "ROOT_CYBERWARFARE_VEHICLE_LIGHTS" };
@@ -61,7 +61,7 @@ if (_action isEqualTo "brakes" && {!(_vehicle isKindOf "LandVehicle")}) exitWith
 	[_owner, localize "STR_ROOT_CYBERWARFARE_BRAKES_LAND_ONLY", false] call _reply;
 };
 
-// Power check + consume (clear feedback on low battery, General #2).
+// Power check and consumption happen before the vehicle action is applied.
 private _cost = _vehicle getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", 2];
 if !([_computer, _cost] call FUNC(checkPowerAvailable)) exitWith {
 	[_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply;
@@ -92,10 +92,32 @@ switch (_action) do
 		private _smin = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_MIN", -50];
 		private _smax = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_MAX", 50];
 		if (_value < _smin || _value > _smax) exitWith { [_owner, format ["Speed must be %1 to %2 km/h.", _smin, _smax], false] call _reply; };
-		private _vel = velocity _vehicle;
-		private _dir = getDir _vehicle;
-		[_vehicle, [(_vel select 0) + (sin _dir * _value), (_vel select 1) + (cos _dir * _value), _vel select 2]] remoteExec ["setVelocity", _vehicle];
-		_msg = format ["Speed adjusted by %1 km/h.", round _value];
+		private _oldHandle = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_LOCK_PFH", -1];
+		if (_oldHandle >= 0) then {
+			[_oldHandle] call CBA_fnc_removePerFrameHandler;
+			_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK_PFH", -1, true];
+		};
+		if ((abs _value) < 0.1) then {
+			_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", 0, true];
+			_msg = "Speed lock released.";
+		} else {
+			_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", _value, true];
+			private _handle = [{
+				params ["_args", "_handle"];
+				_args params ["_vehicle"];
+				private _target = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", 0];
+				if (!alive _vehicle || {(abs _target) < 0.1}) exitWith {
+					[_handle] call CBA_fnc_removePerFrameHandler;
+					_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK_PFH", -1, true];
+				};
+				private _dir = getDir _vehicle;
+				private _speed = _target / 3.6;
+				private _vel = velocity _vehicle;
+				[_vehicle, [sin _dir * _speed, cos _dir * _speed, _vel select 2]] remoteExec ["setVelocity", _vehicle];
+			}, 0.1, [_vehicle]] call CBA_fnc_addPerFrameHandler;
+			_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK_PFH", _handle, true];
+			_msg = format ["Speed locked at %1 km/h.", round _value];
+		};
 	};
 	case "setalarm": {
 		private _amin = _vehicle getVariable ["ROOT_CYBERWARFARE_ALARM_MIN", 1];

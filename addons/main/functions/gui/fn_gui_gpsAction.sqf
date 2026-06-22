@@ -1,9 +1,8 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Server-side GPS tracker action for the GUI GPS app. "track" marks the tracker as
- * tracked so its location is revealed on the map (the GUI's [Map] link); the position keeps
- * updating to the tracker's last pinged location. Runs on the server. (GPS #1/#2)
+ * Description: Server-side GPS tracker action for the GUI GPS app. Starts the same tracking
+ * workflow as the terminal command and reports the result to the desktop.
  *
  * Arguments:
  * 0: _owner <NUMBER> - clientOwner of the operator (reply target)
@@ -33,9 +32,7 @@ if !([_computer, DEVICE_TYPE_GPS_TRACKER, _gpsId, _commandPath] call FUNC(isDevi
 	[_owner, format ["Access denied to tracker %1", _gpsId], false] call _reply;
 };
 
-// ALL_DEVICES is ordered [doors,lights,drones,databases,custom,gps,vehicles,powergrids] = type-1, so
-// GPS trackers live at index 5, NOT DEVICE_TYPE_GPS_TRACKER (6). Using the type as the index pulled the
-// vehicles array, so the tracker was never found -> "Access denied" despite access being granted (GPS #1).
+// The global device registry stores GPS trackers at index 5.
 private _trackers = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [5, []];
 private _idx = _trackers findIf { (_x select 0) == _gpsId };
 if (_idx == -1) exitWith { [_owner, format ["Access denied to tracker %1", _gpsId], false] call _reply; };
@@ -43,7 +40,23 @@ if (_idx == -1) exitWith { [_owner, format ["Access denied to tracker %1", _gpsI
 private _tracker = objectFromNetId ((_trackers select _idx) select 1);
 if (isNull _tracker) exitWith { [_owner, format ["Access denied to tracker %1", _gpsId], false] call _reply; };
 
-_tracker setVariable ["ROOT_CYBERWARFARE_GPS_TRACKED", true, true];
+private _entry = _trackers select _idx;
+_entry params ["_storedTrackerId", "_trackerNetId", "_trackerName", "_trackingTime", "_updateFrequency", "_customMarker", "", "", "_currentStatus", "_allowRetracking", "_lastPingTimer", "_powerCost", ["_ownersSelection", [[], [], []]]];
+if ((_currentStatus param [0, "Untracked"]) isEqualTo "Tracking") exitWith {
+	[_owner, format ["Tracker '%1' is already being tracked.", _trackerName], false] call _reply;
+};
+if (((_currentStatus param [0, "Untracked"]) in ["Completed", "Tracked", "Untrackable", "Disabled"]) && {!_allowRetracking}) exitWith {
+	[_owner, format ["Tracker '%1' cannot be tracked again.", _trackerName], false] call _reply;
+};
+
+if ((isNil "_powerCost") || {_powerCost < 1}) then { _powerCost = _tracker getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_COST", 10]; };
+if !([_computer, _powerCost] call FUNC(checkPowerAvailable)) exitWith {
+	[_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply;
+};
+[_computer, _powerCost] call FUNC(consumePower);
+
+private _markerName = if (_customMarker isNotEqualTo "") then { _customMarker } else { format ["ROOT_GpsTracker_%1_%2", _gpsId, round (random 10000)] };
+[_tracker, _markerName, _trackingTime, _updateFrequency, _storedTrackerId, _computer, _allowRetracking, _gpsId, _trackerName, _owner, _lastPingTimer, _ownersSelection] remoteExec ["Root_fnc_gpsTrackerServer", 2];
 
 ["root_cyberwarfare_deviceStateChanged", [DEVICE_TYPE_GPS_TRACKER, _gpsId, "track"]] call CBA_fnc_serverEvent;
-[_owner, "Tracking active - location revealed on the map.", true] call _reply;
+[_owner, "Tracking active.", true] call _reply;

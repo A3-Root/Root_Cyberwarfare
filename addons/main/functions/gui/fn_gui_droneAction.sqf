@@ -28,18 +28,18 @@ private _reply = {
 if (isNull _computer) exitWith {};
 _faction = toLower _faction;
 
-// Disable action (#2): permanently take the drone offline (mirrors the CLI Disable). Power-checked.
+// The disable action permanently destroys the drone after the power check succeeds.
 if (_faction isEqualTo "disable") exitWith {
 	private _drones = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [2, []];
 	private _idx = _drones findIf { (_x select 0) == _droneId };
 	if (_idx == -1) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DRONE", _droneId], false] call _reply; };
 	private _drone = objectFromNetId ((_drones select _idx) select 1);
 	if (isNull _drone) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DRONE", _droneId], false] call _reply; };
+	if (!alive _drone || {damage _drone >= 1}) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_DRONE_ALREADY_DISABLED", false] call _reply; };
 	private _cost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_DRONE_DISABLE_EDIT", 10];
 	if !([_computer, _cost] call FUNC(checkPowerAvailable)) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply; };
 	[_computer, _cost] call FUNC(consumePower);
-	{ _drone disableAI _x } forEach ["MOVE", "TARGET", "AUTOTARGET", "FSM", "PATH"];
-	_drone setVariable ["ROOT_CYBERWARFARE_DRONE_DISABLED", true, true];
+	(vehicle _drone) setDamage 1;
 	["root_cyberwarfare_deviceStateChanged", [DEVICE_TYPE_DRONE, _droneId, "disable"]] call CBA_fnc_serverEvent;
 	[_owner, localize "STR_ROOT_CYBERWARFARE_DRONE_DISABLED_SUCCESS", true] call _reply;
 };

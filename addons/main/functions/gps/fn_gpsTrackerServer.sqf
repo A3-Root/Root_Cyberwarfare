@@ -36,20 +36,21 @@ private _allGpsTrackers = _allDevices param [5, []];
 
 {
     if ((_x select 0) == _trackerId) then {
-        // [_deviceId, _netId, _trackerName, _trackingTime, _updateFrequency, _customMarker, _linkedComputers, _availableToFutureLaptops, ["Untracked", 0, ""], _allowRetracking, _lastPingTimer, _powerCost];
+        // [_deviceId, _netId, _trackerName, _trackingTime, _updateFrequency, _customMarker, _linkedComputers, _availableToFutureLaptops, ["Untracked", 0, ""], _allowRetracking, _lastPingTimer, _powerCost, _ownersSelection]
         _allGpsTrackers set [_forEachIndex, [
-            _x select 0, 
-            _x select 1, 
-            _x select 2, 
-            _x select 3, 
-            _x select 4, 
-            _x select 5, 
-            _x select 6, 
-            _x select 7, 
+            _x select 0,
+            _x select 1,
+            _x select 2,
+            _x select 3,
+            _x select 4,
+            _x select 5,
+            _x select 6,
+            _x select 7,
             ["Tracking", time, _markerName],
             _x select 9,
             _x select 10,
-            _x select 11
+            _x select 11,
+            _x param [12, [[], [], []]]
         ]];
         _allDevices set [5, _allGpsTrackers];
         missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
@@ -108,7 +109,7 @@ while {time < _endTime} do {
 uiSleep 0.5; // Small delay to ensure client has finished
 
 // Tracking completed - update status
-private _newStatus = "Completed"; 
+private _newStatus = "Completed";
 if !(_allowRetracking) then {
     _newStatus = "Untrackable";
 };
@@ -120,18 +121,19 @@ _allGpsTrackers = _allDevices param [5, []];
 {
     if ((_x select 0) == _trackerId) then {
         _allGpsTrackers set [_forEachIndex, [
-            _x select 0, 
-            _x select 1, 
-            _x select 2, 
-            _x select 3, 
-            _x select 4, 
-            _x select 5, 
-            _x select 6, 
-            _x select 7, 
+            _x select 0,
+            _x select 1,
+            _x select 2,
+            _x select 3,
+            _x select 4,
+            _x select 5,
+            _x select 6,
+            _x select 7,
             [_newStatus, time, _markerName],
             _x select 9,
             _x select 10,
-            _x select 11
+            _x select 11,
+            _x param [12, [[], [], []]]
         ]];
         _allDevices set [5, _allGpsTrackers];
         missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];

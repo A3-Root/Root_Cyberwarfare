@@ -20,6 +20,7 @@ private _populate = {
 		private _i = _listCtrl lbAdd format [localize "STR_ROOT_CYBERWARFARE_GUI_GPS_ENTRY", _name, _id, _statusStr];
 		// Store the tracker object netId so the map window can follow it.
 		_listCtrl lbSetData [_i, _netId];
+		_listCtrl lbSetValue [_i, _id];
 	} forEach _list;
 };
 
@@ -29,6 +30,8 @@ private _track = {
 	if (_sel < 0) exitWith {};
 	private _netId = _listCtrl lbData _sel;
 	if (_netId isEqualTo "") exitWith {};
+	private _id = _listCtrl lbValue _sel;
+	["root_cyberwarfare_gui_gpsAction", [clientOwner, netId _computer, _id, "track", ""]] call CBA_fnc_serverEvent;
 	["RootCW_GpsMap", [_netId, _listCtrl lbText _sel]] call AE3_desktop_fnc_wm_createWindow;
 };
 
