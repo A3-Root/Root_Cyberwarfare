@@ -17,7 +17,7 @@
  * Public: No
  */
 
-params ["_owner", "_computerNetId", "_vehicleId", "_action", ["_commandPath", ""], ["_value", 0]];
+params ["_owner", "_computerNetId", "_vehicleId", "_action", ["_commandPath", ""], ["_value", 0], ["_lock", false]];
 
 private _computer = objectFromNetId _computerNetId;
 private _reply = {
@@ -97,26 +97,34 @@ switch (_action) do
 			[_oldHandle] call CBA_fnc_removePerFrameHandler;
 			_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK_PFH", -1, true];
 		};
+		_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", 0, true];
 		if ((abs _value) < 0.1) then {
-			_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", 0, true];
 			_msg = "Speed lock released.";
 		} else {
-			_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", _value, true];
-			private _handle = [{
-				params ["_args", "_handle"];
-				_args params ["_vehicle"];
-				private _target = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", 0];
-				if (!alive _vehicle || {(abs _target) < 0.1}) exitWith {
-					[_handle] call CBA_fnc_removePerFrameHandler;
-					_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK_PFH", -1, true];
-				};
-				private _dir = getDir _vehicle;
-				private _speed = _target / 3.6;
-				private _vel = velocity _vehicle;
-				[_vehicle, [sin _dir * _speed, cos _dir * _speed, _vel select 2]] remoteExec ["setVelocity", _vehicle];
-			}, 0.1, [_vehicle]] call CBA_fnc_addPerFrameHandler;
-			_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK_PFH", _handle, true];
-			_msg = format ["Speed locked at %1 km/h.", round _value];
+			private _dir = getDir _vehicle;
+			private _speed = _value / 3.6;
+			private _vel = velocity _vehicle;
+			[_vehicle, [sin _dir * _speed, cos _dir * _speed, _vel select 2]] remoteExec ["setVelocity", _vehicle];
+			if (_lock) then {
+				_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", _value, true];
+				private _handle = [{
+					params ["_args", "_handle"];
+					_args params ["_vehicle"];
+					private _target = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", 0];
+					if (!alive _vehicle || {(abs _target) < 0.1}) exitWith {
+						[_handle] call CBA_fnc_removePerFrameHandler;
+						_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK_PFH", -1, true];
+					};
+					private _dir = getDir _vehicle;
+					private _speed = _target / 3.6;
+					private _vel = velocity _vehicle;
+					[_vehicle, [sin _dir * _speed, cos _dir * _speed, _vel select 2]] remoteExec ["setVelocity", _vehicle];
+				}, 0.1, [_vehicle]] call CBA_fnc_addPerFrameHandler;
+				_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK_PFH", _handle, true];
+				_msg = format ["Speed locked at %1 km/h.", round _value];
+			} else {
+				_msg = format ["Speed set to %1 km/h.", round _value];
+			};
 		};
 	};
 	case "setalarm": {

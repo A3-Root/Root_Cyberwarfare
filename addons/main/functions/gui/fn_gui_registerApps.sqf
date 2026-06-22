@@ -29,6 +29,22 @@ if (!_hasWeb && !_hasNative) exitWith
 ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 	params ["_type", "_list"];
 	private _items = [];
+	private _sessionComputer = (uiNamespace getVariable ["AE3_desktop_session", createHashMap]) getOrDefault ["computer", objNull];
+	private _battery = _sessionComputer getVariable ["AE3_power_internal", objNull];
+	private _batteryWh = 0;
+	private _batteryPct = 0;
+	if (!isNull _battery) then {
+		private _batteryLevel = _battery getVariable ["AE3_power_batteryLevel", 0];
+		private _batteryCapacity = _battery getVariable ["AE3_power_batteryCapacity", 0];
+		_batteryWh = _batteryLevel * 1000;
+		if (_batteryCapacity > 0) then { _batteryPct = round ((_batteryLevel / _batteryCapacity) * 100); };
+	};
+	private _doorCost = missionNamespace getVariable [SETTING_DOOR_COST, 2];
+	private _powerConfirm = {
+		params ["_label", "_costWh"];
+		private _remain = (_batteryWh - _costWh) max 0;
+		format ["%1 draws %2 Wh.<br>Current battery: %3 Wh (%4%5).<br>Remaining after continue: %6 Wh.", _label, round _costWh, round _batteryWh, _batteryPct, "%", round _remain]
+	};
 	// Grid + world position for the shared map-link, gated by the per-device "Allow Location View"
 	// flag (default on; GPS is gated on its tracked state instead). Returns [gridStr, [x,y]] or
 	// ["", []] when hidden, so the GUI shows/hides the location and [Map] button accordingly (#0f).
@@ -57,8 +73,8 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 		// Slider-action builder ([id,label,min,max,value,step,unit]): the GUI opens a bounded slider and
 		// sends the chosen numeric value, matching the CLI's fine-tuning (Vehicles #1).
 		private _mkSlider = {
-			_this params ["_sid", "_slabel", "_smin", "_smax", "_sval", ["_sstep", 1], ["_sunit", ""]];
-			createHashMapFromArray [["id", _sid], ["label", _slabel], ["slider", true], ["min", _smin], ["max", _smax], ["value", _sval], ["step", _sstep], ["unit", _sunit]]
+			_this params ["_sid", "_slabel", "_smin", "_smax", "_sval", ["_sstep", 1], ["_sunit", ""], ["_options", createHashMap]];
+			createHashMapFromArray [["id", _sid], ["label", _slabel], ["slider", true], ["min", _smin], ["max", _smax], ["value", _sval], ["step", _sstep], ["unit", _sunit], ["options", _options]]
 		};
 		// _grid (grid square text) + _pos (world [x,y] for the [Map] link), gated by Allow Location.
 		([_obj] call _locOf) params ["_grid", "_pos"];
@@ -69,14 +85,22 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 				if (!isNull _obj) then {
 					private _locked = {(_obj getVariable [format ["bis_disabled_Door_%1", _x], 0]) == 1} count _doorIds;
 					_status = format ["%1/%2 locked", _locked, count _doorIds];
-					// Per-door sub-items so individual doors can be locked/unlocked (#2).
+					private _lockCost = ((count _doorIds) - _locked) * _doorCost;
+					private _unlockCost = _locked * _doorCost;
+					_acts = [
+						["lock", "Lock", ["Locking all doors", _lockCost] call _powerConfirm] call _actC,
+						["unlock", "Unlock", ["Unlocking all doors", _unlockCost] call _powerConfirm] call _actC
+					];
 					{
-						private _ds = ["unlocked", "locked"] select ((_obj getVariable [format ["bis_disabled_Door_%1", _x], 0]) == 1);
+						private _isLocked = (_obj getVariable [format ["bis_disabled_Door_%1", _x], 0]) == 1;
+						private _ds = ["unlocked", "locked"] select _isLocked;
+						private _singleLockCost = ([1, 0] select _isLocked) * _doorCost;
+						private _singleUnlockCost = ([0, 1] select _isLocked) * _doorCost;
 						_children pushBack createHashMapFromArray [
 							["id", str _x], ["label", format ["Door %1", _x]], ["status", _ds],
 							["actions", [
-								["lock", "Lock", "Locking this door draws battery power. Continue?"] call _actC,
-								["unlock", "Unlock", "Unlocking this door draws battery power. Continue?"] call _actC
+								["lock", "Lock", ["Locking this door", _singleLockCost] call _powerConfirm] call _actC,
+								["unlock", "Unlock", ["Unlocking this door", _singleUnlockCost] call _powerConfirm] call _actC
 							]]
 						];
 					} forEach _doorIds;
@@ -129,35 +153,49 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 						["Locked", ["No", "Yes"] select ((locked _obj) > 0)],
 						["Damage", format ["%1%2", round ((damage _obj) * 100), "%"]]
 					];
-					// Controls gated by the per-vehicle allow flags (#2).
-					_acts = [["lock", "Lock"] call _mkAct, ["unlock", "Unlock"] call _mkAct];
-					if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_ENGINE", false]) then { _acts append [["engineon", "Engine On"] call _mkAct, ["engineoff", "Engine Off"] call _mkAct]; };
-					if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_LIGHTS", false]) then { _acts append [["lightson", "Lights On"] call _mkAct, ["lightsoff", "Lights Off"] call _mkAct]; };
-					if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_BRAKES", false]) then { _acts pushBack (["brakes", "Brake"] call _mkAct); };
-					// Fuel / Speed / Alarm are sliders bounded by the per-vehicle limits, matching the CLI
-					// (Vehicles #1). The old Refuel/Drain + Speed +/- buttons are replaced by these.
+					private _accessActions = [["lock", "Lock"] call _mkAct, ["unlock", "Unlock"] call _mkAct];
+					private _systemActions = [];
+					private _movementActions = [];
+					if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_ENGINE", false]) then { _systemActions append [["engineon", "Engine On"] call _mkAct, ["engineoff", "Engine Off"] call _mkAct]; };
+					if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_LIGHTS", false]) then { _systemActions append [["lightson", "Lights On"] call _mkAct, ["lightsoff", "Lights Off"] call _mkAct]; };
+					if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_BRAKES", false]) then { _movementActions pushBack (["brakes", "Brake"] call _mkAct); };
 					if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_FUEL", false]) then {
 						private _fmin = _obj getVariable ["ROOT_CYBERWARFARE_FUEL_MIN", 0];
 						private _fmax = _obj getVariable ["ROOT_CYBERWARFARE_FUEL_MAX", 100];
-						_acts pushBack (["setfuel", "Fuel", _fmin, _fmax, round ((fuel _obj) * 100), 1, "%"] call _mkSlider);
+						_systemActions pushBack (["setfuel", "Fuel", _fmin, _fmax, round ((fuel _obj) * 100), 1, "%"] call _mkSlider);
 					};
 					if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_SPEED", false]) then {
 						private _smin = _obj getVariable ["ROOT_CYBERWARFARE_SPEED_MIN", -50];
 						private _smax = _obj getVariable ["ROOT_CYBERWARFARE_SPEED_MAX", 50];
-						_acts pushBack (["setspeed", "Speed", _smin, _smax, 0, 1, "km/h"] call _mkSlider);
+						private _speedOptions = createHashMapFromArray [["checkboxLabel", "Lock vehicle to this speed"], ["returnObject", true]];
+						_movementActions pushBack (["setspeed", "Speed", _smin, _smax, 0, 1, "km/h", _speedOptions] call _mkSlider);
 					};
 					if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_DOOR", false]) then {
 						private _amin = _obj getVariable ["ROOT_CYBERWARFARE_ALARM_MIN", 1];
 						private _amax = _obj getVariable ["ROOT_CYBERWARFARE_ALARM_MAX", 30];
-						_acts pushBack (["setalarm", "Alarm", _amin, _amax, _amin, 1, "s"] call _mkSlider);
+						_systemActions pushBack (["setalarm", "Alarm", _amin, _amax, _amin, 1, "s"] call _mkSlider);
 					};
+					_acts = [createHashMapFromArray [["id", "access"], ["label", "Access"], ["submenu", _accessActions]]];
+					if (_systemActions isNotEqualTo []) then { _acts pushBack createHashMapFromArray [["id", "systems"], ["label", "Systems"], ["submenu", _systemActions]]; };
+					if (_movementActions isNotEqualTo []) then { _acts pushBack createHashMapFromArray [["id", "movement"], ["label", "Movement"], ["submenu", _movementActions]]; };
 				};
 			};
 			case DEVICE_TYPE_GPS_TRACKER: {
 				_label = [_obj, format ["Tracker %1", _id]] call _displayName;
-				// Location revealed only while/after tracking (#1/#2); otherwise hidden regardless.
-				private _tracked = !isNull _obj && {_obj getVariable ["ROOT_CYBERWARFARE_GPS_TRACKED", false]};
-				_status = ["Untracked", "Tracked"] select _tracked;
+				private _trackingTime = _x param [3, 0];
+				private _updateFrequency = _x param [4, 0];
+				private _currentStatus = _x param [8, ["Untracked", 0, ""]];
+				private _statusName = if (_currentStatus isEqualType []) then { _currentStatus param [0, "Untracked"] } else { str _currentStatus };
+				private _statusStart = if (_currentStatus isEqualType []) then { _currentStatus param [1, 0] } else { 0 };
+				_status = _statusName;
+				if (_statusName isEqualTo "Tracking") then {
+					private _elapsed = (time - _statusStart) max 0;
+					private _remaining = (_trackingTime - _elapsed) max 0;
+					_details = [["Status", "Tracking"], ["Elapsed", format ["%1s", round _elapsed]], ["Remaining", format ["%1s", round _remaining]], ["Duration", format ["%1s", round _trackingTime]], ["Refresh", format ["%1s", round _updateFrequency]]];
+				} else {
+					_details = [["Status", _statusName], ["Duration", format ["%1s", round _trackingTime]], ["Refresh", format ["%1s", round _updateFrequency]]];
+				};
+				private _tracked = !isNull _obj && {_statusName in ["Tracking", "Tracked", "Completed", "Untrackable"]};
 				if (_tracked) then { ([_obj, true] call _locOf) params ["_grid", "_pos"]; } else { _grid = ""; _pos = []; };
 			};
 			default { _label = [_obj, format ["Device %1", _id]] call _displayName; };
@@ -178,26 +216,26 @@ if (_hasWeb) then
 	// Register each device type as a generic CEF device-list app. extra carries the device type
 	// and the action buttons the generic app renders per device.
 	private _act = { params ["_id", "_label"]; createHashMapFromArray [["id", _id], ["label", _label]] };
-	private _actC = { params ["_id", "_label", "_confirm"]; createHashMapFromArray [["id", _id], ["label", _label], ["confirm", _confirm]] };
 
 	{
 		_x params ["_id", "_titleKey", "_glyph", "_icon", "_type", "_actions", "_menu", ["_globals", []]];
 		private _extra = createHashMapFromArray [["type", _type], ["actions", _actions], ["icon", _icon], ["menu", _menu]];
+		if (_menu isEqualTo "Hacking Tools") then { _extra set ["requiresVar", ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", true]]; };
 		if (_globals isNotEqualTo []) then { _extra set ["globalActions", _globals]; };
 		[_id, localize _titleKey, _glyph, "deviceList", _extra] call AE3_desktop_fnc_registerExtApp;
 	} forEach [
 		// All RootCW apps go in a single "Hacking Tools" Applications-menu category (#6). Registration
 		// order below = the display order within the category. Action buttons drive each device.
-		["RootCW_Doors",     "STR_ROOT_CYBERWARFARE_GUI_APP_DOORS",     "&#128682;", "door",     DEVICE_TYPE_DOOR,      [["lock", "Lock", "Locking the building's doors draws battery power. Continue?"] call _actC, ["unlock", "Unlock", "Unlocking the building's doors draws battery power. Continue?"] call _actC], "Hacking Tools"],
+		["RootCW_Doors",     "STR_ROOT_CYBERWARFARE_GUI_APP_DOORS",     "&#128682;", "door",     DEVICE_TYPE_DOOR,      [], "Hacking Tools"],
 		// Lights: per-light On/Off plus whole-network All On / All Off (Lights #1).
 		["RootCW_Lights",    "STR_ROOT_CYBERWARFARE_GUI_APP_LIGHTS",    "&#128161;", "light",    DEVICE_TYPE_LIGHT,     [["on", "On"] call _act, ["off", "Off"] call _act], "Hacking Tools", [["allon", "All On"] call _act, ["alloff", "All Off"] call _act]],
 		["RootCW_Databases", "STR_ROOT_CYBERWARFARE_GUI_APP_DATABASES", "&#128451;", "database", DEVICE_TYPE_DATABASE,  [createHashMapFromArray [["id", "access"], ["label", "Download"], ["flow", "download"]]], "Hacking Tools"],
 		["RootCW_Gps",       "STR_ROOT_CYBERWARFARE_GUI_APP_GPS",       "&#128205;", "gps",      DEVICE_TYPE_GPS_TRACKER, [["track", "Track"] call _act], "Hacking Tools"],
 		// Drones: Disable plus side-change buttons (Drones #1); the action handler supports west/east/guer/civ.
-		["RootCW_Drones",    "STR_ROOT_CYBERWARFARE_GUI_APP_DRONES",    "&#128760;", "drone",    DEVICE_TYPE_DRONE,     [["disable", "Disable"] call _act, ["west", "WEST"] call _act, ["east", "EAST"] call _act, ["guer", "GUER"] call _act, ["civ", "CIV"] call _act], "Hacking Tools"],
+		["RootCW_Drones",    "STR_ROOT_CYBERWARFARE_GUI_APP_DRONES",    "&#128760;", "drone",    DEVICE_TYPE_DRONE,     [["disable", "Disable Drone"] call _act, createHashMapFromArray [["id", "side"], ["label", "Change Drone Side"], ["submenu", [["west", "WEST (BLUFOR)"] call _act, ["east", "EAST (OPFOR)"] call _act, ["guer", "GUER (INDFOR)"] call _act, ["civ", "CIVILIAN"] call _act]]]], "Hacking Tools"],
 		// Vehicles: plain toggles; Fuel/Speed/Alarm are added as slider actions per-vehicle in DESCRIBE
 		// (Vehicles #1). Refuel/Drain removed.
-		["RootCW_Vehicles",  "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES",  "&#128663;", "vehicle",  DEVICE_TYPE_VEHICLE,   [["lock", "Lock"] call _act, ["unlock", "Unlock"] call _act, ["engineoff", "Engine Off"] call _act], "Hacking Tools"],
+		["RootCW_Vehicles",  "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES",  "&#128663;", "vehicle",  DEVICE_TYPE_VEHICLE,   [], "Hacking Tools"],
 		["RootCW_PowerGrid", "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID", "&#9889;",   "power",    DEVICE_TYPE_POWERGRID, [["on", "On"] call _act, ["off", "Off"] call _act, ["overload", "Overload"] call _act], "Hacking Tools"],
 		["RootCW_Custom",    "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM",    "&#129513;", "device",   DEVICE_TYPE_CUSTOM,    [["activate", "Activate"] call _act, ["deactivate", "Deactivate"] call _act], "Hacking Tools"]
 	];
@@ -220,7 +258,8 @@ if (_hasWeb) then
 		private _id = _data getOrDefault ["id", 0];
 		private _action = _data getOrDefault ["action", ""];
 		private _sub = _data getOrDefault ["sub", ""]; // individual door id, etc.
-		private _value = _data getOrDefault ["value", 0]; // numeric slider value (vehicles #1)
+		private _value = _data getOrDefault ["value", 0];
+		private _lock = _data getOrDefault ["lock", false];
 		private _co = clientOwner;
 		private _nid = netId _computer;
 		switch (_type) do {
@@ -230,7 +269,7 @@ if (_hasWeb) then
 			case DEVICE_TYPE_POWERGRID: { ["root_cyberwarfare_gui_powergridAction", [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_DATABASE:  { ["root_cyberwarfare_gui_databaseAction",  [_co, _nid, _id, netId player, "", _data getOrDefault ["savePath", ""]]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_DRONE:     { ["root_cyberwarfare_gui_droneAction",     [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
-			case DEVICE_TYPE_VEHICLE:   { ["root_cyberwarfare_gui_vehicleAction",   [_co, _nid, _id, _action, "", _value]] call CBA_fnc_serverEvent; };
+			case DEVICE_TYPE_VEHICLE:   { ["root_cyberwarfare_gui_vehicleAction",   [_co, _nid, _id, _action, "", _value, _lock]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_GPS_TRACKER: { ["root_cyberwarfare_gui_gpsAction",     [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_CUSTOM:    { ["root_cyberwarfare_gui_customAction",    [_co, _nid, _id, _action, netId player, ""]] call CBA_fnc_serverEvent; };
 			default {};
