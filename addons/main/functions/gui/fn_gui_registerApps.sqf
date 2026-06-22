@@ -69,6 +69,7 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 		private _children = [];      // sub-items with own actions (per-door lock #2)
 			private _downloadTime = 0;   // database download duration in seconds (#5)
 			private _mapLabel = nil;     // optional map marker label override
+			private _mapMarker = nil;    // optional focused map marker toggle
 			private _acts = [];          // per-device action override (vehicles gate by allow flags, #2)
 		// Confirm-action builder ([id,label,confirm]). MUST be local to DESCRIBE: it runs later in the
 		// devList event-handler scope where the registration-time _actC is out of scope, so referencing
@@ -231,6 +232,7 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 					private _tracked = !isNull _obj && {_statusName in ["Tracking", "Tracked", "Completed", "Untrackable"]};
 					if (_tracked) then { ([_obj, true] call _locOf) params ["_grid", "_pos"]; } else { _grid = ""; _pos = []; };
 					_mapLabel = "";
+					_mapMarker = false;
 					private _cost = _x param [11, _obj getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_COST", 10]];
 					_acts = [["track", "Track", ["Tracking this GPS signal", _cost] call _powerConfirm] call _actC];
 				};
@@ -250,6 +252,7 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 			["downloadTime", _downloadTime], ["actions", _acts]
 		];
 		if (!isNil "_mapLabel") then { _item set ["mapLabel", _mapLabel]; };
+		if (!isNil "_mapMarker") then { _item set ["mapMarker", _mapMarker]; };
 		_items pushBack _item;
 	} forEach _list;
 	_items
