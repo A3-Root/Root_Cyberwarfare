@@ -45,10 +45,10 @@ private _cost = missionNamespace getVariable [SETTING_CUSTOM_COST, 5];
 if !([_computer, _cost] call FUNC(checkPowerAvailable)) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply; };
 [_computer, _cost] call FUNC(consumePower);
 
-private _deviceObject = objectFromNetId _deviceNetId;
-private _playerObject = objectFromNetId _playerNetId;
 private _code = [_deactivationCode, _activationCode] select (_state isEqualTo "activate");
-if (_code isEqualType "" && {_code != ""}) then { [_computer, _deviceObject, _playerObject, _owner] spawn (compile _code); };
+if (_code isEqualType "" && {_code != ""}) then {
+	["root_cyberwarfare_gui_customExec", [_computerNetId, _deviceNetId, _playerNetId, _owner, _code], _owner] call CBA_fnc_ownerEvent;
+};
 
 ["root_cyberwarfare_deviceStateChanged", [DEVICE_TYPE_CUSTOM, _customId, _state]] call CBA_fnc_serverEvent;
 

@@ -44,9 +44,16 @@ private _databaseName = _database getVariable ["ROOT_CYBERWARFARE_DATABASE_NAME_
 private _databaseContent = _database getVariable ["ROOT_CYBERWARFARE_DATABASE_DATA_EDIT", ""];
 private _executionCode = _database getVariable ["ROOT_CYBERWARFARE_DATABASE_EXECUTIONCODE", ""];
 
-// Save to the operator-chosen location (file picker, #5); fall back to a discoverable default.
 private _fileName = (_databaseName splitString " ") joinString "_";
 if (_savePath isEqualTo "") then { _savePath = format ["/root/%1.txt", _fileName]; };
+if ((_savePath select [(count _savePath) - 1, 1]) isEqualTo "/") then {
+	_savePath = _savePath + format ["%1.txt", _fileName];
+};
+private _pathParts = _savePath splitString "/";
+private _leafName = _pathParts param [(count _pathParts) - 1, ""];
+if ((_leafName find ".") == -1) then {
+	_savePath = _savePath + ".txt";
+};
 
 [_computer, _savePath, _databaseContent, false, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExecCall ["AE3_filesystem_fnc_device_addFile", 2];
 

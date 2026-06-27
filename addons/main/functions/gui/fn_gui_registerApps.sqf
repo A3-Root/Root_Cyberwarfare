@@ -170,9 +170,10 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 				_label = [_obj, format ["Vehicle %1", _id]] call _displayName;
 				if (!isNull _obj) then {
 					_status = ["unlocked", "locked"] select ((locked _obj) > 0);
-					// Live vehicle properties (#1): fuel, engine, lock, damage.
+					// Live vehicle properties shown beside each available vehicle.
 					_details = [
 						["Fuel", format ["%1%2", round ((fuel _obj) * 100), "%"]],
+						["Fuel control", "Reduce only"],
 						["Engine", ["Off", "On"] select (isEngineOn _obj)],
 						["Locked", ["No", "Yes"] select ((locked _obj) > 0)],
 						["Damage", format ["%1%2", round ((damage _obj) * 100), "%"]]
@@ -192,17 +193,24 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 							["lightson", "Lights On", ["Turning this vehicle lights on", _cost] call _powerConfirm] call _actC,
 							["lightsoff", "Lights Off", ["Turning this vehicle lights off", _cost] call _powerConfirm] call _actC
 						]; };
-						if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_BRAKES", false]) then { _movementActions pushBack (["brakes", "Brake", ["Applying this vehicle brake control", _cost] call _powerConfirm] call _actC); };
+						if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_BRAKES", false]) then {
+							private _bmin = _obj getVariable ["ROOT_CYBERWARFARE_BRAKES_MIN", 1];
+							private _bmax = _obj getVariable ["ROOT_CYBERWARFARE_BRAKES_MAX", 10];
+							_movementActions pushBack (["brakes", "Brake Rate", _bmin, _bmax, _bmax, 1, "m/s2", createHashMap, ["Applying this vehicle brake control", _cost] call _powerConfirm] call _mkSlider);
+						};
 						if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_FUEL", false]) then {
 							private _fmin = _obj getVariable ["ROOT_CYBERWARFARE_FUEL_MIN", 0];
 							private _fmax = _obj getVariable ["ROOT_CYBERWARFARE_FUEL_MAX", 100];
-							_systemActions pushBack (["setfuel", "Fuel", _fmin, _fmax, round ((fuel _obj) * 100), 1, "%", createHashMap, ["Changing this vehicle fuel", _cost] call _powerConfirm] call _mkSlider);
+							private _currentFuel = round ((fuel _obj) * 100);
+							private _fuelCeiling = _currentFuel min _fmax;
+							private _fuelFloor = _fmin min _fuelCeiling;
+							_systemActions pushBack (["setfuel", "Fuel", _fuelFloor, _fuelCeiling, _fuelCeiling, 1, "%", createHashMap, ["Changing this vehicle fuel", _cost] call _powerConfirm] call _mkSlider);
 						};
 						if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_SPEED", false]) then {
 							private _smin = _obj getVariable ["ROOT_CYBERWARFARE_SPEED_MIN", -50];
 							private _smax = _obj getVariable ["ROOT_CYBERWARFARE_SPEED_MAX", 50];
 							private _speedOptions = createHashMapFromArray [["checkboxLabel", "Lock vehicle to this speed"], ["returnObject", true]];
-							_movementActions pushBack (["setspeed", "Speed", _smin, _smax, 0, 1, "km/h", _speedOptions, ["Changing this vehicle speed", _cost] call _powerConfirm] call _mkSlider);
+							_movementActions pushBack (["setspeed", "Speed", _smin, _smax, round (speed _obj), 1, "km/h", _speedOptions, ["Changing this vehicle speed", _cost] call _powerConfirm] call _mkSlider);
 						};
 						if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_DOOR", false]) then {
 							private _amin = _obj getVariable ["ROOT_CYBERWARFARE_ALARM_MIN", 1];
@@ -371,4 +379,15 @@ else
 	if (isNull _listCtrl) exitWith {};
 	private _computer = (uiNamespace getVariable ["AE3_desktop_session", createHashMap]) getOrDefault ["computer", objNull];
 	if (!isNull _computer) then { [_computer, _deviceType] call Root_fnc_gui_requestDevices; };
+}] call CBA_fnc_addEventHandler;
+
+// Runs mission-provided custom device code on the operator client after the server validates access.
+["root_cyberwarfare_gui_customExec", {
+	params ["_computerNetId", "_deviceNetId", "_playerNetId", "_owner", "_code"];
+	private _computer = objectFromNetId _computerNetId;
+	private _deviceObject = objectFromNetId _deviceNetId;
+	private _playerObject = objectFromNetId _playerNetId;
+	if (_code isEqualType "" && {_code isNotEqualTo ""}) then {
+		[_computer, _deviceObject, _playerObject, _owner] spawn (compile _code);
+	};
 }] call CBA_fnc_addEventHandler;

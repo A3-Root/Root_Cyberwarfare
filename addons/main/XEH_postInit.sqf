@@ -93,6 +93,7 @@ if (isServer) then {
 // Runs only on server to maintain authoritative state
 if (isServer) then {
     call FUNC(cleanupDeviceLinks);
+    call FUNC(createDiaryEntry);
 };
 
 // ============================================================================
