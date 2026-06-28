@@ -19,6 +19,7 @@
  */
 
 params ["_owner", "_computerNetId", "_databaseId", "_playerNetId", ["_commandPath", ""], ["_savePath", ""]];
+scopeName "exit";
 
 private _computer = objectFromNetId _computerNetId;
 private _reply = {
@@ -49,16 +50,31 @@ if (_savePath isEqualTo "") then { _savePath = format ["/root/%1.txt", _fileName
 if ((_savePath select [(count _savePath) - 1, 1]) isEqualTo "/") then {
 	_savePath = _savePath + format ["%1.txt", _fileName];
 };
+if ((_savePath select [0, 1]) isNotEqualTo "/") then {
+	_savePath = "/" + _savePath;
+};
 private _pathParts = _savePath splitString "/";
 private _leafName = _pathParts param [(count _pathParts) - 1, ""];
 if ((_leafName find ".") == -1) then {
 	_savePath = _savePath + ".txt";
 };
 
-[_computer, _savePath, _databaseContent, false, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExecCall ["AE3_filesystem_fnc_device_addFile", 2];
+private _filesystem = _computer getVariable ["AE3_filesystem", []];
+if (_filesystem isEqualTo []) exitWith {
+	[_owner, "Laptop filesystem is not initialized.", false] call _reply;
+};
+
+try {
+	[[], _filesystem, _savePath, "", "root", "root", [[true, true, true], [true, true, true]]] call AE3_filesystem_fnc_ensureFile;
+	[[], _filesystem, _savePath, "root", _databaseContent, false] call AE3_filesystem_fnc_writeToFile;
+	_computer setVariable ["AE3_filesystem", _filesystem, true];
+} catch {
+	[_owner, format ["Download failed: %1", _exception], false] call _reply;
+	breakTo "exit";
+};
 
 if (_executionCode != "") then { [_computer, objectFromNetId _playerNetId, _owner] spawn (compile _executionCode); };
 
-// Report the exact path so the GUI can open it (caesar-1 encrypted - read via the Crypto app, key 1).
-private _msg = (format [localize "STR_ROOT_CYBERWARFARE_GUI_DOWNLOADED", _databaseName]) + format [" -> %1 (caesar key 1)", _savePath];
+// Report the exact path so the GUI can open it from the selected destination.
+private _msg = (format [localize "STR_ROOT_CYBERWARFARE_GUI_DOWNLOADED", _databaseName]) + format [" -> %1", _savePath];
 [_owner, _msg, true, _savePath] call _reply;

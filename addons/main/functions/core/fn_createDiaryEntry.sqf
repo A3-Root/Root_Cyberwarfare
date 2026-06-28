@@ -15,7 +15,7 @@
 if (isNil "AE3_desktop_fnc_registerWebpage") exitWith {false};
 
 [
-	"hackerman.ez",
+	"backdoor.dev",
 	"Cyberwarfare Guide",
 	[
 		"<t size='1.2'>Cyberwarfare Guide</t>",
