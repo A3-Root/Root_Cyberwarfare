@@ -1,11 +1,11 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Detects all doors in a building by checking both SimpleObject animate
- * entries (vanilla) and UserActions (modded buildings like Cytech, CUP).
+ * Description: Detects all doors in an object by checking animation names and
+ * config entries (vanilla and modded buildings, gates, and similar objects).
  *
  * Arguments:
- * 0: _building <OBJECT> - The building object to scan for doors
+ * 0: _building <OBJECT> - The object to scan for doors
  *
  * Return Value:
  * <ARRAY> - Array of door numbers found in the building (e.g., [1, 2, 3])
@@ -27,6 +27,23 @@ if (isNull _building) exitWith {
 
 private _buildingDoors = [];
 private _config = configOf _building;
+
+// ========================================================================
+// METHOD 0: Check animation names for any door-like entries
+// ========================================================================
+{
+    private _animationName = toLower _x;
+    if (_animationName find "door" != -1) then {
+        private _regexFinds = _animationName regexFind ["door[_ ]*([0-9]+)"];
+        {
+            private _doorNumber = parseNumber (((_x select 1) select 0));
+            if (!(_doorNumber in _buildingDoors)) then {
+                _buildingDoors pushBack _doorNumber;
+                DEBUG_LOG_2("Found door %1 via animationNames in %2",_doorNumber,typeOf _building);
+            };
+        } forEach _regexFinds;
+    };
+} forEach animationNames _building;
 
 // ========================================================================
 // METHOD 1: Check SimpleObject >> animate (Vanilla Arma 3 buildings)

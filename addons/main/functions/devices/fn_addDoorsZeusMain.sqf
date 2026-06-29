@@ -74,28 +74,27 @@ if (_execUserId == 0) then {
 if (_radiusMode) exitWith {
     private _registeredCount = 0;
 
-    // Find all objects in radius and filter by type
+    // Find all objects in radius and keep only those with door animations or configs
     private _allObjects = nearestObjects [_centerPos, [], _radius];
-    private _buildings = [];
+    private _doorObjects = [];
 
-    // Filter objects into buildings only
+    // Filter objects into door-bearing objects only
     {
-        if ((_x isKindOf "House") || (_x isKindOf "Building")) then {
-            _buildings pushBack _x;
+        if (([_x] call Root_fnc_detectBuildingDoors) isNotEqualTo []) then {
+            _doorObjects pushBack _x;
         };
     } forEach _allObjects;
 
-    // Register each building
+    // Register each door-bearing object
     {
         private _building = _x;
-        // Check if building has doors using enhanced detection (vanilla + modded)
-        private _detectedDoors = [_building] call FUNC(detectBuildingDoors);
+        private _detectedDoors = [_building] call Root_fnc_detectBuildingDoors;
 
         if (_detectedDoors isNotEqualTo []) then {
             [_building, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation] call FUNC(addDoorsZeusMain);
             _registeredCount = _registeredCount + 1;
         };
-    } forEach _buildings;
+    } forEach _doorObjects;
 
     // Send feedback to user
     [format [localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_SUCCESS", _registeredCount]] remoteExec ["zen_common_fnc_showMessage", _execUserId];
@@ -117,12 +116,11 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_AVAILABLE_FUTURE", _availableToFut
 _targetObject setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true];
 
 // Check for buildings with doors
-if (_targetObject isKindOf "House" || _targetObject isKindOf "Building") then {
+if (([_targetObject] call Root_fnc_detectBuildingDoors) isNotEqualTo []) then {
     _isValidObject = true;
 
     private _building = _targetObject;
-    // Use enhanced door detection (vanilla + modded buildings)
-    private _buildingDoors = [_building] call FUNC(detectBuildingDoors);
+    private _buildingDoors = [_building] call Root_fnc_detectBuildingDoors;
 
     if (_buildingDoors isNotEqualTo []) then {
         private _buildingNetId = netId _building;
@@ -154,7 +152,7 @@ if (_targetObject isKindOf "House" || _targetObject isKindOf "Building") then {
 };
 
 if (!_isValidObject) exitWith {
-    [format ["Object (%1) is not a building! Use fn_addLightsZeus for lights.", _targetObject]] remoteExec ["systemChat", _execUserId];
+    [format ["Object (%1) does not expose any door animations. Use fn_addLightsZeus for lights.", _targetObject]] remoteExec ["systemChat", _execUserId];
 };
 
 private _availabilityText = "";

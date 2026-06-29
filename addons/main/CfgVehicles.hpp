@@ -207,7 +207,7 @@ class CfgVehicles {
 		};
 		class ModuleDescription: ModuleDescription {
 			description = "DEPRECATED: Use Add Doors or Add Lights modules. Synchronize this module to buildings (with doors), lights, or triggers to make them hackable. Triggers enable batch-registration of terrain buildings/lights within an area.";
-			sync[] = {"House", "Building", "UAV", "Lamps_base_F", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
+			sync[] = {"All"};
 		};
 	};
 
@@ -247,7 +247,7 @@ class CfgVehicles {
 		};
 		class ModuleDescription: ModuleDescription {
 			description = "Synchronize this module to buildings (with doors) or triggers to make doors hackable. Triggers enable batch-registration of terrain buildings within an area.";
-			sync[] = {"House", "Building", "EmptyDetector", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
+			sync[] = {"All"};
 		};
 	};
 

@@ -37,7 +37,7 @@ private _laptops = _syncedObjects select {
 };
 
 private _directDevices = _syncedObjects select {
-    !(_x in _laptops) && !(_x in _triggers)
+    !(_x in _laptops) && !(_x in _triggers) && {([_x] call Root_fnc_detectBuildingDoors) isNotEqualTo []}
 };
 
 // Get laptop netIds for linking
@@ -61,19 +61,20 @@ private _allDevices = [];
 if (_triggers isNotEqualTo []) then {
     private _objectsInArea = [_triggers] call FUNC(getObjectsInTriggerArea);
 
-    // Filter for buildings only
-    private _buildings = _objectsInArea select {
-        (_x isKindOf "House") || (_x isKindOf "Building")
+    // Keep only objects that expose door animations or door configs
+    private _doorObjects = _objectsInArea select {
+        private _detectedDoors = [_x] call Root_fnc_detectBuildingDoors;
+        _detectedDoors isNotEqualTo []
     };
 
-    _allDevices append _buildings;
+    _allDevices append _doorObjects;
 };
 
-// Add directly synchronized devices
+// Add directly synchronized door-bearing objects
 _allDevices append _directDevices;
 
 if (_allDevices isEqualTo []) exitWith {
-    ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Doors: No buildings synchronized or found in trigger areas!");
+    ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Doors: No door-bearing objects synchronized or found in trigger areas!");
     deleteVehicle _logic;
 };
 

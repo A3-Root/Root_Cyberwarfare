@@ -24,11 +24,11 @@ if (isNull _targetObject) then {
     private _logicPos = getPosATL _logic;
     private _nearObjects = nearestObjects [_logicPos, [], 5];
 
-    // Find the closest compatible object (building or light)
+    // Find the closest compatible object (door-bearing object or light)
     {
         if (_x != _logic && !(_x isKindOf "Logic")) then {
-            // Only accept buildings or lights
-            private _isBuilding = ((_x isKindOf "House") || (_x isKindOf "Building"));
+            private _detectedDoors = [_x] call Root_fnc_detectBuildingDoors;
+            private _isBuilding = count _detectedDoors > 0;
             private _isLight = _x isKindOf "Lamps_base_F";
 
             if (_isBuilding || _isLight) exitWith {
@@ -42,14 +42,15 @@ private _useRadiusMode = isNull _targetObject;
 
 if !(hasInterface) exitWith {};
 
-// In direct mode, validate that the target object is compatible (building or light)
+// In direct mode, validate that the target object is compatible (door-bearing object or light)
 if (!_useRadiusMode) then {
-    private _isBuilding = ((_targetObject isKindOf "House") || (_targetObject isKindOf "Building"));
+    private _detectedDoors = [_targetObject] call Root_fnc_detectBuildingDoors;
+    private _isBuilding = count _detectedDoors > 0;
     private _isLight = _targetObject isKindOf "Lamps_base_F";
 
     if !(_isBuilding || _isLight) exitWith {
         deleteVehicle _logic;
-        ["Object is not a building or light!"] call zen_common_fnc_showMessage;
+        ["Object does not expose any door animations or is not a light!"] call zen_common_fnc_showMessage;
     };
 };
 
@@ -65,8 +66,12 @@ private _allComputers = [];
     };
 } forEach (24 allObjects 1);
 
-// Check if target is a building (for unbreachable option)
-private _isBuilding = !_useRadiusMode && {_targetObject isKindOf "House"};
+// Check if target exposes doors (for unbreachable option)
+private _isBuilding = false;
+if (!_useRadiusMode) then {
+    private _detectedDoors = [_targetObject] call Root_fnc_detectBuildingDoors;
+    _isBuilding = count _detectedDoors > 0;
+};
 
 // Capture logic position before dialog (needed for radius mode callback after logic is deleted)
 private _logicPosition = getPosATL _logic;

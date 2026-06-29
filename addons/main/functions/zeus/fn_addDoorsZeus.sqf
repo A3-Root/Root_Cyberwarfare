@@ -24,11 +24,11 @@ if (isNull _targetObject) then {
     private _logicPos = getPosATL _logic;
     private _nearObjects = nearestObjects [_logicPos, [], 5];
 
-    // Find the closest compatible object (building only)
+    // Find the closest compatible object that exposes door animations or configs
     {
         if (_x != _logic && !(_x isKindOf "Logic")) then {
-            // Only accept buildings
-            private _isBuilding = ((_x isKindOf "House") || (_x isKindOf "Building"));
+            private _detectedDoors = [_x] call Root_fnc_detectBuildingDoors;
+            private _isBuilding = count _detectedDoors > 0;
 
             if (_isBuilding) exitWith {
                 _targetObject = _x;
@@ -41,13 +41,14 @@ private _useRadiusMode = isNull _targetObject;
 
 if !(hasInterface) exitWith {};
 
-// In direct mode, validate that the target object is compatible (building only)
+// In direct mode, validate that the target object exposes door animations or configs
 if (!_useRadiusMode) then {
-    private _isBuilding = ((_targetObject isKindOf "House") || (_targetObject isKindOf "Building"));
+    private _detectedDoors = [_targetObject] call Root_fnc_detectBuildingDoors;
+    private _isBuilding = count _detectedDoors > 0;
 
     if !(_isBuilding) exitWith {
         deleteVehicle _logic;
-        ["Object is not a building!"] call zen_common_fnc_showMessage;
+        ["Object does not expose any door animations!"] call zen_common_fnc_showMessage;
     };
 };
 
