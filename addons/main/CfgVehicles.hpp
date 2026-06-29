@@ -584,7 +584,7 @@ class CfgVehicles {
 		};
 		class ModuleDescription: ModuleDescription {
 			description = "Attaches a GPS tracker to an object. Synchronize to the object to track and optionally to AE3 Laptop objects.";
-			sync[] = {"Anything"};
+			sync[] = {"Air", "Car", "Tank", "Ship", "Motorcycle", "CAManBase", "Static", "ThingX", "Thing", "House", "Building", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};
 
@@ -640,7 +640,7 @@ class CfgVehicles {
 		};
 		class ModuleDescription: ModuleDescription {
 			description = "Creates a custom hackable device with programmable activation/deactivation code. Triggers enable batch-registration of custom devices within the area.";
-			sync[] = {"Anything"};
+			sync[] = {"All"};
 		};
 	};
 
@@ -715,7 +715,7 @@ class CfgVehicles {
 		};
 		class ModuleDescription: ModuleDescription {
 			description = "Creates a power generator that controls lights within a radius. Synchronize to generator object and optionally to AE3 Laptop objects. Triggers enable batch-registration of powergrids within the area.";
-			sync[] = {"Anything"};
+			sync[] = {"GeneratorMaster_01_F_AE3", "Land_PortableGenerator_01_F_AE3", "Land_PortableGenerator_01_black_F_AE3", "Land_PortableGenerator_01_sand_F_AE3", "Land_MobileRadar_01_generator_F_AE3", "Land_DieselGroundPowerUnit_01_F_AE3", "Land_PowerGenerator_F_AE3", "Land_Portable_generator_F_AE3", "Land_PortableGenerator_01_F", "Land_PortableGenerator_01_black_F", "Land_PortableGenerator_01_sand_F", "Land_MobileRadar_01_generator_F", "Land_DieselGroundPowerUnit_01_F", "Land_PowerGenerator_F", "Land_Portable_generator_F", "Static", "ThingX", "Thing", "House", "Building", "EmptyDetector", "Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
 		};
 	};
 
