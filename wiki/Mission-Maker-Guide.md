@@ -94,7 +94,7 @@ params ["_laptops", "_buildings"];
 
 **Function:** `Root_fnc_addHackingToolsZeusMain`
 
-**Description:** Installs hacking tools on an AE3 laptop or USB stick.
+**Description:** Installs hacking tools on an AE3 laptop or USB stick. If the tools are on a USB drive, the laptop gains the desktop Hacking Tools menu and `Hackerman.exe` launcher only while that drive is mounted.
 
 **Syntax:**
 ```sqf

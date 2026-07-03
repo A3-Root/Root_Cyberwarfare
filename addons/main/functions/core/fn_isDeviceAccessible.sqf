@@ -55,13 +55,12 @@ if (_commandPath != "" && {_backdoorPaths isNotEqualTo []}) then {
     } forEach _backdoorPaths;
 };
 
-// Check if hacking tools are installed
-private _hasHackingTools = _computer getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false];
-DEBUG_LOG_1("Hacking tools installed: %1",_hasHackingTools);
+private _hasHackingTools = [_computer] call FUNC(syncHackingToolAvailability);
+DEBUG_LOG_1("Hacking tools available: %1",_hasHackingTools);
 
 if !(_hasHackingTools) exitWith {
-    ROOT_CYBERWARFARE_LOG_DEBUG("isDeviceAccessible: Hacking tools not installed");
-    DEBUG_LOG("Hacking tools not installed - ACCESS DENIED");
+    ROOT_CYBERWARFARE_LOG_DEBUG("isDeviceAccessible: Hacking tools not available");
+    DEBUG_LOG("Hacking tools not available - ACCESS DENIED");
     false
 };
 

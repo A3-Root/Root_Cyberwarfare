@@ -277,7 +277,7 @@ if (_hasWeb) then
 	{
 		_x params ["_id", "_titleKey", "_glyph", "_icon", "_type", "_actions", "_menu", ["_globals", []]];
 		private _extra = createHashMapFromArray [["type", _type], ["actions", _actions], ["icon", _icon], ["menu", _menu]];
-		if (_menu isEqualTo "Hacking Tools") then { _extra set ["requiresVar", ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", true]]; };
+		if (_menu isEqualTo "Hacking Tools") then { _extra set ["requiresFunction", "Root_fnc_hasHackingToolsAvailable"]; };
 		if (_globals isNotEqualTo []) then { _extra set ["globalActions", _globals]; };
 		[_id, localize _titleKey, _glyph, "deviceList", _extra] call AE3_desktop_fnc_registerExtApp;
 	} forEach [
@@ -296,6 +296,28 @@ if (_hasWeb) then
 		["RootCW_PowerGrid", "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID", "&#9889;",   "power",    DEVICE_TYPE_POWERGRID, [["on", "On"] call _act, ["off", "Off"] call _act, ["overload", "Overload"] call _act], "Hacking Tools"],
 		["RootCW_Custom",    "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM",    "&#129513;", "device",   DEVICE_TYPE_CUSTOM,    [["activate", "Activate"] call _act, ["deactivate", "Deactivate"] call _act], "Hacking Tools"]
 	];
+
+	private _hackermanExtra = createHashMapFromArray [
+		["menu", "Hacking Tools"],
+		["icon", "terminal"],
+		["showOnDesktop", true],
+		["showInDock", false],
+		["showInMenu", true],
+		["requiresFunction", "Root_fnc_hasHackingToolsAvailable"],
+		["openCommand", "rootcw_hackerman_open"],
+		["subtitle", "Hacking Tools"],
+		["launchApps", [
+			["RootCW_Doors", localize "STR_ROOT_CYBERWARFARE_GUI_APP_DOORS"],
+			["RootCW_Lights", localize "STR_ROOT_CYBERWARFARE_GUI_APP_LIGHTS"],
+			["RootCW_Databases", localize "STR_ROOT_CYBERWARFARE_GUI_APP_DATABASES"],
+			["RootCW_Gps", localize "STR_ROOT_CYBERWARFARE_GUI_APP_GPS"],
+			["RootCW_Drones", localize "STR_ROOT_CYBERWARFARE_GUI_APP_DRONES"],
+			["RootCW_Vehicles", localize "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES"],
+			["RootCW_PowerGrid", localize "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID"],
+			["RootCW_Custom", localize "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM"]
+		]]
+	];
+	["RootCW_Hackerman", "Hackerman.exe", "H", "launcher", _hackermanExtra] call AE3_desktop_fnc_registerExtApp;
 
 	// dev_request: browser asks for a device type -> reuse the MP-safe request path.
 	["dev_request", {
@@ -331,6 +353,29 @@ if (_hasWeb) then
 			case DEVICE_TYPE_CUSTOM:    { ["root_cyberwarfare_gui_customAction",    [_co, _nid, _id, _action, netId player, ""]] call CBA_fnc_serverEvent; };
 			default {};
 		};
+	}] call AE3_desktop_fnc_registerCmd;
+
+	["rootcw_hackerman_open", {
+		params ["_computer", "_user", "_data", "_rid", "_command"];
+		private _result = createHashMapFromArray [["ok", true]];
+		if (isNull _computer || {!([_computer] call Root_fnc_hasHackingToolsAvailable)}) exitWith {
+			_result set ["ok", false];
+			[_command, _rid, _result] call AE3_desktop_fnc_jsReply;
+		};
+
+		if ((_computer getVariable ["ROOT_CYBERWARFARE_HACKERMAN_INTRO_PLAYED", false]) isEqualTo false) then {
+			_computer setVariable ["ROOT_CYBERWARFARE_HACKERMAN_INTRO_PLAYED", true, true];
+			[
+				_computer,
+				"Hackerman.exe",
+				"AE3_MEDIA|video|mod|0|\z\root_cyberwarfare\addons\main\video\loading.ogv"
+			] call AE3_desktop_fnc_openFile;
+			_result set ["playedIntro", true];
+		} else {
+			_result set ["playedIntro", false];
+		};
+
+		[_command, _rid, _result] call AE3_desktop_fnc_jsReply;
 	}] call AE3_desktop_fnc_registerCmd;
 }
 else

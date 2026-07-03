@@ -338,6 +338,7 @@ Sync to: laptop1, laptop2
 - Enables selected hacking capabilities
 - Players use `vehicle <VehicleID> <action> <value>` to control
 - Only enabled actions work (disabled actions return errors)
+- Braking decelerates the vehicle to a stop, then holds it stationary for 2 seconds
 
 **Vehicle Actions:**
 
@@ -354,7 +355,7 @@ Sync to: laptop1, laptop2
 - All operations are validated against configured min/max limits
 - Operations outside limits are rejected with detailed error messages
 - Toggle operations (lights, engine) enforce max usage counts and cooldown timers
-- Brakes use configurable deceleration rate instead of simple on/off
+- Brakes use configurable deceleration rate and continue until the vehicle stops
 
 **Drones:**
 - If synchronized object is a UAV/drone, it's registered with simplified parameters

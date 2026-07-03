@@ -150,6 +150,20 @@ if (isServer) then {
 // Register the RootCW desktop GUI apps + client reply handlers (no-op if AE3 desktop absent).
 if (hasInterface) then {
     call FUNC(gui_registerApps);
+    ["ae3_desktop_volChanged", {
+        private _session = uiNamespace getVariable ["AE3_desktop_session", createHashMap];
+        private _computer = _session getOrDefault ["computer", objNull];
+        if (isNull _computer) then {
+            private _browserCtrl = uiNamespace getVariable ["AE3_desktop_browserCtrl", controlNull];
+            if (!isNull _browserCtrl) then {
+                private _display = ctrlParent _browserCtrl;
+                _computer = _display getVariable ["AE3_desktop_computer", objNull];
+            };
+        };
+        if (!isNull _computer) then {
+            [_computer] call FUNC(gui_pushExtApps);
+        };
+    }] call CBA_fnc_addEventHandler;
 };
 
 if (hasInterface) then {

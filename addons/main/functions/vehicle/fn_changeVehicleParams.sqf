@@ -190,29 +190,7 @@ if (_vehicleIDNum != 0) then {
                         breakTo "exit";
                     };
 
-                    // Apply brakes with configured deceleration rate
-                    [_vehicleObject, _decelRate] spawn {
-                        params ["_vehicleObject", "_decelRate"];
-                        private _targetSpeed = 0.01;
-                        private _lastTime = time;
-                        private _vel = velocity _vehicleObject;
-                        private _hVel = [_vel select 0, _vel select 1, 0];
-                        private _speed = sqrt ((_hVel select 0)^2 + (_hVel select 1)^2);
-                        while {_speed > _targetSpeed} do {
-                            private _now = time;
-                            private _dt = _now - _lastTime;
-                            _lastTime = _now;
-                            _vel = velocity _vehicleObject;
-                            _hVel = [_vel select 0, _vel select 1, 0];
-                            _speed = sqrt ((_hVel select 0)^2 + (_hVel select 1)^2);
-                            private _newSpeed = _speed - (_decelRate * _dt);
-                            if (_newSpeed < _targetSpeed) then {_newSpeed = _targetSpeed};
-                            private _dir = if (_speed > 0.001) then { [(_hVel select 0) / _speed, (_hVel select 1) / _speed, 0] } else { [0,0,0] };
-                            private _newVel = [(_dir select 0) * _newSpeed, (_dir select 1) * _newSpeed, _vel select 2];
-                            [_vehicleObject, _newVel] remoteExec ["setVelocity", _vehicleObject];
-                            uiSleep 0.02;
-                        };
-                    };
+                    [_vehicleObject, _decelRate, 2] call FUNC(applyVehicleBrakes);
                 };
 
                 if (_action == "lights") then {

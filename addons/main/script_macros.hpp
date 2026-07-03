@@ -252,7 +252,7 @@
 
 // Validates that a computer object exists and has hacking tools installed
 #ifndef VALIDATE_COMPUTER
-    #define VALIDATE_COMPUTER(computer) (!isNull computer && computer getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false])
+    #define VALIDATE_COMPUTER(computer) (!isNull computer && computer getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_AVAILABLE", false])
 #endif
 
 // Validates that a device type number is within valid range (1-8)

@@ -92,6 +92,7 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
     };
     _entity setVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", true, true];
     _entity setVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _customLaptopName, true];
+    [_entity] call FUNC(syncHackingToolAvailability);
 };
 
 

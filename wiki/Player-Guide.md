@@ -12,18 +12,17 @@ This guide covers everything players need to know about using Root's Cyber Warfa
 
 ## Getting Started
 
-### Accessing the Terminal
+### Accessing the Tools
 
 1. Approach an AE3 laptop (black, olive, or sand colored laptop objects)
 2. Open the ACE interaction menu:
    - Press **Windows key** (default) or
    - Use **ACE Self-Interact** key (default: Ctrl+Windows)
-3. Select **Access Terminal**
-4. The terminal interface will open, showing the ArmaOS command line
+3. Select the terminal or desktop interface configured for that laptop
 
 ### Prerequisites
 
-The laptop must have **hacking tools installed** by a Zeus curator or mission maker. You can verify this by typing `ls /` and checking for the tools directory (usually `/rubberducky/tools` or similar).
+The laptop must have **hacking tools available** by direct installation or by a mounted AE3 USB drive that contains the tools. On the desktop, the **Hacking Tools** application group and **Hackerman.exe** desktop app appear only while tools are available. Opening `Hackerman.exe` launches the RootCW tool hub and plays the intro video once per laptop.
 
 ### Basic Navigation
 
@@ -401,7 +400,7 @@ Manipulate various vehicle parameters remotely.
 |--------|-------------|-------------|
 | `battery` | Configured Min-Max % | Set fuel/battery percentage (mission-maker configurable range, e.g., 0-100%) |
 | `speed` | Configured Min-Max km/h | Adjust speed boost (supports negative for slowdown, e.g., -50 to 50 km/h) |
-| `brakes` | Configured Min-Max m/s² | Apply brakes with deceleration rate (e.g., 1-10 m/s²) |
+| `brakes` | Configured Min-Max m/s² | Decelerate the vehicle to a stop, then hold it stopped briefly |
 | `lights` | 0-1 | Toggle lights (subject to max toggle count and cooldown timer) |
 | `engine` | 0-1 | Toggle engine (subject to max toggle count and cooldown timer) |
 | `alarm` | Configured Min-Max seconds | Activate alarm for duration (e.g., 1-30 seconds) |
@@ -414,7 +413,7 @@ vehicle 1337 battery 50    # Set fuel to 50% (if within allowed range)
 vehicle 1337 battery 0     # Empty the tank (if min limit allows)
 vehicle 1337 speed 30      # Boost speed by 30 km/h (if within allowed range)
 vehicle 1337 speed -20     # Slow down by 20 km/h (if negative values allowed)
-vehicle 1337 brakes 5      # Apply brakes at 5 m/s² deceleration (if within allowed range)
+vehicle 1337 brakes 5      # Decelerate to a stop at 5 m/s², then hold stopped briefly
 vehicle 1337 lights 0      # Toggle lights (if toggle limit not reached and cooldown expired)
 vehicle 1337 engine 0      # Stop engine (if toggle limit not reached and cooldown expired)
 vehicle 1337 alarm 10      # Activate alarm for 10 seconds (if within allowed range)

@@ -244,30 +244,7 @@ switch (_action) do {
 		_msg = format ["Speed adjusted by %1 km/h.", _speedChange];
 	};
 	case "brakes": {
-		[_vehicle] call _removeSpeedHandler;
-		[_vehicle] call _removeBrakeHandler;
-		private _handle = [{
-			params ["_args", "_handle"];
-			_args params ["_vehicle", "_decel"];
-			if (!alive _vehicle) exitWith {
-				[_handle] call CBA_fnc_removePerFrameHandler;
-				_vehicle setVariable ["ROOT_CYBERWARFARE_BRAKE_PFH", -1, true];
-			};
-
-			private _vel = velocity _vehicle;
-			private _horizontal = [_vel select 0, _vel select 1, 0];
-			private _speedNow = vectorMagnitude _horizontal;
-			if (_speedNow <= 0.1) exitWith {
-				[_vehicle, [0, 0, _vel select 2]] remoteExec ["setVelocity", _vehicle];
-				[_handle] call CBA_fnc_removePerFrameHandler;
-				_vehicle setVariable ["ROOT_CYBERWARFARE_BRAKE_PFH", -1, true];
-			};
-
-			private _nextSpeed = (_speedNow - (_decel * 0.05)) max 0;
-			private _scale = _nextSpeed / _speedNow;
-			[_vehicle, [(_vel select 0) * _scale, (_vel select 1) * _scale, _vel select 2]] remoteExec ["setVelocity", _vehicle];
-		}, 0.05, [_vehicle, _value]] call CBA_fnc_addPerFrameHandler;
-		_vehicle setVariable ["ROOT_CYBERWARFARE_BRAKE_PFH", _handle, true];
+		[_vehicle, _value, 2] call FUNC(applyVehicleBrakes);
 		_msg = format ["Brakes applied at %1 m/s2.", round _value];
 	};
 };

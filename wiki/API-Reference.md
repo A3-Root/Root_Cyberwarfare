@@ -45,7 +45,7 @@ These functions register devices and make them hackable.
 
 ### Root_fnc_addHackingToolsZeusMain
 
-Installs hacking tools on an AE3 laptop.
+Installs hacking tools on an AE3 laptop or USB drive. USB-installed tools become available to a laptop while the drive is mounted.
 
 **Syntax:**
 ```sqf
@@ -559,7 +559,7 @@ Modifies vehicle parameters.
 **Valid Actions:**
 - `battery` (value: configured min-max percentage)
 - `speed` (value: configured min-max km/h, supports negative)
-- `brakes` (value: configured min-max m/s² deceleration rate)
+- `brakes` (value: configured min-max m/s² deceleration rate; continues until stopped, then holds for 2 seconds)
 - `lights` (value: 0-1, subject to toggle limits and cooldown)
 - `engine` (value: 0-1, subject to toggle limits and cooldown)
 - `alarm` (value: configured min-max seconds)

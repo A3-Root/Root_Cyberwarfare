@@ -63,6 +63,7 @@ class CfgFunctions {
 			class gui_customAction {};
 			class gui_vehicleAction {};
 			class gui_gpsAction {};
+			class gui_pushExtApps {};
 			class gui_appDoors {};
 			class gui_appLights {};
 			class gui_appDrones {};
@@ -108,13 +109,16 @@ class CfgFunctions {
 			class getObjectsInTriggerArea {};
 			class getPlayerFromComputer {};
 			class getUserConfirmation {};
+			class hasHackingToolsAvailable {};
 			class localSoundBroadcast {};
 			class removePower {};
+			class syncHackingToolAvailability {};
 		};
 
 		class Vehicle {
 			file = "\z\root_cyberwarfare\addons\main\functions\vehicle";
 			class addVehicleZeusMain {};
+			class applyVehicleBrakes {};
 			class changeDroneFaction {};
 			class changeVehicleParams {};
 			class disableDrone {};

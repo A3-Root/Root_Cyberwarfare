@@ -88,14 +88,17 @@ PREP(getComputerIdentifier);
 PREP(getObjectsInTriggerArea);
 PREP(getPlayerFromComputer);
 PREP(getUserConfirmation);
+PREP(hasHackingToolsAvailable);
 PREP(localSoundBroadcast);
 PREP(removePower);
+PREP(syncHackingToolAvailability);
 
 // Redefine PREP macro for subdirectory: vehicle
 #undef PREP
 #define PREP(fncName) [QPATHTOF(functions\vehicle\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
 
 PREP(addVehicleZeusMain);
+PREP(applyVehicleBrakes);
 PREP(changeDroneFaction);
 PREP(changeVehicleParams);
 PREP(disableDrone);
@@ -116,6 +119,7 @@ PREP(gui_databaseAction);
 PREP(gui_customAction);
 PREP(gui_vehicleAction);
 PREP(gui_gpsAction);
+PREP(gui_pushExtApps);
 PREP(gui_appDoors);
 PREP(gui_appLights);
 PREP(gui_appDrones);
