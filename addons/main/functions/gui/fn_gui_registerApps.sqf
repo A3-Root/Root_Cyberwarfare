@@ -300,8 +300,9 @@ if (_hasWeb) then
 	private _hackermanExtra = createHashMapFromArray [
 		["menu", "Hacking Tools"],
 		["icon", "terminal"],
+		["iconPath", "\z\root_cyberwarfare\addons\main\images\hackerman.paa"],
 		["showOnDesktop", true],
-		["showInDock", false],
+		["showInDock", true],
 		["showInMenu", true],
 		["requiresFunction", "Root_fnc_hasHackingToolsAvailable"],
 		["openCommand", "rootcw_hackerman_open"],

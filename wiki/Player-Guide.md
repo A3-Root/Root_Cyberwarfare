@@ -22,7 +22,7 @@ This guide covers everything players need to know about using Root's Cyber Warfa
 
 ### Prerequisites
 
-The laptop must have **hacking tools available** by direct installation or by a mounted AE3 USB drive that contains the tools. On the desktop, the **Hacking Tools** application group and **Hackerman.exe** desktop app appear only while tools are available. Opening `Hackerman.exe` launches the RootCW tool hub and plays the intro video once per laptop.
+The laptop must have **hacking tools available** by direct installation or by a mounted AE3 USB drive that contains the tools. On the desktop, the **Hacking Tools** application group and a real `Hackerman.exe` launcher file under the current user's `Desktop` folder appear only while tools are available. Opening `Hackerman.exe` launches the RootCW tool hub and plays the intro video once per laptop.
 
 ### Basic Navigation
 

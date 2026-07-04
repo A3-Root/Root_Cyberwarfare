@@ -161,7 +161,13 @@ if (hasInterface) then {
             };
         };
         if (!isNull _computer) then {
-            [_computer] call FUNC(gui_pushExtApps);
+            [_computer] spawn FUNC(gui_pushExtApps);
+        };
+    }] call CBA_fnc_addEventHandler;
+    ["ae3_desktop_ready", {
+        params [["_computer", objNull, [objNull]]];
+        if (!isNull _computer) then {
+            [_computer] spawn FUNC(gui_pushExtApps);
         };
     }] call CBA_fnc_addEventHandler;
 };

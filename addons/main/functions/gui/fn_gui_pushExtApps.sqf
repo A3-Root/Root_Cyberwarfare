@@ -16,7 +16,14 @@ params [["_computer", objNull, [objNull]]];
 
 if (isNull _computer || {isNil "AE3_desktop_fnc_jsSend"}) exitWith {};
 
-[_computer] call FUNC(syncHackingToolAvailability);
+if (isMultiplayer) then {
+    private _owner = [_computer] call AE3_armaos_fnc_computer_getLocality;
+    [_computer, "AE3_USB_Interfaces_occupied", _owner] call AE3_main_fnc_getRemoteVar;
+    [_computer, "AE3_USB_Interfaces_mounted", _owner] call AE3_main_fnc_getRemoteVar;
+};
+
+private _available = [_computer] call FUNC(syncHackingToolAvailability);
+[_computer, _available] call FUNC(gui_syncHackermanDesktop);
 
 private _extApps = missionNamespace getVariable ["AE3_desktop_extApps", []];
 private _filtered = _extApps select {
