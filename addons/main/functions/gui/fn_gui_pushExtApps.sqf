@@ -17,9 +17,8 @@ params [["_computer", objNull, [objNull]]];
 if (isNull _computer || {isNil "AE3_desktop_fnc_jsSend"}) exitWith {};
 
 if (isMultiplayer) then {
-    private _owner = [_computer] call AE3_armaos_fnc_computer_getLocality;
-    [_computer, "AE3_USB_Interfaces_occupied", _owner] call AE3_main_fnc_getRemoteVar;
-    [_computer, "AE3_USB_Interfaces_mounted", _owner] call AE3_main_fnc_getRemoteVar;
+    [_computer, "AE3_USB_Interfaces_occupied"] call AE3_main_fnc_getRemoteVar;
+    [_computer, "AE3_USB_Interfaces_mounted"] call AE3_main_fnc_getRemoteVar;
 };
 
 private _available = [_computer] call FUNC(syncHackingToolAvailability);

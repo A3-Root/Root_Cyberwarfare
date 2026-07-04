@@ -18,9 +18,8 @@ params [["_computer", objNull, [objNull]], ["_available", false, [false]]];
 if (isNull _computer || {isNil "AE3_filesystem_fnc_fsObjExists"}) exitWith {};
 
 if (isMultiplayer) then {
-    private _owner = [_computer] call AE3_armaos_fnc_computer_getLocality;
-    [_computer, "AE3_filesystem", _owner] call AE3_main_fnc_getRemoteVar;
-    [_computer, "AE3_Userlist", _owner] call AE3_main_fnc_getRemoteVar;
+    [_computer, "AE3_filesystem"] call AE3_main_fnc_getRemoteVar;
+    [_computer, "AE3_Userlist"] call AE3_main_fnc_getRemoteVar;
 };
 
 private _filesystem = _computer getVariable ["AE3_filesystem", []];
@@ -28,6 +27,7 @@ if (_filesystem isEqualTo []) exitWith {};
 
 private _catalogPath = "/usr/share/applications/RootCW_Hackerman.app";
 private _launcherName = "Hackerman.exe";
+private _legacyLauncherNames = ["Hackerman.app"];
 private _launcherContent = "app=RootCW_Hackerman";
 private _appPerms = [[true, true, true], [true, false, true]];
 
@@ -56,23 +56,39 @@ try {
         private _user = _x;
         private _home = ["/home/" + _user, "/root"] select (_user isEqualTo "root");
         private _desktop = _home + "/Desktop";
-        private _link = _desktop + "/" + _launcherName;
+        private _launcherNames = [_launcherName] + _legacyLauncherNames;
 
         [[], _filesystem, _desktop, "root", _user, _appPerms] call AE3_filesystem_fnc_ensureDir;
 
         if (_available) then {
+            {
+                private _legacyLink = _desktop + "/" + _x;
+                if ([[], _filesystem, _legacyLink, "root"] call AE3_filesystem_fnc_fsObjExists) then {
+                    private _obj = [(_legacyLink splitString "/"), _filesystem] call AE3_filesystem_fnc_resolvePntr;
+                    private _target = [(_obj select 0)] call AE3_filesystem_fnc_symlinkTarget;
+                    private _content = _obj select 0;
+                    if (_target isEqualTo _catalogPath || {_content isEqualTo _launcherContent}) then {
+                        [[], _filesystem, _legacyLink, "root"] call AE3_filesystem_fnc_delObj;
+                    };
+                };
+            } forEach _legacyLauncherNames;
+
+            private _link = _desktop + "/" + _launcherName;
             if (!([[], _filesystem, _link, "root"] call AE3_filesystem_fnc_fsObjExists)) then {
                 [[], _filesystem, _link, _catalogPath, "root", _user, _appPerms] call AE3_filesystem_fnc_symlink;
             };
         } else {
-            if ([[], _filesystem, _link, "root"] call AE3_filesystem_fnc_fsObjExists) then {
-                private _obj = [(_link splitString "/"), _filesystem] call AE3_filesystem_fnc_resolvePntr;
-                private _target = [(_obj select 0)] call AE3_filesystem_fnc_symlinkTarget;
-                private _content = _obj select 0;
-                if (_target isEqualTo _catalogPath || {_content isEqualTo _launcherContent}) then {
-                    [[], _filesystem, _link, "root"] call AE3_filesystem_fnc_delObj;
+            {
+                private _link = _desktop + "/" + _x;
+                if ([[], _filesystem, _link, "root"] call AE3_filesystem_fnc_fsObjExists) then {
+                    private _obj = [(_link splitString "/"), _filesystem] call AE3_filesystem_fnc_resolvePntr;
+                    private _target = [(_obj select 0)] call AE3_filesystem_fnc_symlinkTarget;
+                    private _content = _obj select 0;
+                    if (_target isEqualTo _catalogPath || {_content isEqualTo _launcherContent}) then {
+                        [[], _filesystem, _link, "root"] call AE3_filesystem_fnc_delObj;
+                    };
                 };
-            };
+            } forEach _launcherNames;
         };
     } forEach _users;
 

@@ -172,6 +172,15 @@ if (hasInterface) then {
     }] call CBA_fnc_addEventHandler;
 };
 
+if (isServer) then {
+    ["ae3_computer_userAdded", {
+        params [["_computer", objNull, [objNull]]];
+        if (!isNull _computer) then {
+            [_computer, [_computer] call FUNC(hasHackingToolsAvailable)] call FUNC(gui_syncHackermanDesktop);
+        };
+    }] call CBA_fnc_addEventHandler;
+};
+
 if (hasInterface) then {
     [{(!isNull ACE_player) && (uiTime > 10) && (serverTime > 10)}, {
         call FUNC(createDiaryEntry);

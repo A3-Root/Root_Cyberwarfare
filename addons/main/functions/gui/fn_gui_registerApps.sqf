@@ -369,7 +369,9 @@ if (_hasWeb) then
 			[
 				_computer,
 				"Hackerman.exe",
-				"AE3_MEDIA|video|mod|0|\z\root_cyberwarfare\addons\main\video\loading.ogv"
+				"AE3_MEDIA|video|mod|0|\z\root_cyberwarfare\addons\main\video\loading.ogv",
+				[],
+				createHashMapFromArray [["allowStop", false], ["volume", 0.25]]
 			] call AE3_desktop_fnc_openFile;
 			_result set ["playedIntro", true];
 		} else {
