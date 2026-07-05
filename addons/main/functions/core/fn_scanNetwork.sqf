@@ -11,7 +11,7 @@
  * 0: _computer <OBJECT> - The scanning laptop
  *
  * Return Value:
- * Rows <ARRAY> - Array of [ipString, typeString, sshString, interfaceString]
+ * Rows <ARRAY> - Array of [ipString, typeString, sshString, interfaceString, hackableDeviceCount]
  *
  * Example:
  * [_laptop] call Root_fnc_scanNetwork;
@@ -70,7 +70,16 @@ private _seen = [];
         };
     };
 
-    _rows pushBack [_ipStr, _typeStr, _sshStr, _ifaceStr];
+    // Count how many hackable devices (doors, vehicles, databases, ...) this laptop can reach, across
+    // all device categories. Routers do not hold device links, so they report zero.
+    private _deviceCount = 0;
+    if (!_isRouter) then {
+        {
+            _deviceCount = _deviceCount + count ([_dev, _x] call FUNC(getAccessibleDevices));
+        } forEach [DEVICE_TYPE_DOOR, DEVICE_TYPE_LIGHT, DEVICE_TYPE_DRONE, DEVICE_TYPE_DATABASE, DEVICE_TYPE_CUSTOM, DEVICE_TYPE_GPS_TRACKER, DEVICE_TYPE_VEHICLE, DEVICE_TYPE_POWERGRID];
+    };
+
+    _rows pushBack [_ipStr, _typeStr, _sshStr, _ifaceStr, _deviceCount];
 } forEach _devices;
 
 _rows

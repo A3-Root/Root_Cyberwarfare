@@ -60,6 +60,9 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 		[mapGridPosition _o, [_p select 0, _p select 1]]
 	};
 	private _displayName = { params ["_o", "_fallback"]; if (isNull _o) exitWith {_fallback}; private _n = getText (configOf _o >> "displayName"); [_fallback, _n] select (_n isNotEqualTo "") };
+	// Prefer the mission-maker's custom device name (stored in the registry row) over the object's
+	// class displayName, so both Zeus and 3DEN modules show the name they were given on the desktop.
+	private _labelOr = { params ["_o", "_stored", "_fallback"]; if (_stored isEqualType "" && {_stored isNotEqualTo ""}) exitWith {_stored}; [_o, _fallback] call _displayName };
 	{
 		private _id = _x param [0, _forEachIndex];
 		private _obj = objectFromNetId (_x param [1, ""]);
@@ -119,7 +122,7 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 				};
 			};
 			case DEVICE_TYPE_POWERGRID: {
-				_label = [_obj, format ["Power grid %1", _id]] call _displayName;
+				_label = [_obj, _x param [2, ""], format ["Power grid %1", _id]] call _labelOr;
 					if (!isNull _obj) then {
 						_status = _obj getVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "OFF"];
 						private _cost = missionNamespace getVariable [SETTING_POWERGRID_COST, 15];
@@ -167,7 +170,7 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 					};
 				};
 			case DEVICE_TYPE_VEHICLE: {
-				_label = [_obj, format ["Vehicle %1", _id]] call _displayName;
+				_label = [_obj, _x param [2, ""], format ["Vehicle %1", _id]] call _labelOr;
 				if (!isNull _obj) then {
 					_status = ["unlocked", "locked"] select ((locked _obj) > 0);
 					// Live vehicle properties shown beside each available vehicle.
@@ -223,7 +226,7 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 				};
 			};
 				case DEVICE_TYPE_GPS_TRACKER: {
-					_label = [_obj, format ["Tracker %1", _id]] call _displayName;
+					_label = [_obj, _x param [2, ""], format ["Tracker %1", _id]] call _labelOr;
 				private _trackingTime = _x param [3, 0];
 				private _updateFrequency = _x param [4, 0];
 				private _currentStatus = _x param [8, ["Untracked", 0, ""]];
@@ -245,7 +248,7 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 					_acts = [["track", "Track", ["Tracking this GPS signal", _cost] call _powerConfirm] call _actC];
 				};
 				case DEVICE_TYPE_CUSTOM: {
-					_label = [_obj, format ["Custom device %1", _id]] call _displayName;
+					_label = [_obj, _x param [2, ""], format ["Custom device %1", _id]] call _labelOr;
 					private _cost = missionNamespace getVariable [SETTING_CUSTOM_COST, 5];
 					_acts = [
 						["activate", "Activate", ["Activating this custom device", _cost] call _powerConfirm] call _actC,
@@ -253,14 +256,24 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 					];
 				};
 				case DEVICE_TYPE_NETSCAN: {
-					// Rows arrive from Root_fnc_scanNetwork as [ip, type, ssh, interface]; present each as
-					// a read-only entry (IP as label, device type as status) with no actions or location.
-					_x params [["_scanIp", ""], ["_scanType", ""], ["_scanSsh", ""], ["_scanIface", ""]];
-					_id = _forEachIndex;
-					_label = _scanIp;
-					_status = _scanType;
-					_details = [["External SSH", _scanSsh], ["Interface", _scanIface]];
+					// Rows arrive from Root_fnc_scanNetwork as [ip, type, ssh, interface, deviceCount];
+					// present each as a read-only entry with no actions or location. A single
+					// "__SCANNING__" marker row is sent first to show the in-progress scan state.
+					_x params [["_scanIp", ""], ["_scanType", ""], ["_scanSsh", ""], ["_scanIface", ""], ["_scanCount", -1]];
 					_grid = ""; _pos = [];
+					if (_scanIp isEqualTo "__SCANNING__") then {
+						_id = 0;
+						_label = "Scanning network";
+						_status = "in progress...";
+					} else {
+						_id = _forEachIndex;
+						_label = _scanIp;
+						_status = _scanType;
+						_details = [["External SSH", _scanSsh], ["Interface", _scanIface]];
+						if (_scanCount >= 0 && {_scanType isEqualTo "Laptop"}) then {
+							_details pushBack ["Hackable devices", str _scanCount];
+						};
+					};
 				};
 			default { _label = [_obj, format ["Device %1", _id]] call _displayName; };
 		};
@@ -320,7 +333,7 @@ if (_hasWeb) then
 		["iconPath", "\z\root_cyberwarfare\addons\main\images\hackerman.paa.b64"],
 		["showOnDesktop", true],
 		["showInDock", true],
-		["showInMenu", true],
+		["showInMenu", false],
 		["requiresFunction", "Root_fnc_hasHackingToolsAvailable"],
 		["openCommand", "rootcw_hackerman_open"],
 		["subtitle", "Hacking Tools"],
@@ -383,20 +396,8 @@ if (_hasWeb) then
 			[_command, _rid, _result] call AE3_desktop_fnc_jsReply;
 		};
 
-		if ((_computer getVariable ["ROOT_CYBERWARFARE_HACKERMAN_INTRO_PLAYED", false]) isEqualTo false) then {
-			_computer setVariable ["ROOT_CYBERWARFARE_HACKERMAN_INTRO_PLAYED", true, true];
-			[
-				_computer,
-				"Hackerman.exe",
-				"AE3_MEDIA|video|mod|0|\z\root_cyberwarfare\addons\main\video\loading.ogv",
-				[],
-				createHashMapFromArray [["allowStop", false], ["volume", 0.05]]
-			] call AE3_desktop_fnc_openFile;
-			_result set ["playedIntro", true];
-		} else {
-			_result set ["playedIntro", false];
-		};
-
+		// The intro video no longer plays from the launcher; it auto-plays once per USB mount when the
+		// desktop is (re)opened with a hacking-tools drive connected - see gui_pushExtApps.
 		[_command, _rid, _result] call AE3_desktop_fnc_jsReply;
 	}] call AE3_desktop_fnc_registerCmd;
 }

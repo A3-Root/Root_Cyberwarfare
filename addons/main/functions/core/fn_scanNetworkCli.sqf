@@ -32,10 +32,10 @@ private _rows = [_computer] call FUNC(scanNetwork);
 // Optional export to the laptop's filesystem (server writes it so locality/sync is handled).
 if (_exportPath isNotEqualTo "") then {
     private _nl = toString [10];
-    private _text = "Network Scan Results" + _nl + "IP Address | Type | External SSH | Interface" + _nl;
+    private _text = "Network Scan Results" + _nl + "IP Address | Type | External SSH | Interface | Hackable Devices" + _nl;
     {
-        _x params ["_ip", "_type", "_ssh", "_iface"];
-        _text = _text + format ["%1 | %2 | %3 | %4", _ip, _type, _ssh, _iface] + _nl;
+        _x params ["_ip", "_type", "_ssh", "_iface", ["_count", 0]];
+        _text = _text + format ["%1 | %2 | %3 | %4 | %5", _ip, _type, _ssh, _iface, _count] + _nl;
     } forEach _rows;
     [_computer, _exportPath, _text, false, "root", [[true, true, true], [true, false, true]]] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
 };

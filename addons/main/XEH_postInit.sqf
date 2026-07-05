@@ -83,6 +83,14 @@ if (isServer) then {
     ["root_cyberwarfare_gui_customAction", { _this call FUNC(gui_customAction); }] call CBA_fnc_addEventHandler;
     ["root_cyberwarfare_gui_vehicleAction", { _this call FUNC(gui_vehicleAction); }] call CBA_fnc_addEventHandler;
     ["root_cyberwarfare_gui_gpsAction", { _this call FUNC(gui_gpsAction); }] call CBA_fnc_addEventHandler;
+    // Clears the intro-video flag once a client has started playing it, so it plays once per mount.
+    ["root_cyberwarfare_clearIntroPending", {
+        params ["_computerNetId"];
+        private _computer = objectFromNetId _computerNetId;
+        if (!isNull _computer) then {
+            _computer setVariable ["ROOT_CYBERWARFARE_INTRO_PENDING", false, true];
+        };
+    }] call CBA_fnc_addEventHandler;
     // Network Scanner GUI export: build the scan on the server and write it to the chosen (or default)
     // file in the laptop's filesystem.
     ["root_cyberwarfare_gui_netscanExport", {
@@ -93,12 +101,14 @@ if (isServer) then {
         if (_target isEqualTo "") then { _target = "/root/netscan.txt"; };
         private _rows = [_computer] call FUNC(scanNetwork);
         private _nl = toString [10];
-        private _text = "Network Scan Results" + _nl + "IP Address | Type | External SSH | Interface" + _nl;
+        private _text = "Network Scan Results" + _nl + "IP Address | Type | External SSH | Interface | Hackable Devices" + _nl;
         {
-            _x params ["_ip", "_devType", "_ssh", "_iface"];
-            _text = _text + format ["%1 | %2 | %3 | %4", _ip, _devType, _ssh, _iface] + _nl;
+            _x params ["_ip", "_devType", "_ssh", "_iface", ["_count", 0]];
+            _text = _text + format ["%1 | %2 | %3 | %4 | %5", _ip, _devType, _ssh, _iface, _count] + _nl;
         } forEach _rows;
         [_computer, _target, _text, false, "root", [[true, true, true], [true, false, true]]] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+        // Confirm to the requesting client so the app shows the saved path instead of hanging on "Export...".
+        ["root_cyberwarfare_gui_actionResult", [DEVICE_TYPE_NETSCAN, format ["Network scan exported to %1", _target], true, _target], _owner] call CBA_fnc_ownerEvent;
     }] call CBA_fnc_addEventHandler;
 };
 
@@ -252,6 +262,8 @@ if (isServer) then {
                 if (!_provisioned && {!_selfInstalled}) then {
                     [_comp, "/rubberducky/tools", owner _comp, ""] call FUNC(addHackingToolsZeusMain);
                     _comp setVariable ["ROOT_CYBERWARFARE_USB_PROVISIONED", true, true];
+                    // Arm the intro video so the next desktop open plays it once for this mount.
+                    _comp setVariable ["ROOT_CYBERWARFARE_INTRO_PENDING", true, true];
                 };
             } else {
                 if (_provisioned) then {
