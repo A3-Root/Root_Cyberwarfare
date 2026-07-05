@@ -252,6 +252,16 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 						["deactivate", "Deactivate", ["Deactivating this custom device", _cost] call _powerConfirm] call _actC
 					];
 				};
+				case DEVICE_TYPE_NETSCAN: {
+					// Rows arrive from Root_fnc_scanNetwork as [ip, type, ssh, interface]; present each as
+					// a read-only entry (IP as label, device type as status) with no actions or location.
+					_x params [["_scanIp", ""], ["_scanType", ""], ["_scanSsh", ""], ["_scanIface", ""]];
+					_id = _forEachIndex;
+					_label = _scanIp;
+					_status = _scanType;
+					_details = [["External SSH", _scanSsh], ["Interface", _scanIface]];
+					_grid = ""; _pos = [];
+				};
 			default { _label = [_obj, format ["Device %1", _id]] call _displayName; };
 		};
 		private _item = createHashMapFromArray [
@@ -294,13 +304,20 @@ if (_hasWeb) then
 		// (Vehicles #1). Refuel/Drain removed.
 		["RootCW_Vehicles",  "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES",  "&#128663;", "vehicle",  DEVICE_TYPE_VEHICLE,   [], "Hacking Tools"],
 		["RootCW_PowerGrid", "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID", "&#9889;",   "power",    DEVICE_TYPE_POWERGRID, [["on", "On"] call _act, ["off", "Off"] call _act, ["overload", "Overload"] call _act], "Hacking Tools"],
-		["RootCW_Custom",    "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM",    "&#129513;", "device",   DEVICE_TYPE_CUSTOM,    [["activate", "Activate"] call _act, ["deactivate", "Deactivate"] call _act], "Hacking Tools"]
+		["RootCW_Custom",    "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM",    "&#129513;", "device",   DEVICE_TYPE_CUSTOM,    [["activate", "Activate"] call _act, ["deactivate", "Deactivate"] call _act], "Hacking Tools"],
+		// Network Scanner: read-only list of AE3 laptops/routers on the subnet; the Export global
+		// action writes the scan to a file in the laptop's filesystem.
+		["RootCW_NetScan",   "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN",   "&#128225;", "network",  DEVICE_TYPE_NETSCAN,   [], "Hacking Tools", [createHashMapFromArray [["id", "export"], ["label", "Export to File"]]]]
 	];
 
 	private _hackermanExtra = createHashMapFromArray [
 		["menu", "Hacking Tools"],
 		["icon", "terminal"],
-		["iconPath", "\z\root_cyberwarfare\addons\main\images\hackerman.paa"],
+		// Point at the base64 sidecar (PNG bytes): the CEF loader reads .b64 paths directly and skips the
+		// engine texture sampler entirely, which both renders the icon and avoids the "Unknown sampler
+		// texture type" warning the packed .paa produced. Replace hackerman.paa.b64 with your own art by
+		// base64-encoding a PNG to that file.
+		["iconPath", "\z\root_cyberwarfare\addons\main\images\hackerman.paa.b64"],
 		["showOnDesktop", true],
 		["showInDock", true],
 		["showInMenu", true],
@@ -315,7 +332,8 @@ if (_hasWeb) then
 			["RootCW_Drones", localize "STR_ROOT_CYBERWARFARE_GUI_APP_DRONES"],
 			["RootCW_Vehicles", localize "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES"],
 			["RootCW_PowerGrid", localize "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID"],
-			["RootCW_Custom", localize "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM"]
+			["RootCW_Custom", localize "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM"],
+			["RootCW_NetScan", localize "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN"]
 		]]
 	];
 	["RootCW_Hackerman", "Hackerman.exe", "H", "launcher", _hackermanExtra] call AE3_desktop_fnc_registerExtApp;
@@ -352,6 +370,7 @@ if (_hasWeb) then
 			case DEVICE_TYPE_VEHICLE:   { ["root_cyberwarfare_gui_vehicleAction",   [_co, _nid, _id, _action, "", _value, _lock]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_GPS_TRACKER: { ["root_cyberwarfare_gui_gpsAction",     [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_CUSTOM:    { ["root_cyberwarfare_gui_customAction",    [_co, _nid, _id, _action, netId player, ""]] call CBA_fnc_serverEvent; };
+				case DEVICE_TYPE_NETSCAN:   { ["root_cyberwarfare_gui_netscanExport",   [_co, _nid, _data getOrDefault ["savePath", ""]]] call CBA_fnc_serverEvent; };
 			default {};
 		};
 	}] call AE3_desktop_fnc_registerCmd;
@@ -371,7 +390,7 @@ if (_hasWeb) then
 				"Hackerman.exe",
 				"AE3_MEDIA|video|mod|0|\z\root_cyberwarfare\addons\main\video\loading.ogv",
 				[],
-				createHashMapFromArray [["allowStop", false], ["volume", 0.25]]
+				createHashMapFromArray [["allowStop", false], ["volume", 0.05]]
 			] call AE3_desktop_fnc_openFile;
 			_result set ["playedIntro", true];
 		} else {

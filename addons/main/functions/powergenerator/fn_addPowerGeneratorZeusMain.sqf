@@ -111,8 +111,11 @@ if (_availableToFutureLaptops) then {
 // Update link cache
 missionNamespace setVariable ["ROOT_CYBERWARFARE_LINK_CACHE", _linkCache, true];
 
-// If available to future laptops, add to public devices with exclusion list
-if (_availableToFutureLaptops) then {
+// Publish the power grid as a public device when it is meant for future laptops or when no
+// specific computers were linked. The exclusion list is only populated for the future-access
+// case, so an unlinked grid registers with no exclusions and becomes accessible to every laptop.
+private _madePublic = _availableToFutureLaptops || (_linkedComputers isEqualTo []);
+if (_madePublic) then {
     private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
     _publicDevices pushBack [DEVICE_TYPE_POWERGRID, _deviceId, _allExistingComputers];
     missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
@@ -121,7 +124,7 @@ if (_availableToFutureLaptops) then {
 // Sync variables
 call Root_fnc_syncDeviceData;
 publicVariable "ROOT_CYBERWARFARE_LINK_CACHE";
-if (_availableToFutureLaptops) then {
+if (_madePublic) then {
     publicVariable "ROOT_CYBERWARFARE_PUBLIC_DEVICES";
 };
 

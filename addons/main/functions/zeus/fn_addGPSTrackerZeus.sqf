@@ -44,7 +44,7 @@ ROOT_CYBERWARFARE_GPS_TRACKER_NAME = format ["GPS_Tracker_%1", _index];
 // Get all existing laptops with hacking tools
 private _allComputers = [];
 {
-    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
+    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
         private _displayName = getText (configOf _x >> "displayName");
         private _computerName = _x getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _displayName];
         private _netId = netId _x;

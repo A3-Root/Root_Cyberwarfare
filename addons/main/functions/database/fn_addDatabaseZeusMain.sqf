@@ -96,7 +96,7 @@ if ((_availableToFutureLaptops) || (count _linkedComputers == 0)) then {
             if (IS_EXPERIMENTAL_MODE) then {
                 {
                     private _nearLaptops = nearestObjects [_x, [], 3] select {
-                        _x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]
+                        _x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]
                     };
                     if (_nearLaptops isNotEqualTo []) then {
                         _excludedIdentifiers pushBack (getPlayerUID _x);
@@ -105,7 +105,7 @@ if ((_availableToFutureLaptops) || (count _linkedComputers == 0)) then {
                 } forEach allPlayers;
             } else {
                 private _allObjects = 24 allObjects 1;
-                private _allHackingLaptops = _allObjects select {_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]};
+                private _allHackingLaptops = _allObjects select {_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]};
                 {
                     _excludedIdentifiers pushBack (netId _x);
                     DEBUG_LOG_1("Excluding laptop netId: %1",netId _x);

@@ -24,7 +24,7 @@ deleteVehicle _logic;
 // Get all existing laptops with hacking tools
 private _allComputers = [];
 {
-    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
+    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
         private _computerName = _x getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME];
         private _netId = netId _x;
         private _gridPos = mapGridPosition _x;

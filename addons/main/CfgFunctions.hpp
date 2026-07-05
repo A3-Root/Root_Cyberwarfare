@@ -6,7 +6,6 @@ class CfgFunctions {
 			file = "\z\root_cyberwarfare\addons\main\functions\3den";
 			class 3denAddCustomDevice {};
 			class 3denAddDatabase {};
-			class 3denAddDevices {};
 			class 3denAddDoors {};
 			class 3denAddGPSTracker {};
 			class 3denAddHackingTools {};
@@ -14,6 +13,7 @@ class CfgFunctions {
 			class 3denAddPowerGenerator {};
 			class 3denAddVehicle {};
 			class 3denAdjustPowerCost {};
+			class 3denRegisterHackableLaptop {};
 		};
 
 		class Core {
@@ -26,6 +26,12 @@ class CfgFunctions {
 			class isDeviceAccessible {};
 			class gridLabel {};
 			class listDevicesInSubnet {};
+			class registerHackableLaptopZeusMain {};
+			class removeHackingTools {};
+			class seedRubberducky {};
+			class scanNetwork {};
+			class scanNetworkCli {};
+			class scanNetworkPrint {};
 		};
 
 		class Custom {
@@ -42,7 +48,6 @@ class CfgFunctions {
 
 		class Devices {
 			file = "\z\root_cyberwarfare\addons\main\functions\devices";
-			class addDeviceZeusMain {};
 			class addDoorsZeusMain {};
 			class addLightsZeusMain {};
 			class changeDoorState {};
@@ -127,7 +132,6 @@ class CfgFunctions {
 
 		class Zeus {
 			file = "\z\root_cyberwarfare\addons\main\functions\zeus";
-			class addDeviceZeus {};
 			class addDoorsZeus {};
 			class addLightsZeus {};
 			class addCustomDeviceZeus {};
@@ -137,6 +141,7 @@ class CfgFunctions {
 			class addPowerGeneratorZeus {};
 			class modifyPowerZeus {};
 			class addHackingToolsZeus {};
+			class registerHackableLaptopZeus {};
 			class copyDeviceLinksZeus {};
 		};
 	};

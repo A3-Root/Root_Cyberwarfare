@@ -191,7 +191,7 @@ if (_availableToFutureLaptops || _linkedComputers isEqualTo []) then {
                 // Experimental mode: Collect player UIDs
                 {
                     private _nearLaptops = nearestObjects [_x, [], 3] select {
-                        _x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]
+                        _x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]
                     };
                     if (_nearLaptops isNotEqualTo []) then {
                         private _uid = getPlayerUID _x;
@@ -204,7 +204,7 @@ if (_availableToFutureLaptops || _linkedComputers isEqualTo []) then {
             } else {
                 // Simple mode: Collect laptop netIds
                 {
-                    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
+                    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
                         private _netId = netId _x;
                         if !(_netId in _linkedComputers) then {
                             _excludedIdentifiers pushBack _netId;
@@ -224,7 +224,7 @@ if (_availableToFutureLaptops || _linkedComputers isEqualTo []) then {
                 // Experimental mode: Collect player UIDs
                 {
                     private _nearLaptops = nearestObjects [_x, [], 3] select {
-                        _x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]
+                        _x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]
                     };
                     if (_nearLaptops isNotEqualTo []) then {
                         _excludedIdentifiers pushBack (getPlayerUID _x);
@@ -234,7 +234,7 @@ if (_availableToFutureLaptops || _linkedComputers isEqualTo []) then {
             } else {
                 // Simple mode: Collect laptop netIds
                 {
-                    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
+                    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
                         _excludedIdentifiers pushBack (netId _x);
                         DEBUG_LOG_1("Excluding laptop netId: %1",netId _x);
                     };

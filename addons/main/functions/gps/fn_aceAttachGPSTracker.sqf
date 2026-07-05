@@ -31,7 +31,7 @@ private _trackerName = format ["GPS_Tracker_%1", _index];
 // Check if any laptops exist with hacking tools
 private _allComputers = [];
 {
-    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
+    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
         private _netId = netId _x;
         _allComputers pushBack _netId;
     };

@@ -22,7 +22,13 @@ params ["_owner", "_computerNetId", "_deviceType", ["_commandPath", ""]];
 private _computer = objectFromNetId _computerNetId;
 if (isNull _computer) exitWith {};
 
-private _list = [_computer, _deviceType, _commandPath] call FUNC(getAccessibleDevices);
+// The Network Scanner is not a hackable-device list: it enumerates AE3 laptops/routers on the same
+// subnet, so it bypasses the device registry and builds its rows from the AE3 network model instead.
+private _list = if (_deviceType == DEVICE_TYPE_NETSCAN) then {
+    [_computer] call FUNC(scanNetwork)
+} else {
+    [_computer, _deviceType, _commandPath] call FUNC(getAccessibleDevices)
+};
 
 // Registry entries are already lightweight (ids + netIds). Reply to the requesting client only.
 ["root_cyberwarfare_gui_devList", [_deviceType, _list, _computerNetId], _owner] call CBA_fnc_ownerEvent;

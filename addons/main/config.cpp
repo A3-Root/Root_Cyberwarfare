@@ -1,5 +1,6 @@
 #include "script_mod.hpp"
 #include "CfgFunctions.hpp"
+#include "CfgWeapons.hpp"
 #include "CfgVehicles.hpp"
 #include "CfgFactionClasses.hpp"
 
@@ -7,10 +8,10 @@ class CfgPatches {
 	class ROOT_CyberWarfare {
 		name = "Root's Cyber Warfare";
 		units[] = {
-			"ROOT_CyberWarfareAddDeviceZeus",
 			"ROOT_CyberWarfareAddDoorsZeus",
 			"ROOT_CyberWarfareAddLightsZeus",
 			"ROOT_CyberWarfareAddHackingToolsZeus",
+			"ROOT_CyberWarfareRegisterHackableLaptopZeus",
 			"ROOT_CyberWarfareModifyPowerZeus",
 			"ROOT_CyberWarfareAddFileZeus",
 			"ROOT_CyberWarfareAddGPSTrackerZeus",
@@ -19,13 +20,14 @@ class CfgPatches {
 			"ROOT_CyberWarfareCopyDeviceLinksZeus",
 			"ROOT_CyberWarfareAddCustomDeviceZeus",
 			"ROOT_Module3DEN_AddHackingTools",
+			"ROOT_Module3DEN_RegisterHackableLaptop",
 			"ROOT_Module3DEN_AdjustPowerCost",
-			"ROOT_Module3DEN_AddDevices",
 			"ROOT_Module3DEN_AddDatabase",
 			"ROOT_Module3DEN_AddVehicle",
 			"ROOT_Module3DEN_AddGPSTracker",
 			"ROOT_Module3DEN_AddCustomDevice",
-			"ROOT_Module3DEN_AddPowerGenerator"
+			"ROOT_Module3DEN_AddPowerGenerator",
+			"ROOT_Rubberducky_Object"
 		};
 		requiredAddons[] = {
 			"A3_Modules_F_Curator",
@@ -37,9 +39,12 @@ class CfgPatches {
 			"zen_custom_modules",
 			"ae3_main",
 			"ae3_filesystem",
-			"ae3_desktop"
+			"ae3_desktop",
+			"ae3_flashdrive"
 		};
-		weapons[] = {};
+		weapons[] = {
+			"ROOT_Rubberducky_Item"
+		};
 		author = "Root";
 		authors[] = {
 			"Root",

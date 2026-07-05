@@ -92,7 +92,7 @@ ROOT_hackingVehicleName = format ["Vehicle_%1", _index];
 // Get all existing laptops with hacking tools
 private _allComputers = [];
 {
-    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
+    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
         private _displayName = getText (configOf _x >> "displayName");
         private _computerName = _x getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _displayName];
         private _netId = netId _x;
@@ -220,7 +220,7 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this de
                     _selectedComputers = _allComputers apply { _x select 0 };
                 };
 
-                // Call addVehicleZeusMain which will detect drone and redirect to addDeviceZeusMain
+                // Hand off to the vehicle worker, which detects drones and applies the drone-specific handling.
                 [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
                 // Drone path can't carry the flag through the 4-param call; apply it on the object (#3).
                 [_targetObject, ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]] remoteExec ["setVariable", 2];

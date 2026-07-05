@@ -66,7 +66,7 @@ ROOT_CYBERWARFARE_LOG_INFO_1(format ["Regular Device Cleanup script started! Run
             private _computer = objectFromNetId _computerNetId;
 
             // Check if computer still exists and has hacking tools
-            if (!isNull _computer && {_computer getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]}) then {
+            if (!isNull _computer && {_computer getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]}) then {
                 _cleanLinks pushBack _x;
             } else {
                 // Computer is deleted or no longer has hacking tools
@@ -113,7 +113,7 @@ ROOT_CYBERWARFARE_LOG_INFO_1(format ["Regular Device Cleanup script started! Run
                 DEBUG_LOG_1("Cleanup: Validating laptop netId: %1",_identifier);
 
                 private _computer = objectFromNetId _identifier;
-                _isValid = !isNull _computer && {_computer getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]};
+                _isValid = !isNull _computer && {_computer getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]};
 
                 if (!_isValid) then {
                     DEBUG_LOG_1("Cleanup: Laptop netId %1 invalid or no hacking tools",_identifier);

@@ -83,6 +83,23 @@ if (isServer) then {
     ["root_cyberwarfare_gui_customAction", { _this call FUNC(gui_customAction); }] call CBA_fnc_addEventHandler;
     ["root_cyberwarfare_gui_vehicleAction", { _this call FUNC(gui_vehicleAction); }] call CBA_fnc_addEventHandler;
     ["root_cyberwarfare_gui_gpsAction", { _this call FUNC(gui_gpsAction); }] call CBA_fnc_addEventHandler;
+    // Network Scanner GUI export: build the scan on the server and write it to the chosen (or default)
+    // file in the laptop's filesystem.
+    ["root_cyberwarfare_gui_netscanExport", {
+        params ["_owner", "_computerNetId", ["_savePath", ""]];
+        private _computer = objectFromNetId _computerNetId;
+        if (isNull _computer) exitWith {};
+        private _target = _savePath;
+        if (_target isEqualTo "") then { _target = "/root/netscan.txt"; };
+        private _rows = [_computer] call FUNC(scanNetwork);
+        private _nl = toString [10];
+        private _text = "Network Scan Results" + _nl + "IP Address | Type | External SSH | Interface" + _nl;
+        {
+            _x params ["_ip", "_devType", "_ssh", "_iface"];
+            _text = _text + format ["%1 | %2 | %3 | %4", _ip, _devType, _ssh, _iface] + _nl;
+        } forEach _rows;
+        [_computer, _target, _text, false, "root", [[true, true, true], [true, false, true]]] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+    }] call CBA_fnc_addEventHandler;
 };
 
 // ============================================================================
@@ -170,6 +187,22 @@ if (hasInterface) then {
             [_computer] spawn FUNC(gui_pushExtApps);
         };
     }] call CBA_fnc_addEventHandler;
+    // Server-driven refresh: after a re-plugged hacking-tools drive has its install flag rebroadcast,
+    // rebuild the desktop app list for the laptop this client is currently viewing.
+    ["root_cyberwarfare_refreshExtApps", {
+        private _session = uiNamespace getVariable ["AE3_desktop_session", createHashMap];
+        private _computer = _session getOrDefault ["computer", objNull];
+        if (isNull _computer) then {
+            private _browserCtrl = uiNamespace getVariable ["AE3_desktop_browserCtrl", controlNull];
+            if (!isNull _browserCtrl) then {
+                private _display = ctrlParent _browserCtrl;
+                _computer = _display getVariable ["AE3_desktop_computer", objNull];
+            };
+        };
+        if (!isNull _computer) then {
+            [_computer] spawn FUNC(gui_pushExtApps);
+        };
+    }] call CBA_fnc_addEventHandler;
 };
 
 if (isServer) then {
@@ -178,6 +211,58 @@ if (isServer) then {
         if (!isNull _computer) then {
             [_computer, [_computer] call FUNC(hasHackingToolsAvailable)] call FUNC(gui_syncHackermanDesktop);
         };
+    }] call CBA_fnc_addEventHandler;
+
+    // A flash drive that was picked up and re-plugged has its RootCW install flag restored only on
+    // the server: AE3 rebuilds the drive object on reconnect and restores its variables without the
+    // public broadcast flag, so clients evaluating tool availability read the default (false). On any
+    // USB volume change, walk every AE3 computer's mounted drives; for a laptop with a hacking-tools
+    // drive mounted, re-broadcast the drive's flag and provision the CLI toolset onto the laptop so
+    // terminal commands work while plugged in. When the last tools drive is removed, withdraw a
+    // USB-provisioned toolset again. Finally, ask clients to rebuild their desktop app list so the
+    // Hacking Tools menu, launcher and dock icon track availability for all users of that laptop.
+    ["ae3_desktop_volChanged", {
+        {
+            private _comp = _x;
+            private _occupied = _comp getVariable ["AE3_USB_Interfaces_occupied", []];
+            private _mounted = _comp getVariable ["AE3_USB_Interfaces_mounted", []];
+
+            // Detect any mounted drive carrying the hacking toolset and re-broadcast its flag so
+            // clients reading tool availability from the drive object see the restored value.
+            private _hasToolsUsb = false;
+            for "_i" from 0 to ((count _occupied) - 1) do {
+                private _drive = _occupied param [_i, objNull];
+                if (
+                    !isNull _drive
+                    && {_mounted param [_i, false]}
+                    && {_drive getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]}
+                ) then {
+                    _drive setVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", true, true];
+                    private _platformName = _drive getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", ""];
+                    _drive setVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _platformName, true];
+                    _hasToolsUsb = true;
+                };
+            };
+
+            // Provision / withdraw the laptop's own CLI toolset based on drive presence. A laptop
+            // whose tools were installed directly (mission-side, not via a USB) is left untouched.
+            private _provisioned = _comp getVariable ["ROOT_CYBERWARFARE_USB_PROVISIONED", false];
+            private _selfInstalled = (_comp getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) && {!_provisioned};
+            if (_hasToolsUsb) then {
+                if (!_provisioned && {!_selfInstalled}) then {
+                    [_comp, "/rubberducky/tools", owner _comp, ""] call FUNC(addHackingToolsZeusMain);
+                    _comp setVariable ["ROOT_CYBERWARFARE_USB_PROVISIONED", true, true];
+                };
+            } else {
+                if (_provisioned) then {
+                    [_comp, "/rubberducky/tools"] call FUNC(removeHackingTools);
+                    _comp setVariable ["ROOT_CYBERWARFARE_USB_PROVISIONED", false, true];
+                };
+            };
+        } forEach (missionNamespace getVariable ["ae3_desktop_computers", []]);
+
+        // Always refresh so re-plugged drives (flag rebroadcast only, no provisioning change) surface too.
+        ["root_cyberwarfare_refreshExtApps", []] call CBA_fnc_globalEvent;
     }] call CBA_fnc_addEventHandler;
 };
 

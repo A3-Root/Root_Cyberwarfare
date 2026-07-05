@@ -108,7 +108,7 @@ if (_availableToFutureLaptops || count _linkedComputers == 0) then {
             if (IS_EXPERIMENTAL_MODE) then {
                 {
                     private _nearLaptops = nearestObjects [_x, [], 3] select {
-                        _x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]
+                        _x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]
                     };
                     if (_nearLaptops isNotEqualTo []) then {
                         private _uid = getPlayerUID _x;
@@ -120,7 +120,7 @@ if (_availableToFutureLaptops || count _linkedComputers == 0) then {
                 } forEach allPlayers;
             } else {
                 {
-                    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
+                    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
                         private _netId = netId _x;
                         if !(_netId in _linkedComputers) then {
                             _excludedIdentifiers pushBack _netId;
@@ -139,7 +139,7 @@ if (_availableToFutureLaptops || count _linkedComputers == 0) then {
             if (IS_EXPERIMENTAL_MODE) then {
                 {
                     private _nearLaptops = nearestObjects [_x, [], 3] select {
-                        _x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]
+                        _x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]
                     };
                     if (_nearLaptops isNotEqualTo []) then {
                         _excludedIdentifiers pushBack (getPlayerUID _x);
@@ -148,7 +148,7 @@ if (_availableToFutureLaptops || count _linkedComputers == 0) then {
                 } forEach allPlayers;
             } else {
                 {
-                    if (_x getVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", false]) then {
+                    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
                         _excludedIdentifiers pushBack (netId _x);
                         DEBUG_LOG_1("Excluding laptop netId: %1",netId _x);
                     };
@@ -165,11 +165,11 @@ if (_availableToFutureLaptops || count _linkedComputers == 0) then {
     };
 
     DEBUG_LOG_1("Excluded identifiers: %1",_excludedIdentifiers);
-    // Only add to public devices if we have exclusions or it's available to future
-    if (_availableToFutureLaptops || _excludedIdentifiers isNotEqualTo []) then {
-        _publicDevices pushBack [6, _deviceId, _excludedIdentifiers]; // 6 = GPS tracker type
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
-    };
+    // Publish the tracker as a public device whenever this branch runs (future access or no
+    // explicit links): every laptop not named in the exclusion list can then reach it. With no
+    // links and no future flag the exclusion list is empty, so the tracker is accessible to all.
+    _publicDevices pushBack [6, _deviceId, _excludedIdentifiers]; // 6 = GPS tracker type
+    missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
 };
 
 if (_sysChat) then {

@@ -4,7 +4,6 @@
 
 PREP(3denAddHackingTools);
 PREP(3denAdjustPowerCost);
-PREP(3denAddDevices);
 PREP(3denAddDoors);
 PREP(3denAddLights);
 PREP(3denAddDatabase);
@@ -12,6 +11,7 @@ PREP(3denAddVehicle);
 PREP(3denAddGPSTracker);
 PREP(3denAddCustomDevice);
 PREP(3denAddPowerGenerator);
+PREP(3denRegisterHackableLaptop);
 
 // Redefine PREP macro for subdirectory: core
 #undef PREP
@@ -25,6 +25,12 @@ PREP(initSettings);
 PREP(isDeviceAccessible);
 PREP(gridLabel);
 PREP(listDevicesInSubnet);
+PREP(registerHackableLaptopZeusMain);
+PREP(removeHackingTools);
+PREP(seedRubberducky);
+PREP(scanNetwork);
+PREP(scanNetworkCli);
+PREP(scanNetworkPrint);
 
 // Redefine PREP macro for subdirectory: custom
 #undef PREP
@@ -44,7 +50,6 @@ PREP(downloadDatabase);
 #undef PREP
 #define PREP(fncName) [QPATHTOF(functions\devices\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
 
-PREP(addDeviceZeusMain);
 PREP(addDoorsZeusMain);
 PREP(addLightsZeusMain);
 PREP(changeDoorState);
@@ -137,11 +142,11 @@ PREP(gui_appGpsMap);
 
 PREP(addCustomDeviceZeus);
 PREP(addDatabaseZeus);
-PREP(addDeviceZeus);
 PREP(addDoorsZeus);
 PREP(addLightsZeus);
 PREP(addGPSTrackerZeus);
 PREP(addHackingToolsZeus);
+PREP(registerHackableLaptopZeus);
 PREP(addPowerGeneratorZeus);
 PREP(addVehicleZeus);
 PREP(copyDeviceLinksZeus);

@@ -45,6 +45,11 @@
 #ifndef DEVICE_TYPE_POWERGRID
     #define DEVICE_TYPE_POWERGRID 8     // Power generators (light control in radius)
 #endif
+// GUI-only pseudo device type: not a hackable device, used by the Network Scanner app so it can reuse
+// the generic device-list rendering pipeline to show scanned AE3 laptops/routers.
+#ifndef DEVICE_TYPE_NETSCAN
+    #define DEVICE_TYPE_NETSCAN 9       // Network scanner results (laptops/routers on the subnet)
+#endif
 
 // ============================================================================
 // Device Cache Keys

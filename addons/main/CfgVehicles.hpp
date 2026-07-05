@@ -1,4 +1,18 @@
 class CfgVehicles {
+	class Land_USB_Dongle_01_F_AE3;   // AE3 flash-drive world object (base for the Rubberducky)
+
+	// Placeable / Arsenal-spawnable Rubberducky drive object. Behaves as an AE3 flash drive but is
+	// seeded read-only with the hacking toolset by its init handler; picking it up yields the single
+	// ROOT_Rubberducky_Item.
+	class ROOT_Rubberducky_Object: Land_USB_Dongle_01_F_AE3 {
+		author = "Root";
+		scope = 2;
+		scopeCurator = 2;
+		scopeArsenal = 2;
+		displayName = "Rubberducky USB";
+		ae3_item = "ROOT_Rubberducky_Item";
+	};
+
 	class zen_modules_moduleBase;
 	class ROOT_CyberWarfareAddHackingToolsZeus: zen_modules_moduleBase {
 		author = "Root";
@@ -8,13 +22,13 @@ class CfgVehicles {
 		function = "Root_fnc_addHackingToolsZeus";
 		displayName = "Add Hacking Tools";
 	};
-	class ROOT_CyberWarfareAddDeviceZeus: zen_modules_moduleBase {
+	class ROOT_CyberWarfareRegisterHackableLaptopZeus: zen_modules_moduleBase {
 		author = "Root";
-		_generalMacro = "ROOT_CyberWarfareAddDeviceZeus";
+		_generalMacro = "ROOT_CyberWarfareRegisterHackableLaptopZeus";
 		curatorCanAttach = 1;
 		category = "ROOT_CYBERWARFARE";
-		function = "Root_fnc_addDeviceZeus";
-		displayName = "Add Hackable Object (DEPRECATED - Use Add Doors/Lights)";
+		function = "Root_fnc_registerHackableLaptopZeus";
+		displayName = "Register Hackable Laptop";
 	};
 	class ROOT_CyberWarfareAddDoorsZeus: zen_modules_moduleBase {
 		author = "Root";
@@ -132,6 +146,25 @@ class CfgVehicles {
 		};
 	};
 
+	class ROOT_Module3DEN_RegisterHackableLaptop: Module_F {
+		scope = 2;
+		displayName = "Register Hackable Laptop";
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_3denRegisterHackableLaptop";
+		functionPriority = 4;
+		isGlobal = 0;
+		isTriggerActivated = 0;
+		isDisposable = 1;
+		is3DEN = 0;
+		class Attributes: AttributesBase {
+			class ModuleDescription: ModuleDescription{};
+		};
+		class ModuleDescription: ModuleDescription {
+			description = "Synchronize this module to AE3 Laptop objects to register them as hackable stations. Devices can then be linked to these laptops. Registration does NOT install hacking tools - the laptop still needs a hacking-tools USB (or the Add Hacking Tools module) before it can list and control devices.";
+			sync[] = {"Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3"};
+		};
+	};
+
 	class ROOT_Module3DEN_AdjustPowerCost: Module_F {
 		scope = 2;
 		displayName = "Adjust Power Cost Settings";
@@ -175,39 +208,6 @@ class CfgVehicles {
 		};
 		class ModuleDescription: ModuleDescription {
 			description = "Configures power costs for hacking operations. Only one module of this type should exist.";
-		};
-	};
-
-	class ROOT_Module3DEN_AddDevices: Module_F {
-		scope = 2;
-		displayName = "Add Devices (DEPRECATED - Use Add Doors/Lights)";
-		category = "ROOT_CYBERWARFARE";
-		function = "Root_fnc_3denAddDevices";
-		functionPriority = 4;
-		isGlobal = 0;
-		isTriggerActivated = 0;
-		isDisposable = 1;
-		is3DEN = 0;
-		class Attributes: AttributesBase {
-			class ROOT_CYBERWARFARE_3DEN_DEVICES_PUBLIC: Checkbox {
-				property = "ROOT_CYBERWARFARE_3DEN_DEVICES_PUBLIC";
-				displayName = "Add to Public Device List";
-				tooltip = "If checked, these devices will be accessible by all laptops (current and future)";
-				typeName = "BOOL";
-				defaultValue = 1;
-			};
-			class ROOT_CYBERWARFARE_3DEN_DEVICES_UNBREACHABLE: Checkbox {
-				property = "ROOT_CYBERWARFARE_3DEN_DEVICES_UNBREACHABLE";
-				displayName = "Make Unbreachable";
-				tooltip = "If checked, none of the building doors can be breached by ACE explosives or lockpicking. It is only openable via hacking.";
-				typeName = "BOOL";
-				defaultValue = 0;
-			};
-			class ModuleDescription: ModuleDescription{};
-		};
-		class ModuleDescription: ModuleDescription {
-			description = "DEPRECATED: Use Add Doors or Add Lights modules. Synchronize this module to buildings (with doors), lights, or triggers to make them hackable. Triggers enable batch-registration of terrain buildings/lights within an area.";
-			sync[] = {"All"};
 		};
 	};
 

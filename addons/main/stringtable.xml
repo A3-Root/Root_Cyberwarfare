@@ -239,6 +239,9 @@
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_LIGHTS">
             <English>Lights</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN">
+            <English>Network Scanner</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID">
             <English>Power Grid</English>
         </Key>
@@ -514,6 +517,9 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_POWER_MODIFIED">
             <English>Modified Hacking Power Cost!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_REGISTER_LAPTOP_SUCCESS">
+            <English>Laptop Registered as a Hackable Station!</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_SAME_LAPTOP_ERROR">
             <English>Source and target cannot be the same laptop!</English>

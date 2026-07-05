@@ -22,7 +22,7 @@
 
 params ["_entity", ["_path", "/rubberducky/tools", [""]], ["_execUserId", 0, [0]], ["_customLaptopName", "", [""]], ["_backdoorScriptPrefix", "", [""]]];
 
-private ["_guide", "_devices", "_door", "_light", "_changedrone", "_disabledrone", "_download", "_custom", "_gpstrack", "_vehicle", "_powergrid"];
+private ["_guide", "_devices", "_door", "_light", "_changedrone", "_disabledrone", "_download", "_custom", "_gpstrack", "_vehicle", "_powergrid", "_netscan"];
 
 // Validate _path is a string
 if (_path isEqualType objNull || {_path isEqualType []}) exitWith {
@@ -55,10 +55,11 @@ _custom = _result + "/custom";
 _gpstrack = _result + "/gpstrack";
 _vehicle = _result + "/vehicle";
 _powergrid = _result + "/powergrid";
+_netscan = _result + "/netscan";
 
 
 
-if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then 
+if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
 {
     private _currentBackdoorPaths = _entity getVariable ["ROOT_CYBERWARFARE_BACKDOOR_FUNCTION", []];
     if (_backdoorScriptPrefix == "") then { _backdoorScriptPrefix = "backdoor_debug_" };
@@ -73,6 +74,7 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
     _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "gpstrack");
     _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "vehicle");
     _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "powergrid");
+    _currentBackdoorPaths pushBackUnique (_backdoorScriptPrefix + "netscan");
     _entity setVariable ["ROOT_CYBERWARFARE_BACKDOOR_FUNCTION", _currentBackdoorPaths, true];
     _result = _result + "/" + _backdoorScriptPrefix;
     _guide = _result + "guide";
@@ -86,12 +88,16 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
     _gpstrack = _result + "gpstrack";
     _vehicle = _result + "vehicle";
     _powergrid = _result + "powergrid";
+    _netscan = _result + "netscan";
 } else {
     if (_execUserId == 0) then {
         _execUserId = owner _entity;
     };
+    // Mark the toolset as physically present on this object (a laptop or a USB drive) and refresh
+    // availability. Station registration (platform name and link eligibility) is owned by the
+    // Register Hackable Laptop module, so installing the toolset alone no longer turns an object into
+    // a hackable station - it only makes the tools available wherever they are plugged in.
     _entity setVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", true, true];
-    _entity setVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _customLaptopName, true];
     [_entity] call FUNC(syncHackingToolAvailability);
 };
 
@@ -594,5 +600,32 @@ _content = "
     };
 ";
 [_entity, _powergrid, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+
+
+_content = "
+    params['_computer', '_options', '_commandName'];
+
+    if ((count _options > 0) && {(_options select 0) in ['-h', '--help', 'help']}) exitWith {
+        [_computer, [[['NETSCAN - list network devices on this subnet', '#8ce10b']]]] call AE3_armaos_fnc_shell_stdout;
+        [_computer, [[['Syntax: netscan [-o <path>]', '#FFD966']]]] call AE3_armaos_fnc_shell_stdout;
+        [_computer, [[['  -o <path>   Export the results to a file. Ex: netscan -o /root/scan.txt', '']]]] call AE3_armaos_fnc_shell_stdout;
+    };
+
+    private _exportPath = '';
+    if ((count _options >= 2) && {(_options select 0) in ['-o', '--output']}) then {
+        _exportPath = _options select 1;
+    };
+
+    private _owner = clientOwner;
+    private _nameOfVariable = 'ROOT_CYBERWARFARE_NETSCAN-' + "+ _computerNetIdString +";
+    missionNamespace setVariable [_nameOfVariable, false, true];
+    [_owner, _computer, _nameOfVariable, _exportPath] remoteExec ['Root_fnc_scanNetworkCli', 2];
+    private _tStart = time;
+    waitUntil { missionNamespace getVariable [_nameOfVariable, false] || ((time - _tStart) > 10) };
+    if (!(missionNamespace getVariable [_nameOfVariable, false])) then {
+        [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
+    };
+";
+[_entity, _netscan, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
 
 [format [localize "STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_ADDED", _result]] remoteExec ["systemChat", _execUserId];
