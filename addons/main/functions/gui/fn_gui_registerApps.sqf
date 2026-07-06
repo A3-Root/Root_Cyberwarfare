@@ -282,7 +282,7 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 		// Default the map-link label/marker for every device type that has a position (doors, lights,
 		// vehicles, drones, custom devices, power grids), so the same [Map] link GPS already gets also
 		// shows up for them - GPS sets its own mapLabel/mapMarker above and is left untouched here.
-		if (isNil "_mapLabel" && {_pos isNotEqualTo []}) then { _mapLabel = _label; _mapMarker = false; };
+		if (isNil "_mapLabel" && {_pos isNotEqualTo []}) then { _mapLabel = _label; _mapMarker = true; };
 		private _item = createHashMapFromArray [
 			["id", _id], ["label", _label], ["status", _status],
 			["grid", _grid], ["pos", _pos], ["details", _details], ["children", _children],
