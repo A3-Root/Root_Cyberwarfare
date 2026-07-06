@@ -66,8 +66,8 @@ if (_linkedComputers isNotEqualTo []) then {
 
     {
         private _computerNetId = _x;
-        private _existingLinks = _linkCache getOrDefault [_computerNetId, []];
-        _existingLinks pushBack [4, _databaseId]; // 4 = database type
+        private _existingLinks = _linkCache getOrDefault [_computerNetId, [], true];
+        if !([4, _databaseId] in _existingLinks) then { _existingLinks pushBack [4, _databaseId]; }; // 4 = database type
         _linkCache set [_computerNetId, _existingLinks];
     } forEach _linkedComputers;
 

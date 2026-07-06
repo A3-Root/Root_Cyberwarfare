@@ -103,12 +103,27 @@ if (isServer) then {
         private _nl = toString [10];
         private _text = "Network Scan Results" + _nl + "IP Address | Type | External SSH | Interface | Hackable Devices" + _nl;
         {
-            _x params ["_ip", "_devType", "_ssh", "_iface", ["_count", 0]];
-            _text = _text + format ["%1 | %2 | %3 | %4 | %5", _ip, _devType, _ssh, _iface, _count] + _nl;
+            _x params ["_ip", "_devType", "_ssh", "_iface", ["_breakdown", []]];
+            private _devicesStr = if (_breakdown isEqualTo []) then { "0" } else {
+                (_breakdown apply { format ["%1 %2", _x select 1, _x select 0] }) joinString ", "
+            };
+            _text = _text + format ["%1 | %2 | %3 | %4 | %5", _ip, _devType, _ssh, _iface, _devicesStr] + _nl;
         } forEach _rows;
-        [_computer, _target, _text, false, "root", [[true, true, true], [true, false, true]]] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+
+        // The old fire-and-forget remoteExec here always reported success regardless of whether the
+        // write actually happened, so a rejected path (bad permissions, invalid target, etc.) still
+        // showed "exported" while no file was created. Call it directly and report the real outcome.
+        private _ok = true;
+        try {
+            [_computer, _target, _text, false, "root", [[true, true, true], [true, false, true]]] call AE3_filesystem_fnc_device_addFile;
+        } catch {
+            _ok = false;
+            ROOT_CYBERWARFARE_LOG_ERROR_2("Network scan export to %1 failed: %2",_target,_exception);
+        };
+
         // Confirm to the requesting client so the app shows the saved path instead of hanging on "Export...".
-        ["root_cyberwarfare_gui_actionResult", [DEVICE_TYPE_NETSCAN, format ["Network scan exported to %1", _target], true, _target], _owner] call CBA_fnc_ownerEvent;
+        private _msg = if (_ok) then { format ["Network scan exported to %1", _target] } else { format ["Failed to export network scan to %1", _target] };
+        ["root_cyberwarfare_gui_actionResult", [DEVICE_TYPE_NETSCAN, _msg, _ok, _target], _owner] call CBA_fnc_ownerEvent;
     }] call CBA_fnc_addEventHandler;
 };
 

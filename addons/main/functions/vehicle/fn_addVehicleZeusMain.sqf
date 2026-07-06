@@ -175,8 +175,8 @@ if (_isRadiusMode) then {
 
             {
                 private _computerNetId = _x;
-                private _existingLinks = _linkCache getOrDefault [_computerNetId, []];
-                _existingLinks pushBack [_typeofhackable, _deviceId];
+                private _existingLinks = _linkCache getOrDefault [_computerNetId, [], true];
+                if !([_typeofhackable, _deviceId] in _existingLinks) then { _existingLinks pushBack [_typeofhackable, _deviceId]; };
                 _linkCache set [_computerNetId, _existingLinks];
             } forEach _linkedComputers;
 
@@ -371,8 +371,8 @@ call Root_fnc_syncDeviceData;
 
             {
                 private _computerNetId = _x;
-                private _existingLinks = _linkCache getOrDefault [_computerNetId, []];
-                _existingLinks pushBack [_typeofhackable, _deviceId];
+                private _existingLinks = _linkCache getOrDefault [_computerNetId, [], true];
+                if !([_typeofhackable, _deviceId] in _existingLinks) then { _existingLinks pushBack [_typeofhackable, _deviceId]; };
                 _linkCache set [_computerNetId, _existingLinks];
             } forEach _linkedComputers;
 

@@ -82,8 +82,10 @@ if (_linkedComputers isNotEqualTo []) then {
 
     {
         private _computerNetId = _x;
-        private _existingLinks = _linkCache getOrDefault [_computerNetId, []];
-        _existingLinks pushBack [6, _deviceId]; // 6 = GPS tracker type
+        // setDefault=true so a first-time key is inserted and returned by reference (not an orphan
+        // copy discarded by a later registration's own read-modify-write on this same hashmap).
+        private _existingLinks = _linkCache getOrDefault [_computerNetId, [], true];
+        if !([6, _deviceId] in _existingLinks) then { _existingLinks pushBack [6, _deviceId]; }; // 6 = GPS tracker type
         _linkCache set [_computerNetId, _existingLinks];
     } forEach _linkedComputers;
 

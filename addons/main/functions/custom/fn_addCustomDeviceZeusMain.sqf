@@ -150,8 +150,8 @@ if (_availableToFutureLaptops) then {
     // Get computer object to verify it exists
     private _computer = objectFromNetId _computerNetId;
     if (!isNull _computer) then {
-        private _existingLinks = _linkCache getOrDefault [_computerNetId, []];
-        _existingLinks pushBack [DEVICE_TYPE_CUSTOM, _deviceId];
+        private _existingLinks = _linkCache getOrDefault [_computerNetId, [], true];
+        if !([DEVICE_TYPE_CUSTOM, _deviceId] in _existingLinks) then { _existingLinks pushBack [DEVICE_TYPE_CUSTOM, _deviceId]; };
         _linkCache set [_computerNetId, _existingLinks];
 
         // Remove from exclusion list if they were in it

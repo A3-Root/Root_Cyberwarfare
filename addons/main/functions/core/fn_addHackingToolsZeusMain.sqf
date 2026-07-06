@@ -10,6 +10,7 @@
  * 2: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
  * 3: _customLaptopName <STRING> (Optional) - Custom name for the laptop, default: ""
  * 4: _backdoorScriptPrefix <STRING> (Optional) - Backdoor prefix for special access, default: ""
+ * 5: _silent <BOOL> (Optional) - Skip the "hacking tools added" systemChat, default: false
  *
  * Return Value:
  * None
@@ -20,7 +21,7 @@
  * Public: No
  */
 
-params ["_entity", ["_path", "/rubberducky/tools", [""]], ["_execUserId", 0, [0]], ["_customLaptopName", "", [""]], ["_backdoorScriptPrefix", "", [""]]];
+params ["_entity", ["_path", "/rubberducky/tools", [""]], ["_execUserId", 0, [0]], ["_customLaptopName", "", [""]], ["_backdoorScriptPrefix", "", [""]], ["_silent", false, [false]]];
 
 private ["_guide", "_devices", "_door", "_light", "_changedrone", "_disabledrone", "_download", "_custom", "_gpstrack", "_vehicle", "_powergrid", "_netscan"];
 
@@ -628,4 +629,6 @@ _content = "
 ";
 [_entity, _netscan, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
 
-[format [localize "STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_ADDED", _result]] remoteExec ["systemChat", _execUserId];
+if (!_silent) then {
+    [format [localize "STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_ADDED", _result]] remoteExec ["systemChat", _execUserId];
+};

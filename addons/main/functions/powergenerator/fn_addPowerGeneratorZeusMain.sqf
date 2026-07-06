@@ -96,8 +96,8 @@ if (_availableToFutureLaptops) then {
 {
     if (_x != "") then {
         private _computerNetId = _x;
-        private _existingLinks = _linkCache getOrDefault [_computerNetId, []];
-        _existingLinks pushBack [DEVICE_TYPE_POWERGRID, _deviceId];
+        private _existingLinks = _linkCache getOrDefault [_computerNetId, [], true];
+        if !([DEVICE_TYPE_POWERGRID, _deviceId] in _existingLinks) then { _existingLinks pushBack [DEVICE_TYPE_POWERGRID, _deviceId]; };
         _linkCache set [_computerNetId, _existingLinks];
 
         // Remove from exclusion list if they were in it
