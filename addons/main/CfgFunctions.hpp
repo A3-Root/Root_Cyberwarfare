@@ -29,6 +29,7 @@ class CfgFunctions {
 			class registerHackableLaptopZeusMain {};
 			class removeHackingTools {};
 			class seedRubberducky {};
+			class seedRubberduckyCredentials {};
 			class scanNetwork {};
 			class scanNetworkCli {};
 			class scanNetworkPrint {};
@@ -107,6 +108,7 @@ class CfgFunctions {
 			class cacheDeviceLinks {};
 			class runDeviceLinkCleanup {};
 			class clearBrokenDeviceLinks {};
+			class setRubberduckyCredentials {};
 			class syncDeviceData {};
 			class checkPowerAvailable {};
 			class consumePower {};

@@ -292,6 +292,9 @@ if (isServer) then {
                     // Arm the intro video so the next desktop open plays it once for this mount.
                     _comp setVariable ["ROOT_CYBERWARFARE_INTRO_PENDING", true, true];
                 };
+                // Drop the configured default login onto the laptop (if enabled and not already present),
+                // so an operator plugging in the Rubberducky always has a known account to log in with.
+                [_comp] call FUNC(seedRubberduckyCredentials);
             } else {
                 if (_provisioned) then {
                     [_comp, "/rubberducky/tools"] call FUNC(removeHackingTools);

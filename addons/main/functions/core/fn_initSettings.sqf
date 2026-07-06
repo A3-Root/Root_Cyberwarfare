@@ -237,4 +237,40 @@
     false
 ] call CBA_fnc_addSetting;
 
+// Rubberducky Default Credentials - Enable
+[
+    "ROOT_CYBERWARFARE_RUBBERDUCKY_CREDS_ENABLED",
+    "CHECKBOX",
+    ["Rubberducky Default Login", "When a Rubberducky/hacking-tools USB is connected to a laptop, add a default login account to that laptop (if one with the same username does not already exist)."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Rubberducky Settings"],
+    true, // default ON
+    1, // mission-level
+    {},
+    false
+] call CBA_fnc_addSetting;
+
+// Rubberducky Default Credentials - Username
+[
+    "ROOT_CYBERWARFARE_RUBBERDUCKY_CRED_USER",
+    "EDITBOX",
+    ["Rubberducky Login Username", "Username of the account injected on connect."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Rubberducky Settings"],
+    "quack",
+    1, // mission-level
+    {},
+    false
+] call CBA_fnc_addSetting;
+
+// Rubberducky Default Credentials - Password
+[
+    "ROOT_CYBERWARFARE_RUBBERDUCKY_CRED_PASS",
+    "EDITBOX",
+    ["Rubberducky Login Password", "Password of the account injected on connect."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Rubberducky Settings"],
+    "quack",
+    1, // mission-level
+    {},
+    false
+] call CBA_fnc_addSetting;
+
 ROOT_CYBERWARFARE_LOG_INFO("CBA settings initialized");
