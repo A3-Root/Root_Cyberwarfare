@@ -101,6 +101,14 @@ class CfgVehicles {
 		function = "Root_fnc_copyDeviceLinksZeus";
 		displayName = "Copy Device Links";
 	};
+	class ROOT_CyberWarfareClearBrokenLinksZeus: zen_modules_moduleBase {
+		author = "Root";
+		_generalMacro = "ROOT_CyberWarfareClearBrokenLinksZeus";
+		curatorCanAttach = 0;
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_clearBrokenDeviceLinksZeus";
+		displayName = "Clear Broken Device Links";
+	};
 
 	// 3DEN Editor Modules
 	class Logic;

@@ -282,6 +282,11 @@
     #define IS_EXPERIMENTAL_MODE (GET_DEVICE_MODE == "EXPERIMENTAL")
 #endif
 
+// Consecutive failed cleanup passes before a removal candidate is dropped (strike-grace mode)
+#ifndef CLEANUP_STRIKE_LIMIT
+    #define CLEANUP_STRIKE_LIMIT 3
+#endif
+
 // ============================================================================
 // Power Conversion Macros
 // ============================================================================

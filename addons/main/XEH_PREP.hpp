@@ -83,6 +83,8 @@ PREP(powerGridControl);
 
 PREP(addComputerDeviceLinks);
 PREP(cacheDeviceLinks);
+PREP(runDeviceLinkCleanup);
+PREP(clearBrokenDeviceLinks);
 PREP(syncDeviceData);
 PREP(checkPowerAvailable);
 PREP(consumePower);
@@ -151,4 +153,6 @@ PREP(registerHackableLaptopZeus);
 PREP(addPowerGeneratorZeus);
 PREP(addVehicleZeus);
 PREP(copyDeviceLinksZeus);
+PREP(clearBrokenDeviceLinksZeus);
+PREP(clearBrokenDeviceLinksZeusMain);
 PREP(modifyPowerZeus);

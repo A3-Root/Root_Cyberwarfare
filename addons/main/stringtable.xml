@@ -494,6 +494,9 @@
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_BULK_SUCCESS">
             <English>Registered %1 device(s) successfully!</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_CLEAR_LINKS_RESULT">
+            <English>Cleared %1 broken device link(s).</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_COMPLETE">
             <English>Copied %1 device links from %2 to %3</English>
         </Key>

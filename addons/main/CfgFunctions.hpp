@@ -105,6 +105,8 @@ class CfgFunctions {
 			file = "\z\root_cyberwarfare\addons\main\functions\utility";
 			class addComputerDeviceLinks {};
 			class cacheDeviceLinks {};
+			class runDeviceLinkCleanup {};
+			class clearBrokenDeviceLinks {};
 			class syncDeviceData {};
 			class checkPowerAvailable {};
 			class consumePower {};
@@ -144,6 +146,8 @@ class CfgFunctions {
 			class addHackingToolsZeus {};
 			class registerHackableLaptopZeus {};
 			class copyDeviceLinksZeus {};
+			class clearBrokenDeviceLinksZeus {};
+			class clearBrokenDeviceLinksZeusMain {};
 		};
 	};
 };

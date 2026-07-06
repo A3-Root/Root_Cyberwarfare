@@ -201,4 +201,40 @@
     true // requires mission restart (ACE actions are added at mission start)
 ] call CBA_fnc_addSetting;
 
+// Automatic Device Link Cleanup - Enable (OFF by default; admins opt in)
+[
+    "ROOT_CYBERWARFARE_CLEANUP_ENABLED",
+    "CHECKBOX",
+    ["Automatic Link Cleanup", "Periodically remove device links whose laptop/device has been deleted. OFF by default - links can always be cleared on demand with the 'Clear Broken Device Links' ZEN module or Root_fnc_clearBrokenDeviceLinks."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Cleanup Settings"],
+    false, // default OFF
+    1, // mission-level
+    {},
+    false // read live each pass, no restart needed
+] call CBA_fnc_addSetting;
+
+// Automatic Device Link Cleanup - Interval (seconds)
+[
+    "ROOT_CYBERWARFARE_CLEANUP_TIME",
+    "SLIDER",
+    ["Link Cleanup Interval", "How often (seconds) the automatic cleanup runs when enabled."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Cleanup Settings"],
+    [30, 3600, 180, 0], // [min, max, default, decimals]
+    1, // mission-level
+    {},
+    false // read live each pass, no restart needed
+] call CBA_fnc_addSetting;
+
+// Automatic Device Link Cleanup - Strike grace vs immediate
+[
+    "ROOT_CYBERWARFARE_CLEANUP_STRIKE_GRACE",
+    "CHECKBOX",
+    ["Link Cleanup Strike Grace", "ON (recommended): a link is only removed after its object has been missing for several consecutive passes, absorbing brief lookup misses right after a player joins. OFF: remove as soon as the object is missing. Only affects the automatic loop; the manual clear always acts immediately."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Cleanup Settings"],
+    true, // default ON (grace)
+    1, // mission-level
+    {},
+    false
+] call CBA_fnc_addSetting;
+
 ROOT_CYBERWARFARE_LOG_INFO("CBA settings initialized");
