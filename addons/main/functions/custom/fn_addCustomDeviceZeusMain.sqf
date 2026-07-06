@@ -144,26 +144,14 @@ if (_availableToFutureLaptops) then {
     } forEach (keys _linkCache);
 };
 
-// Link to specified computers
+// Add the private link to each selected (still-existing) computer through the shared atomic helper,
+// then drop those computers from the public exclusion list and notify listeners.
+private _validComputers = _linkedComputers select {!isNull (objectFromNetId _x)};
+[_validComputers, DEVICE_TYPE_CUSTOM, _deviceId] call FUNC(addComputerDeviceLinks);
 {
-    private _computerNetId = _x;
-    // Get computer object to verify it exists
-    private _computer = objectFromNetId _computerNetId;
-    if (!isNull _computer) then {
-        private _existingLinks = _linkCache getOrDefault [_computerNetId, [], true];
-        if !([DEVICE_TYPE_CUSTOM, _deviceId] in _existingLinks) then { _existingLinks pushBack [DEVICE_TYPE_CUSTOM, _deviceId]; };
-        _linkCache set [_computerNetId, _existingLinks];
-
-        // Remove from exclusion list if they were in it
-        _allExistingComputers = _allExistingComputers - [_computerNetId];
-
-        // Broadcast event
-        ["root_cyberwarfare_deviceLinked", [_computerNetId, DEVICE_TYPE_CUSTOM, _deviceId]] call CBA_fnc_serverEvent;
-    };
-} forEach _linkedComputers;
-
-// Update link cache
-missionNamespace setVariable ["ROOT_CYBERWARFARE_LINK_CACHE", _linkCache, true];
+    _allExistingComputers = _allExistingComputers - [_x];
+    ["root_cyberwarfare_deviceLinked", [_x, DEVICE_TYPE_CUSTOM, _deviceId]] call CBA_fnc_serverEvent;
+} forEach _validComputers;
 
 // Publish the custom device when it targets future laptops or when no specific computers were
 // linked. The exclusion list is only populated for the future-access case, so an unlinked public

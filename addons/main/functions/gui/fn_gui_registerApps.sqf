@@ -153,7 +153,8 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 				_details = [["Download time", format ["%1s", _downloadTime]]];
 			};
 				case DEVICE_TYPE_DRONE: {
-					_label = [_obj, format ["Drone %1", _id]] call _displayName;
+					// Prefer the mission-maker's custom drone name (registry row index 2) over the class displayName.
+					_label = [_obj, _x param [2, ""], format ["Drone %1", _id]] call _labelOr;
 					if (!isNull _obj) then {
 						_status = [str (side _obj), "Disabled"] select (!alive _obj || {_obj getVariable ["ROOT_CYBERWARFARE_DRONE_DISABLED", false]});
 						private _disableCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_DRONE_DISABLE_EDIT", 10];

@@ -46,7 +46,8 @@ private _allowLights = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_LIGHT
 private _allowEngine = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ENGINE", true];
 private _allowAlarm = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ALARM", false];
 private _addToPublic = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_PUBLIC", true];
-private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ALLOWLOCATION", 1]) isEqualTo 1;
+// 3DEN checkbox attribute (typeName BOOL) loads as a boolean; accept both boolean and legacy numeric storage.
+private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ALLOWLOCATION", 1]) in [1, true];
 
 // Get limit attributes
 private _fuelMinPercent = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_FUEL_MIN", 0];
@@ -122,9 +123,9 @@ if (_addToPublic) then {
 
 	// Check if this is a UAV/drone
 	if (unitIsUAV _vehicle) then {
-		// Call as drone with 4 parameters
-		// Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops
-		[_vehicle, _execUserId, _linkedComputers, _availableToFutureLaptops] call FUNC(addVehicleZeusMain); _vehicle setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // drone flag (#3)
+		// Call as drone, forwarding the custom "Vehicle Name" so the device list shows it.
+		// Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _droneName
+		[_vehicle, _execUserId, _linkedComputers, _availableToFutureLaptops, _vehicleName] call FUNC(addVehicleZeusMain); _vehicle setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // drone location-view flag
 	} else {
 		// Call as vehicle with all parameters including limits
 		[

@@ -77,22 +77,11 @@ private _availabilityText = "";
 
 // Store device linking information (for selected computers)
 if (_linkedComputers isNotEqualTo []) then {
-    // Update new hashmap-based link cache
-    private _linkCache = GET_LINK_CACHE;
+    // Add the private [type, id] link to each selected computer through the shared atomic helper.
+    [_linkedComputers, DEVICE_TYPE_GPS_TRACKER, _deviceId] call FUNC(addComputerDeviceLinks);
 
-    {
-        private _computerNetId = _x;
-        // setDefault=true so a first-time key is inserted and returned by reference (not an orphan
-        // copy discarded by a later registration's own read-modify-write on this same hashmap).
-        private _existingLinks = _linkCache getOrDefault [_computerNetId, [], true];
-        if !([6, _deviceId] in _existingLinks) then { _existingLinks pushBack [6, _deviceId]; }; // 6 = GPS tracker type
-        _linkCache set [_computerNetId, _existingLinks];
-    } forEach _linkedComputers;
-
-    private _firstComputerLinks = _linkCache getOrDefault [_linkedComputers select 0, []];
+    private _firstComputerLinks = (GET_LINK_CACHE) getOrDefault [_linkedComputers select 0, []];
     DEBUG_LOG_3("GPS tracker %1 linked to computers %2, link cache now %3",_deviceId,_linkedComputers,_firstComputerLinks);
-    missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache];
-call Root_fnc_syncDeviceData;
     _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
 };
 

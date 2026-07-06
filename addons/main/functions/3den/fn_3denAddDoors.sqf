@@ -20,9 +20,10 @@ params ["_logic"];
 if (!isServer) exitWith {};
 
 // Get module attributes (convert number to boolean)
-private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_PUBLIC", 1]) isEqualTo 1;
-private _makeUnbreachable = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_UNBREACHABLE", 0]) isEqualTo 1;
-private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_ALLOWLOCATION", 1]) isEqualTo 1;
+// 3DEN checkbox attributes (typeName BOOL) load as booleans; accept both boolean and legacy numeric storage.
+private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_PUBLIC", 1]) in [1, true];
+private _makeUnbreachable = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_UNBREACHABLE", 0]) in [1, true];
+private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_ALLOWLOCATION", 1]) in [1, true];
 
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;

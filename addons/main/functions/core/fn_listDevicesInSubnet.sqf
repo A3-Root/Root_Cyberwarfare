@@ -282,7 +282,9 @@ if (_type in ["drones", "all", "a"]) then {
                 if (_currentDroneId == _droneIdNum) exitWith {
                     _foundDrone = true;
                     private _drone = objectFromNetId (_x select 1);
-                    private _droneName = getText (configOf (vehicle _drone) >> "displayName");
+                    // Prefer the stored custom name; fall back to the class displayName when none was set.
+                    private _droneName = _x param [2, ""];
+                    if (_droneName isEqualTo "") then { _droneName = getText (configOf (vehicle _drone) >> "displayName"); };
                     private _mapGridPos = [_drone] call FUNC(gridLabel);
                     private _droneSide = side _drone;
                     private _droneSideString = str _droneSide;
@@ -333,7 +335,9 @@ if (_type in ["drones", "all", "a"]) then {
             {
                 private _droneId = _x select 0;
                 private _drone = objectFromNetId (_x select 1);
-                private _droneName = getText (configOf (vehicle _drone) >> "displayName");
+                // Prefer the stored custom name; fall back to the class displayName when none was set.
+                private _droneName = _x param [2, ""];
+                if (_droneName isEqualTo "") then { _droneName = getText (configOf (vehicle _drone) >> "displayName"); };
                 private _mapGridPos = [_drone] call FUNC(gridLabel);
                 private _droneSide = side _drone;
                 private _damage = damage (vehicle _drone);

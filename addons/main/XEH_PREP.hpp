@@ -81,6 +81,7 @@ PREP(powerGridControl);
 #undef PREP
 #define PREP(fncName) [QPATHTOF(functions\utility\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
 
+PREP(addComputerDeviceLinks);
 PREP(cacheDeviceLinks);
 PREP(syncDeviceData);
 PREP(checkPowerAvailable);

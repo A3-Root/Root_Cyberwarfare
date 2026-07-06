@@ -61,18 +61,8 @@ private _availabilityText = "";
 
 // Store database linking information (for selected computers)
 if (_linkedComputers isNotEqualTo []) then {
-    // Update new hashmap-based link cache
-    private _linkCache = GET_LINK_CACHE;
-
-    {
-        private _computerNetId = _x;
-        private _existingLinks = _linkCache getOrDefault [_computerNetId, [], true];
-        if !([4, _databaseId] in _existingLinks) then { _existingLinks pushBack [4, _databaseId]; }; // 4 = database type
-        _linkCache set [_computerNetId, _existingLinks];
-    } forEach _linkedComputers;
-
-    missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache];
-call Root_fnc_syncDeviceData;
+    // Add the private [type, id] link to each selected computer through the shared atomic helper.
+    [_linkedComputers, DEVICE_TYPE_DATABASE, _databaseId] call FUNC(addComputerDeviceLinks);
     _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
 };
 

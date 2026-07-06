@@ -24,12 +24,13 @@ if (!isServer) exitWith {
 // Get module attributes
 private _generatorName = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_NAME", "Power Generator"];
 private _radius = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_RADIUS", 1000];
-private _allowExplosionOverload = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_OVERLOAD", 0]) isEqualTo 1;
+// 3DEN checkbox attribute (typeName BOOL) loads as a boolean; accept both boolean and legacy numeric storage.
+private _allowExplosionOverload = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_OVERLOAD", 0]) in [1, true];
 private _explosionType = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_TYPE", "ClaymoreDirectionalMine_Remote_Ammo_Scripted"];
 private _excludedClassnames = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXCLUDED", ""];
 private _powerCost = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_COST", 10];
-private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_PUBLIC", 1]) isEqualTo 1;
-private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_ALLOWLOCATION", 1]) isEqualTo 1;
+private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_PUBLIC", 1]) in [1, true];
+private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_ALLOWLOCATION", 1]) in [1, true];
 
 // Parse excluded classnames (comma-separated string to array)
 private _excludedArray = [];

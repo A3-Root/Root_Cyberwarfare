@@ -92,24 +92,14 @@ if (_availableToFutureLaptops) then {
     } forEach (keys _linkCache);
 };
 
-// Link to specified computers
+// Add the private link to each selected computer through the shared atomic helper, then drop those
+// computers from the public exclusion list and notify listeners.
+private _validComputers = _linkedComputers select {_x != ""};
+[_validComputers, DEVICE_TYPE_POWERGRID, _deviceId] call FUNC(addComputerDeviceLinks);
 {
-    if (_x != "") then {
-        private _computerNetId = _x;
-        private _existingLinks = _linkCache getOrDefault [_computerNetId, [], true];
-        if !([DEVICE_TYPE_POWERGRID, _deviceId] in _existingLinks) then { _existingLinks pushBack [DEVICE_TYPE_POWERGRID, _deviceId]; };
-        _linkCache set [_computerNetId, _existingLinks];
-
-        // Remove from exclusion list if they were in it
-        _allExistingComputers = _allExistingComputers - [_computerNetId];
-
-        // Broadcast event
-        ["root_cyberwarfare_deviceLinked", [_computerNetId, DEVICE_TYPE_POWERGRID, _deviceId]] call CBA_fnc_serverEvent;
-    };
-} forEach _linkedComputers;
-
-// Update link cache
-missionNamespace setVariable ["ROOT_CYBERWARFARE_LINK_CACHE", _linkCache, true];
+    _allExistingComputers = _allExistingComputers - [_x];
+    ["root_cyberwarfare_deviceLinked", [_x, DEVICE_TYPE_POWERGRID, _deviceId]] call CBA_fnc_serverEvent;
+} forEach _validComputers;
 
 // Publish the power grid as a public device when it is meant for future laptops or when no
 // specific computers were linked. The exclusion list is only populated for the future-access

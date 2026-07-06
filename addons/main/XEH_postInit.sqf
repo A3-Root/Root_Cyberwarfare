@@ -110,12 +110,24 @@ if (isServer) then {
             _text = _text + format ["%1 | %2 | %3 | %4 | %5", _ip, _devType, _ssh, _iface, _devicesStr] + _nl;
         } forEach _rows;
 
-        // The old fire-and-forget remoteExec here always reported success regardless of whether the
-        // write actually happened, so a rejected path (bad permissions, invalid target, etc.) still
-        // showed "exported" while no file was created. Call it directly and report the real outcome.
+        // Write through the laptop's own filesystem (ensureFile + writeToFile), overwriting any previous
+        // export, then broadcast the filesystem so the requesting client sees the new file - device_addFile
+        // both refused to overwrite an existing file and synced server-only, so re-exports were dropped and
+        // the client's browser never showed the result. Mirrors the database-download write.
         private _ok = true;
+        private _filesystem = _computer getVariable ["AE3_filesystem", []];
+        if (_filesystem isEqualTo []) exitWith {
+            ["root_cyberwarfare_gui_actionResult", [DEVICE_TYPE_NETSCAN, "Laptop filesystem is not initialized.", false, _target], _owner] call CBA_fnc_ownerEvent;
+        };
+        // Ensure the destination folder exists before writing the file into it.
+        private _parts = _target splitString "/";
+        _parts deleteAt ((count _parts) - 1);
+        private _dir = "/" + (_parts joinString "/");
         try {
-            [_computer, _target, _text, false, "root", [[true, true, true], [true, false, true]]] call AE3_filesystem_fnc_device_addFile;
+            if (_dir != "/") then { [[], _filesystem, _dir, "root", "root", [[true, true, true], [true, false, true]]] call AE3_filesystem_fnc_ensureDir; };
+            [[], _filesystem, _target, "", "root", "root", [[true, true, true], [true, false, true]]] call AE3_filesystem_fnc_ensureFile;
+            [[], _filesystem, _target, "root", _text, false] call AE3_filesystem_fnc_writeToFile;
+            _computer setVariable ["AE3_filesystem", _filesystem, true];
         } catch {
             _ok = false;
             ROOT_CYBERWARFARE_LOG_ERROR_2("Network scan export to %1 failed: %2",_target,_exception);

@@ -105,6 +105,15 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
 
 private _computerNetIdString = str (netId _entity);
 
+// Write each tool file synchronously when already on the server, so a freshly-spawned drive object
+// (which can be buffered back into an item on the same frame) receives every file before it is
+// invalidated. The previous per-file remoteExec deferred each write by a frame and dropped the tail
+// files on such drives. Off the server it still hops to the server to perform the write.
+private _writeFile = {
+    if (isServer) then { _this call AE3_filesystem_fnc_device_addFile }
+    else { _this remoteExec ["AE3_filesystem_fnc_device_addFile", 2] };
+};
+
 private _content = "
     Type 'devices <type>' to list devices. Use 'devices doors' for buildings, then 'devices doors <buildingId>' for door details.
             .
@@ -127,7 +136,7 @@ private _content = "
     Type 'powergrid GridID action' to control a power grid. Actions: on, off, overload. Ex: 'powergrid 1234 on' or 'powergrid 1234 overload'
 ";
 
-[_entity, _guide, _content, false, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+[_entity, _guide, _content, false, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call _writeFile;
 
 
 _content = "
@@ -179,7 +188,7 @@ _content = "
         [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
     };
 ";
-[_entity, _devices, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+[_entity, _devices, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call _writeFile;
 
 
 _content = "
@@ -229,7 +238,7 @@ _content = "
         [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
     };
 ";
-[_entity, _door, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+[_entity, _door, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call _writeFile;
 
 
 _content = "
@@ -277,7 +286,7 @@ _content = "
         [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
     };
 ";
-[_entity, _light, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+[_entity, _light, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call _writeFile;
 
 
 _content = "
@@ -323,7 +332,7 @@ _content = "
         [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
     };
 ";
-[_entity, _disabledrone, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+[_entity, _disabledrone, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call _writeFile;
 
 
 _content = "
@@ -371,7 +380,7 @@ _content = "
         [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
     };
 ";
-[_entity, _changedrone, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+[_entity, _changedrone, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call _writeFile;
 
 
 _content = "
@@ -419,7 +428,7 @@ _content = "
         [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
     };
 ";
-[_entity, _download, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+[_entity, _download, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call _writeFile;
 
 
 _content = "
@@ -469,7 +478,7 @@ _content = "
         [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
     };
 ";
-[_entity, _custom, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+[_entity, _custom, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call _writeFile;
 
 _content = "
     params['_computer', '_options', '_commandName'];
@@ -514,7 +523,7 @@ _content = "
         [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
     };
 ";
-[_entity, _gpstrack, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+[_entity, _gpstrack, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call _writeFile;
 
 _content = "
     params['_computer', '_options', '_commandName'];
@@ -553,7 +562,7 @@ _content = "
         [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
     };
 ";
-[_entity, _vehicle, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+[_entity, _vehicle, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call _writeFile;
 
 _content = "
     params['_computer', '_options', '_commandName'];
@@ -600,7 +609,7 @@ _content = "
         [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
     };
 ";
-[_entity, _powergrid, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+[_entity, _powergrid, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call _writeFile;
 
 
 _content = "
@@ -627,7 +636,7 @@ _content = "
         [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
     };
 ";
-[_entity, _netscan, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] remoteExec ["AE3_filesystem_fnc_device_addFile", 2];
+[_entity, _netscan, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call _writeFile;
 
 if (!_silent) then {
     [format [localize "STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_ADDED", _result]] remoteExec ["systemChat", _execUserId];

@@ -69,9 +69,10 @@
 // - Drone call: 4 params or less
 // - Vehicle call: 12 params
 // Radius mode is a position-array first arg (>=5 params allows an optional _allowLocation tail
-// without breaking the count-based dispatch). Drone call is <=4 params (object first).
+// without breaking the count-based dispatch). Drone call is an object first arg with <=5 params
+// (the optional 5th is the custom drone name); vehicle calls carry 12+ params.
 private _isRadiusMode = (count _this) >= 5 && {(_this select 0) isEqualType []};
-private _isDroneCall = !_isRadiusMode && {(count _this) <= 4};
+private _isDroneCall = !_isRadiusMode && {(count _this) <= 5};
 
 if (_isRadiusMode) then {
     // Radius mode: Register all vehicles/drones within radius
@@ -131,7 +132,7 @@ if (_isRadiusMode) then {
 } else {
     if (_isDroneCall) then {
         // Drone: handle drone registration directly
-        params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false]];
+        params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false], ["_droneName", "", [""]]];
 
         if (_execUserId == 0) then {
             _execUserId = owner _targetObject;
@@ -142,7 +143,10 @@ if (_isRadiusMode) then {
         private _allDrones = _allDevices select 2;
 
         private _netId = netId _targetObject;
+        // Prefer the mission-maker's custom name; fall back to the class displayName when none was given.
         private _displayName = getText (configOf _targetObject >> "displayName");
+        if (_droneName != "") then { _displayName = _droneName; };
+        _targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_NAME", _displayName, true];
         private _typeofhackable = 3; // Drone device type
 
         // Generate unique device ID
@@ -170,18 +174,8 @@ if (_isRadiusMode) then {
 
         // Store device linking information (for selected computers)
         if (_linkedComputers isNotEqualTo []) then {
-            // Update new hashmap-based link cache
-            private _linkCache = GET_LINK_CACHE;
-
-            {
-                private _computerNetId = _x;
-                private _existingLinks = _linkCache getOrDefault [_computerNetId, [], true];
-                if !([_typeofhackable, _deviceId] in _existingLinks) then { _existingLinks pushBack [_typeofhackable, _deviceId]; };
-                _linkCache set [_computerNetId, _existingLinks];
-            } forEach _linkedComputers;
-
-            missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache];
-call Root_fnc_syncDeviceData;
+            // Add the private [type, id] link to each selected computer through the shared atomic helper.
+            [_linkedComputers, _typeofhackable, _deviceId] call FUNC(addComputerDeviceLinks);
             _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
         };
 
@@ -366,18 +360,8 @@ call Root_fnc_syncDeviceData;
 
         // Store device linking information (for selected computers)
         if (_linkedComputers isNotEqualTo []) then {
-            // Update new hashmap-based link cache
-            private _linkCache = GET_LINK_CACHE;
-
-            {
-                private _computerNetId = _x;
-                private _existingLinks = _linkCache getOrDefault [_computerNetId, [], true];
-                if !([_typeofhackable, _deviceId] in _existingLinks) then { _existingLinks pushBack [_typeofhackable, _deviceId]; };
-                _linkCache set [_computerNetId, _existingLinks];
-            } forEach _linkedComputers;
-
-            missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache];
-call Root_fnc_syncDeviceData;
+            // Add the private [type, id] link to each selected computer through the shared atomic helper.
+            [_linkedComputers, _typeofhackable, _deviceId] call FUNC(addComputerDeviceLinks);
             _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
         };
 

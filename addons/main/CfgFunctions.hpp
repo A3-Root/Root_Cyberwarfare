@@ -103,6 +103,7 @@ class CfgFunctions {
 
 		class Utility {
 			file = "\z\root_cyberwarfare\addons\main\functions\utility";
+			class addComputerDeviceLinks {};
 			class cacheDeviceLinks {};
 			class syncDeviceData {};
 			class checkPowerAvailable {};
