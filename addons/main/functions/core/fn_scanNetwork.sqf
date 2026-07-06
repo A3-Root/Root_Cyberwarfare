@@ -11,7 +11,8 @@
  * 0: _computer <OBJECT> - The scanning laptop
  *
  * Return Value:
- * Rows <ARRAY> - Array of [ipString, typeString, sshString, interfaceString, hackableDeviceCount]
+ * Rows <ARRAY> - Array of [ipString, typeString, sshString, interfaceString, deviceBreakdown], where
+ *                deviceBreakdown is an array of [categoryLabel, count] pairs for non-zero categories
  *
  * Example:
  * [_laptop] call Root_fnc_scanNetwork;
@@ -70,16 +71,24 @@ private _seen = [];
         };
     };
 
-    // Count how many hackable devices (doors, vehicles, databases, ...) this laptop can reach, across
-    // all device categories. Routers do not hold device links, so they report zero.
-    private _deviceCount = 0;
+    // Count how many hackable devices (doors, vehicles, databases, ...) this laptop can reach, broken
+    // down per category, across all device categories. Routers do not hold device links, so they
+    // report an empty breakdown.
+    private _deviceBreakdown = [];
     if (!_isRouter) then {
         {
-            _deviceCount = _deviceCount + count ([_dev, _x] call FUNC(getAccessibleDevices));
-        } forEach [DEVICE_TYPE_DOOR, DEVICE_TYPE_LIGHT, DEVICE_TYPE_DRONE, DEVICE_TYPE_DATABASE, DEVICE_TYPE_CUSTOM, DEVICE_TYPE_GPS_TRACKER, DEVICE_TYPE_VEHICLE, DEVICE_TYPE_POWERGRID];
+            _x params ["_devType", "_devLabel"];
+            private _devCount = count ([_dev, _devType] call FUNC(getAccessibleDevices));
+            if (_devCount > 0) then { _deviceBreakdown pushBack [_devLabel, _devCount]; };
+        } forEach [
+            [DEVICE_TYPE_DOOR, "Doors"], [DEVICE_TYPE_LIGHT, "Lights"], [DEVICE_TYPE_DRONE, "Drones"],
+            [DEVICE_TYPE_DATABASE, "Databases"], [DEVICE_TYPE_CUSTOM, "Custom Devices"],
+            [DEVICE_TYPE_GPS_TRACKER, "GPS Trackers"], [DEVICE_TYPE_VEHICLE, "Vehicles"],
+            [DEVICE_TYPE_POWERGRID, "Power Grids"]
+        ];
     };
 
-    _rows pushBack [_ipStr, _typeStr, _sshStr, _ifaceStr, _deviceCount];
+    _rows pushBack [_ipStr, _typeStr, _sshStr, _ifaceStr, _deviceBreakdown];
 } forEach _devices;
 
 _rows

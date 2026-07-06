@@ -6,7 +6,7 @@
  *
  * Arguments:
  * 0: _computer <OBJECT> - The scanning laptop (its terminal receives the output)
- * 1: _rows <ARRAY> - Rows of [ipString, typeString, sshString, interfaceString]
+ * 1: _rows <ARRAY> - Rows of [ipString, typeString, sshString, interfaceString, deviceBreakdown]
  *
  * Return Value:
  * None
@@ -27,7 +27,11 @@ if (_rows isEqualTo []) exitWith {
 };
 
 {
-    _x params ["_ip", "_type", "_ssh", "_iface", ["_count", 0]];
-    private _countStr = if (_type isEqualTo "Laptop") then { format ["  devices:%1", _count] } else { "" };
+    _x params ["_ip", "_type", "_ssh", "_iface", ["_breakdown", []]];
+    private _countStr = if (_type isEqualTo "Laptop" && {_breakdown isNotEqualTo []}) then {
+        format ["  devices:%1", (_breakdown apply { format ["%1 %2", _x select 1, _x select 0] }) joinString ", "]
+    } else {
+        ""
+    };
     [_computer, [[[_ip, "#008DF8"], [format ["   %1   SSH:%2   %3%4", _type, _ssh, _iface, _countStr], ""]]]] call AE3_armaos_fnc_shell_stdout;
 } forEach _rows;

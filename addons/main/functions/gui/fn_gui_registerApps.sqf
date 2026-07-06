@@ -256,10 +256,10 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 					];
 				};
 				case DEVICE_TYPE_NETSCAN: {
-					// Rows arrive from Root_fnc_scanNetwork as [ip, type, ssh, interface, deviceCount];
+					// Rows arrive from Root_fnc_scanNetwork as [ip, type, ssh, interface, deviceBreakdown];
 					// present each as a read-only entry with no actions or location. A single
 					// "__SCANNING__" marker row is sent first to show the in-progress scan state.
-					_x params [["_scanIp", ""], ["_scanType", ""], ["_scanSsh", ""], ["_scanIface", ""], ["_scanCount", -1]];
+					_x params [["_scanIp", ""], ["_scanType", ""], ["_scanSsh", ""], ["_scanIface", ""], ["_scanBreakdown", []]];
 					_grid = ""; _pos = [];
 					if (_scanIp isEqualTo "__SCANNING__") then {
 						_id = 0;
@@ -270,13 +270,18 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 						_label = _scanIp;
 						_status = _scanType;
 						_details = [["External SSH", _scanSsh], ["Interface", _scanIface]];
-						if (_scanCount >= 0 && {_scanType isEqualTo "Laptop"}) then {
-							_details pushBack ["Hackable devices", str _scanCount];
+						if (_scanBreakdown isNotEqualTo [] && {_scanType isEqualTo "Laptop"}) then {
+							private _breakdownStr = (_scanBreakdown apply { format ["%1 %2", _x select 1, _x select 0] }) joinString ", ";
+							_details pushBack ["Hackable devices", _breakdownStr];
 						};
 					};
 				};
 			default { _label = [_obj, format ["Device %1", _id]] call _displayName; };
 		};
+		// Default the map-link label/marker for every device type that has a position (doors, lights,
+		// vehicles, drones, custom devices, power grids), so the same [Map] link GPS already gets also
+		// shows up for them - GPS sets its own mapLabel/mapMarker above and is left untouched here.
+		if (isNil "_mapLabel" && {_pos isNotEqualTo []}) then { _mapLabel = _label; _mapMarker = false; };
 		private _item = createHashMapFromArray [
 			["id", _id], ["label", _label], ["status", _status],
 			["grid", _grid], ["pos", _pos], ["details", _details], ["children", _children],
@@ -320,7 +325,7 @@ if (_hasWeb) then
 		["RootCW_Custom",    "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM",    "&#129513;", "device",   DEVICE_TYPE_CUSTOM,    [["activate", "Activate"] call _act, ["deactivate", "Deactivate"] call _act], "Hacking Tools"],
 		// Network Scanner: read-only list of AE3 laptops/routers on the subnet; the Export global
 		// action writes the scan to a file in the laptop's filesystem.
-		["RootCW_NetScan",   "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN",   "&#128225;", "network",  DEVICE_TYPE_NETSCAN,   [], "Hacking Tools", [createHashMapFromArray [["id", "export"], ["label", "Export to File"]]]]
+		["RootCW_NetScan",   "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN",   "&#128225;", "network",  DEVICE_TYPE_NETSCAN,   [], "Hacking Tools", [createHashMapFromArray [["id", "export"], ["label", "Export to File"], ["flow", "download"]]]]
 	];
 
 	private _hackermanExtra = createHashMapFromArray [

@@ -111,6 +111,9 @@ private _linkCache = GET_LINK_CACHE;
 // Get this computer's device links from cache
 private _allowedDevices = _linkCache getOrDefault [_computerIdentifier, []];
 DEBUG_LOG_2("Private device links for identifier %1: %2 devices",_computerIdentifier,count _allowedDevices);
+if (_deviceType == DEVICE_TYPE_GPS_TRACKER) then {
+    DEBUG_LOG_3("[GPS DEBUG] identifier=%1 deviceId=%2 allowedDevices=%3",_computerIdentifier,_deviceId,_allowedDevices);
+};
 
 if (_allowedDevices isEqualTo []) exitWith {
     ROOT_CYBERWARFARE_LOG_DEBUG_1("isDeviceAccessible: No device links for computer %1",_computerIdentifier);

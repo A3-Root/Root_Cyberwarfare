@@ -71,5 +71,8 @@ private _accessibleDevices = _allDevices select {
 };
 
 DEBUG_LOG_2("Accessible devices found: %1 out of %2",count _accessibleDevices,count _allDevices);
+if (_deviceType == DEVICE_TYPE_GPS_TRACKER) then {
+    DEBUG_LOG_3("[GPS DEBUG] computer=%1 allGpsDeviceIds=%2 accessibleCount=%3",_computer,(_allDevices apply {_x select 0}),count _accessibleDevices);
+};
 
 _accessibleDevices

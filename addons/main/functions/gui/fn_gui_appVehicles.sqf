@@ -17,7 +17,12 @@ private _populate = {
 	{
 		_x params ["_id", "_netId"];
 		private _veh = objectFromNetId _netId;
-		private _name = if (isNull _veh) then { "?" } else { getText (configOf _veh >> "displayName") };
+		private _storedName = _x param [2, ""];
+		private _name = if (_storedName isEqualType "" && {_storedName isNotEqualTo ""}) then {
+			_storedName
+		} else {
+			if (isNull _veh) then { "?" } else { getText (configOf _veh >> "displayName") }
+		};
 		private _i = _listCtrl lbAdd format [localize "STR_ROOT_CYBERWARFARE_GUI_VEHICLE_ENTRY", _id, _name];
 		_listCtrl lbSetData [_i, str _id];
 	} forEach _list;

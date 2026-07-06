@@ -87,6 +87,8 @@ if (_linkedComputers isNotEqualTo []) then {
         _linkCache set [_computerNetId, _existingLinks];
     } forEach _linkedComputers;
 
+    private _firstComputerLinks = _linkCache getOrDefault [_linkedComputers select 0, []];
+    DEBUG_LOG_3("GPS tracker %1 linked to computers %2, link cache now %3",_deviceId,_linkedComputers,_firstComputerLinks);
     missionNamespace setVariable [GVAR_LINK_CACHE, _linkCache];
 call Root_fnc_syncDeviceData;
     _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];

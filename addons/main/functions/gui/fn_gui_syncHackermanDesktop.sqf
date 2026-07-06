@@ -92,7 +92,10 @@ try {
         };
     } forEach _users;
 
-    _computer setVariable ["AE3_filesystem", _filesystem, [_computer] call AE3_armaos_fnc_computer_getLocality];
+    // Broadcast globally (not just to the desktop's current owner) so the server's canonical
+    // filesystem always reflects the launcher removal, even when the sync is triggered by a
+    // remote client on a dedicated server.
+    _computer setVariable ["AE3_filesystem", _filesystem, true];
 } catch {
     diag_log text format ["[ROOT_CYBERWARFARE WARNING] Hackerman desktop sync failed: %1", _exception];
 };
