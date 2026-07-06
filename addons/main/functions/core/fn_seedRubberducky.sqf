@@ -28,7 +28,21 @@ if (!isServer) exitWith {};
 // Friendly label shown in the file browser / volume list.
 _drive setVariable ["ace_cargo_customName", "Rubberducky USB", true];
 
-// The drive's base class (Land_USB_Dongle_01_F_AE3) already ran AE3_filesystem_fnc_initFilesystem via
-// its own init handler just before this one, giving it a blank writable filesystem - populate it with
-// the hacking tools here.
-[_drive, "/rubberducky/tools", 0, "Rubberducky USB", "", true] call FUNC(addHackingToolsZeusMain);
+// The drive's base class (Land_USB_Dongle_01_F_AE3) creates the blank writable filesystem through its
+// own init handler (AE3_filesystem_fnc_initFilesystem), but that can land a frame or more after this
+// child init handler fires, so AE3_filesystem is often still nil at this point - seeding immediately
+// then fails with "no filesystem initialized". Wait until the base init has published the filesystem,
+// then populate it with the hacking tools. Seeding only after the filesystem exists also means a later
+// base init can't overwrite the tools we add. Stops early if the drive is picked up/deleted meanwhile.
+[
+    {
+        params ["_drive"];
+        isNull _drive || {!isNil {_drive getVariable "AE3_filesystem"}}
+    },
+    {
+        params ["_drive"];
+        if (isNull _drive) exitWith {};
+        [_drive, "/rubberducky/tools", 0, "Rubberducky USB", "", true] call FUNC(addHackingToolsZeusMain);
+    },
+    [_drive]
+] call CBA_fnc_waitUntilAndExecute;

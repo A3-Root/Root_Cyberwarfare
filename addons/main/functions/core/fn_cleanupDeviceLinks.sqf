@@ -65,8 +65,13 @@ ROOT_CYBERWARFARE_LOG_INFO_1(format ["Regular Device Cleanup script started! Run
 
             private _computer = objectFromNetId _computerNetId;
 
-            // Check if computer still exists and has hacking tools
-            if (!isNull _computer && {_computer getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]}) then {
+            // Keep the entry while the netId can't be resolved AND the server has no players: on a
+            // dedicated server an editor-placed laptop is not reachable through objectFromNetId until a
+            // player has joined, so an early null lookup means "not networked yet", not "deleted". Once
+            // players are present a persisting null is treated as a real deletion. A resolved object is
+            // kept only while still flagged as a hackable laptop.
+            private _keep = if (isNull _computer) then { allPlayers isEqualTo [] } else { _computer getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false] };
+            if (_keep) then {
                 _cleanLinks pushBack _x;
             } else {
                 // Computer is deleted or no longer has hacking tools
@@ -109,14 +114,18 @@ ROOT_CYBERWARFARE_LOG_INFO_1(format ["Regular Device Cleanup script started! Run
                     DEBUG_LOG_1("Cleanup: Player UID %1 no longer exists",_identifier);
                 };
             } else {
-                // Simple mode: Check if laptop object exists
+                // Simple mode: validate the laptop object. An unresolved netId is treated as valid while
+                // the server has no players (the object is not networked until a player has joined, so the
+                // null means "cannot verify yet", not "deleted"); once players are present a persisting
+                // null is a real deletion. A resolved object stays valid only while still flagged as a
+                // hackable laptop.
                 DEBUG_LOG_1("Cleanup: Validating laptop netId: %1",_identifier);
 
                 private _computer = objectFromNetId _identifier;
-                _isValid = !isNull _computer && {_computer getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]};
+                _isValid = if (isNull _computer) then { allPlayers isEqualTo [] } else { _computer getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false] };
 
                 if (!_isValid) then {
-                    DEBUG_LOG_1("Cleanup: Laptop netId %1 invalid or no hacking tools",_identifier);
+                    DEBUG_LOG_1("Cleanup: Laptop netId %1 invalid (resolved but not a hackable laptop, or gone with players present)",_identifier);
                 };
             };
 
@@ -147,13 +156,16 @@ ROOT_CYBERWARFARE_LOG_INFO_1(format ["Regular Device Cleanup script started! Run
             private _deviceList = _allDevices select _forEachIndex;
             private _cleanedList = [];
 
-            // Check each device to see if it still exists
+            // Check each device to see if it still exists. A device whose netId can't be resolved is
+            // kept while the server has no players (the objects are not networked until a player has
+            // joined, so an early null is not a deletion); once players are present a null is a real
+            // deletion and the device is dropped.
             {
                 private _deviceData = _x;
                 private _deviceNetId = _deviceData select 1;
                 private _deviceObject = objectFromNetId _deviceNetId;
 
-                if (isNull _deviceObject) then {
+                if (isNull _deviceObject && {allPlayers isNotEqualTo []}) then {
                     ROOT_CYBERWARFARE_LOG_INFO_2(format ["[Root Cyber Warfare] Removing Invalid/Null/Deleted Device: Type %1, NetId %2",_forEachIndex,_deviceNetId]);
                 } else {
                     _cleanedList pushBack _deviceData;
