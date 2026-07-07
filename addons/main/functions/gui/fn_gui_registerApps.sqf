@@ -352,7 +352,9 @@ if (_hasWeb) then
 			["RootCW_Vehicles", localize "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES"],
 			["RootCW_PowerGrid", localize "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID"],
 			["RootCW_Custom", localize "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM"],
-			["RootCW_NetScan", localize "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN"]
+			["RootCW_NetScan", localize "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN"],
+			["crypto", "Crypto"],
+			["crack", "Crack"]
 		]]
 	];
 	["RootCW_Hackerman", "Hackerman.exe", "H", "launcher", _hackermanExtra] call AE3_desktop_fnc_registerExtApp;
