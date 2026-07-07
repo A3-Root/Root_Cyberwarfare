@@ -312,6 +312,9 @@ if (_hasWeb) then
 	} forEach [
 		// All RootCW apps go in a single "Hacking Tools" Applications-menu category (#6). Registration
 		// order below = the display order within the category. Action buttons drive each device.
+		// Network Scanner: read-only list of AE3 laptops/routers on the subnet; the Export global
+		// action writes the scan to a file in the laptop's filesystem.
+		["RootCW_NetScan",   "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN",   "&#128225;", "network",  DEVICE_TYPE_NETSCAN,   [], "Hacking Tools", [createHashMapFromArray [["id", "export"], ["label", "Export to File"], ["flow", "download"]]]],
 		["RootCW_Doors",     "STR_ROOT_CYBERWARFARE_GUI_APP_DOORS",     "&#128682;", "door",     DEVICE_TYPE_DOOR,      [], "Hacking Tools"],
 		// Lights: per-light On/Off plus whole-network All On / All Off (Lights #1).
 		["RootCW_Lights",    "STR_ROOT_CYBERWARFARE_GUI_APP_LIGHTS",    "&#128161;", "light",    DEVICE_TYPE_LIGHT,     [["on", "On"] call _act, ["off", "Off"] call _act], "Hacking Tools", [["allon", "All On"] call _act, ["alloff", "All Off"] call _act]],
@@ -323,10 +326,7 @@ if (_hasWeb) then
 		// (Vehicles #1). Refuel/Drain removed.
 		["RootCW_Vehicles",  "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES",  "&#128663;", "vehicle",  DEVICE_TYPE_VEHICLE,   [], "Hacking Tools"],
 		["RootCW_PowerGrid", "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID", "&#9889;",   "power",    DEVICE_TYPE_POWERGRID, [["on", "On"] call _act, ["off", "Off"] call _act, ["overload", "Overload"] call _act], "Hacking Tools"],
-		["RootCW_Custom",    "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM",    "&#129513;", "device",   DEVICE_TYPE_CUSTOM,    [["activate", "Activate"] call _act, ["deactivate", "Deactivate"] call _act], "Hacking Tools"],
-		// Network Scanner: read-only list of AE3 laptops/routers on the subnet; the Export global
-		// action writes the scan to a file in the laptop's filesystem.
-		["RootCW_NetScan",   "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN",   "&#128225;", "network",  DEVICE_TYPE_NETSCAN,   [], "Hacking Tools", [createHashMapFromArray [["id", "export"], ["label", "Export to File"], ["flow", "download"]]]]
+		["RootCW_Custom",    "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM",    "&#129513;", "device",   DEVICE_TYPE_CUSTOM,    [["activate", "Activate"] call _act, ["deactivate", "Deactivate"] call _act], "Hacking Tools"]
 	];
 
 	private _hackermanExtra = createHashMapFromArray [
@@ -342,8 +342,11 @@ if (_hasWeb) then
 		["showInMenu", false],
 		["requiresFunction", "Root_fnc_hasHackingToolsAvailable"],
 		["openCommand", "rootcw_hackerman_open"],
+		["width", 319],
+		["height", 563],
 		["subtitle", "Hacking Tools"],
 		["launchApps", [
+			["RootCW_NetScan", localize "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN"],
 			["RootCW_Doors", localize "STR_ROOT_CYBERWARFARE_GUI_APP_DOORS"],
 			["RootCW_Lights", localize "STR_ROOT_CYBERWARFARE_GUI_APP_LIGHTS"],
 			["RootCW_Databases", localize "STR_ROOT_CYBERWARFARE_GUI_APP_DATABASES"],
@@ -352,7 +355,6 @@ if (_hasWeb) then
 			["RootCW_Vehicles", localize "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES"],
 			["RootCW_PowerGrid", localize "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID"],
 			["RootCW_Custom", localize "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM"],
-			["RootCW_NetScan", localize "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN"],
 			["crypto", "Crypto"],
 			["crack", "Crack"]
 		]]
@@ -383,6 +385,7 @@ if (_hasWeb) then
 		private _nid = netId _computer;
 		switch (_type) do {
 			// _sub carries an individual door id for per-door lock/unlock (Doors #2); "" = whole building.
+			case DEVICE_TYPE_NETSCAN:   { ["root_cyberwarfare_gui_netscanExport",   [_co, _nid, _data getOrDefault ["savePath", ""]]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_DOOR:      { ["root_cyberwarfare_gui_doorAction",      [_co, _nid, _id, _action, "", _sub]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_LIGHT:     { ["root_cyberwarfare_gui_lightAction",     [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_POWERGRID: { ["root_cyberwarfare_gui_powergridAction", [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
@@ -391,7 +394,6 @@ if (_hasWeb) then
 			case DEVICE_TYPE_VEHICLE:   { ["root_cyberwarfare_gui_vehicleAction",   [_co, _nid, _id, _action, "", _value, _lock]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_GPS_TRACKER: { ["root_cyberwarfare_gui_gpsAction",     [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_CUSTOM:    { ["root_cyberwarfare_gui_customAction",    [_co, _nid, _id, _action, netId player, ""]] call CBA_fnc_serverEvent; };
-				case DEVICE_TYPE_NETSCAN:   { ["root_cyberwarfare_gui_netscanExport",   [_co, _nid, _data getOrDefault ["savePath", ""]]] call CBA_fnc_serverEvent; };
 			default {};
 		};
 	}] call AE3_desktop_fnc_registerCmd;
