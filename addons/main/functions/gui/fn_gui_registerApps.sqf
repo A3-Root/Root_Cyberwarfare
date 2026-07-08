@@ -342,8 +342,8 @@ if (_hasWeb) then
 		["showInMenu", false],
 		["requiresFunction", "Root_fnc_hasHackingToolsAvailable"],
 		["openCommand", "rootcw_hackerman_open"],
-		["width", 319],
-		["height", 563],
+		["width", 320],
+		["height", 571],
 		["subtitle", "Hacking Tools"],
 		["launchApps", [
 			["RootCW_NetScan", localize "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN"],
