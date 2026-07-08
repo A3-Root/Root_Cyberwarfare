@@ -33,6 +33,15 @@ PREP(scanNetwork);
 PREP(scanNetworkCli);
 PREP(scanNetworkPrint);
 
+// Redefine PREP macro for subdirectory: cipher
+#undef PREP
+#define PREP(fncName) [QPATHTOF(functions\cipher\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
+
+PREP(cipherProcess);
+PREP(cipherRegister);
+PREP(os_crack);
+PREP(os_crypto);
+
 // Redefine PREP macro for subdirectory: custom
 #undef PREP
 #define PREP(fncName) [QPATHTOF(functions\custom\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction

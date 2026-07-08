@@ -343,7 +343,7 @@ if (_hasWeb) then
 		["requiresFunction", "Root_fnc_hasHackingToolsAvailable"],
 		["openCommand", "rootcw_hackerman_open"],
 		["width", 320],
-		["height", 571],
+		["height", 630],
 		["subtitle", "Hacking Tools"],
 		["launchApps", [
 			["RootCW_NetScan", localize "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN"],
@@ -355,8 +355,8 @@ if (_hasWeb) then
 			["RootCW_Vehicles", localize "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES"],
 			["RootCW_PowerGrid", localize "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID"],
 			["RootCW_Custom", localize "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM"],
-			["crypto", "Crypto"],
-			["crack", "Crack"]
+			["RootCW_Crypto", "Crypto"],
+			["RootCW_Crack", "Crack"]
 		]]
 	];
 	["RootCW_Hackerman", "Hackerman.exe", "H", "launcher", _hackermanExtra] call AE3_desktop_fnc_registerExtApp;

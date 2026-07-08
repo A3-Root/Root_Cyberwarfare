@@ -35,6 +35,14 @@ class CfgFunctions {
 			class scanNetworkPrint {};
 		};
 
+		class Cipher {
+			file = "\z\root_cyberwarfare\addons\main\functions\cipher";
+			class cipherProcess {};
+			class cipherRegister {};
+			class os_crack {};
+			class os_crypto {};
+		};
+
 		class Custom {
 			file = "\z\root_cyberwarfare\addons\main\functions\custom";
 			class addCustomDeviceZeusMain {};

@@ -521,6 +521,28 @@ class CfgVehicles {
 		};
 	};
 
+	class AE3_AddFile {
+		class Attributes {
+			class AE3_Module_AddFile_EncryptionAlgorithm {
+				class Values {
+					class morse { name = "Morse Code"; value = "morse"; };
+					class spelling { name = "Spelling Alphabet"; value = "spelling"; };
+					class affine { name = "Affine"; value = "affine"; };
+					class rot { name = "ROT"; value = "rot"; };
+					class vigenere { name = "Vigenere"; value = "vigenere"; };
+					class bacon { name = "Bacon"; value = "bacon"; };
+					class alpha_sub { name = "Alphabetical Substitution"; value = "alpha_sub"; };
+					class railfence { name = "Railfence"; value = "railfence"; };
+					class base32 { name = "Base32"; value = "base32"; };
+					class base64 { name = "Base64"; value = "base64"; };
+					class ascii85 { name = "Ascii85"; value = "ascii85"; };
+					class unicode { name = "Unicode Notation"; value = "unicode"; };
+					class integer { name = "Integer"; value = "integer"; };
+				};
+			};
+		};
+	};
+
 	class ROOT_Module3DEN_AddGPSTracker: Module_F {
 		scope = 2;
 		displayName = "Add GPS Tracker";

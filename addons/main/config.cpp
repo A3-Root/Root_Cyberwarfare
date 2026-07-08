@@ -38,6 +38,7 @@ class CfgPatches {
 			"ace_interact_menu",
 			"zen_custom_modules",
 			"ae3_main",
+			"ae3_armaos",
 			"ae3_filesystem",
 			"ae3_desktop",
 			"ae3_flashdrive"
@@ -52,6 +53,15 @@ class CfgPatches {
 		};
 		url = "https://github.com/A3-Root/Root_CyberWarfare";
 		requiredVersion = REQUIRED_VERSION;
+	};
+};
+
+class CfgSecurityCommands {
+	class crypto {
+		code = "call Root_fnc_os_crypto";
+	};
+	class crack {
+		code = "call Root_fnc_os_crack";
 	};
 };
 

@@ -150,6 +150,8 @@ if (isServer) then {
     call FUNC(createDiaryEntry);
 };
 
+call FUNC(cipherRegister);
+
 // ============================================================================
 // Server-Side: Initialize Device Cache and Link Cache
 // ============================================================================
