@@ -37,7 +37,11 @@ private _dialogControls = [
     ["SLIDER", ["File Hack Time (in seconds)", "Time taken to hack and download the file (in seconds)"], [1, 300, 10, 0]],
     ["EDIT:MULTI", ["File Contents", "Content of the file that could be read after downloading via the command 'cat <filename>"], ["Check out my other projects that could interest you here: https://github.com/A3-Root/", {}, 7]],
     ["EDIT:CODE", ["Code to Execute on Download", "Code that will be executed in a SCHEDULED environment (spawn) when file is successfully downloaded. The code is run on the player who downloaded the file. Default parameters ['_computer', '_playerNetID']"], ["hint str format ['File Downloaded ON: %1 ---- BY %2 (Client ID: %3)', getText (configOf (_this select 0) >> 'displayName'), name (_this select 1), _this select 2];", {}, 7]],
-    ["TOOLBOX:ENABLED", ["Available to Future Laptops", "Should this database be available to laptops that are added later?"], false]
+    ["TOOLBOX:ENABLED", ["Available to Future Laptops", "Should this database be available to laptops that are added later?"], false],
+    ["CHECKBOX", ["Encrypt File Contents", "Encrypt the stored file contents before it is added to the hackable file list."], false],
+    ["COMBO", ["Encryption Algorithm", "Cipher used when encryption is enabled."], [["morse", "spelling", "affine", "rot", "vigenere", "bacon", "alpha_sub", "railfence", "base32", "base64", "ascii85", "unicode", "integer"], ["Morse Code", "Spelling Alphabet", "Affine", "ROT", "Vigenere", "Bacon", "Alphabetical Substitution", "Railfence", "Base32", "Base64", "Ascii85", "Unicode Notation", "Integer"], 0]],
+    ["EDIT", ["Key / Variant", "Primary key, password, keyword, or variant. Examples: rot13, LEMON, 3"], [""]],
+    ["EDIT", ["Encryption Options", "Optional key=value pairs. Examples: a=5 b=8, rails=3, radix=16 width=8 signed=0"], [""]]
 ];
 
 {
@@ -53,12 +57,12 @@ private _dialogControls = [
         params ["_results", "_args"];
         _args params ["_fileObject", "_allComputers"];
         
-        // First 5 results are the original controls + new code field + availability
-        _results params ["_filename", "_filesize", "_filecontent", "_executionCode", "_availableToFutureLaptops"];
+        // Dialog values before the per-computer link checkboxes.
+        _results params ["_filename", "_filesize", "_filecontent", "_executionCode", "_availableToFutureLaptops", "_isEncrypted", "_encryptionAlgorithm", "_encryptionKey", "_encryptionOptions"];
         
         // The rest are checkbox values for each computer
         private _linkedComputers = [];
-        private _checkboxStartIndex = 5;
+        private _checkboxStartIndex = 9;
         
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
@@ -75,7 +79,7 @@ private _dialogControls = [
         if (_filesize < 1) then {_filesize = 1};
 
         private _execUserId = clientOwner;
-        [_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
+        [_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
         ["Hackable File Added!"] call zen_common_fnc_showMessage;
     },  
     {

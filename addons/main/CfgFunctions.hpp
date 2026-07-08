@@ -37,6 +37,7 @@ class CfgFunctions {
 
 		class Cipher {
 			file = "\z\root_cyberwarfare\addons\main\functions\cipher";
+			class cipherOptionsFromText {};
 			class cipherProcess {};
 			class cipherRegister {};
 			class os_crack {};
@@ -145,6 +146,7 @@ class CfgFunctions {
 
 		class Zeus {
 			file = "\z\root_cyberwarfare\addons\main\functions\zeus";
+			class cipherZeus {};
 			class addDoorsZeus {};
 			class addLightsZeus {};
 			class addCustomDeviceZeus {};

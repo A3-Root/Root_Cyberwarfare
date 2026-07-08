@@ -13,6 +13,7 @@ class CfgPatches {
 			"ROOT_CyberWarfareAddHackingToolsZeus",
 			"ROOT_CyberWarfareRegisterHackableLaptopZeus",
 			"ROOT_CyberWarfareModifyPowerZeus",
+			"ROOT_CyberWarfareCipherZeus",
 			"ROOT_CyberWarfareAddFileZeus",
 			"ROOT_CyberWarfareAddGPSTrackerZeus",
 			"ROOT_CyberWarfareAddVehicleZeus",

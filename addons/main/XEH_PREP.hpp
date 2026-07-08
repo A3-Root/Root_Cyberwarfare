@@ -37,6 +37,7 @@ PREP(scanNetworkPrint);
 #undef PREP
 #define PREP(fncName) [QPATHTOF(functions\cipher\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
 
+PREP(cipherOptionsFromText);
 PREP(cipherProcess);
 PREP(cipherRegister);
 PREP(os_crack);
@@ -154,6 +155,7 @@ PREP(gui_appGpsMap);
 #undef PREP
 #define PREP(fncName) [QPATHTOF(functions\zeus\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
 
+PREP(cipherZeus);
 PREP(addCustomDeviceZeus);
 PREP(addDatabaseZeus);
 PREP(addDoorsZeus);

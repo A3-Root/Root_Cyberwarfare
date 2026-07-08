@@ -41,6 +41,10 @@ private _laptops = _syncedObjects select {
 		private _fileContent = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_CONTENT", "This is a secret file downloaded from the network."];
 		private _executionCode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_EXEC", ""];
 		private _addToPublic = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_PUBLIC", true];
+		private _isEncrypted = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT", false];
+		private _encryptionAlgorithm = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT_ALGORITHM", "morse"];
+		private _encryptionKey = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT_KEY", ""];
+		private _encryptionOptions = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT_OPTIONS", ""];
 
 		// Get laptop netIds for linking
 		private _linkedComputers = _laptops apply { netId _x };
@@ -61,9 +65,7 @@ private _laptops = _syncedObjects select {
 		private _fileObject = _logic;
 		private _execUserId = 2; // Server
 
-		// Call the existing Zeus main function
-		// Parameters: _fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops
-		[_fileObject, _fileName, _fileSize, _fileContent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops] call FUNC(addDatabaseZeusMain);
+		[_fileObject, _fileName, _fileSize, _fileContent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions] call FUNC(addDatabaseZeusMain);
 
 		// Notify admins of success
 		if (serverCommandAvailable "#kick") then {

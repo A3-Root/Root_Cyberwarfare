@@ -12,20 +12,45 @@
  * 5: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
  * 6: _executionCode <STRING> (Optional) - Code to execute on download, default: ""
  * 7: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ * 8: _isEncrypted <BOOLEAN> (Optional) - Encrypt stored content, default: false
+ * 9: _encryptionAlgorithm <STRING> (Optional) - Cipher algorithm, default: "morse"
+ * 10: _encryptionKey <STRING> (Optional) - Primary key or variant, default: ""
+ * 11: _encryptionOptions <STRING|HASHMAP> (Optional) - Additional cipher options, default: ""
  *
  * Return Value:
  * None
  *
  * Example:
- * [_obj, "secret.txt", 10, "content", 0, [], "", false] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
+ * [_obj, "secret.txt", 10, "content", 0, [], "", false, true, "rot", "rot13"] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
  *
  * Public: No
  */
 
-params ["_fileObject", "_filename", "_filesize", "_filecontent", ["_execUserId", 0], ["_linkedComputers", []], ["_executionCode", ""], ["_availableToFutureLaptops", false]];
+params [
+    "_fileObject",
+    "_filename",
+    "_filesize",
+    "_filecontent",
+    ["_execUserId", 0],
+    ["_linkedComputers", []],
+    ["_executionCode", ""],
+    ["_availableToFutureLaptops", false],
+    ["_isEncrypted", false],
+    ["_encryptionAlgorithm", "morse"],
+    ["_encryptionKey", ""],
+    ["_encryptionOptions", ""]
+];
 
 if (_execUserId == 0) then {
     _execUserId = owner _fileObject;
+};
+
+if (_isEncrypted) then {
+    private _cipherOptions = [_encryptionKey, _encryptionOptions] call FUNC(cipherOptionsFromText);
+    private _encryptedContent = [_encryptionAlgorithm, "encrypt", _filecontent, _cipherOptions] call FUNC(cipherProcess);
+    if (_encryptedContent isEqualType "") then {
+        _filecontent = _encryptedContent;
+    };
 };
 
 // Load device arrays from global storage

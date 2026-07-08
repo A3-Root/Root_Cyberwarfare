@@ -62,6 +62,14 @@ class CfgVehicles {
 		function = "Root_fnc_modifyPowerZeus";
 		displayName = "Modify Power Costs";
 	};
+	class ROOT_CyberWarfareCipherZeus: zen_modules_moduleBase {
+		author = "Root";
+		_generalMacro = "ROOT_CyberWarfareCipherZeus";
+		curatorCanAttach = 1;
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_cipherZeus";
+		displayName = "Cipher Tools";
+	};
 	class ROOT_CyberWarfareAddFileZeus: zen_modules_moduleBase {
 		author = "Root";
 		_generalMacro = "ROOT_CyberWarfareAddFileZeus";
@@ -116,6 +124,7 @@ class CfgVehicles {
 		class AttributesBase {
 			class Edit;
 			class Checkbox;
+			class Combo;
 			class ModuleDescription;
 		};
 		class ModuleDescription;
@@ -339,6 +348,49 @@ class CfgVehicles {
 				tooltip = "If checked, this file will be accessible by all laptops (current and future)";
 				typeName = "BOOL";
 				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT";
+				displayName = "Encrypt File Contents";
+				tooltip = "Encrypt the stored file contents before the file is registered";
+				typeName = "BOOL";
+				defaultValue = 0;
+			};
+			class ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT_ALGORITHM: Combo {
+				property = "ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT_ALGORITHM";
+				displayName = "Encryption Algorithm";
+				tooltip = "Cipher used when encryption is enabled";
+				typeName = "STRING";
+				defaultValue = """morse""";
+				class Values {
+					class morse { name = "Morse Code"; value = "morse"; };
+					class spelling { name = "Spelling Alphabet"; value = "spelling"; };
+					class affine { name = "Affine"; value = "affine"; };
+					class rot { name = "ROT"; value = "rot"; };
+					class vigenere { name = "Vigenere"; value = "vigenere"; };
+					class bacon { name = "Bacon"; value = "bacon"; };
+					class alpha_sub { name = "Alphabetical Substitution"; value = "alpha_sub"; };
+					class railfence { name = "Railfence"; value = "railfence"; };
+					class base32 { name = "Base32"; value = "base32"; };
+					class base64 { name = "Base64"; value = "base64"; };
+					class ascii85 { name = "Ascii85"; value = "ascii85"; };
+					class unicode { name = "Unicode Notation"; value = "unicode"; };
+					class integer { name = "Integer"; value = "integer"; };
+				};
+			};
+			class ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT_KEY: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT_KEY";
+				displayName = "Key / Variant";
+				tooltip = "Primary key, password, keyword, or variant. Examples: rot13, LEMON, 3";
+				typeName = "STRING";
+				defaultValue = """""";
+			};
+			class ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT_OPTIONS: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT_OPTIONS";
+				displayName = "Encryption Options";
+				tooltip = "Optional key=value pairs. Examples: a=5 b=8, rails=3, radix=16 width=8 signed=0";
+				typeName = "STRING";
+				defaultValue = """""";
 			};
 			class ModuleDescription: ModuleDescription{};
 		};
