@@ -24,6 +24,12 @@ This guide covers everything players need to know about using Root's Cyber Warfa
 
 The laptop must have **hacking tools available** by direct installation or by a mounted AE3 USB drive that contains the tools. On the desktop, the **Hacking Tools** application group and a real `Hackerman.exe` launcher file under the current user's `Desktop` folder appear only while tools are available. Opening `Hackerman.exe` launches the RootCW tool hub and plays the intro video once per laptop.
 
+**Rubberducky USB:** A pre-loaded hacking-tools USB drive (`ROOT Rubberducky USB`) can be dropped in a mission for players to find and plug in. Connecting it installs the toolset instantly and, unless a mission maker disabled it, auto-adds a known login account to the laptop (default username/password: `quack` / `quack`) so you always have a way in.
+
+### Hackerman Desktop (Graphical Interface)
+
+Everything the text terminal can do is also available as a point-and-click app suite. Open **Hackerman.exe** from the desktop to launch the tool hub, which lists an app per feature: **Doors**, **Lights**, **Vehicles**, **Drones**, **GPS**, **Databases**, **Custom**, **PowerGrid**, **NetScan**, **Crypto**, and **Crack**. Each device app shows a list of accessible devices and an action screen (lock/unlock, on/off, track, download, etc.) equivalent to the matching terminal command. Use whichever interface you prefer - both operate on the same devices and consume the same power.
+
 ### Basic Navigation
 
 Once in the terminal, you can use standard ArmaOS commands:
@@ -132,6 +138,8 @@ devices powergrids 3344 # Show affected lights in power grid 3344
 - **GPS Trackers**: Track time, update frequency, power cost, status, last position
 - **Vehicles**: Hackable features with allowed/not allowed indicators, current vehicle status (fuel, engine, lights, damage)
 - **Power Grids**: Radius, state (ON/OFF), count of affected lights with their IDs
+
+**Note:** If a mission maker disabled "Allow Location View" on a device, its grid reference is replaced with `[location hidden]` in both the terminal and Hackerman Desktop listings. GPS trackers are unaffected by this and always follow their own tracked/untracked state instead.
 
 **Color Coding:**
 Device status information is color-coded for quick identification:
@@ -482,6 +490,98 @@ powergrid 1234 overload    # Destroy generator and lights
 - **Overload** action may create an explosion if enabled (configurable explosion type)
 - Overload permanently destroys the generator
 - Number of affected lights is shown in the output
+
+---
+
+### 11. netscan - Scan the Network
+
+**Syntax:**
+```bash
+netscan [-o <path>]
+```
+
+**Description:**
+Scans the subnet visible to the laptop and lists each host's IP, device type, whether external SSH is exposed, its network interface, and a breakdown of hackable devices reachable through it (counted against what you actually have access to).
+
+**Parameters:**
+- `-o <path>` - Optional. Exports the results to a file in the laptop's filesystem instead of (in addition to) printing them. Defaults to `/root/netscan.txt` if `-o` is given with no path.
+
+**Examples:**
+```bash
+netscan                      # Print scan results to the terminal
+netscan -o /root/scan.txt    # Also save results to a file
+```
+
+**Confirmation Required:** No
+
+**Notes:**
+- Also available as the **NetScan** app on the Hackerman Desktop, which can export the same report to a chosen file.
+- Requires hacking tools to be installed/available on the laptop.
+
+---
+
+### 12. crypto - Encrypt / Decrypt Text or Files
+
+**Syntax:**
+```bash
+crypto -m=<encrypt|decrypt> -a=<algorithm> [-k=<key>] [options] <text|filepath>
+```
+
+**Description:**
+Runs a classical cipher against a text string or a file already present in the laptop's filesystem, and prints (or saves) the result.
+
+**Parameters:**
+- `-m=<encrypt|decrypt>` - Mode
+- `-a=<algorithm>` - One of: `morse`, `spelling`, `affine`, `rot`, `vigenere`, `bacon`, `alpha_sub`, `railfence`, `base32`, `base64`, `ascii85`, `unicode`, `integer`
+- `-k=<key>` - Key/keyword/password, where the algorithm requires one (e.g. Vigenère keyword, Affine `a`/`b`, ROT variant)
+- Algorithm-specific options: `--variant=` (ROT), `--a=`/`--b=` (Affine), `--rails=` (Railfence), `--radix=`/`--width=`/`--signed=` (Integer)
+- `-o=<path>` - Optional. Write the result to a file instead of printing it
+- `<text|filepath>` - Text to process, or a path to an existing file to read as input
+
+**Examples:**
+```bash
+crypto -m=encrypt -a=rot --variant=13 "meet at the docks"
+crypto -m=decrypt -a=vigenere -k=LEMON "attack at dawn"
+crypto -m=decrypt -a=base64 /root/Downloads/message.txt -o=/root/decoded.txt
+```
+
+**Confirmation Required:** No
+
+**Notes:**
+- Use `crypto help` for full syntax and per-algorithm option reference.
+- Also available as the **Crypto** app on the Hackerman Desktop.
+- Some hackable files are stored pre-encrypted by the mission maker - use `crypto -m=decrypt` with the correct algorithm/key to read them.
+
+---
+
+### 13. crack - Identify or Bruteforce a Cipher
+
+**Syntax:**
+```bash
+crack -a=<algorithm|all> [--wordlist=] [options] <text|filepath>
+```
+
+**Description:**
+Attempts to decrypt ciphertext without knowing the exact key. Pass a specific algorithm to bruteforce its keyspace (e.g. all 26 ROT shifts), or `-a=all` to try every supported cipher and rank candidate plaintexts by a letter-frequency/common-word heuristic.
+
+**Parameters:**
+- `-a=<algorithm|all>` - Specific cipher, or `all` to try everything
+- `--wordlist=` - Optional custom word list for scoring candidates
+- `--rails=`, `--radix=`, `--width=`, `--signed=` - Algorithm-specific bruteforce constraints
+- `-o=<path>` - Optional. Save the results to a file
+- `<text|filepath>` - Ciphertext, or a path to a file containing it
+
+**Examples:**
+```bash
+crack -a=rot "message that looks shifted"
+crack -a=all /root/Downloads/cipher.txt
+```
+
+**Confirmation Required:** No
+
+**Notes:**
+- `-a=all` returns the top-scoring candidates per algorithm rather than a single answer - review them for a plausible plaintext.
+- Also available as the **Crack** app on the Hackerman Desktop.
 
 ---
 

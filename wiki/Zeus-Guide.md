@@ -8,21 +8,25 @@ This guide covers all Zeus modules provided by Root's Cyber Warfare, enabling Ze
 - [Zeus Modules Overview](#zeus-modules-overview)
 - [Module Reference](#module-reference)
   - [1. Add Hacking Tools](#1-add-hacking-tools)
-  - [2. Add Hackable Object](#2-add-hackable-object)
-  - [3. Add Custom Device](#3-add-custom-device)
-  - [4. Add Hackable File](#4-add-hackable-file)
-  - [5. Add GPS Tracker](#5-add-gps-tracker)
-  - [6. Add Hackable Vehicle](#6-add-hackable-vehicle)
-  - [7. Add Power Generator](#7-add-power-generator)
-  - [8. Copy Device Links](#8-copy-device-links)
-  - [9. Modify Power Costs](#9-modify-power-costs)
+  - [2. Register Hackable Laptop](#2-register-hackable-laptop)
+  - [3. Add Hackable Doors](#3-add-hackable-doors)
+  - [4. Add Hackable Lights](#4-add-hackable-lights)
+  - [5. Add Custom Device](#5-add-custom-device)
+  - [6. Add Hackable File](#6-add-hackable-file)
+  - [7. Add GPS Tracker](#7-add-gps-tracker)
+  - [8. Add Hackable Vehicle](#8-add-hackable-vehicle)
+  - [9. Add Power Generator](#9-add-power-generator)
+  - [10. Cipher Tools](#10-cipher-tools)
+  - [11. Copy Device Links](#11-copy-device-links)
+  - [12. Clear Broken Device Links](#12-clear-broken-device-links)
+  - [13. Modify Power Costs](#13-modify-power-costs)
 - [Access Control System](#access-control-system)
 - [Common Workflows](#common-workflows)
 - [Troubleshooting](#troubleshooting)
 
 ## Introduction
 
-Root's Cyber Warfare provides 9 Zeus modules in the **ROOT_CYBERWARFARE** category. These modules allow you to dynamically add hacking capabilities, register hackable devices, and configure access control during active missions.
+Root's Cyber Warfare provides 13 Zeus modules in the **ROOT_CYBERWARFARE** category. These modules allow you to dynamically add hacking capabilities, register hackable devices, run cipher tools, and configure access control during active missions.
 
 ### Finding the Modules
 
@@ -42,7 +46,7 @@ Most Zeus modules support two placement modes:
 - Place the module directly on a terrain object (building, vehicle, lamp, etc.)
 - The module will register that specific object immediately
 - Best for precisely targeting individual objects
-- Example: Place "Add Hackable Object" on a specific building to register only that building
+- Example: Place "Add Hackable Doors" on a specific building to register only that building
 
 **2. Radius Mode (Area Registration)**
 - Place the module on empty ground or where no compatible object is detected
@@ -52,7 +56,8 @@ Most Zeus modules support two placement modes:
 - Example: Place "Add Hackable Vehicle" on empty ground with 500m radius to register all vehicles in that area
 
 **Module Support:**
-- **Add Hackable Object**: Supports both modes (registers buildings and lights)
+- **Add Hackable Doors**: Supports both modes (registers building doors)
+- **Add Hackable Lights**: Supports both modes (registers lights)
 - **Add Hackable Vehicle**: Supports both modes (registers vehicles and drones)
 - **Add Custom Device**: Supports only direct placement mode
 - **Add GPS Tracker**: Supports only direct placement mode
@@ -68,14 +73,18 @@ Most Zeus modules support two placement modes:
 
 | Module Name | Purpose | Placement Modes |
 |-------------|---------|-----------------|
-| Add Hacking Tools | Install hacking software on laptops | Direct only |
-| Add Hackable Object | Register doors/lights in buildings | Direct + Radius |
+| Add Hacking Tools | Install hacking software on laptops/USBs | Direct only |
+| Register Hackable Laptop | Mark a laptop as a linkable hacking station (no tools installed) | Direct only |
+| Add Hackable Doors | Register building doors | Direct + Radius |
+| Add Hackable Lights | Register lights | Direct + Radius |
 | Add Custom Device | Create scripted devices | Direct only |
 | Add Hackable File | Add downloadable files | Dialog only |
 | Add GPS Tracker | Attach GPS tracker to objects | Direct only |
 | Add Hackable Vehicle | Register vehicles/drones | Direct + Radius |
 | Add Power Generator | Create power grid control | Direct only |
+| Cipher Tools | Encrypt/decrypt/bruteforce text and push it to a device | Dialog only |
 | Copy Device Links | Transfer laptop permissions | Dialog only |
+| Clear Broken Device Links | Remove links to deleted devices/laptops on demand | Dialog only |
 | Modify Power Costs | Adjust power consumption | Dialog only |
 
 ---
@@ -109,14 +118,15 @@ Backdoor Function Prefix: (leave empty)
 **What It Does:**
 - Installs a virtual filesystem on the laptop with hacking commands
 - Creates the tools directory at the specified path
-- Enables terminal commands: `devices`, `door`, `light`, `changedrone`, `disabledrone`, `download`, `custom`, `gpstrack`, `vehicle`, `powergrid`
-- Registers the laptop as a valid hacking device
+- Enables terminal commands: `devices`, `door`, `light`, `changedrone`, `disabledrone`, `download`, `custom`, `gpstrack`, `vehicle`, `powergrid`, `netscan`, `crypto`, `crack`
+- Enables the **Hackerman Desktop** app suite (graphical equivalent of the terminal commands)
 
 **Notes:**
 - Can be used on any AE3 laptop/USB object
 - Multiple laptops can be configured independently
 - Tool path must be unique per laptop (or can be shared)
 - Backdoor prefix enables admin access (bypasses all permission checks)
+- This module only installs the toolset. It does **not** mark the laptop as a linkable "hackable station" - use **Register Hackable Laptop** for that (most laptops need both).
 
 **Feedback Message:**
 ```
@@ -125,12 +135,43 @@ Hacking tools installed successfully on laptop at /network/hackertools
 
 ---
 
-### 2. Add Hackable Object
+### 2. Register Hackable Laptop
 
-**Purpose:** Register buildings (with doors) or lights as hackable devices. **Note:** For drones, use the "Add Hackable Vehicle" module instead.
+**Purpose:** Mark an AE3 laptop as a hackable station so devices can be linked to it, without installing the hacking toolset itself. A registered-but-tool-less laptop can receive device links but stays inert until tools are installed (directly, or via a plugged-in hacking-tools/Rubberducky USB).
 
 **How to Use:**
-1. Place module on a building or lamp
+1. Place module on an AE3 laptop object
+2. Configure parameters in the dialog
+3. Click OK
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| **Custom Laptop Name** | String | (empty) | Display label used in device-linking dialogs. Falls back to the laptop's class display name if left empty. |
+
+**What It Does:**
+- Sets the laptop as a valid link target and access holder (`ROOT_CYBERWARFARE_HACKABLE_LAPTOP`)
+- Stores the display name used when linking devices to this laptop
+- Refreshes tool availability immediately if tools are already present (self-installed or a mounted USB)
+
+**Feedback Message:**
+```
+Root Cyber Warfare: Laptop registered as a hackable station ('HQ_Terminal').
+```
+
+**Notes:**
+- Use this together with **Add Hacking Tools** on laptops that both need to be link targets and need working commands.
+- Useful on its own for "empty" laptops you want players to eventually plug a hacking USB into.
+
+---
+
+### 3. Add Hackable Doors
+
+**Purpose:** Register building doors as hackable devices.
+
+**How to Use:**
+1. Place module on a building (or on empty ground for radius mode)
 2. Configure parameters in the dialog
 3. Click OK
 
@@ -140,11 +181,11 @@ Hacking tools installed successfully on laptop at /network/hackertools
 |-----------|------|---------|-------------|
 | **Linked Computers** | Array | (empty) | List of specific laptops that should have access. Leave empty for none. |
 | **Available to Future Laptops** | Checkbox | Unchecked | If checked, all laptops added AFTER this device will automatically have access. |
-| **Make Unbreachable** | Checkbox | Unchecked | If checked, building doors cannot be breached with ACE explosives or lockpicking (doors only). |
+| **Allow Location View** | Checkbox | Checked | If unchecked, the building's grid location is hidden (shown as `[location hidden]`) in device listings. |
+| **Make Unbreachable** | Checkbox | Unchecked | If checked, building doors cannot be breached with ACE explosives or lockpicking. |
 
 **Auto-Detection:**
-- **Buildings**: Automatically detects all doors and registers them
-- **Lamps**: Registers as a single light device
+- Automatically detects all doors in the building and registers them together under one building/device ID
 
 **Device ID Assignment:**
 - Automatically generates a unique 4-digit ID (1000-9999)
@@ -157,9 +198,8 @@ Make Unbreachable: ✓ (checked)
 ```
 
 **What It Does:**
-- **For Buildings**: Registers all doors with unique door IDs
-- **For Lights**: Registers the lamp object with on/off control
-- If "Make Unbreachable" is checked (doors only), prevents ACE breaching/lockpicking
+- Registers all doors in the building with unique door IDs
+- If "Make Unbreachable" is checked, prevents ACE breaching/lockpicking
 
 **Access Control:**
 - If **Linked Computers** are specified: Only those laptops get access
@@ -174,13 +214,57 @@ Unbreachable: Yes
 ```
 
 **Notes:**
-- For buildings, ALL doors are automatically detected (no need to specify door IDs)
-- Lights can be building lights or standalone lamp objects
+- ALL doors in the building are automatically detected (no need to specify door IDs)
+- Radius mode registers every compatible building within range in one placement
 - For drones/UAVs, use the "Add Hackable Vehicle" module
 
 ---
 
-### 3. Add Custom Device
+### 4. Add Hackable Lights
+
+**Purpose:** Register lights (building lights or standalone lamps) as hackable devices.
+
+**How to Use:**
+1. Place module on a lamp (or on empty ground for radius mode)
+2. Configure parameters in the dialog
+3. Click OK
+
+**Parameters:**
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| **Linked Computers** | Array | (empty) | List of specific laptops that should have access. Leave empty for none. |
+| **Available to Future Laptops** | Checkbox | Unchecked | If checked, all laptops added AFTER this device will automatically have access. |
+| **Allow Location View** | Checkbox | Checked | If unchecked, the light's grid location is hidden (shown as `[location hidden]`) in device listings. |
+
+**Device ID Assignment:**
+- Automatically generates a unique 4-digit ID (1000-9999)
+
+**Example Configuration:**
+```
+Linked Computers: (leave empty)
+Available to Future Laptops: ✓ (checked)
+```
+
+**What It Does:**
+- Registers the lamp object with on/off control via the `light` command
+
+**Access Control:**
+- Same rules as Add Hackable Doors (Linked Computers / Available to Future Laptops)
+
+**Feedback Message:**
+```
+Light registered with ID: 5678
+Available to future laptops: Yes
+```
+
+**Notes:**
+- Works on building lights and standalone lamp objects
+- Radius mode registers every compatible light within range in one placement
+
+---
+
+### 5. Add Custom Device
 
 **Purpose:** Create custom scripted devices with user-defined activation and deactivation code.
 
@@ -249,7 +333,7 @@ Available to future laptops: Yes
 
 ---
 
-### 4. Add Hackable File
+### 6. Add Hackable File
 
 **Purpose:** Create downloadable files that players can download via the terminal.
 
@@ -324,7 +408,7 @@ Available to future laptops: No
 
 ---
 
-### 5. Add GPS Tracker
+### 7. Add GPS Tracker
 
 **Purpose:** Attach a GPS tracker to an object, enabling real-time position tracking via the terminal.
 
@@ -417,7 +501,7 @@ Available to future laptops: Yes
 
 ---
 
-### 6. Add Hackable Vehicle
+### 8. Add Hackable Vehicle
 
 **Purpose:** Register vehicles or drones as hackable, enabling control over fuel, speed, brakes, lights, engine, and alarms.
 
@@ -437,7 +521,7 @@ Available to future laptops: Yes
 | **Linked Computers** | Array | (empty) | Specific laptops with access. |
 | **Available to Future Laptops** | Checkbox | Unchecked | Auto-grant access to future laptops. |
 
-Drones use the `changedrone` and `disabledrone` commands (see [Add Hackable Object](#2-add-hackable-object) for drone details).
+Drones use the `changedrone` and `disabledrone` commands (see [Add Hackable Doors](#3-add-hackable-doors) for placement-mode details).
 
 **Parameters for Vehicles:**
 
@@ -525,7 +609,7 @@ Available to future laptops: Yes
 
 ---
 
-### 7. Add Power Generator
+### 9. Add Power Generator
 
 **Purpose:** Create a power generator that controls all lights within a configurable radius, with optional explosion effects.
 
@@ -608,7 +692,41 @@ Available to future laptops: Yes
 
 ---
 
-### 8. Copy Device Links
+### 10. Cipher Tools
+
+**Purpose:** Encrypt, decrypt, or bruteforce text directly from Zeus, optionally writing the result into a laptop's filesystem (e.g. to plant an encrypted intel file without leaving Zeus).
+
+**How to Use:**
+1. Place module (not on an object, or synced to a laptop to write output to it)
+2. Configure mode, algorithm, key, and text in the dialog
+3. Click OK to preview the result, or save it to the synced laptop's filesystem
+
+**Parameters:**
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| **Mode** | Dropdown | `encrypt`, `decrypt`, or `bruteforce` |
+| **Algorithm** | Dropdown | One of the 13 supported ciphers: Morse Code, Spelling Alphabet, Affine, ROT, Vigenere, Bacon, Alphabetical Substitution, Railfence, Base32, Base64, Ascii85, Unicode Notation, Integer (or `all` for bruteforce) |
+| **Key / Options** | String | Key, keyword, or algorithm-specific option string (e.g. `rot13`, `LEMON`, `rails=3`) |
+| **Text** | Multiline Text | Input text to process |
+
+**What It Does:**
+- Runs the same cipher engine used by the player-facing `crypto`/`crack` commands
+- Shows the resulting plaintext/ciphertext in a feedback message
+- If synced to a laptop, can write the result directly into that laptop's filesystem
+
+**Common Use Cases:**
+- Pre-encrypt intel files before registering them with **Add Hackable File**
+- Quickly test what a cipher output looks like while designing a puzzle
+- Drop a partially-solved cipher for players to finish decoding
+
+**Notes:**
+- Same algorithm set as the "Encrypt File Contents" option on **Add Hackable File** (Eden) / the database registration functions
+- See the [Player Guide](Player-Guide#terminal-commands) for the full player-facing `crypto`/`crack` syntax
+
+---
+
+### 11. Copy Device Links
 
 **Purpose:** Copy all device access permissions from one laptop to another.
 
@@ -657,7 +775,34 @@ Devices copied: 15
 
 ---
 
-### 9. Modify Power Costs
+### 12. Clear Broken Device Links
+
+**Purpose:** Immediately remove device/link entries whose underlying laptop or device object no longer exists (deleted mid-mission, respawned without persistence, etc.).
+
+**How to Use:**
+1. Place module (not on an object)
+2. Click OK
+
+**Parameters:** None
+
+**What It Does:**
+- Runs one immediate cleanup sweep across the legacy device array, link cache, and device registry
+- Removes entries whose object can no longer be resolved - no "strike grace" delay, unlike the automatic background loop
+- Reports how many entries were removed
+
+**Feedback Message:**
+```
+Cleared 3 broken device link(s).
+```
+
+**Notes:**
+- Works regardless of whether the automatic cleanup loop (see [Configuration](Configuration#cleanup-settings)) is enabled
+- Safe to run at any time; only removes references to objects that genuinely no longer exist
+- Equivalent to calling `Root_fnc_clearBrokenDeviceLinks` from a script
+
+---
+
+### 13. Modify Power Costs
 
 **Purpose:** Adjust global power costs for hacking operations during runtime.
 
@@ -811,7 +956,7 @@ Result:
 1. Place **Add Hacking Tools** module on an AE3 laptop
    - Tool Path: `/network/tools`
    - Click OK
-2. Place **Add Hackable Object** module on a building
+2. Place **Add Hackable Doors** module on a building
    - Linked Computers: (select the laptop)
    - Available to Future Laptops: (unchecked)
    - Click OK

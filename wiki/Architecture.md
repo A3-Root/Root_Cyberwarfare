@@ -377,7 +377,7 @@ Device Access Request
 
 2. **Initialize CBA settings**
 ```sqf
-call FUNC(initSettings); // Registers 10 CBA settings
+call FUNC(initSettings); // Registers 15 CBA settings
 ```
 
 3. **Set addon loaded flag**
@@ -431,17 +431,13 @@ if (isServer) then {
 
 4. **Register CBA Event Handlers** (for power, device state changes, GPS updates)
 
-5. **Start Background Cleanup Task**
+5. **Optionally Start Background Cleanup Task** (off by default - see [Configuration](Configuration#cleanup-settings))
 ```sqf
 if (isServer) then {
-    [] spawn {
-        while {true} do {
-            sleep 300; // Every 5 minutes
-            call FUNC(cleanupDeviceLinks); // Remove destroyed objects
-        };
-    };
+    call FUNC(cleanupDeviceLinks); // Starts the loop only if ROOT_CYBERWARFARE_CLEANUP_ENABLED is true
 };
 ```
+The loop interval is configurable (`ROOT_CYBERWARFARE_CLEANUP_TIME`, default 180s), and a "strike grace" mode (`ROOT_CYBERWARFARE_CLEANUP_STRIKE_GRACE`, default on) requires several consecutive failed lookups before removing an entry, to absorb brief netId-resolution misses right after a player joins. Regardless of this setting, `Root_fnc_clearBrokenDeviceLinks` (or the Zeus "Clear Broken Device Links" module) always runs one immediate, grace-free sweep on demand.
 
 ---
 
@@ -604,12 +600,12 @@ Zeus modules use a UI + implementation pattern:
 
 **Example:**
 ```sqf
-// fn_addDeviceZeus.sqf (UI)
+// fn_addDoorsZeus.sqf (UI)
 params [["_mode", ""], ["_input", []]];
 // ... Zeus dialog code ...
-[_object, _execUserId, _linkedComputers, ...] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_object, _execUserId, _linkedComputers, ...] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 
-// fn_addDeviceZeusMain.sqf (Implementation)
+// fn_addDoorsZeusMain.sqf (Implementation)
 params ["_object", "_execUserId", "_linkedComputers", ...];
 // ... actual device registration logic ...
 ```
@@ -786,22 +782,26 @@ if (_existingDevices isNotEqualTo []) then {
 
 ### Background Cleanup Task
 
-Removes destroyed objects from caches:
+Removes destroyed objects from caches. **Off by default** - admins opt in via `ROOT_CYBERWARFARE_CLEANUP_ENABLED`; `fn_cleanupDeviceLinks.sqf` only starts the loop when that setting is true:
 
 ```sqf
-// Runs every 5 minutes on server
-[] spawn {
-    while {true} do {
-        sleep 300;
-        call ROOT_fnc_cleanupDeviceLinks;
+if (missionNamespace getVariable ["ROOT_CYBERWARFARE_CLEANUP_ENABLED", false]) then {
+    [] spawn {
+        while {true} do {
+            sleep (missionNamespace getVariable ["ROOT_CYBERWARFARE_CLEANUP_TIME", 180]);
+            call FUNC(runDeviceLinkCleanup); // _useGrace = true by default
+        };
     };
 };
 ```
 
+The actual sweep logic lives in `Root_fnc_runDeviceLinkCleanup`, shared with the on-demand `Root_fnc_clearBrokenDeviceLinks` (which calls it with `_useGrace = false`).
+
 **Cleanup Logic:**
 - Check if netId objects still exist
+- With grace mode on (default), only remove an entry after several consecutive failed lookups (`CLEANUP_STRIKE_LIMIT`, default 3) - absorbs brief lookup misses right after a player joins
 - Remove entries for destroyed objects
-- Update caches and sync
+- Update caches and sync (via `Root_fnc_syncDeviceData`)
 
 ---
 

@@ -4,7 +4,7 @@ Welcome to the official documentation for **Root's Cyber Warfare**, an advanced 
 
 ## What is Root's Cyber Warfare?
 
-Root's Cyber Warfare introduces a comprehensive cyber warfare system to Arma 3, allowing players to hack and control 8 different device types using terminal commands. Built on top of AE3 ArmaOS, the mod provides a realistic hacking experience with power management, access control, and flexible deployment options for mission makers.
+Root's Cyber Warfare introduces a comprehensive cyber warfare system to Arma 3, allowing players to hack and control 8 different device types using terminal commands or the graphical **Hackerman Desktop** app suite. Built on top of AE3 ArmaOS, the mod provides a realistic hacking experience with power management, access control, network reconnaissance, classical-cipher encryption/decryption, and flexible deployment options for mission makers.
 
 This is an improved adaptation and expansion of the original Cyber Warfare mod created by Mister Adrian.
 
@@ -23,6 +23,15 @@ The mod supports the following hackable devices:
 | **GPS Trackers** | Real-time position tracking with map markers | `gpstrack` |
 | **Power Grids** | Generator-controlled lights in radius | `powergrid` |
 
+Beyond controlling devices, hacking-tools-equipped laptops also gain:
+
+| Feature | Description | Terminal Command |
+|---------|-------------|------------------|
+| **Network Scanner** | List subnet hosts, SSH exposure, and hackable device counts | `netscan` |
+| **Cipher Tools** | Encrypt/decrypt/bruteforce text or files with 13 classical ciphers | `crypto`, `crack` |
+
+All of the above (device control, network scanning, and cipher tools) are also available as graphical apps in the **Hackerman Desktop** - a launcher (`Hackerman.exe`) that appears on a laptop's desktop while hacking tools are available, giving point-and-click access alongside the text terminal.
+
 ## Documentation by User Type
 
 ### For Players
@@ -30,8 +39,8 @@ The mod supports the following hackable devices:
 **[Player Guide](Player-Guide)** - Learn how to use the terminal and control devices
 
 Topics covered:
-- Accessing the terminal via ACE interaction menu
-- Complete terminal command reference (10 commands)
+- Accessing the terminal via ACE interaction menu, or the Hackerman Desktop GUI
+- Complete terminal command reference (device commands, `netscan`, `crypto`, `crack`)
 - Power management and battery consumption
 - GPS tracker mechanics (attach, search, disable)
 - Tips for bulk operations and confirmation prompts
@@ -41,9 +50,10 @@ Topics covered:
 **[Zeus Guide](Zeus-Guide)** - Use Zeus modules to set up cyber warfare scenarios
 
 Topics covered:
-- All 9 Zeus modules with detailed parameters
-- Adding hacking tools to laptops
-- Registering hackable objects, vehicles, files, trackers
+- All Zeus modules with detailed parameters
+- Adding hacking tools to laptops, registering laptops as hackable stations
+- Registering hackable doors, lights, vehicles, files, trackers, custom devices
+- Cipher Tools module and Clear Broken Device Links maintenance module
 - Access control (public vs private devices)
 - Common workflows and troubleshooting
 
@@ -88,9 +98,11 @@ Topics covered:
 **[Configuration](Configuration)** - CBA settings reference
 
 Topics covered:
-- All 10 CBA settings with defaults
+- All 15 CBA settings with defaults
 - Power cost settings (5 settings)
 - GPS settings (5 settings)
+- Cleanup settings (3 settings)
+- Rubberducky settings (2 settings)
 - Configuration best practices
 - Mission parameter overrides
 
@@ -137,6 +149,14 @@ custom 5 activate         # Activate custom device
 # Power grids
 powergrid 1234 on         # Turn on lights in radius
 powergrid 1234 overload   # Destroy generator and lights
+
+# Scan the network
+netscan                   # List subnet hosts and hackable device counts
+netscan -o /root/scan.txt # Export results to a file
+
+# Cipher tools
+crypto -m=encrypt -a=vigenere -k=LEMON "attack at dawn"
+crack -a=all "some ciphertext to identify"
 ```
 
 ### Power Costs (Default Values)

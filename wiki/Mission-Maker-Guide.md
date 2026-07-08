@@ -8,6 +8,7 @@ This guide covers programmatic device registration and advanced scripting for Ro
 - [Getting Started](#getting-started)
 - [Device Registration Functions](#device-registration-functions)
   - [Add Hacking Tools](#add-hacking-tools)
+  - [Register Hackable Laptop](#register-hackable-laptop)
   - [Register Buildings (Doors/Lights)](#register-buildings-doorslights)
   - [Register Vehicles](#register-vehicles)
   - [Register Custom Devices](#register-custom-devices)
@@ -15,6 +16,10 @@ This guide covers programmatic device registration and advanced scripting for Ro
   - [Register GPS Trackers](#register-gps-trackers)
   - [Register Power Generators](#register-power-generators)
   - [Copy Device Links](#copy-device-links)
+  - [Clear Broken Device Links](#clear-broken-device-links)
+- [Cipher Functions](#cipher-functions)
+- [Network Scanning](#network-scanning)
+- [Rubberducky Credentials](#rubberducky-credentials)
 - [Access Control Patterns](#access-control-patterns)
 - [Practical Examples](#practical-examples)
 - [initServer.sqf Template](#initserversqf-template)
@@ -45,7 +50,7 @@ All registration functions should be called **on the server** (use `remoteExec` 
 
 // Example:
 [_laptop1, "/network/tools", 0, "HackingStation", ""] call Root_fnc_addHackingToolsZeusMain;
-[_building1, 0, [], false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_building1, 0, [], false, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 ```
 
 **Triggered Scripts** (For dynamic registration)
@@ -67,7 +72,7 @@ params ["_laptops", "_buildings"];
 } forEach _laptops;
 
 {
-    [_x, 0, _laptops apply {netId _x}, false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [_x, 0, _laptops apply {netId _x}, false, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 } forEach _buildings;
 ```
 
@@ -131,53 +136,119 @@ params ["_laptops", "_buildings"];
 - Must be called before registering devices
 - Backdoor prefix enables admin access (bypasses all permissions)
 - Can be called on the same laptop multiple times (overwrites previous installation)
+- Only installs the toolset - does not by itself mark the laptop as a link target. Combine with `Root_fnc_registerHackableLaptopZeusMain` for laptops that must both work and receive device links.
+- Accepts an optional 6th `_silent <BOOLEAN>` parameter (default `false`) to suppress the "tools installed" systemChat feedback - used internally when seeding a Rubberducky.
 
 ---
 
-### Register Buildings (Doors/Lights)
+### Register Hackable Laptop
 
-**Function:** `Root_fnc_addDeviceZeusMain`
+**Function:** `Root_fnc_registerHackableLaptopZeusMain`
 
-**Description:** Registers buildings (with doors) or lights as hackable devices.
+**Description:** Marks a laptop as a hackable station (a valid link target and access holder) without installing the hacking toolset. Combine with `Root_fnc_addHackingToolsZeusMain` for laptops that need to both hold links and run commands. A laptop registered this way stays inert until tools are present (installed directly, or via a mounted hacking-tools/Rubberducky USB).
 
 **Syntax:**
 ```sqf
-[_targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_entity, _execUserId, _customLaptopName] remoteExec ["Root_fnc_registerHackableLaptopZeusMain", 2];
 ```
 
 **Parameters:**
 
 | Index | Name | Type | Default | Description |
 |-------|------|------|---------|-------------|
-| 0 | `_targetObject` | OBJECT | (required) | Building or lamp object |
+| 0 | `_entity` | OBJECT | (required) | Laptop object to register |
+| 1 | `_execUserId` | NUMBER | `0` | User ID for feedback (resolves to owner if `0`) |
+| 2 | `_customLaptopName` | STRING | `""` | Display label for linking dialogs. Falls back to the object's configured display name if empty. |
+
+**Examples:**
+```sqf
+// Register a laptop as a link target, no tools yet
+[_laptop1, 0, "HQ_Terminal"] remoteExec ["Root_fnc_registerHackableLaptopZeusMain", 2];
+
+// Register multiple laptops
+{
+    [_x, 0, ""] remoteExec ["Root_fnc_registerHackableLaptopZeusMain", 2];
+} forEach [_laptop1, _laptop2, _laptop3];
+```
+
+**Returns:** None (feedback message sent to execUserId)
+
+**Notes:**
+- Sets `ROOT_CYBERWARFARE_HACKABLE_LAPTOP` and `ROOT_CYBERWARFARE_PLATFORM_NAME` on the object
+- Refreshes tool availability immediately in case tools are already present
+- Devices can be linked to a registered-but-tool-less laptop; the links simply won't be usable until tools arrive
+
+---
+
+### Register Buildings (Doors/Lights)
+
+**Functions:** `Root_fnc_addDoorsZeusMain` (doors) and `Root_fnc_addLightsZeusMain` (lights). These replace the old combined `Root_fnc_addDeviceZeusMain`, which has been removed.
+
+**Description:** Registers building doors, or lights, as hackable devices. Both functions support **direct mode** (single object) and **radius mode** (batch-register everything of that kind within a radius of a position).
+
+**Syntax (Doors, direct mode):**
+```sqf
+[_targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+```
+
+**Syntax (Doors, radius mode):**
+```sqf
+[_centerPosition, _radius, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+```
+
+**Syntax (Lights, direct mode):**
+```sqf
+[_targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addLightsZeusMain", 2];
+```
+
+**Syntax (Lights, radius mode):**
+```sqf
+[_centerPosition, _radius, _execUserId, _linkedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addLightsZeusMain", 2];
+```
+
+**Parameters (Doors, direct mode):**
+
+| Index | Name | Type | Default | Description |
+|-------|------|------|---------|-------------|
+| 0 | `_targetObject` | OBJECT | (required) | Building object |
 | 1 | `_execUserId` | NUMBER | `0` | User ID for feedback |
 | 2 | `_linkedComputers` | ARRAY | `[]` | Array of computer netIds (NOT objects) |
 | 3 | `_availableToFutureLaptops` | BOOLEAN | `false` | Auto-grant access to future laptops |
-| 4 | `_makeUnbreachable` | BOOLEAN | `false` | Prevent ACE breaching (doors only) |
+| 4 | `_makeUnbreachable` | BOOLEAN | `false` | Prevent ACE breaching |
+
+**Parameters (Doors, radius mode):** same as above, but index 0/1 are `_centerPosition` (`[x, y, z]`) and `_radius` (meters), shifting the remaining indices by one.
+
+**Parameters (Lights):** identical to Doors but without `_makeUnbreachable` (lights have no breach state).
 
 **Examples:**
 ```sqf
 // Public building (all laptops)
-[_building1, 0, [], true, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_building1, 0, [], true, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 
 // Private building (specific laptops)
-[_building2, 0, [netId _laptop1, netId _laptop2], false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_building2, 0, [netId _laptop1, netId _laptop2], false, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 
 // Unbreachable building (future laptops only)
-[_building3, 0, [], true, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_building3, 0, [], true, true] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 
 // Register multiple buildings
 {
-    [_x, 0, [netId _laptop1], false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [_x, 0, [netId _laptop1], false, true] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 } forEach [_building1, _building2, _building3];
 
+// Radius mode - register every building's doors within 500m of a marker
+[getMarkerPos "baseMarker", 500, 0, [], true, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+
 // Light registration
-[_streetLamp1, 0, [], true, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_streetLamp1, 0, [], true] remoteExec ["Root_fnc_addLightsZeusMain", 2];
+
+// Radius mode - register every light within 300m of a marker
+[getMarkerPos "townMarker", 300, 0, [], true] remoteExec ["Root_fnc_addLightsZeusMain", 2];
 ```
 
 **Auto-Detection:**
 - **Buildings**: All doors are automatically detected and registered
-- **Lights**: Single light device registered
+- **Lights**: Single light device registered per lamp
 
 **Returns:** None (feedback message sent to execUserId)
 
@@ -185,7 +256,8 @@ params ["_laptops", "_buildings"];
 - Automatically generates unique 4-digit device ID (1000-9999)
 - `linkedComputers` must be netId strings, not object references
 - Get netId with: `netId _laptop`
-- Unbreachable flag prevents ACE explosive breaching and lockpicking
+- Unbreachable flag (doors only) prevents ACE explosive breaching and lockpicking
+- Radius mode is detected automatically: pass a position array (`[x, y, z]`) as the first parameter and a number as the second to trigger it
 
 ---
 
@@ -764,6 +836,142 @@ if (playerSide == west) then {
 
 ---
 
+### Clear Broken Device Links
+
+**Function:** `Root_fnc_clearBrokenDeviceLinks`
+
+**Description:** Runs one immediate cleanup sweep removing device/link entries whose underlying object (laptop or device) no longer exists. Works regardless of whether the automatic background cleanup loop is enabled (see [Configuration](Configuration#cleanup-settings)), and applies no "strike grace" delay - candidates are dropped the moment their object can't be resolved.
+
+**Syntax:**
+```sqf
+private _removed = call Root_fnc_clearBrokenDeviceLinks;
+// or from a client:
+[] remoteExec ["Root_fnc_clearBrokenDeviceLinks", 2];
+```
+
+**Parameters:** None
+
+**Returns:** `<NUMBER>` - Count of entries removed
+
+**Example:**
+```sqf
+private _removed = call Root_fnc_clearBrokenDeviceLinks;
+systemChat format ["Cleared %1 broken device link(s).", _removed];
+```
+
+**Notes:**
+- Equivalent to the Zeus "Clear Broken Device Links" module
+- Safe to run at any time - only removes references that genuinely no longer resolve
+- The periodic background version of this logic is `Root_fnc_runDeviceLinkCleanup`, gated by the `ROOT_CYBERWARFARE_CLEANUP_ENABLED`/`_CLEANUP_TIME`/`_CLEANUP_STRIKE_GRACE` CBA settings
+
+---
+
+## Cipher Functions
+
+**Function:** `Root_fnc_cipherProcess`
+
+**Description:** Runs a classical cipher (encrypt/decrypt/bruteforce) against text - the same engine backing the player-facing `crypto`/`crack` commands and the Zeus Cipher Tools module. Useful for pre-encrypting intel content when registering a database/file.
+
+**Syntax:**
+```sqf
+[_algorithm, _mode, _text, _options] call Root_fnc_cipherProcess;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Description |
+|-------|------|------|-------------|
+| 0 | `_algorithm` | STRING | One of: `morse`, `spelling`, `affine`, `rot`, `vigenere`, `bacon`, `alpha_sub`, `railfence`, `base32`, `base64`, `ascii85`, `unicode`, `integer` (or `"all"` for bruteforce mode) |
+| 1 | `_mode` | STRING | `"encrypt"`, `"decrypt"`, or `"bruteforce"` |
+| 2 | `_text` | STRING | Input text |
+| 3 | `_options` | HASHMAP | Algorithm-specific options (e.g. `["key", "LEMON"]`, `["variant", 13]`, `["rails", 3]`) |
+
+**Example:**
+```sqf
+private _options = createHashMap;
+_options set ["key", "LEMON"];
+private _cipherText = ["vigenere", "encrypt", "attack at dawn", _options] call Root_fnc_cipherProcess;
+
+// Register the encrypted text as a downloadable file
+[_server, "orders.enc", 10, _cipherText, 0, [], "", true] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
+```
+
+**Returns:** `<STRING>` (encrypt/decrypt) or `<ARRAY>` of ranked candidate strings (bruteforce)
+
+**Notes:**
+- `Root_fnc_cipherOptionsFromText` can parse a `crypto`/`crack`-style CLI option string (e.g. `"-k=LEMON --variant=13"`) into the options hashmap this function expects
+- `Root_fnc_cipherRegister` (called once automatically in `XEH_postInit.sqf`) is what wires these ciphers into AE3's own file-encryption algorithm list and registers the `RootCW_Crypto`/`RootCW_Crack` desktop apps - mission makers don't need to call it themselves
+
+---
+
+## Network Scanning
+
+**Function:** `Root_fnc_scanNetwork`
+
+**Description:** Builds the same subnet snapshot the `netscan` terminal command and NetScan desktop app show - IP, host type, external SSH exposure, interface, and a breakdown of hackable devices reachable through each host (limited to what the laptop can actually access).
+
+**Syntax:**
+```sqf
+private _rows = [_computer] call Root_fnc_scanNetwork;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Description |
+|-------|------|------|-------------|
+| 0 | `_computer` | OBJECT | The scanning laptop |
+
+**Returns:** `<ARRAY>` of `[ip, deviceType, sshAllowed, interface, deviceBreakdown]` rows
+
+**Example:**
+```sqf
+private _rows = [_laptop] call Root_fnc_scanNetwork;
+{
+    _x params ["_ip", "_type", "_ssh", "_iface", ["_breakdown", []]];
+    systemChat format ["%1 (%2) - SSH: %3", _ip, _type, _ssh];
+} forEach _rows;
+```
+
+**Notes:**
+- `Root_fnc_scanNetworkCli` drives the full `netscan` terminal command (printing to the owning client and optionally exporting to a file) - use `scanNetwork` directly only if you need the raw data in a script
+- `Root_fnc_hasHackingToolsAvailable` checks whether a laptop has tools installed or a qualifying USB mounted, if you need to gate mission logic on tool availability
+
+---
+
+## Rubberducky Credentials
+
+A **Rubberducky** is a placeable/Arsenal USB item (`ROOT_Rubberducky_Object`) pre-seeded with the hacking toolset - a "USB drop" for players to find and plug in. When connected, it can also auto-inject a known login account onto the laptop.
+
+**Function:** `Root_fnc_setRubberduckyCredentials`
+
+**Description:** Runtime API to change the Rubberducky default-login behavior (mirrors the CBA settings in [Configuration](Configuration#rubberducky-settings)).
+
+**Syntax:**
+```sqf
+[_enabled, _username, _password] call Root_fnc_setRubberduckyCredentials;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Description |
+|-------|------|------|-------------|
+| 0 | `_enabled` | BOOLEAN (or `nil`) | Whether connecting a Rubberducky adds a login. `nil` leaves the current setting unchanged. |
+| 1 | `_username` | STRING (or `nil`) | Account username. `nil` leaves it unchanged. |
+| 2 | `_password` | STRING (or `nil`) | Account password. `nil` leaves it unchanged. |
+
+**Example:**
+```sqf
+// Change the default Rubberducky login for this mission
+[true, "admin", "correcthorse"] call Root_fnc_setRubberduckyCredentials;
+```
+
+**Notes:**
+- `Root_fnc_seedRubberducky` (server) is what pre-installs tools on a placed Rubberducky object once its filesystem exists - not normally called directly by mission makers
+- `Root_fnc_seedRubberduckyCredentials` runs automatically whenever a hacking-tools USB is plugged into a laptop - it skips silently if an account with the configured username already exists
+- Disable entirely by setting `_enabled` to `false`, or via the `ROOT_CYBERWARFARE_RUBBERDUCKY_CREDS_ENABLED` CBA setting
+
+---
+
 ## Access Control Patterns
 
 ### Pattern 1: Public Access (All Laptops)
@@ -772,7 +980,7 @@ All laptops can access the device immediately.
 
 ```sqf
 // Register device with public access
-[_building1, 0, [], false, "", "", "", true, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_building1, 0, [], true, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 // availableToFutureLaptops = true, linkedComputers = []
 ```
 
@@ -802,7 +1010,7 @@ Only laptops added AFTER device registration get access (current laptops exclude
 
 ```sqf
 // Register device
-[_building1, 0, [], false, "", "", "", true, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_building1, 0, [], true, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 // linkedComputers = [], availableToFutureLaptops = true
 
 // Laptops that existed BEFORE this registration are excluded
@@ -854,7 +1062,7 @@ Grant access based on mission events.
 
 ```sqf
 // Initial registration (no access)
-[_secretVault, 0, [], false, "", "", "", false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_secretVault, 0, [], false, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 
 // Later, when player completes objective:
 if ("KeycardObjective" call BIS_fnc_taskCompleted) then {
@@ -899,11 +1107,11 @@ private _bluforBuildingNetIds = _bluforLaptops apply {netId _x};
 private _opforBuildingNetIds = _opforLaptops apply {netId _x};
 
 {
-    [_x, 0, _bluforBuildingNetIds, false, "", "", "", false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [_x, 0, _bluforBuildingNetIds, false, true] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 } forEach [building_blufor_1, building_blufor_2];
 
 {
-    [_x, 0, _opforBuildingNetIds, false, "", "", "", false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [_x, 0, _opforBuildingNetIds, false, true] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 } forEach [building_opfor_1, building_opfor_2];
 
 // Register vehicles
@@ -953,7 +1161,7 @@ private _allBuildings = [building1, building2, building3, building4, building5];
     _assignedLaptops resize _numLaptops;
     private _laptopNetIds = _assignedLaptops apply {netId _x};
 
-    [_building, 0, _laptopNetIds, false, "", "", "", false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [_building, 0, _laptopNetIds, false, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 } forEach _allBuildings;
 ```
 
@@ -966,7 +1174,7 @@ private _allBuildings = [building1, building2, building3, building4, building5];
 
 // Register all devices initially with no access
 {
-    [_x, 0, [], false, "", "", "", false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [_x, 0, [], false, true] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 } forEach [tier1_building, tier2_building, tier3_building];
 
 // When objective 1 completes, grant access to tier1
@@ -1057,18 +1265,18 @@ private _opforLaptops = [laptop_opfor_1];
 // BLUFOR base (private to BLUFOR laptops)
 private _bluforNetIds = _bluforLaptops apply {netId _x};
 {
-    [_x, 0, _bluforNetIds, false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [_x, 0, _bluforNetIds, false, true] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 } forEach [blufor_hq, blufor_barracks];
 
 // OPFOR base (private to OPFOR laptops)
 private _opforNetIds = _opforLaptops apply {netId _x};
 {
-    [_x, 0, _opforNetIds, false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [_x, 0, _opforNetIds, false, true] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 } forEach [opfor_hq, opfor_barracks];
 
 // Neutral buildings (public)
 {
-    [_x, 0, [], true, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [_x, 0, [], true, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 } forEach [civilian_building_1, civilian_building_2];
 
 // ===========================
@@ -1213,9 +1421,9 @@ Register based on player choice or mission state:
 ```sqf
 // Register different devices based on player faction
 if (playerSide == west) then {
-    [building_opfor, 0, [netId playerLaptop], false, "", "", "", false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [building_opfor, 0, [netId playerLaptop], false, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 } else {
-    [building_blufor, 0, [netId playerLaptop], false, "", "", "", false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [building_blufor, 0, [netId playerLaptop], false, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 };
 ```
 
@@ -1259,7 +1467,7 @@ Register many devices efficiently:
 // Register all buildings in a trigger area
 private _buildings = nearestObjects [getMarkerPos "baseMarker", ["House"], 500];
 {
-    [_x, 0, [netId laptop1], false, "", "", "", false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+    [_x, 0, [netId laptop1], false, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 } forEach _buildings;
 
 systemChat format ["Registered %1 buildings.", count _buildings];

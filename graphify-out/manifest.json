@@ -1,0 +1,862 @@
+{
+  ".github/scripts/auto_release.py": {
+    "mtime": 1762439661.3129818,
+    "ast_hash": "0ec9e597b3375191564e6965da3ba4b1",
+    "semantic_hash": "0ec9e597b3375191564e6965da3ba4b1"
+  },
+  ".github/scripts/update_readme.py": {
+    "mtime": 1761076853.9928093,
+    "ast_hash": "668e428602a64d7ca966b0abc6b4d797",
+    "semantic_hash": "668e428602a64d7ca966b0abc6b4d797"
+  },
+  "addons/main/CfgEventHandlers.hpp": {
+    "mtime": 1783241738.5098643,
+    "ast_hash": "1c7debeebdb8be7a9917c7444dce5cf8",
+    "semantic_hash": "1c7debeebdb8be7a9917c7444dce5cf8"
+  },
+  "addons/main/CfgFactionClasses.hpp": {
+    "mtime": 1760496406.2643807,
+    "ast_hash": "4dad0d9e5392ec53eeb393859d841ca9",
+    "semantic_hash": "4dad0d9e5392ec53eeb393859d841ca9"
+  },
+  "addons/main/CfgFunctions.hpp": {
+    "mtime": 1783498305.573001,
+    "ast_hash": "4945e93bcde3239373d66985d916f286",
+    "semantic_hash": "4945e93bcde3239373d66985d916f286"
+  },
+  "addons/main/CfgSounds.hpp": {
+    "mtime": 1760496406.2643807,
+    "ast_hash": "621d13790186758de79d1548d67d12a0",
+    "semantic_hash": "621d13790186758de79d1548d67d12a0"
+  },
+  "addons/main/CfgVehicles.hpp": {
+    "mtime": 1783498454.7017496,
+    "ast_hash": "52fb64f0ce6fdb5012929d21ab453313",
+    "semantic_hash": "52fb64f0ce6fdb5012929d21ab453313"
+  },
+  "addons/main/CfgWeapons.hpp": {
+    "mtime": 1783336535.4622915,
+    "ast_hash": "70c4de189a828090654e71596578df7a",
+    "semantic_hash": "70c4de189a828090654e71596578df7a"
+  },
+  "addons/main/XEH_PREP.hpp": {
+    "mtime": 1783498313.09148,
+    "ast_hash": "13f77c6069e40a742a6f5f2ce9a816d2",
+    "semantic_hash": "13f77c6069e40a742a6f5f2ce9a816d2"
+  },
+  "addons/main/config.cpp": {
+    "mtime": 1783498353.0783117,
+    "ast_hash": "308d5759d27ef7c9243ee8ea4da93cad",
+    "semantic_hash": "308d5759d27ef7c9243ee8ea4da93cad"
+  },
+  "addons/main/script_component.hpp": {
+    "mtime": 1783266761.9361165,
+    "ast_hash": "4a3b72aafdb644555af4907a94f8fd7d",
+    "semantic_hash": "4a3b72aafdb644555af4907a94f8fd7d"
+  },
+  "addons/main/script_macros.hpp": {
+    "mtime": 1783368719.0306861,
+    "ast_hash": "3a96134bd8ded5ce19cb86bc8eefa809",
+    "semantic_hash": "3a96134bd8ded5ce19cb86bc8eefa809"
+  },
+  "addons/main/script_mod.hpp": {
+    "mtime": 1783266761.937115,
+    "ast_hash": "ed2bdc9d092c5ef3f92da846d3855162",
+    "semantic_hash": "ed2bdc9d092c5ef3f92da846d3855162"
+  },
+  "addons/main/script_version.hpp": {
+    "mtime": 1783498530.587774,
+    "ast_hash": "d3ce0dd9a72afe5254e621809f114757",
+    "semantic_hash": "d3ce0dd9a72afe5254e621809f114757"
+  },
+  "addons/main/ui/web/js/cipherapps.js": {
+    "mtime": 1783492995.8555753,
+    "ast_hash": "9b5650010e79325353545b6c8bbd6391",
+    "semantic_hash": "9b5650010e79325353545b6c8bbd6391"
+  },
+  "include/x/cba/addons/main/script_macros_common.hpp": {
+    "mtime": 1760496406.2834551,
+    "ast_hash": "083a8cbaa9857e1016e04368fd30ca2c",
+    "semantic_hash": "083a8cbaa9857e1016e04368fd30ca2c"
+  },
+  "mod.cpp": {
+    "mtime": 1760496406.2834551,
+    "ast_hash": "586c65d8a3206b5e0af38e84091ec2f1",
+    "semantic_hash": "586c65d8a3206b5e0af38e84091ec2f1"
+  },
+  ".code-wiki/archive/README.md": {
+    "mtime": 1783502509.5938983,
+    "ast_hash": "2a3e8a95dbd585a4f9c8475b4f62c0d2",
+    "semantic_hash": "2a3e8a95dbd585a4f9c8475b4f62c0d2"
+  },
+  ".code-wiki/conventions.md": {
+    "mtime": 1783502501.4187033,
+    "ast_hash": "cf3c2bc5fdb0b347e9d67b76105db9d0",
+    "semantic_hash": "cf3c2bc5fdb0b347e9d67b76105db9d0"
+  },
+  ".code-wiki/database-and-custom-devices.md": {
+    "mtime": 1783502531.5493598,
+    "ast_hash": "3212667b30972e48dd8c282c7b38f7e9",
+    "semantic_hash": "3212667b30972e48dd8c282c7b38f7e9"
+  },
+  ".code-wiki/device-registry-and-access.md": {
+    "mtime": 1783502512.9337852,
+    "ast_hash": "daea9ceaa37b4389459d0d6985b53596",
+    "semantic_hash": "daea9ceaa37b4389459d0d6985b53596"
+  },
+  ".code-wiki/gps-tracking.md": {
+    "mtime": 1783502528.4386997,
+    "ast_hash": "3914aedee007cf798fc93a76226d8ddc",
+    "semantic_hash": "3914aedee007cf798fc93a76226d8ddc"
+  },
+  ".code-wiki/index.md": {
+    "mtime": 1783502498.0383892,
+    "ast_hash": "c5e2e36f07b6d9786c52a3369005dc7c",
+    "semantic_hash": "c5e2e36f07b6d9786c52a3369005dc7c"
+  },
+  ".code-wiki/log.md": {
+    "mtime": 1783502504.5314393,
+    "ast_hash": "cbfdaa51e2fc105c4f47dd1885b4dd36",
+    "semantic_hash": "cbfdaa51e2fc105c4f47dd1885b4dd36"
+  },
+  ".code-wiki/power-grid-control.md": {
+    "mtime": 1783502521.9328878,
+    "ast_hash": "85a12fd8cc64b4df51d6da0f4f275968",
+    "semantic_hash": "85a12fd8cc64b4df51d6da0f4f275968"
+  },
+  ".code-wiki/terminal-and-desktop.md": {
+    "mtime": 1783502516.0440505,
+    "ast_hash": "7cfa2e056319ee4d5948440ff9176749",
+    "semantic_hash": "7cfa2e056319ee4d5948440ff9176749"
+  },
+  ".code-wiki/vehicle-and-drone-control.md": {
+    "mtime": 1783502525.350886,
+    "ast_hash": "584f0aa7ef61f5a1e023f3789894302e",
+    "semantic_hash": "584f0aa7ef61f5a1e023f3789894302e"
+  },
+  ".code-wiki/zeus-and-eden-setup.md": {
+    "mtime": 1783502519.0851047,
+    "ast_hash": "3eb91ae181fd9e5a429c3c8381d6f1aa",
+    "semantic_hash": "3eb91ae181fd9e5a429c3c8381d6f1aa"
+  },
+  ".github/workflows/auto-release.yml": {
+    "mtime": 1762365399.6949108,
+    "ast_hash": "abd38efcbbf7932dd4ea7fe14f3820f8",
+    "semantic_hash": "abd38efcbbf7932dd4ea7fe14f3820f8"
+  },
+  "README.md": {
+    "mtime": 1771537019.780548,
+    "ast_hash": "1d7840a55f1165d022bccb397fda72e7",
+    "semantic_hash": "1d7840a55f1165d022bccb397fda72e7"
+  },
+  "README_steam.md": {
+    "mtime": 1769635589.0067215,
+    "ast_hash": "a2105bff0793c9b939c59144d2d9726d",
+    "semantic_hash": "a2105bff0793c9b939c59144d2d9726d"
+  },
+  "releases/CHANGELOG.md": {
+    "mtime": 1771535217.9122686,
+    "ast_hash": "8cd1c554fc4720467d416db87dbfc3f9",
+    "semantic_hash": "8cd1c554fc4720467d416db87dbfc3f9"
+  },
+  "wiki/API-Reference.md": {
+    "mtime": 1783111666.5203433,
+    "ast_hash": "ca6a63ad5c9584eaa2b8606d0747cf92",
+    "semantic_hash": "ca6a63ad5c9584eaa2b8606d0747cf92"
+  },
+  "wiki/Architecture.md": {
+    "mtime": 1761594466.2566173,
+    "ast_hash": "6177b7278cf663379fe4684beb70ecdb",
+    "semantic_hash": "6177b7278cf663379fe4684beb70ecdb"
+  },
+  "wiki/Configuration.md": {
+    "mtime": 1761594466.2566173,
+    "ast_hash": "7bfac50bed32e5642ff78d7b3204ba4f",
+    "semantic_hash": "7bfac50bed32e5642ff78d7b3204ba4f"
+  },
+  "wiki/Eden-Editor-Guide.md": {
+    "mtime": 1783111665.5913856,
+    "ast_hash": "0541c9b7fe2733b41dee2f10abe6e6ad",
+    "semantic_hash": "0541c9b7fe2733b41dee2f10abe6e6ad"
+  },
+  "wiki/Home.md": {
+    "mtime": 1761044570.561435,
+    "ast_hash": "4175bcacd3ed47e79d40fc3025db81b7",
+    "semantic_hash": "4175bcacd3ed47e79d40fc3025db81b7"
+  },
+  "wiki/Mission-Maker-Guide.md": {
+    "mtime": 1783177836.0974233,
+    "ast_hash": "ae55cf0d7d744e576b31f4249c493ba0",
+    "semantic_hash": "ae55cf0d7d744e576b31f4249c493ba0"
+  },
+  "wiki/Player-Guide.md": {
+    "mtime": 1783177836.0872338,
+    "ast_hash": "36f251b9b869566c18e5394dabacbdcb",
+    "semantic_hash": "36f251b9b869566c18e5394dabacbdcb"
+  },
+  "wiki/Zeus-Guide.md": {
+    "mtime": 1764442602.4557471,
+    "ast_hash": "2438494a57cf30d204ffb2db57ba5917",
+    "semantic_hash": "2438494a57cf30d204ffb2db57ba5917"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\3den\\fn_3denAddCustomDevice.txt": {
+    "mtime": 1783503750.7072134,
+    "ast_hash": "6d1206f32a9d3e1e311b2728eea4da8c",
+    "semantic_hash": "6d1206f32a9d3e1e311b2728eea4da8c"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\3den\\fn_3denAddDatabase.txt": {
+    "mtime": 1783503750.8063667,
+    "ast_hash": "728b9bfaba26662198dd9c252b02be02",
+    "semantic_hash": "728b9bfaba26662198dd9c252b02be02"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\3den\\fn_3denAddDoors.txt": {
+    "mtime": 1783503750.9024923,
+    "ast_hash": "d68cba4ee41dd7167b94d40eeb841c27",
+    "semantic_hash": "d68cba4ee41dd7167b94d40eeb841c27"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\3den\\fn_3denAddGPSTracker.txt": {
+    "mtime": 1783503751.0026653,
+    "ast_hash": "dea5f936450e4213042af41775860260",
+    "semantic_hash": "dea5f936450e4213042af41775860260"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\3den\\fn_3denAddHackingTools.txt": {
+    "mtime": 1783503751.107852,
+    "ast_hash": "d4f45e149c8455c42ac5ed3bb7d446a7",
+    "semantic_hash": "d4f45e149c8455c42ac5ed3bb7d446a7"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\3den\\fn_3denAddLights.txt": {
+    "mtime": 1783503751.206972,
+    "ast_hash": "f502259c0b7709d95a234c487f7459aa",
+    "semantic_hash": "f502259c0b7709d95a234c487f7459aa"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\3den\\fn_3denAddPowerGenerator.txt": {
+    "mtime": 1783503751.3033607,
+    "ast_hash": "cdc5429144a659f335867c5955fb7768",
+    "semantic_hash": "cdc5429144a659f335867c5955fb7768"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\3den\\fn_3denAddVehicle.txt": {
+    "mtime": 1783503751.3998713,
+    "ast_hash": "5204e1a17026f99bc01ca08159fe900b",
+    "semantic_hash": "5204e1a17026f99bc01ca08159fe900b"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\3den\\fn_3denAdjustPowerCost.txt": {
+    "mtime": 1783503751.4963298,
+    "ast_hash": "6e3115f76fcc4c28ebb0e5aef69426ac",
+    "semantic_hash": "6e3115f76fcc4c28ebb0e5aef69426ac"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\3den\\fn_3denRegisterHackableLaptop.txt": {
+    "mtime": 1783503751.5932715,
+    "ast_hash": "7084d197c091f256e7291c7575cc55ac",
+    "semantic_hash": "7084d197c091f256e7291c7575cc55ac"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\cipher\\fn_cipherOptionsFromText.txt": {
+    "mtime": 1783503751.6972165,
+    "ast_hash": "c26dd3f0859673fcdf7803b7756ad532",
+    "semantic_hash": "c26dd3f0859673fcdf7803b7756ad532"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\cipher\\fn_cipherProcess.txt": {
+    "mtime": 1783503751.8042703,
+    "ast_hash": "3b9eeecfdcdc44d755450bfc5cc7c81b",
+    "semantic_hash": "3b9eeecfdcdc44d755450bfc5cc7c81b"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\cipher\\fn_cipherRegister.txt": {
+    "mtime": 1783503751.9123535,
+    "ast_hash": "36d66138ec8f3ab1136838a325261a1b",
+    "semantic_hash": "36d66138ec8f3ab1136838a325261a1b"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\cipher\\fn_os_crack.txt": {
+    "mtime": 1783503752.007091,
+    "ast_hash": "f27c6227c25de5c6eaadff4643155274",
+    "semantic_hash": "f27c6227c25de5c6eaadff4643155274"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\cipher\\fn_os_crypto.txt": {
+    "mtime": 1783503752.104983,
+    "ast_hash": "9386d1b1b0908eb2beac913e69f5425c",
+    "semantic_hash": "9386d1b1b0908eb2beac913e69f5425c"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_addHackingToolsZeusMain.txt": {
+    "mtime": 1783503752.2030284,
+    "ast_hash": "2a65d857e85024a993506bf3c4c5356d",
+    "semantic_hash": "2a65d857e85024a993506bf3c4c5356d"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_cleanupDeviceLinks.txt": {
+    "mtime": 1783503752.3011758,
+    "ast_hash": "0e2396c0e750e195c0e73291c6811e44",
+    "semantic_hash": "0e2396c0e750e195c0e73291c6811e44"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_createDiaryEntry.txt": {
+    "mtime": 1783503752.4053059,
+    "ast_hash": "165cb32de759951edbb7fe87864d7ade",
+    "semantic_hash": "165cb32de759951edbb7fe87864d7ade"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_gridLabel.txt": {
+    "mtime": 1783503752.5053427,
+    "ast_hash": "981c8c3c9763700db1956b5bf3fbca94",
+    "semantic_hash": "981c8c3c9763700db1956b5bf3fbca94"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_initBreachIntegration.txt": {
+    "mtime": 1783503752.6063461,
+    "ast_hash": "82b4f279d60ba0cd73d734565d8e806c",
+    "semantic_hash": "82b4f279d60ba0cd73d734565d8e806c"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_initSettings.txt": {
+    "mtime": 1783503752.701487,
+    "ast_hash": "5668d892a4230bc422c9b28c63bad0d5",
+    "semantic_hash": "5668d892a4230bc422c9b28c63bad0d5"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_isDeviceAccessible.txt": {
+    "mtime": 1783503752.796332,
+    "ast_hash": "93a5d3a36e60e58836fe0dcbae417bb3",
+    "semantic_hash": "93a5d3a36e60e58836fe0dcbae417bb3"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_listDevicesInSubnet.txt": {
+    "mtime": 1783503752.8913872,
+    "ast_hash": "585c9a07b1c8ff8772b131ef065366a5",
+    "semantic_hash": "585c9a07b1c8ff8772b131ef065366a5"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_registerHackableLaptopZeusMain.txt": {
+    "mtime": 1783503752.9951265,
+    "ast_hash": "b0613adda2e7da5e127b57d5ecd03c59",
+    "semantic_hash": "b0613adda2e7da5e127b57d5ecd03c59"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_removeHackingTools.txt": {
+    "mtime": 1783503753.1013453,
+    "ast_hash": "a8fea14264a3f965d0b4750aa921773c",
+    "semantic_hash": "a8fea14264a3f965d0b4750aa921773c"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_scanNetwork.txt": {
+    "mtime": 1783503753.1969516,
+    "ast_hash": "2277a480fca8ebeddb882e9f430fb3ac",
+    "semantic_hash": "2277a480fca8ebeddb882e9f430fb3ac"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_scanNetworkCli.txt": {
+    "mtime": 1783503753.29154,
+    "ast_hash": "fe4ce83e0d66622a4638e3e58edf3a06",
+    "semantic_hash": "fe4ce83e0d66622a4638e3e58edf3a06"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_scanNetworkPrint.txt": {
+    "mtime": 1783503753.3861413,
+    "ast_hash": "e60e80a5f1015c2fbbc63b407fc284ba",
+    "semantic_hash": "e60e80a5f1015c2fbbc63b407fc284ba"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_seedRubberducky.txt": {
+    "mtime": 1783503753.5025663,
+    "ast_hash": "6e2437733282911e89784b0f09b0bcb4",
+    "semantic_hash": "6e2437733282911e89784b0f09b0bcb4"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\core\\fn_seedRubberduckyCredentials.txt": {
+    "mtime": 1783503753.6055655,
+    "ast_hash": "c959ac6401003dd07c16bc4229a70fb5",
+    "semantic_hash": "c959ac6401003dd07c16bc4229a70fb5"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\custom\\fn_addCustomDeviceZeusMain.txt": {
+    "mtime": 1783503753.7097497,
+    "ast_hash": "0a66f21c43f9c5458a2980e7db5eff8b",
+    "semantic_hash": "0a66f21c43f9c5458a2980e7db5eff8b"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\custom\\fn_customDevice.txt": {
+    "mtime": 1783503753.8464687,
+    "ast_hash": "ffaed50e9d891c69b42b58919e7659b7",
+    "semantic_hash": "ffaed50e9d891c69b42b58919e7659b7"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\database\\fn_addDatabaseZeusMain.txt": {
+    "mtime": 1783503753.942286,
+    "ast_hash": "c333e293622f99181b7bb7be2dad1b70",
+    "semantic_hash": "c333e293622f99181b7bb7be2dad1b70"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\database\\fn_downloadDatabase.txt": {
+    "mtime": 1783503754.0391574,
+    "ast_hash": "cda16ea1511a10386a533679b275927b",
+    "semantic_hash": "cda16ea1511a10386a533679b275927b"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\devices\\fn_addDoorsZeusMain.txt": {
+    "mtime": 1783503754.139907,
+    "ast_hash": "fdae18e99ed0b65d01bf76d27e54c3e6",
+    "semantic_hash": "fdae18e99ed0b65d01bf76d27e54c3e6"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\devices\\fn_addLightsZeusMain.txt": {
+    "mtime": 1783503754.2471373,
+    "ast_hash": "9cc0df11b88e398024d6f3c79f91ad1f",
+    "semantic_hash": "9cc0df11b88e398024d6f3c79f91ad1f"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\devices\\fn_changeDoorState.txt": {
+    "mtime": 1783503754.3488898,
+    "ast_hash": "5d08f4b22a83bdbb40dce3c6607ffe0d",
+    "semantic_hash": "5d08f4b22a83bdbb40dce3c6607ffe0d"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\devices\\fn_changeLightState.txt": {
+    "mtime": 1783503754.4479215,
+    "ast_hash": "1922ace0d32eef64fdfc96a3b2cb24c5",
+    "semantic_hash": "1922ace0d32eef64fdfc96a3b2cb24c5"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gps\\fn_aceAttachGPSTracker.txt": {
+    "mtime": 1783503754.5480819,
+    "ast_hash": "c32b7b1143c8c32cc526c3e91e8a1a74",
+    "semantic_hash": "c32b7b1143c8c32cc526c3e91e8a1a74"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gps\\fn_addGPSTrackerZeusMain.txt": {
+    "mtime": 1783503754.6457205,
+    "ast_hash": "b7760c4f05b01366e6bf2e43dcd9e80b",
+    "semantic_hash": "b7760c4f05b01366e6bf2e43dcd9e80b"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gps\\fn_disableGPSTracker.txt": {
+    "mtime": 1783503754.7471292,
+    "ast_hash": "ec1f5506dd392e4ac4f090913c95d676",
+    "semantic_hash": "ec1f5506dd392e4ac4f090913c95d676"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gps\\fn_disableGPSTrackerServer.txt": {
+    "mtime": 1783503754.8455887,
+    "ast_hash": "04a43b4e68338f4d9607642b277125e1",
+    "semantic_hash": "04a43b4e68338f4d9607642b277125e1"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gps\\fn_displayGPSPosition.txt": {
+    "mtime": 1783503754.962366,
+    "ast_hash": "809d5fbd678d0421aaf95ac104c60415",
+    "semantic_hash": "809d5fbd678d0421aaf95ac104c60415"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gps\\fn_gpsTrackerClient.txt": {
+    "mtime": 1783503755.0633767,
+    "ast_hash": "adb81ac6cf90fbf6266dd4a34c3f6a50",
+    "semantic_hash": "adb81ac6cf90fbf6266dd4a34c3f6a50"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gps\\fn_gpsTrackerServer.txt": {
+    "mtime": 1783503755.1678565,
+    "ast_hash": "3036ff928a6c02f7fd70d1d9a7099654",
+    "semantic_hash": "3036ff928a6c02f7fd70d1d9a7099654"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gps\\fn_revealLaptopLocations.txt": {
+    "mtime": 1783503755.2601533,
+    "ast_hash": "8fdfab867e375f83761b1ee51ed4104b",
+    "semantic_hash": "8fdfab867e375f83761b1ee51ed4104b"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gps\\fn_searchForGPSTracker.txt": {
+    "mtime": 1783503755.3665557,
+    "ast_hash": "ff01b2ce8c84a18c7f2aa16f866300de",
+    "semantic_hash": "ff01b2ce8c84a18c7f2aa16f866300de"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_appCustom.txt": {
+    "mtime": 1783503755.4753685,
+    "ast_hash": "6d48d6836cd36bdbe34d581c69ea1b0e",
+    "semantic_hash": "6d48d6836cd36bdbe34d581c69ea1b0e"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_appDatabases.txt": {
+    "mtime": 1783503755.5754838,
+    "ast_hash": "ac08a9bee44f1f6c0a1b615fc007142a",
+    "semantic_hash": "ac08a9bee44f1f6c0a1b615fc007142a"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_appDoors.txt": {
+    "mtime": 1783503755.672353,
+    "ast_hash": "40c9d8da50f47595abe6e22a80d8e231",
+    "semantic_hash": "40c9d8da50f47595abe6e22a80d8e231"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_appDrones.txt": {
+    "mtime": 1783503755.7753959,
+    "ast_hash": "c407d61dc120115ad055f3093117c955",
+    "semantic_hash": "c407d61dc120115ad055f3093117c955"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_appGps.txt": {
+    "mtime": 1783503755.8951616,
+    "ast_hash": "5527f1bca353e1cb896b7031c70dc777",
+    "semantic_hash": "5527f1bca353e1cb896b7031c70dc777"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_appGpsMap.txt": {
+    "mtime": 1783503755.992636,
+    "ast_hash": "daf24ea53c8ee4833737edb8582070e0",
+    "semantic_hash": "daf24ea53c8ee4833737edb8582070e0"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_appLights.txt": {
+    "mtime": 1783503756.0910594,
+    "ast_hash": "c131b748b9949579cff7fefe1fac99ee",
+    "semantic_hash": "c131b748b9949579cff7fefe1fac99ee"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_appPowergrid.txt": {
+    "mtime": 1783503756.192675,
+    "ast_hash": "3b76a434af06427ad44f6dd56f01c42d",
+    "semantic_hash": "3b76a434af06427ad44f6dd56f01c42d"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_appVehicles.txt": {
+    "mtime": 1783503756.2891445,
+    "ast_hash": "261994b3c7ceb03ada973bccb1963f3a",
+    "semantic_hash": "261994b3c7ceb03ada973bccb1963f3a"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_buildListApp.txt": {
+    "mtime": 1783503756.3822813,
+    "ast_hash": "a47738c5d9dbbad14d511653d65cfbbe",
+    "semantic_hash": "a47738c5d9dbbad14d511653d65cfbbe"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_customAction.txt": {
+    "mtime": 1783503756.478835,
+    "ast_hash": "9174fcb99e10d137669b469351ab122d",
+    "semantic_hash": "9174fcb99e10d137669b469351ab122d"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_databaseAction.txt": {
+    "mtime": 1783503756.5852942,
+    "ast_hash": "77a46e7372463927d4f56e7457e268a1",
+    "semantic_hash": "77a46e7372463927d4f56e7457e268a1"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_doorAction.txt": {
+    "mtime": 1783503756.694476,
+    "ast_hash": "16d798c27e45b6cda687bc8b8b9f7e6f",
+    "semantic_hash": "16d798c27e45b6cda687bc8b8b9f7e6f"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_droneAction.txt": {
+    "mtime": 1783503756.8098693,
+    "ast_hash": "863794986c320c76d5c475ce49c93f0f",
+    "semantic_hash": "863794986c320c76d5c475ce49c93f0f"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_gpsAction.txt": {
+    "mtime": 1783503756.9188507,
+    "ast_hash": "a19ade5271cac17cb0de91c1ff78a622",
+    "semantic_hash": "a19ade5271cac17cb0de91c1ff78a622"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_lightAction.txt": {
+    "mtime": 1783503757.0239608,
+    "ast_hash": "597ac38f89e77b86c54aa10ab7974a2c",
+    "semantic_hash": "597ac38f89e77b86c54aa10ab7974a2c"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_powergridAction.txt": {
+    "mtime": 1783503757.1331737,
+    "ast_hash": "72e1a34d4d7a79d95eb9b151fe4c37c7",
+    "semantic_hash": "72e1a34d4d7a79d95eb9b151fe4c37c7"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_pushExtApps.txt": {
+    "mtime": 1783503757.2408972,
+    "ast_hash": "e3a933a1c94f798d9864fe1ed9d19083",
+    "semantic_hash": "e3a933a1c94f798d9864fe1ed9d19083"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_registerApps.txt": {
+    "mtime": 1783503757.3482108,
+    "ast_hash": "d4f3600d410f57e2560cab0206320251",
+    "semantic_hash": "d4f3600d410f57e2560cab0206320251"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_requestDevices.txt": {
+    "mtime": 1783503757.4562705,
+    "ast_hash": "7aa6549d37b3422ca81e73c4c5cb8339",
+    "semantic_hash": "7aa6549d37b3422ca81e73c4c5cb8339"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_sendDeviceList.txt": {
+    "mtime": 1783503757.5701525,
+    "ast_hash": "c68f1f0286b992f49ace7e205229c81a",
+    "semantic_hash": "c68f1f0286b992f49ace7e205229c81a"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_syncHackermanDesktop.txt": {
+    "mtime": 1783503757.6742318,
+    "ast_hash": "bbd05182b6229659fd8600fef52b13aa",
+    "semantic_hash": "bbd05182b6229659fd8600fef52b13aa"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\gui\\fn_gui_vehicleAction.txt": {
+    "mtime": 1783503757.7811947,
+    "ast_hash": "a840d42c0797a520485f6d66cabfdcc9",
+    "semantic_hash": "a840d42c0797a520485f6d66cabfdcc9"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\powergenerator\\fn_addPowerGeneratorZeusMain.txt": {
+    "mtime": 1783503757.8853955,
+    "ast_hash": "22b16b8121832c83826d9acf432cd244",
+    "semantic_hash": "22b16b8121832c83826d9acf432cd244"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\powergenerator\\fn_powerGeneratorLights.txt": {
+    "mtime": 1783503757.9998808,
+    "ast_hash": "f234ce29dfbd2bc46c08012f4caa0d9f",
+    "semantic_hash": "f234ce29dfbd2bc46c08012f4caa0d9f"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\powergenerator\\fn_powerGridControl.txt": {
+    "mtime": 1783503758.1099572,
+    "ast_hash": "318f7e54830acf48213822af2c3e3687",
+    "semantic_hash": "318f7e54830acf48213822af2c3e3687"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_addComputerDeviceLinks.txt": {
+    "mtime": 1783503758.2064388,
+    "ast_hash": "509c64f211e8520e4e076cd1bf655cb6",
+    "semantic_hash": "509c64f211e8520e4e076cd1bf655cb6"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_cacheDeviceLinks.txt": {
+    "mtime": 1783503758.2978287,
+    "ast_hash": "7123897cc59198d36cf3486ae64d3418",
+    "semantic_hash": "7123897cc59198d36cf3486ae64d3418"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_checkPowerAvailable.txt": {
+    "mtime": 1783503758.3951266,
+    "ast_hash": "a26162d75494400ee00b1015e73037e3",
+    "semantic_hash": "a26162d75494400ee00b1015e73037e3"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_clearBrokenDeviceLinks.txt": {
+    "mtime": 1783503758.494371,
+    "ast_hash": "b06458ff17cc851a4fd759a6d0423b8b",
+    "semantic_hash": "b06458ff17cc851a4fd759a6d0423b8b"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_consumePower.txt": {
+    "mtime": 1783503758.5979607,
+    "ast_hash": "1bacf426969a0c1e3c4d935532dd3af1",
+    "semantic_hash": "1bacf426969a0c1e3c4d935532dd3af1"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_copyDeviceLinksZeusMain.txt": {
+    "mtime": 1783503758.691222,
+    "ast_hash": "60fd42dad41f1a3172ab130a21fcc125",
+    "semantic_hash": "60fd42dad41f1a3172ab130a21fcc125"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_detectBuildingDoors.txt": {
+    "mtime": 1783503758.7853777,
+    "ast_hash": "940f6d9abe82eecb7aa20c476484585d",
+    "semantic_hash": "940f6d9abe82eecb7aa20c476484585d"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_getAccessibleDevices.txt": {
+    "mtime": 1783503758.8789434,
+    "ast_hash": "12c9617bc291904eb3820b822dffd902",
+    "semantic_hash": "12c9617bc291904eb3820b822dffd902"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_getBatteryStatus.txt": {
+    "mtime": 1783503758.979864,
+    "ast_hash": "64e72b746beefcdf9e6049ca8ba4df93",
+    "semantic_hash": "64e72b746beefcdf9e6049ca8ba4df93"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_getComputerIdentifier.txt": {
+    "mtime": 1783503759.0850666,
+    "ast_hash": "224c11a3ab8c8df993a9f57145166960",
+    "semantic_hash": "224c11a3ab8c8df993a9f57145166960"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_getObjectsInTriggerArea.txt": {
+    "mtime": 1783503759.19335,
+    "ast_hash": "d10a8a7c3a74ba408cd4cd4f2fc0353a",
+    "semantic_hash": "d10a8a7c3a74ba408cd4cd4f2fc0353a"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_getPlayerFromComputer.txt": {
+    "mtime": 1783503759.287227,
+    "ast_hash": "f0d42bdc1aa3874becd4971187179fcd",
+    "semantic_hash": "f0d42bdc1aa3874becd4971187179fcd"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_getUserConfirmation.txt": {
+    "mtime": 1783503759.3833618,
+    "ast_hash": "d49455b31c60fb4d3591f6f8dc6f1900",
+    "semantic_hash": "d49455b31c60fb4d3591f6f8dc6f1900"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_hasHackingToolsAvailable.txt": {
+    "mtime": 1783503759.4817097,
+    "ast_hash": "a6e2122f8dc21d29bc67343d8a7d40a3",
+    "semantic_hash": "a6e2122f8dc21d29bc67343d8a7d40a3"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_localSoundBroadcast.txt": {
+    "mtime": 1783503759.6011617,
+    "ast_hash": "243451208836d5925007093b8b64023e",
+    "semantic_hash": "243451208836d5925007093b8b64023e"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_removePower.txt": {
+    "mtime": 1783503759.697875,
+    "ast_hash": "a4ae6b431b8f62909effaf47d6741239",
+    "semantic_hash": "a4ae6b431b8f62909effaf47d6741239"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_runDeviceLinkCleanup.txt": {
+    "mtime": 1783503759.796336,
+    "ast_hash": "8045d94d7d166a48fb5ed499779150ac",
+    "semantic_hash": "8045d94d7d166a48fb5ed499779150ac"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_setRubberduckyCredentials.txt": {
+    "mtime": 1783503759.8923807,
+    "ast_hash": "22a67868a434124c9560500120b1416d",
+    "semantic_hash": "22a67868a434124c9560500120b1416d"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_syncDeviceData.txt": {
+    "mtime": 1783503759.9898453,
+    "ast_hash": "c114e77c1afeac14935f04d72bf69532",
+    "semantic_hash": "c114e77c1afeac14935f04d72bf69532"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\utility\\fn_syncHackingToolAvailability.txt": {
+    "mtime": 1783503760.1036625,
+    "ast_hash": "dc95172fedfa247b9424df561e38dd22",
+    "semantic_hash": "dc95172fedfa247b9424df561e38dd22"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\vehicle\\fn_addVehicleZeusMain.txt": {
+    "mtime": 1783503760.2167494,
+    "ast_hash": "59143a0c72f2b8d4a1605986c499e4e9",
+    "semantic_hash": "59143a0c72f2b8d4a1605986c499e4e9"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\vehicle\\fn_applyVehicleBrakes.txt": {
+    "mtime": 1783503760.3231637,
+    "ast_hash": "040e8aa834b9bee344a5bac6c7d38137",
+    "semantic_hash": "040e8aa834b9bee344a5bac6c7d38137"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\vehicle\\fn_changeDroneFaction.txt": {
+    "mtime": 1783503760.4253523,
+    "ast_hash": "b346acabedaf3df933a90f800df9455c",
+    "semantic_hash": "b346acabedaf3df933a90f800df9455c"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\vehicle\\fn_changeVehicleParams.txt": {
+    "mtime": 1783503760.5201068,
+    "ast_hash": "becd00325df8766ff23c52b39a5bc2a5",
+    "semantic_hash": "becd00325df8766ff23c52b39a5bc2a5"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\vehicle\\fn_disableDrone.txt": {
+    "mtime": 1783503760.6269329,
+    "ast_hash": "21bf3d764e6eabd3dbfe00ee09d41ea2",
+    "semantic_hash": "21bf3d764e6eabd3dbfe00ee09d41ea2"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\zeus\\fn_addCustomDeviceZeus.txt": {
+    "mtime": 1783503760.721524,
+    "ast_hash": "01aa3e24a03083e292b4ea55a299ceec",
+    "semantic_hash": "01aa3e24a03083e292b4ea55a299ceec"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\zeus\\fn_addDatabaseZeus.txt": {
+    "mtime": 1783503760.820893,
+    "ast_hash": "6dbcbd9a1273ae2424b94d2d599f22c7",
+    "semantic_hash": "6dbcbd9a1273ae2424b94d2d599f22c7"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\zeus\\fn_addDoorsZeus.txt": {
+    "mtime": 1783503760.9168186,
+    "ast_hash": "5873ddb26b29663acaf072cb06878a24",
+    "semantic_hash": "5873ddb26b29663acaf072cb06878a24"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\zeus\\fn_addGPSTrackerZeus.txt": {
+    "mtime": 1783503761.0150871,
+    "ast_hash": "02c21ad0dab5b507dea921294526e9e5",
+    "semantic_hash": "02c21ad0dab5b507dea921294526e9e5"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\zeus\\fn_addHackingToolsZeus.txt": {
+    "mtime": 1783503761.1129706,
+    "ast_hash": "7793d84f73631b9f365da5d436e0e450",
+    "semantic_hash": "7793d84f73631b9f365da5d436e0e450"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\zeus\\fn_addLightsZeus.txt": {
+    "mtime": 1783503761.2097998,
+    "ast_hash": "2468002f24146912da6b274b1116a640",
+    "semantic_hash": "2468002f24146912da6b274b1116a640"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\zeus\\fn_addPowerGeneratorZeus.txt": {
+    "mtime": 1783503761.3056285,
+    "ast_hash": "686e772cf0086746e596e56116cf0bc4",
+    "semantic_hash": "686e772cf0086746e596e56116cf0bc4"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\zeus\\fn_addVehicleZeus.txt": {
+    "mtime": 1783503761.4061997,
+    "ast_hash": "5aafafc4d14fef1cbd64103620e20767",
+    "semantic_hash": "5aafafc4d14fef1cbd64103620e20767"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\zeus\\fn_cipherZeus.txt": {
+    "mtime": 1783503761.511294,
+    "ast_hash": "0c5277337ccd3d9ba5f4c39c0197a0d1",
+    "semantic_hash": "0c5277337ccd3d9ba5f4c39c0197a0d1"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\zeus\\fn_clearBrokenDeviceLinksZeus.txt": {
+    "mtime": 1783503761.6129012,
+    "ast_hash": "d91c6a96d1fb328d70831c5146c46be8",
+    "semantic_hash": "d91c6a96d1fb328d70831c5146c46be8"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\zeus\\fn_clearBrokenDeviceLinksZeusMain.txt": {
+    "mtime": 1783503761.70909,
+    "ast_hash": "de7fcb801ac252ef2d9c3afe8c8b584d",
+    "semantic_hash": "de7fcb801ac252ef2d9c3afe8c8b584d"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\zeus\\fn_copyDeviceLinksZeus.txt": {
+    "mtime": 1783503761.8053277,
+    "ast_hash": "8a87418880ca992c5691d0e2383626f9",
+    "semantic_hash": "8a87418880ca992c5691d0e2383626f9"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\zeus\\fn_modifyPowerZeus.txt": {
+    "mtime": 1783503761.8992312,
+    "ast_hash": "c94e3879699e3fd7f09c5c02b3279dcb",
+    "semantic_hash": "c94e3879699e3fd7f09c5c02b3279dcb"
+  },
+  "C:\\Users\\Mark\\AppData\\Local\\Temp\\claude\\G--Games-Arma-3---Git-Root-Cyberwarfare\\36aa2d17-8296-4a53-be40-2373f9324bf3\\scratchpad\\sqf_mirror\\zeus\\fn_registerHackableLaptopZeus.txt": {
+    "mtime": 1783503761.9933727,
+    "ast_hash": "393a3ce51698284743027a034a9d77d6",
+    "semantic_hash": "393a3ce51698284743027a034a9d77d6"
+  },
+  "addons/main/images/hackerman.png": {
+    "mtime": 1783258169.1381946,
+    "ast_hash": "5000d113dbd0cb43989e4a9f9319e8df",
+    "semantic_hash": "5000d113dbd0cb43989e4a9f9319e8df"
+  },
+  "images/APL-SA.png": {
+    "mtime": 1761136080.3721695,
+    "ast_hash": "98c1077f649e0cc31b73e610a57811ed",
+    "semantic_hash": "98c1077f649e0cc31b73e610a57811ed"
+  },
+  "images/Root_Cyber_Warfare.png": {
+    "mtime": 1758642288.8514009,
+    "ast_hash": "e20fe8a49b3f5c824901cdd09f750771",
+    "semantic_hash": "e20fe8a49b3f5c824901cdd09f750771"
+  },
+  "images/Root_Cyberwarfare_3DENModules.jpg": {
+    "mtime": 1761132492.651816,
+    "ast_hash": "762a5ddcaf21cba83adc17c286cd42fd",
+    "semantic_hash": "762a5ddcaf21cba83adc17c286cd42fd"
+  },
+  "images/Root_Cyberwarfare_3DEN_Custom.jpg": {
+    "mtime": 1761132492.9354663,
+    "ast_hash": "d03ecafaf6d1fe02ed5687b460fe9c6a",
+    "semantic_hash": "d03ecafaf6d1fe02ed5687b460fe9c6a"
+  },
+  "images/Root_Cyberwarfare_3DEN_Devices.jpg": {
+    "mtime": 1761132493.2177818,
+    "ast_hash": "dc5cf474cebafe4f36d180e6b3631ead",
+    "semantic_hash": "dc5cf474cebafe4f36d180e6b3631ead"
+  },
+  "images/Root_Cyberwarfare_3DEN_File.jpg": {
+    "mtime": 1761132493.4982874,
+    "ast_hash": "df98ce4ddf1ae1aa3da79f82ab11f19a",
+    "semantic_hash": "df98ce4ddf1ae1aa3da79f82ab11f19a"
+  },
+  "images/Root_Cyberwarfare_3DEN_GPS.jpg": {
+    "mtime": 1761132493.7822945,
+    "ast_hash": "b35c807fdc079042964188ad7b09780a",
+    "semantic_hash": "b35c807fdc079042964188ad7b09780a"
+  },
+  "images/Root_Cyberwarfare_3DEN_PowerGenerator.jpg": {
+    "mtime": 1761132494.0745842,
+    "ast_hash": "42b94eb928846a378dc35d1ef5494a7e",
+    "semantic_hash": "42b94eb928846a378dc35d1ef5494a7e"
+  },
+  "images/Root_Cyberwarfare_3DEN_Tools.jpg": {
+    "mtime": 1761132494.3581336,
+    "ast_hash": "6097b033d7fdf8e6d4aa8c272fb5c91d",
+    "semantic_hash": "6097b033d7fdf8e6d4aa8c272fb5c91d"
+  },
+  "images/Root_Cyberwarfare_3DEN_Vehicle.jpg": {
+    "mtime": 1761132494.6599503,
+    "ast_hash": "c67eb6ca19ed5a3d9bd1c902f1f08cb7",
+    "semantic_hash": "c67eb6ca19ed5a3d9bd1c902f1f08cb7"
+  },
+  "images/Root_Cyberwarfare_CBASettings.jpg": {
+    "mtime": 1761132494.944397,
+    "ast_hash": "a7a21ddbff87c957252d626cf3d2277c",
+    "semantic_hash": "a7a21ddbff87c957252d626cf3d2277c"
+  },
+  "images/Root_Cyberwarfare_FileDownload.jpg": {
+    "mtime": 1761132495.2280917,
+    "ast_hash": "2ff1f84effb3b1e754bad9710d967615",
+    "semantic_hash": "2ff1f84effb3b1e754bad9710d967615"
+  },
+  "images/Root_Cyberwarfare_GPSAttach.jpg": {
+    "mtime": 1761132495.5101726,
+    "ast_hash": "065f7d9fb585877e27329cb955e050dc",
+    "semantic_hash": "065f7d9fb585877e27329cb955e050dc"
+  },
+  "images/Root_Cyberwarfare_GPSContext.jpg": {
+    "mtime": 1761132495.7941663,
+    "ast_hash": "9e7b446339a8e2de768fd6bdef673714",
+    "semantic_hash": "9e7b446339a8e2de768fd6bdef673714"
+  },
+  "images/Root_Cyberwarfare_GPSDetectNormal.jpg": {
+    "mtime": 1761132496.0811522,
+    "ast_hash": "404cf451e6196539e5ce45de12b14499",
+    "semantic_hash": "404cf451e6196539e5ce45de12b14499"
+  },
+  "images/Root_Cyberwarfare_GPSDetectTool.jpg": {
+    "mtime": 1761132496.3721962,
+    "ast_hash": "096ad854d7d885587c75e2d245bd42bf",
+    "semantic_hash": "096ad854d7d885587c75e2d245bd42bf"
+  },
+  "images/Root_Cyberwarfare_GPSTracking.jpg": {
+    "mtime": 1761132496.6572356,
+    "ast_hash": "49a529735e0d9f7a2b93c2f37aa9ace8",
+    "semantic_hash": "49a529735e0d9f7a2b93c2f37aa9ace8"
+  },
+  "images/Root_Cyberwarfare_HomeScreen.jpg": {
+    "mtime": 1761132496.9401598,
+    "ast_hash": "20362ecd8597e5f2fe7c35d70d2b3c29",
+    "semantic_hash": "20362ecd8597e5f2fe7c35d70d2b3c29"
+  },
+  "images/Root_Cyberwarfare_ZeusModules.jpg": {
+    "mtime": 1761132497.2252653,
+    "ast_hash": "f26fd552948dfa81a58d10fea72aca09",
+    "semantic_hash": "f26fd552948dfa81a58d10fea72aca09"
+  }
+}

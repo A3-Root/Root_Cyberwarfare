@@ -8,20 +8,21 @@ This guide covers all 3DEN editor modules provided by Root's Cyber Warfare, enab
 - [3DEN Modules Overview](#3den-modules-overview)
 - [Module Reference](#module-reference)
   - [1. Add Hacking Tools](#1-add-hacking-tools)
-  - [2. Adjust Power Cost Settings](#2-adjust-power-cost-settings)
-  - [3. Add Devices](#3-add-devices)
-  - [4. Add Hackable File](#4-add-hackable-file)
-  - [5. Add Hackable Vehicle](#5-add-hackable-vehicle)
-  - [6. Add GPS Tracker](#6-add-gps-tracker)
-  - [7. Add Custom Device](#7-add-custom-device)
-  - [8. Add Power Generator](#8-add-power-generator)
+  - [2. Register Hackable Laptop](#2-register-hackable-laptop)
+  - [3. Adjust Power Cost Settings](#3-adjust-power-cost-settings)
+  - [4. Add Hackable Doors / Lights](#4-add-hackable-doors--lights)
+  - [5. Add Hackable File](#5-add-hackable-file)
+  - [6. Add Hackable Vehicle](#6-add-hackable-vehicle)
+  - [7. Add GPS Tracker](#7-add-gps-tracker)
+  - [8. Add Custom Device](#8-add-custom-device)
+  - [9. Add Power Generator](#9-add-power-generator)
 - [Synchronization Guide](#synchronization-guide)
 - [Best Practices](#best-practices)
 - [Example Mission Setup](#example-mission-setup)
 
 ## Introduction
 
-Root's Cyber Warfare provides **8 modules for the 3DEN Editor** (Arma 3's built-in mission editor). These modules allow you to visually configure cyber warfare scenarios before the mission starts.
+Root's Cyber Warfare provides **modules for the 3DEN Editor** (Arma 3's built-in mission editor). These modules allow you to visually configure cyber warfare scenarios before the mission starts.
 
 ### Advantages of 3DEN Modules
 
@@ -44,13 +45,15 @@ Root's Cyber Warfare provides **8 modules for the 3DEN Editor** (Arma 3's built-
 | Module Name | Purpose | Synchronize To |
 |-------------|---------|----------------|
 | Add Hacking Tools | Install hacking software on laptops | AE3 Laptops/USB |
+| Register Hackable Laptop | Mark laptops as link targets without installing tools | AE3 Laptops |
 | Adjust Power Cost Settings | Set global power costs | None (mission-wide) |
-| Add Devices | Register doors/lights/drones | Buildings, Lights, Drones, Laptops |
-| Add Hackable File | Create downloadable files | Laptops (optional) |
-| Add Hackable Vehicle | Register hackable vehicles | Vehicles, Laptops (optional) |
+| Add Hackable Doors | Register building doors | Buildings, Laptops (optional) |
+| Add Hackable Lights | Register lights | Lights, Laptops (optional) |
+| Add Hackable File | Create downloadable files (optionally encrypted) | Laptops (optional) |
+| Add Hackable Vehicle | Register hackable vehicles/drones | Vehicles, Laptops (optional) |
 | Add GPS Tracker | Attach GPS trackers | Any object, Laptops (optional) |
 | Add Custom Device | Create custom scripted devices | Any object, Laptops (optional) |
-| Add Power Generator | Create power grid control | Any object, Laptops (optional) |
+| Add Power Generator | Create power grid control | Generator objects, Laptops (optional) |
 
 ---
 
@@ -91,16 +94,42 @@ Root's Cyber Warfare provides **8 modules for the 3DEN Editor** (Arma 3's built-
 **What It Does:**
 - Installs hacking tools on all synchronized laptops when mission starts
 - Creates virtual filesystem at the specified path
-- Enables terminal commands: `devices`, `door`, `light`, `changedrone`, `disabledrone`, `download`, `custom`, `gpstrack`, `vehicle`, `powergrid`
+- Enables terminal commands: `devices`, `door`, `light`, `changedrone`, `disabledrone`, `download`, `custom`, `gpstrack`, `vehicle`, `powergrid`, `netscan`, `crypto`, `crack`
+- Enables the Hackerman Desktop app suite
 
 **Notes:**
 - Can sync to multiple laptops (all get the same tool path)
 - Tool path can be different for each module instance
 - Backdoor bypasses all access control (use for testing only)
+- Only installs the toolset - does not register the laptop as a link target. Combine with **Register Hackable Laptop** if the laptop also needs to receive device links.
 
 ---
 
-### 2. Adjust Power Cost Settings
+### 2. Register Hackable Laptop
+
+**Purpose:** Marks synchronized AE3 laptops as hackable stations (valid link targets) without installing the hacking toolset.
+
+**How to Use:**
+1. Place laptop objects in the scene
+2. Place **Register Hackable Laptop** module (F5 → ROOT_CYBERWARFARE)
+3. **Synchronize** the module to the laptop object(s)
+
+**Attributes:** None
+
+**Synchronization:**
+- **Required**: Sync to one or more AE3 laptop objects
+
+**What It Does:**
+- Marks each synchronized laptop as a valid device-link target
+- Does **not** install hacking tools - the laptop still needs tools (Add Hacking Tools module, or a hacking-tools/Rubberducky USB) before it can list or control devices
+
+**Notes:**
+- Useful for laptops meant to stay inert until a player plugs in a hacking-tools USB
+- Combine with **Add Hacking Tools** for laptops that need both roles from mission start
+
+---
+
+### 3. Adjust Power Cost Settings
 
 **Purpose:** Configure global power costs for hacking operations.
 
@@ -139,14 +168,14 @@ Custom Device Cost: 20
 
 ---
 
-### 3. Add Devices
+### 4. Add Hackable Doors / Lights
 
-**Purpose:** Register buildings (doors), lights, or drones as hackable devices.
+**Purpose:** Register building doors (**Add Hackable Doors**) or lights (**Add Hackable Lights**) as hackable devices. For drones, use **Add Hackable Vehicle** instead.
 
 **How to Use:**
-1. Place buildings, lamps, or drones in the scene
-2. Place **Add Devices** module (F5 → ROOT_CYBERWARFARE)
-3. **Synchronize** the module to target objects
+1. Place buildings or lamps in the scene
+2. Place the matching module (F5 → ROOT_CYBERWARFARE → Add Hackable Doors / Add Hackable Lights)
+3. **Synchronize** the module to target objects (or leave a Doors module unsynced and use a trigger area for batch registration)
 4. Optionally synchronize to laptops for private access
 5. Configure attributes
 
@@ -155,21 +184,21 @@ Custom Device Cost: 20
 | Attribute | Type | Default | Description |
 |-----------|------|---------|-------------|
 | **Add to Public Device List** | Checkbox | ✓ Checked | If checked, devices are accessible by all laptops (current and future). |
-| **Make Unbreachable** | Checkbox | Unchecked | If checked, building doors cannot be breached with ACE explosives, lockpicking, or other means except using the linked laptop. |
+| **Allow Location View** | Checkbox | ✓ Checked | If unchecked, the device's grid location is hidden (`[location hidden]`) in CLI and GUI listings. |
+| **Make Unbreachable** (Doors only) | Checkbox | Unchecked | If checked, building doors cannot be breached with ACE explosives, lockpicking, or other means except using the linked laptop. |
 
 **Synchronization:**
 
-| Sync Target | Effect |
-|-------------|--------|
-| **Buildings** | Registers all doors in the building |
-| **Lamps** | Registers as controllable lights |
-| **Drones/UAVs** | Registers for faction change/disable |
-| **Laptops** | Grants those laptops private access (if "Add to Public Device List" is unchecked) |
+| Module | Sync Target | Effect |
+|--------|-------------|--------|
+| Add Hackable Doors | Buildings, or a trigger area | Registers all doors in each building |
+| Add Hackable Lights | Lamps | Registers as controllable lights |
+| Both | Laptops | Grants those laptops private access (if "Add to Public Device List" is unchecked) |
 
 **Example Setup 1: Public Building (All Laptops)**
 ```
 1. Place building1 in scene
-2. Place "Add Devices" module
+2. Place "Add Hackable Doors" module
 3. Sync module to building1
 4. Set "Add to Public Device List": ✓ (checked)
 5. Set "Make Unbreachable": ✓ (checked)
@@ -178,20 +207,19 @@ Result: All laptops can access this building's doors, which cannot be breached
 
 ![Add Devices Module](../images/Root_Cyberwarfare_3DEN_Devices.jpg)
 
-**Example Setup 2: Private Drone (Specific Laptops)**
+**Example Setup 2: Private Light (Specific Laptop)**
 ```
-1. Place drone1 and laptop1 in scene
-2. Place "Add Devices" module
-3. Sync module to drone1 AND laptop1
+1. Place lamp1 and laptop1 in scene
+2. Place "Add Hackable Lights" module
+3. Sync module to lamp1 AND laptop1
 4. Set "Add to Public Device List": (unchecked)
-Result: Only laptop1 can change drone1's faction or disable it
+Result: Only laptop1 can toggle lamp1
 ```
 
 **What It Does:**
-- **Buildings**: Auto-detects all doors, registers with unique door IDs
-- **Lights**: Registers lamp with on/off control
-- **Drones**: Registers for `changedrone` and `disabledrone` commands
-- **Unbreachable** (if checked): Prevents ACE explosive breaching and lockpicking on doors
+- **Doors**: Auto-detects all doors in each building, registers with unique door IDs
+- **Lights**: Registers each lamp with on/off control
+- **Unbreachable** (Doors, if checked): Prevents ACE explosive breaching and lockpicking
 
 **Public vs Private Access:**
 - **Public** (checkbox checked): All laptops have access
@@ -201,11 +229,11 @@ Result: Only laptop1 can change drone1's faction or disable it
 **Notes:**
 - One module can be synced to multiple objects (all get the same settings)
 - Buildings auto-detect all doors (no manual door ID specification needed)
-- Drones are auto-detected based on vehicle type
+- For drones/UAVs, use the **Add Hackable Vehicle** module instead
 
 ---
 
-### 4. Add Hackable File
+### 5. Add Hackable File
 
 **Purpose:** Create downloadable files that players can access via the `download` command.
 
@@ -222,7 +250,13 @@ Result: Only laptop1 can change drone1's faction or disable it
 | **Download Time (seconds)** | Number | `10` | Time in seconds required to download. |
 | **File Contents** | Multiline Text | (example) | Contents shown when using `cat` command. Uses code editor for formatting. |
 | **Execution Code (Optional)** | Multiline SQF | (empty) | Code executed upon successful download. Uses code editor. |
+| **Encrypt File Contents** | Checkbox | Unchecked | If checked, the file contents are encrypted with the selected cipher before the file is registered. |
+| **Encryption Algorithm** | Dropdown | `Morse Code` | Cipher used when encryption is enabled: Morse Code, Spelling Alphabet, Affine, ROT, Vigenere, Bacon, Alphabetical Substitution, Railfence, Base32, Base64, Ascii85, Unicode Notation, or Integer. |
+| **Key / Variant** | String | (empty) | Primary key, password, keyword, or variant for the chosen algorithm (e.g. `rot13`, `LEMON`, `3`). |
+| **Encryption Options** | String | (empty) | Optional `key=value` pairs for algorithms with extra parameters (e.g. `a=5 b=8`, `rails=3`, `radix=16 width=8 signed=0`). |
 | **Add to Public Device List** | Checkbox | ✓ Checked | If checked, file is accessible by all laptops. |
+
+Players must run `crypto -m=decrypt` (or the **Crypto** Hackerman Desktop app) with the matching algorithm and key to read an encrypted file's contents - see the [Player Guide](Player-Guide#terminal-commands).
 
 **Synchronization:**
 - **Optional**: Sync to laptops for private access (if "Add to Public Device List" is unchecked)
@@ -270,7 +304,7 @@ Sync to: laptop1, laptop2
 
 ---
 
-### 5. Add Hackable Vehicle
+### 6. Add Hackable Vehicle
 
 **Purpose:** Register vehicles or drones as hackable, enabling control over fuel, speed, brakes, lights, engine, and alarms.
 
@@ -372,7 +406,7 @@ Sync to: laptop1, laptop2
 
 ---
 
-### 6. Add GPS Tracker
+### 7. Add GPS Tracker
 
 **Purpose:** Attach GPS trackers to objects for real-time position tracking.
 
@@ -448,7 +482,7 @@ Result: Only laptop1 can track enemyCommander
 
 ---
 
-### 7. Add Custom Device
+### 8. Add Custom Device
 
 **Purpose:** Create custom scripted devices with user-defined activation and deactivation code.
 
@@ -536,7 +570,7 @@ private _action = _this select 1; // "activate" or "deactivate"
 
 ---
 
-### 8. Add Power Generator
+### 9. Add Power Generator
 
 **Purpose:** Create power generators that control lights within a configurable radius.
 

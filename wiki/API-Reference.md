@@ -9,6 +9,9 @@ Complete reference for all public functions in Root's Cyber Warfare, organized b
 - [Device Control Functions](#device-control-functions)
 - [Access Control Functions](#access-control-functions)
 - [Power Management Functions](#power-management-functions)
+- [Cipher Functions](#cipher-functions)
+- [Network Scanning Functions](#network-scanning-functions)
+- [Rubberducky Functions](#rubberducky-functions)
 - [Utility Functions](#utility-functions)
 - [Data Structures](#data-structures)
 - [Constants and Macros](#constants-and-macros)
@@ -71,30 +74,94 @@ Installs hacking tools on an AE3 laptop or USB drive. USB-installed tools become
 
 ---
 
-### Root_fnc_addDeviceZeusMain
+### Root_fnc_addDoorsZeusMain
 
-Registers buildings (doors) or lights as hackable. **Note:** For custom devices, use `Root_fnc_addCustomDeviceZeusMain` instead.
+Registers building doors as hackable. Supports direct mode (single building) and radius mode (batch-register within an area). **Note:** For lights use `Root_fnc_addLightsZeusMain`, for drones use `Root_fnc_addVehicleZeusMain`, for custom devices use `Root_fnc_addCustomDeviceZeusMain`.
+
+**Syntax (direct mode):**
+```sqf
+[_targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+```
+
+**Syntax (radius mode):**
+```sqf
+[_centerPosition, _radius, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+```
+
+**Parameters (direct mode):**
+
+| Index | Name | Type | Default | Description |
+|-------|------|------|---------|-------------|
+| 0 | _targetObject | OBJECT | - | Building object |
+| 1 | _execUserId | NUMBER | 0 | User ID for feedback |
+| 2 | _linkedComputers | ARRAY | [] | Array of computer netIds (strings) |
+| 3 | _availableToFutureLaptops | BOOLEAN | false | Auto-grant access to future laptops |
+| 4 | _makeUnbreachable | BOOLEAN | false | Prevent ACE breaching |
+
+**Return Value:** None
+
+**Example:**
+```sqf
+[_building1, 0, [netId _laptop1], false, true] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+[getMarkerPos "base", 500, 0, [], true, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2]; // Radius mode
+```
+
+---
+
+### Root_fnc_addLightsZeusMain
+
+Registers lights as hackable. Supports direct mode (single lamp) and radius mode (batch-register within an area).
+
+**Syntax (direct mode):**
+```sqf
+[_targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addLightsZeusMain", 2];
+```
+
+**Syntax (radius mode):**
+```sqf
+[_centerPosition, _radius, _execUserId, _linkedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addLightsZeusMain", 2];
+```
+
+**Parameters (direct mode):**
+
+| Index | Name | Type | Default | Description |
+|-------|------|------|---------|-------------|
+| 0 | _targetObject | OBJECT | - | Lamp object |
+| 1 | _execUserId | NUMBER | 0 | User ID for feedback |
+| 2 | _linkedComputers | ARRAY | [] | Array of computer netIds (strings) |
+| 3 | _availableToFutureLaptops | BOOLEAN | false | Auto-grant access to future laptops |
+
+**Return Value:** None
+
+**Example:**
+```sqf
+[_lamp1, 0, [], true] remoteExec ["Root_fnc_addLightsZeusMain", 2];
+```
+
+---
+
+### Root_fnc_registerHackableLaptopZeusMain
+
+Marks a laptop as a hackable station (valid link target) without installing the hacking toolset. Use alongside `Root_fnc_addHackingToolsZeusMain` for laptops that need both roles.
 
 **Syntax:**
 ```sqf
-[_targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_entity, _execUserId, _customLaptopName] remoteExec ["Root_fnc_registerHackableLaptopZeusMain", 2];
 ```
 
 **Parameters:**
 
 | Index | Name | Type | Default | Description |
 |-------|------|------|---------|-------------|
-| 0 | _targetObject | OBJECT | - | Building or lamp object |
-| 1 | _execUserId | NUMBER | 0 | User ID for feedback |
-| 2 | _linkedComputers | ARRAY | [] | Array of computer netIds (strings) |
-| 3 | _availableToFutureLaptops | BOOLEAN | false | Auto-grant access to future laptops |
-| 4 | _makeUnbreachable | BOOLEAN | false | Prevent ACE breaching (doors only) |
+| 0 | _entity | OBJECT | - | Laptop object |
+| 1 | _execUserId | NUMBER | 0 | User ID for feedback (0 resolves to owner) |
+| 2 | _customLaptopName | STRING | "" | Display label; falls back to class displayName |
 
 **Return Value:** None
 
 **Example:**
 ```sqf
-[_building1, 0, [netId _laptop1], false, true] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
+[_laptop1, 0, "HQ_Terminal"] remoteExec ["Root_fnc_registerHackableLaptopZeusMain", 2];
 ```
 
 ---
@@ -326,6 +393,26 @@ Copies device access from one laptop to another.
 **Example:**
 ```sqf
 [netId _laptop1, netId _laptop2, 0] remoteExec ["Root_fnc_copyDeviceLinksZeusMain", 2];
+```
+
+---
+
+### Root_fnc_clearBrokenDeviceLinks
+
+Immediately removes device/link entries whose object no longer exists. No strike-grace delay (unlike the automatic background loop).
+
+**Syntax:**
+```sqf
+private _removed = call Root_fnc_clearBrokenDeviceLinks;
+```
+
+**Parameters:** None
+
+**Return Value:** NUMBER - count of entries removed
+
+**Example:**
+```sqf
+private _removed = call Root_fnc_clearBrokenDeviceLinks;
 ```
 
 ---
@@ -732,6 +819,174 @@ Alias for consumePower (legacy compatibility).
 
 ---
 
+## Cipher Functions
+
+### Root_fnc_cipherProcess
+
+Runs a classical cipher against text: encrypt, decrypt, or bruteforce. Backs the `crypto`/`crack` terminal commands, the Hackerman Desktop Crypto/Crack apps, and the Zeus Cipher Tools module.
+
+**Syntax:**
+```sqf
+[_algorithm, _mode, _text, _options] call Root_fnc_cipherProcess;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Description |
+|-------|------|------|-------------|
+| 0 | _algorithm | STRING | `morse`, `spelling`, `affine`, `rot`, `vigenere`, `bacon`, `alpha_sub`, `railfence`, `base32`, `base64`, `ascii85`, `unicode`, `integer`, or `all` (bruteforce only) |
+| 1 | _mode | STRING | `encrypt`, `decrypt`, `bruteforce` |
+| 2 | _text | STRING | Input text |
+| 3 | _options | HASHMAP | Algorithm-specific options (`key`, `variant`, `a`/`b`, `rails`, `radix`, `width`, `signed`, etc.) |
+
+**Return Value:** STRING (encrypt/decrypt) or ARRAY of ranked candidates (bruteforce)
+
+**Example:**
+```sqf
+private _options = createHashMap; _options set ["key", "LEMON"];
+private _cipherText = ["vigenere", "encrypt", "attack at dawn", _options] call Root_fnc_cipherProcess;
+```
+
+---
+
+### Root_fnc_cipherOptionsFromText
+
+Parses a `crypto`/`crack`-style CLI option string into the options hashmap `Root_fnc_cipherProcess` expects.
+
+**Syntax:**
+```sqf
+private _options = [_optionString] call Root_fnc_cipherOptionsFromText;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Description |
+|-------|------|------|-------------|
+| 0 | _optionString | STRING | e.g. `"-k=LEMON --variant=13"` |
+
+**Return Value:** HASHMAP
+
+---
+
+### Root_fnc_cipherRegister
+
+Builds the list of supported ciphers, merges them into AE3's file-encryption algorithm registry, and registers the `RootCW_Crypto`/`RootCW_Crack` desktop apps. Called once automatically from `XEH_postInit.sqf` - mission makers don't need to call this themselves.
+
+**Syntax:**
+```sqf
+call Root_fnc_cipherRegister;
+```
+
+**Parameters:** None
+
+**Return Value:** None
+
+---
+
+## Network Scanning Functions
+
+### Root_fnc_scanNetwork
+
+Builds the subnet snapshot used by the `netscan` command and NetScan desktop app: IP, host type, external SSH exposure, interface, and reachable/accessible hackable device counts.
+
+**Syntax:**
+```sqf
+private _rows = [_computer] call Root_fnc_scanNetwork;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Description |
+|-------|------|------|-------------|
+| 0 | _computer | OBJECT | Scanning laptop |
+
+**Return Value:** ARRAY of `[ip, deviceType, sshAllowed, interface, deviceBreakdown]` rows
+
+---
+
+### Root_fnc_scanNetworkCli
+
+Server-side driver for the `netscan` terminal command: builds the scan, prints it to the requesting client, and optionally exports it to a file in the laptop's filesystem.
+
+**Syntax:**
+```sqf
+[_owner, _computer, _nameOfVariable, _exportPath] call Root_fnc_scanNetworkCli;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _owner | NUMBER | - |
+| 1 | _computer | OBJECT | - |
+| 2 | _nameOfVariable | STRING | - |
+| 3 | _exportPath | STRING | "" |
+
+**Return Value:** None
+
+---
+
+## Rubberducky Functions
+
+### Root_fnc_seedRubberducky
+
+Server-side: waits for a placed Rubberducky USB object's filesystem to exist, then silently installs the hacking toolset on it via `Root_fnc_addHackingToolsZeusMain`.
+
+**Syntax:**
+```sqf
+[_drive] call Root_fnc_seedRubberducky;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Description |
+|-------|------|------|-------------|
+| 0 | _drive | OBJECT | The Rubberducky USB object |
+
+**Return Value:** None
+
+---
+
+### Root_fnc_seedRubberduckyCredentials
+
+Adds the configured default login (username/password) to a laptop when a hacking-tools USB is connected, unless an account with that username already exists or the feature is disabled.
+
+**Syntax:**
+```sqf
+private _added = [_computer] call Root_fnc_seedRubberduckyCredentials;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Description |
+|-------|------|------|-------------|
+| 0 | _computer | OBJECT | The laptop the USB was connected to |
+
+**Return Value:** BOOLEAN - true if a credential was added
+
+---
+
+### Root_fnc_setRubberduckyCredentials
+
+Runtime API to change Rubberducky default-login behavior (mirrors the CBA settings).
+
+**Syntax:**
+```sqf
+[_enabled, _username, _password] call Root_fnc_setRubberduckyCredentials;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Description |
+|-------|------|------|-------------|
+| 0 | _enabled | BOOLEAN or nil | `nil` leaves unchanged |
+| 1 | _username | STRING or nil | `nil` leaves unchanged |
+| 2 | _password | STRING or nil | `nil` leaves unchanged |
+
+**Return Value:** None
+
+---
+
 ## Utility Functions
 
 ### Root_fnc_listDevicesInSubnet
@@ -788,6 +1043,139 @@ Displays confirmation prompt with timeout.
 ```sqf
 [_laptop, "Continue? (Y/N)", 10, "confirmVar"] call Root_fnc_getUserConfirmation;
 ```
+
+---
+
+### Root_fnc_getBatteryStatus
+
+Reads a laptop's battery through AE3 and calculates the remaining charge after a given cost, without consuming it.
+
+**Syntax:**
+```sqf
+[_computer, _powerCostWh] call Root_fnc_getBatteryStatus;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _computer | OBJECT | - |
+| 1 | _powerCostWh | NUMBER | 0 |
+
+**Return Value:** ARRAY - `[success, battery, currentWh, currentPercent, capacityWh, remainingWh, remainingPercent]`
+
+---
+
+### Root_fnc_gridLabel
+
+Returns a device's map-grid string for display, honoring the per-device "Allow Location View" flag. GPS trackers are exempt (they gate on tracked state instead).
+
+**Syntax:**
+```sqf
+private _grid = [_obj] call Root_fnc_gridLabel;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Description |
+|-------|------|------|-------------|
+| 0 | _obj | OBJECT | The device object |
+
+**Return Value:** STRING - grid string, `"[location hidden]"`, or `"unknown"`
+
+---
+
+### Root_fnc_applyVehicleBrakes
+
+Applies server-managed braking to a land vehicle until it stops, then holds it stationary. Backs the `vehicle <id> brakes <rate>` command/action.
+
+**Syntax:**
+```sqf
+[_vehicle, _decelRate, _holdTime] call Root_fnc_applyVehicleBrakes;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default | Description |
+|-------|------|------|---------|-------------|
+| 0 | _vehicle | OBJECT | - | Vehicle to brake |
+| 1 | _decelRate | NUMBER | 1 | Deceleration in m/s² |
+| 2 | _holdTime | NUMBER | 2 | Seconds to hold stationary after stopping |
+
+**Return Value:** None
+
+---
+
+### Root_fnc_removeHackingTools
+
+Deletes the installed toolset's command files from a laptop's filesystem and clears the installed flag. Used when a hacking USB is unplugged, revoking capability.
+
+**Syntax:**
+```sqf
+[_computer, _path] call Root_fnc_removeHackingTools;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default |
+|-------|------|------|---------|
+| 0 | _computer | OBJECT | - |
+| 1 | _path | STRING | "/rubberducky/tools" |
+
+**Return Value:** None
+
+---
+
+### Root_fnc_hasHackingToolsAvailable
+
+Checks whether a laptop has hacking tools installed directly, or has a qualifying USB mounted.
+
+**Syntax:**
+```sqf
+private _available = [_computer] call Root_fnc_hasHackingToolsAvailable;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Description |
+|-------|------|------|-------------|
+| 0 | _computer | OBJECT | Laptop to check |
+
+**Return Value:** BOOLEAN
+
+---
+
+### Root_fnc_runDeviceLinkCleanup
+
+Sweeps device/link caches removing entries whose object no longer resolves. Backs the automatic background cleanup loop.
+
+**Syntax:**
+```sqf
+private _removed = [_useGrace] call Root_fnc_runDeviceLinkCleanup;
+```
+
+**Parameters:**
+
+| Index | Name | Type | Default | Description |
+|-------|------|------|---------|-------------|
+| 0 | _useGrace | BOOLEAN | true | If true, requires several consecutive failed lookups before removing an entry |
+
+**Return Value:** NUMBER - count of entries removed
+
+---
+
+### Root_fnc_syncDeviceData
+
+Debounced (1s) `publicVariable` broadcast of the device registry (`ALL_DEVICES`/`LINK_CACHE`/`PUBLIC_DEVICES`/`DEVICE_LINKS`), replacing per-mutation broadcasts. Called internally after registry changes; mission scripts rarely need to call it directly.
+
+**Syntax:**
+```sqf
+call Root_fnc_syncDeviceData;
+```
+
+**Parameters:** None
+
+**Return Value:** None
 
 ---
 
@@ -931,6 +1319,7 @@ These are the array formats used when devices are stored in `ROOT_CYBERWARFARE_A
 #define DEVICE_TYPE_GPS_TRACKER 6
 #define DEVICE_TYPE_VEHICLE 7
 #define DEVICE_TYPE_POWERGRID 8
+#define DEVICE_TYPE_NETSCAN 9   // GUI-only: network scanner results, not a cache entry type
 ```
 
 ---

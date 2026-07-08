@@ -20,9 +20,11 @@ Root's Cyber Warfare uses **CBA (Community Base Addons) Settings** for runtime c
 - **Server config**: Via server.cfg or mission parameters
 - **Mission script**: Via script commands
 
-**Total Settings:** 10
+**Total Settings:** 15
 - **Power Cost Settings:** 5 settings
 - **GPS Settings:** 5 settings
+- **Cleanup Settings:** 3 settings
+- **Rubberducky Settings:** 2 settings
 
 ---
 
@@ -439,6 +441,114 @@ Use a different color from Active Ping to clearly distinguish:
 **Access in Script:**
 ```sqf
 private _lastPingColor = missionNamespace getVariable ["ROOT_CYBERWARFARE_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_LASTPING", "ColorUNKNOWN"];
+```
+
+---
+
+## Cleanup Settings
+
+### 12. Automatic Link Cleanup - Enable
+
+**Setting Name:** `ROOT_CYBERWARFARE_CLEANUP_ENABLED`
+
+**Type:** Checkbox
+
+**Default:** OFF (unchecked)
+
+**Description:** Periodically removes device links whose laptop or device object has been deleted. **Off by default** — admins opt in. Links can always be cleared on demand regardless of this setting via the **Clear Broken Device Links** Zeus module or `Root_fnc_clearBrokenDeviceLinks`.
+
+**Access in Script:**
+```sqf
+private _cleanupEnabled = missionNamespace getVariable ["ROOT_CYBERWARFARE_CLEANUP_ENABLED", false];
+```
+
+---
+
+### 13. Automatic Link Cleanup - Interval
+
+**Setting Name:** `ROOT_CYBERWARFARE_CLEANUP_TIME`
+
+**Type:** Slider
+
+**Range:** 30-3600 seconds
+
+**Default:** 180 seconds
+
+**Description:** How often (in seconds) the automatic cleanup loop runs when Setting #12 is enabled.
+
+**Access in Script:**
+```sqf
+private _cleanupInterval = missionNamespace getVariable ["ROOT_CYBERWARFARE_CLEANUP_TIME", 180];
+```
+
+---
+
+### 14. Automatic Link Cleanup - Strike Grace
+
+**Setting Name:** `ROOT_CYBERWARFARE_CLEANUP_STRIKE_GRACE`
+
+**Type:** Checkbox
+
+**Default:** ON (checked, recommended)
+
+**Description:** When ON, a link is only removed after its object has been missing for several consecutive cleanup passes — this absorbs brief lookup misses right after a player joins. When OFF, a link is removed the moment its object is missing on a single pass. Only affects the automatic loop; the manual **Clear Broken Device Links** action always acts immediately.
+
+**Access in Script:**
+```sqf
+private _strikeGrace = missionNamespace getVariable ["ROOT_CYBERWARFARE_CLEANUP_STRIKE_GRACE", true];
+```
+
+---
+
+## Rubberducky Settings
+
+### 15. Rubberducky Default Login - Enable
+
+**Setting Name:** `ROOT_CYBERWARFARE_RUBBERDUCKY_CREDS_ENABLED`
+
+**Type:** Checkbox
+
+**Default:** ON (checked)
+
+**Description:** When a Rubberducky (hacking-tools USB) is connected to a laptop, automatically adds a default login account to that laptop, unless an account with the same username already exists.
+
+**Access in Script:**
+```sqf
+private _credsEnabled = missionNamespace getVariable ["ROOT_CYBERWARFARE_RUBBERDUCKY_CREDS_ENABLED", true];
+```
+
+---
+
+### 16. Rubberducky Default Login - Username
+
+**Setting Name:** `ROOT_CYBERWARFARE_RUBBERDUCKY_CRED_USER`
+
+**Type:** Text Box (EDITBOX)
+
+**Default:** `quack`
+
+**Description:** Username of the account injected into the laptop's login system when the Rubberducky connects.
+
+**Access in Script:**
+```sqf
+private _credUser = missionNamespace getVariable ["ROOT_CYBERWARFARE_RUBBERDUCKY_CRED_USER", "quack"];
+```
+
+---
+
+### 17. Rubberducky Default Login - Password
+
+**Setting Name:** `ROOT_CYBERWARFARE_RUBBERDUCKY_CRED_PASS`
+
+**Type:** Text Box (EDITBOX)
+
+**Default:** `quack`
+
+**Description:** Password of the account injected into the laptop's login system when the Rubberducky connects.
+
+**Access in Script:**
+```sqf
+private _credPass = missionNamespace getVariable ["ROOT_CYBERWARFARE_RUBBERDUCKY_CRED_PASS", "quack"];
 ```
 
 ---
