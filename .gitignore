@@ -16,13 +16,25 @@ hemtt.exe
 **/*.json
 !README*.md
 !wiki/*
+!wiki/**/*.md
+!.github/PULL_REQUEST_TEMPLATE.md
 TODO
 !releases/CHANGELOG.md
 !NOTEPAD.txt
 logs/**/*
-.code*
+.codex
+!.code-wiki/
+!.code-wiki/**
 .bak
 reference_files
+!graphify-out
+cache
+.graphify_python
+.graphify_root
+!.graphify_labels.json
+!cost.json
+!graph.json
+!manifest.json
 
 # =========================
 # Python
@@ -45,6 +57,7 @@ build/.env
 .vscode/**/*
 .env
 *.exe
+.agents
 
 # =========================
 # General / Miscellaneous
