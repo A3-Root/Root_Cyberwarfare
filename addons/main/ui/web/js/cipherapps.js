@@ -193,11 +193,25 @@
       return String.fromCodePoint(mod(n, max));
     }).join("");
   }
+  // Caesar's shift, taken from its own field and falling back to a numeric key (the bruteforce path
+  // and a single-cipher run both pass one). Returns null when no usable number was given.
+  function caesarShift(o) {
+    var v = (o.shift !== undefined && String(o.shift).trim() !== "") ? o.shift : o.key;
+    if (v === undefined || v === null || String(v).trim() === "") return null;
+    var n = Number(v);
+    return isFinite(n) ? mod(Math.round(n), 26) : null;
+  }
   function run(cipher, mode, s, o) {
     o = o || {};
     var dec = mode === "decrypt";
     switch (cipher) {
-      case "caesar": return arr(s).map(function (ch) { var n = ch.charCodeAt(0), base = n >= 97 && n <= 122 ? 97 : (n >= 65 && n <= 90 ? 65 : 0); return base ? String.fromCharCode(base + mod(n - base + (dec ? -1 : 1) * Number(o.key || 0), 26)) : ch; }).join("");
+      // Caesar shifts by a number, never by a word: a text key yields NaN and would map every letter to
+      // a null character, so the shift comes from its own field (o.shift) and falls back to a numeric key.
+      case "caesar": {
+        var caesarKey = caesarShift(o);
+        if (caesarKey === null) return "";
+        return arr(s).map(function (ch) { var n = ch.charCodeAt(0), base = n >= 97 && n <= 122 ? 97 : (n >= 65 && n <= 90 ? 65 : 0); return base ? String.fromCharCode(base + mod(n - base + (dec ? -1 : 1) * caesarKey, 26)) : ch; }).join("");
+      }
       case "columnar": {
         var key = String(o.key || ""), cols = key.length, text = String(s || ""); if (cols < 2) return "";
         var order = arr(key).map(function (c, i) { return { c: c, i: i }; }).sort(function (a, b) { return a.c === b.c ? a.i - b.i : (a.c < b.c ? -1 : 1); });
@@ -228,10 +242,24 @@
   var CIPHERS = ["caesar", "columnar", "morse", "spelling", "affine", "rot", "vigenere", "bacon", "alpha_sub", "railfence", "base32", "base64", "ascii85", "unicode", "integer"];
   // Ciphers whose run() case reads o.key (as key, password or keyword).
   var KEYED = ["caesar", "columnar", "vigenere", "alpha_sub"];
+  // Why a cipher cannot run with the options given, or "" when it can. Reported in place of its output
+  // so an unusable option shows as a reason instead of an empty or corrupted line.
+  function optionProblem(cipher, mode, s, o) {
+    if (cipher === "caesar" && caesarShift(o) === null) return "needs a whole-number Caesar shift (0-25)";
+    if (cipher === "columnar") {
+      var key = String(o.key || "");
+      if (key.length < 2) return "needs a key of 2 or more characters";
+      if (mode === "decrypt" && String(s || "").length % key.length) return "ciphertext length must be a multiple of the key length";
+    }
+    return "";
+  }
   // Runs every concrete cipher and returns one labelled output line per cipher.
   function runEvery(mode, s, o) {
     var lines = [];
-    CIPHERS.forEach(function (c) { lines.push("[" + c + "] " + run(c, mode, s, o)); });
+    CIPHERS.forEach(function (c) {
+      var problem = optionProblem(c, mode, s, o);
+      lines.push("[" + c + "] " + (problem ? "(" + problem + ")" : run(c, mode, s, o)));
+    });
     return lines;
   }
   function crackOne(cipher, s, o) {
@@ -257,25 +285,66 @@
     var algos = [["caesar", "Caesar"], ["columnar", "Columnar"], ["morse", "Morse Code"], ["spelling", "Spelling Alphabet"], ["affine", "Affine"], ["rot", "ROT"], ["vigenere", "Vigenere"], ["bacon", "Bacon"], ["alpha_sub", "Alphabetical Substitution"], ["railfence", "Railfence"], ["base32", "Base32"], ["base64", "Base64"], ["ascii85", "Ascii85"], ["unicode", "Unicode Notation"], ["integer", "Integer"]];
     if (isCrack || unified) algos = [["all", "All"]].concat(algos);
     var variants = { morse: [["standard", "Standard"]], spelling: [["nato", "NATO/ICAO"]], affine: [["numeric", "Numeric A/B"]], rot: [["rot5", "ROT5"], ["rot13", "ROT13"], ["rot18", "ROT18"], ["rot47", "ROT47"]], vigenere: [["manual", "Manual"], ["wordlist", "Wordlist"]], bacon: [["standard", "Standard"], ["extended", "Extended"]], alpha_sub: [["keyword", "Keyword"], ["manual", "Manual"]], railfence: [["zigzag", "Zigzag"]], base32: [["standard", "Standard"], ["hex", "Base32Hex"]], base64: [["standard", "Standard"], ["url", "URL-safe"]], ascii85: [["adobe", "Adobe"], ["bare", "Bare"]], unicode: [["uplus", "U+ notation"], ["escape", "\\u escape"]], integer: [["bin", "Binary"], ["oct", "Octal"], ["dec", "Decimal"], ["hex", "Hexadecimal"]], all: [["auto", "Auto"]] };
-    return { id: desc.id, title: desc.title, glyph: desc.glyph || (isCrack ? "K" : "C"), kind: "script", width: 940, height: 620, menu: "Hacking Tools", external: true, showInMenu: true, singleton: true, render: function (body, win) {
-      body.innerHTML = '<div class="pad" style="display:flex;flex-direction:column;gap:8px;height:100%"><div style="display:flex;gap:8px;flex-wrap:wrap"><select class="input cmode" style="min-width:120px"></select><select class="input csrc" style="min-width:110px"><option value="text">Text</option><option value="files">Files</option></select><select class="input calgo" style="min-width:190px"></select><select class="input cvar" style="min-width:160px"></select></div><div style="display:grid;grid-template-columns:1.35fr .95fr;gap:8px;min-height:0;flex:1"><div style="display:flex;flex-direction:column;gap:8px;min-height:0"><textarea class="input ctext" rows="7" placeholder="Text input"></textarea><div class="cfiles" style="display:none;border:1px solid var(--line);border-radius:6px;padding:8px;min-height:84px;overflow:auto"></div><textarea class="input cout" rows="8" readonly placeholder="Result"></textarea><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn accent crun">' + (isCrack ? "Analyse" : "Run") + '</button><button class="btn csave">Save Output</button><button class="btn cclear">Clear</button><button class="btn cadd" style="display:none">Add File</button><button class="btn crem" style="display:none">Remove Selected</button><button class="btn cclrfiles" style="display:none">Clear Files</button></div></div><div class="opts" style="display:flex;flex-direction:column;gap:8px;min-height:0;overflow:auto"><input class="input ckey" placeholder="Key / password / keyword"><input class="input calpha" placeholder="Manual alphabet / substitution alphabet"><input class="input craw" placeholder="Affine A/B or rail count"><div style="display:flex;gap:8px"><input class="input cmax" type="number" min="1" max="12" value="12" style="flex:1" placeholder="Max key length"><input class="input cstep" type="number" min="1" value="400" style="flex:1" placeholder="Solver steps"></div><div style="display:flex;gap:8px"><select class="input cradix" style="flex:1"><option value="2">Binary</option><option value="8">Octal</option><option value="10">Decimal</option><option value="16" selected>Hex</option></select><select class="input cwidth" style="flex:1"><option value="8">8-bit</option><option value="16">16-bit</option><option value="32">32-bit</option></select></div><div style="display:flex;gap:8px;flex-wrap:wrap"><select class="input cpres"><option value="1">Preserve case</option><option value="0">Force upper</option></select><select class="input csigned"><option value="0">Unsigned</option><option value="1">Signed</option></select><select class="input cpad"><option value="1">Pad output</option><option value="0">No pad</option></select></div><div style="display:flex;gap:8px"><textarea class="input cwords" rows="6" placeholder="Wordlist (one key per line)" style="flex:1"></textarea><button class="btn cwordfile" style="align-self:flex-start">Wordlist File</button></div></div></div></div>';
-      var mode = body.querySelector(".cmode"), src = body.querySelector(".csrc"), algo = body.querySelector(".calgo"), variant = body.querySelector(".cvar"), txt = body.querySelector(".ctext"), out = body.querySelector(".cout"), key = body.querySelector(".ckey"), alphaBox = body.querySelector(".calpha"), raw = body.querySelector(".craw"), radix = body.querySelector(".cradix"), width = body.querySelector(".cwidth"), preserve = body.querySelector(".cpres"), signed = body.querySelector(".csigned"), padding = body.querySelector(".cpad"), words = body.querySelector(".cwords"), filesWrap = body.querySelector(".cfiles"), addBtn = body.querySelector(".cadd"), remBtn = body.querySelector(".crem"), clearFilesBtn = body.querySelector(".cclrfiles"), wordFileBtn = body.querySelector(".cwordfile");
+    // Every option input sits in a labelled field so the operator can tell what each one expects
+    // (which cipher reads it, and in what format) instead of guessing from a placeholder.
+    var field = function (label, hint, cls, control) {
+      return '<div class="cfield ' + cls + '" style="display:flex;flex-direction:column;gap:3px">' +
+        '<label style="font-size:12px;font-weight:600">' + label + '</label>' +
+        (hint ? '<span class="muted" style="font-size:11px">' + hint + '</span>' : '') +
+        control + '</div>';
+    };
+    return { id: desc.id, title: desc.title, glyph: desc.glyph || (isCrack ? "K" : "C"), kind: "script", width: 940, height: 760, menu: "Hacking Tools", external: true, showInMenu: true, singleton: true, render: function (body, win) {
+      body.innerHTML = '<div class="pad" style="display:flex;flex-direction:column;gap:8px;height:100%"><div style="display:flex;gap:8px;flex-wrap:wrap"><select class="input cmode" style="min-width:120px"></select><select class="input csrc" style="min-width:110px"><option value="text">Text</option><option value="files">Files</option></select><select class="input calgo" style="min-width:190px"></select><select class="input cvar" style="min-width:160px"></select></div><div style="display:grid;grid-template-columns:1.35fr .95fr;gap:8px;min-height:0;flex:1"><div style="display:flex;flex-direction:column;gap:8px;min-height:0">' +
+        field("Input", "Text to process", "cfinput", '<textarea class="input ctext" rows="5" placeholder="Text input" style="resize:none"></textarea>') +
+        '<div class="cfiles" style="display:none;border:1px solid var(--line);border-radius:6px;padding:8px;min-height:84px;overflow:auto"></div>' +
+        // The result box takes every remaining pixel of the column: an "All" run prints one labelled
+        // line per cipher, far more than a fixed-height textarea can show.
+        '<div class="cfield" style="display:flex;flex-direction:column;gap:3px;flex:1;min-height:220px"><label style="font-size:12px;font-weight:600">Result</label><textarea class="input cout" readonly placeholder="Result" style="flex:1;min-height:0;resize:none"></textarea></div>' +
+        '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn accent crun">' + (isCrack ? "Analyse" : "Run") + '</button><button class="btn csave">Save Output</button><button class="btn cclear">Clear</button><button class="btn cadd" style="display:none">Add File</button><button class="btn crem" style="display:none">Remove Selected</button><button class="btn cclrfiles" style="display:none">Clear Files</button></div></div><div class="opts" style="display:flex;flex-direction:column;gap:10px;min-height:0;overflow:auto">' +
+        field("Key / password / keyword", "Columnar (2+ characters), Vigenere, Alphabetical Substitution", "cfkey", '<input class="input ckey" placeholder="e.g. SECRET">') +
+        field("Caesar shift", "Whole number 0-25 - Caesar only, it cannot use a text key", "cfshift", '<input class="input cshift" type="number" min="0" max="25" value="3">') +
+        field("Manual alphabet", "Substitution alphabet for Alphabetical Substitution", "cfalpha", '<input class="input calpha" placeholder="e.g. QWERTYUIOPASDFGHJKLZXCVBNM">') +
+        field("Affine A/B or rail count", "Affine: two numbers (e.g. 5/8). Railfence: one number", "cfraw", '<input class="input craw" placeholder="e.g. 5/8 or 3">') +
+        field("Bruteforce limits", "Max key length and solver steps", "cflimits", '<div style="display:flex;gap:8px"><input class="input cmax" type="number" min="1" max="12" value="12" style="flex:1" placeholder="Max key length"><input class="input cstep" type="number" min="1" value="400" style="flex:1" placeholder="Solver steps"></div>') +
+        field("Integer notation", "Number base and word size", "cfint", '<div style="display:flex;gap:8px"><select class="input cradix" style="flex:1"><option value="2">Binary</option><option value="8">Octal</option><option value="10">Decimal</option><option value="16" selected>Hex</option></select><select class="input cwidth" style="flex:1"><option value="8">8-bit</option><option value="16">16-bit</option><option value="32">32-bit</option></select></div>') +
+        field("Output options", "Letter case, sign and padding", "cfout", '<div style="display:flex;gap:8px;flex-wrap:wrap"><select class="input cpres"><option value="1">Preserve case</option><option value="0">Force upper</option></select><select class="input csigned"><option value="0">Unsigned</option><option value="1">Signed</option></select><select class="input cpad"><option value="1">Pad output</option><option value="0">No pad</option></select></div>') +
+        field("Wordlist", "One candidate key per line - Vigenere bruteforce", "cfwords", '<div style="display:flex;gap:8px"><textarea class="input cwords" rows="6" placeholder="Wordlist (one key per line)" style="flex:1"></textarea><button class="btn cwordfile" style="align-self:flex-start">Wordlist File</button></div>') +
+        '</div></div></div>';
+      var mode = body.querySelector(".cmode"), src = body.querySelector(".csrc"), algo = body.querySelector(".calgo"), variant = body.querySelector(".cvar"), txt = body.querySelector(".ctext"), out = body.querySelector(".cout"), key = body.querySelector(".ckey"), shift = body.querySelector(".cshift"), alphaBox = body.querySelector(".calpha"), raw = body.querySelector(".craw"), radix = body.querySelector(".cradix"), width = body.querySelector(".cwidth"), preserve = body.querySelector(".cpres"), signed = body.querySelector(".csigned"), padding = body.querySelector(".cpad"), words = body.querySelector(".cwords"), filesWrap = body.querySelector(".cfiles"), addBtn = body.querySelector(".cadd"), remBtn = body.querySelector(".crem"), clearFilesBtn = body.querySelector(".cclrfiles"), wordFileBtn = body.querySelector(".cwordfile");
+      var maxLen = body.querySelector(".cmax");
+      var fieldOf = function (el) { return el.closest(".cfield") || el; };
       (unified ? [["encrypt", "Encrypt"], ["decrypt", "Decrypt"], ["bruteforce", "Bruteforce"]] : (isCrack ? [["bruteforce", "Bruteforce"]] : [["encrypt", "Encrypt"], ["decrypt", "Decrypt"]])).forEach(function (m) { var o = document.createElement("option"); o.value = m[0]; o.textContent = m[1]; mode.appendChild(o); });
       algos.forEach(function (a) { var o = document.createElement("option"); o.value = a[0]; o.textContent = a[1]; algo.appendChild(o); });
       var files = [], selected = -1;
       function fillVariants() { variant.innerHTML = ""; (variants[algo.value] || [["standard", "Standard"]]).forEach(function (v) { var o = document.createElement("option"); o.value = v[0]; o.textContent = v[1]; variant.appendChild(o); }); }
       function show(el, yes) { el.style.display = yes ? "" : "none"; }
       function updateFields() {
-        var a = algo.value, fileMode = src.value === "files";
-        show(filesWrap, fileMode); show(txt, !fileMode); show(addBtn, fileMode); show(remBtn, fileMode); show(clearFilesBtn, fileMode);
-        show(key, a === "all" || KEYED.indexOf(a) >= 0); show(alphaBox, a === "alpha_sub"); show(raw, ["affine", "railfence"].indexOf(a) >= 0);
-        var cracking = mode.value === "bruteforce"; show(radix.parentNode, a === "integer" || (cracking && a === "all")); show(preserve.parentNode, ["affine", "vigenere", "alpha_sub"].indexOf(a) >= 0); show(words.parentNode, cracking && (a === "vigenere" || a === "all"));
+        var a = algo.value, fileMode = src.value === "files", every = a === "all";
+        show(filesWrap, fileMode); show(fieldOf(txt), !fileMode); show(addBtn, fileMode); show(remBtn, fileMode); show(clearFilesBtn, fileMode);
+        // "All" runs every cipher in one pass, so it needs every option a cipher can read - not just
+        // the key. Each cipher then takes the field that belongs to it and ignores the rest.
+        show(fieldOf(key), every || KEYED.indexOf(a) >= 0);
+        show(fieldOf(shift), every || a === "caesar");
+        show(fieldOf(alphaBox), every || a === "alpha_sub");
+        show(fieldOf(raw), every || ["affine", "railfence"].indexOf(a) >= 0);
+        var cracking = mode.value === "bruteforce";
+        show(fieldOf(radix), a === "integer" || every || (cracking && every));
+        show(fieldOf(preserve), every || ["affine", "vigenere", "alpha_sub"].indexOf(a) >= 0);
+        show(fieldOf(words), cracking && (a === "vigenere" || every));
+        show(fieldOf(maxLen), cracking);
       }
       function renderFiles() { filesWrap.innerHTML = files.length ? files.map(function (f, i) { return '<div data-i="' + i + '" style="padding:4px 6px;border-radius:4px;margin-bottom:4px;cursor:pointer;background:' + (i === selected ? "rgba(255,255,255,0.08)" : "transparent") + '">' + esc(f.name) + "</div>"; }).join("") : '<div class="muted">No files selected.</div>'; Array.prototype.slice.call(filesWrap.children).forEach(function (n) { n.onclick = function () { selected = Number(n.getAttribute("data-i")); renderFiles(); }; }); }
       function pickFile() { if (typeof AE3_pickFile !== "function") return; AE3_pickFile("open", { title: "Select file", start: window.AE3_HOME || "/home" }).then(function (p) { if (!p) return; files.push({ path: p, name: p.split("/").pop() }); selected = files.length - 1; renderFiles(); }); }
       function readFile(path) { return A3.request("fs_read", { path: path }).then(function (r) { return r && !r.error ? (r.content || "") : ""; }); }
       function inputs() { if (src.value !== "files") return Promise.resolve([{ name: "input", text: txt.value || "" }]); return Promise.all(files.map(function (f) { return readFile(f.path).then(function (t) { return { name: f.name, text: t }; }); })); }
-      function opts() { var a = raw.value.trim().split(/[\/,\s]+/); return { variant: variant.value, key: key.value, keyword: key.value, manualAlphabet: alphaBox.value, a: a[0] || 1, b: a[1] || 0, rails: a[0] || 2, preserveCase: preserve.value === "1", wordlist: words.value, radix: Number(radix.value), width: Number(width.value), signed: signed.value === "1", padding: padding.value === "1" }; }
+      // shift is Caesar's own field. When Caesar is the only selected cipher a numeric key still works,
+      // so an operator who types the shift into the key box is not punished for it.
+      function opts() {
+        var a = raw.value.trim().split(/[\/,\s]+/);
+        var caesarShift = shift.value;
+        if (algo.value === "caesar" && String(caesarShift).trim() === "" && String(key.value).trim() !== "") caesarShift = key.value;
+        return { variant: variant.value, key: key.value, keyword: key.value, shift: caesarShift, manualAlphabet: alphaBox.value, a: a[0] || 1, b: a[1] || 0, rails: a[0] || 2, preserveCase: preserve.value === "1", wordlist: words.value, radix: Number(radix.value), width: Number(width.value), signed: signed.value === "1", padding: padding.value === "1" };
+      }
       function setOut(v) { out.value = Array.isArray(v) ? v.join("\n") : String(v || ""); }
       function runAll() {
         inputs().then(function (list) {

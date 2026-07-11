@@ -20,7 +20,7 @@ private _classes = [
     "jsoc_B_ewo_bag_MCT", "jsoc_B_ewo_bag_BLK", "jsoc_B_ewo_bag_GRY", "jsoc_B_ewo_bag_OD",
     "jsoc_B_ewo_bag_Tan", "jsoc_B_ewo_bag_White", "jsoc_ew_base_backpack_multicam",
     "jsoc_ew_base_backpack_multicamarctic", "jsoc_ew_base_backpack_multicamblack",
-    "jsoc_ew_base_backpack_multicamtropic", "jsoc_ew_base_backpack_multicamod"
+    "jsoc_ew_base_backpack_multicamtropic", "jsoc_ew_base_backpack_multicamod", "B_RadioBag_01_black_F"
 ];
 
 private _bags = allPlayers apply {backpackContainer _x};

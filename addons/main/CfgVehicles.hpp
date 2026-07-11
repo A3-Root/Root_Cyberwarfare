@@ -512,14 +512,14 @@ class CfgVehicles {
 			class ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED_MIN: Edit {
 				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED_MIN";
 				displayName = "Min Speed Boost (km/h)";
-				tooltip = "Minimum speed boost allowed (negative = slowdown)";
+				tooltip = "Minimum speed boost allowed (negative = slowdown). Clamped to -2000 - 2000.";
 				typeName = "NUMBER";
 				defaultValue = -50;
 			};
 			class ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED_MAX: Edit {
 				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED_MAX";
 				displayName = "Max Speed Boost (km/h)";
-				tooltip = "Maximum speed boost allowed";
+				tooltip = "Maximum speed boost allowed. Clamped to -2000 - 2000.";
 				typeName = "NUMBER";
 				defaultValue = 50;
 			};

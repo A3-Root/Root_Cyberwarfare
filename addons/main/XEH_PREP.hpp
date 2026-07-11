@@ -27,6 +27,7 @@ PREP(gridLabel);
 PREP(listDevicesInSubnet);
 PREP(registerHackableLaptopZeusMain);
 PREP(removeHackingTools);
+PREP(renameHackableLaptopMain);
 PREP(seedRubberducky);
 PREP(seedRubberduckyCredentials);
 PREP(scanNetwork);

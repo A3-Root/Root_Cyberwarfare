@@ -38,6 +38,19 @@ if (_customLaptopName isEqualTo "") then {
     _customLaptopName = getText (configOf _entity >> "displayName");
 };
 
+// A laptop that is already a hacking station keeps the devices, files and credentials it holds: only
+// its label is refreshed. Registering it a second time would re-seed the login account and re-run the
+// tool sync, so the name is the only thing worth updating here.
+if (_entity getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) exitWith {
+    private _currentName = _entity getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", ""];
+    if (_customLaptopName isNotEqualTo _currentName) then {
+        _entity setVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _customLaptopName, true];
+        [format ["Root Cyber Warfare: Laptop is already registered; renamed to '%1'.", _customLaptopName]] remoteExec ["systemChat", _execUserId];
+    } else {
+        [format ["Root Cyber Warfare: Laptop is already registered as a hackable station ('%1').", _currentName]] remoteExec ["systemChat", _execUserId];
+    };
+};
+
 // Mark the laptop as a registered hacking station (broadcast) and store its link-dialog label.
 _entity setVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", true, true];
 _entity setVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _customLaptopName, true];

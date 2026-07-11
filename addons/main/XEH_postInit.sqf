@@ -353,8 +353,36 @@ if (hasInterface) then {
             }
         ] call ace_interact_menu_fnc_createAction;
 
+        // Relabel a station after it was registered. Only the name the curator sees when linking
+        // devices changes; the laptop keeps its registration, links, files and accounts, so an
+        // operator can rename it at any point and the next device added shows the new name.
+        private _actionEwoRenameLaptop = [
+            "ROOT_EWO_RenameLaptop",
+            "Rename Hackable Laptop",
+            "",
+            {
+                params ["_target", "_player"];
+
+                [
+                    "Rename Hackable Laptop", [
+                        ["EDIT", ["Laptop Name", "New name shown to curators when linking devices to this laptop. Registered devices, files and accounts are not affected."], [_target getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", getText (configOf _target >> "displayName")]]]
+                    ], {
+                        params ["_results", "_args"];
+                        _args params ["_target", "_player"];
+                        _results params ["_newName"];
+                        [_target, _newName, owner _player] remoteExecCall ["Root_fnc_renameHackableLaptopMain", 2];
+                    }, {}, [_target, _player]
+                ] call zen_dialog_fnc_create;
+            },
+            {
+                missionNamespace getVariable [SETTING_EWO_MODE, false]
+                && {_target getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]}
+            }
+        ] call ace_interact_menu_fnc_createAction;
+
         {
             [_x, 0, ["ACE_MainActions"], _actionEwoRegisterLaptop, true] call ace_interact_menu_fnc_addActionToClass;
+            [_x, 0, ["ACE_MainActions"], _actionEwoRenameLaptop, true] call ace_interact_menu_fnc_addActionToClass;
         } forEach ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3"];
 
         private _actionEwoCharge = [

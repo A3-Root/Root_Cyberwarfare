@@ -52,8 +52,10 @@ private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_AL
 // Get limit attributes
 private _fuelMinPercent = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_FUEL_MIN", 0];
 private _fuelMaxPercent = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_FUEL_MAX", 100];
-private _speedMinValue = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED_MIN", -50];
-private _speedMaxValue = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED_MAX", 50];
+// The speed attributes are free-form number fields, so hold them to the same -2000 - 2000 span the
+// Zeus sliders offer instead of letting a typo register an unreachable boost limit.
+private _speedMinValue = ((_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED_MIN", -50]) max -2000) min 2000;
+private _speedMaxValue = ((_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED_MAX", 50]) max -2000) min 2000;
 private _brakesMinDecel = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_BRAKES_MIN", 1];
 private _brakesMaxDecel = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_BRAKES_MAX", 10];
 private _lightsMaxToggles = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_LIGHTS_MAX_TOGGLES", -1];

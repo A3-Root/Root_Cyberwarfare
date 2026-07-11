@@ -175,8 +175,14 @@
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_POWERGRID_OBJECT_NOT_FOUND">
             <English>Error! Power grid object not found.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_SPEED_ENGINE_DESTROYED">
+            <English>Error! The engine is destroyed - the drivetrain cannot deliver any boost.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_SPEED_OUT_OF_RANGE">
             <English>Error! Speed value %1 km/h is outside allowed range [%2 - %3 km/h].</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ERROR_SPEED_WHEELS_DESTROYED">
+            <English>Error! At least one wheel is below 10 percent health - the vehicle cannot be boosted.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_VEHICLE_NOT_FOUND">
             <English>Vehicle ID %1 not found.</English>
@@ -385,6 +391,9 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_OVERLOAD_WARNING">
             <English>WARNING: Power grid overloaded! Generator destroyed. %1 objects affected within %2m radius.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SPEED_DERATED">
+            <English>Drivetrain damaged: %1 percent effective. Applied %2 km/h of the requested %3 km/h.</English>
         </Key>
     </Package>
     <Package name="Prompts">

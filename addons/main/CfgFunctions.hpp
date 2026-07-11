@@ -28,6 +28,7 @@ class CfgFunctions {
 			class listDevicesInSubnet {};
 			class registerHackableLaptopZeusMain {};
 			class removeHackingTools {};
+			class renameHackableLaptopMain {};
 			class seedRubberducky {};
 			class seedRubberduckyCredentials {};
 			class scanNetwork {};

@@ -61,7 +61,9 @@ private _extra = createHashMapFromArray [
     ["factory", "RootCW_makeCipherApp"],
     ["requiresFunction", "Root_fnc_hasHackingToolsAvailable"],
     ["width", 940],
-    ["height", 620]
+    // Tall enough for the result box to show a full "All" run (one labelled line per cipher) without
+    // the operator having to scroll a few rows at a time.
+    ["height", 760]
 ];
 
 _extra set ["mode", "cryptography"];

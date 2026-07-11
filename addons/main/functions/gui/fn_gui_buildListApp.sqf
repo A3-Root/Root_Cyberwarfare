@@ -57,16 +57,30 @@ private _applyFilter = {
     private _grid = toLower (ctrlText _gridEdit);
     if (_grid isEqualTo "grid") then {_grid = "";};
     private _distance = parseNumber (ctrlText _distanceEdit);
+
+    // A grid combined with a distance names a search area: the distance is measured from the centre
+    // of that grid square, so the pair lists every device within the radius of the grid reference.
+    // A grid on its own still matches devices whose own grid label starts with it.
+    private _gridPos = [];
+    private _digits = count (toArray _grid);
+    if (_grid isNotEqualTo "" && {_distance > 0} && {_grid regexMatch "^\d+$"} && {_digits % 2 == 0} && {_digits >= 2 && _digits <= 10}) then {
+        _gridPos = [_grid, true] call CBA_fnc_mapGridToPos;
+    };
+
     private _filtered = [];
     {
         private _obj = objectFromNetId (_x param [1, ""]);
         private _matchesGrid = true;
         private _matchesDistance = true;
-        if (_grid isNotEqualTo "") then {
-            _matchesGrid = !isNull _obj && {(toLower (mapGridPosition _obj)) find _grid == 0};
-        };
-        if (_distance > 0) then {
-            _matchesDistance = !isNull _obj && {_obj distance _computer <= _distance};
+        if (_gridPos isNotEqualTo []) then {
+            _matchesGrid = !isNull _obj && {_obj distance2D _gridPos <= _distance};
+        } else {
+            if (_grid isNotEqualTo "") then {
+                _matchesGrid = !isNull _obj && {(toLower (mapGridPosition _obj)) find _grid == 0};
+            };
+            if (_distance > 0) then {
+                _matchesDistance = !isNull _obj && {_obj distance _computer <= _distance};
+            };
         };
         if (_matchesGrid && _matchesDistance) then {_filtered pushBack _x;};
     } forEach _rows;
