@@ -23,6 +23,8 @@
 // Using CBA events instead of remoteExec for better reliability and bandwidth
 
 if (isServer) then {
+	[FUNC(ewoSyncBackpacks), 5] call CBA_fnc_addPerFrameHandler;
+	[FUNC(ewoChargeTick), 1] call CBA_fnc_addPerFrameHandler;
     // Power consumption event (server-side only)
     // Triggered when a laptop operation consumes battery power
     ["root_cyberwarfare_consumePower", {
@@ -313,6 +315,81 @@ if (isServer) then {
 if (hasInterface) then {
     [{(!isNull ACE_player) && (uiTime > 10) && (serverTime > 10)}, {
         call FUNC(createDiaryEntry);
+
+        private _actionEwoRegisterLaptop = [
+            "ROOT_EWO_RegisterLaptop",
+            "Register Hackable Laptop",
+            "",
+            {
+                params ["_target", "_player"];
+                [_target, owner _player, getText (configOf _target >> "displayName")] remoteExecCall ["Root_fnc_registerHackableLaptopZeusMain", 2];
+            },
+            {
+                missionNamespace getVariable [SETTING_EWO_MODE, false]
+                && {!(_target getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false])}
+            }
+        ] call ace_interact_menu_fnc_createAction;
+
+        {
+            [_x, 0, ["ACE_MainActions"], _actionEwoRegisterLaptop, true] call ace_interact_menu_fnc_addActionToClass;
+        } forEach ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3"];
+
+        private _actionEwoCharge = [
+            "ROOT_EWO_ChargeLaptop",
+            "Charge Laptop",
+            "",
+            {},
+            {
+                missionNamespace getVariable [SETTING_EWO_MODE, false]
+                && {!isNull (backpackContainer _player)}
+                && {(backpackContainer _player) getVariable ["ROOT_EWO_INITIALIZED", false]}
+                && {([_player] call FUNC(ewoGetInventoryLaptops)) isNotEqualTo []}
+            },
+            {
+                params ["_target", "_player"];
+                private _actions = [];
+                {
+                    private _item = _x;
+                    private _label = getText (configFile >> "CfgWeapons" >> _item >> "displayName");
+                    private _action = [
+                        "ROOT_EWO_Charge_" + _item,
+                        _label,
+                        "",
+                        {
+                            params ["_target", "_player", "_item"];
+                            [_player, _item] remoteExecCall ["Root_fnc_ewoStartCharging", 2];
+                        },
+                        {true},
+                        {},
+                        _item
+                    ] call ace_interact_menu_fnc_createAction;
+                    _actions pushBack [_action, [], _target];
+                } forEach ([_player] call FUNC(ewoGetInventoryLaptops));
+                _actions
+            }
+        ] call ace_interact_menu_fnc_createAction;
+
+        [player, 1, ["ACE_SelfActions"], _actionEwoCharge] call ace_interact_menu_fnc_addActionToObject;
+
+        private _actionEwoStatus = [
+            "ROOT_EWO_Status",
+            "EWO Charging Status",
+            "",
+            {
+                params ["_target", "_player"];
+                private _bag = backpackContainer _player;
+                private _energy = _bag getVariable ["ROOT_EWO_ENERGY", 0];
+                private _jobs = _bag getVariable ["ROOT_EWO_CHARGE_JOBS", createHashMap];
+                hintSilent format ["EWO backpack energy: %1%2\nActive laptop charging jobs: %3", _energy, "%", count _jobs];
+            },
+            {
+                missionNamespace getVariable [SETTING_EWO_MODE, false]
+                && {!isNull (backpackContainer _player)}
+                && {(backpackContainer _player) getVariable ["ROOT_EWO_INITIALIZED", false]}
+            }
+        ] call ace_interact_menu_fnc_createAction;
+
+        [player, 1, ["ACE_SelfActions"], _actionEwoStatus] call ace_interact_menu_fnc_addActionToObject;
 
         // ========================================================================
         // ACE Action: GPS Tracker Operations (Parent Menu)

@@ -111,7 +111,7 @@ if (_validationError isNotEqualTo "") exitWith {
 	[_owner, _validationError, false] call _reply;
 };
 
-private _cost = _vehicle getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", 2];
+private _cost = _vehicle getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", missionNamespace getVariable [SETTING_VEHICLE_COST, 2]];
 if !([_computer, _cost] call FUNC(checkPowerAvailable)) exitWith {
 	[_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply;
 };

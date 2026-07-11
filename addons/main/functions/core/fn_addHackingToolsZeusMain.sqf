@@ -11,6 +11,7 @@
  * 3: _customLaptopName <STRING> (Optional) - Custom name for the laptop, default: ""
  * 4: _backdoorScriptPrefix <STRING> (Optional) - Backdoor prefix for special access, default: ""
  * 5: _silent <BOOL> (Optional) - Skip the "hacking tools added" systemChat, default: false
+ * 6: _addCredentials <BOOL> (Optional) - Add the configured Rubberducky account, default: true
  *
  * Return Value:
  * None
@@ -21,7 +22,7 @@
  * Public: No
  */
 
-params ["_entity", ["_path", "/rubberducky/tools", [""]], ["_execUserId", 0, [0]], ["_customLaptopName", "", [""]], ["_backdoorScriptPrefix", "", [""]], ["_silent", false, [false]]];
+params ["_entity", ["_path", "/rubberducky/tools", [""]], ["_execUserId", 0, [0]], ["_customLaptopName", "", [""]], ["_backdoorScriptPrefix", "", [""]], ["_silent", false, [false]], ["_addCredentials", true, [false]]];
 
 private ["_guide", "_devices", "_door", "_light", "_changedrone", "_disabledrone", "_download", "_custom", "_gpstrack", "_vehicle", "_powergrid", "_netscan"];
 
@@ -100,6 +101,9 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
     // a hackable station - it only makes the tools available wherever they are plugged in.
     _entity setVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", true, true];
     [_entity] call FUNC(syncHackingToolAvailability);
+    if (_addCredentials) then {
+        [_entity] call FUNC(seedRubberduckyCredentials);
+    };
 };
 
 

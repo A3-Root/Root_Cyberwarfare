@@ -32,6 +32,10 @@ PREP(seedRubberduckyCredentials);
 PREP(scanNetwork);
 PREP(scanNetworkCli);
 PREP(scanNetworkPrint);
+PREP(ewoSyncBackpacks);
+PREP(ewoStartCharging);
+PREP(ewoChargeTick);
+PREP(ewoGetInventoryLaptops);
 
 // Redefine PREP macro for subdirectory: cipher
 #undef PREP

@@ -38,7 +38,7 @@ if (!isServer) exitWith {};
 
 // Get module attributes
 private _vehicleName = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_NAME", "Target Vehicle"];
-private _powerCost = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_COST", 2];
+private _powerCost = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_COST", missionNamespace getVariable [SETTING_VEHICLE_COST, 2]];
 private _allowFuel = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_FUEL", true];
 private _allowSpeed = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED", true];
 private _allowBrakes = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_BRAKES", false];

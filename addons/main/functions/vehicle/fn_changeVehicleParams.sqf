@@ -84,7 +84,7 @@ if (_vehicleIDNum != 0) then {
     private _foundVehicle = false;
     private _invalidOption = true;
 
-    private _powerCost = 2;
+    private _powerCost = missionNamespace getVariable [SETTING_VEHICLE_COST, 2];
 
     {
         // [_deviceId, _netId, _vehicleName, _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm, _availableToFutureLaptops, _powerCost];
@@ -101,7 +101,7 @@ if (_vehicleIDNum != 0) then {
             ["_alarmMinDuration", 1], ["_alarmMaxDuration", 30]
         ];
         private _vehicleObject = objectFromNetId _vehicleNetID;
-        _powerCost = _vehicleObject getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", 2];
+        _powerCost = _vehicleObject getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", missionNamespace getVariable [SETTING_VEHICLE_COST, 2]];
         if !([_computer, _powerCost] call FUNC(checkPowerAvailable)) then {
             _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;

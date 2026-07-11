@@ -26,13 +26,14 @@ ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME = format ["HackTool_%1", _index];
 [
     "Hacking Tools Settings", [
 	["EDIT", ["Tool Path", "Path for the Hacking Tool. Do not add trailing '/'. Always end with a letter. No special characters or spaces except '/' and '_'. Example: /rubberducky/tools"], ["/rubberducky/tools"]],
-	["EDIT", ["Laptop Name", "Custom Name to be given to the laptop for easier management of devices. Only visible to curators when linking devices to specific laptops."], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]]
+	["EDIT", ["Laptop Name", "Custom name used by curator device-linking tools."], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]],
+    ["TOOLBOX:YESNO", ["Add Default Credentials", "Adds the configured Rubberducky login account to the target laptop."], true]
 	], {
 		params ["_results", "_args"];
 		_args params ["_entity", "_index"];
-		_results params ["_path", "_customName"];
+		_results params ["_path", "_customName", "_addCredentials"];
 		private _execUserId = owner _entity;
-		[_entity, _path, _execUserId, _customName] remoteExec [QFUNC(addHackingToolsZeusMain), 2];
+		[_entity, _path, _execUserId, _customName, "", false, _addCredentials] remoteExec [QFUNC(addHackingToolsZeusMain), 2];
 		_index = _index + 1;
 		missionNamespace setVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", _index, true];
 		[localize "STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_SUCCESS"] call zen_common_fnc_showMessage;

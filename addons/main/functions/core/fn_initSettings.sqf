@@ -27,6 +27,28 @@
     true // requires mission restart
 ] call CBA_fnc_addSetting;
 
+[
+    SETTING_VEHICLE_COST,
+    "SLIDER",
+    ["Vehicle Hacking Power Cost", "Energy in Wh consumed by each vehicle hacking action unless the vehicle has a mission-specific cost."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY"],
+    [1, 100, 2, 0],
+    1,
+    {},
+    false
+] call CBA_fnc_addSetting;
+
+[
+    SETTING_EWO_MODE,
+    "CHECKBOX",
+    ["77th JSOC EWO Mode", "Enables EWO laptop registration and EWO backpack support."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "EWO Settings"],
+    false,
+    1,
+    {},
+    false
+] call CBA_fnc_addSetting;
+
 // Debug Mode Setting
 [
     "ROOT_CYBERWARFARE_DEBUG_MODE",

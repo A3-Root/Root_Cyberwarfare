@@ -291,7 +291,7 @@ private _decrypt = _mode isEqualTo "decrypt";
 
 if (_mode isEqualTo "bruteforce") exitWith {
     private _targets = if (_algorithm isEqualTo "all") then {
-        ["morse", "spelling", "affine", "rot", "vigenere", "bacon", "alpha_sub", "railfence", "base32", "base64", "ascii85", "unicode", "integer"]
+        ["caesar", "columnar", "morse", "spelling", "affine", "rot", "vigenere", "bacon", "alpha_sub", "railfence", "base32", "base64", "ascii85", "unicode", "integer"]
     } else {
         [_algorithm]
     };
@@ -348,6 +348,26 @@ if (_mode isEqualTo "bruteforce") exitWith {
 };
 
 switch (_algorithm) do {
+    case "caesar": {
+        private _key = floor parseNumber str (_options getOrDefault ["key", 0]);
+        private _out = "";
+        {
+            private _code = (toArray _x) select 0;
+            if ((_code >= 65 && {_code <= 90}) || {_code >= 97 && {_code <= 122}}) then {
+                private _base = [65, 97] select (_code >= 97);
+                private _shift = [_key, -_key] select _decrypt;
+                _out = _out + toString [_base + ([(_code - _base) + _shift, 26] call _mod)];
+            } else {
+                _out = _out + _x;
+            };
+        } forEach ([_text] call _chars);
+        _out
+    };
+    case "columnar": {
+        private _key = _options getOrDefault ["key", ""];
+        if (count _key < 2) exitWith {""};
+        [_key, ["encrypt", "decrypt"] select _decrypt, _text] call AE3_armaos_fnc_encryption_columnar
+    };
     case "morse": {
         if (!_decrypt) exitWith {
             (([_text] call _chars) apply { if (_x isEqualTo " ") then {"/"} else {_morse getOrDefault [toUpper _x, _x]} }) joinString " "

@@ -43,6 +43,7 @@ private _laptops = _syncedObjects select {
 		// Get module attributes
 		private _toolPath = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_HACK_TOOL_PATH", "/rubberducky/tools"];
 		private _backdoorPrefix = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_HACK_TOOL_BACKDOOR", ""];
+		private _addCredentials = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_HACK_TOOL_CREDENTIALS", true];
 
 		// Generate custom laptop name
 		private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", 1];
@@ -53,7 +54,7 @@ private _laptops = _syncedObjects select {
 			private _execUserId = owner _laptop;
 
 			// Call the existing Zeus main function
-			[_laptop, _toolPath, _execUserId, _customName, _backdoorPrefix] call FUNC(addHackingToolsZeusMain);
+			[_laptop, _toolPath, _execUserId, _customName, _backdoorPrefix, false, _addCredentials] call FUNC(addHackingToolsZeusMain);
 
 			_index = _index + 1;
 		} forEach _laptops;

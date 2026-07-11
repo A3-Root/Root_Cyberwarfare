@@ -286,6 +286,7 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 		private _item = createHashMapFromArray [
 			["id", _id], ["label", _label], ["status", _status],
 			["grid", _grid], ["pos", _pos], ["details", _details], ["children", _children],
+			["distance", if (isNull _obj) then {-1} else {round (_obj distance player)}],
 			["downloadTime", _downloadTime], ["actions", _acts]
 		];
 		if (!isNil "_mapLabel") then { _item set ["mapLabel", _mapLabel]; };
@@ -307,6 +308,7 @@ if (_hasWeb) then
 		_x params ["_id", "_titleKey", "_glyph", "_icon", "_type", "_actions", "_menu", ["_globals", []]];
 		private _extra = createHashMapFromArray [["type", _type], ["actions", _actions], ["icon", _icon], ["menu", _menu]];
 		if (_menu isEqualTo "Hacking Tools") then { _extra set ["requiresFunction", "Root_fnc_hasHackingToolsAvailable"]; };
+		if (_menu isEqualTo "Hacking Tools") then { _extra set ["filters", true]; };
 		if (_globals isNotEqualTo []) then { _extra set ["globalActions", _globals]; };
 		[_id, localize _titleKey, _glyph, "deviceList", _extra] call AE3_desktop_fnc_registerExtApp;
 	} forEach [
@@ -355,8 +357,7 @@ if (_hasWeb) then
 			["RootCW_Vehicles", localize "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES"],
 			["RootCW_PowerGrid", localize "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID"],
 			["RootCW_Custom", localize "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM"],
-			["RootCW_Crypto", "Crypto"],
-			["RootCW_Crack", "Crack"]
+			["RootCW_Cryptography", "Cryptography"]
 		]]
 	];
 	["RootCW_Hackerman", "Hackerman.exe", "H", "launcher", _hackermanExtra] call AE3_desktop_fnc_registerExtApp;
@@ -433,7 +434,10 @@ else
 	private _open = uiNamespace getVariable [format ["ROOT_gui_open_%1", _deviceType], []];
 	if (_open isNotEqualTo []) then {
 		_open params ["_listCtrl", "_populate"];
-		if (!isNull _listCtrl) then { [_listCtrl, _list] call _populate; };
+		if (!isNull _listCtrl) then {
+			_listCtrl setVariable ["ROOT_gui_rows", _list];
+			[_listCtrl, _list] call _populate;
+		};
 	};
 
 	if (!isNil "AE3_desktop_fnc_jsSend") then {

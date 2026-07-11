@@ -14,6 +14,8 @@
  */
 
 private _algorithms = [
+    ["caesar", "Caesar", true],
+    ["columnar", "Columnar", true],
     ["morse", "Morse Code", false],
     ["spelling", "Spelling Alphabet", false],
     ["affine", "Affine", true],
@@ -62,10 +64,5 @@ private _extra = createHashMapFromArray [
     ["height", 620]
 ];
 
-private _cryptoExtra = +_extra;
-_cryptoExtra set ["mode", "crypto"];
-["RootCW_Crypto", "Crypto", "C", "script", _cryptoExtra] call AE3_desktop_fnc_registerExtApp;
-
-private _crackExtra = +_extra;
-_crackExtra set ["mode", "crack"];
-["RootCW_Crack", "Crack", "K", "script", _crackExtra] call AE3_desktop_fnc_registerExtApp;
+_extra set ["mode", "cryptography"];
+["RootCW_Cryptography", "Cryptography", "C", "script", _extra] call AE3_desktop_fnc_registerExtApp;

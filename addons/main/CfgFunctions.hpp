@@ -33,6 +33,10 @@ class CfgFunctions {
 			class scanNetwork {};
 			class scanNetworkCli {};
 			class scanNetworkPrint {};
+			class ewoSyncBackpacks {};
+			class ewoStartCharging {};
+			class ewoChargeTick {};
+			class ewoGetInventoryLaptops {};
 		};
 
 		class Cipher {

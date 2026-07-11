@@ -274,7 +274,7 @@ call Root_fnc_syncDeviceData;
             "_targetObject", ["_execUserId", 0], ["_linkedComputers", []], "_vehicleName",
             ["_allowFuel", false], ["_allowSpeed", false], ["_allowBrakes", false],
             ["_allowLights", false], ["_allowEngine", true], ["_allowAlarm", false],
-            ["_availableToFutureLaptops", false], ["_powerCost", 2],
+            ["_availableToFutureLaptops", false], ["_powerCost", missionNamespace getVariable [SETTING_VEHICLE_COST, 2]],
             ["_fuelMinPercent", 0], ["_fuelMaxPercent", 100],
             ["_speedMinValue", -50], ["_speedMaxValue", 50],
             ["_brakesMinDecel", 1], ["_brakesMaxDecel", 10],

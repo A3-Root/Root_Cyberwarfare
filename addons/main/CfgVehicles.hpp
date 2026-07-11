@@ -112,7 +112,7 @@ class CfgVehicles {
 	class ROOT_CyberWarfareClearBrokenLinksZeus: zen_modules_moduleBase {
 		author = "Root";
 		_generalMacro = "ROOT_CyberWarfareClearBrokenLinksZeus";
-		curatorCanAttach = 0;
+		curatorCanAttach = 1;
 		category = "ROOT_CYBERWARFARE";
 		function = "Root_fnc_clearBrokenDeviceLinksZeus";
 		displayName = "Clear Broken Device Links";
@@ -348,6 +348,12 @@ class CfgVehicles {
 				tooltip = "If checked, this file will be accessible by all laptops (current and future)";
 				typeName = "BOOL";
 				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_HACK_TOOL_CREDENTIALS: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_HACK_TOOL_CREDENTIALS";
+				displayName = "Add Default Credentials";
+				tooltip = "Adds the configured Rubberducky login account to each target laptop.";
+				defaultValue = "true";
 			};
 			class ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT";
