@@ -326,6 +326,11 @@
     #define GET_PUBLIC_DEVICES (missionNamespace getVariable [GVAR_PUBLIC_DEVICES, []])
 #endif
 
+// Minimum seconds between two plays of the desktop intro video on the same laptop for one client
+#ifndef ROOT_CYBERWARFARE_INTRO_COOLDOWN
+    #define ROOT_CYBERWARFARE_INTRO_COOLDOWN 120
+#endif
+
 // ============================================================================
 // Color Codes for Terminal Output
 // ============================================================================

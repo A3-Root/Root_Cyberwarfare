@@ -11,6 +11,7 @@
  * 0: _entity <OBJECT> - The laptop object to register
  * 1: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0 (resolves to owner)
  * 2: _customLaptopName <STRING> (Optional) - Display name for linking, default: "" (uses class displayName)
+ * 3: _addCredentials <BOOL> (Optional) - Add the configured Rubberducky account, default: true
  *
  * Return Value:
  * None
@@ -21,7 +22,7 @@
  * Public: No
  */
 
-params ["_entity", ["_execUserId", 0, [0]], ["_customLaptopName", "", [""]]];
+params ["_entity", ["_execUserId", 0, [0]], ["_customLaptopName", "", [""]], ["_addCredentials", true, [false]]];
 
 if (isNull _entity) exitWith {
     [format ["Root Cyber Warfare: Cannot register a null object as a hackable laptop."]] remoteExec ["systemChat", _execUserId];
@@ -43,5 +44,10 @@ _entity setVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _customLaptopName, true]
 
 // Refresh availability so any already-present tools (self-installed or a mounted USB) surface immediately.
 [_entity] call FUNC(syncHackingToolAvailability);
+
+// Seed the configured login account so the station can actually be logged into.
+if (_addCredentials) then {
+    [_entity] call FUNC(seedRubberduckyCredentials);
+};
 
 [format ["Root Cyber Warfare: Laptop registered as a hackable station ('%1').", _customLaptopName]] remoteExec ["systemChat", _execUserId];

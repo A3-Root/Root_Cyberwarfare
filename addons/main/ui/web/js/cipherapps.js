@@ -224,15 +224,26 @@
       default: return "";
     }
   }
+  // Every concrete cipher, in the order they are offered in the app's algorithm list.
+  var CIPHERS = ["caesar", "columnar", "morse", "spelling", "affine", "rot", "vigenere", "bacon", "alpha_sub", "railfence", "base32", "base64", "ascii85", "unicode", "integer"];
+  // Ciphers whose run() case reads o.key (as key, password or keyword).
+  var KEYED = ["caesar", "columnar", "vigenere", "alpha_sub"];
+  // Runs every concrete cipher and returns one labelled output line per cipher.
+  function runEvery(mode, s, o) {
+    var lines = [];
+    CIPHERS.forEach(function (c) { lines.push("[" + c + "] " + run(c, mode, s, o)); });
+    return lines;
+  }
   function crackOne(cipher, s, o) {
-    var cand = [], all = ["morse", "spelling", "affine", "rot", "vigenere", "bacon", "alpha_sub", "railfence", "base32", "base64", "ascii85", "unicode", "integer"];
+    var cand = [];
     if (cipher === "all") {
       var lines = [];
-      all.forEach(function (c) { lines.push("[" + c + "]"); lines = lines.concat(crackOne(c, s, o)); lines.push(""); });
+      CIPHERS.forEach(function (c) { lines.push("[" + c + "]"); lines = lines.concat(crackOne(c, s, o)); lines.push(""); });
       return lines;
     }
     function add(label, plain) { if (plain) cand.push({ score: score(plain), line: label + " | " + plain }); }
-    if (cipher === "rot") ["rot5", "rot13", "rot18", "rot47"].forEach(function (v) { add(v, run("rot", "decrypt", s, { variant: v })); });
+    if (cipher === "caesar") for (var k = 1; k < 26; k++) add("shift=" + k, run("caesar", "decrypt", s, { key: k }));
+    else if (cipher === "rot") ["rot5", "rot13", "rot18", "rot47"].forEach(function (v) { add(v, run("rot", "decrypt", s, { variant: v })); });
     else if (cipher === "affine") for (var a = 1; a < 26; a++) if (gcd(a, 26) === 1) for (var b = 0; b < 26; b++) add("a=" + a + " b=" + b, run("affine", "decrypt", s, { a: a, b: b, preserveCase: true }));
     else if (cipher === "railfence") for (var r = 2; r <= 12; r++) add("rails=" + r, run("railfence", "decrypt", s, { rails: r }));
     else if (cipher === "vigenere") String(o.wordlist || WORDS.join(" ")).split(/[\s,;]+/).filter(Boolean).forEach(function (k) { add("key=" + k, run("vigenere", "decrypt", s, { key: k, preserveCase: true })); });
@@ -257,7 +268,7 @@
       function updateFields() {
         var a = algo.value, fileMode = src.value === "files";
         show(filesWrap, fileMode); show(txt, !fileMode); show(addBtn, fileMode); show(remBtn, fileMode); show(clearFilesBtn, fileMode);
-        show(key, ["vigenere"].indexOf(a) >= 0); show(alphaBox, a === "alpha_sub"); show(raw, ["affine", "railfence"].indexOf(a) >= 0);
+        show(key, a === "all" || KEYED.indexOf(a) >= 0); show(alphaBox, a === "alpha_sub"); show(raw, ["affine", "railfence"].indexOf(a) >= 0);
         var cracking = mode.value === "bruteforce"; show(radix.parentNode, a === "integer" || (cracking && a === "all")); show(preserve.parentNode, ["affine", "vigenere", "alpha_sub"].indexOf(a) >= 0); show(words.parentNode, cracking && (a === "vigenere" || a === "all"));
       }
       function renderFiles() { filesWrap.innerHTML = files.length ? files.map(function (f, i) { return '<div data-i="' + i + '" style="padding:4px 6px;border-radius:4px;margin-bottom:4px;cursor:pointer;background:' + (i === selected ? "rgba(255,255,255,0.08)" : "transparent") + '">' + esc(f.name) + "</div>"; }).join("") : '<div class="muted">No files selected.</div>'; Array.prototype.slice.call(filesWrap.children).forEach(function (n) { n.onclick = function () { selected = Number(n.getAttribute("data-i")); renderFiles(); }; }); }
@@ -266,7 +277,21 @@
       function inputs() { if (src.value !== "files") return Promise.resolve([{ name: "input", text: txt.value || "" }]); return Promise.all(files.map(function (f) { return readFile(f.path).then(function (t) { return { name: f.name, text: t }; }); })); }
       function opts() { var a = raw.value.trim().split(/[\/,\s]+/); return { variant: variant.value, key: key.value, keyword: key.value, manualAlphabet: alphaBox.value, a: a[0] || 1, b: a[1] || 0, rails: a[0] || 2, preserveCase: preserve.value === "1", wordlist: words.value, radix: Number(radix.value), width: Number(width.value), signed: signed.value === "1", padding: padding.value === "1" }; }
       function setOut(v) { out.value = Array.isArray(v) ? v.join("\n") : String(v || ""); }
-      function runAll() { inputs().then(function (list) { var lines = [], o = opts(), cracking = mode.value === "bruteforce"; if (!list.length) { setOut("No input."); return; } list.forEach(function (item) { if (list.length > 1) lines.push("[" + item.name + "]"); lines = lines.concat(cracking ? crackOne(algo.value, item.text, o) : [run(algo.value, mode.value, item.text, o)]); if (list.length > 1) lines.push(""); }); setOut(lines); }); }
+      function runAll() {
+        inputs().then(function (list) {
+          var lines = [], o = opts(), cracking = mode.value === "bruteforce", every = algo.value === "all";
+          if (!list.length) { setOut("No input."); return; }
+          list.forEach(function (item) {
+            if (list.length > 1) lines.push("[" + item.name + "]");
+            // "All" encrypts/decrypts with every cipher and labels each output line; bruteforce has its own
+            // all-cipher handling in crackOne.
+            if (cracking) lines = lines.concat(crackOne(algo.value, item.text, o));
+            else lines = lines.concat(every ? runEvery(mode.value, item.text, o) : [run(algo.value, mode.value, item.text, o)]);
+            if (list.length > 1) lines.push("");
+          });
+          setOut(lines);
+        });
+      }
       fillVariants(); updateFields(); renderFiles();
       algo.onchange = function () { fillVariants(); updateFields(); }; mode.onchange = updateFields; src.onchange = updateFields; addBtn.onclick = pickFile; remBtn.onclick = function () { if (selected >= 0) { files.splice(selected, 1); selected = Math.min(selected, files.length - 1); renderFiles(); } }; clearFilesBtn.onclick = function () { files = []; selected = -1; renderFiles(); };
       wordFileBtn.onclick = function () { if (typeof AE3_pickFile !== "function") return; AE3_pickFile("open", { title: "Select wordlist", start: window.AE3_HOME || "/home" }).then(function (p) { if (!p) return; readFile(p).then(function (t) { words.value = t; }); }); };

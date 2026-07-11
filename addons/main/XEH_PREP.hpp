@@ -115,6 +115,7 @@ PREP(getUserConfirmation);
 PREP(hasHackingToolsAvailable);
 PREP(localSoundBroadcast);
 PREP(removePower);
+PREP(syncHackermanFs);
 PREP(syncHackingToolAvailability);
 
 // Redefine PREP macro for subdirectory: vehicle

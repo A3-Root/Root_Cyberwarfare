@@ -41,13 +41,14 @@ private _laptops = _syncedObjects select {
         };
 
         private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", 1];
+        private _addCredentials = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_REGISTER_LAPTOP_CREDENTIALS", true];
 
         {
             private _laptop = _x;
             private _customName = format ["HackTool_%1", _index];
             private _execUserId = owner _laptop;
 
-            [_laptop, _execUserId, _customName] call FUNC(registerHackableLaptopZeusMain);
+            [_laptop, _execUserId, _customName, _addCredentials] call FUNC(registerHackableLaptopZeusMain);
 
             _index = _index + 1;
         } forEach _laptops;

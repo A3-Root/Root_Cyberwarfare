@@ -30,13 +30,20 @@ private _available = [_computer] call FUNC(syncHackingToolAvailability);
 // clears the flag globally so it shows once per mount (a re-plug sets it again).
 if (_available && {_computer getVariable ["ROOT_CYBERWARFARE_INTRO_PENDING", false]} && {!isNil "AE3_desktop_fnc_openFile"}) then {
     ["root_cyberwarfare_clearIntroPending", [netId _computer]] call CBA_fnc_serverEvent;
-    [
-        _computer,
-        "Hackerman.exe",
-        "AE3_MEDIA|video|mod|0|\z\root_cyberwarfare\addons\main\video\loading.ogv",
-        [],
-        createHashMapFromArray [["allowStop", false], ["volume", 0.05]]
-    ] call AE3_desktop_fnc_openFile;
+
+    // Rate-limit the intro on this client: repeated mounts of the same laptop within the cooldown
+    // clear the pending flag but skip the video, so re-plugging a drive does not replay it back to back.
+    private _lastPlayed = _computer getVariable ["ROOT_CYBERWARFARE_INTRO_LAST", -1e9];
+    if (time - _lastPlayed >= ROOT_CYBERWARFARE_INTRO_COOLDOWN) then {
+        _computer setVariable ["ROOT_CYBERWARFARE_INTRO_LAST", time];
+        [
+            _computer,
+            "Hackerman.exe",
+            "AE3_MEDIA|video|mod|0|\z\root_cyberwarfare\addons\main\video\loading.ogv",
+            [],
+            createHashMapFromArray [["allowStop", false], ["volume", 0.05]]
+        ] call AE3_desktop_fnc_openFile;
+    };
 };
 
 private _extApps = missionNamespace getVariable ["AE3_desktop_extApps", []];

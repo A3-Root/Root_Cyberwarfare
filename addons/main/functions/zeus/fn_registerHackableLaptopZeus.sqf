@@ -31,13 +31,14 @@ ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME = format ["HackTool_%1", _index];
 
 [
     "Register Hackable Laptop", [
-        ["EDIT", ["Laptop Name", "Custom name given to the laptop for easier management of devices. Only visible to curators when linking devices to specific laptops."], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]]
+        ["EDIT", ["Laptop Name", "Custom name given to the laptop for easier management of devices. Only visible to curators when linking devices to specific laptops."], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]],
+        ["TOOLBOX:YESNO", ["Add Default Credentials", "Adds the configured Rubberducky login account to the target laptop."], true]
     ], {
         params ["_results", "_args"];
         _args params ["_entity", "_index"];
-        _results params ["_customName"];
+        _results params ["_customName", "_addCredentials"];
         private _execUserId = owner _entity;
-        [_entity, _execUserId, _customName] remoteExec [QFUNC(registerHackableLaptopZeusMain), 2];
+        [_entity, _execUserId, _customName, _addCredentials] remoteExec [QFUNC(registerHackableLaptopZeusMain), 2];
         _index = _index + 1;
         missionNamespace setVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", _index, true];
         [localize "STR_ROOT_CYBERWARFARE_ZEUS_REGISTER_LAPTOP_SUCCESS"] call zen_common_fnc_showMessage;

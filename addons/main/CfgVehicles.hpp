@@ -155,6 +155,13 @@ class CfgVehicles {
 				typeName = "STRING";
 				defaultValue = """""";
 			};
+			class ROOT_CYBERWARFARE_3DEN_HACK_TOOL_CREDENTIALS: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_HACK_TOOL_CREDENTIALS";
+				displayName = "Add Default Credentials";
+				tooltip = "Adds the configured Rubberducky login account to each target laptop.";
+				typeName = "BOOL";
+				defaultValue = 1;
+			};
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {
@@ -174,6 +181,13 @@ class CfgVehicles {
 		isDisposable = 1;
 		is3DEN = 0;
 		class Attributes: AttributesBase {
+			class ROOT_CYBERWARFARE_3DEN_REGISTER_LAPTOP_CREDENTIALS: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_REGISTER_LAPTOP_CREDENTIALS";
+				displayName = "Add Default Credentials";
+				tooltip = "Adds the configured Rubberducky login account to each target laptop.";
+				typeName = "BOOL";
+				defaultValue = 1;
+			};
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {
@@ -348,12 +362,6 @@ class CfgVehicles {
 				tooltip = "If checked, this file will be accessible by all laptops (current and future)";
 				typeName = "BOOL";
 				defaultValue = 1;
-			};
-			class ROOT_CYBERWARFARE_3DEN_HACK_TOOL_CREDENTIALS: Checkbox {
-				property = "ROOT_CYBERWARFARE_3DEN_HACK_TOOL_CREDENTIALS";
-				displayName = "Add Default Credentials";
-				tooltip = "Adds the configured Rubberducky login account to each target laptop.";
-				defaultValue = "true";
 			};
 			class ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT";
@@ -579,10 +587,15 @@ class CfgVehicles {
 		};
 	};
 
-	class AE3_AddFile {
-		class Attributes {
-			class AE3_Module_AddFile_EncryptionAlgorithm {
+	// Extends AE3's Add File module with the cipher algorithms provided by this mod.
+	// The parent classes must be repeated here, otherwise the re-open resets the module's
+	// base chain and the editor loses side/faction/vehicleClass/displayName.
+	class AE3_AddFile: Module_F {
+		class Attributes: AttributesBase {
+			class AE3_Module_AddFile_EncryptionAlgorithm: Combo {
 				class Values {
+					class caesar { name = "Caesar"; value = "caesar"; };
+					class columnar { name = "Columnar Transposition"; value = "columnar"; };
 					class morse { name = "Morse Code"; value = "morse"; };
 					class spelling { name = "Spelling Alphabet"; value = "spelling"; };
 					class affine { name = "Affine"; value = "affine"; };

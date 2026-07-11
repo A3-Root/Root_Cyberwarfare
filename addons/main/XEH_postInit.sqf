@@ -250,7 +250,17 @@ if (isServer) then {
     ["ae3_computer_userAdded", {
         params [["_computer", objNull, [objNull]]];
         if (!isNull _computer) then {
-            [_computer, [_computer] call FUNC(hasHackingToolsAvailable)] call FUNC(gui_syncHackermanDesktop);
+            [_computer, [_computer] call FUNC(hasHackingToolsAvailable)] call FUNC(syncHackermanFs);
+        };
+    }] call CBA_fnc_addEventHandler;
+
+    // Clients ask the server to update the launcher on a computer's desktops; the server owns the
+    // filesystem so the read-modify-write stays serialized and cannot duplicate entries.
+    ["root_cyberwarfare_syncHackermanFs", {
+        params [["_computerNetId", "", [""]], ["_available", false, [false]]];
+        private _computer = objectFromNetId _computerNetId;
+        if (!isNull _computer) then {
+            [_computer, _available] call FUNC(syncHackermanFs);
         };
     }] call CBA_fnc_addEventHandler;
 
@@ -322,7 +332,20 @@ if (hasInterface) then {
             "",
             {
                 params ["_target", "_player"];
-                [_target, owner _player, getText (configOf _target >> "displayName")] remoteExecCall ["Root_fnc_registerHackableLaptopZeusMain", 2];
+
+                // Prompt for the link-dialog name (and whether to seed the default login) the same way
+                // the Zeus module does, instead of silently registering under the class display name.
+                [
+                    "Register Hackable Laptop", [
+                        ["EDIT", ["Laptop Name", "Custom name given to the laptop for easier management of devices. Only visible to curators when linking devices to specific laptops."], [getText (configOf _target >> "displayName")]],
+                        ["TOOLBOX:YESNO", ["Add Default Credentials", "Adds the configured Rubberducky login account to the target laptop."], true]
+                    ], {
+                        params ["_results", "_args"];
+                        _args params ["_target", "_player"];
+                        _results params ["_customName", "_addCredentials"];
+                        [_target, owner _player, _customName, _addCredentials] remoteExecCall ["Root_fnc_registerHackableLaptopZeusMain", 2];
+                    }, {}, [_target, _player]
+                ] call zen_dialog_fnc_create;
             },
             {
                 missionNamespace getVariable [SETTING_EWO_MODE, false]

@@ -136,6 +136,7 @@ class CfgFunctions {
 			class hasHackingToolsAvailable {};
 			class localSoundBroadcast {};
 			class removePower {};
+			class syncHackermanFs {};
 			class syncHackingToolAvailability {};
 		};
 
