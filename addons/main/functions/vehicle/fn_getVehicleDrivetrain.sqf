@@ -42,8 +42,10 @@ private _wheelHealths = [];
     // A vehicle's hitpoint list is the one its class inherits, not the one its model actually carries: a
     // four-wheeler still lists the eight wheel hitpoints of the family it comes from. The wheels it does
     // not have are bound to no selection and always read as fully destroyed, so counting them would strip
-    // a healthy vehicle of most of its drivetrain. Only hitpoints bound to a selection are real.
-    if ((_selections param [_forEachIndex, ""]) isEqualTo "") then {continue};
+    // a healthy vehicle of most of its drivetrain. Only hitpoints bound to a selection are real, and an
+    // unused one is sometimes blank rather than empty, so the name is trimmed before it is judged. What
+    // survives this is exactly the wheels the vehicle has - four on a four-wheeler, eight on an eight.
+    if ((trim (_selections param [_forEachIndex, ""])) isEqualTo "") then {continue};
 
     if ("engine" in _name || {"motor" in _name}) then {
         _engineDamage = _engineDamage max _damage;
