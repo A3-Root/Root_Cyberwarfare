@@ -44,7 +44,7 @@ Root's Cyber Warfare introduces 8 distinct device types that can be hacked and c
 
 ### Steam Workshop
 
-1. Subscribe to Root's Cyber Warfare on Steam Workshop
+1. Subscribe to Root's Cyber Warfare on Steam Workshop (Development Build / Release Build) - link at the bottom of this page
 2. Subscribe to all required dependencies (CBA, ACE3, AE3, ZEN)
 3. Launch Arma 3 and enable the mod in the launcher
 
@@ -206,6 +206,7 @@ See [LICENSE](LICENSE) file for full terms.
 ## Links
 
 - [GitHub Repository](https://github.com/A3-Root/Root_Cyberwarfare)
-- [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3591608460)
+- [Steam Workshop (DEVELOPMENT BUILD)](https://steamcommunity.com/sharedfiles/filedetails/?id=3574138571)
+- [Steam Workshop (PUBLIC RELEASE)](https://steamcommunity.com/sharedfiles/filedetails/?id=3591608460)
 - [Issue Tracker](https://github.com/A3-Root/Root_Cyberwarfare/issues)
 - [Discord](https://discord.gg/77th-jsoc-official)
