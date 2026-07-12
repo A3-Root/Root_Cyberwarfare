@@ -1,5 +1,23 @@
 # Changelog
 
+## Major Update 8 (v1.5.0.6)
+
+### Added
+- Hackerman Desktop support, including the new `crypto`, `crack`, and `netscan` workflows
+- Classical cipher tooling backed by a shared cipher engine for encrypt, decrypt, and bruteforce operations
+- New Zeus and 3DEN modules for hackable laptops, cipher tools, and broken device-link cleanup
+- Expanded in-game GUI apps for devices, doors, lights, vehicles, drones, GPS, databases, custom devices, and power grids
+- Rubber ducky support plus laptop battery and Wi-Fi synchronization helpers
+
+### Removed
+- Legacy `Add Devices` Zeus and 3DEN module files were removed in favor of the dedicated door, light, vehicle, and related modules
+
+### Changed
+- Vehicle control was refactored around configurable per-action limits, with braking and drivetrain/speed-lock behavior updated accordingly
+- Device registration, access control, and link cleanup were reworked across the core and Zeus modules
+- GPS, power-grid, and terminal behavior were updated to match the new desktop-driven workflow
+- Documentation, generated wiki pages, and release packaging were refreshed for the newer release line
+
 ## Update 7 (v1.1.4.2)
 
 ### Added
