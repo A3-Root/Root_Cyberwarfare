@@ -292,8 +292,12 @@
       default: return "";
     }
   }
+  // What each option field falls back to when the operator leaves it empty. The app never runs a cipher
+  // on a blank option: an empty box means "use the standard setting", so a run always produces output
+  // instead of a line explaining which field was not filled in.
+  var DEFAULTS = { key: "JSOC", shift: "7", alphabet: "qwertyuiopasdfghjklzxcvbnm", affine: "5/8", rails: "7" };
   // Every concrete cipher, in the order they are offered in the app's algorithm list.
-  var CIPHERS = ["caesar", "columnar", "morse", "spelling", "affine", "rot", "vigenere", "bacon", "alpha_sub", "railfence", "base32", "base64", "ascii85", "unicode", "integer"];
+  var CIPHERS =["caesar", "columnar", "morse", "spelling", "affine", "rot", "vigenere", "bacon", "alpha_sub", "railfence", "base32", "base64", "ascii85", "unicode", "integer"];
   // Ciphers whose run() case reads o.key (as key, password or keyword).
   var KEYED = ["caesar", "columnar", "vigenere", "alpha_sub"];
   // Why a cipher cannot run with the options given, or "" when it can. Reported in place of its output
@@ -628,8 +632,12 @@
       try { plain = run(cipher, "decrypt", s, options); } catch (e) { return; }
       if (plain) cand.push({ score: score(plain) - (bias || 0), line: label + " | " + plain });
     }
+    // Caesar's 26 shifts and ROT's handful of variants are a keyspace small enough to print whole, so
+    // they are listed in full and the max-results cap is left to the keyspaces that run to thousands of
+    // candidates. Without that, a Caesar bruteforce would hide most of its shifts behind the cap.
+    var exhaustive = cipher === "caesar" || cipher === "rot";
     if (cipher === "caesar") {
-      for (var k = 1; k < 26; k++) attempt("shift=" + k, { shift: k });
+      for (var k = 0; k < 26; k++) attempt("shift=" + k, { shift: k });
     } else if (cipher === "rot") {
       VARIANTS.rot.forEach(function (v) { attempt(v, { variant: v }); });
     } else if (cipher === "affine") {
@@ -650,14 +658,16 @@
     } else if (cipher === "alpha_sub") {
       var words = String(o.wordlist || "").split(/[\s,;]+/).filter(Boolean);
       if (String(o.keyword || "").trim() !== "") words.unshift(String(o.keyword).trim());
-      words.forEach(function (v) { attempt("keyword=" + v, { keyword: v, variant: "keyword", preserveCase: true }); });
+      // A typed manual alphabet outranks a keyword everywhere else, so the keyword attempts clear it -
+      // otherwise every candidate here would decode with the same alphabet and the search would be blind.
+      words.forEach(function (v) { attempt("keyword=" + v, { keyword: v, variant: "keyword", manualAlphabet: "", preserveCase: true }); });
       var solved = solveAlphaSub(s, 200);
       if (solved) attempt("solved alphabet=" + solved, { variant: "manual", manualAlphabet: solved, preserveCase: true });
     } else {
       attempt(cipher, o);
     }
     cand.sort(function (x, y) { return y.score - x.score; });
-    return cand.slice(0, limit).map(function (c) { return c.line; });
+    return (exhaustive ? cand : cand.slice(0, limit)).map(function (c) { return c.line; });
   }
   // "All" in bruteforce mode means auto: rank the ciphers first and only attack the ones the text
   // actually looks like, instead of grinding every keyspace on every run.
@@ -722,16 +732,17 @@
         // line per cipher, far more than a fixed-height textarea can show.
         '<div class="cfield cfresult"><label>Result</label><textarea class="input cout" readonly placeholder="Result"></textarea></div>' +
         '<div class="cbtns"><button class="btn accent crun">' + (isCrack ? "Bruteforce" : "Run") + '</button><button class="btn canalyse">Analyse</button><button class="btn csave">Save Output</button><button class="btn cclear">Clear</button><button class="btn cadd" style="display:none">Add File</button><button class="btn crem" style="display:none">Remove Selected</button><button class="btn cclrfiles" style="display:none">Clear Files</button></div></div><div class="ccol copts">' +
-        field("Key / password / keyword", "Columnar (2+ characters), Vigenere, Alphabetical Substitution", "cfkey", '<input class="input ckey" placeholder="e.g. SECRET">') +
-        field("Caesar shift", "Whole number 0-25 - Caesar only, it cannot use a text key", "cfshift", '<input class="input cshift" type="number" min="0" max="25" value="3">') +
-        field("Manual alphabet", "Substitution alphabet for Alphabetical Substitution", "cfalpha", '<input class="input calpha" placeholder="e.g. QWERTYUIOPASDFGHJKLZXCVBNM">') +
-        field("Affine A/B or rail count", "Affine: two numbers (e.g. 5/8). Railfence: one number", "cfraw", '<input class="input craw" placeholder="e.g. 5/8 or 3">') +
+        field("Key / password / keyword", "Columnar (2+ characters), Vigenere, Alphabetical Substitution", "cfkey", '<input class="input ckey" value="' + DEFAULTS.key + '" placeholder="e.g. SECRET">') +
+        field("Caesar shift", "Whole number 0-25 - Caesar only, it cannot use a text key", "cfshift", '<input class="input cshift" type="number" min="0" max="25" value="' + DEFAULTS.shift + '">') +
+        field("Manual alphabet", "Substitution alphabet for Alphabetical Substitution", "cfalpha", '<input class="input calpha" value="' + DEFAULTS.alphabet + '" placeholder="e.g. QWERTYUIOPASDFGHJKLZXCVBNM">') +
+        field("Affine A/B", "Two numbers - Affine only. A must share no factor with 26", "cfaffine", '<input class="input caffine" value="' + DEFAULTS.affine + '" placeholder="e.g. 5/8">') +
+        field("Rail count", "Number of rails - Railfence only", "cfrails", '<input class="input crails" type="number" min="2" value="' + DEFAULTS.rails + '">') +
         field("Bruteforce limits", "Longest key to try, and how many candidates to list", "cflimits", '<div class="crow"><input class="input cmax" type="number" min="2" max="12" value="12" placeholder="Max key length"><input class="input cstep" type="number" min="1" max="100" value="10" placeholder="Max results"></div>') +
         field("Integer notation", "Number base and word size", "cfint", '<div class="crow"><select class="input cradix"><option value="2">Binary</option><option value="8">Octal</option><option value="10">Decimal</option><option value="16" selected>Hex</option></select><select class="input cwidth"><option value="8">8-bit</option><option value="16">16-bit</option><option value="32">32-bit</option></select></div>') +
         field("Output options", "Letter case, sign and padding", "cfout", '<div class="crow"><select class="input cpres"><option value="1">Preserve case</option><option value="0">Force upper</option></select><select class="input csigned"><option value="0">Unsigned</option><option value="1">Signed</option></select><select class="input cpad"><option value="1">Pad output</option><option value="0">No pad</option></select></div>') +
         field("Wordlist", "One candidate key per line - Vigenere bruteforce", "cfwords", '<div class="crow"><textarea class="input cwords" rows="6" placeholder="Wordlist (one key per line)"></textarea><button class="btn cwordfile">Wordlist File</button></div>') +
         '</div></div></div>';
-      var mode = body.querySelector(".cmode"), src = body.querySelector(".csrc"), algo = body.querySelector(".calgo"), variant = body.querySelector(".cvar"), txt = body.querySelector(".ctext"), out = body.querySelector(".cout"), key = body.querySelector(".ckey"), shift = body.querySelector(".cshift"), alphaBox = body.querySelector(".calpha"), raw = body.querySelector(".craw"), radix = body.querySelector(".cradix"), width = body.querySelector(".cwidth"), preserve = body.querySelector(".cpres"), signed = body.querySelector(".csigned"), padding = body.querySelector(".cpad"), words = body.querySelector(".cwords"), filesWrap = body.querySelector(".cfiles"), addBtn = body.querySelector(".cadd"), remBtn = body.querySelector(".crem"), clearFilesBtn = body.querySelector(".cclrfiles"), wordFileBtn = body.querySelector(".cwordfile");
+      var mode = body.querySelector(".cmode"), src = body.querySelector(".csrc"), algo = body.querySelector(".calgo"), variant = body.querySelector(".cvar"), txt = body.querySelector(".ctext"), out = body.querySelector(".cout"), key = body.querySelector(".ckey"), shift = body.querySelector(".cshift"), alphaBox = body.querySelector(".calpha"), affineBox = body.querySelector(".caffine"), railsBox = body.querySelector(".crails"), radix = body.querySelector(".cradix"), width = body.querySelector(".cwidth"), preserve = body.querySelector(".cpres"), signed = body.querySelector(".csigned"), padding = body.querySelector(".cpad"), words = body.querySelector(".cwords"), filesWrap = body.querySelector(".cfiles"), addBtn = body.querySelector(".cadd"), remBtn = body.querySelector(".crem"), clearFilesBtn = body.querySelector(".cclrfiles"), wordFileBtn = body.querySelector(".cwordfile");
       var maxLen = body.querySelector(".cmax"), maxResults = body.querySelector(".cstep"), analyseBtn = body.querySelector(".canalyse");
       var fieldOf = function (el) { return el.closest(".cfield") || el; };
       (unified ? [["encrypt", "Encrypt"], ["decrypt", "Decrypt"], ["bruteforce", "Bruteforce"]] : (isCrack ? [["bruteforce", "Bruteforce"]] : [["encrypt", "Encrypt"], ["decrypt", "Decrypt"]])).forEach(function (m) { var o = document.createElement("option"); o.value = m[0]; o.textContent = m[1]; mode.appendChild(o); });
@@ -747,7 +758,8 @@
         show(fieldOf(key), every || KEYED.indexOf(a) >= 0);
         show(fieldOf(shift), every || a === "caesar");
         show(fieldOf(alphaBox), every || a === "alpha_sub");
-        show(fieldOf(raw), every || ["affine", "railfence"].indexOf(a) >= 0);
+        show(fieldOf(affineBox), every || a === "affine");
+        show(fieldOf(railsBox), every || a === "railfence");
         var cracking = mode.value === "bruteforce";
         show(fieldOf(radix), a === "integer" || every);
         show(fieldOf(preserve), every || ["affine", "vigenere", "alpha_sub"].indexOf(a) >= 0);
@@ -762,14 +774,21 @@
       function readFile(path) { return A3.request("fs_read", { path: path }).then(function (r) { return r && !r.error ? (r.content || "") : ""; }); }
       function inputs() { if (src.value !== "files") return Promise.resolve([{ name: "input", text: txt.value || "" }]); return Promise.all(files.map(function (f) { return readFile(f.path).then(function (t) { return { name: f.name, text: t }; }); })); }
       // shift is Caesar's own field. When Caesar is the only selected cipher a numeric key still works,
-      // so an operator who types the shift into the key box is not punished for it.
+      // so an operator who types the shift into the key box is not punished for it. Every box that is
+      // left empty falls back to its standard setting rather than failing the cipher that reads it.
       function opts() {
-        var a = raw.value.trim().split(/[\/,\s]+/).filter(Boolean);
+        var affinePair = (affineBox.value.trim() || DEFAULTS.affine).split(/[\/,\s]+/).filter(Boolean);
+        var keyValue = key.value.trim() || DEFAULTS.key;
         var caesarShift = shift.value;
-        if (algo.value === "caesar" && String(caesarShift).trim() === "" && String(key.value).trim() !== "") caesarShift = key.value;
+        // A shift typed into the key box is still a shift, but only a number can be one: a word left in
+        // that box belongs to the ciphers that read text keys and must not become Caesar's shift.
+        if (algo.value === "caesar" && String(caesarShift).trim() === "" && isFinite(Number(key.value.trim())) && key.value.trim() !== "") caesarShift = key.value;
+        if (String(caesarShift).trim() === "") caesarShift = DEFAULTS.shift;
         return {
-          variant: variant.value, key: key.value, keyword: key.value, shift: caesarShift,
-          manualAlphabet: alphaBox.value, a: a[0], b: a[1] || 0, rails: a[0] || 2,
+          variant: variant.value, key: keyValue, keyword: keyValue, shift: caesarShift,
+          manualAlphabet: alphaBox.value.trim() || DEFAULTS.alphabet,
+          a: affinePair[0], b: affinePair[1] || 0,
+          rails: Number(railsBox.value.trim() || DEFAULTS.rails),
           preserveCase: preserve.value === "1", wordlist: words.value,
           radix: Number(radix.value), width: Number(width.value),
           signed: signed.value === "1", padding: padding.value === "1",

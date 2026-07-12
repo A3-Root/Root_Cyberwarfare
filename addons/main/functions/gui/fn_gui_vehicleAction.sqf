@@ -169,6 +169,10 @@ switch (_action) do {
 		_msg = "Engine started.";
 	};
 	case "engineoff": {
+		// A speed hold or a brake run keeps the engine turning for as long as it is active, so both are
+		// let go before the engine is cut - otherwise the next tick would start it again.
+		[_vehicle] call FUNC(releaseVehicleSpeedLock);
+		[_vehicle] call _removeBrakeHandler;
 		[_vehicle, false] remoteExec ["engineOn", _vehicle];
 		_msg = localize "STR_ROOT_CYBERWARFARE_GUI_VEHICLE_ENGINE_OFF";
 	};
@@ -191,6 +195,11 @@ switch (_action) do {
 	case "setspeed": {
 		[_vehicle] call FUNC(releaseVehicleSpeedLock);
 		[_vehicle] call _removeBrakeHandler;
+		// A vehicle only carries a commanded speed under its own power: a dead engine would leave it
+		// sliding along on nothing, so the engine is started before the ramp begins.
+		if (!isEngineOn _vehicle) then {
+			[_vehicle, true] remoteExec ["engineOn", _vehicle];
+		};
 		private _dir = getDir _vehicle;
 		private _forward = [sin _dir, cos _dir, 0];
 		private _vel = velocity _vehicle;
@@ -214,6 +223,13 @@ switch (_action) do {
 				if (_blocked && {alive _vehicle}) then {
 					["root_cyberwarfare_gui_actionResult", [DEVICE_TYPE_VEHICLE, localize "STR_ROOT_CYBERWARFARE_SPEED_LOCK_LOST", false], _owner] call CBA_fnc_ownerEvent;
 				};
+			};
+
+			// The engine belongs to whoever holds the vehicle, and a crew member can cut it mid-ramp. It is
+			// restarted for as long as the ramp runs, so the speed being commanded is always speed the
+			// vehicle is making itself.
+			if (!isEngineOn _vehicle) then {
+				[_vehicle, true] remoteExec ["engineOn", _vehicle];
 			};
 
 			private _capMs = _speedCap / 3.6;
@@ -246,6 +262,12 @@ switch (_action) do {
 							};
 						};
 
+						// The hold keeps the engine running for as long as it holds the speed, so an engine
+						// switched off from the seat does not leave the vehicle being carried on a dead one.
+						if (!isEngineOn _vehicle) then {
+							[_vehicle, true] remoteExec ["engineOn", _vehicle];
+						};
+
 						private _capMs = _speedCap / 3.6;
 						private _heldSpeed = (_wanted max (-_capMs)) min _capMs;
 						private _dir = getDir _vehicle;
@@ -275,7 +297,11 @@ switch (_action) do {
 	};
 	case "speedup";
 	case "slowdown": {
-		private _speedChange = _vehicle getVariable [["ROOT_CYBERWARFARE_SPEED_MAX", "ROOT_CYBERWARFARE_SPEED_MIN"] select (_action isEqualTo "slowdown"), [50, -50] select (_action isEqualTo "slowdown")];
+		// The step is only held if the vehicle is making the speed itself, so the engine is started first.
+		if (!isEngineOn _vehicle) then {
+			[_vehicle, true] remoteExec ["engineOn", _vehicle];
+		};
+		private _speedChange =_vehicle getVariable [["ROOT_CYBERWARFARE_SPEED_MAX", "ROOT_CYBERWARFARE_SPEED_MIN"] select (_action isEqualTo "slowdown"), [50, -50] select (_action isEqualTo "slowdown")];
 		private _vel = velocity _vehicle;
 		private _dir = getDir _vehicle;
 

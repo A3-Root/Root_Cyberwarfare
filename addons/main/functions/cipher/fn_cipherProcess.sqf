@@ -94,10 +94,15 @@ private _score = {
     } forEach ["the", "and", "that", "have", "you", "with", "this", "from", "message", "secret"];
     _scoreValue
 };
+// Ranks bruteforce candidates best-first. A keyspace that runs to thousands of candidates is cut down to
+// the strongest few, while a keyspace small enough to read in full is listed whole: the caller passes the
+// count it wants back, and a count of 0 keeps every candidate.
 private _sortCandidates = {
-    params ["_candidates"];
+    params ["_candidates", ["_limit", 10, [0]]];
     _candidates sort false;
-    (_candidates apply {_x select 1}) select [0, 10]
+    private _lines = _candidates apply {_x select 1};
+    if (_limit <= 0) exitWith {_lines};
+    _lines select [0, _limit]
 };
 
 private _morsePairs = [
@@ -300,7 +305,16 @@ if (_mode isEqualTo "bruteforce") exitWith {
         private _candidateAlgo = _x;
         if (count _targets > 1) then { _lines pushBack format ["[%1]", _candidateAlgo]; };
         private _candidates = [];
+        // Caesar's 26 shifts and ROT's four variants are a keyspace small enough to print whole, so they
+        // are listed in full instead of being cut down to the strongest handful.
+        private _limit = [10, 0] select (_candidateAlgo in ["caesar", "rot"]);
         switch (_candidateAlgo) do {
+            case "caesar": {
+                for "_shift" from 0 to 25 do {
+                    private _plain = ["caesar", "decrypt", _text, createHashMapFromArray [["key", _shift]]] call FUNC(cipherProcess);
+                    _candidates pushBack [[_plain] call _score, format ["shift=%1 | %2", _shift, _plain]];
+                };
+            };
             case "rot": {
                 {
                     private _plain = [_text, _x, true] call _rot;
@@ -341,7 +355,7 @@ if (_mode isEqualTo "bruteforce") exitWith {
                 };
             };
         };
-        _lines append ([_candidates] call _sortCandidates);
+        _lines append ([_candidates, _limit] call _sortCandidates);
         if (count _targets > 1) then { _lines pushBack ""; };
     } forEach _targets;
     _lines
@@ -349,7 +363,15 @@ if (_mode isEqualTo "bruteforce") exitWith {
 
 switch (_algorithm) do {
     case "caesar": {
-        private _key = floor parseNumber str (_options getOrDefault ["key", 0]);
+        // Caesar shifts by a number, never by a word. A text key belongs to the ciphers that read one, so
+        // anything that is not a whole number falls back to the standard shift instead of becoming zero.
+        private _rawShift = _options getOrDefault ["shift", _options getOrDefault ["key", 7]];
+        private _key = 7;
+        if (_rawShift isEqualType 0) then {
+            _key = floor _rawShift;
+        } else {
+            if ((str _rawShift) regexMatch "\s*-?\d+\s*") then { _key = floor parseNumber str _rawShift; };
+        };
         private _out = "";
         {
             private _code = (toArray _x) select 0;
@@ -364,7 +386,7 @@ switch (_algorithm) do {
         _out
     };
     case "columnar": {
-        private _key = _options getOrDefault ["key", ""];
+        private _key = _options getOrDefault ["key", "JSOC"];
         if (count _key < 2) exitWith {""};
         [_key, ["encrypt", "decrypt"] select _decrypt, _text] call AE3_armaos_fnc_encryption_columnar
     };
@@ -381,8 +403,8 @@ switch (_algorithm) do {
         ((_text splitString " ") apply { if (_x in ["/", "|"]) then {" "} else {_natoRev getOrDefault [toLower _x, ""]} }) joinString ""
     };
     case "affine": {
-        private _a = parseNumber str (_options getOrDefault ["a", 1]);
-        private _b = parseNumber str (_options getOrDefault ["b", 0]);
+        private _a = parseNumber str (_options getOrDefault ["a", 5]);
+        private _b = parseNumber str (_options getOrDefault ["b", 8]);
         if ([_a, 26] call _gcd != 1) exitWith {""};
         if (_decrypt) then {
             private _inv = [_a, 26] call _inverse;
@@ -403,7 +425,7 @@ switch (_algorithm) do {
         _out
     };
     case "rot": { [_text, _options getOrDefault ["variant", "rot13"], _decrypt] call _rot };
-    case "vigenere": { [_text, _options getOrDefault ["key", ""], _decrypt] call _vigenere };
+    case "vigenere": { [_text, _options getOrDefault ["key", "JSOC"], _decrypt] call _vigenere };
     case "bacon": {
         private _alphabet = ["ABCDEFGHIKLMNOPQRSTUWXYZ", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"] select ((_options getOrDefault ["variant", "standard"]) isEqualTo "extended");
         if (!_decrypt) exitWith {
@@ -425,7 +447,7 @@ switch (_algorithm) do {
     };
     case "alpha_sub": {
         private _plain = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        private _subst = toUpper (_options getOrDefault ["alphabet", _options getOrDefault ["manualAlphabet", _plain]]);
+        private _subst = toUpper (_options getOrDefault ["alphabet", _options getOrDefault ["manualAlphabet", "QWERTYUIOPASDFGHJKLZXCVBNM"]]);
         if (count _subst < 26) then { _subst = _plain; };
         private _from = [_plain, _subst] select _decrypt;
         private _to = [_subst, _plain] select _decrypt;
@@ -437,7 +459,7 @@ switch (_algorithm) do {
         _out
     };
     case "railfence": {
-        private _rails = 2 max floor parseNumber str (_options getOrDefault ["rails", 2]);
+        private _rails = 2 max floor parseNumber str (_options getOrDefault ["rails", 7]);
         private _letters = [_text] call _chars;
         private _len = count _letters;
         if (_rails >= _len) exitWith {_text};
