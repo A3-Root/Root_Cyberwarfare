@@ -111,21 +111,29 @@ if (_validationError isNotEqualTo "") exitWith {
 	[_owner, _validationError, false] call _reply;
 };
 
+// Speed only exists as far as the drivetrain can deliver it. A vehicle whose engine is gone or whose
+// wheels are shot out is refused outright, drops any speed it was being held at, and costs the operator
+// nothing - the request never reached the vehicle.
+private _drivetrain = [0, 1, 1, false, DRIVETRAIN_NO_SPEED_CAP];
+if (_action in ["setspeed", "speedup", "slowdown"]) then {
+	_drivetrain = _vehicle call FUNC(getVehicleDrivetrain);
+};
+_drivetrain params ["_engineDamage", "_wheelFactor", "_effectiveness", "_blocked", "_speedCap"];
+
+if (_blocked) exitWith {
+	[_vehicle] call FUNC(releaseVehicleSpeedLock);
+	[_owner, format [
+		localize "STR_ROOT_CYBERWARFARE_SPEED_BLOCKED",
+		round (_engineDamage * 100),
+		round (_wheelFactor * 100)
+	], false] call _reply;
+};
+
 private _cost = _vehicle getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", missionNamespace getVariable [SETTING_VEHICLE_COST, 2]];
 if !([_computer, _cost] call FUNC(checkPowerAvailable)) exitWith {
 	[_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply;
 };
 [_computer, _cost] call FUNC(consumePower);
-
-private _removeSpeedHandler = {
-	params ["_vehicle"];
-	private _handle = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_PFH", -1];
-	if (_handle >= 0) then {
-		[_handle] call CBA_fnc_removePerFrameHandler;
-		_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_PFH", -1, true];
-	};
-	_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", 0, true];
-};
 
 private _removeBrakeHandler = {
 	params ["_vehicle"];
@@ -180,23 +188,33 @@ switch (_action) do {
 		_msg = format ["Fuel/battery set to %1%2.", round _value, "%"];
 	};
 	case "setspeed": {
-		[_vehicle] call _removeSpeedHandler;
+		[_vehicle] call FUNC(releaseVehicleSpeedLock);
 		[_vehicle] call _removeBrakeHandler;
 		private _dir = getDir _vehicle;
 		private _forward = [sin _dir, cos _dir, 0];
 		private _vel = velocity _vehicle;
 		private _startSpeed = ((_vel select 0) * (_forward select 0)) + ((_vel select 1) * (_forward select 1));
-		private _targetSpeed = _value / 3.6;
+		private _requested = ((_value * _effectiveness) max (-_speedCap)) min _speedCap;
+		private _targetSpeed = _requested / 3.6;
 		private _handle = [{
 			params ["_args", "_handle"];
-			_args params ["_vehicle", "_startSpeed", "_targetSpeed", "_startTime", "_lock"];
-			if (!alive _vehicle) exitWith {
-				[_handle] call CBA_fnc_removePerFrameHandler;
-				_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_PFH", -1, true];
+			_args params ["_vehicle", "_startSpeed", "_targetSpeed", "_startTime", "_lock", "_owner"];
+
+			// Damage taken while the ramp is running counts: the target is re-capped against what the
+			// drivetrain can still deliver, and a drivetrain that fails outright ends the ramp and lets
+			// the vehicle roll out rather than dragging it along at a speed it can no longer make.
+			(_vehicle call FUNC(getVehicleDrivetrain)) params ["", "", "_effectiveness", "_blocked", "_speedCap"];
+			if (!alive _vehicle || _blocked) exitWith {
+				[_vehicle] call FUNC(releaseVehicleSpeedLock);
+				if (_blocked && {alive _vehicle}) then {
+					["root_cyberwarfare_gui_actionResult", [DEVICE_TYPE_VEHICLE, localize "STR_ROOT_CYBERWARFARE_SPEED_LOCK_LOST", false], _owner] call CBA_fnc_ownerEvent;
+				};
 			};
 
+			private _capMs = _speedCap / 3.6;
+			private _cappedTarget = (_targetSpeed max (-_capMs)) min _capMs;
 			private _progress = ((time - _startTime) / 5) min 1;
-			private _speedNow = _startSpeed + ((_targetSpeed - _startSpeed) * _progress);
+			private _speedNow = _startSpeed + ((_cappedTarget - _startSpeed) * _progress);
 			private _dir = getDir _vehicle;
 			private _vel = velocity _vehicle;
 			[_vehicle, [sin _dir * _speedNow, cos _dir * _speedNow, _vel select 2]] remoteExec ["setVelocity", _vehicle];
@@ -204,26 +222,40 @@ switch (_action) do {
 			if (_progress >= 1) exitWith {
 				[_handle] call CBA_fnc_removePerFrameHandler;
 				_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_PFH", -1, true];
-				if (_lock && {(abs _targetSpeed) > 0.01}) then {
-					_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", _targetSpeed, true];
+				if (_lock && {(abs _cappedTarget) > 0.01}) then {
+					_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", _cappedTarget, true];
 					private _lockHandle = [{
 						params ["_args", "_handle"];
-						_args params ["_vehicle"];
+						_args params ["_vehicle", "_owner"];
 						private _targetSpeed = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", 0];
-						if (!alive _vehicle || {(abs _targetSpeed) <= 0.01}) exitWith {
-							[_handle] call CBA_fnc_removePerFrameHandler;
-							_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_PFH", -1, true];
+
+						// The lock is only as good as the drivetrain holding it: it follows the vehicle
+						// down as wheels shred and releases itself once the vehicle can no longer drive,
+						// leaving it to coast to a stop instead of being held at speed on a dead engine.
+						(_vehicle call FUNC(getVehicleDrivetrain)) params ["", "", "", "_blocked", "_speedCap"];
+						if (!alive _vehicle || _blocked || {(abs _targetSpeed) <= 0.01}) exitWith {
+							[_vehicle] call FUNC(releaseVehicleSpeedLock);
+							if (_blocked && {alive _vehicle}) then {
+								["root_cyberwarfare_gui_actionResult", [DEVICE_TYPE_VEHICLE, localize "STR_ROOT_CYBERWARFARE_SPEED_LOCK_LOST", false], _owner] call CBA_fnc_ownerEvent;
+							};
 						};
+
+						private _capMs = _speedCap / 3.6;
+						private _heldSpeed = (_targetSpeed max (-_capMs)) min _capMs;
 						private _dir = getDir _vehicle;
 						private _vel = velocity _vehicle;
-						[_vehicle, [sin _dir * _targetSpeed, cos _dir * _targetSpeed, _vel select 2]] remoteExec ["setVelocity", _vehicle];
-					}, 0.1, [_vehicle]] call CBA_fnc_addPerFrameHandler;
+						[_vehicle, [sin _dir * _heldSpeed, cos _dir * _heldSpeed, _vel select 2]] remoteExec ["setVelocity", _vehicle];
+					}, 0.1, [_vehicle, _owner]] call CBA_fnc_addPerFrameHandler;
 					_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_PFH", _lockHandle, true];
 				};
 			};
-		}, 0.05, [_vehicle, _startSpeed, _targetSpeed, time, _lock]] call CBA_fnc_addPerFrameHandler;
+		}, 0.05, [_vehicle, _startSpeed, _targetSpeed, time, _lock, _owner]] call CBA_fnc_addPerFrameHandler;
 		_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_PFH", _handle, true];
-		_msg = format ["Speed changing to %1 km/h over 5 seconds.", round _value];
+		_msg = if (round _requested isEqualTo round _value) then {
+			format ["Speed changing to %1 km/h over 5 seconds.", round _value]
+		} else {
+			format [localize "STR_ROOT_CYBERWARFARE_SPEED_DERATED", round (_effectiveness * 100), round _requested, round _value]
+		};
 	};
 	case "setalarm": {
 		if (_value < 1) then { _value = 1; };
@@ -240,8 +272,18 @@ switch (_action) do {
 		private _speedChange = _vehicle getVariable [["ROOT_CYBERWARFARE_SPEED_MAX", "ROOT_CYBERWARFARE_SPEED_MIN"] select (_action isEqualTo "slowdown"), [50, -50] select (_action isEqualTo "slowdown")];
 		private _vel = velocity _vehicle;
 		private _dir = getDir _vehicle;
-		[_vehicle, [(_vel select 0) + (sin _dir * _speedChange), (_vel select 1) + (cos _dir * _speedChange), _vel select 2]] remoteExec ["setVelocity", _vehicle];
-		_msg = format ["Speed adjusted by %1 km/h.", _speedChange];
+
+		// The step is added to the speed the vehicle already carries, scaled by the surviving drivetrain
+		// and capped at the top speed that drivetrain can reach, so a wrecked vehicle cannot be stepped
+		// past what it could physically do.
+		private _forwardSpeed = (((_vel select 0) * (sin _dir)) + ((_vel select 1) * (cos _dir))) * 3.6;
+		private _targetSpeed = _forwardSpeed + (_speedChange * _effectiveness);
+		_targetSpeed = (_targetSpeed max (-_speedCap)) min _speedCap;
+		private _applied = _targetSpeed - _forwardSpeed;
+		private _targetMs = _targetSpeed / 3.6;
+
+		[_vehicle, [(sin _dir) * _targetMs, (cos _dir) * _targetMs, _vel select 2]] remoteExec ["setVelocity", _vehicle];
+		_msg = format ["Speed adjusted by %1 km/h.", round _applied];
 	};
 	case "brakes": {
 		[_vehicle, _value, 2] call FUNC(applyVehicleBrakes);

@@ -38,6 +38,8 @@ class CfgFunctions {
 			class ewoStartCharging {};
 			class ewoChargeTick {};
 			class ewoGetInventoryLaptops {};
+			class ewoLaptopDisplayName {};
+			class ewoNotify {};
 		};
 
 		class Cipher {
@@ -145,6 +147,8 @@ class CfgFunctions {
 			file = "\z\root_cyberwarfare\addons\main\functions\vehicle";
 			class addVehicleZeusMain {};
 			class applyVehicleBrakes {};
+			class getVehicleDrivetrain {};
+			class releaseVehicleSpeedLock {};
 			class changeDroneFaction {};
 			class changeVehicleParams {};
 			class disableDrone {};

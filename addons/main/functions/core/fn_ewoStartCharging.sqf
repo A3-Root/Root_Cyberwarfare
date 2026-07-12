@@ -3,7 +3,8 @@
  * Author: Root
  * Description: Starts a server-authoritative inventory laptop charging job using the caller's EWO
  *              backpack. Each job advances at one percent per three seconds until the backpack is
- *              empty, the laptop is removed from inventory, or it reaches full charge.
+ *              empty, the laptop is removed from inventory, or it reaches full charge. The caller is
+ *              told whether the job started and why it did not, since the job itself runs unattended.
  *
  * Arguments:
  * 0: _player <OBJECT> - Player carrying the backpack and laptop item
@@ -22,9 +23,27 @@ if (!isServer || {isNull _player} || {!_isCarried}) exitWith {};
 
 private _bag = backpackContainer _player;
 if (isNull _bag || {!(_bag getVariable ["ROOT_EWO_INITIALIZED", false])}) exitWith {};
-if ((_bag getVariable ["ROOT_EWO_ENERGY", 0]) <= 0) exitWith {};
+
+private _name = [_item] call FUNC(ewoLaptopDisplayName);
+private _energy = _bag getVariable ["ROOT_EWO_ENERGY", 0];
+
+if (_energy <= 0) exitWith {
+    [localize "STR_ROOT_CYBERWARFARE_EWO_NO_ENERGY", ROOT_CYBERWARFARE_COLOR_ERROR] remoteExecCall [QFUNC(ewoNotify), _player];
+};
+
+private _buffer = missionNamespace getVariable ["AE3_LAPTOP_ITEM", createHashMap];
+private _charge = (_buffer getOrDefault [_item, createHashMap]) getOrDefault ["ROOT_EWO_BATTERY_PERCENT", 0];
+
+if (_charge >= 100) exitWith {
+    [format [localize "STR_ROOT_CYBERWARFARE_EWO_ALREADY_FULL", _name], ROOT_CYBERWARFARE_COLOR_WARNING] remoteExecCall [QFUNC(ewoNotify), _player];
+};
 
 private _jobs = _bag getVariable ["ROOT_EWO_CHARGE_JOBS", createHashMap];
-if ((_jobs getOrDefault [_item, false]) isNotEqualTo false) exitWith {};
+if ((_jobs getOrDefault [_item, false]) isNotEqualTo false) exitWith {
+    [format [localize "STR_ROOT_CYBERWARFARE_EWO_ALREADY_CHARGING", _name], ROOT_CYBERWARFARE_COLOR_WARNING] remoteExecCall [QFUNC(ewoNotify), _player];
+};
+
 _jobs set [_item, time];
 _bag setVariable ["ROOT_EWO_CHARGE_JOBS", _jobs, true];
+
+[format [localize "STR_ROOT_CYBERWARFARE_EWO_CHARGE_STARTED", _name, round _charge, "%", round _energy], ROOT_CYBERWARFARE_COLOR_INFO] remoteExecCall [QFUNC(ewoNotify), _player];

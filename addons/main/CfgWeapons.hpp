@@ -3,11 +3,9 @@
 // filesystem by a unique class per instance instead of collapsing to one shared item. Defined locally
 // (DOUBLES/TRIPLES/QUOTE come from CBA, already available via script_mod.hpp) since HEMTT can't resolve
 // an #include into another mod's project tree.
-// The per-instance ID classes MUST inherit directly from Item_FlashDisk_AE3, not from
-// ROOT_Rubberducky_Item: the laptop Connect menu lists only inventory items whose DIRECT parent is
-// Item_FlashDisk_AE3 (AE3 flashdrive fn_initInterface uses an exact inheritsFrom == Item_FlashDisk_AE3
-// test). A picked-up drive is buffered as its ID class, so an ID class one level too deep in the tree
-// drops out of the Connect menu and can never be plugged back in. ae3_vehicle keeps it paired with the
+// The per-instance ID classes descend from Item_FlashDisk_AE3, which is what the laptop Connect menu
+// tests for: a picked-up drive is buffered as its ID class, so every ID class has to stay inside that
+// branch of the tree or it could never be plugged back in. ae3_vehicle keeps it paired with the
 // Rubberducky world object, and ace_arsenal_uniqueBase keeps every instance under the single arsenal entry.
 #define RUBBERDUCKY_ID_ENTRY(IDN) \
     class TRIPLES(ROOT_Rubberducky_Item,ID,IDN): Item_FlashDisk_AE3 { \

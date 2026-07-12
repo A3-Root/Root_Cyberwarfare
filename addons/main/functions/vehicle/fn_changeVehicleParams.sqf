@@ -160,47 +160,24 @@ if (_vehicleIDNum != 0) then {
 
                     // The drivetrain has to be able to deliver the boost: a vehicle whose engine is
                     // destroyed cannot be pushed at all, and one running on shot-out wheels cannot reach
-                    // the speed an intact one would. Hitpoint names vary per vehicle, so match on the
-                    // engine/wheel keywords in getAllHitPointsDamage rather than fixed hitpoint names.
-                    (getAllHitPointsDamage _vehicleObject) params [["_hitPoints", []], "", ["_damages", []]];
+                    // the speed an intact one would.
+                    (_vehicleObject call FUNC(getVehicleDrivetrain)) params [
+                        "_engineDamage", "_wheelFactor", "_effectiveness", "_blocked", "_speedCap"
+                    ];
 
-                    private _engineDamage = 0;
-                    private _wheelHealths = [];
-                    {
-                        private _damage = _damages param [_forEachIndex, 0];
-                        private _name = toLower _x;
-                        if ("engine" in _name) then {
-                            _engineDamage = _engineDamage max _damage;
+                    if (_blocked) then {
+                        // A dead engine and a shredded set of wheels fail for different reasons, so the
+                        // operator is told which one it is. Any speed the vehicle was being held at is
+                        // dropped as well, letting it roll out under its own weight.
+                        [_vehicleObject] call FUNC(releaseVehicleSpeedLock);
+                        _string = if (_engineDamage >= 1) then {
+                            localize "STR_ROOT_CYBERWARFARE_ERROR_SPEED_ENGINE_DESTROYED"
+                        } else {
+                            localize "STR_ROOT_CYBERWARFARE_ERROR_SPEED_WHEELS_DESTROYED"
                         };
-                        if ("wheel" in _name) then {
-                            _wheelHealths pushBack (1 - _damage);
-                        };
-                    } forEach _hitPoints;
-
-                    if (_engineDamage >= 1) then {
-                        _string = localize "STR_ROOT_CYBERWARFARE_ERROR_SPEED_ENGINE_DESTROYED";
                         [_computer, [[[_string, ROOT_CYBERWARFARE_COLOR_ERROR]]]] call AE3_armaos_fnc_shell_stdout;
                         breakTo "exit";
                     };
-
-                    // Wheeled vehicles need every wheel above 10% health. Vehicles without wheel
-                    // hitpoints (helicopters, drones, boats) only depend on the engine.
-                    if (_wheelHealths findIf {_x < 0.1} > -1) then {
-                        _string = localize "STR_ROOT_CYBERWARFARE_ERROR_SPEED_WHEELS_DESTROYED";
-                        [_computer, [[[_string, ROOT_CYBERWARFARE_COLOR_ERROR]]]] call AE3_armaos_fnc_shell_stdout;
-                        breakTo "exit";
-                    };
-
-                    // Scale the boost by how much of the drivetrain is left, so a battered vehicle
-                    // accelerates worse than an intact one instead of hitting the same top speed.
-                    private _wheelFactor = 1;
-                    if (_wheelHealths isNotEqualTo []) then {
-                        private _sum = 0;
-                        {_sum = _sum + _x} forEach _wheelHealths;
-                        _wheelFactor = _sum / (count _wheelHealths);
-                    };
-                    private _effectiveness = (1 - _engineDamage) * _wheelFactor;
-                    private _appliedValue = _value * _effectiveness;
 
                     // A boost only takes hold while the engine is running; restart it if the vehicle
                     // was switched off.
@@ -208,22 +185,30 @@ if (_vehicleIDNum != 0) then {
                         [_vehicleObject, true] remoteExec ["engineOn", _vehicleObject];
                     };
 
-                    // Apply speed change
+                    // The boost is expressed in km/h and adds to whatever the vehicle is already doing,
+                    // scaled by the drivetrain that is left and capped at the top speed that drivetrain
+                    // can still reach - a vehicle on one wheel cannot be pushed to its factory top speed.
                     private _vel = velocity _vehicleObject;
                     private _dir = getDir _vehicleObject;
+                    private _forwardSpeed = (((_vel select 0) * (sin _dir)) + ((_vel select 1) * (cos _dir))) * 3.6;
+                    private _targetSpeed = _forwardSpeed + (_value * _effectiveness);
+                    _targetSpeed = (_targetSpeed max (-_speedCap)) min _speedCap;
+                    private _appliedValue = _targetSpeed - _forwardSpeed;
+                    private _targetMs = _targetSpeed / 3.6;
+
                     [_vehicleObject, [
-                        (_vel select 0) + (sin _dir * _appliedValue),
-                        (_vel select 1) + (cos _dir * _appliedValue),
+                        (sin _dir) * _targetMs,
+                        (cos _dir) * _targetMs,
                         (_vel select 2)
                     ]] remoteExec ["setVelocity", _vehicleObject];
 
                     // Tell the operator what actually went to the drivetrain when damage cut it back.
-                    if (_effectiveness < 1) then {
+                    if (_effectiveness < 1 || {(abs _appliedValue) < (abs _value) - 0.5}) then {
                         _string = format [
                             localize "STR_ROOT_CYBERWARFARE_SPEED_DERATED",
                             round (_effectiveness * 100),
                             round _appliedValue,
-                            _value
+                            round _value
                         ];
                         [_computer, [[[_string, ROOT_CYBERWARFARE_COLOR_WARNING]]]] call AE3_armaos_fnc_shell_stdout;
                     };

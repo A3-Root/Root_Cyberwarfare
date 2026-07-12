@@ -138,6 +138,19 @@
 #endif
 
 // ============================================================================
+// Drivetrain Limits
+// ============================================================================
+// Smallest fraction of an intact drivetrain that can still move a vehicle, and the stand-in speed cap
+// used for vehicles whose config declares no top speed.
+
+#ifndef DRIVETRAIN_MIN_EFFECTIVENESS
+    #define DRIVETRAIN_MIN_EFFECTIVENESS 0.15
+#endif
+#ifndef DRIVETRAIN_NO_SPEED_CAP
+    #define DRIVETRAIN_NO_SPEED_CAP 1e6
+#endif
+
+// ============================================================================
 // Global Variable Keys
 // ============================================================================
 // Keys for accessing global hashmaps and arrays in missionNamespace

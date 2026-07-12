@@ -37,6 +37,8 @@ PREP(ewoSyncBackpacks);
 PREP(ewoStartCharging);
 PREP(ewoChargeTick);
 PREP(ewoGetInventoryLaptops);
+PREP(ewoLaptopDisplayName);
+PREP(ewoNotify);
 
 // Redefine PREP macro for subdirectory: cipher
 #undef PREP
@@ -125,6 +127,8 @@ PREP(syncHackingToolAvailability);
 
 PREP(addVehicleZeusMain);
 PREP(applyVehicleBrakes);
+PREP(getVehicleDrivetrain);
+PREP(releaseVehicleSpeedLock);
 PREP(changeDroneFaction);
 PREP(changeVehicleParams);
 PREP(disableDrone);

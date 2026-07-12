@@ -385,6 +385,9 @@ if (hasInterface) then {
             [_x, 0, ["ACE_MainActions"], _actionEwoRenameLaptop, true] call ace_interact_menu_fnc_addActionToClass;
         } forEach ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3"];
 
+        // Both EWO actions sit beside the AE3 laptop self-actions ("Deploy laptop", "Use laptop") so
+        // everything that acts on a carried laptop is reachable from one menu. Each carried laptop is
+        // labelled with the same name the deploy menu uses.
         private _actionEwoCharge = [
             "ROOT_EWO_ChargeLaptop",
             "Charge Laptop",
@@ -392,55 +395,68 @@ if (hasInterface) then {
             {},
             {
                 missionNamespace getVariable [SETTING_EWO_MODE, false]
-                && {!isNull (backpackContainer _player)}
-                && {(backpackContainer _player) getVariable ["ROOT_EWO_INITIALIZED", false]}
-                && {([_player] call FUNC(ewoGetInventoryLaptops)) isNotEqualTo []}
+                && {!isNull (backpackContainer ACE_player)}
+                && {(backpackContainer ACE_player) getVariable ["ROOT_EWO_INITIALIZED", false]}
+                && {([ACE_player] call FUNC(ewoGetInventoryLaptops)) isNotEqualTo []}
             },
             {
-                params ["_target", "_player"];
+                params ["_target"];
                 private _actions = [];
                 {
                     private _item = _x;
-                    private _label = getText (configFile >> "CfgWeapons" >> _item >> "displayName");
                     private _action = [
                         "ROOT_EWO_Charge_" + _item,
-                        _label,
+                        [_item] call FUNC(ewoLaptopDisplayName),
                         "",
                         {
                             params ["_target", "_player", "_item"];
-                            [_player, _item] remoteExecCall ["Root_fnc_ewoStartCharging", 2];
+                            [_player, _item] remoteExecCall [QFUNC(ewoStartCharging), 2];
                         },
                         {true},
                         {},
                         _item
                     ] call ace_interact_menu_fnc_createAction;
                     _actions pushBack [_action, [], _target];
-                } forEach ([_player] call FUNC(ewoGetInventoryLaptops));
+                } forEach ([ACE_player] call FUNC(ewoGetInventoryLaptops));
                 _actions
             }
         ] call ace_interact_menu_fnc_createAction;
 
-        [player, 1, ["ACE_SelfActions"], _actionEwoCharge] call ace_interact_menu_fnc_addActionToObject;
+        ["CAManBase", 1, ["ACE_SelfActions", "ACE_Equipment"], _actionEwoCharge, true] call ace_interact_menu_fnc_addActionToClass;
 
+        // Reports the backpack's remaining energy plus every laptop currently drawing from it, each with
+        // its live battery level, taken from the snapshot the charging tick publishes on the backpack.
         private _actionEwoStatus = [
             "ROOT_EWO_Status",
             "EWO Charging Status",
             "",
             {
-                params ["_target", "_player"];
-                private _bag = backpackContainer _player;
-                private _energy = _bag getVariable ["ROOT_EWO_ENERGY", 0];
-                private _jobs = _bag getVariable ["ROOT_EWO_CHARGE_JOBS", createHashMap];
-                hintSilent format ["EWO backpack energy: %1%2\nActive laptop charging jobs: %3", _energy, "%", count _jobs];
+                private _bag = backpackContainer ACE_player;
+                private _energy = round (_bag getVariable ["ROOT_EWO_ENERGY", 0]);
+                private _status = _bag getVariable ["ROOT_EWO_CHARGE_STATUS", []];
+
+                private _lines = [format [localize "STR_ROOT_CYBERWARFARE_EWO_STATUS_ENERGY", _energy, "%"]];
+
+                if (_status isEqualTo []) then {
+                    _lines pushBack localize "STR_ROOT_CYBERWARFARE_EWO_STATUS_IDLE";
+                } else {
+                    _lines pushBack localize "STR_ROOT_CYBERWARFARE_EWO_STATUS_CHARGING";
+                    {
+                        _x params ["", "_name", "_charge"];
+                        _lines pushBack format ["    %1  -  %2%3", _name, _charge, "%"];
+                    } forEach _status;
+                };
+
+                [_lines joinString "<br/>", ROOT_CYBERWARFARE_COLOR_INFO] call FUNC(ewoNotify);
             },
             {
                 missionNamespace getVariable [SETTING_EWO_MODE, false]
-                && {!isNull (backpackContainer _player)}
-                && {(backpackContainer _player) getVariable ["ROOT_EWO_INITIALIZED", false]}
+                && {!isNull (backpackContainer ACE_player)}
+                && {(backpackContainer ACE_player) getVariable ["ROOT_EWO_INITIALIZED", false]}
             }
         ] call ace_interact_menu_fnc_createAction;
 
-        [player, 1, ["ACE_SelfActions"], _actionEwoStatus] call ace_interact_menu_fnc_addActionToObject;
+        ["CAManBase", 1, ["ACE_SelfActions", "ACE_Equipment"], _actionEwoStatus, true] call ace_interact_menu_fnc_addActionToClass;
 
         // ========================================================================
         // ACE Action: GPS Tracker Operations (Parent Menu)

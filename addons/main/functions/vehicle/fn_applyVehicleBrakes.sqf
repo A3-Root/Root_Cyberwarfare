@@ -23,12 +23,9 @@ if (_handle >= 0) then {
     [_handle] call CBA_fnc_removePerFrameHandler;
 };
 
-private _speedHandle = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_PFH", -1];
-if (_speedHandle >= 0) then {
-    [_speedHandle] call CBA_fnc_removePerFrameHandler;
-    _vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_PFH", -1, true];
-};
-_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", 0, true];
+// Braking and holding a speed are mutually exclusive: whatever was driving the vehicle's velocity is
+// released first so the brake handler owns it alone.
+[_vehicle] call FUNC(releaseVehicleSpeedLock);
 
 _decelRate = _decelRate max 0.1;
 _holdTime = _holdTime max 0;

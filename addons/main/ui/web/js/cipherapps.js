@@ -287,28 +287,52 @@
     var variants = { morse: [["standard", "Standard"]], spelling: [["nato", "NATO/ICAO"]], affine: [["numeric", "Numeric A/B"]], rot: [["rot5", "ROT5"], ["rot13", "ROT13"], ["rot18", "ROT18"], ["rot47", "ROT47"]], vigenere: [["manual", "Manual"], ["wordlist", "Wordlist"]], bacon: [["standard", "Standard"], ["extended", "Extended"]], alpha_sub: [["keyword", "Keyword"], ["manual", "Manual"]], railfence: [["zigzag", "Zigzag"]], base32: [["standard", "Standard"], ["hex", "Base32Hex"]], base64: [["standard", "Standard"], ["url", "URL-safe"]], ascii85: [["adobe", "Adobe"], ["bare", "Bare"]], unicode: [["uplus", "U+ notation"], ["escape", "\\u escape"]], integer: [["bin", "Binary"], ["oct", "Octal"], ["dec", "Decimal"], ["hex", "Hexadecimal"]], all: [["auto", "Auto"]] };
     // Every option input sits in a labelled field so the operator can tell what each one expects
     // (which cipher reads it, and in what format) instead of guessing from a placeholder.
+    // Layout lives in the stylesheet below, never in inline styles: updateFields() hides and re-shows
+    // fields by writing element.style.display, which would wipe an inline display rule and collapse the
+    // label, hint and control onto one line.
     var field = function (label, hint, cls, control) {
-      return '<div class="cfield ' + cls + '" style="display:flex;flex-direction:column;gap:3px">' +
-        '<label style="font-size:12px;font-weight:600">' + label + '</label>' +
-        (hint ? '<span class="muted" style="font-size:11px">' + hint + '</span>' : '') +
+      return '<div class="cfield ' + cls + '">' +
+        '<label>' + label + '</label>' +
+        (hint ? '<div class="chint">' + hint + '</div>' : '') +
         control + '</div>';
     };
+    var STYLE = '<style>' +
+      '.rcw-crypto{display:flex;flex-direction:column;gap:12px;height:100%}' +
+      '.rcw-crypto .ctop{display:flex;gap:8px;flex-wrap:wrap;flex:0 0 auto}' +
+      '.rcw-crypto .cgrid{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;flex:1;min-height:0}' +
+      '.rcw-crypto .ccol{display:flex;flex-direction:column;gap:12px;min-height:0}' +
+      '.rcw-crypto .copts{overflow-y:auto;padding-right:6px}' +
+      '.rcw-crypto .cfield{display:flex;flex-direction:column;gap:4px;min-width:0}' +
+      '.rcw-crypto .cfield > label{font-size:12px;font-weight:600;line-height:1.3}' +
+      '.rcw-crypto .chint{font-size:11px;line-height:1.4;color:var(--muted)}' +
+      '.rcw-crypto .cfield .input,.rcw-crypto .cfield textarea,.rcw-crypto .cfield select{width:100%}' +
+      '.rcw-crypto .crow{display:flex;gap:8px}' +
+      '.rcw-crypto .crow > *{flex:1;min-width:0}' +
+      '.rcw-crypto .crow > .btn{flex:0 0 auto;align-self:flex-start}' +
+      '.rcw-crypto .cfinput{flex:0 0 auto}' +
+      '.rcw-crypto .ctext{min-height:120px;resize:none}' +
+      '.rcw-crypto .cfresult{flex:1;min-height:160px}' +
+      '.rcw-crypto .cout{flex:1;min-height:0;resize:none;font-family:monospace}' +
+      '.rcw-crypto .cwords{min-height:110px;resize:none}' +
+      '.rcw-crypto .cfiles{border:1px solid var(--line);border-radius:6px;padding:8px;min-height:84px;overflow:auto}' +
+      '.rcw-crypto .cbtns{display:flex;gap:8px;flex-wrap:wrap;flex:0 0 auto}' +
+      '</style>';
     return { id: desc.id, title: desc.title, glyph: desc.glyph || (isCrack ? "K" : "C"), kind: "script", width: 940, height: 760, menu: "Hacking Tools", external: true, showInMenu: true, singleton: true, render: function (body, win) {
-      body.innerHTML = '<div class="pad" style="display:flex;flex-direction:column;gap:8px;height:100%"><div style="display:flex;gap:8px;flex-wrap:wrap"><select class="input cmode" style="min-width:120px"></select><select class="input csrc" style="min-width:110px"><option value="text">Text</option><option value="files">Files</option></select><select class="input calgo" style="min-width:190px"></select><select class="input cvar" style="min-width:160px"></select></div><div style="display:grid;grid-template-columns:1.35fr .95fr;gap:8px;min-height:0;flex:1"><div style="display:flex;flex-direction:column;gap:8px;min-height:0">' +
-        field("Input", "Text to process", "cfinput", '<textarea class="input ctext" rows="5" placeholder="Text input" style="resize:none"></textarea>') +
-        '<div class="cfiles" style="display:none;border:1px solid var(--line);border-radius:6px;padding:8px;min-height:84px;overflow:auto"></div>' +
+      body.innerHTML = STYLE + '<div class="pad rcw-crypto"><div class="ctop"><select class="input cmode" style="min-width:120px"></select><select class="input csrc" style="min-width:110px"><option value="text">Text</option><option value="files">Files</option></select><select class="input calgo" style="min-width:190px"></select><select class="input cvar" style="min-width:160px"></select></div><div class="cgrid"><div class="ccol">' +
+        field("Input", "Text to process", "cfinput", '<textarea class="input ctext" rows="5" placeholder="Text input"></textarea>') +
+        '<div class="cfiles" style="display:none"></div>' +
         // The result box takes every remaining pixel of the column: an "All" run prints one labelled
         // line per cipher, far more than a fixed-height textarea can show.
-        '<div class="cfield" style="display:flex;flex-direction:column;gap:3px;flex:1;min-height:220px"><label style="font-size:12px;font-weight:600">Result</label><textarea class="input cout" readonly placeholder="Result" style="flex:1;min-height:0;resize:none"></textarea></div>' +
-        '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn accent crun">' + (isCrack ? "Analyse" : "Run") + '</button><button class="btn csave">Save Output</button><button class="btn cclear">Clear</button><button class="btn cadd" style="display:none">Add File</button><button class="btn crem" style="display:none">Remove Selected</button><button class="btn cclrfiles" style="display:none">Clear Files</button></div></div><div class="opts" style="display:flex;flex-direction:column;gap:10px;min-height:0;overflow:auto">' +
+        '<div class="cfield cfresult"><label>Result</label><textarea class="input cout" readonly placeholder="Result"></textarea></div>' +
+        '<div class="cbtns"><button class="btn accent crun">' + (isCrack ? "Analyse" : "Run") + '</button><button class="btn csave">Save Output</button><button class="btn cclear">Clear</button><button class="btn cadd" style="display:none">Add File</button><button class="btn crem" style="display:none">Remove Selected</button><button class="btn cclrfiles" style="display:none">Clear Files</button></div></div><div class="ccol copts">' +
         field("Key / password / keyword", "Columnar (2+ characters), Vigenere, Alphabetical Substitution", "cfkey", '<input class="input ckey" placeholder="e.g. SECRET">') +
         field("Caesar shift", "Whole number 0-25 - Caesar only, it cannot use a text key", "cfshift", '<input class="input cshift" type="number" min="0" max="25" value="3">') +
         field("Manual alphabet", "Substitution alphabet for Alphabetical Substitution", "cfalpha", '<input class="input calpha" placeholder="e.g. QWERTYUIOPASDFGHJKLZXCVBNM">') +
         field("Affine A/B or rail count", "Affine: two numbers (e.g. 5/8). Railfence: one number", "cfraw", '<input class="input craw" placeholder="e.g. 5/8 or 3">') +
-        field("Bruteforce limits", "Max key length and solver steps", "cflimits", '<div style="display:flex;gap:8px"><input class="input cmax" type="number" min="1" max="12" value="12" style="flex:1" placeholder="Max key length"><input class="input cstep" type="number" min="1" value="400" style="flex:1" placeholder="Solver steps"></div>') +
-        field("Integer notation", "Number base and word size", "cfint", '<div style="display:flex;gap:8px"><select class="input cradix" style="flex:1"><option value="2">Binary</option><option value="8">Octal</option><option value="10">Decimal</option><option value="16" selected>Hex</option></select><select class="input cwidth" style="flex:1"><option value="8">8-bit</option><option value="16">16-bit</option><option value="32">32-bit</option></select></div>') +
-        field("Output options", "Letter case, sign and padding", "cfout", '<div style="display:flex;gap:8px;flex-wrap:wrap"><select class="input cpres"><option value="1">Preserve case</option><option value="0">Force upper</option></select><select class="input csigned"><option value="0">Unsigned</option><option value="1">Signed</option></select><select class="input cpad"><option value="1">Pad output</option><option value="0">No pad</option></select></div>') +
-        field("Wordlist", "One candidate key per line - Vigenere bruteforce", "cfwords", '<div style="display:flex;gap:8px"><textarea class="input cwords" rows="6" placeholder="Wordlist (one key per line)" style="flex:1"></textarea><button class="btn cwordfile" style="align-self:flex-start">Wordlist File</button></div>') +
+        field("Bruteforce limits", "Max key length and solver steps", "cflimits", '<div class="crow"><input class="input cmax" type="number" min="1" max="12" value="12" placeholder="Max key length"><input class="input cstep" type="number" min="1" value="400" placeholder="Solver steps"></div>') +
+        field("Integer notation", "Number base and word size", "cfint", '<div class="crow"><select class="input cradix"><option value="2">Binary</option><option value="8">Octal</option><option value="10">Decimal</option><option value="16" selected>Hex</option></select><select class="input cwidth"><option value="8">8-bit</option><option value="16">16-bit</option><option value="32">32-bit</option></select></div>') +
+        field("Output options", "Letter case, sign and padding", "cfout", '<div class="crow"><select class="input cpres"><option value="1">Preserve case</option><option value="0">Force upper</option></select><select class="input csigned"><option value="0">Unsigned</option><option value="1">Signed</option></select><select class="input cpad"><option value="1">Pad output</option><option value="0">No pad</option></select></div>') +
+        field("Wordlist", "One candidate key per line - Vigenere bruteforce", "cfwords", '<div class="crow"><textarea class="input cwords" rows="6" placeholder="Wordlist (one key per line)"></textarea><button class="btn cwordfile">Wordlist File</button></div>') +
         '</div></div></div>';
       var mode = body.querySelector(".cmode"), src = body.querySelector(".csrc"), algo = body.querySelector(".calgo"), variant = body.querySelector(".cvar"), txt = body.querySelector(".ctext"), out = body.querySelector(".cout"), key = body.querySelector(".ckey"), shift = body.querySelector(".cshift"), alphaBox = body.querySelector(".calpha"), raw = body.querySelector(".craw"), radix = body.querySelector(".cradix"), width = body.querySelector(".cwidth"), preserve = body.querySelector(".cpres"), signed = body.querySelector(".csigned"), padding = body.querySelector(".cpad"), words = body.querySelector(".cwords"), filesWrap = body.querySelector(".cfiles"), addBtn = body.querySelector(".cadd"), remBtn = body.querySelector(".crem"), clearFilesBtn = body.querySelector(".cclrfiles"), wordFileBtn = body.querySelector(".cwordfile");
       var maxLen = body.querySelector(".cmax");
