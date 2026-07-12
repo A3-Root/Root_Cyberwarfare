@@ -25,6 +25,14 @@
 if (isServer) then {
 	[FUNC(ewoSyncBackpacks), 5] call CBA_fnc_addPerFrameHandler;
 	[FUNC(ewoChargeTick), 1] call CBA_fnc_addPerFrameHandler;
+
+    // A laptop taken out of the inventory to be used or deployed is no longer stowed kit, so the charger
+    // comes off with it. Reconnecting it is the operator's to do, deliberately, once it is packed again.
+    ["AE3_laptop_removedFromInventory", {
+        params [["_player", objNull, [objNull]], ["_item", "", [""]]];
+        [_player, _item] call FUNC(ewoStopCharging);
+    }] call CBA_fnc_addEventHandler;
+
     // Power consumption event (server-side only)
     // Triggered when a laptop operation consumes battery power
     ["root_cyberwarfare_consumePower", {
@@ -387,7 +395,8 @@ if (hasInterface) then {
 
         // Both EWO actions sit beside the AE3 laptop self-actions ("Deploy laptop", "Use laptop") so
         // everything that acts on a carried laptop is reachable from one menu. Each carried laptop is
-        // labelled with the same name the deploy menu uses.
+        // labelled with the same name the deploy menu uses, followed by the battery it currently holds -
+        // the point of plugging one in is knowing how empty it is.
         private _actionEwoCharge = [
             "ROOT_EWO_ChargeLaptop",
             "Charge Laptop",
@@ -404,15 +413,19 @@ if (hasInterface) then {
                 private _actions = [];
                 {
                     private _item = _x;
+                    ([_item] call FUNC(ewoLaptopBattery)) params ["_charge"];
+                    private _label = format ["%1  -  %2%3", [_item] call FUNC(ewoLaptopDisplayName), round _charge, "%"];
                     private _action = [
                         "ROOT_EWO_Charge_" + _item,
-                        [_item] call FUNC(ewoLaptopDisplayName),
+                        _label,
                         "",
                         {
                             params ["_target", "_player", "_item"];
                             [_player, _item] remoteExecCall [QFUNC(ewoStartCharging), 2];
                         },
-                        {true},
+                        // A laptop already on charge is not offered again; it is offered to the disconnect
+                        // action instead.
+                        {!((_this select 2) in ((backpackContainer ACE_player) getVariable ["ROOT_EWO_CHARGE_JOBS", createHashMap]))},
                         {},
                         _item
                     ] call ace_interact_menu_fnc_createAction;
@@ -423,6 +436,44 @@ if (hasInterface) then {
         ] call ace_interact_menu_fnc_createAction;
 
         ["CAManBase", 1, ["ACE_SelfActions", "ACE_Equipment"], _actionEwoCharge, true] call ace_interact_menu_fnc_addActionToClass;
+
+        // Pulling the charger back out. A laptop keeps whatever charge it has taken on; only the draw on
+        // the backpack stops. Listed from the charge snapshot the tick publishes, so it names exactly the
+        // laptops that are actually drawing power.
+        private _actionEwoDisconnect = [
+            "ROOT_EWO_DisconnectCharger",
+            "Disconnect Charger",
+            "",
+            {},
+            {
+                missionNamespace getVariable [SETTING_EWO_MODE, false]
+                && {!isNull (backpackContainer ACE_player)}
+                && {((backpackContainer ACE_player) getVariable ["ROOT_EWO_CHARGE_STATUS", []]) isNotEqualTo []}
+            },
+            {
+                params ["_target"];
+                private _actions = [];
+                {
+                    _x params ["_item", "_name", "_charge"];
+                    private _action = [
+                        "ROOT_EWO_Disconnect_" + _item,
+                        format ["%1  -  %2%3", _name, _charge, "%"],
+                        "",
+                        {
+                            params ["_target", "_player", "_item"];
+                            [_player, _item] remoteExecCall [QFUNC(ewoStopCharging), 2];
+                        },
+                        {true},
+                        {},
+                        _item
+                    ] call ace_interact_menu_fnc_createAction;
+                    _actions pushBack [_action, [], _target];
+                } forEach ((backpackContainer ACE_player) getVariable ["ROOT_EWO_CHARGE_STATUS", []]);
+                _actions
+            }
+        ] call ace_interact_menu_fnc_createAction;
+
+        ["CAManBase", 1, ["ACE_SelfActions", "ACE_Equipment"], _actionEwoDisconnect, true] call ace_interact_menu_fnc_addActionToClass;
 
         // Reports the backpack's remaining energy plus every laptop currently drawing from it, each with
         // its live battery level, taken from the snapshot the charging tick publishes on the backpack.
@@ -457,6 +508,114 @@ if (hasInterface) then {
         ] call ace_interact_menu_fnc_createAction;
 
         ["CAManBase", 1, ["ACE_SelfActions", "ACE_Equipment"], _actionEwoStatus, true] call ace_interact_menu_fnc_addActionToClass;
+
+        // ========================================================================
+        // ACE Action: EWO Network (Parent Menu)
+        // ========================================================================
+        // The backpack broadcasts a wireless network that laptops in range can join. It is the EWO's to
+        // run: they name it, set its password, and decide when it is on the air - a broadcasting pack is
+        // both a beacon and a steady drain on the same energy the laptop charger draws from. Its reach and
+        // what the broadcast costs are fixed and are not offered here.
+        private _ewoHasBag = {
+            missionNamespace getVariable [SETTING_EWO_MODE, false]
+            && {!isNull (backpackContainer ACE_player)}
+            && {(backpackContainer ACE_player) getVariable ["ROOT_EWO_INITIALIZED", false]}
+        };
+
+        private _actionEwoNetwork = [
+            "ROOT_EWO_Network",
+            "EWO Network",
+            "",
+            {},
+            _ewoHasBag
+        ] call ace_interact_menu_fnc_createAction;
+
+        ["CAManBase", 1, ["ACE_SelfActions", "ACE_Equipment"], _actionEwoNetwork, true] call ace_interact_menu_fnc_addActionToClass;
+
+        // Switching the network on is what makes it visible to a laptop's scan, and what starts it costing
+        // the pack energy. The label says which way the switch will go.
+        private _actionEwoWifiToggle = [
+            "ROOT_EWO_WifiToggle",
+            "Toggle Network",
+            "",
+            {
+                params ["_target", "_player"];
+                private _bag = backpackContainer _player;
+                [_player, !(_bag getVariable ["ROOT_EWO_WIFI_ON", false])] remoteExecCall [QFUNC(ewoWifiSet), 2];
+            },
+            _ewoHasBag,
+            {},
+            [],
+            {[0, 0, 0]},
+            2,
+            [false, false, false, false, false],
+            {
+                // The entry names the state it will move the network to, so the operator reads the switch
+                // rather than the switch's current position.
+                params ["", "", "", "_actionData"];
+                private _on = (backpackContainer ACE_player) getVariable ["ROOT_EWO_WIFI_ON", false];
+                _actionData set [1, ["Switch Network On", "Switch Network Off"] select _on];
+            }
+        ] call ace_interact_menu_fnc_createAction;
+
+        ["CAManBase", 1, ["ACE_SelfActions", "ACE_Equipment", "ROOT_EWO_Network"], _actionEwoWifiToggle, true] call ace_interact_menu_fnc_addActionToClass;
+
+        // Name and password in one dialog, prefilled with what the network is running now, so an operator
+        // can read the current password off it as well as change it.
+        private _actionEwoWifiConfig = [
+            "ROOT_EWO_WifiConfig",
+            "Network Settings",
+            "",
+            {
+                params ["_target", "_player"];
+                private _bag = backpackContainer _player;
+
+                [
+                    "EWO Network Settings", [
+                        ["EDIT", ["Network Name", "The name laptops in range see when they scan for networks."], [_bag getVariable ["ROOT_EWO_NETWORK_NAME", "EWO Net"]]],
+                        ["EDIT", ["Password", "The password a laptop has to give to join the network."], [_bag getVariable ["ROOT_EWO_PASSWORD", ""]]]
+                    ], {
+                        params ["_results", "_args"];
+                        _args params ["_player"];
+                        _results params ["_name", "_password"];
+                        private _bag = backpackContainer _player;
+                        [_player, _bag getVariable ["ROOT_EWO_WIFI_ON", false], _name, _password] remoteExecCall [QFUNC(ewoWifiSet), 2];
+                    }, {}, [_player]
+                ] call zen_dialog_fnc_create;
+            },
+            _ewoHasBag
+        ] call ace_interact_menu_fnc_createAction;
+
+        ["CAManBase", 1, ["ACE_SelfActions", "ACE_Equipment", "ROOT_EWO_Network"], _actionEwoWifiConfig, true] call ace_interact_menu_fnc_addActionToClass;
+
+        // Everything the operator would otherwise have to open a laptop to find out.
+        private _actionEwoWifiInfo = [
+            "ROOT_EWO_WifiInfo",
+            "Network Info",
+            "",
+            {
+                private _bag = backpackContainer ACE_player;
+                private _on = _bag getVariable ["ROOT_EWO_WIFI_ON", false];
+                private _gateway = _bag getVariable ["ROOT_EWO_GATEWAY", [77, 77, 0, 1]];
+
+                [
+                    [
+                        format [localize "STR_ROOT_CYBERWARFARE_EWO_INFO_NAME", _bag getVariable ["ROOT_EWO_NETWORK_NAME", "EWO Net"]],
+                        format [localize "STR_ROOT_CYBERWARFARE_EWO_INFO_PASSWORD", _bag getVariable ["ROOT_EWO_PASSWORD", ""]],
+                        format [localize "STR_ROOT_CYBERWARFARE_EWO_INFO_ADDRESS", _gateway joinString "."],
+                        format [
+                            localize "STR_ROOT_CYBERWARFARE_EWO_INFO_STATE",
+                            localize (["STR_ROOT_CYBERWARFARE_EWO_WIFI_OFF", "STR_ROOT_CYBERWARFARE_EWO_WIFI_ON"] select _on)
+                        ],
+                        format [localize "STR_ROOT_CYBERWARFARE_EWO_STATUS_ENERGY", round (_bag getVariable ["ROOT_EWO_ENERGY", 0]), "%"]
+                    ] joinString "<br/>",
+                    [ROOT_CYBERWARFARE_COLOR_INFO, ROOT_CYBERWARFARE_COLOR_SUCCESS] select _on
+                ] call FUNC(ewoNotify);
+            },
+            _ewoHasBag
+        ] call ace_interact_menu_fnc_createAction;
+
+        ["CAManBase", 1, ["ACE_SelfActions", "ACE_Equipment", "ROOT_EWO_Network"], _actionEwoWifiInfo, true] call ace_interact_menu_fnc_addActionToClass;
 
         // ========================================================================
         // ACE Action: GPS Tracker Operations (Parent Menu)

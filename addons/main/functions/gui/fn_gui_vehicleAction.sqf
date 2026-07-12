@@ -111,9 +111,10 @@ if (_validationError isNotEqualTo "") exitWith {
 	[_owner, _validationError, false] call _reply;
 };
 
-// Speed only exists as far as the drivetrain can deliver it. A vehicle whose engine is gone or whose
-// wheels are shot out is refused outright, drops any speed it was being held at, and costs the operator
-// nothing - the request never reached the vehicle.
+// Damage limits how fast a vehicle can be driven, not whether it can be driven: a commanded speed is cut
+// down to what the surviving drivetrain can deliver rather than refused. Only a vehicle with nothing left
+// to turn its wheels is turned away, and that one costs the operator nothing - the request never reached
+// it.
 private _drivetrain = [0, 1, 1, false, DRIVETRAIN_NO_SPEED_CAP];
 if (_action in ["setspeed", "speedup", "slowdown"]) then {
 	_drivetrain = _vehicle call FUNC(getVehicleDrivetrain);
@@ -194,16 +195,20 @@ switch (_action) do {
 		private _forward = [sin _dir, cos _dir, 0];
 		private _vel = velocity _vehicle;
 		private _startSpeed = ((_vel select 0) * (_forward select 0)) + ((_vel select 1) * (_forward select 1));
-		private _requested = ((_value * _effectiveness) max (-_speedCap)) min _speedCap;
-		private _targetSpeed = _requested / 3.6;
+		// The speed the operator asked for is what gets held, and it is kept whole rather than written
+		// back already cut down to the damage of the moment. The cap is applied fresh on every tick, so a
+		// vehicle repaired while it is being held climbs the rest of the way to the speed it was given
+		// instead of staying stuck at whatever its wheels could manage when the order was issued.
+		private _wanted = _value / 3.6;
+		private _requested = ((_value max (-_speedCap)) min _speedCap);
 		private _handle = [{
 			params ["_args", "_handle"];
-			_args params ["_vehicle", "_startSpeed", "_targetSpeed", "_startTime", "_lock", "_owner"];
+			_args params ["_vehicle", "_startSpeed", "_wanted", "_startTime", "_lock", "_owner"];
 
 			// Damage taken while the ramp is running counts: the target is re-capped against what the
-			// drivetrain can still deliver, and a drivetrain that fails outright ends the ramp and lets
-			// the vehicle roll out rather than dragging it along at a speed it can no longer make.
-			(_vehicle call FUNC(getVehicleDrivetrain)) params ["", "", "_effectiveness", "_blocked", "_speedCap"];
+			// drivetrain can still deliver. Only a vehicle left with no drivetrain at all ends the ramp,
+			// and then it is left to roll out rather than dragged along on nothing.
+			(_vehicle call FUNC(getVehicleDrivetrain)) params ["", "", "", "_blocked", "_speedCap"];
 			if (!alive _vehicle || _blocked) exitWith {
 				[_vehicle] call FUNC(releaseVehicleSpeedLock);
 				if (_blocked && {alive _vehicle}) then {
@@ -212,7 +217,7 @@ switch (_action) do {
 			};
 
 			private _capMs = _speedCap / 3.6;
-			private _cappedTarget = (_targetSpeed max (-_capMs)) min _capMs;
+			private _cappedTarget = (_wanted max (-_capMs)) min _capMs;
 			private _progress = ((time - _startTime) / 5) min 1;
 			private _speedNow = _startSpeed + ((_cappedTarget - _startSpeed) * _progress);
 			private _dir = getDir _vehicle;
@@ -222,18 +227,19 @@ switch (_action) do {
 			if (_progress >= 1) exitWith {
 				[_handle] call CBA_fnc_removePerFrameHandler;
 				_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_PFH", -1, true];
-				if (_lock && {(abs _cappedTarget) > 0.01}) then {
-					_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", _cappedTarget, true];
+				if (_lock && {(abs _wanted) > 0.01}) then {
+					_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", _wanted, true];
 					private _lockHandle = [{
 						params ["_args", "_handle"];
 						_args params ["_vehicle", "_owner"];
-						private _targetSpeed = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", 0];
+						private _wanted = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_LOCK", 0];
 
-						// The lock is only as good as the drivetrain holding it: it follows the vehicle
-						// down as wheels shred and releases itself once the vehicle can no longer drive,
-						// leaving it to coast to a stop instead of being held at speed on a dead engine.
+						// The lock holds the ordered speed for as long as any drivetrain survives to hold
+						// it, following the vehicle down as wheels shred and back up again if it is
+						// repaired. It lets go only when there is nothing left to drive with, and then the
+						// vehicle coasts to a stop rather than being carried along on a dead engine.
 						(_vehicle call FUNC(getVehicleDrivetrain)) params ["", "", "", "_blocked", "_speedCap"];
-						if (!alive _vehicle || _blocked || {(abs _targetSpeed) <= 0.01}) exitWith {
+						if (!alive _vehicle || _blocked || {(abs _wanted) <= 0.01}) exitWith {
 							[_vehicle] call FUNC(releaseVehicleSpeedLock);
 							if (_blocked && {alive _vehicle}) then {
 								["root_cyberwarfare_gui_actionResult", [DEVICE_TYPE_VEHICLE, localize "STR_ROOT_CYBERWARFARE_SPEED_LOCK_LOST", false], _owner] call CBA_fnc_ownerEvent;
@@ -241,7 +247,7 @@ switch (_action) do {
 						};
 
 						private _capMs = _speedCap / 3.6;
-						private _heldSpeed = (_targetSpeed max (-_capMs)) min _capMs;
+						private _heldSpeed = (_wanted max (-_capMs)) min _capMs;
 						private _dir = getDir _vehicle;
 						private _vel = velocity _vehicle;
 						[_vehicle, [sin _dir * _heldSpeed, cos _dir * _heldSpeed, _vel select 2]] remoteExec ["setVelocity", _vehicle];
@@ -249,7 +255,7 @@ switch (_action) do {
 					_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_PFH", _lockHandle, true];
 				};
 			};
-		}, 0.05, [_vehicle, _startSpeed, _targetSpeed, time, _lock, _owner]] call CBA_fnc_addPerFrameHandler;
+		}, 0.05, [_vehicle, _startSpeed, _wanted, time, _lock, _owner]] call CBA_fnc_addPerFrameHandler;
 		_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_PFH", _handle, true];
 		_msg = if (round _requested isEqualTo round _value) then {
 			format ["Speed changing to %1 km/h over 5 seconds.", round _value]
@@ -273,11 +279,12 @@ switch (_action) do {
 		private _vel = velocity _vehicle;
 		private _dir = getDir _vehicle;
 
-		// The step is added to the speed the vehicle already carries, scaled by the surviving drivetrain
-		// and capped at the top speed that drivetrain can reach, so a wrecked vehicle cannot be stepped
-		// past what it could physically do.
+		// The step is added to the speed the vehicle already carries and then capped at the top speed the
+		// surviving drivetrain can reach, so a wrecked vehicle still steps up - just never past what it
+		// could physically do. The cap alone does the derating: scaling the step by the drivetrain as well
+		// would charge the damage twice.
 		private _forwardSpeed = (((_vel select 0) * (sin _dir)) + ((_vel select 1) * (cos _dir))) * 3.6;
-		private _targetSpeed = _forwardSpeed + (_speedChange * _effectiveness);
+		private _targetSpeed = _forwardSpeed + _speedChange;
 		_targetSpeed = (_targetSpeed max (-_speedCap)) min _speedCap;
 		private _applied = _targetSpeed - _forwardSpeed;
 		private _targetMs = _targetSpeed / 3.6;

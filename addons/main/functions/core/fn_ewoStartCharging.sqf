@@ -3,8 +3,10 @@
  * Author: Root
  * Description: Starts a server-authoritative inventory laptop charging job using the caller's EWO
  *              backpack. Each job advances at one percent per three seconds until the backpack is
- *              empty, the laptop is removed from inventory, or it reaches full charge. The caller is
- *              told whether the job started and why it did not, since the job itself runs unattended.
+ *              empty, the laptop is removed from inventory, or it reaches full charge. The starting level
+ *              is read from the laptop itself, so a half-charged laptop is topped up from where it stands
+ *              rather than treated as empty. The caller is told whether the job started and why it did not,
+ *              since the job itself runs unattended.
  *
  * Arguments:
  * 0: _player <OBJECT> - Player carrying the backpack and laptop item
@@ -31,8 +33,7 @@ if (_energy <= 0) exitWith {
     [localize "STR_ROOT_CYBERWARFARE_EWO_NO_ENERGY", ROOT_CYBERWARFARE_COLOR_ERROR] remoteExecCall [QFUNC(ewoNotify), _player];
 };
 
-private _buffer = missionNamespace getVariable ["AE3_LAPTOP_ITEM", createHashMap];
-private _charge = (_buffer getOrDefault [_item, createHashMap]) getOrDefault ["ROOT_EWO_BATTERY_PERCENT", 0];
+([_item] call FUNC(ewoLaptopBattery)) params ["_charge"];
 
 if (_charge >= 100) exitWith {
     [format [localize "STR_ROOT_CYBERWARFARE_EWO_ALREADY_FULL", _name], ROOT_CYBERWARFARE_COLOR_WARNING] remoteExecCall [QFUNC(ewoNotify), _player];

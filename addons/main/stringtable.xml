@@ -182,7 +182,7 @@
             <English>Error! Speed value %1 km/h is outside allowed range [%2 - %3 km/h].</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_SPEED_WHEELS_DESTROYED">
-            <English>Error! At least one wheel is below 10 percent health - the vehicle cannot be boosted.</English>
+            <English>Error! Every wheel is destroyed - there is nothing left for the drivetrain to drive.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_VEHICLE_NOT_FOUND">
             <English>Vehicle ID %1 not found.</English>
@@ -392,11 +392,26 @@
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_CHARGE_COMPLETE">
             <English>Charging of %1 is complete.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_EWO_CHARGE_DISCONNECTED">
+            <English>Charger disconnected from %1. The charge it has taken on is kept.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_CHARGE_STARTED">
             <English>Charging %1 - battery %2%3, EWO energy %4%3.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_DEPLETED">
             <English>Charging stopped: the EWO backpack is out of energy.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_EWO_INFO_ADDRESS">
+            <English>Address: %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_EWO_INFO_NAME">
+            <English>Network name: %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_EWO_INFO_PASSWORD">
+            <English>Password: %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_EWO_INFO_STATE">
+            <English>Network is %1.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_NO_ENERGY">
             <English>EWO backpack has no energy remaining.</English>
@@ -409,6 +424,18 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_STATUS_IDLE">
             <English>No laptops are charging.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_EWO_WIFI_DEPLETED">
+            <English>EWO network shut down: the backpack is out of energy.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_EWO_WIFI_OFF">
+            <English>off the air</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_EWO_WIFI_ON">
+            <English>broadcasting</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_EWO_WIFI_SET">
+            <English>EWO network '%1' is now %2.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_ACTIVATED">
             <English>Power grid activated: %1 lights turned ON within %2m radius</English>
@@ -423,13 +450,13 @@
             <English>WARNING: Power grid overloaded! Generator destroyed. %1 objects affected within %2m radius.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SPEED_BLOCKED">
-            <English>Drivetrain failure: engine %1 percent damaged, wheels %2 percent effective. The vehicle cannot be driven.</English>
+            <English>Drivetrain destroyed: engine %1 percent damaged, wheels %2 percent effective. Nothing is left to turn the wheels.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SPEED_DERATED">
             <English>Drivetrain damaged: %1 percent effective. Applied %2 km/h of the requested %3 km/h.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SPEED_LOCK_LOST">
-            <English>Speed lock released: the drivetrain is too damaged to hold speed.</English>
+            <English>Speed lock released: the drivetrain is destroyed and can no longer hold any speed.</English>
         </Key>
     </Package>
     <Package name="Prompts">

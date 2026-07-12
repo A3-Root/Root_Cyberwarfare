@@ -138,14 +138,35 @@
 #endif
 
 // ============================================================================
+// EWO Backpack
+// ============================================================================
+// The backpack's energy pool, the reach of the network it broadcasts, and what that broadcast costs to
+// keep running. These are fixed on purpose: the reach and the drain are part of what an EWO backpack is,
+// not something a mission or an operator is meant to tune.
+
+#ifndef EWO_ENERGY_MAX
+    #define EWO_ENERGY_MAX 400
+#endif
+#ifndef EWO_WIFI_RANGE
+    #define EWO_WIFI_RANGE 100
+#endif
+// One percent of a full pack every twenty seconds the network is broadcasting.
+#ifndef EWO_WIFI_DRAIN_INTERVAL
+    #define EWO_WIFI_DRAIN_INTERVAL 20
+#endif
+#ifndef EWO_WIFI_DRAIN_PERCENT
+    #define EWO_WIFI_DRAIN_PERCENT 1
+#endif
+// Seconds of charging that add one percent to a packed laptop's battery.
+#ifndef EWO_CHARGE_SECONDS_PER_PERCENT
+    #define EWO_CHARGE_SECONDS_PER_PERCENT 3
+#endif
+
+// ============================================================================
 // Drivetrain Limits
 // ============================================================================
-// Smallest fraction of an intact drivetrain that can still move a vehicle, and the stand-in speed cap
-// used for vehicles whose config declares no top speed.
+// The stand-in speed cap used for vehicles whose config declares no top speed.
 
-#ifndef DRIVETRAIN_MIN_EFFECTIVENESS
-    #define DRIVETRAIN_MIN_EFFECTIVENESS 0.15
-#endif
 #ifndef DRIVETRAIN_NO_SPEED_CAP
     #define DRIVETRAIN_NO_SPEED_CAP 1e6
 #endif

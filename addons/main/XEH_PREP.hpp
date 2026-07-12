@@ -35,9 +35,13 @@ PREP(scanNetworkCli);
 PREP(scanNetworkPrint);
 PREP(ewoSyncBackpacks);
 PREP(ewoStartCharging);
+PREP(ewoStopCharging);
 PREP(ewoChargeTick);
 PREP(ewoGetInventoryLaptops);
+PREP(ewoLaptopBattery);
+PREP(ewoSetLaptopBattery);
 PREP(ewoLaptopDisplayName);
+PREP(ewoWifiSet);
 PREP(ewoNotify);
 
 // Redefine PREP macro for subdirectory: cipher

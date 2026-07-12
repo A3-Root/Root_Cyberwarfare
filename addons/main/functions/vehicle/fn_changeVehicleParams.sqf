@@ -158,9 +158,9 @@ if (_vehicleIDNum != 0) then {
                         breakTo "exit";
                     };
 
-                    // The drivetrain has to be able to deliver the boost: a vehicle whose engine is
-                    // destroyed cannot be pushed at all, and one running on shot-out wheels cannot reach
-                    // the speed an intact one would.
+                    // Damage sets how fast the vehicle can be pushed, not whether it can be pushed: the
+                    // boost is cut back to what the surviving drivetrain can deliver. Only a vehicle with
+                    // no drivetrain left at all has nothing to push.
                     (_vehicleObject call FUNC(getVehicleDrivetrain)) params [
                         "_engineDamage", "_wheelFactor", "_effectiveness", "_blocked", "_speedCap"
                     ];
@@ -186,12 +186,13 @@ if (_vehicleIDNum != 0) then {
                     };
 
                     // The boost is expressed in km/h and adds to whatever the vehicle is already doing,
-                    // scaled by the drivetrain that is left and capped at the top speed that drivetrain
-                    // can still reach - a vehicle on one wheel cannot be pushed to its factory top speed.
+                    // capped at the top speed the surviving drivetrain can reach - a vehicle on one wheel
+                    // cannot be pushed to its factory top speed. The cap alone does the derating: scaling
+                    // the boost by the drivetrain as well would charge the damage twice.
                     private _vel = velocity _vehicleObject;
                     private _dir = getDir _vehicleObject;
                     private _forwardSpeed = (((_vel select 0) * (sin _dir)) + ((_vel select 1) * (cos _dir))) * 3.6;
-                    private _targetSpeed = _forwardSpeed + (_value * _effectiveness);
+                    private _targetSpeed = _forwardSpeed + _value;
                     _targetSpeed = (_targetSpeed max (-_speedCap)) min _speedCap;
                     private _appliedValue = _targetSpeed - _forwardSpeed;
                     private _targetMs = _targetSpeed / 3.6;

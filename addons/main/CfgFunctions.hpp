@@ -36,9 +36,13 @@ class CfgFunctions {
 			class scanNetworkPrint {};
 			class ewoSyncBackpacks {};
 			class ewoStartCharging {};
+			class ewoStopCharging {};
 			class ewoChargeTick {};
 			class ewoGetInventoryLaptops {};
+			class ewoLaptopBattery {};
+			class ewoSetLaptopBattery {};
 			class ewoLaptopDisplayName {};
+			class ewoWifiSet {};
 			class ewoNotify {};
 		};
 
