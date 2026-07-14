@@ -23,6 +23,7 @@ Root's Cyber Warfare introduces 8 distinct device types that can be hacked and c
 
 ### Key Capabilities
 
+- **Desktop GUI and Terminal CLI** - All operations can be performed using the Desktop (GUI) or Terminal (CLI)
 - **Power Management System** - All operations consume battery power (configurable costs in Wh)
 - **Flexible Access Control** - Link devices to specific computers or make them public
 - **Customizable Operation Limits** - Set min/max ranges for vehicle operations, toggle counts, and cooldown timers
