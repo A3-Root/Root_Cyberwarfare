@@ -159,6 +159,18 @@
     false // doesn't require mission restart
 ] call CBA_fnc_addSetting;
 
+// GPS Tracker Ping Power Cost Setting
+[
+    SETTING_GPS_COST,
+    "SLIDER",
+    ["GPS Tracker Power Cost", "Energy in Wh consumed by each GPS tracker ping unless the tracker has a mission-specific cost."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY"],
+    [1, 100, 10, 0], // [min, max, default, decimal places]
+    1, // mission-level
+    {},
+    false // doesn't require mission restart
+] call CBA_fnc_addSetting;
+
 // Power Grid Control Power Cost Setting
 [
     SETTING_POWERGRID_COST,

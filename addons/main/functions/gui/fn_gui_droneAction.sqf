@@ -36,7 +36,7 @@ if (_faction isEqualTo "disable") exitWith {
 	private _drone = objectFromNetId ((_drones select _idx) select 1);
 	if (isNull _drone) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DRONE", _droneId], false] call _reply; };
 	if (!alive _drone || {damage _drone >= 1}) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_DRONE_ALREADY_DISABLED", false] call _reply; };
-	private _cost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_DRONE_DISABLE_EDIT", 10];
+	private _cost = [_drone, "disable"] call FUNC(getDroneCost);
 	if !([_computer, _cost] call FUNC(checkPowerAvailable)) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply; };
 	[_computer, _cost] call FUNC(consumePower);
 	(vehicle _drone) setDamage 1;
@@ -60,7 +60,7 @@ private _drone = objectFromNetId ((_drones select _idx) select 1);
 if (isNull _drone) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DRONE", _droneId], false] call _reply; };
 if (side _drone isEqualTo _side) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_DRONE_ALREADY_FACTION", _faction], false] call _reply; };
 
-private _cost = missionNamespace getVariable [SETTING_DRONE_SIDE_COST, 20];
+private _cost = [_drone, "side"] call FUNC(getDroneCost);
 if !([_computer, _cost] call FUNC(checkPowerAvailable)) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply; };
 [_computer, _cost] call FUNC(consumePower);
 

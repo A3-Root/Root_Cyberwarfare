@@ -58,8 +58,6 @@ _droneFaction = toLower _droneFaction;
 
 if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "west" || _droneFaction isEqualTo "east" || _droneFaction isEqualTo "guer" || _droneFaction isEqualTo "civ")) then {
     private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
-    private _allCosts = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_COSTS", []];
-    private _powerCostPerDrone = _allCosts select 1;
     private _allDrones = _allDevices select 2;
 
     // Filter drones to only those accessible by this computer
@@ -92,13 +90,17 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
     if(_droneId isEqualTo "a") then {
         private _countOfChangingDrones = 0;
         private _affectedDrones = [];
-        
+        // Each drone is charged at its own rate, so the bill for the whole sweep is the sum of what the
+        // individual drones cost rather than one rate multiplied out.
+        private _changeWh = 0;
+
         // Count only accessible drones that need changing
         {
             private _drone = objectFromNetId (_x select 1);
             private _currentState = side _drone;
             if((_side isNotEqualTo _currentState)) then {
                 _countOfChangingDrones = _countOfChangingDrones + 1;
+                _changeWh = _changeWh + ([_drone, "side"] call FUNC(getDroneCost));
                 _affectedDrones pushBack _x;
             };
         } forEach _accessibleDrones;
@@ -110,10 +112,9 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
             breakTo "exit";
         };
 
-        _string = format ['Affected Drones: %1. Power Cost: %2Wh.', _countOfChangingDrones, (_countOfChangingDrones * _powerCostPerDrone)];
+        _string = format ['Affected Drones: %1. Power Cost: %2Wh.', _countOfChangingDrones, _changeWh];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
-        private _changeWh = (_powerCostPerDrone * _countOfChangingDrones);
         if !([_computer, _changeWh] call FUNC(checkPowerAvailable)) then {
             _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
@@ -147,6 +148,7 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "wes
                 private _currentState = side _drone;
                 
                 if((_side isNotEqualTo _currentState)) then {
+                    private _powerCostPerDrone = [_drone, "side"] call FUNC(getDroneCost);
                     _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _powerCostPerDrone];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 

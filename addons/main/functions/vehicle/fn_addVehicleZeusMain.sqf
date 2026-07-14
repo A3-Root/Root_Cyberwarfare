@@ -69,10 +69,11 @@
 // - Drone call: 4 params or less
 // - Vehicle call: 12 params
 // Radius mode is a position-array first arg (>=5 params allows an optional _allowLocation tail
-// without breaking the count-based dispatch). Drone call is an object first arg with <=5 params
-// (the optional 5th is the custom drone name); vehicle calls carry 12+ params.
+// without breaking the count-based dispatch). Drone call is an object first arg with <=7 params
+// (the optional tail is the custom drone name and the drone's own hacking costs); vehicle calls carry
+// 12+ params.
 private _isRadiusMode = (count _this) >= 5 && {(_this select 0) isEqualType []};
-private _isDroneCall = !_isRadiusMode && {(count _this) <= 5};
+private _isDroneCall = !_isRadiusMode && {(count _this) <= 7};
 
 if (_isRadiusMode) then {
     // Radius mode: Register all vehicles/drones within radius
@@ -132,11 +133,16 @@ if (_isRadiusMode) then {
 } else {
     if (_isDroneCall) then {
         // Drone: handle drone registration directly
-        params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false], ["_droneName", "", [""]]];
+        params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false], ["_droneName", "", [""]], ["_disableCost", 0, [0]], ["_sideCost", 0, [0]]];
 
         if (_execUserId == 0) then {
             _execUserId = owner _targetObject;
         };
+
+        // A cost of its own is what this drone is billed at; zero leaves it to the mission's settings,
+        // which is what a drone registered without one - by the radius mode or an older script - gets.
+        _targetObject setVariable ["ROOT_CYBERWARFARE_DRONE_DISABLE_COST", _disableCost, true];
+        _targetObject setVariable ["ROOT_CYBERWARFARE_DRONE_SIDE_COST", _sideCost, true];
 
         // Load device arrays from global storage
         private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];

@@ -157,11 +157,13 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 					_label = [_obj, _x param [2, ""], format ["Drone %1", _id]] call _labelOr;
 					if (!isNull _obj) then {
 						_status = [str (side _obj), "Disabled"] select (!alive _obj || {_obj getVariable ["ROOT_CYBERWARFARE_DRONE_DISABLED", false]});
-						private _disableCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_DRONE_DISABLE_EDIT", 10];
-						private _sideCost = missionNamespace getVariable [SETTING_DRONE_SIDE_COST, 20];
+						// The figure the confirmation quotes is the one the server will charge: a drone
+						// registered with a cost of its own is billed at that, everything else at the setting.
+						private _disableCost = [_obj, "disable"] call FUNC(getDroneCost);
+						private _sideCost = [_obj, "side"] call FUNC(getDroneCost);
 						_acts = [
-							["disable", "Disable Drone", ["Disabling this drone", _disableCost] call _powerConfirm] call _actC,
-							createHashMapFromArray [["id", "side"], ["label", "Change Drone Side"], ["submenu", [
+							["disable", "Disable", ["Disabling this drone", _disableCost] call _powerConfirm] call _actC,
+							createHashMapFromArray [["id", "side"], ["label", "Change Side"], ["submenu", [
 								["west", "WEST (BLUFOR)", ["Changing this drone side", _sideCost] call _powerConfirm] call _actC,
 								["east", "EAST (OPFOR)", ["Changing this drone side", _sideCost] call _powerConfirm] call _actC,
 								["guer", "GUER (INDFOR)", ["Changing this drone side", _sideCost] call _powerConfirm] call _actC,
@@ -323,7 +325,7 @@ if (_hasWeb) then
 		["RootCW_Databases", "STR_ROOT_CYBERWARFARE_GUI_APP_DATABASES", "&#128451;", "database", DEVICE_TYPE_DATABASE,  [createHashMapFromArray [["id", "access"], ["label", "Download"], ["flow", "download"]]], "Hacking Tools"],
 		["RootCW_Gps",       "STR_ROOT_CYBERWARFARE_GUI_APP_GPS",       "&#128205;", "gps",      DEVICE_TYPE_GPS_TRACKER, [["track", "Track"] call _act], "Hacking Tools"],
 		// Drones: Disable plus side-change buttons (Drones #1); the action handler supports west/east/guer/civ.
-		["RootCW_Drones",    "STR_ROOT_CYBERWARFARE_GUI_APP_DRONES",    "&#128760;", "drone",    DEVICE_TYPE_DRONE,     [["disable", "Disable Drone"] call _act, createHashMapFromArray [["id", "side"], ["label", "Change Drone Side"], ["submenu", [["west", "WEST (BLUFOR)"] call _act, ["east", "EAST (OPFOR)"] call _act, ["guer", "GUER (INDFOR)"] call _act, ["civ", "CIVILIAN"] call _act]]]], "Hacking Tools"],
+		["RootCW_Drones",    "STR_ROOT_CYBERWARFARE_GUI_APP_DRONES",    "&#128760;", "drone",    DEVICE_TYPE_DRONE,     [["disable", "Disable"] call _act, createHashMapFromArray [["id", "side"], ["label", "Change Side"], ["submenu", [["west", "WEST (BLUFOR)"] call _act, ["east", "EAST (OPFOR)"] call _act, ["guer", "GUER (INDFOR)"] call _act, ["civ", "CIVILIAN"] call _act]]]], "Hacking Tools"],
 		// Vehicles: plain toggles; Fuel/Speed/Alarm are added as slider actions per-vehicle in DESCRIBE
 		// (Vehicles #1). Refuel/Drain removed.
 		["RootCW_Vehicles",  "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES",  "&#128663;", "vehicle",  DEVICE_TYPE_VEHICLE,   [], "Hacking Tools"],

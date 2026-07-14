@@ -46,7 +46,11 @@ if (isNull _router) then {
     private _gateway = _bag getVariable ["ROOT_EWO_GATEWAY", [77, 95, 0, 1]];
 
     [_router, objNull, _gateway, true] call AE3_network_fnc_initRouter;
-    [_router, _name, EWO_WIFI_RANGE, _password, _gateway, true, "77\\.95\\.\\d+\\.1"] call AE3_network_fnc_applyRouterConfig;
+    // EWO networks are one force's networks wherever they stand, so they are open to each other and to
+    // nothing else: the allow list is every address on an EWO subnet, which lets an operator reach a
+    // laptop on another EWO's network across the map while a laptop on any other network is still
+    // turned away at the gateway.
+    [_router, _name, EWO_WIFI_RANGE, _password, _gateway, true, EWO_SUBNET_ALLOW] call AE3_network_fnc_applyRouterConfig;
 
     // initRouter leaves the router powered as a matter of course, and a laptop's scan lists a router
     // only while it is powered. The network follows the switch the operator left it on: off for a pack

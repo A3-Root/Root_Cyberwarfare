@@ -112,6 +112,9 @@
 #ifndef SETTING_VEHICLE_COST
     #define SETTING_VEHICLE_COST "ROOT_CYBERWARFARE_VEHICLE_COST"
 #endif
+#ifndef SETTING_GPS_COST
+    #define SETTING_GPS_COST "ROOT_CYBERWARFARE_GPS_COST"
+#endif
 #ifndef SETTING_EWO_MODE
     #define SETTING_EWO_MODE "ROOT_CYBERWARFARE_EWO_MODE"
 #endif
@@ -154,6 +157,12 @@
 // considered pulled out. Matches the reach AE3 gives its own power interfaces.
 #ifndef EWO_POWER_SOURCE_RANGE
     #define EWO_POWER_SOURCE_RANGE 10
+#endif
+// Every EWO network hands its laptops an address on its own 77.95.x/24 subnet. This is the access list
+// each EWO router is opened with: any address on any EWO subnet, so the networks reach each other and
+// nothing outside them does. Matched whole against a source address, so it has to cover the host part.
+#ifndef EWO_SUBNET_ALLOW
+    #define EWO_SUBNET_ALLOW "77\\.95\\.\\d+\\..*"
 #endif
 
 // Energy per minute: spent while the network broadcasts, delivered to a laptop on charge, and taken in

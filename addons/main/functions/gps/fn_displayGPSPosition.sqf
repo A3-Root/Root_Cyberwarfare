@@ -74,7 +74,14 @@ if (_trackerIdNum != 0) then {
             if ([_computer, 6, _storedTrackerId, _commandPath] call Root_fnc_isDeviceAccessible) then {
                 _foundTracker = true;
 
-                if ((isNil "_powerCost") || (_powerCost < 1)) then { _powerCost = _trackerObject getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_COST", 10] };
+                // A tracker registered with a cost of its own is billed at that; every other tracker is
+                // billed at the mission's GPS setting.
+                if ((isNil "_powerCost") || (_powerCost < 1)) then {
+                    _powerCost = _trackerObject getVariable [
+                        "ROOT_CYBERWARFARE_GPS_TRACKER_COST",
+                        missionNamespace getVariable [SETTING_GPS_COST, 10]
+                    ];
+                };
 
                 // Check if already being tracked by this computer
                 if ((_currentStatus select 0) == "Tracking") then {

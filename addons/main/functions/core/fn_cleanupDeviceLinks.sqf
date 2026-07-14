@@ -30,10 +30,12 @@ if (missionNamespace getVariable ["ROOT_CYBERWARFARE_CLEANUP_STARTED", false]) e
 };
 
 // Legacy power-cost snapshot kept for backwards compatibility with older scripts that read ALL_COSTS.
-private _doorCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_DOOR_EDIT", 2];
-private _droneSideCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_DRONE_SIDE_EDIT", 20];
-private _droneDestructionCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_DRONE_DISABLE_EDIT", 10];
-private _customCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_COST_CUSTOM_EDIT", 10];
+// It is taken from the settings the mod itself charges against, so a script reading the old array is
+// told the same figures the operations use rather than a stale set of its own.
+private _doorCost = missionNamespace getVariable [SETTING_DOOR_COST, 2];
+private _droneSideCost = missionNamespace getVariable [SETTING_DRONE_SIDE_COST, 20];
+private _droneDestructionCost = missionNamespace getVariable [SETTING_DRONE_HACK_COST, 10];
+private _customCost = missionNamespace getVariable [SETTING_CUSTOM_COST, 10];
 missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_COSTS", [_doorCost, _droneSideCost, _droneDestructionCost, _customCost], true];
 
 ROOT_CYBERWARFARE_LOG_INFO("Device link cleanup task ready (opt-in via ROOT_CYBERWARFARE_CLEANUP_ENABLED; default off).");

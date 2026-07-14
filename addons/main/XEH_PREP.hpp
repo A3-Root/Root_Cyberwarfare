@@ -118,6 +118,7 @@ PREP(copyDeviceLinksZeusMain);
 PREP(detectBuildingDoors);
 PREP(getAccessibleDevices);
 PREP(getBatteryStatus);
+PREP(getDroneCost);
 PREP(getComputerIdentifier);
 PREP(getObjectsInTriggerArea);
 PREP(getPlayerFromComputer);

@@ -49,7 +49,7 @@ _bag setVariable ["ROOT_EWO_WIFI_ON", _on, true];
 private _router = [_bag] call FUNC(ewoRouterProxy);
 if (isNull _router) exitWith {};
 
-[_router, _name, EWO_WIFI_RANGE, _password, _gateway, true, "77\\.95\\.\\d+\\.1"] call AE3_network_fnc_applyRouterConfig;
+[_router, _name, EWO_WIFI_RANGE, _password, _gateway, true, EWO_SUBNET_ALLOW] call AE3_network_fnc_applyRouterConfig;
 
 // The power state is what a laptop's network scan filters on, so it is the switch.
 _router setVariable ["AE3_power_powerState", [0, 1] select _on, true];

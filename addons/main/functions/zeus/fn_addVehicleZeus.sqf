@@ -1,3 +1,4 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
  * Zeus module to add a hackable vehicle or drone with customizable operation limits
@@ -114,8 +115,16 @@ if (_useRadiusMode) then {
     _dialogControls pushBack ["SLIDER:RADIUS", [localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS", localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS_DESC"], [10, 3000, 1000, 0, _logicPosition, [7,120,32,1]]];
 } else {
     if (_isDrone) then {
-        // Simplified dialog for drones - only availability and laptop selection
+        // A drone is named and priced the same way a vehicle is: the name is what an operator reads in
+        // the terminal and on the desktop, and the two costs are what hacking this particular drone is
+        // worth. They start at the mission's own settings, so a drone left alone is charged like every
+        // other drone and only a drone that is deliberately changed here departs from that.
         _dialogTitle = format ["Add Hackable Drone - %1", getText (configOf _targetObject >> "displayName")];
+        _dialogControls = [
+            ["EDIT", ["Drone Name", "Name that will appear in the terminal for hacking"], [format ["Drone_%1", _index]]],
+            ["SLIDER", ["Power Cost to Disable", "Energy / Power (in Wh) required to disable this drone."], [1, 100, missionNamespace getVariable [SETTING_DRONE_HACK_COST, 10], 0]],
+            ["SLIDER", ["Power Cost to Switch Side", "Energy / Power (in Wh) required to change this drone's side."], [1, 100, missionNamespace getVariable [SETTING_DRONE_SIDE_COST, 20], 0]]
+        ];
     } else {
         // Full dialog for vehicles
         _dialogTitle = format ["Add Hackable Vehicle - %1", getText (configOf _targetObject >> "displayName")];
@@ -200,7 +209,13 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this de
 
         } else {
             if (_isDrone) then {
-                // Drone: only availability flag
+                // Drone: name, the two hacking costs, then the flags every device carries
+                private _droneName = _results select _resultIndex;
+                _resultIndex = _resultIndex + 1;
+                private _disableCost = _results select _resultIndex;
+                _resultIndex = _resultIndex + 1;
+                private _sideCost = _results select _resultIndex;
+                _resultIndex = _resultIndex + 1;
                 private _availableToFutureLaptops = _results select _resultIndex;
                 _resultIndex = _resultIndex + 1;
                 private _allowLocation = _results select _resultIndex;
@@ -220,11 +235,16 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this de
                     _selectedComputers = _allComputers apply { _x select 0 };
                 };
 
+                if (_disableCost < 1) then { _disableCost = 1; };
+                if (_sideCost < 1) then { _sideCost = 1; };
+
                 // Hand off to the vehicle worker, which detects drones and applies the drone-specific handling.
-                [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
-                // Drone path can't carry the flag through the 4-param call; apply it on the object (#3).
+                [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _droneName, _disableCost, _sideCost] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+                // Drone path can't carry the flag through the registration call; apply it on the object.
                 [_targetObject, ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]] remoteExec ["setVariable", 2];
                 ["Hackable Drone Added!"] call zen_common_fnc_showMessage;
+                _index = _index + 1;
+                missionNamespace setVariable ["ROOT_CYBERWARFARE_VEHICLE_INDEX", _index, true];
 
             } else {
                 // Vehicle: full configuration

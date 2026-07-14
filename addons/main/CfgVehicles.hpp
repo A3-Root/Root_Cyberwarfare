@@ -235,6 +235,20 @@ class CfgVehicles {
 				typeName = "NUMBER";
 				defaultValue = 10;
 			};
+			class ROOT_CYBERWARFARE_3DEN_COST_GPS: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_COST_GPS";
+				displayName = "GPS Tracker Cost";
+				tooltip = "Power cost in Wh to ping a GPS tracker that was registered without a cost of its own";
+				typeName = "NUMBER";
+				defaultValue = 10;
+			};
+			class ROOT_CYBERWARFARE_3DEN_COST_POWERGRID: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_COST_POWERGRID";
+				displayName = "Power Grid Cost";
+				tooltip = "Power cost in Wh to switch or overload a power grid";
+				typeName = "NUMBER";
+				defaultValue = 15;
+			};
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {

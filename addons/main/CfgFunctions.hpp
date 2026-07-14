@@ -139,6 +139,7 @@ class CfgFunctions {
 			class detectBuildingDoors {};
 			class getAccessibleDevices {};
 			class getBatteryStatus {};
+			class getDroneCost {};
 			class getComputerIdentifier {};
 			class getObjectsInTriggerArea {};
 			class getPlayerFromComputer {};

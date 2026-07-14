@@ -256,7 +256,7 @@ changedrone a civ      # Change ALL drones to Civilian
 
 ---
 
-### 5. disabledrone - Disable Drones
+### 5. disabledrone - Disables
 
 **Syntax:**
 ```bash
@@ -273,7 +273,7 @@ Disable (destroy/explode) a drone or UAV.
 
 **Examples:**
 ```bash
-disabledrone 2        # Disable drone 2
+disabledrone 2        # Disable 2
 disabledrone a        # Disable ALL accessible drones
 ```
 
@@ -601,7 +601,7 @@ Power costs for hacking operations are configured in **Watt-hours (Wh)**:
 |-----------|-------------------|
 | Lock/unlock door | 2 |
 | Change drone faction | 20 |
-| Disable drone | 10 |
+| Disable | 10 |
 | Custom device action | 10 |
 | Power grid control | 15 |
 | Vehicle action | 2 (configurable per vehicle) |
