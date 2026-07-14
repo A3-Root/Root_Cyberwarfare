@@ -161,8 +161,10 @@
 // Every EWO network hands its laptops an address on its own 77.95.x/24 subnet. This is the access list
 // each EWO router is opened with: any address on any EWO subnet, so the networks reach each other and
 // nothing outside them does. Matched whole against a source address, so it has to cover the host part.
+// A backslash carries no escape meaning inside an SQF string, so one backslash is what reaches the regex
+// engine and one is what is written here - doubling it would ask the engine to match a literal backslash.
 #ifndef EWO_SUBNET_ALLOW
-    #define EWO_SUBNET_ALLOW "77\\.95\\.\\d+\\..*"
+    #define EWO_SUBNET_ALLOW "77\.95\.\d+\..*"
 #endif
 
 // Energy per minute: spent while the network broadcasts, delivered to a laptop on charge, and taken in
