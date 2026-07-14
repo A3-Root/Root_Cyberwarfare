@@ -596,7 +596,7 @@ if (hasInterface) then {
             {
                 private _bag = backpackContainer ACE_player;
                 private _on = _bag getVariable ["ROOT_EWO_WIFI_ON", false];
-                private _gateway = _bag getVariable ["ROOT_EWO_GATEWAY", [77, 77, 0, 1]];
+                private _gateway = _bag getVariable ["ROOT_EWO_GATEWAY", [77, 95, 0, 1]];
 
                 [
                     [
@@ -616,6 +616,69 @@ if (hasInterface) then {
         ] call ace_interact_menu_fnc_createAction;
 
         ["CAManBase", 1, ["ACE_SelfActions", "ACE_Equipment", "ROOT_EWO_Network"], _actionEwoWifiInfo, true] call ace_interact_menu_fnc_addActionToClass;
+
+        // The pack is not only something to spend energy from: cabled to a running AE3 power source -
+        // a generator, a solar panel, a battery pack - it takes energy back in. The sources on offer are
+        // the ones standing beside the operator and already running, since a source that is switched off
+        // has nothing to give.
+        private _actionEwoPowerConnect = [
+            "ROOT_EWO_PowerConnect",
+            "Connect to Power Source",
+            "",
+            {},
+            {
+                missionNamespace getVariable [SETTING_EWO_MODE, false]
+                && {!isNull (backpackContainer ACE_player)}
+                && {(backpackContainer ACE_player) getVariable ["ROOT_EWO_INITIALIZED", false]}
+                && {isNull ((backpackContainer ACE_player) getVariable ["ROOT_EWO_POWER_SOURCE", objNull])}
+            },
+            {
+                params ["_target"];
+                private _actions = [];
+                private _sources = (nearestObjects [ACE_player, [], EWO_POWER_SOURCE_RANGE]) select {
+                    !isNil {_x getVariable "AE3_power_connectedDevices"}
+                    && {(_x getVariable ["AE3_power_powerState", 0]) == 1}
+                };
+                {
+                    private _source = _x;
+                    private _action = [
+                        format ["ROOT_EWO_PowerConnect_%1", netId _source],
+                        [_source, true] call ace_cargo_fnc_getNameItem,
+                        "",
+                        {
+                            params ["_target", "_player", "_source"];
+                            [_player, _source] remoteExecCall [QFUNC(ewoConnectPower), 2];
+                        },
+                        {true},
+                        {},
+                        _source
+                    ] call ace_interact_menu_fnc_createAction;
+                    _actions pushBack [_action, [], _target];
+                } forEach _sources;
+                _actions
+            }
+        ] call ace_interact_menu_fnc_createAction;
+
+        ["CAManBase", 1, ["ACE_SelfActions", "ACE_Equipment", "ROOT_EWO_Network"], _actionEwoPowerConnect, true] call ace_interact_menu_fnc_addActionToClass;
+
+        // Pulling the cable back out. The energy the pack has taken on is kept; only the intake stops.
+        private _actionEwoPowerDisconnect = [
+            "ROOT_EWO_PowerDisconnect",
+            "Disconnect from Power Source",
+            "",
+            {
+                params ["_target", "_player"];
+                [_player] remoteExecCall [QFUNC(ewoDisconnectPower), 2];
+                [localize "STR_ROOT_CYBERWARFARE_EWO_POWER_DISCONNECTED", ROOT_CYBERWARFARE_COLOR_WARNING] call FUNC(ewoNotify);
+            },
+            {
+                missionNamespace getVariable [SETTING_EWO_MODE, false]
+                && {!isNull (backpackContainer ACE_player)}
+                && {!isNull ((backpackContainer ACE_player) getVariable ["ROOT_EWO_POWER_SOURCE", objNull])}
+            }
+        ] call ace_interact_menu_fnc_createAction;
+
+        ["CAManBase", 1, ["ACE_SelfActions", "ACE_Equipment", "ROOT_EWO_Network"], _actionEwoPowerDisconnect, true] call ace_interact_menu_fnc_addActionToClass;
 
         // ========================================================================
         // ACE Action: GPS Tracker Operations (Parent Menu)

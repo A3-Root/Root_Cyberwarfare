@@ -416,6 +416,21 @@
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_NO_ENERGY">
             <English>EWO backpack has no energy remaining.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_EWO_POWER_CONNECTED">
+            <English>EWO backpack connected to %1 - charging at %2 energy per minute.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_EWO_POWER_DISCONNECTED">
+            <English>EWO backpack disconnected from its power source. The energy it has taken on is kept.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_EWO_POWER_FAR">
+            <English>The power source is too far away to connect the EWO backpack to.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_EWO_POWER_LOST">
+            <English>EWO backpack unplugged: the power source is off or out of reach.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_EWO_POWER_OFF">
+            <English>The power source is not running.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_STATUS_CHARGING">
             <English>Charging:</English>
         </Key>

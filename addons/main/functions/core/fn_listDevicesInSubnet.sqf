@@ -663,4 +663,41 @@ if (_type in ["powergrids", "all", "a"]) then {
     };
 };
 
+// A tally to close the listing on: how many devices of each kind the laptop can reach, how many of that
+// kind the mission has registered at all, and the same two figures across everything listed. It is
+// printed for the summary views only - a detailed view of a single device has nothing to count - and it
+// names every kind, including the ones with nothing on them, so a type that comes back empty reads as
+// empty rather than as missing. When a single type was asked for, only that type is tallied.
+if (_deviceId isEqualTo "") then {
+    private _counts = [
+        ["doors", "Doors", _accessibleDoors, _allDoors],
+        ["lights", "Lights", _accessibleLights, _allLights],
+        ["drones", "Drones", _accessibleDrones, _allDrones],
+        ["files", "Databases", _accessibleDatabases, _allDatabases],
+        ["custom", "Custom Devices", _accessibleCustom, _allCustom],
+        ["gps", "GPS Trackers", _accessibleGpsTrackers, _allGpsTrackers],
+        ["vehicles", "Vehicles", _accessibleVehicles, _allVehicles],
+        ["powergrids", "Power Grids", _accessiblePowerGrids, _allPowerGrids]
+    ] select {(_x select 0) isEqualTo _type || {_type in ["all", "a"]}};
+
+    if (_counts isNotEqualTo []) then {
+        private _accessibleTotal = 0;
+        private _registeredTotal = 0;
+
+        [_computer, [[[""]]]] call AE3_armaos_fnc_shell_stdout;
+        [_computer, [[["Device Count:", "#FFD966"]]]] call AE3_armaos_fnc_shell_stdout;
+
+        {
+            _x params ["", "_label", "_accessible", "_registered"];
+            _accessibleTotal = _accessibleTotal + (count _accessible);
+            _registeredTotal = _registeredTotal + (count _registered);
+            _string = format ["    %1: %2 accessible of %3 registered", _label, count _accessible, count _registered];
+            [_computer, _string] call AE3_armaos_fnc_shell_stdout;
+        } forEach _counts;
+
+        _string = format ["    Total: %1 accessible of %2 registered", _accessibleTotal, _registeredTotal];
+        [_computer, [[[_string, "#008DF8"]]]] call AE3_armaos_fnc_shell_stdout;
+    };
+};
+
 missionNamespace setVariable [_nameOfVariable, true, true];

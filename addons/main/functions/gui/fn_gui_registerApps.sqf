@@ -382,13 +382,16 @@ if (_hasWeb) then
 		private _sub = _data getOrDefault ["sub", ""]; // individual door id, etc.
 		private _value = _data getOrDefault ["value", 0];
 		private _lock = _data getOrDefault ["lock", false];
+		// The ids the app has on screen when a whole-app action is pressed. The filter never leaves the
+		// browser, so the visible rows have to travel with the action for it to mean "all of these".
+		private _ids = _data getOrDefault ["ids", []];
 		private _co = clientOwner;
 		private _nid = netId _computer;
 		switch (_type) do {
 			// _sub carries an individual door id for per-door lock/unlock (Doors #2); "" = whole building.
 			case DEVICE_TYPE_NETSCAN:   { ["root_cyberwarfare_gui_netscanExport",   [_co, _nid, _data getOrDefault ["savePath", ""]]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_DOOR:      { ["root_cyberwarfare_gui_doorAction",      [_co, _nid, _id, _action, "", _sub]] call CBA_fnc_serverEvent; };
-			case DEVICE_TYPE_LIGHT:     { ["root_cyberwarfare_gui_lightAction",     [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
+			case DEVICE_TYPE_LIGHT:     { ["root_cyberwarfare_gui_lightAction",     [_co, _nid, _id, _action, "", _ids]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_POWERGRID: { ["root_cyberwarfare_gui_powergridAction", [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_DATABASE:  { ["root_cyberwarfare_gui_databaseAction",  [_co, _nid, _id, netId player, "", _data getOrDefault ["savePath", ""]]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_DRONE:     { ["root_cyberwarfare_gui_droneAction",     [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };

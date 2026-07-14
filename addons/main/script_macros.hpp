@@ -140,9 +140,9 @@
 // ============================================================================
 // EWO Backpack
 // ============================================================================
-// The backpack's energy pool, the reach of the network it broadcasts, and what that broadcast costs to
-// keep running. These are fixed on purpose: the reach and the drain are part of what an EWO backpack is,
-// not something a mission or an operator is meant to tune.
+// The backpack's energy pool and the reach of the network it broadcasts are part of what an EWO
+// backpack is and stay fixed. What the pack spends and takes in per minute is a mission's to balance,
+// so the three rates are CBA settings and only their defaults live here.
 
 #ifndef EWO_ENERGY_MAX
     #define EWO_ENERGY_MAX 400
@@ -150,16 +150,31 @@
 #ifndef EWO_WIFI_RANGE
     #define EWO_WIFI_RANGE 100
 #endif
-// One percent of a full pack every twenty seconds the network is broadcasting.
-#ifndef EWO_WIFI_DRAIN_INTERVAL
-    #define EWO_WIFI_DRAIN_INTERVAL 20
+// How close the carrier has to stand to the power source the pack is plugged into before the cable is
+// considered pulled out. Matches the reach AE3 gives its own power interfaces.
+#ifndef EWO_POWER_SOURCE_RANGE
+    #define EWO_POWER_SOURCE_RANGE 10
 #endif
-#ifndef EWO_WIFI_DRAIN_PERCENT
-    #define EWO_WIFI_DRAIN_PERCENT 1
+
+// Energy per minute: spent while the network broadcasts, delivered to a laptop on charge, and taken in
+// from a connected power source.
+#ifndef SETTING_EWO_WIFI_DRAIN
+    #define SETTING_EWO_WIFI_DRAIN "ROOT_CYBERWARFARE_EWO_WIFI_DRAIN"
 #endif
-// Seconds of charging that add one percent to a packed laptop's battery.
-#ifndef EWO_CHARGE_SECONDS_PER_PERCENT
-    #define EWO_CHARGE_SECONDS_PER_PERCENT 3
+#ifndef SETTING_EWO_CHARGE_RATE
+    #define SETTING_EWO_CHARGE_RATE "ROOT_CYBERWARFARE_EWO_CHARGE_RATE"
+#endif
+#ifndef SETTING_EWO_RECHARGE_RATE
+    #define SETTING_EWO_RECHARGE_RATE "ROOT_CYBERWARFARE_EWO_RECHARGE_RATE"
+#endif
+#ifndef EWO_WIFI_DRAIN_DEFAULT
+    #define EWO_WIFI_DRAIN_DEFAULT 3
+#endif
+#ifndef EWO_CHARGE_RATE_DEFAULT
+    #define EWO_CHARGE_RATE_DEFAULT 10
+#endif
+#ifndef EWO_RECHARGE_RATE_DEFAULT
+    #define EWO_RECHARGE_RATE_DEFAULT 5
 #endif
 
 // ============================================================================

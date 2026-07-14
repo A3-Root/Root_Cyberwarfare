@@ -9,8 +9,10 @@
  * 0: _owner <NUMBER> - clientOwner of the operator (for the result reply)
  * 1: _computerNetId <STRING> - netId of the laptop
  * 2: _lightId <NUMBER> - Light id from the device registry
- * 3: _state <STRING> - "on" or "off"
+ * 3: _state <STRING> - "on", "off", "allon" or "alloff"
  * 4: _commandPath <STRING> - Backdoor command path
+ * 5: _ids <ARRAY> - (Optional, default: []) Light ids the app had on screen when a whole-app action was
+ *                   pressed; [] means every light the laptop can reach
  *
  * Return Value:
  * None
@@ -18,7 +20,7 @@
  * Public: No
  */
 
-params ["_owner", "_computerNetId", "_lightId", "_state", ["_commandPath", ""]];
+params ["_owner", "_computerNetId", "_lightId", "_state", ["_commandPath", ""], ["_ids", [], [[]]]];
 
 private _computer = objectFromNetId _computerNetId;
 private _reply = {
@@ -28,14 +30,21 @@ private _reply = {
 
 if (isNull _computer) exitWith {};
 
-// Whole-network All On / All Off (#1): apply to every accessible light, then report a summary.
+// All On / All Off: switch every light the operator is looking at. The app sends the ids its filter has
+// left on screen, so a filtered list switches only what it shows; an unfiltered one sends every row and
+// the action reaches the whole network. An empty list is the app asking for everything the laptop can
+// reach, which is what a caller without a filter to speak of means.
 if (_state in ["allon", "alloff"]) exitWith {
 	private _want = _state isEqualTo "allon";
 	private _lights = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [1, []];
+	// Ids arrive from the browser and may come across as text.
+	private _wanted = _ids apply {if (_x isEqualType "") then {parseNumber _x} else {_x}};
 	private _n = 0;
+	private _total = 0;
 	{
 		_x params ["_lid", "_lnetId"];
-		if ([_computer, DEVICE_TYPE_LIGHT, _lid, _commandPath] call FUNC(isDeviceAccessible)) then {
+		if ((_wanted isEqualTo [] || {_lid in _wanted}) && {[_computer, DEVICE_TYPE_LIGHT, _lid, _commandPath] call FUNC(isDeviceAccessible)}) then {
+			_total = _total + 1;
 			private _light = objectFromNetId _lnetId;
 			if (!isNull _light) then {
 				[_light, [toUpper "off", toUpper "on"] select _want] remoteExec ["switchLight", 0, format ["rcw_light_%1", netId _light]];
@@ -45,7 +54,7 @@ if (_state in ["allon", "alloff"]) exitWith {
 			};
 		};
 	} forEach _lights;
-	[_owner, format ["%1 lights switched %2", _n, ["off", "on"] select _want], true] call _reply;
+	[_owner, format ["%1 of %2 lights switched %3", _n, _total, ["off", "on"] select _want], true] call _reply;
 };
 
 if !(_state in ["on", "off"]) exitWith {};

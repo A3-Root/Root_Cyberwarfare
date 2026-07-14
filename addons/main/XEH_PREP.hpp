@@ -42,6 +42,9 @@ PREP(ewoLaptopBattery);
 PREP(ewoSetLaptopBattery);
 PREP(ewoLaptopDisplayName);
 PREP(ewoWifiSet);
+PREP(ewoRouterProxy);
+PREP(ewoConnectPower);
+PREP(ewoDisconnectPower);
 PREP(ewoNotify);
 
 // Redefine PREP macro for subdirectory: cipher

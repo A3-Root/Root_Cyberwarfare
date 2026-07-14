@@ -49,6 +49,42 @@
     false
 ] call CBA_fnc_addSetting;
 
+// What a broadcasting network costs the pack, what a laptop on charge takes out of it, and what a
+// connected power source puts back in. All three are read per tick, so a mission can retune the pack's
+// endurance without touching the code that spends the energy.
+[
+    SETTING_EWO_WIFI_DRAIN,
+    "SLIDER",
+    ["EWO Network Drain", "Energy per minute an EWO backpack spends while its wireless network is broadcasting. The pack holds 400 energy."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "EWO Settings"],
+    [0, 60, EWO_WIFI_DRAIN_DEFAULT, 0],
+    1,
+    {},
+    false
+] call CBA_fnc_addSetting;
+
+[
+    SETTING_EWO_CHARGE_RATE,
+    "SLIDER",
+    ["EWO Laptop Charge Rate", "Energy per minute an EWO backpack delivers to a laptop it is charging. One energy raises a laptop battery by one percent."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "EWO Settings"],
+    [1, 60, EWO_CHARGE_RATE_DEFAULT, 0],
+    1,
+    {},
+    false
+] call CBA_fnc_addSetting;
+
+[
+    SETTING_EWO_RECHARGE_RATE,
+    "SLIDER",
+    ["EWO Power Source Recharge Rate", "Energy per minute an EWO backpack takes in from the power source it is connected to."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "EWO Settings"],
+    [1, 60, EWO_RECHARGE_RATE_DEFAULT, 0],
+    1,
+    {},
+    false
+] call CBA_fnc_addSetting;
+
 // Debug Mode Setting
 [
     "ROOT_CYBERWARFARE_DEBUG_MODE",

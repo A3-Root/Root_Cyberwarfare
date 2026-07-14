@@ -43,6 +43,9 @@ class CfgFunctions {
 			class ewoSetLaptopBattery {};
 			class ewoLaptopDisplayName {};
 			class ewoWifiSet {};
+			class ewoRouterProxy {};
+			class ewoConnectPower {};
+			class ewoDisconnectPower {};
 			class ewoNotify {};
 		};
 
