@@ -54,6 +54,14 @@ if (isNull _router) exitWith {};
 // The power state is what a laptop's network scan filters on, so it is the switch.
 _router setVariable ["AE3_power_powerState", [0, 1] select _on, true];
 
+// A network that goes off the air takes its laptops off with it. Leaving them attached would leave them
+// holding addresses on a network that is no longer running, which is a laptop that can still be reached
+// over a network nobody can see - and it would let them come back up on it when it is switched on again
+// from the other side of the map, without ever being in range of the pack.
+if (!_on) then {
+    [_router] call AE3_network_fnc_router_onTurnOff;
+};
+
 // The drain is counted from the moment the network came up.
 if (_on) then {
     _bag setVariable ["ROOT_EWO_WIFI_SINCE", time, true];
