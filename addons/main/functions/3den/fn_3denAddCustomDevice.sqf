@@ -23,9 +23,15 @@ if (!isServer) exitWith {};
 private _customName = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_NAME", "Custom Device"];
 private _activationCode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_ACTIVATE", "// Example: Display Hint when triggered\nhint 'Custom device activated';"];
 private _deactivationCode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_DEACTIVATE", "// Example: Display Hint when triggered\nhint 'Custom device deactivated';"];
-private _addToPublic = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_PUBLIC", true];
+// 3DEN BOOL attribute loads as a number (1/0); coerce to a real boolean.
+private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_PUBLIC", 1]) in [1, true];
 // 3DEN checkbox attribute (typeName BOOL) loads as a boolean; accept both boolean and legacy numeric storage.
 private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_ALLOWLOCATION", 1]) in [1, true];
+
+// Optional fixed IDs. A single device uses the start value; a trigger area hands out Start..End
+// sequentially, falling back to auto-assignment once the range is exhausted or unset.
+private _startId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_ID_START", 0]);
+private _endId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_ID_END", 0]);
 
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;
@@ -74,14 +80,23 @@ if (_addToPublic) then {
 	};
 };
 
+// Hand out sequential IDs from the requested start across the registered devices.
+private _nextId = _startId;
+
 // Process each target object
 {
 	private _target = _x;
 	private _execUserId = 2; // Server
 
+	private _assignId = 0;
+	if (_nextId >= 1000 && _nextId <= 9999 && {_endId <= 0 || _nextId <= _endId}) then {
+		_assignId = _nextId;
+		_nextId = _nextId + 1;
+	};
+
 	// Call the custom device Zeus main function
 	// Parameters: _targetObject, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops
-	[_target, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops] call FUNC(addCustomDeviceZeusMain);
+	[_target, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation, _assignId] call FUNC(addCustomDeviceZeusMain);
 	_target setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // General #3
 
 } forEach _allTargets;

@@ -89,6 +89,9 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 		switch (_type) do {
 			case DEVICE_TYPE_DOOR: {
 				private _doorIds = _x param [2, []];
+				// Per-door custom IDs assigned by the mission maker; the id sent back for a per-door
+				// action is the custom one, resolved to the engine number server-side.
+				private _doorIdMap = _x param [5, []];
 				_label = [_obj, format ["Building %1", _id]] call _displayName;
 				if (!isNull _obj) then {
 					private _locked = {(_obj getVariable [format ["bis_disabled_Door_%1", _x], 0]) == 1} count _doorIds;
@@ -100,12 +103,17 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 						["unlock", "Unlock", ["Unlocking all doors", _unlockCost] call _powerConfirm] call _actC
 					];
 					{
-						private _isLocked = (_obj getVariable [format ["bis_disabled_Door_%1", _x], 0]) == 1;
+						private _realDoor = _x;
+						private _customDoor = _realDoor;
+						{
+							if ((_x select 1) == _realDoor) exitWith { _customDoor = _x select 0; };
+						} forEach _doorIdMap;
+						private _isLocked = (_obj getVariable [format ["bis_disabled_Door_%1", _realDoor], 0]) == 1;
 						private _ds = ["unlocked", "locked"] select _isLocked;
 						private _singleLockCost = ([1, 0] select _isLocked) * _doorCost;
 						private _singleUnlockCost = ([0, 1] select _isLocked) * _doorCost;
 						_children pushBack createHashMapFromArray [
-							["id", str _x], ["label", format ["Door %1", _x]], ["status", _ds],
+							["id", str _customDoor], ["label", format ["Door %1", _customDoor]], ["status", _ds],
 							["actions", [
 								["lock", "Lock", ["Locking this door", _singleLockCost] call _powerConfirm] call _actC,
 								["unlock", "Unlock", ["Unlocking this door", _singleUnlockCost] call _powerConfirm] call _actC

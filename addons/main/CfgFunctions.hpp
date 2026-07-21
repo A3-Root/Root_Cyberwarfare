@@ -137,6 +137,7 @@ class CfgFunctions {
 			class consumePower {};
 			class copyDeviceLinksZeusMain {};
 			class detectBuildingDoors {};
+			class getDoorPositions {};
 			class getAccessibleDevices {};
 			class getBatteryStatus {};
 			class getDroneCost {};
@@ -144,6 +145,7 @@ class CfgFunctions {
 			class getObjectsInTriggerArea {};
 			class getPlayerFromComputer {};
 			class getUserConfirmation {};
+			class resolveDeviceId {};
 			class hasHackingToolsAvailable {};
 			class localSoundBroadcast {};
 			class removePower {};

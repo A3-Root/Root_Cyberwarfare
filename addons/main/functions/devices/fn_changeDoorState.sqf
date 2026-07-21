@@ -118,7 +118,7 @@ if (_targetDoors isEqualTo []) exitWith {
 
 // Get building object from first matching door entry
 private _doorEntry = _targetDoors select 0;
-_doorEntry params ["_bId", "_buildingNetId", "_doorsOfBuilding"];
+_doorEntry params ["_bId", "_buildingNetId", "_doorsOfBuilding", "", "", ["_doorIdMap", []]];
 private _building = objectFromNetId _buildingNetId;
 
 // Handle "all doors" case
@@ -174,14 +174,21 @@ if (_doorId isEqualTo "a") then {
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
 } else {
-    // Handle single door
-    if !(_doorIdNum in _doorsOfBuilding) exitWith {
+    // Handle single door. The typed ID is resolved through the building's custom door-ID map first
+    // (mission-maker assigned IDs), then falls back to the raw engine door number.
+    private _realDoor = -1;
+    {
+        if ((_x select 0) == _doorIdNum) exitWith { _realDoor = _x select 1; };
+    } forEach _doorIdMap;
+    if (_realDoor == -1 && {_doorIdNum in _doorsOfBuilding}) then { _realDoor = _doorIdNum; };
+
+    if (_realDoor == -1) exitWith {
         private _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_DOOR_NOT_IN_BUILDING", _doorIdNum, _buildingIdNum];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         missionNamespace setVariable [_nameOfVariable, true, true];
     };
 
-    private _currentState = _building getVariable [format ["bis_disabled_Door_%1", _doorIdNum], 5];
+    private _currentState = _building getVariable [format ["bis_disabled_Door_%1", _realDoor], 5];
     private _targetState = parseNumber (_doorDesiredState isEqualTo "lock");
 
     // Check if already in desired state
@@ -209,13 +216,13 @@ if (_doorId isEqualTo "a") then {
     [_computer, _powerCostPerDoor] call FUNC(consumePower);
 
     // Apply change
-    _building setVariable [format ["bis_disabled_Door_%1", _doorIdNum], _targetState, true];
+    _building setVariable [format ["bis_disabled_Door_%1", _realDoor], _targetState, true];
 
     // Mark/unmark door as cyber-locked for breach mod integration
     if (_doorDesiredState isEqualTo "lock") then {
-        _building setVariable [format ["ROOT_CYBERWARFARE_CYBER_LOCKED_%1", _doorIdNum], true, true];
+        _building setVariable [format ["ROOT_CYBERWARFARE_CYBER_LOCKED_%1", _realDoor], true, true];
     } else {
-        _building setVariable [format ["ROOT_CYBERWARFARE_CYBER_LOCKED_%1", _doorIdNum], nil, true];
+        _building setVariable [format ["ROOT_CYBERWARFARE_CYBER_LOCKED_%1", _realDoor], nil, true];
     };
 
     // Broadcast event

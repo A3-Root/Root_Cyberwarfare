@@ -132,6 +132,7 @@ if (_type in ["doors", "all", "a"]) then {
                     private _buildingDisplayName = getText (configOf _building >> "displayName");
                     private _mapGridPos = [_building] call FUNC(gridLabel);
                     private _doorsOfBuilding = _x select 2;
+                    private _doorIdMap = _x param [5, []];
                     private _doorCount = count _doorsOfBuilding;
 
                     _string = format ["Building: %1 (%2) - %3 door(s) - Grid: %4", _currentBuildingId, _buildingDisplayName, _doorCount, _mapGridPos];
@@ -140,6 +141,11 @@ if (_type in ["doors", "all", "a"]) then {
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
                     {
+                        // Show the mission-maker's custom door ID (defaults to the engine number).
+                        private _displayDoorId = _x;
+                        {
+                            if ((_x select 1) == _displayDoorId) exitWith { _displayDoorId = _x select 0; };
+                        } forEach _doorIdMap;
                         private _currentState = _building getVariable [format ['bis_disabled_Door_%1', _x], 5];
                         private _currentStateString = "";
                         private _currentStateStringColor = "#8ce10b";
@@ -162,7 +168,7 @@ if (_type in ["doors", "all", "a"]) then {
                             _phaseStringColor = "#fa4c58";
                         };
 
-                        _string = format ["    Door %1 - Status: ", _x];
+                        _string = format ["    Door %1 - Status: ", _displayDoorId];
                         [_computer, [[_string, [_currentStateString, _currentStateStringColor], " / ", [_phaseString, _phaseStringColor]]]] call AE3_armaos_fnc_shell_stdout;
                     } forEach _doorsOfBuilding;
                 };

@@ -62,6 +62,15 @@ _dialogControls append [
     ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true]
 ];
 
+// Device ID entry: radius mode distributes a Start..End range across the found objects; direct mode
+// takes a single fixed ID.
+if (_useRadiusMode) then {
+    _dialogControls pushBack ["EDIT", ["Device ID Start (0 = auto)", "First device ID handed out across the area. 0 = auto-assign."], ["0"]];
+    _dialogControls pushBack ["EDIT", ["Device ID End (0 = auto)", "Last device ID handed out across the area. 0 = auto-assign."], ["0"]];
+} else {
+    _dialogControls pushBack ["EDIT", ["Device ID (0 = auto)", "Fixed ID for this device. 0 = auto-assign a free ID."], ["0"]];
+};
+
 // Add a checkbox for each computer
 {
     _x params ["_netId", "_computerName"];
@@ -96,6 +105,19 @@ _dialogControls append [
         private _allowLocation = _results select _resultIndex;
         _resultIndex = _resultIndex + 1;
 
+        // Extract the device ID field(s): a Start..End range in radius mode, a single ID otherwise.
+        private _requestedId = 0;
+        private _rangeEndId = 0;
+        if (_useRadiusMode) then {
+            _requestedId = parseNumber (_results select _resultIndex);
+            _resultIndex = _resultIndex + 1;
+            _rangeEndId = parseNumber (_results select _resultIndex);
+            _resultIndex = _resultIndex + 1;
+        } else {
+            _requestedId = parseNumber (_results select _resultIndex);
+            _resultIndex = _resultIndex + 1;
+        };
+
         // Process laptop checkboxes
         private _selectedComputers = [];
         {
@@ -114,10 +136,10 @@ _dialogControls append [
         if (_useRadiusMode) then {
             // Radius mode: Pass position array instead of logic object
             private _centerPos = getPosATL _logic;
-            [_centerPos, _radius, _execUserId, _selectedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
+            [_centerPos, _radius, _execUserId, _selectedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation, _requestedId, _rangeEndId] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
         } else {
             // Direct mode: Register single object
-            [_targetObject, _execUserId, _selectedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
+            [_targetObject, _execUserId, _selectedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation, _requestedId] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
             ["Custom Device Added!"] call zen_common_fnc_showMessage;
         };
     },

@@ -62,7 +62,8 @@ private _dialogControls = [
     ["EDIT", ["Custom Marker (optional)", "Custom name for the map marker to be used. Leave empty to use Tracker Name"], [""]],
     ["TOOLBOX:YESNO", ["Allow Retracking", "Allow tracking again after the initial tracking time ends?"], false],
     ["OWNERS", ["Additional GPS Tracking Visibility", "Additional (apart from the player who initiated the track) sides, groups, or players that can see the GPS tracking marker."], [[], [], [], 0]],
-    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this tracker be available to laptops that are added later?"], false]
+    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this tracker be available to laptops that are added later?"], false],
+    ["EDIT", ["Device ID (0 = auto)", "Fixed ID for this tracker. 0 = auto-assign a free ID."], ["0"]]
 ];
 
 // Add a checkbox for each computer
@@ -78,12 +79,13 @@ private _dialogControls = [
         params ["_results", "_args"];
         _args params ["_targetObject", "_execUserId", "_allComputers", "_index"];
 
-        // First nine results are the tracker configuration
-        _results params ["_trackerName", "_trackingTime", "_updateFrequency", "_lastPingTimer", "_powerCost", "_customMarker", "_allowRetracking", "_ownersSelection", "_availableToFutureLaptops"];
+        // First results are the tracker configuration
+        _results params ["_trackerName", "_trackingTime", "_updateFrequency", "_lastPingTimer", "_powerCost", "_customMarker", "_allowRetracking", "_ownersSelection", "_availableToFutureLaptops", "_requestedIdText"];
+        private _requestedId = parseNumber _requestedIdText;
 
         // The rest are checkbox values for each computer
         private _selectedComputers = [];
-        private _checkboxStartIndex = 9;
+        private _checkboxStartIndex = 10;
         
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
@@ -103,7 +105,7 @@ private _dialogControls = [
         } forEach _underFlow;
         
         // Pass all parameters including the availability setting and owners selection
-        [_targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, true, _ownersSelection] remoteExec ["Root_fnc_addGpsTrackerZeusMain", 2];
+        [_targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, true, _ownersSelection, _requestedId] remoteExec ["Root_fnc_addGpsTrackerZeusMain", 2];
         ["GPS Tracker Added!"] call zen_common_fnc_showMessage;
         _index = _index + 1;
         missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_INDEX", _index, true];

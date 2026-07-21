@@ -39,13 +39,15 @@ if (!isServer) exitWith {};
 // Get module attributes
 private _vehicleName = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_NAME", "Target Vehicle"];
 private _powerCost = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_COST", missionNamespace getVariable [SETTING_VEHICLE_COST, 2]];
-private _allowFuel = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_FUEL", true];
-private _allowSpeed = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED", true];
-private _allowBrakes = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_BRAKES", false];
-private _allowLights = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_LIGHTS", true];
-private _allowEngine = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ENGINE", true];
-private _allowAlarm = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ALARM", false];
-private _addToPublic = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_PUBLIC", true];
+// 3DEN BOOL attributes load as numbers (1/0); coerce each to a real boolean before it feeds an
+// `if` check or a boolean-typed parameter.
+private _allowFuel = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_FUEL", 1]) in [1, true];
+private _allowSpeed = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_SPEED", 1]) in [1, true];
+private _allowBrakes = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_BRAKES", 0]) in [1, true];
+private _allowLights = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_LIGHTS", 1]) in [1, true];
+private _allowEngine = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ENGINE", 1]) in [1, true];
+private _allowAlarm = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ALARM", 0]) in [1, true];
+private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_PUBLIC", 1]) in [1, true];
 // 3DEN checkbox attribute (typeName BOOL) loads as a boolean; accept both boolean and legacy numeric storage.
 private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ALLOWLOCATION", 1]) in [1, true];
 
@@ -64,6 +66,11 @@ private _engineMaxToggles = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_
 private _engineCooldown = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ENGINE_COOLDOWN", 0];
 private _alarmMinDuration = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ALARM_MIN", 1];
 private _alarmMaxDuration = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ALARM_MAX", 30];
+
+// Optional fixed IDs. A single vehicle uses the start value; a trigger area hands out Start..End
+// sequentially, falling back to auto-assignment once the range is exhausted or unset.
+private _startId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ID_START", 0]);
+private _endId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ID_END", 0]);
 
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;
@@ -118,16 +125,25 @@ if (_addToPublic) then {
 	};
 };
 
+// Hand out sequential IDs from the requested start across the registered vehicles/drones.
+private _nextId = _startId;
+
 // Process each vehicle
 {
 	private _vehicle = _x;
 	private _execUserId = 2; // Server
 
+	private _assignId = 0;
+	if (_nextId >= 1000 && _nextId <= 9999 && {_endId <= 0 || _nextId <= _endId}) then {
+		_assignId = _nextId;
+		_nextId = _nextId + 1;
+	};
+
 	// Check if this is a UAV/drone
 	if (unitIsUAV _vehicle) then {
 		// Call as drone, forwarding the custom "Vehicle Name" so the device list shows it.
 		// Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _droneName
-		[_vehicle, _execUserId, _linkedComputers, _availableToFutureLaptops, _vehicleName] call FUNC(addVehicleZeusMain); _vehicle setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // drone location-view flag
+		[_vehicle, _execUserId, _linkedComputers, _availableToFutureLaptops, _vehicleName, 0, 0, _assignId] call FUNC(addVehicleZeusMain); _vehicle setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // drone location-view flag
 	} else {
 		// Call as vehicle with all parameters including limits
 		[
@@ -136,7 +152,7 @@ if (_addToPublic) then {
 			_availableToFutureLaptops, _powerCost,
 			_fuelMinPercent, _fuelMaxPercent, _speedMinValue, _speedMaxValue,
 			_brakesMinDecel, _brakesMaxDecel, _lightsMaxToggles, _lightsCooldown,
-			_engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration, _allowLocation
+			_engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration, _allowLocation, _assignId
 		] call FUNC(addVehicleZeusMain);
 	};
 

@@ -43,7 +43,9 @@ private _laptops = _syncedObjects select {
 		// Get module attributes
 		private _toolPath = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_HACK_TOOL_PATH", "/rubberducky/tools"];
 		private _backdoorPrefix = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_HACK_TOOL_BACKDOOR", ""];
-		private _addCredentials = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_HACK_TOOL_CREDENTIALS", true];
+		// 3DEN BOOL attributes load as numbers (1/0); coerce to a real boolean before it reaches the
+			// boolean-typed parameter of the registration function.
+			private _addCredentials = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_HACK_TOOL_CREDENTIALS", 1]) in [1, true];
 
 		// Generate custom laptop name
 		private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", 1];

@@ -34,7 +34,8 @@ params [
     ["_explosionType", "ClaymoreDirectionalMine_Remote_Ammo_Scripted"],
     ["_excludedClassnames", []],
     ["_availableToFutureLaptops", false],
-    ["_powerCost", 10]
+    ["_powerCost", 10],
+    ["_requestedId", 0]
 ];
 
 if (isNull _targetObject) exitWith {
@@ -54,12 +55,12 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "ON", true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_DESTROYED", false, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_COST", _powerCost, true];
 
-// Generate unique device ID
-private _deviceId = (round (random 8999)) + 1000;
-
 // Get all devices
 private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
 private _allPowerGrids = _allDevices select 7;
+
+// Honour a caller-requested ID when free, otherwise draw a fresh unused one.
+private _deviceId = [_requestedId, _allPowerGrids apply { _x select 0 }] call FUNC(resolveDeviceId);
 
 // Store device entry: [gridId, objectNetId, gridName, radius, allowExplosionOverload, explosionType, excludedClassnames, availableToFutureLaptops, powerCost, linkedComputers]
 _allPowerGrids pushBack [

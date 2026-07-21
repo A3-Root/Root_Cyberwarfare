@@ -32,6 +32,11 @@ private _powerCost = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_COST"
 private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_PUBLIC", 1]) in [1, true];
 private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_ALLOWLOCATION", 1]) in [1, true];
 
+// Optional fixed IDs. A single generator uses the start value; a trigger area hands out Start..End
+// sequentially, falling back to auto-assignment once the range is exhausted or unset.
+private _startId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_ID_START", 0]);
+private _endId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_ID_END", 0]);
+
 // Parse excluded classnames (comma-separated string to array)
 private _excludedArray = [];
 if (_excludedClassnames != "") then {
@@ -86,14 +91,23 @@ if (_addToPublic) then {
 	};
 };
 
+// Hand out sequential IDs from the requested start across the registered generators.
+private _nextId = _startId;
+
 // Process each generator
 {
 	private _generator = _x;
 	private _execUserId = 2; // Server
 
+	private _assignId = 0;
+	if (_nextId >= 1000 && _nextId <= 9999 && {_endId <= 0 || _nextId <= _endId}) then {
+		_assignId = _nextId;
+		_nextId = _nextId + 1;
+	};
+
 	// Call the existing Zeus main function
 	// Parameters: _targetObject, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost
-	[_generator, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, _powerCost] call FUNC(addPowerGeneratorZeusMain);
+	[_generator, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, _powerCost, _assignId] call FUNC(addPowerGeneratorZeusMain);
 	_generator setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // General #3
 
 } forEach _allGenerators;

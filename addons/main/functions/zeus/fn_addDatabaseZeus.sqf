@@ -41,7 +41,8 @@ private _dialogControls = [
     ["CHECKBOX", ["Encrypt File Contents", "Encrypt the stored file contents before it is added to the hackable file list."], false],
     ["COMBO", ["Encryption Algorithm", "Cipher used when encryption is enabled."], [["morse", "spelling", "affine", "rot", "vigenere", "bacon", "alpha_sub", "railfence", "base32", "base64", "ascii85", "unicode", "integer"], ["Morse Code", "Spelling Alphabet", "Affine", "ROT", "Vigenere", "Bacon", "Alphabetical Substitution", "Railfence", "Base32", "Base64", "Ascii85", "Unicode Notation", "Integer"], 0]],
     ["EDIT", ["Key / Variant", "Primary key, password, keyword, or variant. Examples: rot13, LEMON, 3"], [""]],
-    ["EDIT", ["Encryption Options", "Optional key=value pairs. Examples: a=5 b=8, rails=3, radix=16 width=8 signed=0"], [""]]
+    ["EDIT", ["Encryption Options", "Optional key=value pairs. Examples: a=5 b=8, rails=3, radix=16 width=8 signed=0"], [""]],
+    ["EDIT", ["Device ID (0 = auto)", "Fixed ID for this file. 0 = auto-assign a free ID."], ["0"]]
 ];
 
 {
@@ -58,11 +59,12 @@ private _dialogControls = [
         _args params ["_fileObject", "_allComputers"];
         
         // Dialog values before the per-computer link checkboxes.
-        _results params ["_filename", "_filesize", "_filecontent", "_executionCode", "_availableToFutureLaptops", "_isEncrypted", "_encryptionAlgorithm", "_encryptionKey", "_encryptionOptions"];
-        
+        _results params ["_filename", "_filesize", "_filecontent", "_executionCode", "_availableToFutureLaptops", "_isEncrypted", "_encryptionAlgorithm", "_encryptionKey", "_encryptionOptions", "_requestedIdText"];
+        private _requestedId = parseNumber _requestedIdText;
+
         // The rest are checkbox values for each computer
         private _linkedComputers = [];
-        private _checkboxStartIndex = 9;
+        private _checkboxStartIndex = 10;
         
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
@@ -79,7 +81,7 @@ private _dialogControls = [
         if (_filesize < 1) then {_filesize = 1};
 
         private _execUserId = clientOwner;
-        [_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
+        [_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions, _requestedId] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
         ["Hackable File Added!"] call zen_common_fnc_showMessage;
     },  
     {

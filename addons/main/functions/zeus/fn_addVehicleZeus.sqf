@@ -158,6 +158,15 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Shou
 // Allow Location View (common to all modes, #3) - pushed right after availability.
 _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true];
 
+// Device ID entry: radius mode distributes a Start..End range across the found objects; direct and
+// drone modes take a single fixed ID.
+if (_useRadiusMode) then {
+    _dialogControls pushBack ["EDIT", ["Device ID Start (0 = auto)", "First device ID handed out across the area. 0 = auto-assign."], ["0"]];
+    _dialogControls pushBack ["EDIT", ["Device ID End (0 = auto)", "Last device ID handed out across the area. 0 = auto-assign."], ["0"]];
+} else {
+    _dialogControls pushBack ["EDIT", ["Device ID (0 = auto)", "Fixed ID for this vehicle/drone. 0 = auto-assign a free ID."], ["0"]];
+};
+
 // Add a checkbox for each computer
 {
     _x params ["_netId", "_computerName"];
@@ -189,6 +198,10 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this de
             _resultIndex = _resultIndex + 1;
             private _allowLocation = _results select _resultIndex;
             _resultIndex = _resultIndex + 1;
+            private _requestedId = parseNumber (_results select _resultIndex);
+            _resultIndex = _resultIndex + 1;
+            private _rangeEndId = parseNumber (_results select _resultIndex);
+            _resultIndex = _resultIndex + 1;
             _checkboxStartIndex = _resultIndex;
 
             // Process laptop checkboxes
@@ -205,7 +218,7 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this de
             };
 
             // Radius mode: Use captured position (logic is already deleted)
-            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation, _requestedId, _rangeEndId] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 
         } else {
             if (_isDrone) then {
@@ -219,6 +232,8 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this de
                 private _availableToFutureLaptops = _results select _resultIndex;
                 _resultIndex = _resultIndex + 1;
                 private _allowLocation = _results select _resultIndex;
+                _resultIndex = _resultIndex + 1;
+                private _requestedId = parseNumber (_results select _resultIndex);
                 _resultIndex = _resultIndex + 1;
                 _checkboxStartIndex = _resultIndex;
 
@@ -239,7 +254,7 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this de
                 if (_sideCost < 1) then { _sideCost = 1; };
 
                 // Hand off to the vehicle worker, which detects drones and applies the drone-specific handling.
-                [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _droneName, _disableCost, _sideCost] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+                [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _droneName, _disableCost, _sideCost, _requestedId] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
                 // Drone path can't carry the flag through the registration call; apply it on the object.
                 [_targetObject, ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]] remoteExec ["setVariable", 2];
                 ["Hackable Drone Added!"] call zen_common_fnc_showMessage;
@@ -257,9 +272,10 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this de
                     "_lightsMaxToggles", "_lightsCooldown",
                     "_engineMaxToggles", "_engineCooldown",
                     "_alarmMinDuration", "_alarmMaxDuration",
-                    "_availableToFutureLaptops", "_allowLocation"
+                    "_availableToFutureLaptops", "_allowLocation", "_requestedIdText"
                 ];
-                _checkboxStartIndex = 22;
+                private _requestedId = parseNumber _requestedIdText;
+                _checkboxStartIndex = 23;
 
                 // Process laptop checkboxes
                 {
@@ -283,7 +299,7 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this de
                     _availableToFutureLaptops, _powerCost,
                     _fuelMinPercent, _fuelMaxPercent, _speedMinValue, _speedMaxValue,
                     _brakesMinDecel, _brakesMaxDecel, _lightsMaxToggles, _lightsCooldown,
-                    _engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration, _allowLocation
+                    _engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration, _allowLocation, _requestedId
                 ] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
                 ["Hackable Vehicle Added!"] call zen_common_fnc_showMessage;
                 _index = _index + 1;

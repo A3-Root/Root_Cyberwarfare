@@ -45,6 +45,9 @@ private _activationCode = "";
 private _deactivationCode = "";
 private _availableToFutureLaptops = false;
 private _allowLocation = true; // "Allow Location View" (General #3); default on
+private _requestedId = 0;      // Desired device ID for direct mode (0 = auto)
+private _startId = 0;          // First ID handed out across a radius sweep
+private _endId = 0;            // Last ID handed out across a radius sweep
 
 private _firstParam = _this select 0;
 
@@ -61,6 +64,8 @@ if (typeName _firstParam == "ARRAY") then {
     _deactivationCode = param [6, "", [""]];
     _availableToFutureLaptops = param [7, false, [false]];
     _allowLocation = param [8, true, [false]];
+    _startId = param [9, 0, [0]];
+    _endId = param [10, 0, [0]];
 } else {
     // Direct mode: object passed
     _radiusMode = false;
@@ -72,6 +77,7 @@ if (typeName _firstParam == "ARRAY") then {
     _deactivationCode = param [5, "", [""]];
     _availableToFutureLaptops = param [6, false, [false]];
     _allowLocation = param [7, true, [false]];
+    _requestedId = param [8, 0, [0]];
 };
 
 // Validate object in direct mode
@@ -90,12 +96,21 @@ if (_radiusMode) exitWith {
     // Find all objects in radius (no type filter - any object can be custom device)
     private _allObjects = nearestObjects [_centerPos, [], _radius];
 
+    // Hand out sequential IDs from the requested start across the found objects; once the range is
+    // exhausted (or none was given) the remaining devices fall back to auto-assignment.
+    private _nextId = _startId;
+
     // Register each object
     {
         private _obj = _x;
         // Register each object (skip logic modules)
         if (typeOf _obj find "Logic" < 0) then {
-            [_obj, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation] call FUNC(addCustomDeviceZeusMain);
+            private _assignId = 0;
+            if (_nextId >= 1000 && _nextId <= 9999 && {_endId <= 0 || _nextId <= _endId}) then {
+                _assignId = _nextId;
+                _nextId = _nextId + 1;
+            };
+            [_obj, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation, _assignId] call FUNC(addCustomDeviceZeusMain);
             _registeredCount = _registeredCount + 1;
         };
     } forEach _allObjects;
@@ -110,12 +125,12 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, t
 _targetObject setVariable ["ROOT_CYBERWARFARE_ACTIVATIONCODE", _activationCode, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_DEACTIVATIONCODE", _deactivationCode, true];
 
-// Generate unique device ID
-private _deviceId = (round (random 8999)) + 1000;
-
 // Get all devices
 private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
 private _allCustom = _allDevices select 4;
+
+// Honour a caller-requested ID when free, otherwise draw a fresh unused one.
+private _deviceId = [_requestedId, _allCustom apply { _x select 0 }] call FUNC(resolveDeviceId);
 
 // Store device entry: [deviceId, objectNetId, deviceName, activationCode, deactivationCode, availableToFuture]
 _allCustom pushBack [

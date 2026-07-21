@@ -38,7 +38,8 @@ params [
     ["_isEncrypted", false],
     ["_encryptionAlgorithm", "morse"],
     ["_encryptionKey", ""],
-    ["_encryptionOptions", ""]
+    ["_encryptionOptions", ""],
+    ["_requestedId", 0]
 ];
 
 if (_execUserId == 0) then {
@@ -57,22 +58,8 @@ if (_isEncrypted) then {
 private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
 private _allDatabases = _allDevices select 3;
 
-// Generate unique database ID
-private _databaseId = (round (random 8999)) + 1000;
-if (_allDatabases isNotEqualTo []) then {
-    while {true} do {
-        _databaseId = (round (random 8999)) + 1000;
-        private _databaseIsNew = true;
-        {
-            if (_x select 0 == _databaseId) then {
-                _databaseIsNew = false;
-            };
-        } forEach _allDatabases;
-        if (_databaseIsNew) then {
-            break;
-        };
-    };
-};
+// Honour a caller-requested ID when free, otherwise draw a fresh unused one.
+private _databaseId = [_requestedId, _allDatabases apply { _x select 0 }] call FUNC(resolveDeviceId);
 
 // Store database variables
 _allDatabases pushBack [_databaseId, netId _fileObject, _filename, _filesize, _linkedComputers, _availableToFutureLaptops];

@@ -25,6 +25,26 @@ private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_PUBLIC
 private _makeUnbreachable = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_UNBREACHABLE", 0]) in [1, true];
 private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_ALLOWLOCATION", 1]) in [1, true];
 
+// Optional fixed building IDs. A single building uses the start value; a trigger area hands out
+// Start..End sequentially, falling back to auto-assignment once the range is exhausted or unset.
+private _startId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_ID_START", 0]);
+private _endId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_ID_END", 0]);
+
+// Optional per-door ID overrides, e.g. "1:101,2:102" (engineDoor:customID). Parsed into
+// [[realDoor, customId], ...] and applied to every registered building that exposes those doors.
+private _doorIdMapText = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_IDMAP", ""];
+private _doorIdMap = [];
+{
+    private _pair = _x splitString ":";
+    if (count _pair == 2) then {
+        private _real = floor (parseNumber (_pair select 0));
+        private _custom = floor (parseNumber (_pair select 1));
+        if (_real > 0 && _custom > 0) then {
+            _doorIdMap pushBack [_real, _custom];
+        };
+    };
+} forEach (_doorIdMapText splitString ", ");
+
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;
 
@@ -79,14 +99,24 @@ if (_allDevices isEqualTo []) exitWith {
     deleteVehicle _logic;
 };
 
+// Hand out sequential IDs from the requested start across the registered buildings; each building
+// also receives the shared per-door override map.
+private _nextId = _startId;
+
 // Process each device
 {
     private _device = _x;
     private _execUserId = 2; // Server
 
+    private _assignId = 0;
+    if (_nextId >= 1000 && _nextId <= 9999 && {_endId <= 0 || _nextId <= _endId}) then {
+        _assignId = _nextId;
+        _nextId = _nextId + 1;
+    };
+
     // Call the doors-specific main function
-    // Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable
-    [_device, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation] call FUNC(addDoorsZeusMain);
+    // Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _requestedId, _doorIdMap
+    [_device, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _assignId, _doorIdMap] call FUNC(addDoorsZeusMain);
 
 } forEach _allDevices;
 

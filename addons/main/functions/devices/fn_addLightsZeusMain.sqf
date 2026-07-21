@@ -38,6 +38,9 @@ private _execUserId = 0;
 private _linkedComputers = [];
 private _availableToFutureLaptops = false;
 private _allowLocation = true; // "Allow Location View" (General #3); default on
+private _requestedId = 0;      // Desired light ID for direct mode (0 = auto)
+private _startId = 0;          // First ID handed out across a radius sweep
+private _endId = 0;            // Last ID handed out across a radius sweep
 
 private _firstParam = _this select 0;
 
@@ -51,6 +54,8 @@ if (typeName _firstParam == "ARRAY") then {
     _linkedComputers = param [3, [], [[]]];
     _availableToFutureLaptops = param [4, false, [false]];
     _allowLocation = param [5, true, [false]];
+    _startId = param [6, 0, [0]];
+    _endId = param [7, 0, [0]];
 } else {
     // Direct mode: object passed
     _radiusMode = false;
@@ -59,6 +64,7 @@ if (typeName _firstParam == "ARRAY") then {
     _linkedComputers = param [2, [], [[]]];
     _availableToFutureLaptops = param [3, false, [false]];
     _allowLocation = param [4, true, [false]];
+    _requestedId = param [5, 0, [0]];
 };
 
 if (_execUserId == 0) then {
@@ -80,9 +86,18 @@ if (_radiusMode) exitWith {
         };
     } forEach _allObjects;
 
+    // Hand out sequential IDs from the requested start across the found lights; once the range is
+    // exhausted (or none was given) the remaining lights fall back to auto-assignment.
+    private _nextId = _startId;
+
     // Register each light
     {
-        [_x, _execUserId, _linkedComputers, _availableToFutureLaptops, _allowLocation] call FUNC(addLightsZeusMain);
+        private _assignId = 0;
+        if (_nextId >= 1000 && _nextId <= 9999 && {_endId <= 0 || _nextId <= _endId}) then {
+            _assignId = _nextId;
+            _nextId = _nextId + 1;
+        };
+        [_x, _execUserId, _linkedComputers, _availableToFutureLaptops, _allowLocation, _assignId] call FUNC(addLightsZeusMain);
         _registeredCount = _registeredCount + 1;
     } forEach _lights;
 
@@ -108,19 +123,9 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, t
 // Check for lamps/lights
 if (_targetObject isKindOf "Lamps_base_F") then {
     _isValidObject = true;
-    _deviceId = (round (random 8999)) + 1000;
-    if (count _allLamps > 0) then {
-        while {true} do {
-            _deviceId = (round (random 8999)) + 1000;
-            private _lampIsNew = true;
-            {
-                if (_x select 0 == _deviceId) then {
-                    _lampIsNew = false;
-                };
-            } forEach _allLamps;
-            if (_lampIsNew) then { break };
-        };
-    };
+    // Honour a caller-requested ID when free, otherwise draw a fresh unused one.
+    private _usedIds = _allLamps apply { _x select 0 };
+    _deviceId = [_requestedId, _usedIds] call FUNC(resolveDeviceId);
     _allLamps pushBack [_deviceId, _netId, _displayName, _availableToFutureLaptops];
 };
 

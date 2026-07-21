@@ -76,6 +76,15 @@ if (_useRadiusMode) then {
 _dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false];
 _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true];
 
+// Device ID entry: radius mode distributes a Start..End range across the found lights; direct mode
+// takes a single fixed ID.
+if (_useRadiusMode) then {
+    _dialogControls pushBack ["EDIT", ["Device ID Start (0 = auto)", "First light ID handed out across the area. 0 = auto-assign."], ["0"]];
+    _dialogControls pushBack ["EDIT", ["Device ID End (0 = auto)", "Last light ID handed out across the area. 0 = auto-assign."], ["0"]];
+} else {
+    _dialogControls pushBack ["EDIT", ["Device ID (0 = auto)", "Fixed ID for this light. 0 = auto-assign a free ID."], ["0"]];
+};
+
 // Add a checkbox for each computer
 {
     _x params ["_netId", "_computerName"];
@@ -106,6 +115,19 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this de
         private _allowLocation = _results select _resultIndex;
         _resultIndex = _resultIndex + 1;
 
+        // Extract the device ID field(s): a Start..End range in radius mode, a single ID otherwise.
+        private _requestedId = 0;
+        private _rangeEndId = 0;
+        if (_useRadiusMode) then {
+            _requestedId = parseNumber (_results select _resultIndex);
+            _resultIndex = _resultIndex + 1;
+            _rangeEndId = parseNumber (_results select _resultIndex);
+            _resultIndex = _resultIndex + 1;
+        } else {
+            _requestedId = parseNumber (_results select _resultIndex);
+            _resultIndex = _resultIndex + 1;
+        };
+
         // Process laptop checkboxes
         private _selectedComputers = [];
         {
@@ -123,10 +145,10 @@ _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this de
         // Handle radius mode or direct mode
         if (_useRadiusMode) then {
             // Radius mode: Use captured position (logic is already deleted)
-            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation] remoteExec ["Root_fnc_addLightsZeusMain", 2];
+            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation, _requestedId, _rangeEndId] remoteExec ["Root_fnc_addLightsZeusMain", 2];
         } else {
             // Direct mode: Register single object
-            [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation] remoteExec ["Root_fnc_addLightsZeusMain", 2];
+            [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation, _requestedId] remoteExec ["Root_fnc_addLightsZeusMain", 2];
             ["Hackable Light Added!"] call zen_common_fnc_showMessage;
         };
     },

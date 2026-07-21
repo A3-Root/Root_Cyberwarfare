@@ -36,15 +36,20 @@ private _doors = [_computer, DEVICE_TYPE_DOOR, _commandPath] call FUNC(getAccess
 private _idx = _doors findIf { (_x select 0) == _buildingId };
 if (_idx == -1) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_BUILDING_NOT_FOUND", false] call _reply; };
 
-(_doors select _idx) params ["_bId", "_bNetId", "_doorIds"];
+(_doors select _idx) params ["_bId", "_bNetId", "_doorIds", "", "", ["_doorIdMap", []]];
 private _building = objectFromNetId _bNetId;
 if (isNull _building) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_BUILDING_NOT_FOUND", false] call _reply; };
 
 private _newState = parseNumber (_state isEqualTo "lock");
 // A specific door id (#2) restricts the operation to that single door; otherwise the whole building.
+// The id sent by the GUI is the mission-maker's custom door ID, resolved back to the engine number.
 if (_doorId isNotEqualTo "") then {
 	private _d = parseNumber _doorId;
-	_doorIds = _doorIds select { _x == _d };
+	private _realDoor = _d;
+	{
+		if ((_x select 0) == _d) exitWith { _realDoor = _x select 1; };
+	} forEach _doorIdMap;
+	_doorIds = _doorIds select { _x == _realDoor };
 };
 private _changing = _doorIds select { (_building getVariable [format ["bis_disabled_Door_%1", _x], 5]) != _newState };
 

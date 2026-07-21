@@ -73,11 +73,14 @@
 // (the optional tail is the custom drone name and the drone's own hacking costs); vehicle calls carry
 // 12+ params.
 private _isRadiusMode = (count _this) >= 5 && {(_this select 0) isEqualType []};
-private _isDroneCall = !_isRadiusMode && {(count _this) <= 7};
+// Object-first calls with fewer than 12 params are drones; a full vehicle registration always carries
+// 12+. Keying on 12 (rather than an exact drone count) leaves room for the optional trailing custom-ID
+// param on drone calls without misrouting them to the vehicle branch.
+private _isDroneCall = !_isRadiusMode && {(count _this) < 12};
 
 if (_isRadiusMode) then {
     // Radius mode: Register all vehicles/drones within radius
-    params ["_centerPos", "_radius", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false], ["_allowLocation", true]];
+    params ["_centerPos", "_radius", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false], ["_allowLocation", true], ["_startId", 0], ["_endId", 0]];
 
     // Get all objects in radius and filter by vehicle type
     private _allObjects = nearestObjects [_centerPos, [], _radius];
@@ -103,13 +106,23 @@ if (_isRadiusMode) then {
     private _droneCount = 0;
     private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_VEHICLE_INDEX", 1];
 
+    // Hand out sequential IDs from the requested start across the found objects; once the range is
+    // exhausted (or none was given) the remaining objects fall back to auto-assignment.
+    private _nextId = _startId;
+
     {
         private _obj = _x;
         private _isDrone = unitIsUAV _obj;
 
+        private _assignId = 0;
+        if (_nextId >= 1000 && _nextId <= 9999 && {_endId <= 0 || _nextId <= _endId}) then {
+            _assignId = _nextId;
+            _nextId = _nextId + 1;
+        };
+
         if (_isDrone) then {
             // Register as drone
-            [_obj, _execUserId, _linkedComputers, _availableToFutureLaptops] call FUNC(addVehicleZeusMain);
+            [_obj, _execUserId, _linkedComputers, _availableToFutureLaptops, "", 0, 0, _assignId] call FUNC(addVehicleZeusMain);
             _droneCount = _droneCount + 1;
         } else {
             // Register as vehicle with default settings
@@ -117,7 +130,7 @@ if (_isRadiusMode) then {
             private _defaultPowerCost = 2;
             private _allowAllFeatures = true;
 
-            [_obj, _execUserId, _linkedComputers, _vehicleName, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _availableToFutureLaptops, _defaultPowerCost, 0, 100, -50, 50, 1, 10, -1, 0, -1, 0, 1, 30, _allowLocation] call FUNC(addVehicleZeusMain);
+            [_obj, _execUserId, _linkedComputers, _vehicleName, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _availableToFutureLaptops, _defaultPowerCost, 0, 100, -50, 50, 1, 10, -1, 0, -1, 0, 1, 30, _allowLocation, _assignId] call FUNC(addVehicleZeusMain);
             _vehicleCount = _vehicleCount + 1;
             _index = _index + 1;
         };
@@ -133,7 +146,7 @@ if (_isRadiusMode) then {
 } else {
     if (_isDroneCall) then {
         // Drone: handle drone registration directly
-        params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false], ["_droneName", "", [""]], ["_disableCost", 0, [0]], ["_sideCost", 0, [0]]];
+        params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false], ["_droneName", "", [""]], ["_disableCost", 0, [0]], ["_sideCost", 0, [0]], ["_requestedId", 0, [0]]];
 
         if (_execUserId == 0) then {
             _execUserId = owner _targetObject;
@@ -155,23 +168,8 @@ if (_isRadiusMode) then {
         _targetObject setVariable ["ROOT_CYBERWARFARE_VEHICLE_NAME", _displayName, true];
         private _typeofhackable = 3; // Drone device type
 
-        // Generate unique device ID
-        private _deviceId = (round (random 8999)) + 1000;
-        if (_allDrones isNotEqualTo []) then {
-            while {true} do {
-                _deviceId = (round (random 8999)) + 1000;
-                private _droneIsNew = true;
-                {
-                    if (_x select 0 == _deviceId) then {
-                        _droneIsNew = false;
-                    };
-                } forEach _allDrones;
-
-                if (_droneIsNew) then {
-                    break;
-                };
-            };
-        };
+        // Honour a caller-requested ID when free, otherwise draw a fresh unused one.
+        private _deviceId = [_requestedId, _allDrones apply { _x select 0 }] call FUNC(resolveDeviceId);
 
         // Store drone entry: [deviceId, droneNetId, droneName, availableToFuture]
         _allDrones pushBack [_deviceId, _netId, _displayName, _availableToFutureLaptops];
@@ -287,7 +285,7 @@ call Root_fnc_syncDeviceData;
             ["_lightsMaxToggles", -1], ["_lightsCooldown", 0],
             ["_engineMaxToggles", -1], ["_engineCooldown", 0],
             ["_alarmMinDuration", 1], ["_alarmMaxDuration", 30],
-            ["_allowLocation", true]
+            ["_allowLocation", true], ["_requestedId", 0]
         ];
 
         if (_execUserId == 0) then {
@@ -300,7 +298,8 @@ call Root_fnc_syncDeviceData;
 
         private _netId = netId _targetObject;
 
-        private _deviceId = 0;
+        // Honour a caller-requested ID when free, otherwise draw a fresh unused one.
+        private _deviceId = [_requestedId, _allVehicles apply { _x select 0 }] call FUNC(resolveDeviceId);
 
         private _typeofhackable = 7;
 
@@ -335,20 +334,6 @@ call Root_fnc_syncDeviceData;
         _targetObject setVariable ["ROOT_CYBERWARFARE_ENGINE_TOGGLE_COUNT", 0, true];
         _targetObject setVariable ["ROOT_CYBERWARFARE_LIGHTS_LAST_TOGGLE", -999, true];
         _targetObject setVariable ["ROOT_CYBERWARFARE_ENGINE_LAST_TOGGLE", -999, true];
-
-        _deviceId = (round (random 8999)) + 1000;
-        if (_allVehicles isNotEqualTo []) then {
-            while {true} do {
-                _deviceId = (round (random 8999)) + 1000;
-                private _vehicleIsNew = true;
-                {
-                    if (_x select 0 == _deviceId) then {
-                        _vehicleIsNew = false;
-                    };
-                } forEach _allVehicles;
-                if (_vehicleIsNew) then { break };
-            };
-        };
 
         // Store with availability flag
         _allVehicles pushBack [

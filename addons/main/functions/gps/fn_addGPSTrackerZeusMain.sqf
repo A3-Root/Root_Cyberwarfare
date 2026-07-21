@@ -27,7 +27,7 @@
  * Public: No
  */
 
-params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_trackerName", ""], ["_trackingTime", 60], ["_updateFrequency", 5], ["_customMarker", ""], ["_availableToFutureLaptops", false], ["_allowRetracking", false], "_lastPingTimer", "_powerCost", ["_sysChat", true], ["_ownersSelection", [[], [], []]]];
+params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_trackerName", ""], ["_trackingTime", 60], ["_updateFrequency", 5], ["_customMarker", ""], ["_availableToFutureLaptops", false], ["_allowRetracking", false], "_lastPingTimer", "_powerCost", ["_sysChat", true], ["_ownersSelection", [[], [], []]], ["_requestedId", 0]];
 
 if (_execUserId == 0) then {
     _execUserId = owner _targetObject;
@@ -38,19 +38,8 @@ private _allGpsTrackers = _allDevices select 5;
 
 private _netId = netId _targetObject;
 
-private _deviceId = (round (random 8999)) + 1000;
-if (count _allGpsTrackers > 0) then {
-    while {true} do {
-        _deviceId = (round (random 8999)) + 1000;
-        private _trackerIsNew = true;
-        {
-            if (_x select 0 == _deviceId) then {
-                _trackerIsNew = false;
-            };
-        } forEach _allGpsTrackers;
-        if (_trackerIsNew) then { break };
-    };
-};
+// Honour a caller-requested ID when free, otherwise draw a fresh unused one.
+private _deviceId = [_requestedId, _allGpsTrackers apply { _x select 0 }] call FUNC(resolveDeviceId);
 
 // Store the tracker with initial status "Untracked" and owners selection
 _allGpsTrackers pushBack [_deviceId, _netId, _trackerName, _trackingTime, _updateFrequency, _customMarker, _linkedComputers, _availableToFutureLaptops, ["Untracked", 0, ""], _allowRetracking, _lastPingTimer, _powerCost, _ownersSelection];

@@ -66,7 +66,8 @@ private _dialogControls = [
     ]],
     ["EDIT", ["Excluded Light Classnames", "Comma-separated list of classnames to exclude (e.g., Lamp_Street_small_F,Land_LampHalogen_F)"], [""]],
     ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false],
-    ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true]
+    ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true],
+    ["EDIT", ["Device ID (0 = auto)", "Fixed ID for this generator. 0 = auto-assign a free ID."], ["0"]]
 ];
 
 // Add a checkbox for each computer
@@ -83,7 +84,8 @@ private _dialogControls = [
         _args params ["_targetObject", "_execUserId", "_allComputers"];
 
         // Parse results
-        _results params ["_generatorName", "_radius", "_allowExplosionOverload", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops", "_allowLocation"];
+        _results params ["_generatorName", "_radius", "_allowExplosionOverload", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops", "_allowLocation", "_requestedIdText"];
+        private _requestedId = parseNumber _requestedIdText;
 
         // Parse excluded classnames (convert comma-separated string to array)
         private _excludedArray = [];
@@ -100,7 +102,7 @@ private _dialogControls = [
 
         // Get selected computers
         private _selectedComputers = [];
-        private _checkboxStartIndex = 7;
+        private _checkboxStartIndex = 8;
 
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
@@ -113,8 +115,9 @@ private _dialogControls = [
             _selectedComputers = _allComputers apply { _x select 0 };
         };
 
-        // Call main function
-        [_targetObject, _execUserId, _selectedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
+        // Call main function. Power cost keeps the main's default (10 Wh) since this dialog has no
+        // cost field; the trailing value carries the mission-maker's requested device ID.
+        [_targetObject, _execUserId, _selectedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, 10, _requestedId] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
         [_targetObject, ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]] remoteExec ["setVariable", 2]; // General #3
         ["Power Generator Added!"] call zen_common_fnc_showMessage;
     },

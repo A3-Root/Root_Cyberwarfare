@@ -12,6 +12,9 @@
  * 2: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
  * 3: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
  * 4: _makeUnbreachable <BOOLEAN> (Optional) - Prevent non-hacking breaching methods, default: false
+ * 5: _allowLocation <BOOLEAN> (Optional) - Show grid location on the laptop, default: true
+ * 6: _requestedId <NUMBER> (Optional) - Desired building ID (0 = auto-assign), default: 0
+ * 7: _doorIdMap <ARRAY> (Optional) - Per-door overrides [[realDoor, customId], ...], default: []
  *
  * RADIUS MODE (multiple objects):
  * 0: _centerPosition <ARRAY> - Position array [x, y, z] for search center
@@ -20,6 +23,9 @@
  * 3: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
  * 4: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
  * 5: _makeUnbreachable <BOOLEAN> (Optional) - Prevent non-hacking breaching methods, default: false
+ * 6: _allowLocation <BOOLEAN> (Optional) - Show grid location on the laptop, default: true
+ * 7: _startId <NUMBER> (Optional) - First building ID handed out across the area (0 = auto), default: 0
+ * 8: _endId <NUMBER> (Optional) - Last building ID handed out across the area (0 = auto), default: 0
  *
  * Return Value:
  * None
@@ -41,6 +47,10 @@ private _linkedComputers = [];
 private _availableToFutureLaptops = false;
 private _makeUnbreachable = false;
 private _allowLocation = true; // "Allow Location View" (General #3); default on
+private _requestedId = 0;      // Desired building ID for direct mode (0 = auto)
+private _doorIdMapInput = [];  // Caller-supplied per-door overrides for direct mode
+private _startId = 0;          // First ID handed out across a radius sweep
+private _endId = 0;            // Last ID handed out across a radius sweep
 
 private _firstParam = _this select 0;
 
@@ -55,6 +65,8 @@ if (typeName _firstParam == "ARRAY") then {
     _availableToFutureLaptops = param [4, false, [false]];
     _makeUnbreachable = param [5, false, [false]];
     _allowLocation = param [6, true, [false]];
+    _startId = param [7, 0, [0]];
+    _endId = param [8, 0, [0]];
 } else {
     // Direct mode: object passed
     _radiusMode = false;
@@ -64,6 +76,8 @@ if (typeName _firstParam == "ARRAY") then {
     _availableToFutureLaptops = param [3, false, [false]];
     _makeUnbreachable = param [4, false, [false]];
     _allowLocation = param [5, true, [false]];
+    _requestedId = param [6, 0, [0]];
+    _doorIdMapInput = param [7, [], [[]]];
 };
 
 if (_execUserId == 0) then {
@@ -85,13 +99,22 @@ if (_radiusMode) exitWith {
         };
     } forEach _allObjects;
 
+    // Hand out sequential IDs across the area from the requested start; once the Start..End range is
+    // exhausted (or no range was given) the remaining buildings pass 0 and fall back to auto-assignment.
+    private _nextId = _startId;
+
     // Register each door-bearing object
     {
         private _building = _x;
         private _detectedDoors = [_building] call Root_fnc_detectBuildingDoors;
 
         if (_detectedDoors isNotEqualTo []) then {
-            [_building, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation] call FUNC(addDoorsZeusMain);
+            private _assignId = 0;
+            if (_nextId >= 1000 && _nextId <= 9999 && {_endId <= 0 || _nextId <= _endId}) then {
+                _assignId = _nextId;
+                _nextId = _nextId + 1;
+            };
+            [_building, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _assignId] call FUNC(addDoorsZeusMain);
             _registeredCount = _registeredCount + 1;
         };
     } forEach _doorObjects;
@@ -125,29 +148,36 @@ if (([_targetObject] call Root_fnc_detectBuildingDoors) isNotEqualTo []) then {
     if (_buildingDoors isNotEqualTo []) then {
         private _buildingNetId = netId _building;
 
-        _deviceId = (round (random 8999)) + 1000;
-        if (count _allDoors > 0) then {
-            while {true} do {
-                _deviceId = (round (random 8999)) + 1000;
-                private _buildingIsNew = true;
-                {
-                    if (_x select 0 == _deviceId) then {
-                        _buildingIsNew = false;
-                    };
-                } forEach _allDoors;
+        // Honour a caller-requested ID when it is free, otherwise draw a fresh unused one.
+        private _usedIds = _allDoors apply { _x select 0 };
+        _deviceId = [_requestedId, _usedIds] call FUNC(resolveDeviceId);
 
-                if (_buildingIsNew) then {
-                    break;
+        // Build the per-door ID map: start from an identity map (custom == engine number) and apply any
+        // caller overrides. Overrides that are non-numeric, non-positive, or duplicate another door's
+        // custom ID fall back to that door's engine number so every door stays addressable.
+        private _doorIdMap = [];
+        private _usedCustom = [];
+        {
+            private _real = _x;
+            private _custom = _real;
+            {
+                if ((_x select 0) == _real) exitWith {
+                    private _override = _x select 1;
+                    if (_override isEqualType 0 && {_override > 0} && {!(_override in _usedCustom)}) then {
+                        _custom = _override;
+                    };
                 };
-            };
-        };
+            } forEach _doorIdMapInput;
+            _usedCustom pushBack _custom;
+            _doorIdMap pushBack [_custom, _real];
+        } forEach _buildingDoors;
 
         // Store unbreachable flag on building
         if (_makeUnbreachable) then {
             _building setVariable ["ROOT_CYBERWARFARE_UNBREACHABLE", true, true];
         };
 
-        _allDoors pushBack [_deviceId, _buildingNetId, _buildingDoors, _displayName, _availableToFutureLaptops];
+        _allDoors pushBack [_deviceId, _buildingNetId, _buildingDoors, _displayName, _availableToFutureLaptops, _doorIdMap];
     };
 };
 

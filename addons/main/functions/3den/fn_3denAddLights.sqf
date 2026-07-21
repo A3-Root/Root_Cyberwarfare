@@ -24,6 +24,11 @@ if (!isServer) exitWith {};
 private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_LIGHTS_PUBLIC", 1]) in [1, true];
 private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_LIGHTS_ALLOWLOCATION", 1]) in [1, true];
 
+// Optional fixed IDs. A single light uses the start value; a trigger area hands out Start..End
+// sequentially, falling back to auto-assignment once the range is exhausted or unset.
+private _startId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_LIGHTS_ID_START", 0]);
+private _endId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_LIGHTS_ID_END", 0]);
+
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;
 
@@ -77,14 +82,23 @@ if (_allDevices isEqualTo []) exitWith {
     deleteVehicle _logic;
 };
 
+// Hand out sequential IDs from the requested start across the registered lights.
+private _nextId = _startId;
+
 // Process each device
 {
     private _device = _x;
     private _execUserId = 2; // Server
 
+    private _assignId = 0;
+    if (_nextId >= 1000 && _nextId <= 9999 && {_endId <= 0 || _nextId <= _endId}) then {
+        _assignId = _nextId;
+        _nextId = _nextId + 1;
+    };
+
     // Call the lights-specific main function
-    // Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops
-    [_device, _execUserId, _linkedComputers, _availableToFutureLaptops, _allowLocation] call FUNC(addLightsZeusMain);
+    // Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _allowLocation, _requestedId
+    [_device, _execUserId, _linkedComputers, _availableToFutureLaptops, _allowLocation, _assignId] call FUNC(addLightsZeusMain);
 
 } forEach _allDevices;
 

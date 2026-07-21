@@ -41,7 +41,9 @@ private _laptops = _syncedObjects select {
         };
 
         private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDEX", 1];
-        private _addCredentials = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_REGISTER_LAPTOP_CREDENTIALS", true];
+        // 3DEN BOOL attributes load as numbers (1/0); coerce to a real boolean before it reaches the
+        // boolean-typed parameter of the registration function.
+        private _addCredentials = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_REGISTER_LAPTOP_CREDENTIALS", 1]) in [1, true];
 
         {
             private _laptop = _x;

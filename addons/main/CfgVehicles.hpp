@@ -288,6 +288,27 @@ class CfgVehicles {
 				typeName = "BOOL";
 				defaultValue = 0;
 			};
+			class ROOT_CYBERWARFARE_3DEN_DOORS_ID_START: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_DOORS_ID_START";
+				displayName = "Device ID (Start)";
+				tooltip = "Assign a fixed 4-digit ID (1000-9999). 0 = auto-assign. With a trigger, IDs are handed out Start..End across the objects found.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+			};
+			class ROOT_CYBERWARFARE_3DEN_DOORS_ID_END: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_DOORS_ID_END";
+				displayName = "Device ID (End, for triggers)";
+				tooltip = "Last ID handed out across a trigger area (0 = auto). Leave 0 for single-object use.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+			};
+			class ROOT_CYBERWARFARE_3DEN_DOORS_IDMAP: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_DOORS_IDMAP";
+				displayName = "Door ID Overrides";
+				tooltip = "Comma-separated realDoor:customID pairs, e.g. 1:101,2:102. Omitted doors keep their engine number.";
+				typeName = "STRING";
+				defaultValue = "";
+			};
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {
@@ -320,6 +341,20 @@ class CfgVehicles {
 				tooltip = "If checked (default), the device's grid location is shown on the laptop (CLI + GUI). Uncheck to hide it.";
 				typeName = "BOOL";
 				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_LIGHTS_ID_START: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_LIGHTS_ID_START";
+				displayName = "Device ID (Start)";
+				tooltip = "Assign a fixed 4-digit ID (1000-9999). 0 = auto-assign. With a trigger, IDs are handed out Start..End across the objects found.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+			};
+			class ROOT_CYBERWARFARE_3DEN_LIGHTS_ID_END: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_LIGHTS_ID_END";
+				displayName = "Device ID (End, for triggers)";
+				tooltip = "Last ID handed out across a trigger area (0 = auto). Leave 0 for single-object use.";
+				typeName = "NUMBER";
+				defaultValue = 0;
 			};
 			class ModuleDescription: ModuleDescription{};
 		};
@@ -419,6 +454,13 @@ class CfgVehicles {
 				tooltip = "Optional key=value pairs. Examples: a=5 b=8, rails=3, radix=16 width=8 signed=0";
 				typeName = "STRING";
 				defaultValue = """""";
+			};
+			class ROOT_CYBERWARFARE_3DEN_DATABASE_ID_START: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_DATABASE_ID_START";
+				displayName = "Device ID (Start)";
+				tooltip = "Assign a fixed 4-digit ID (1000-9999). 0 = auto-assign. With a trigger, IDs are handed out Start..End across the objects found.";
+				typeName = "NUMBER";
+				defaultValue = 0;
 			};
 			class ModuleDescription: ModuleDescription{};
 		};
@@ -593,6 +635,20 @@ class CfgVehicles {
 				typeName = "NUMBER";
 				defaultValue = 30;
 			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_ID_START: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_ID_START";
+				displayName = "Device ID (Start)";
+				tooltip = "Assign a fixed 4-digit ID (1000-9999). 0 = auto-assign. With a trigger, IDs are handed out Start..End across the objects found.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_ID_END: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_ID_END";
+				displayName = "Device ID (End, for triggers)";
+				tooltip = "Last ID handed out across a trigger area (0 = auto). Leave 0 for single-object use.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+			};
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {
@@ -695,6 +751,20 @@ class CfgVehicles {
 				typeName = "BOOL";
 				defaultValue = 1;
 			};
+			class ROOT_CYBERWARFARE_3DEN_GPS_ID_START: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_GPS_ID_START";
+				displayName = "Device ID (Start)";
+				tooltip = "Assign a fixed 4-digit ID (1000-9999). 0 = auto-assign. With a trigger, IDs are handed out Start..End across the objects found.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+			};
+			class ROOT_CYBERWARFARE_3DEN_GPS_ID_END: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_GPS_ID_END";
+				displayName = "Device ID (End, for triggers)";
+				tooltip = "Last ID handed out across a trigger area (0 = auto). Leave 0 for single-object use.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+			};
 			class ModuleDescription: ModuleDescription{};
 		};
 		class ModuleDescription: ModuleDescription {
@@ -750,6 +820,20 @@ class CfgVehicles {
 				tooltip = "If checked (default), the device's grid location is shown on the laptop (CLI + GUI). Uncheck to hide it.";
 				typeName = "BOOL";
 				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_CUSTOM_ID_START: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_CUSTOM_ID_START";
+				displayName = "Device ID (Start)";
+				tooltip = "Assign a fixed 4-digit ID (1000-9999). 0 = auto-assign. With a trigger, IDs are handed out Start..End across the objects found.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+			};
+			class ROOT_CYBERWARFARE_3DEN_CUSTOM_ID_END: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_CUSTOM_ID_END";
+				displayName = "Device ID (End, for triggers)";
+				tooltip = "Last ID handed out across a trigger area (0 = auto). Leave 0 for single-object use.";
+				typeName = "NUMBER";
+				defaultValue = 0;
 			};
 			class ModuleDescription: ModuleDescription{};
 		};
@@ -825,6 +909,20 @@ class CfgVehicles {
 				tooltip = "If checked (default), the device's grid location is shown on the laptop (CLI + GUI). Uncheck to hide it.";
 				typeName = "BOOL";
 				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_POWERGRID_ID_START: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_ID_START";
+				displayName = "Device ID (Start)";
+				tooltip = "Assign a fixed 4-digit ID (1000-9999). 0 = auto-assign. With a trigger, IDs are handed out Start..End across the objects found.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+			};
+			class ROOT_CYBERWARFARE_3DEN_POWERGRID_ID_END: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_ID_END";
+				displayName = "Device ID (End, for triggers)";
+				tooltip = "Last ID handed out across a trigger area (0 = auto). Leave 0 for single-object use.";
+				typeName = "NUMBER";
+				defaultValue = 0;
 			};
 			class ModuleDescription: ModuleDescription{};
 		};
