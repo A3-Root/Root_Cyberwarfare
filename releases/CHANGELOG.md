@@ -1,5 +1,17 @@
 # Changelog
 
+## Update 9 (v1.6.0.1)
+
+### Added
+- Ability to manually assign device IDs to all devices
+- Ability to view the individual door numbers of a building to assign ID if needed (only for Zeus)
+
+### Removed
+- N/A
+
+### Changed
+- Bug fixes
+
 ## Major Update 8 (v1.5.0.6)
 
 ### Added
