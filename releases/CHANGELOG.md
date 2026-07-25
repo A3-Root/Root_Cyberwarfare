@@ -1,34 +1,47 @@
 # Changelog
 
-## Update 9 (v1.6.0.1)
+## Major Update 2 (v2.0.0.0)
 
 ### Added
-- Ability to manually assign device IDs to all devices
-- Ability to view the individual door numbers of a building to assign ID if needed (only for Zeus)
+
+- A full **Hackerman Desktop** interface for AE3 laptops. Players can now use point-and-click applications for Doors, Lights, Vehicles, Drones, GPS, Databases, Custom Devices, Power Grid control, NetScan, Crypto, and Crack; the applications operate on the same accessible-device list and power economy as the terminal.
+- A **NetScan** feature in both the terminal and desktop. It reports the laptop-visible subnet, including host IP address, device type, external SSH exposure, network interface, and the accessible hackable devices associated with each host. Scan reports can also be exported into the laptop filesystem.
+- Terminal and desktop **cryptography tools**:
+  - `crypto` encrypts or decrypts text and laptop files, and can save results to a chosen path.
+  - `crack` attempts to identify or brute-force supported ciphers and ranks likely plaintext candidates.
+  - Supported algorithms include Morse, spelling alphabet, Affine, ROT, Vigenere, Bacon, alphabetical substitution, Rail Fence, Base32, Base64, Ascii85, Unicode notation, and integer encodings.
+- Mission-makers can now create encrypted database content directly from Eden and configure its cipher, key/variant, and options. The cipher options are also available when using AE3's Add File module, and a new Zeus **Cipher Tools** module supports cipher setup during play.
+- The **Rubberducky USB**, a placeable and Arsenal-available AE3-compatible flash drive preloaded with the hacking toolset. Plugging it into a laptop makes the tools available, preserves the drive's unique contents across pickup and reconnection, and presents the Hackerman launcher while connected.
+- Configurable Rubberducky login seeding. By default, connecting a tools USB creates the `quack` / `quack` account if it is absent; mission makers can disable this behavior or set their own credentials.
+- An optional **77th JSOC EWO Mode** with ACE actions for registering and renaming hackable laptops in the field.
+- EWO backpack support: operators can charge carried laptops, inspect charging status, broadcast a configurable password-protected wireless network, and connect the pack to nearby active AE3 power sources to recharge it. Network broadcast, charging, and recharge rates are mission-configurable.
+- A dedicated Eden **Register Hackable Laptop** module and a matching Zeus workflow. Laptops can be registered without automatically receiving hacking tools, allowing missions to separate access points from the tool delivery method.
+- A Zeus **Clear Broken Device Links** module and an optional scheduled cleanup system for purging links whose laptop or device no longer exists. Cleanup timing and grace behavior are configurable.
+- Mission-maker controls for stable four-digit device IDs. Doors, lights, databases, vehicles, GPS trackers, custom devices, and power grids can use fixed IDs; trigger-based registration modules can also distribute IDs through configured ranges.
+- Per-device **Allow Location View** controls for doors, lights, vehicles, custom devices, and power grids. When disabled, terminal and desktop listings hide the device grid reference.
+- New configurable default power costs for vehicle actions and GPS tracker pings, with per-device costs still able to override the mission default.
+- Vehicle-control improvements: configurable remote braking, drivetrain-aware speed changes, automatic engine start for speed control, damage-based speed limiting, and release of held speed when a vehicle can no longer be driven.
+- Additional vehicle status support for detailed device listings, including drivetrain information and remote speed-lock release handling.
+- New audiovisual assets for the Rubberducky/Hackerman experience, including connection audio and a desktop loading/intro video.
 
 ### Removed
-- N/A
+
+- The deprecated **Add Devices** Eden module has been removed. Missions should register the appropriate device type with the dedicated Doors, Lights, Vehicle, Database, GPS, Custom Device, or Power Grid module instead.
+- The deprecated generic **Add Hackable Object** Zeus module has been removed and replaced by **Register Hackable Laptop** for laptop registration.
 
 ### Changed
-- Bug fixes
 
-## Major Update 8 (v1.5.0.6)
-
-### Added
-- Hackerman Desktop support, including the new `crypto`, `crack`, and `netscan` workflows
-- Classical cipher tooling backed by a shared cipher engine for encrypt, decrypt, and bruteforce operations
-- New Zeus and 3DEN modules for hackable laptops, cipher tools, and broken device-link cleanup
-- Expanded in-game GUI apps for devices, doors, lights, vehicles, drones, GPS, databases, custom devices, and power grids
-- Rubber ducky support plus laptop battery and Wi-Fi synchronization helpers
-
-### Removed
-- Legacy `Add Devices` Zeus and 3DEN module files were removed in favor of the dedicated door, light, vehicle, and related modules
-
-### Changed
-- Vehicle control was refactored around configurable per-action limits, with braking and drivetrain/speed-lock behavior updated accordingly
-- Device registration, access control, and link cleanup were reworked across the core and Zeus modules
-- GPS, power-grid, and terminal behavior were updated to match the new desktop-driven workflow
-- Documentation, generated wiki pages, and release packaging were refreshed for the newer release line
+- Hacking-tool availability now follows the mounted USB state: a laptop provisioned through a tools USB gains the terminal and desktop tools when the drive is connected and loses USB-provisioned tools when the final tools drive is removed. Directly installed mission tools remain intact.
+- The Hackerman launcher and desktop app group now appear only when hacking tools are available, and are refreshed for active desktop users after USB-volume changes.
+- Device access, desktop requests, and desktop actions are validated on the server before their results are sent to the requesting player, improving multiplayer synchronization and authority over door, light, vehicle, drone, GPS, database, custom-device, and power-grid operations.
+- Device-registry synchronization is consolidated and debounced, including server-authoritative GPS tracker status updates. This reduces unnecessary broadcasts while keeping client lists current.
+- Device-link maintenance now handles invalid or deleted objects more reliably; mission makers may clear broken links manually or enable periodic cleanup with a configurable grace period.
+- Eden registration modules now expose more precise setup controls: triggers can distribute IDs through a range, door IDs can be overridden individually, and module synchronization targets have been narrowed where appropriate to make placement less error-prone.
+- Vehicle hacking consumes the configured global vehicle cost unless an individual vehicle supplies its own cost, and all vehicle operations use the common power-check and confirmation flow.
+- Speed hacking now applies requested speed in km/h relative to the vehicle's current forward motion, clamps it to the capability of the remaining engine and wheels, and reports when damage reduces the requested effect.
+- Remote braking is performed through the shared braking routine, giving braking actions consistent deceleration and a brief stopped hold.
+- Power consumption handling has been standardized across the new and existing operations, so insufficient-power checks and battery deductions are consistent.
+- Database, device, and laptop setup workflows now distinguish between registering a hackable station, granting device access, and installing hacking tools; this makes staged mission progression and physical tool delivery easier to build.
 
 ## Update 7 (v1.1.4.2)
 
