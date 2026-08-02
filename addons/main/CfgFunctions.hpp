@@ -13,6 +13,7 @@ class CfgFunctions {
 			class 3denAddPowerGenerator {};
 			class 3denAddVehicle {};
 			class 3denAdjustPowerCost {};
+			class 3denLinkDevices {};
 			class 3denRegisterHackableLaptop {};
 		};
 
@@ -128,7 +129,9 @@ class CfgFunctions {
 		class Utility {
 			file = "\z\root_cyberwarfare\addons\main\functions\utility";
 			class addComputerDeviceLinks {};
+			class applyDeviceAccess {};
 			class cacheDeviceLinks {};
+			class setDeviceLinksMain {};
 			class runDeviceLinkCleanup {};
 			class clearBrokenDeviceLinks {};
 			class setRubberduckyCredentials {};
@@ -178,6 +181,7 @@ class CfgFunctions {
 			class addHackingToolsZeus {};
 			class registerHackableLaptopZeus {};
 			class copyDeviceLinksZeus {};
+			class manageDeviceLinksZeus {};
 			class clearBrokenDeviceLinksZeus {};
 			class clearBrokenDeviceLinksZeusMain {};
 		};

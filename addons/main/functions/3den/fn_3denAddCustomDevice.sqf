@@ -24,7 +24,6 @@ private _customName = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_NAME", 
 private _activationCode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_ACTIVATE", "// Example: Display Hint when triggered\nhint 'Custom device activated';"];
 private _deactivationCode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_DEACTIVATE", "// Example: Display Hint when triggered\nhint 'Custom device deactivated';"];
 // 3DEN BOOL attribute loads as a number (1/0); coerce to a real boolean.
-private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_PUBLIC", 1]) in [1, true];
 // 3DEN checkbox attribute (typeName BOOL) loads as a boolean; accept both boolean and legacy numeric storage.
 private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_ALLOWLOCATION", 1]) in [1, true];
 
@@ -68,16 +67,27 @@ if (_allTargets isEqualTo []) exitWith {
 // Get laptop netIds for linking
 private _linkedComputers = _laptops apply { netId _x };
 
-// Determine availability setting
+// Device Access states how the registered devices may be reached. The combo's fourth entry (3) is
+// the linked-plus-future variant, which resolves to a linked device that later laptops also reach.
+private _accessMode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_ACCESS", -1];
 private _availableToFutureLaptops = false;
-if (_addToPublic) then {
-	if (_linkedComputers isEqualTo []) then {
-		// Public + no linked = all current laptops only
-		_availableToFutureLaptops = false;
-	} else {
-		// Public + some linked = linked laptops + all future
-		_availableToFutureLaptops = true;
-	};
+
+if (_accessMode == 3) then {
+    _accessMode = ACCESS_MODE_LINKED;
+    _availableToFutureLaptops = true;
+};
+
+if (_accessMode < 0) then {
+    // Missions saved before Device Access existed carry only the legacy public checkbox, so map
+    // that forward and leave their devices as reachable as they were.
+    _accessMode = ACCESS_MODE_LINKED;
+    if ((_logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_PUBLIC", 1]) in [1, true]) then {
+        if (_linkedComputers isEqualTo []) then {
+            _accessMode = ACCESS_MODE_PUBLIC;
+        } else {
+            _availableToFutureLaptops = true;
+        };
+    };
 };
 
 // Hand out sequential IDs from the requested start across the registered devices.
@@ -96,7 +106,7 @@ private _nextId = _startId;
 
 	// Call the custom device Zeus main function
 	// Parameters: _targetObject, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops
-	[_target, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation, _assignId] call FUNC(addCustomDeviceZeusMain);
+	[_target, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation, _assignId, _accessMode] call FUNC(addCustomDeviceZeusMain);
 	_target setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // General #3
 
 } forEach _allTargets;

@@ -15,6 +15,7 @@
  * 5: _allowLocation <BOOLEAN> (Optional) - Show grid location on the laptop, default: true
  * 6: _requestedId <NUMBER> (Optional) - Desired building ID (0 = auto-assign), default: 0
  * 7: _doorIdMap <ARRAY> (Optional) - Per-door overrides [[realDoor, customId], ...], default: []
+ * 8: _accessMode <NUMBER> (Optional) - ACCESS_MODE_* constant, default: ACCESS_MODE_UNASSIGNED
  *
  * RADIUS MODE (multiple objects):
  * 0: _centerPosition <ARRAY> - Position array [x, y, z] for search center
@@ -26,13 +27,14 @@
  * 6: _allowLocation <BOOLEAN> (Optional) - Show grid location on the laptop, default: true
  * 7: _startId <NUMBER> (Optional) - First building ID handed out across the area (0 = auto), default: 0
  * 8: _endId <NUMBER> (Optional) - Last building ID handed out across the area (0 = auto), default: 0
+ * 9: _accessMode <NUMBER> (Optional) - ACCESS_MODE_* constant, default: ACCESS_MODE_UNASSIGNED
  *
  * Return Value:
  * None
  *
  * Example:
- * [_building, 0, [], false, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
- * [[100, 200, 0], 500, 0, [], true, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2]; // Radius mode
+ * [_building, 0, [], false, false, true, 0, [], ACCESS_MODE_PUBLIC] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+ * [[100, 200, 0], 500, 0, [], true, false, true, 0, 0, ACCESS_MODE_LINKED] remoteExec ["Root_fnc_addDoorsZeusMain", 2]; // Radius mode
  *
  * Public: No
  */
@@ -51,6 +53,7 @@ private _requestedId = 0;      // Desired building ID for direct mode (0 = auto)
 private _doorIdMapInput = [];  // Caller-supplied per-door overrides for direct mode
 private _startId = 0;          // First ID handed out across a radius sweep
 private _endId = 0;            // Last ID handed out across a radius sweep
+private _accessMode = ACCESS_MODE_UNASSIGNED; // How the registered buildings may be reached
 
 private _firstParam = _this select 0;
 
@@ -63,10 +66,12 @@ if (typeName _firstParam == "ARRAY") then {
     _execUserId = param [2, 0, [0]];
     _linkedComputers = param [3, [], [[]]];
     _availableToFutureLaptops = param [4, false, [false]];
+    // The unbreachable flag is forwarded to every building the sweep registers.
     _makeUnbreachable = param [5, false, [false]];
     _allowLocation = param [6, true, [false]];
     _startId = param [7, 0, [0]];
     _endId = param [8, 0, [0]];
+    _accessMode = param [9, ACCESS_MODE_UNASSIGNED, [0]];
 } else {
     // Direct mode: object passed
     _radiusMode = false;
@@ -78,6 +83,7 @@ if (typeName _firstParam == "ARRAY") then {
     _allowLocation = param [5, true, [false]];
     _requestedId = param [6, 0, [0]];
     _doorIdMapInput = param [7, [], [[]]];
+    _accessMode = param [8, ACCESS_MODE_UNASSIGNED, [0]];
 };
 
 if (_execUserId == 0) then {
@@ -114,7 +120,7 @@ if (_radiusMode) exitWith {
                 _assignId = _nextId;
                 _nextId = _nextId + 1;
             };
-            [_building, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _assignId] call FUNC(addDoorsZeusMain);
+            [_building, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _assignId, [], _accessMode] call FUNC(addDoorsZeusMain);
             _registeredCount = _registeredCount + 1;
         };
     } forEach _doorObjects;
@@ -185,95 +191,9 @@ if (!_isValidObject) exitWith {
     [format ["Object (%1) does not expose any door animations. Use fn_addLightsZeus for lights.", _targetObject]] remoteExec ["systemChat", _execUserId];
 };
 
-private _availabilityText = "";
+// Apply the requested reachability: private links, public registration, or nothing at all.
+private _availabilityText = [_typeofhackable, _deviceId, _linkedComputers, _accessMode, _availableToFutureLaptops] call FUNC(applyDeviceAccess);
 
-// Store device linking information (for selected computers)
-if (_linkedComputers isNotEqualTo []) then {
-    // Add the private [type, id] link to each selected computer through the shared atomic helper.
-    [_linkedComputers, _typeofhackable, _deviceId] call FUNC(addComputerDeviceLinks);
-    _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
-};
-
-private _excludedIdentifiers = [];
-// Handle public device access
-if (_availableToFutureLaptops || _linkedComputers isEqualTo []) then {
-    private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
-
-    DEBUG_LOG_2("Device setup mode: %1, Future laptops: %2",GET_DEVICE_MODE,_availableToFutureLaptops);
-
-    if (_availableToFutureLaptops) then {
-        if (_linkedComputers isNotEqualTo []) then {
-            // Scenario 4: Available to future + some linked
-            // Exclude current laptops that are NOT linked
-            DEBUG_LOG("Scenario 4: Excluding current non-linked computers");
-
-            if (IS_EXPERIMENTAL_MODE) then {
-                // Experimental mode: Collect player UIDs
-                {
-                    private _nearLaptops = nearestObjects [_x, [], 3] select {
-                        _x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]
-                    };
-                    if (_nearLaptops isNotEqualTo []) then {
-                        private _uid = getPlayerUID _x;
-                        if !(_uid in _linkedComputers) then {
-                            _excludedIdentifiers pushBack _uid;
-                            DEBUG_LOG_2("Excluding player %1 (UID: %2)",name _x,_uid);
-                        };
-                    };
-                } forEach allPlayers;
-            } else {
-                // Simple mode: Collect laptop netIds
-                {
-                    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
-                        private _netId = netId _x;
-                        if !(_netId in _linkedComputers) then {
-                            _excludedIdentifiers pushBack _netId;
-                            DEBUG_LOG_1("Excluding laptop netId: %1",_netId);
-                        };
-                    };
-                } forEach (24 allObjects 1);
-            };
-
-            _availabilityText = _availabilityText + format [" and all future computers"];
-        } else {
-            // Scenario 3: Available to future + no linked
-            // Exclude ALL current laptops
-            DEBUG_LOG("Scenario 3: Excluding all current computers");
-
-            if (IS_EXPERIMENTAL_MODE) then {
-                // Experimental mode: Collect player UIDs
-                {
-                    private _nearLaptops = nearestObjects [_x, [], 3] select {
-                        _x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]
-                    };
-                    if (_nearLaptops isNotEqualTo []) then {
-                        _excludedIdentifiers pushBack (getPlayerUID _x);
-                        DEBUG_LOG_2("Excluding player %1 (UID: %2)",name _x,getPlayerUID _x);
-                    };
-                } forEach allPlayers;
-            } else {
-                // Simple mode: Collect laptop netIds
-                {
-                    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
-                        _excludedIdentifiers pushBack (netId _x);
-                        DEBUG_LOG_1("Excluding laptop netId: %1",netId _x);
-                    };
-                } forEach (24 allObjects 1);
-            };
-
-            _availabilityText = "Available to future computers only.";
-        };
-    } else {
-        // Scenario 1: Not available to future + no linked
-        // No exclusions - all current laptops get access
-        DEBUG_LOG("Scenario 1: All current computers get access");
-        _availabilityText = format ["Available to all current computers only"];
-    };
-
-    DEBUG_LOG_1("Excluded identifiers: %1",_excludedIdentifiers);
-    _publicDevices pushBack [_typeofhackable, _deviceId, _excludedIdentifiers];
-    missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
-};
 
 // Update global storage with modified device arrays
 _allDevices set [0, _allDoors];

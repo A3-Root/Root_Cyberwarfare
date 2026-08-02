@@ -153,8 +153,13 @@ if (_useRadiusMode) then {
     };
 };
 
-// Add availability setting (common to all modes)
-_dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false];
+// Add access mode and availability setting (common to all modes)
+_dialogControls pushBack ["COMBO", [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_DESC"], [
+    [ACCESS_MODE_UNASSIGNED, ACCESS_MODE_LINKED, ACCESS_MODE_PUBLIC],
+    [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_UNASSIGNED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_LINKED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_PUBLIC"],
+    0
+]];
+_dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Only applies to 'Linked computers only': the linked computers keep access and laptops added later gain it too."], false];
 // Allow Location View (common to all modes, #3) - pushed right after availability.
 _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true];
 
@@ -193,7 +198,9 @@ if (_useRadiusMode) then {
         private _checkboxStartIndex = 0;
 
         if (_useRadiusMode) then {
-            // Radius mode: Extract availability flag and process computers
+            // Radius mode: Extract access mode and availability flag, then process computers
+            private _accessMode = _results select _resultIndex;
+            _resultIndex = _resultIndex + 1;
             private _availableToFutureLaptops = _results select _resultIndex;
             _resultIndex = _resultIndex + 1;
             private _allowLocation = _results select _resultIndex;
@@ -211,14 +218,8 @@ if (_useRadiusMode) then {
                 };
             } forEach _allComputers;
 
-            // If available to future laptops, keep the selected computers but mark for future availability
-            // If not available to future laptops and no computers selected, use all current computers
-            if (!_availableToFutureLaptops && _selectedComputers isEqualTo []) then {
-                _selectedComputers = _allComputers apply { _x select 0 };
-            };
-
             // Radius mode: Use captured position (logic is already deleted)
-            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation, _requestedId, _rangeEndId] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation, _requestedId, _rangeEndId, _accessMode] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 
         } else {
             if (_isDrone) then {
@@ -228,6 +229,8 @@ if (_useRadiusMode) then {
                 private _disableCost = _results select _resultIndex;
                 _resultIndex = _resultIndex + 1;
                 private _sideCost = _results select _resultIndex;
+                _resultIndex = _resultIndex + 1;
+                private _accessMode = _results select _resultIndex;
                 _resultIndex = _resultIndex + 1;
                 private _availableToFutureLaptops = _results select _resultIndex;
                 _resultIndex = _resultIndex + 1;
@@ -244,17 +247,11 @@ if (_useRadiusMode) then {
                     };
                 } forEach _allComputers;
 
-                // If available to future laptops, keep the selected computers but mark for future availability
-                // If not available to future laptops and no computers selected, use all current computers
-                if (!_availableToFutureLaptops && _selectedComputers isEqualTo []) then {
-                    _selectedComputers = _allComputers apply { _x select 0 };
-                };
-
                 if (_disableCost < 1) then { _disableCost = 1; };
                 if (_sideCost < 1) then { _sideCost = 1; };
 
                 // Hand off to the vehicle worker, which detects drones and applies the drone-specific handling.
-                [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _droneName, _disableCost, _sideCost, _requestedId] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
+                [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _droneName, _disableCost, _sideCost, _requestedId, _accessMode] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
                 // Drone path can't carry the flag through the registration call; apply it on the object.
                 [_targetObject, ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]] remoteExec ["setVariable", 2];
                 ["Hackable Drone Added!"] call zen_common_fnc_showMessage;
@@ -272,10 +269,10 @@ if (_useRadiusMode) then {
                     "_lightsMaxToggles", "_lightsCooldown",
                     "_engineMaxToggles", "_engineCooldown",
                     "_alarmMinDuration", "_alarmMaxDuration",
-                    "_availableToFutureLaptops", "_allowLocation", "_requestedIdText"
+                    "_accessMode", "_availableToFutureLaptops", "_allowLocation", "_requestedIdText"
                 ];
                 private _requestedId = parseNumber _requestedIdText;
-                _checkboxStartIndex = 23;
+                _checkboxStartIndex = 24;
 
                 // Process laptop checkboxes
                 {
@@ -283,12 +280,6 @@ if (_useRadiusMode) then {
                         _selectedComputers pushBack (_x select 0);
                     };
                 } forEach _allComputers;
-
-                // If available to future laptops, keep the selected computers but mark for future availability
-                // If not available to future laptops and no computers selected, use all current computers
-                if (!_availableToFutureLaptops && _selectedComputers isEqualTo []) then {
-                    _selectedComputers = _allComputers apply { _x select 0 };
-                };
 
                 // Validate power cost
                 if (_powerCost < 1) then { _powerCost = 1; };
@@ -299,7 +290,7 @@ if (_useRadiusMode) then {
                     _availableToFutureLaptops, _powerCost,
                     _fuelMinPercent, _fuelMaxPercent, _speedMinValue, _speedMaxValue,
                     _brakesMinDecel, _brakesMaxDecel, _lightsMaxToggles, _lightsCooldown,
-                    _engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration, _allowLocation, _requestedId
+                    _engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration, _allowLocation, _requestedId, _accessMode
                 ] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
                 ["Hackable Vehicle Added!"] call zen_common_fnc_showMessage;
                 _index = _index + 1;

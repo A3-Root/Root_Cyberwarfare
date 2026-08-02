@@ -17,17 +17,19 @@
  * 10: _powerCost <NUMBER> - Power cost per ping
  * 11: _sysChat <BOOLEAN> (Optional) - Show system chat message, default: true
  * 12: _ownersSelection <ARRAY> (Optional) - Additional sides, groups, or players, to get GPS Pings marked on map, default: [[], [], []]
+ * 13: _requestedId <NUMBER> (Optional) - Fixed device id, 0 = auto-assign, default: 0
+ * 14: _accessMode <NUMBER> (Optional) - ACCESS_MODE_* constant, default: ACCESS_MODE_UNASSIGNED
  *
  * Return Value:
  * None
  *
  * Example:
- * [_obj, 0, [], "Tracker1", 60, 5, "", false, true, 30, 2, true, [[], [], []]] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
+ * [_obj, 0, [], "Tracker1", 60, 5, "", false, true, 30, 2, true, [[], [], []], 0, ACCESS_MODE_PUBLIC] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
  *
  * Public: No
  */
 
-params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_trackerName", ""], ["_trackingTime", 60], ["_updateFrequency", 5], ["_customMarker", ""], ["_availableToFutureLaptops", false], ["_allowRetracking", false], "_lastPingTimer", "_powerCost", ["_sysChat", true], ["_ownersSelection", [[], [], []]], ["_requestedId", 0]];
+params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_trackerName", ""], ["_trackingTime", 60], ["_updateFrequency", 5], ["_customMarker", ""], ["_availableToFutureLaptops", false], ["_allowRetracking", false], "_lastPingTimer", "_powerCost", ["_sysChat", true], ["_ownersSelection", [[], [], []]], ["_requestedId", 0], ["_accessMode", ACCESS_MODE_UNASSIGNED, [0]]];
 
 if (_execUserId == 0) then {
     _execUserId = owner _targetObject;
@@ -62,97 +64,8 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_PING", _lastPingTimer,
 _targetObject setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_COST", _powerCost, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_OWNERS", _ownersSelection, true];
 
-private _availabilityText = "";
-
-// Store device linking information (for selected computers)
-if (_linkedComputers isNotEqualTo []) then {
-    // Add the private [type, id] link to each selected computer through the shared atomic helper.
-    [_linkedComputers, DEVICE_TYPE_GPS_TRACKER, _deviceId] call FUNC(addComputerDeviceLinks);
-
-    private _firstComputerLinks = (GET_LINK_CACHE) getOrDefault [_linkedComputers select 0, []];
-    DEBUG_LOG_3("GPS tracker %1 linked to computers %2, link cache now %3",_deviceId,_linkedComputers,_firstComputerLinks);
-    _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
-};
-
-private _excludedIdentifiers = [];
-// Handle public device access
-if (_availableToFutureLaptops || count _linkedComputers == 0) then {
-    private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
-
-    DEBUG_LOG_2("Device setup mode: %1, Future laptops: %2",GET_DEVICE_MODE,_availableToFutureLaptops);
-
-    if (_availableToFutureLaptops) then {
-        if (_linkedComputers isNotEqualTo []) then {
-            // Scenario: Available to future + some linked
-            // Exclude current laptops that are NOT linked
-            DEBUG_LOG("Scenario 4: Excluding current non-linked computers");
-
-            if (IS_EXPERIMENTAL_MODE) then {
-                {
-                    private _nearLaptops = nearestObjects [_x, [], 3] select {
-                        _x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]
-                    };
-                    if (_nearLaptops isNotEqualTo []) then {
-                        private _uid = getPlayerUID _x;
-                        if !(_uid in _linkedComputers) then {
-                            _excludedIdentifiers pushBack _uid;
-                            DEBUG_LOG_2("Excluding player %1 (UID: %2)",name _x,_uid);
-                        };
-                    };
-                } forEach allPlayers;
-            } else {
-                {
-                    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
-                        private _netId = netId _x;
-                        if !(_netId in _linkedComputers) then {
-                            _excludedIdentifiers pushBack _netId;
-                            DEBUG_LOG_1("Excluding laptop netId: %1",_netId);
-                        };
-                    };
-                } forEach (24 allObjects 1);
-            };
-
-            _availabilityText = _availabilityText + format [" and all future computers."];
-        } else {
-            // Scenario: Available to future + no linked
-            // Exclude ALL current laptops
-            DEBUG_LOG("Scenario 3: Excluding all current computers");
-
-            if (IS_EXPERIMENTAL_MODE) then {
-                {
-                    private _nearLaptops = nearestObjects [_x, [], 3] select {
-                        _x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]
-                    };
-                    if (_nearLaptops isNotEqualTo []) then {
-                        _excludedIdentifiers pushBack (getPlayerUID _x);
-                        DEBUG_LOG_2("Excluding player %1 (UID: %2)",name _x,getPlayerUID _x);
-                    };
-                } forEach allPlayers;
-            } else {
-                {
-                    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
-                        _excludedIdentifiers pushBack (netId _x);
-                        DEBUG_LOG_1("Excluding laptop netId: %1",netId _x);
-                    };
-                } forEach (24 allObjects 1);
-            };
-
-            _availabilityText = "Available to future computers only";
-        };
-    } else {
-        // Scenario: Not available to future + no linked
-        // No exclusions - all current laptops get access
-        DEBUG_LOG("Scenario 1: All current computers get access");
-        _availabilityText = format ["Available to all current computers."];
-    };
-
-    DEBUG_LOG_1("Excluded identifiers: %1",_excludedIdentifiers);
-    // Publish the tracker as a public device whenever this branch runs (future access or no
-    // explicit links): every laptop not named in the exclusion list can then reach it. With no
-    // links and no future flag the exclusion list is empty, so the tracker is accessible to all.
-    _publicDevices pushBack [6, _deviceId, _excludedIdentifiers]; // 6 = GPS tracker type
-    missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
-};
+// Apply the requested reachability: private links, public registration, or nothing at all.
+private _availabilityText = [DEVICE_TYPE_GPS_TRACKER, _deviceId, _linkedComputers, _accessMode, _availableToFutureLaptops] call FUNC(applyDeviceAccess);
 
 if (_sysChat) then {
     [format ["Root Cyber Warfare: GPS Tracker '%1' added (ID: %2). %3", _trackerName, _deviceId, _availabilityText]] remoteExec ["systemChat", _execUserId];

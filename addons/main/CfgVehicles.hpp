@@ -109,6 +109,14 @@ class CfgVehicles {
 		function = "Root_fnc_copyDeviceLinksZeus";
 		displayName = "Copy Device Links";
 	};
+	class ROOT_CyberWarfareManageDeviceLinksZeus: zen_modules_moduleBase {
+		author = "Root";
+		_generalMacro = "ROOT_CyberWarfareManageDeviceLinksZeus";
+		curatorCanAttach = 1;
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_manageDeviceLinksZeus";
+		displayName = "Manage Device Links";
+	};
 	class ROOT_CyberWarfareClearBrokenLinksZeus: zen_modules_moduleBase {
 		author = "Root";
 		_generalMacro = "ROOT_CyberWarfareClearBrokenLinksZeus";
@@ -128,6 +136,45 @@ class CfgVehicles {
 			class ModuleDescription;
 		};
 		class ModuleDescription;
+	};
+
+	class ROOT_Module3DEN_LinkDevices: Module_F {
+		scope = 2;
+		displayName = "Link Devices";
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_3denLinkDevices";
+		functionPriority = 1;
+		isGlobal = 0;
+		isTriggerActivated = 0;
+		isDisposable = 1;
+		is3DEN = 0;
+		class Attributes: AttributesBase {
+			class ROOT_CYBERWARFARE_3DEN_LINKDEVICES_LIST: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_LINKDEVICES_LIST";
+				displayName = "Devices (type:id)";
+				tooltip = "Comma-separated deviceType:deviceId pairs, e.g. 4:1003, 1:1001. Types: 1 Doors, 2 Lights, 3 Drones, 4 Files, 5 Custom, 6 GPS Trackers, 7 Vehicles, 8 Power Grids.";
+				typeName = "STRING";
+				defaultValue = """""";
+			};
+			class ROOT_CYBERWARFARE_3DEN_LINKDEVICES_ACTION: Combo {
+				property = "ROOT_CYBERWARFARE_3DEN_LINKDEVICES_ACTION";
+				displayName = "Action";
+				tooltip = "What to do with the listed devices for the synchronized laptops.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+				class Values {
+					class LinkDevices { name = "Link to synchronized laptops"; value = 0; };
+					class UnlinkDevices { name = "Unlink from synchronized laptops"; value = 1; };
+					class PublishDevices { name = "Make public (all laptops)"; value = 2; };
+					class UnassignDevices { name = "Unassign (no laptop can reach)"; value = 3; };
+				};
+			};
+			class ModuleDescription: ModuleDescription{};
+		};
+		class ModuleDescription: ModuleDescription {
+			description = "Grants synchronized AE3 Laptops access to devices that other modules already registered. Runs 10 seconds into the mission so device IDs exist.";
+			sync[] = {"Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"};
+		};
 	};
 
 	class ROOT_Module3DEN_AddHackingTools: Module_F {
@@ -270,9 +317,22 @@ class CfgVehicles {
 			class ROOT_CYBERWARFARE_3DEN_DOORS_PUBLIC: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_DOORS_PUBLIC";
 				displayName = "Add to Public Device List";
-				tooltip = "If checked, these devices will be accessible by all laptops (current and future)";
+				tooltip = "Deprecated, kept so missions saved before the Device Access setting existed keep working. Device Access is used instead whenever it is set.";
 				typeName = "BOOL";
 				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_DOORS_ACCESS: Combo {
+				property = "ROOT_CYBERWARFARE_3DEN_DOORS_ACCESS";
+				displayName = "Device Access";
+				tooltip = "Unassigned: registered but no laptop can reach it - grant access later with the Link Devices or Manage Device Links module. Linked: only the laptops synchronized to this module. Public: every current and future laptop.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+				class Values {
+					class Unassigned { name = "Unassigned (assign later)"; value = 0; };
+					class Linked { name = "Linked laptops only"; value = 1; };
+					class LinkedFuture { name = "Linked laptops + all future laptops"; value = 3; };
+					class PublicAll { name = "Public (all laptops)"; value = 2; };
+				};
 			};
 			class ROOT_CYBERWARFARE_3DEN_DOORS_ALLOWLOCATION: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_DOORS_ALLOWLOCATION";
@@ -331,9 +391,22 @@ class CfgVehicles {
 			class ROOT_CYBERWARFARE_3DEN_LIGHTS_PUBLIC: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_LIGHTS_PUBLIC";
 				displayName = "Add to Public Device List";
-				tooltip = "If checked, these lights will be accessible by all laptops (current and future)";
+				tooltip = "Deprecated, kept so missions saved before the Device Access setting existed keep working. Device Access is used instead whenever it is set.";
 				typeName = "BOOL";
 				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_LIGHTS_ACCESS: Combo {
+				property = "ROOT_CYBERWARFARE_3DEN_LIGHTS_ACCESS";
+				displayName = "Device Access";
+				tooltip = "Unassigned: registered but no laptop can reach it - grant access later with the Link Devices or Manage Device Links module. Linked: only the laptops synchronized to this module. Public: every current and future laptop.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+				class Values {
+					class Unassigned { name = "Unassigned (assign later)"; value = 0; };
+					class Linked { name = "Linked laptops only"; value = 1; };
+					class LinkedFuture { name = "Linked laptops + all future laptops"; value = 3; };
+					class PublicAll { name = "Public (all laptops)"; value = 2; };
+				};
 			};
 			class ROOT_CYBERWARFARE_3DEN_LIGHTS_ALLOWLOCATION: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_LIGHTS_ALLOWLOCATION";
@@ -408,9 +481,22 @@ class CfgVehicles {
 			class ROOT_CYBERWARFARE_3DEN_DATABASE_PUBLIC: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_DATABASE_PUBLIC";
 				displayName = "Add to Public Device List";
-				tooltip = "If checked, this file will be accessible by all laptops (current and future)";
+				tooltip = "Deprecated, kept so missions saved before the Device Access setting existed keep working. Device Access is used instead whenever it is set.";
 				typeName = "BOOL";
 				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_DATABASE_ACCESS: Combo {
+				property = "ROOT_CYBERWARFARE_3DEN_DATABASE_ACCESS";
+				displayName = "Device Access";
+				tooltip = "Unassigned: registered but no laptop can reach it - grant access later with the Link Devices or Manage Device Links module. Linked: only the laptops synchronized to this module. Public: every current and future laptop.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+				class Values {
+					class Unassigned { name = "Unassigned (assign later)"; value = 0; };
+					class Linked { name = "Linked laptops only"; value = 1; };
+					class LinkedFuture { name = "Linked laptops + all future laptops"; value = 3; };
+					class PublicAll { name = "Public (all laptops)"; value = 2; };
+				};
 			};
 			class ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT";
@@ -540,9 +626,22 @@ class CfgVehicles {
 			class ROOT_CYBERWARFARE_3DEN_VEHICLE_PUBLIC: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_PUBLIC";
 				displayName = "Add to Public Device List";
-				tooltip = "If checked, this vehicle will be accessible by all laptops (current and future)";
+				tooltip = "Deprecated, kept so missions saved before the Device Access setting existed keep working. Device Access is used instead whenever it is set.";
 				typeName = "BOOL";
 				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_ACCESS: Combo {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_ACCESS";
+				displayName = "Device Access";
+				tooltip = "Unassigned: registered but no laptop can reach it - grant access later with the Link Devices or Manage Device Links module. Linked: only the laptops synchronized to this module. Public: every current and future laptop.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+				class Values {
+					class Unassigned { name = "Unassigned (assign later)"; value = 0; };
+					class Linked { name = "Linked laptops only"; value = 1; };
+					class LinkedFuture { name = "Linked laptops + all future laptops"; value = 3; };
+					class PublicAll { name = "Public (all laptops)"; value = 2; };
+				};
 			};
 			class ROOT_CYBERWARFARE_3DEN_VEHICLE_ALLOWLOCATION: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_ALLOWLOCATION";
@@ -747,9 +846,22 @@ class CfgVehicles {
 			class ROOT_CYBERWARFARE_3DEN_GPS_PUBLIC: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_GPS_PUBLIC";
 				displayName = "Add to Public Device List";
-				tooltip = "If checked, this GPS tracker will be accessible by all laptops (current and future)";
+				tooltip = "Deprecated, kept so missions saved before the Device Access setting existed keep working. Device Access is used instead whenever it is set.";
 				typeName = "BOOL";
 				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_GPS_ACCESS: Combo {
+				property = "ROOT_CYBERWARFARE_3DEN_GPS_ACCESS";
+				displayName = "Device Access";
+				tooltip = "Unassigned: registered but no laptop can reach it - grant access later with the Link Devices or Manage Device Links module. Linked: only the laptops synchronized to this module. Public: every current and future laptop.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+				class Values {
+					class Unassigned { name = "Unassigned (assign later)"; value = 0; };
+					class Linked { name = "Linked laptops only"; value = 1; };
+					class LinkedFuture { name = "Linked laptops + all future laptops"; value = 3; };
+					class PublicAll { name = "Public (all laptops)"; value = 2; };
+				};
 			};
 			class ROOT_CYBERWARFARE_3DEN_GPS_ID_START: Edit {
 				property = "ROOT_CYBERWARFARE_3DEN_GPS_ID_START";
@@ -810,9 +922,22 @@ class CfgVehicles {
 			class ROOT_CYBERWARFARE_3DEN_CUSTOM_PUBLIC: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_CUSTOM_PUBLIC";
 				displayName = "Add to Public Device List";
-				tooltip = "If checked, this custom device will be accessible by all laptops (current and future)";
+				tooltip = "Deprecated, kept so missions saved before the Device Access setting existed keep working. Device Access is used instead whenever it is set.";
 				typeName = "BOOL";
 				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_CUSTOM_ACCESS: Combo {
+				property = "ROOT_CYBERWARFARE_3DEN_CUSTOM_ACCESS";
+				displayName = "Device Access";
+				tooltip = "Unassigned: registered but no laptop can reach it - grant access later with the Link Devices or Manage Device Links module. Linked: only the laptops synchronized to this module. Public: every current and future laptop.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+				class Values {
+					class Unassigned { name = "Unassigned (assign later)"; value = 0; };
+					class Linked { name = "Linked laptops only"; value = 1; };
+					class LinkedFuture { name = "Linked laptops + all future laptops"; value = 3; };
+					class PublicAll { name = "Public (all laptops)"; value = 2; };
+				};
 			};
 			class ROOT_CYBERWARFARE_3DEN_CUSTOM_ALLOWLOCATION: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_CUSTOM_ALLOWLOCATION";
@@ -899,9 +1024,22 @@ class CfgVehicles {
 			class ROOT_CYBERWARFARE_3DEN_POWERGRID_PUBLIC: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_PUBLIC";
 				displayName = "Add to Public Device List";
-				tooltip = "If checked, this power generator will be accessible by all laptops (current and future)";
+				tooltip = "Deprecated, kept so missions saved before the Device Access setting existed keep working. Device Access is used instead whenever it is set.";
 				typeName = "BOOL";
 				defaultValue = 1;
+			};
+			class ROOT_CYBERWARFARE_3DEN_POWERGRID_ACCESS: Combo {
+				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_ACCESS";
+				displayName = "Device Access";
+				tooltip = "Unassigned: registered but no laptop can reach it - grant access later with the Link Devices or Manage Device Links module. Linked: only the laptops synchronized to this module. Public: every current and future laptop.";
+				typeName = "NUMBER";
+				defaultValue = 0;
+				class Values {
+					class Unassigned { name = "Unassigned (assign later)"; value = 0; };
+					class Linked { name = "Linked laptops only"; value = 1; };
+					class LinkedFuture { name = "Linked laptops + all future laptops"; value = 3; };
+					class PublicAll { name = "Public (all laptops)"; value = 2; };
+				};
 			};
 			class ROOT_CYBERWARFARE_3DEN_POWERGRID_ALLOWLOCATION: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_ALLOWLOCATION";

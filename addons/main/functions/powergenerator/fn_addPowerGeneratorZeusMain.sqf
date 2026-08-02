@@ -14,12 +14,14 @@
  * 7: _excludedClassnames <ARRAY> (Optional) - Array of classnames to exclude, default: []
  * 8: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
  * 9: _powerCost <NUMBER> (Optional) - Power cost in Wh per operation, default: 10
+ * 10: _requestedId <NUMBER> (Optional) - Fixed device id, 0 = auto-assign, default: 0
+ * 11: _accessMode <NUMBER> (Optional) - ACCESS_MODE_* constant, default: ACCESS_MODE_UNASSIGNED
  *
  * Return Value:
  * None
  *
  * Example:
- * [_obj, 0, [], "Generator", 100, true, "HelicopterExploSmall", ["Lamp_Street_small_F"], false, 15] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
+ * [_obj, 0, [], "Generator", 100, true, "HelicopterExploSmall", ["Lamp_Street_small_F"], false, 15, 0, ACCESS_MODE_PUBLIC] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
  *
  * Public: No
  */
@@ -35,7 +37,8 @@ params [
     ["_excludedClassnames", []],
     ["_availableToFutureLaptops", false],
     ["_powerCost", 10],
-    ["_requestedId", 0]
+    ["_requestedId", 0],
+    ["_accessMode", ACCESS_MODE_UNASSIGNED, [0]]
 ];
 
 if (isNull _targetObject) exitWith {
@@ -81,60 +84,10 @@ _allDevices set [7, _allPowerGrids];
 missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
 call Root_fnc_syncDeviceData;
 
-// Handle device linking
-private _linkCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_LINK_CACHE", createHashMap];
-
-// Get all existing computers for exclusion if availableToFuture is enabled
-private _allExistingComputers = [];
-if (_availableToFutureLaptops) then {
-    {
-        private _computerNetId = _x;
-        _allExistingComputers pushBack _computerNetId;
-    } forEach (keys _linkCache);
-};
-
-// Add the private link to each selected computer through the shared atomic helper, then drop those
-// computers from the public exclusion list and notify listeners.
+// Drop placeholder identifiers, then apply the requested reachability: private links, public
+// registration, or nothing at all.
 private _validComputers = _linkedComputers select {_x != ""};
-[_validComputers, DEVICE_TYPE_POWERGRID, _deviceId] call FUNC(addComputerDeviceLinks);
-{
-    _allExistingComputers = _allExistingComputers - [_x];
-    ["root_cyberwarfare_deviceLinked", [_x, DEVICE_TYPE_POWERGRID, _deviceId]] call CBA_fnc_serverEvent;
-} forEach _validComputers;
-
-// Publish the power grid as a public device when it is meant for future laptops or when no
-// specific computers were linked. The exclusion list is only populated for the future-access
-// case, so an unlinked grid registers with no exclusions and becomes accessible to every laptop.
-private _madePublic = _availableToFutureLaptops || (_linkedComputers isEqualTo []);
-if (_madePublic) then {
-    private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
-    _publicDevices pushBack [DEVICE_TYPE_POWERGRID, _deviceId, _allExistingComputers];
-    missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
-};
-
-// Sync variables
-call Root_fnc_syncDeviceData;
-publicVariable "ROOT_CYBERWARFARE_LINK_CACHE";
-if (_madePublic) then {
-    publicVariable "ROOT_CYBERWARFARE_PUBLIC_DEVICES";
-};
-
-// Build availability text
-private _availabilityText = "";
-private _linkedComputerCount = count _linkedComputers;
-if (_availableToFutureLaptops) then {
-    if (_linkedComputerCount > 0) then {
-        _availabilityText = format ["Accessible by %1 linked computer(s) and all future computers", _linkedComputerCount];
-    } else {
-        _availabilityText = "Accessible by all future computers";
-    };
-} else {
-    if (_linkedComputerCount > 0) then {
-        _availabilityText = format ["Accessible by %1 linked computer(s)", _linkedComputerCount];
-    } else {
-        _availabilityText = "Not accessible by any computers (add links manually)";
-    };
-};
+private _availabilityText = [DEVICE_TYPE_POWERGRID, _deviceId, _validComputers, _accessMode, _availableToFutureLaptops] call FUNC(applyDeviceAccess);
 
 // Send feedback to Zeus user
 [format ["Root Cyber Warfare: Power Grid added with ID: %1. %2", _deviceId, _availabilityText]] remoteExec ["systemChat", _execUserId];

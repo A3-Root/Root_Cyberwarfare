@@ -29,7 +29,6 @@ private _allowExplosionOverload = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_P
 private _explosionType = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_TYPE", "ClaymoreDirectionalMine_Remote_Ammo_Scripted"];
 private _excludedClassnames = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXCLUDED", ""];
 private _powerCost = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_COST", 10];
-private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_PUBLIC", 1]) in [1, true];
 private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_ALLOWLOCATION", 1]) in [1, true];
 
 // Optional fixed IDs. A single generator uses the start value; a trigger area hands out Start..End
@@ -79,16 +78,27 @@ if (_allGenerators isEqualTo []) exitWith {
 // Get laptop netIds for linking
 private _linkedComputers = _laptops apply { netId _x };
 
-// Determine availability setting
+// Device Access states how the registered devices may be reached. The combo's fourth entry (3) is
+// the linked-plus-future variant, which resolves to a linked device that later laptops also reach.
+private _accessMode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_ACCESS", -1];
 private _availableToFutureLaptops = false;
-if (_addToPublic) then {
-	if (_linkedComputers isEqualTo []) then {
-		// Public + no linked = all current laptops only
-		_availableToFutureLaptops = false;
-	} else {
-		// Public + some linked = linked laptops + all future
-		_availableToFutureLaptops = true;
-	};
+
+if (_accessMode == 3) then {
+    _accessMode = ACCESS_MODE_LINKED;
+    _availableToFutureLaptops = true;
+};
+
+if (_accessMode < 0) then {
+    // Missions saved before Device Access existed carry only the legacy public checkbox, so map
+    // that forward and leave their devices as reachable as they were.
+    _accessMode = ACCESS_MODE_LINKED;
+    if ((_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_PUBLIC", 1]) in [1, true]) then {
+        if (_linkedComputers isEqualTo []) then {
+            _accessMode = ACCESS_MODE_PUBLIC;
+        } else {
+            _availableToFutureLaptops = true;
+        };
+    };
 };
 
 // Hand out sequential IDs from the requested start across the registered generators.
@@ -107,7 +117,7 @@ private _nextId = _startId;
 
 	// Call the existing Zeus main function
 	// Parameters: _targetObject, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost
-	[_generator, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, _powerCost, _assignId] call FUNC(addPowerGeneratorZeusMain);
+	[_generator, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, _powerCost, _assignId, _accessMode] call FUNC(addPowerGeneratorZeusMain);
 	_generator setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // General #3
 
 } forEach _allGenerators;

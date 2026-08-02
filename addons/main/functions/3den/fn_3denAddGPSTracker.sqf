@@ -28,7 +28,6 @@ private _powerCost = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_GPS_POWER_COST"
 private _customMarker = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_GPS_MARKER", ""];
 // 3DEN BOOL attributes load as numbers (1/0); coerce to real booleans.
 private _allowRetracking = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_GPS_RETRACK", 0]) in [1, true];
-private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_GPS_PUBLIC", 1]) in [1, true];
 
 // Optional fixed IDs. A single target uses the start value; multiple synced targets hand out
 // Start..End sequentially, falling back to auto-assignment once the range is exhausted or unset.
@@ -55,16 +54,27 @@ if (_targets isEqualTo []) exitWith {
 // Get laptop netIds for linking
 private _linkedComputers = _laptops apply { netId _x };
 
-// Determine availability setting
+// Device Access states how the registered devices may be reached. The combo's fourth entry (3) is
+// the linked-plus-future variant, which resolves to a linked device that later laptops also reach.
+private _accessMode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_GPS_ACCESS", -1];
 private _availableToFutureLaptops = false;
-if (_addToPublic) then {
-	if (_linkedComputers isEqualTo []) then {
-		// Public + no linked = all current laptops only
-		_availableToFutureLaptops = false;
-	} else {
-		// Public + some linked = linked laptops + all future
-		_availableToFutureLaptops = true;
-	};
+
+if (_accessMode == 3) then {
+    _accessMode = ACCESS_MODE_LINKED;
+    _availableToFutureLaptops = true;
+};
+
+if (_accessMode < 0) then {
+    // Missions saved before Device Access existed carry only the legacy public checkbox, so map
+    // that forward and leave their devices as reachable as they were.
+    _accessMode = ACCESS_MODE_LINKED;
+    if ((_logic getVariable ["ROOT_CYBERWARFARE_3DEN_GPS_PUBLIC", 1]) in [1, true]) then {
+        if (_linkedComputers isEqualTo []) then {
+            _accessMode = ACCESS_MODE_PUBLIC;
+        } else {
+            _availableToFutureLaptops = true;
+        };
+    };
 };
 
 // Process each target object
@@ -89,7 +99,7 @@ private _nextId = _startId;
 
 	// Call the existing Zeus main function
 	// Parameters: _targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, _isFromZeus, _ownersSelection
-	[_target, _execUserId, _linkedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, false, _ownersSelection, _assignId] call FUNC(addGPSTrackerZeusMain);
+	[_target, _execUserId, _linkedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, false, _ownersSelection, _assignId, _accessMode] call FUNC(addGPSTrackerZeusMain);
 
 	_index = _index + 1;
 } forEach _targets;

@@ -1,3 +1,4 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
  * Zeus module to add hackable building doors.
@@ -96,7 +97,12 @@ if (_useRadiusMode) then {
     _dialogControls pushBack ["TOOLBOX:YESNO", ["Make Unbreachable", "Prevent door breaching by ACE explosives for all buildings with doors in radius"], false];
 };
 
-_dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false];
+_dialogControls pushBack ["COMBO", [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_DESC"], [
+    [ACCESS_MODE_UNASSIGNED, ACCESS_MODE_LINKED, ACCESS_MODE_PUBLIC],
+    [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_UNASSIGNED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_LINKED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_PUBLIC"],
+    0
+]];
+_dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Only applies to 'Linked computers only': the linked computers keep access and laptops added later gain it too."], false];
 _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true];
 
 // Add unbreachable option for buildings (always available in this module)
@@ -149,7 +155,10 @@ if (_useRadiusMode) then {
             _resultIndex = _resultIndex + 1;
         };
 
-        // Extract availability setting
+        // Extract the access mode, then the availability setting that refines the linked mode
+        private _accessMode = _results select _resultIndex;
+        _resultIndex = _resultIndex + 1;
+
         private _availableToFutureLaptops = _results select _resultIndex;
         _resultIndex = _resultIndex + 1;
 
@@ -190,19 +199,13 @@ if (_useRadiusMode) then {
             };
         } forEach _allComputers;
 
-        // If available to future laptops, keep the selected computers but mark for future availability
-        // If not available to future laptops and no computers selected, use all current computers
-        if (!_availableToFutureLaptops && _selectedComputers isEqualTo []) then {
-            _selectedComputers = _allComputers apply { _x select 0 };
-        };
-
         // Handle radius mode or direct mode
         if (_useRadiusMode) then {
             // Radius mode: Use captured position (logic is already deleted)
-            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _requestedId, _rangeEndId] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _requestedId, _rangeEndId, _accessMode] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
         } else {
             // Direct mode: Register single object
-            [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _requestedId, _doorIdMap] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+            [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _requestedId, _doorIdMap, _accessMode] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
             ["Hackable Doors Added!"] call zen_common_fnc_showMessage;
         };
     },

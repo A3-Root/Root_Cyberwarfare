@@ -8,6 +8,83 @@
             <English>Custom device '%1' (ID: %2) deactivated.</English>
         </Key>
     </Package>
+    <Package name="Device_Access">
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_FUTURE_ONLY">
+            <English>Available to future computers only</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_LINKED">
+            <English>Accessible by %1 linked computer(s)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_LINKED_FUTURE">
+            <English>Accessible by %1 linked computer(s) and all future computers</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_MODE">
+            <English>Device Access</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_MODE_DESC">
+            <English>Unassigned: the device is registered but no computer can reach it - grant access later with the Manage Device Links module. Linked: only the computers ticked below. Public: every current and future computer.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_MODE_LINKED">
+            <English>Linked computers only</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_MODE_PUBLIC">
+            <English>Public (all computers)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_MODE_UNASSIGNED">
+            <English>Unassigned (assign later)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_PUBLIC">
+            <English>Accessible by all current and future computers</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_UNASSIGNED">
+            <English>Registered but not accessible yet. Grant access with the Manage Device Links module.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LINKS_ACTION">
+            <English>Action</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LINKS_ACTION_DESC">
+            <English>What to do with the ticked devices for the selected computer.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LINKS_ACTION_LINK">
+            <English>Link to this computer</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LINKS_ACTION_PUBLIC">
+            <English>Make public (all computers)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LINKS_ACTION_UNASSIGN">
+            <English>Unassign (no computer can reach)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LINKS_ACTION_UNLINK">
+            <English>Unlink from this computer</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LINKS_APPLIED">
+            <English>Device Links Updated!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LINKS_DEVICE_DESC">
+            <English>Tick to include this device in the chosen action. Already ticked devices are the ones this computer currently reaches through a private link.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LINKS_LAPTOP">
+            <English>Computer</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LINKS_LAPTOP_DESC">
+            <English>Computer the action applies to. Place the module on a laptop to skip this step.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LINKS_NONE_SELECTED">
+            <English>No devices ticked!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LINKS_NO_DEVICES">
+            <English>No registered devices found!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LINKS_TITLE">
+            <English>Manage Device Links</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_LINKS_UPDATED">
+            <English>Root Cyber Warfare: Updated access for %1 device(s).</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_NO_LAPTOPS">
+            <English>No registered hackable laptops found!</English>
+        </Key>
+    </Package>
     <Package name="Device_Operations">
         <Key ID="STR_ROOT_CYBERWARFARE_DOOR_ALREADY_LOCKED">
             <English>Door already locked.</English>

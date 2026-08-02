@@ -47,7 +47,6 @@ private _allowBrakes = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_BRAK
 private _allowLights = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_LIGHTS", 1]) in [1, true];
 private _allowEngine = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ENGINE", 1]) in [1, true];
 private _allowAlarm = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ALARM", 0]) in [1, true];
-private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_PUBLIC", 1]) in [1, true];
 // 3DEN checkbox attribute (typeName BOOL) loads as a boolean; accept both boolean and legacy numeric storage.
 private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ALLOWLOCATION", 1]) in [1, true];
 
@@ -113,16 +112,27 @@ if (_allVehicles isEqualTo []) exitWith {
 // Get laptop netIds for linking
 private _linkedComputers = _laptops apply { netId _x };
 
-// Determine availability setting
+// Device Access states how the registered devices may be reached. The combo's fourth entry (3) is
+// the linked-plus-future variant, which resolves to a linked device that later laptops also reach.
+private _accessMode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ACCESS", -1];
 private _availableToFutureLaptops = false;
-if (_addToPublic) then {
-	if (_linkedComputers isEqualTo []) then {
-		// Public + no linked = all current laptops only
-		_availableToFutureLaptops = false;
-	} else {
-		// Public + some linked = linked laptops + all future
-		_availableToFutureLaptops = true;
-	};
+
+if (_accessMode == 3) then {
+    _accessMode = ACCESS_MODE_LINKED;
+    _availableToFutureLaptops = true;
+};
+
+if (_accessMode < 0) then {
+    // Missions saved before Device Access existed carry only the legacy public checkbox, so map
+    // that forward and leave their devices as reachable as they were.
+    _accessMode = ACCESS_MODE_LINKED;
+    if ((_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_PUBLIC", 1]) in [1, true]) then {
+        if (_linkedComputers isEqualTo []) then {
+            _accessMode = ACCESS_MODE_PUBLIC;
+        } else {
+            _availableToFutureLaptops = true;
+        };
+    };
 };
 
 // Hand out sequential IDs from the requested start across the registered vehicles/drones.
@@ -143,7 +153,7 @@ private _nextId = _startId;
 	if (unitIsUAV _vehicle) then {
 		// Call as drone, forwarding the custom "Vehicle Name" so the device list shows it.
 		// Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _droneName
-		[_vehicle, _execUserId, _linkedComputers, _availableToFutureLaptops, _vehicleName, 0, 0, _assignId] call FUNC(addVehicleZeusMain); _vehicle setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // drone location-view flag
+		[_vehicle, _execUserId, _linkedComputers, _availableToFutureLaptops, _vehicleName, 0, 0, _assignId, _accessMode] call FUNC(addVehicleZeusMain); _vehicle setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // drone location-view flag
 	} else {
 		// Call as vehicle with all parameters including limits
 		[
@@ -152,7 +162,7 @@ private _nextId = _startId;
 			_availableToFutureLaptops, _powerCost,
 			_fuelMinPercent, _fuelMaxPercent, _speedMinValue, _speedMaxValue,
 			_brakesMinDecel, _brakesMaxDecel, _lightsMaxToggles, _lightsCooldown,
-			_engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration, _allowLocation, _assignId
+			_engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration, _allowLocation, _assignId, _accessMode
 		] call FUNC(addVehicleZeusMain);
 	};
 

@@ -12,6 +12,9 @@
  * 4: _activationCode <STRING> (Optional) - Code to execute on activation, default: ""
  * 5: _deactivationCode <STRING> (Optional) - Code to execute on deactivation, default: ""
  * 6: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ * 7: _allowLocation <BOOLEAN> (Optional) - Show grid location on the laptop, default: true
+ * 8: _requestedId <NUMBER> (Optional) - Desired device ID (0 = auto-assign), default: 0
+ * 9: _accessMode <NUMBER> (Optional) - ACCESS_MODE_* constant, default: ACCESS_MODE_UNASSIGNED
  *
  * RADIUS MODE (multiple objects):
  * 0: _centerPosition <ARRAY> - Position array [x, y, z] for search center
@@ -22,13 +25,17 @@
  * 5: _activationCode <STRING> (Optional) - Code to execute on activation, default: ""
  * 6: _deactivationCode <STRING> (Optional) - Code to execute on deactivation, default: ""
  * 7: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ * 8: _allowLocation <BOOLEAN> (Optional) - Show grid location on the laptop, default: true
+ * 9: _startId <NUMBER> (Optional) - First device ID handed out across the area (0 = auto), default: 0
+ * 10: _endId <NUMBER> (Optional) - Last device ID handed out across the area (0 = auto), default: 0
+ * 11: _accessMode <NUMBER> (Optional) - ACCESS_MODE_* constant, default: ACCESS_MODE_UNASSIGNED
  *
  * Return Value:
  * None
  *
  * Example:
- * [_obj, 0, [], "Generator", "hint 'ON'", "hint 'OFF'", false] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
- * [[100, 200, 0], 500, 0, [], "GenSet", "hint 'ON'", "hint 'OFF'", true] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2]; // Radius mode with position
+ * [_obj, 0, [], "Generator", "hint 'ON'", "hint 'OFF'", false, true, 0, ACCESS_MODE_PUBLIC] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
+ * [[100, 200, 0], 500, 0, [], "GenSet", "hint 'ON'", "hint 'OFF'", true, true, 0, 0, ACCESS_MODE_LINKED] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2]; // Radius mode with position
  *
  * Public: No
  */
@@ -48,6 +55,7 @@ private _allowLocation = true; // "Allow Location View" (General #3); default on
 private _requestedId = 0;      // Desired device ID for direct mode (0 = auto)
 private _startId = 0;          // First ID handed out across a radius sweep
 private _endId = 0;            // Last ID handed out across a radius sweep
+private _accessMode = ACCESS_MODE_UNASSIGNED; // How the registered devices may be reached
 
 private _firstParam = _this select 0;
 
@@ -66,6 +74,7 @@ if (typeName _firstParam == "ARRAY") then {
     _allowLocation = param [8, true, [false]];
     _startId = param [9, 0, [0]];
     _endId = param [10, 0, [0]];
+    _accessMode = param [11, ACCESS_MODE_UNASSIGNED, [0]];
 } else {
     // Direct mode: object passed
     _radiusMode = false;
@@ -78,6 +87,7 @@ if (typeName _firstParam == "ARRAY") then {
     _availableToFutureLaptops = param [6, false, [false]];
     _allowLocation = param [7, true, [false]];
     _requestedId = param [8, 0, [0]];
+    _accessMode = param [9, ACCESS_MODE_UNASSIGNED, [0]];
 };
 
 // Validate object in direct mode
@@ -110,7 +120,7 @@ if (_radiusMode) exitWith {
                 _assignId = _nextId;
                 _nextId = _nextId + 1;
             };
-            [_obj, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation, _assignId] call FUNC(addCustomDeviceZeusMain);
+            [_obj, _execUserId, _linkedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation, _assignId, _accessMode] call FUNC(addCustomDeviceZeusMain);
             _registeredCount = _registeredCount + 1;
         };
     } forEach _allObjects;
@@ -147,43 +157,9 @@ _allDevices set [4, _allCustom];
 missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
 call Root_fnc_syncDeviceData;
 
-// Handle device linking
-private _linkCache = missionNamespace getVariable ["ROOT_CYBERWARFARE_LINK_CACHE", createHashMap];
-
-// Get all existing computers for exclusion if availableToFuture is enabled
-private _allExistingComputers = [];
-if (_availableToFutureLaptops) then {
-    {
-        private _computerNetId = _x;
-        _allExistingComputers pushBack _computerNetId;
-    } forEach (keys _linkCache);
-};
-
-// Add the private link to each selected (still-existing) computer through the shared atomic helper,
-// then drop those computers from the public exclusion list and notify listeners.
+// Only link computers whose object still exists, then apply the requested reachability: private
+// links, public registration, or nothing at all.
 private _validComputers = _linkedComputers select {!isNull (objectFromNetId _x)};
-[_validComputers, DEVICE_TYPE_CUSTOM, _deviceId] call FUNC(addComputerDeviceLinks);
-{
-    _allExistingComputers = _allExistingComputers - [_x];
-    ["root_cyberwarfare_deviceLinked", [_x, DEVICE_TYPE_CUSTOM, _deviceId]] call CBA_fnc_serverEvent;
-} forEach _validComputers;
-
-// Publish the custom device when it targets future laptops or when no specific computers were
-// linked. The exclusion list is only populated for the future-access case, so an unlinked public
-// device registers with no exclusions and becomes accessible to every laptop (matches Doors and
-// fixes the 3DEN module, whose public + unlinked case previously registered nothing).
-private _madePublic = _availableToFutureLaptops || (_linkedComputers isEqualTo []);
-if (_madePublic) then {
-    private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
-    _publicDevices pushBack [DEVICE_TYPE_CUSTOM, _deviceId, _allExistingComputers];
-    missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
-};
-
-// Sync variables
-call Root_fnc_syncDeviceData;
-publicVariable "ROOT_CYBERWARFARE_LINK_CACHE";
-if (_madePublic) then {
-    publicVariable "ROOT_CYBERWARFARE_PUBLIC_DEVICES";
-};
+[DEVICE_TYPE_CUSTOM, _deviceId, _validComputers, _accessMode, _availableToFutureLaptops] call FUNC(applyDeviceAccess);
 
 ROOT_CYBERWARFARE_LOG_INFO_1("Custom Device added: %1",_customName);

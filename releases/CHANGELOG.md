@@ -1,5 +1,26 @@
 # Changelog
 
+## Hotfix 8 (v2.0.0.1)
+
+### Added
+
+- A **Device Access** setting on every Zeus and Eden device module (Doors, Lights, Vehicles, Files, GPS Trackers, Custom Devices, Power Grids). It replaces the old "Add to Public Device List" checkbox with explicit options: *Unassigned*, *Linked computers only*, *Linked computers + all future laptops* (Eden), and *Public*. Unassigned registers the device on the network without granting any laptop access to it, so mission makers can place devices up front and hand out access later.
+- A Zeus **Manage Device Links** module. Placed on a registered laptop it lists every registered device with its type, ID, name, and current link state; placed on the ground it first asks which laptop to work on. Ticked devices can be linked, unlinked, published to all laptops, or unassigned again during play.
+- An Eden **Link Devices** module. Synchronize laptops to it and list the devices as `deviceType:deviceId` pairs to link, unlink, publish, or unassign them at mission start, after the add-device modules have handed out their IDs.
+- A scriptable `Root_fnc_setDeviceLinksMain` behind both modules, for missions that want to grant or revoke device access from triggers and scripts.
+
+### Removed
+- N/A
+
+### Changed
+
+- **Breaking:** a device with no linked laptops is no longer silently treated as public. Access is now always stated by the module's Device Access setting, and the Zeus device dialogs no longer select every laptop for you when none are ticked.
+- **Breaking:** the `Root_fnc_add*ZeusMain` functions take an additional trailing access-mode argument. Scripts and triggers calling them through `remoteExec` should pass it; callers that omit it now register the device as Unassigned.
+- Eden missions saved before this release are migrated automatically: the legacy "Add to Public Device List" checkbox is carried forward to the equivalent Device Access value, so existing missions behave as they did in 2.0.0.0.
+- Device access application - private links, public registration, and the future-laptop exclusion list - is consolidated into one shared routine used by every device type, so all access modes behave identically across the modules.
+- The "Make Unbreachable" option now reaches the buildings registered by the Zeus Add Hackable Doors module in radius mode, which previously discarded it.
+- Granting a laptop access to a device raises the device-linked event consistently, whichever module or script performed the linking.
+
 ## Major Update 2 (v2.0.0.0)
 
 ### Added

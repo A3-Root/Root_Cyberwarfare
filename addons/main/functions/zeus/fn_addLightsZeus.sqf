@@ -1,3 +1,4 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
  * Zeus module to add hackable lights.
@@ -73,7 +74,12 @@ if (_useRadiusMode) then {
     _dialogControls pushBack ["SLIDER:RADIUS", [localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS", localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS_DESC"], [10, 3000, 1000, 0, _logicPosition, [7,120,32,1]]];
 };
 
-_dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false];
+_dialogControls pushBack ["COMBO", [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_DESC"], [
+    [ACCESS_MODE_UNASSIGNED, ACCESS_MODE_LINKED, ACCESS_MODE_PUBLIC],
+    [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_UNASSIGNED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_LINKED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_PUBLIC"],
+    0
+]];
+_dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Only applies to 'Linked computers only': the linked computers keep access and laptops added later gain it too."], false];
 _dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true];
 
 // Device ID entry: radius mode distributes a Start..End range across the found lights; direct mode
@@ -107,7 +113,10 @@ if (_useRadiusMode) then {
             _resultIndex = _resultIndex + 1;
         };
 
-        // Extract availability setting
+        // Extract the access mode, then the availability setting that refines the linked mode
+        private _accessMode = _results select _resultIndex;
+        _resultIndex = _resultIndex + 1;
+
         private _availableToFutureLaptops = _results select _resultIndex;
         _resultIndex = _resultIndex + 1;
 
@@ -136,19 +145,13 @@ if (_useRadiusMode) then {
             };
         } forEach _allComputers;
 
-        // If available to future laptops, keep the selected computers but mark for future availability
-        // If not available to future laptops and no computers selected, use all current computers
-        if (!_availableToFutureLaptops && _selectedComputers isEqualTo []) then {
-            _selectedComputers = _allComputers apply { _x select 0 };
-        };
-
         // Handle radius mode or direct mode
         if (_useRadiusMode) then {
             // Radius mode: Use captured position (logic is already deleted)
-            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation, _requestedId, _rangeEndId] remoteExec ["Root_fnc_addLightsZeusMain", 2];
+            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation, _requestedId, _rangeEndId, _accessMode] remoteExec ["Root_fnc_addLightsZeusMain", 2];
         } else {
             // Direct mode: Register single object
-            [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation, _requestedId] remoteExec ["Root_fnc_addLightsZeusMain", 2];
+            [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation, _requestedId, _accessMode] remoteExec ["Root_fnc_addLightsZeusMain", 2];
             ["Hackable Light Added!"] call zen_common_fnc_showMessage;
         };
     },

@@ -34,7 +34,11 @@ if (_computerIds isEqualTo [] || {_deviceType == 0}) exitWith {};
 private _linkCache = GET_LINK_CACHE;
 {
     private _existingLinks = _linkCache getOrDefault [_x, [], true];
-    _existingLinks pushBackUnique [_deviceType, _deviceId];
+    // pushBackUnique returns -1 when the link was already present, so listeners only hear about
+    // access that was actually granted by this call.
+    if ((_existingLinks pushBackUnique [_deviceType, _deviceId]) > -1) then {
+        ["root_cyberwarfare_deviceLinked", [_x, _deviceType, _deviceId]] call CBA_fnc_serverEvent;
+    };
     _linkCache set [_x, _existingLinks];
 } forEach _computerIds;
 

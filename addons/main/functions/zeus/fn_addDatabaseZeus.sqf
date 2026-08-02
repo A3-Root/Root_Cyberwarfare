@@ -1,3 +1,4 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
  * Zeus module to add a hackable database/file
@@ -37,7 +38,12 @@ private _dialogControls = [
     ["SLIDER", ["File Hack Time (in seconds)", "Time taken to hack and download the file (in seconds)"], [1, 300, 10, 0]],
     ["EDIT:MULTI", ["File Contents", "Content of the file that could be read after downloading via the command 'cat <filename>"], ["Check out my other projects that could interest you here: https://github.com/A3-Root/", {}, 7]],
     ["EDIT:CODE", ["Code to Execute on Download", "Code that will be executed in a SCHEDULED environment (spawn) when file is successfully downloaded. The code is run on the player who downloaded the file. Default parameters ['_computer', '_playerNetID']"], ["hint str format ['File Downloaded ON: %1 ---- BY %2 (Client ID: %3)', getText (configOf (_this select 0) >> 'displayName'), name (_this select 1), _this select 2];", {}, 7]],
-    ["TOOLBOX:ENABLED", ["Available to Future Laptops", "Should this database be available to laptops that are added later?"], false],
+    ["COMBO", [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_DESC"], [
+        [ACCESS_MODE_UNASSIGNED, ACCESS_MODE_LINKED, ACCESS_MODE_PUBLIC],
+        [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_UNASSIGNED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_LINKED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_PUBLIC"],
+        0
+    ]],
+    ["TOOLBOX:ENABLED", ["Available to Future Laptops", "Only applies to 'Linked computers only': the linked computers keep access and laptops added later gain it too."], false],
     ["CHECKBOX", ["Encrypt File Contents", "Encrypt the stored file contents before it is added to the hackable file list."], false],
     ["COMBO", ["Encryption Algorithm", "Cipher used when encryption is enabled."], [["morse", "spelling", "affine", "rot", "vigenere", "bacon", "alpha_sub", "railfence", "base32", "base64", "ascii85", "unicode", "integer"], ["Morse Code", "Spelling Alphabet", "Affine", "ROT", "Vigenere", "Bacon", "Alphabetical Substitution", "Railfence", "Base32", "Base64", "Ascii85", "Unicode Notation", "Integer"], 0]],
     ["EDIT", ["Key / Variant", "Primary key, password, keyword, or variant. Examples: rot13, LEMON, 3"], [""]],
@@ -59,29 +65,23 @@ private _dialogControls = [
         _args params ["_fileObject", "_allComputers"];
         
         // Dialog values before the per-computer link checkboxes.
-        _results params ["_filename", "_filesize", "_filecontent", "_executionCode", "_availableToFutureLaptops", "_isEncrypted", "_encryptionAlgorithm", "_encryptionKey", "_encryptionOptions", "_requestedIdText"];
+        _results params ["_filename", "_filesize", "_filecontent", "_executionCode", "_accessMode", "_availableToFutureLaptops", "_isEncrypted", "_encryptionAlgorithm", "_encryptionKey", "_encryptionOptions", "_requestedIdText"];
         private _requestedId = parseNumber _requestedIdText;
 
         // The rest are checkbox values for each computer
         private _linkedComputers = [];
-        private _checkboxStartIndex = 10;
-        
+        private _checkboxStartIndex = 11;
+
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
                 _linkedComputers pushBack (_x select 0); // Push the netId
             };
         } forEach _allComputers;
 
-        // If available to future laptops, keep the selected computers but mark for future availability
-        // If not available to future laptops and no computers selected, use all current computers
-        if (!_availableToFutureLaptops && _linkedComputers isEqualTo []) then {
-            _linkedComputers = _allComputers apply { _x select 0 };
-        };
-
         if (_filesize < 1) then {_filesize = 1};
 
         private _execUserId = clientOwner;
-        [_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions, _requestedId] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
+        [_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions, _requestedId, _accessMode] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
         ["Hackable File Added!"] call zen_common_fnc_showMessage;
     },  
     {

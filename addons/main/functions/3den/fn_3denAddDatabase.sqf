@@ -40,7 +40,6 @@ private _laptops = _syncedObjects select {
 		private _fileSize = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_SIZE", 10];
 		private _fileContent = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_CONTENT", "This is a secret file downloaded from the network."];
 		private _executionCode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_EXEC", ""];
-		private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_PUBLIC", 1]) in [1, true];
 		// 3DEN BOOL attributes load as numbers (1/0); coerce so the boolean checks downstream do not throw.
 			private _isEncrypted = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT", 0]) in [1, true];
 		private _encryptionAlgorithm = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_ENCRYPT_ALGORITHM", "morse"];
@@ -52,23 +51,34 @@ private _laptops = _syncedObjects select {
 		// Get laptop netIds for linking
 		private _linkedComputers = _laptops apply { netId _x };
 
-		// Determine availability setting
+		// Device Access states how the registered devices may be reached. The combo's fourth entry (3) is
+		// the linked-plus-future variant, which resolves to a linked device that later laptops also reach.
+		private _accessMode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_ACCESS", -1];
 		private _availableToFutureLaptops = false;
-		if (_addToPublic) then {
-			if (_linkedComputers isEqualTo []) then {
-				// Public + no linked = all current laptops only
-				_availableToFutureLaptops = false;
-			} else {
-				// Public + some linked = linked laptops + all future
-				_availableToFutureLaptops = true;
-			};
+
+		if (_accessMode == 3) then {
+		    _accessMode = ACCESS_MODE_LINKED;
+		    _availableToFutureLaptops = true;
+		};
+
+		if (_accessMode < 0) then {
+		    // Missions saved before Device Access existed carry only the legacy public checkbox, so map
+		    // that forward and leave their devices as reachable as they were.
+		    _accessMode = ACCESS_MODE_LINKED;
+		    if ((_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_PUBLIC", 1]) in [1, true]) then {
+		        if (_linkedComputers isEqualTo []) then {
+		            _accessMode = ACCESS_MODE_PUBLIC;
+		        } else {
+		            _availableToFutureLaptops = true;
+		        };
+		    };
 		};
 
 		// Use the logic object itself to store the file data
 		private _fileObject = _logic;
 		private _execUserId = 2; // Server
 
-		[_fileObject, _fileName, _fileSize, _fileContent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions, _requestedId] call FUNC(addDatabaseZeusMain);
+		[_fileObject, _fileName, _fileSize, _fileContent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions, _requestedId, _accessMode] call FUNC(addDatabaseZeusMain);
 
 		// Notify admins of success
 		if (serverCommandAvailable "#kick") then {

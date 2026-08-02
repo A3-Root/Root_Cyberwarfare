@@ -1,3 +1,4 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
  * Zeus module to add a custom device with activation/deactivation code
@@ -58,7 +59,12 @@ _dialogControls append [
     ["EDIT", ["Custom Device Name", "Name that will appear in the terminal for this device"], ["Custom Device"]],
     ["EDIT:CODE", ["Activation Code", "Code to run in a SCHEDULED environment (spawn) when device is activated. The code is run on the player who activated the device. Default parameters ['_computer', '_customObject', '_playerNetID']"], ["hint str format ['Custom Activation triggered USING: %1 ---- ON: %2 ---- BY: %3 (Client ID: %4)', getText (configOf (_this select 0) >> 'displayName'), getText (configOf (_this select 1) >> 'displayName'), name (_this select 2), _this select 3];", {}, 7]],
     ["EDIT:CODE", ["Deactivation Code", "Code to run in a SCHEDULED environment (spawn) when device is deactivated. The code is run on the player who deactivated the device. Default parameters ['_computer', '_customObject', '_playerNetID']"], ["hint str format ['Custom Deactivation triggered USING: %1 ---- ON: %2 ---- BY: %3 (Client ID: %4)', getText (configOf (_this select 0) >> 'displayName'), getText (configOf (_this select 1) >> 'displayName'), name (_this select 2), _this select 3];", {}, 7]],
-    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this device be available to laptops that are added later?"], false],
+    ["COMBO", [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_DESC"], [
+        [ACCESS_MODE_UNASSIGNED, ACCESS_MODE_LINKED, ACCESS_MODE_PUBLIC],
+        [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_UNASSIGNED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_LINKED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_PUBLIC"],
+        0
+    ]],
+    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Only applies to 'Linked computers only': the linked computers keep access and laptops added later gain it too."], false],
     ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true]
 ];
 
@@ -100,6 +106,8 @@ if (_useRadiusMode) then {
         _resultIndex = _resultIndex + 1;
         private _deactivationCode = _results select _resultIndex;
         _resultIndex = _resultIndex + 1;
+        private _accessMode = _results select _resultIndex;
+        _resultIndex = _resultIndex + 1;
         private _availableToFutureLaptops = _results select _resultIndex;
         _resultIndex = _resultIndex + 1;
         private _allowLocation = _results select _resultIndex;
@@ -126,20 +134,14 @@ if (_useRadiusMode) then {
             };
         } forEach _allComputers;
 
-        // If available to future laptops, keep the selected computers but mark for future availability
-        // If not available to future laptops and no computers selected, use all current computers
-        if (!_availableToFutureLaptops && _selectedComputers isEqualTo []) then {
-            _selectedComputers = _allComputers apply { _x select 0 };
-        };
-
         // Handle radius mode or direct mode
         if (_useRadiusMode) then {
             // Radius mode: Pass position array instead of logic object
             private _centerPos = getPosATL _logic;
-            [_centerPos, _radius, _execUserId, _selectedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation, _requestedId, _rangeEndId] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
+            [_centerPos, _radius, _execUserId, _selectedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation, _requestedId, _rangeEndId, _accessMode] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
         } else {
             // Direct mode: Register single object
-            [_targetObject, _execUserId, _selectedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation, _requestedId] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
+            [_targetObject, _execUserId, _selectedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation, _requestedId, _accessMode] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
             ["Custom Device Added!"] call zen_common_fnc_showMessage;
         };
     },

@@ -52,6 +52,40 @@
 #endif
 
 // ============================================================================
+// Device Access Modes
+// ============================================================================
+// States how a freshly registered device may be reached. Stated explicitly by the Zeus and Eden
+// modules instead of being inferred from an empty link list, so a device can exist on the network
+// before anyone is allowed to see it.
+// UNASSIGNED: registered only, no link cache entry and no public entry - grant access later
+// LINKED:     private links to the selected laptops (plus future laptops when that flag is set)
+// PUBLIC:     reachable by every current and future laptop
+
+#ifndef ACCESS_MODE_UNASSIGNED
+    #define ACCESS_MODE_UNASSIGNED 0
+#endif
+#ifndef ACCESS_MODE_LINKED
+    #define ACCESS_MODE_LINKED 1
+#endif
+#ifndef ACCESS_MODE_PUBLIC
+    #define ACCESS_MODE_PUBLIC 2
+#endif
+
+// Actions fn_setDeviceLinksMain can apply to devices that are already registered
+#ifndef ACCESS_ACTION_LINK
+    #define ACCESS_ACTION_LINK 0
+#endif
+#ifndef ACCESS_ACTION_UNLINK
+    #define ACCESS_ACTION_UNLINK 1
+#endif
+#ifndef ACCESS_ACTION_PUBLIC
+    #define ACCESS_ACTION_PUBLIC 2
+#endif
+#ifndef ACCESS_ACTION_UNASSIGN
+    #define ACCESS_ACTION_UNASSIGN 3
+#endif
+
+// ============================================================================
 // Device Cache Keys
 // ============================================================================
 // HashMap keys for storing devices by type in the device cache
@@ -329,6 +363,11 @@
 // Validates that a device type number is within valid range (1-8)
 #ifndef VALIDATE_DEVICE_TYPE
     #define VALIDATE_DEVICE_TYPE(type) (type >= DEVICE_TYPE_DOOR && type <= DEVICE_TYPE_POWERGRID)
+#endif
+
+// Validates that an access mode number is one of the known modes
+#ifndef VALIDATE_ACCESS_MODE
+    #define VALIDATE_ACCESS_MODE(mode) (mode >= ACCESS_MODE_UNASSIGNED && mode <= ACCESS_MODE_PUBLIC)
 #endif
 
 // ============================================================================

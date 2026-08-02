@@ -12,6 +12,7 @@ PREP(3denAddGPSTracker);
 PREP(3denAddCustomDevice);
 PREP(3denAddPowerGenerator);
 PREP(3denRegisterHackableLaptop);
+PREP(3denLinkDevices);
 
 // Redefine PREP macro for subdirectory: core
 #undef PREP
@@ -107,7 +108,9 @@ PREP(powerGridControl);
 #define PREP(fncName) [QPATHTOF(functions\utility\DOUBLES(fn,fncName).sqf),QFUNC(fncName)] call CBA_fnc_compileFunction
 
 PREP(addComputerDeviceLinks);
+PREP(applyDeviceAccess);
 PREP(cacheDeviceLinks);
+PREP(setDeviceLinksMain);
 PREP(runDeviceLinkCleanup);
 PREP(clearBrokenDeviceLinks);
 PREP(setRubberduckyCredentials);
@@ -186,6 +189,7 @@ PREP(registerHackableLaptopZeus);
 PREP(addPowerGeneratorZeus);
 PREP(addVehicleZeus);
 PREP(copyDeviceLinksZeus);
+PREP(manageDeviceLinksZeus);
 PREP(clearBrokenDeviceLinksZeus);
 PREP(clearBrokenDeviceLinksZeusMain);
 PREP(modifyPowerZeus);

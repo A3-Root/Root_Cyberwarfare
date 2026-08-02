@@ -12,12 +12,21 @@
  * 2: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
  * 3: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
  * 4: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ * 5: _allowLocation <BOOLEAN> (Optional) - Show grid location on the laptop, default: true
+ * 6: _startId <NUMBER> (Optional) - First ID handed out across the area (0 = auto), default: 0
+ * 7: _endId <NUMBER> (Optional) - Last ID handed out across the area (0 = auto), default: 0
+ * 8: _accessMode <NUMBER> (Optional) - ACCESS_MODE_* constant, default: ACCESS_MODE_UNASSIGNED
  *
  * For Drones (when called with 4 parameters or when unitIsUAV):
  * 0: _targetObject <OBJECT> - The drone to make hackable
  * 1: _execUserId <NUMBER> (Optional) - User ID for feedback, default: 0
  * 2: _linkedComputers <ARRAY> (Optional) - Array of computer netIds, default: []
  * 3: _availableToFutureLaptops <BOOLEAN> (Optional) - Available to future laptops, default: false
+ * 4: _droneName <STRING> (Optional) - Custom drone name, default: ""
+ * 5: _disableCost <NUMBER> (Optional) - Power cost to disable this drone, default: 0
+ * 6: _sideCost <NUMBER> (Optional) - Power cost to change this drone's side, default: 0
+ * 7: _requestedId <NUMBER> (Optional) - Fixed device id, 0 = auto-assign, default: 0
+ * 8: _accessMode <NUMBER> (Optional) - ACCESS_MODE_* constant, default: ACCESS_MODE_UNASSIGNED
  *
  * For Vehicles (when called with 24 parameters):
  * 0: _targetObject <OBJECT> - The vehicle to make hackable
@@ -44,6 +53,9 @@
  * 21: _engineCooldown <NUMBER> (Optional) - Engine toggle cooldown in seconds, default: 0
  * 22: _alarmMinDuration <NUMBER> (Optional) - Minimum alarm duration in seconds, default: 1
  * 23: _alarmMaxDuration <NUMBER> (Optional) - Maximum alarm duration in seconds, default: 30
+ * 24: _allowLocation <BOOLEAN> (Optional) - Show grid location on the laptop, default: true
+ * 25: _requestedId <NUMBER> (Optional) - Fixed device id, 0 = auto-assign, default: 0
+ * 26: _accessMode <NUMBER> (Optional) - ACCESS_MODE_* constant, default: ACCESS_MODE_UNASSIGNED
  *
  * Return Value:
  * None
@@ -80,7 +92,7 @@ private _isDroneCall = !_isRadiusMode && {(count _this) < 12};
 
 if (_isRadiusMode) then {
     // Radius mode: Register all vehicles/drones within radius
-    params ["_centerPos", "_radius", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false], ["_allowLocation", true], ["_startId", 0], ["_endId", 0]];
+    params ["_centerPos", "_radius", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false], ["_allowLocation", true], ["_startId", 0], ["_endId", 0], ["_accessMode", ACCESS_MODE_UNASSIGNED, [0]]];
 
     // Get all objects in radius and filter by vehicle type
     private _allObjects = nearestObjects [_centerPos, [], _radius];
@@ -122,7 +134,7 @@ if (_isRadiusMode) then {
 
         if (_isDrone) then {
             // Register as drone
-            [_obj, _execUserId, _linkedComputers, _availableToFutureLaptops, "", 0, 0, _assignId] call FUNC(addVehicleZeusMain);
+            [_obj, _execUserId, _linkedComputers, _availableToFutureLaptops, "", 0, 0, _assignId, _accessMode] call FUNC(addVehicleZeusMain);
             _droneCount = _droneCount + 1;
         } else {
             // Register as vehicle with default settings
@@ -130,7 +142,7 @@ if (_isRadiusMode) then {
             private _defaultPowerCost = 2;
             private _allowAllFeatures = true;
 
-            [_obj, _execUserId, _linkedComputers, _vehicleName, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _availableToFutureLaptops, _defaultPowerCost, 0, 100, -50, 50, 1, 10, -1, 0, -1, 0, 1, 30, _allowLocation, _assignId] call FUNC(addVehicleZeusMain);
+            [_obj, _execUserId, _linkedComputers, _vehicleName, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _allowAllFeatures, _availableToFutureLaptops, _defaultPowerCost, 0, 100, -50, 50, 1, 10, -1, 0, -1, 0, 1, 30, _allowLocation, _assignId, _accessMode] call FUNC(addVehicleZeusMain);
             _vehicleCount = _vehicleCount + 1;
             _index = _index + 1;
         };
@@ -146,7 +158,7 @@ if (_isRadiusMode) then {
 } else {
     if (_isDroneCall) then {
         // Drone: handle drone registration directly
-        params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false], ["_droneName", "", [""]], ["_disableCost", 0, [0]], ["_sideCost", 0, [0]], ["_requestedId", 0, [0]]];
+        params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_availableToFutureLaptops", false], ["_droneName", "", [""]], ["_disableCost", 0, [0]], ["_sideCost", 0, [0]], ["_requestedId", 0, [0]], ["_accessMode", ACCESS_MODE_UNASSIGNED, [0]]];
 
         if (_execUserId == 0) then {
             _execUserId = owner _targetObject;
@@ -174,91 +186,8 @@ if (_isRadiusMode) then {
         // Store drone entry: [deviceId, droneNetId, droneName, availableToFuture]
         _allDrones pushBack [_deviceId, _netId, _displayName, _availableToFutureLaptops];
 
-        private _availabilityText = "";
-
-        // Store device linking information (for selected computers)
-        if (_linkedComputers isNotEqualTo []) then {
-            // Add the private [type, id] link to each selected computer through the shared atomic helper.
-            [_linkedComputers, _typeofhackable, _deviceId] call FUNC(addComputerDeviceLinks);
-            _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
-        };
-
-        private _excludedIdentifiers = [];
-        // Handle public device access
-        if (_availableToFutureLaptops || _linkedComputers isEqualTo []) then {
-            private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
-
-            DEBUG_LOG_2("Device setup mode: %1, Future laptops: %2",GET_DEVICE_MODE,_availableToFutureLaptops);
-
-            if (_availableToFutureLaptops) then {
-                if (_linkedComputers isNotEqualTo []) then {
-                    // Scenario 4: Available to future + some linked
-                    // Exclude current laptops that are NOT linked
-                    DEBUG_LOG("Scenario 4: Excluding current non-linked computers");
-
-                    if (IS_EXPERIMENTAL_MODE) then {
-                        {
-                            private _nearLaptops = nearestObjects [_x, [], 3] select {
-                                _x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]
-                            };
-                            if (_nearLaptops isNotEqualTo []) then {
-                                private _uid = getPlayerUID _x;
-                                if !(_uid in _linkedComputers) then {
-                                    _excludedIdentifiers pushBack _uid;
-                                    DEBUG_LOG_2("Excluding player %1 (UID: %2)",name _x,_uid);
-                                };
-                            };
-                        } forEach allPlayers;
-                    } else {
-                        {
-                            if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
-                                private _netId = netId _x;
-                                if !(_netId in _linkedComputers) then {
-                                    _excludedIdentifiers pushBack _netId;
-                                    DEBUG_LOG_1("Excluding laptop netId: %1",_netId);
-                                };
-                            };
-                        } forEach (24 allObjects 1);
-                    };
-
-                    _availabilityText = _availabilityText + format [" and all future computers"];
-                } else {
-                    // Scenario 3: Available to future + no linked
-                    // Exclude ALL current laptops
-                    DEBUG_LOG("Scenario 3: Excluding all current computers");
-
-                    if (IS_EXPERIMENTAL_MODE) then {
-                        {
-                            private _nearLaptops = nearestObjects [_x, [], 3] select {
-                                _x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]
-                            };
-                            if (_nearLaptops isNotEqualTo []) then {
-                                _excludedIdentifiers pushBack (getPlayerUID _x);
-                                DEBUG_LOG_2("Excluding player %1 (UID: %2)",name _x,getPlayerUID _x);
-                            };
-                        } forEach allPlayers;
-                    } else {
-                        {
-                            if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
-                                _excludedIdentifiers pushBack (netId _x);
-                                DEBUG_LOG_1("Excluding laptop netId: %1",netId _x);
-                            };
-                        } forEach (24 allObjects 1);
-                    };
-
-                    _availabilityText = "Available to future computers only";
-                };
-            } else {
-                // Scenario 1: Not available to future + no linked
-                // No exclusions - all current laptops get access
-                DEBUG_LOG("Scenario 1: All current computers get access");
-                _availabilityText = format ["Available to all current computers"];
-            };
-
-            DEBUG_LOG_1("Excluded identifiers: %1",_excludedIdentifiers);
-            _publicDevices pushBack [_typeofhackable, _deviceId, _excludedIdentifiers];
-            missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
-        };
+        // Apply the requested reachability: private links, public registration, or nothing at all.
+        private _availabilityText = [_typeofhackable, _deviceId, _linkedComputers, _accessMode, _availableToFutureLaptops] call FUNC(applyDeviceAccess);
 
         // Update global storage with modified drone array
         _allDevices set [2, _allDrones];
@@ -285,7 +214,8 @@ call Root_fnc_syncDeviceData;
             ["_lightsMaxToggles", -1], ["_lightsCooldown", 0],
             ["_engineMaxToggles", -1], ["_engineCooldown", 0],
             ["_alarmMinDuration", 1], ["_alarmMaxDuration", 30],
-            ["_allowLocation", true], ["_requestedId", 0]
+            ["_allowLocation", true], ["_requestedId", 0],
+            ["_accessMode", ACCESS_MODE_UNASSIGNED, [0]]
         ];
 
         if (_execUserId == 0) then {
@@ -346,92 +276,10 @@ call Root_fnc_syncDeviceData;
             nil, nil, nil, nil, nil, nil  // Reserved slots
         ];
 
-        private _availabilityText = "";
         private _availableHacks = "";
 
-        // Store device linking information (for selected computers)
-        if (_linkedComputers isNotEqualTo []) then {
-            // Add the private [type, id] link to each selected computer through the shared atomic helper.
-            [_linkedComputers, _typeofhackable, _deviceId] call FUNC(addComputerDeviceLinks);
-            _availabilityText = format ["Accessible by %1 linked computer(s)", count _linkedComputers];
-        };
-
-        private _excludedIdentifiers = [];
-        /// Handle public device access
-        if ((_availableToFutureLaptops) || (_linkedComputers isEqualTo [])) then {
-            private _publicDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", []];
-
-            DEBUG_LOG_2("Device setup mode: %1, Future laptops: %2",GET_DEVICE_MODE,_availableToFutureLaptops);
-
-            if (_availableToFutureLaptops) then {
-                if (_linkedComputers isNotEqualTo []) then {
-                    // Scenario 4: Available to future + some linked
-                    // Exclude current laptops that are NOT linked
-                    DEBUG_LOG("Scenario 4: Excluding current non-linked computers");
-
-                    if (IS_EXPERIMENTAL_MODE) then {
-                        {
-                            private _nearLaptops = nearestObjects [_x, [], 3] select {
-                                _x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]
-                            };
-                            if (_nearLaptops isNotEqualTo []) then {
-                                private _uid = getPlayerUID _x;
-                                if !(_uid in _linkedComputers) then {
-                                    _excludedIdentifiers pushBack _uid;
-                                    DEBUG_LOG_2("Excluding player %1 (UID: %2)",name _x,_uid);
-                                };
-                            };
-                        } forEach allPlayers;
-                    } else {
-                        {
-                            if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
-                                private _netId = netId _x;
-                                if !(_netId in _linkedComputers) then {
-                                    _excludedIdentifiers pushBack _netId;
-                                    DEBUG_LOG_1("Excluding laptop netId: %1",_netId);
-                                };
-                            };
-                        } forEach (24 allObjects 1);
-                    };
-
-                    _availabilityText = _availabilityText + format [" and all future computers"];
-                } else {
-                    // Scenario 3: Available to future + no linked
-                    // Exclude ALL current laptops
-                    DEBUG_LOG("Scenario 3: Excluding all current computers");
-
-                    if (IS_EXPERIMENTAL_MODE) then {
-                        {
-                            private _nearLaptops = nearestObjects [_x, [], 3] select {
-                                _x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]
-                            };
-                            if (_nearLaptops isNotEqualTo []) then {
-                                _excludedIdentifiers pushBack (getPlayerUID _x);
-                                DEBUG_LOG_2("Excluding player %1 (UID: %2)",name _x,getPlayerUID _x);
-                            };
-                        } forEach allPlayers;
-                    } else {
-                        {
-                            if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
-                                _excludedIdentifiers pushBack (netId _x);
-                                DEBUG_LOG_1("Excluding laptop netId: %1",netId _x);
-                            };
-                        } forEach (24 allObjects 1);
-                    };
-
-                    _availabilityText = "Available to future computers only";
-                };
-            } else {
-                // Scenario 1: Not available to future + no linked
-                // No exclusions - all current laptops get access
-                DEBUG_LOG("Scenario 1: All current computers get access");
-                _availabilityText = format ["Available to all current computers"];
-            };
-
-            DEBUG_LOG_1("Excluded identifiers: %1",_excludedIdentifiers);
-            _publicDevices pushBack [_typeofhackable, _deviceId, _excludedIdentifiers];
-            missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices, true];
-        };
+        // Apply the requested reachability: private links, public registration, or nothing at all.
+        private _availabilityText = [_typeofhackable, _deviceId, _linkedComputers, _accessMode, _availableToFutureLaptops] call FUNC(applyDeviceAccess);
 
         // Update global storage with modified vehicle array
         _allDevices set [6, _allVehicles];

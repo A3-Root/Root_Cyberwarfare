@@ -1,3 +1,4 @@
+#include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
  * Zeus module to add a GPS tracker to an object
@@ -62,7 +63,12 @@ private _dialogControls = [
     ["EDIT", ["Custom Marker (optional)", "Custom name for the map marker to be used. Leave empty to use Tracker Name"], [""]],
     ["TOOLBOX:YESNO", ["Allow Retracking", "Allow tracking again after the initial tracking time ends?"], false],
     ["OWNERS", ["Additional GPS Tracking Visibility", "Additional (apart from the player who initiated the track) sides, groups, or players that can see the GPS tracking marker."], [[], [], [], 0]],
-    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Should this tracker be available to laptops that are added later?"], false],
+    ["COMBO", [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_DESC"], [
+        [ACCESS_MODE_UNASSIGNED, ACCESS_MODE_LINKED, ACCESS_MODE_PUBLIC],
+        [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_UNASSIGNED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_LINKED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_PUBLIC"],
+        0
+    ]],
+    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Only applies to 'Linked computers only': the linked computers keep access and laptops added later gain it too."], false],
     ["EDIT", ["Device ID (0 = auto)", "Fixed ID for this tracker. 0 = auto-assign a free ID."], ["0"]]
 ];
 
@@ -80,32 +86,27 @@ private _dialogControls = [
         _args params ["_targetObject", "_execUserId", "_allComputers", "_index"];
 
         // First results are the tracker configuration
-        _results params ["_trackerName", "_trackingTime", "_updateFrequency", "_lastPingTimer", "_powerCost", "_customMarker", "_allowRetracking", "_ownersSelection", "_availableToFutureLaptops", "_requestedIdText"];
+        _results params ["_trackerName", "_trackingTime", "_updateFrequency", "_lastPingTimer", "_powerCost", "_customMarker", "_allowRetracking", "_ownersSelection", "_accessMode", "_availableToFutureLaptops", "_requestedIdText"];
         private _requestedId = parseNumber _requestedIdText;
 
         // The rest are checkbox values for each computer
         private _selectedComputers = [];
-        private _checkboxStartIndex = 10;
-        
+        private _checkboxStartIndex = 11;
+
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
                 _selectedComputers pushBack (_x select 0);
             };
         } forEach _allComputers;
 
-        // If available to future laptops, keep the selected computers but mark for future availability
-        // If not available to future laptops and no computers selected, use all current computers
-        if (!_availableToFutureLaptops && _selectedComputers isEqualTo []) then {
-            _selectedComputers = _allComputers apply { _x select 0 };
-        };
-        
+
         private _underFlow = [_trackingTime, _updateFrequency, _lastPingTimer, _powerCost];
         {
             if (_x < 1) then { _x = 1; };
         } forEach _underFlow;
         
         // Pass all parameters including the availability setting and owners selection
-        [_targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, true, _ownersSelection, _requestedId] remoteExec ["Root_fnc_addGpsTrackerZeusMain", 2];
+        [_targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, true, _ownersSelection, _requestedId, _accessMode] remoteExec ["Root_fnc_addGpsTrackerZeusMain", 2];
         ["GPS Tracker Added!"] call zen_common_fnc_showMessage;
         _index = _index + 1;
         missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_INDEX", _index, true];

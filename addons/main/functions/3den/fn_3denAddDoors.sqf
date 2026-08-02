@@ -21,7 +21,6 @@ if (!isServer) exitWith {};
 
 // Get module attributes (convert number to boolean)
 // 3DEN checkbox attributes (typeName BOOL) load as booleans; accept both boolean and legacy numeric storage.
-private _addToPublic = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_PUBLIC", 1]) in [1, true];
 private _makeUnbreachable = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_UNBREACHABLE", 0]) in [1, true];
 private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_ALLOWLOCATION", 1]) in [1, true];
 
@@ -64,15 +63,26 @@ private _directDevices = _syncedObjects select {
 // Get laptop netIds for linking
 private _linkedComputers = _laptops apply { netId _x };
 
-// Determine availability setting
+// Device Access states how the registered buildings may be reached. The combo's fourth entry (3) is
+// the linked-plus-future variant, which resolves to a linked device that later laptops also reach.
+private _accessMode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_ACCESS", -1];
 private _availableToFutureLaptops = false;
-if (_addToPublic) then {
-    if (_linkedComputers isEqualTo []) then {
-        // Public + no linked = all current laptops only
-        _availableToFutureLaptops = false;
-    } else {
-        // Public + some linked = linked laptops + all future
-        _availableToFutureLaptops = true;
+
+if (_accessMode == 3) then {
+    _accessMode = ACCESS_MODE_LINKED;
+    _availableToFutureLaptops = true;
+};
+
+if (_accessMode < 0) then {
+    // Missions saved before Device Access existed carry only the legacy public checkbox, so map that
+    // forward and leave their devices as reachable as they were.
+    _accessMode = ACCESS_MODE_LINKED;
+    if ((_logic getVariable ["ROOT_CYBERWARFARE_3DEN_DOORS_PUBLIC", 1]) in [1, true]) then {
+        if (_linkedComputers isEqualTo []) then {
+            _accessMode = ACCESS_MODE_PUBLIC;
+        } else {
+            _availableToFutureLaptops = true;
+        };
     };
 };
 
@@ -115,8 +125,8 @@ private _nextId = _startId;
     };
 
     // Call the doors-specific main function
-    // Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _requestedId, _doorIdMap
-    [_device, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _assignId, _doorIdMap] call FUNC(addDoorsZeusMain);
+    // Parameters: _targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _requestedId, _doorIdMap, _accessMode
+    [_device, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _assignId, _doorIdMap, _accessMode] call FUNC(addDoorsZeusMain);
 
 } forEach _allDevices;
 
