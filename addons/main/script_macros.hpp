@@ -212,6 +212,15 @@
 #ifndef SETTING_EWO_RECHARGE_RATE
     #define SETTING_EWO_RECHARGE_RATE "ROOT_CYBERWARFARE_EWO_RECHARGE_RATE"
 #endif
+// Which backpacks behave as EWO packs. The classnames are a mission's to choose - a unit may field a
+// different pack, or none of the JSOC ones - so the list is a comma-separated CBA setting and only its
+// default lives here.
+#ifndef SETTING_EWO_BACKPACKS
+    #define SETTING_EWO_BACKPACKS "ROOT_CYBERWARFARE_EWO_BACKPACKS"
+#endif
+#ifndef EWO_BACKPACKS_DEFAULT
+    #define EWO_BACKPACKS_DEFAULT "jsoc_B_ewo_bag_MC,jsoc_B_ewo_bag_MCA,jsoc_B_ewo_bag_MCB,jsoc_B_ewo_bag_MCD,jsoc_B_ewo_bag_MCT,jsoc_B_ewo_bag_BLK,jsoc_B_ewo_bag_GRY,jsoc_B_ewo_bag_OD,jsoc_B_ewo_bag_Tan,jsoc_B_ewo_bag_White,jsoc_ew_base_backpack_multicam,jsoc_ew_base_backpack_multicamarctic,jsoc_ew_base_backpack_multicamblack,jsoc_ew_base_backpack_multicamtropic,jsoc_ew_base_backpack_multicamod,B_RadioBag_01_black_F"
+#endif
 #ifndef EWO_WIFI_DRAIN_DEFAULT
     #define EWO_WIFI_DRAIN_DEFAULT 3
 #endif
@@ -425,9 +434,42 @@
     #define GET_PUBLIC_DEVICES (missionNamespace getVariable [GVAR_PUBLIC_DEVICES, []])
 #endif
 
-// Minimum seconds between two plays of the desktop intro video on the same laptop for one client
+// Which laptops the curator device dialogs offer as link targets: every laptop on the map, or only the
+// ones already set up as hacking stations. Server-forced, because it decides what a curator is allowed
+// to wire a device to and that is a mission-wide rule rather than a per-client preference.
+#ifndef SETTING_LIST_ALL_LAPTOPS
+    #define SETTING_LIST_ALL_LAPTOPS "ROOT_CYBERWARFARE_LIST_ALL_LAPTOPS"
+#endif
+
+// ============================================================================
+// Desktop and Audio Settings
+// ============================================================================
+// Whether the desktop intro video plays at all, and the minimum seconds between two plays of it on the
+// same laptop for one client. The cooldown default is also the value used when the setting is missing.
 #ifndef ROOT_CYBERWARFARE_INTRO_COOLDOWN
     #define ROOT_CYBERWARFARE_INTRO_COOLDOWN 120
+#endif
+#ifndef SETTING_INTRO_VIDEO_ENABLED
+    #define SETTING_INTRO_VIDEO_ENABLED "ROOT_CYBERWARFARE_INTRO_VIDEO_ENABLED"
+#endif
+#ifndef SETTING_INTRO_VIDEO_COOLDOWN
+    #define SETTING_INTRO_VIDEO_COOLDOWN "ROOT_CYBERWARFARE_INTRO_VIDEO_COOLDOWN"
+#endif
+
+// The connect and disconnect sounds a drive makes, split so a mission can silence the Rubberducky's own
+// sound without silencing every other AE3 flash drive, and the volume all of them are played at.
+// AE3 reads these from missionNamespace and defaults to sound on, so AE3 without this mod is unaffected.
+#ifndef SETTING_DUCKY_SOUND_ENABLED
+    #define SETTING_DUCKY_SOUND_ENABLED "ROOT_CYBERWARFARE_DUCKY_SOUND_ENABLED"
+#endif
+#ifndef SETTING_USB_SOUND_ENABLED
+    #define SETTING_USB_SOUND_ENABLED "ROOT_CYBERWARFARE_USB_SOUND_ENABLED"
+#endif
+#ifndef SETTING_DEVICE_SOUND_VOLUME
+    #define SETTING_DEVICE_SOUND_VOLUME "ROOT_CYBERWARFARE_DEVICE_SOUND_VOLUME"
+#endif
+#ifndef DEVICE_SOUND_VOLUME_DEFAULT
+    #define DEVICE_SOUND_VOLUME_DEFAULT 3
 #endif
 
 // ============================================================================

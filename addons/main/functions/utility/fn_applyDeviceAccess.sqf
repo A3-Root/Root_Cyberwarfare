@@ -92,7 +92,7 @@ private _excludedIdentifiers = [];
 if (IS_EXPERIMENTAL_MODE) then {
     {
         private _nearLaptops = nearestObjects [_x, [], 3] select {
-            _x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]
+            [_x] call FUNC(isRegisteredLaptop)
         };
         if (_nearLaptops isNotEqualTo []) then {
             private _uid = getPlayerUID _x;
@@ -104,14 +104,12 @@ if (IS_EXPERIMENTAL_MODE) then {
     } forEach allPlayers;
 } else {
     {
-        if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
-            private _netId = netId _x;
-            if !(_netId in _linkedComputers) then {
-                _excludedIdentifiers pushBackUnique _netId;
-                DEBUG_LOG_1("Excluding laptop netId: %1",_netId);
-            };
+        _x params ["_netId"];
+        if !(_netId in _linkedComputers) then {
+            _excludedIdentifiers pushBackUnique _netId;
+            DEBUG_LOG_1("Excluding laptop netId: %1",_netId);
         };
-    } forEach (24 allObjects 1);
+    } forEach (call FUNC(getRegisteredLaptops));
 };
 
 private _publicDevices = GET_PUBLIC_DEVICES;

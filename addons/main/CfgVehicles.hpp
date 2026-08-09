@@ -117,6 +117,14 @@ class CfgVehicles {
 		function = "Root_fnc_manageDeviceLinksZeus";
 		displayName = "Manage Device Links";
 	};
+	class ROOT_CyberWarfareManageDeviceAccessZeus: zen_modules_moduleBase {
+		author = "Root";
+		_generalMacro = "ROOT_CyberWarfareManageDeviceAccessZeus";
+		curatorCanAttach = 1;
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_manageDeviceAccessZeus";
+		displayName = "Manage Device Access";
+	};
 	class ROOT_CyberWarfareClearBrokenLinksZeus: zen_modules_moduleBase {
 		author = "Root";
 		_generalMacro = "ROOT_CyberWarfareClearBrokenLinksZeus";

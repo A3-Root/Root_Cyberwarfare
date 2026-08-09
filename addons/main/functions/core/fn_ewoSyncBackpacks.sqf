@@ -1,7 +1,7 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Initializes the supported EWO backpacks and records their energy pool, then keeps each
+ * Description: Initializes the configured EWO backpacks and records their energy pool, then keeps each
  *              pack's hidden router riding with it and clears away the routers of packs that are gone.
  *              The network starts switched off: an EWO decides when to broadcast, and until then the pack
  *              gives nothing away and spends nothing. A router is only listed by a laptop's scan while it
@@ -19,13 +19,23 @@
 
 if (!isServer || {!(missionNamespace getVariable [SETTING_EWO_MODE, false])}) exitWith {};
 
-private _classes = [
-    "jsoc_B_ewo_bag_MC", "jsoc_B_ewo_bag_MCA", "jsoc_B_ewo_bag_MCB", "jsoc_B_ewo_bag_MCD",
-    "jsoc_B_ewo_bag_MCT", "jsoc_B_ewo_bag_BLK", "jsoc_B_ewo_bag_GRY", "jsoc_B_ewo_bag_OD",
-    "jsoc_B_ewo_bag_Tan", "jsoc_B_ewo_bag_White", "jsoc_ew_base_backpack_multicam",
-    "jsoc_ew_base_backpack_multicamarctic", "jsoc_ew_base_backpack_multicamblack",
-    "jsoc_ew_base_backpack_multicamtropic", "jsoc_ew_base_backpack_multicamod", "B_RadioBag_01_black_F"
-];
+// The configured pack list arrives as one comma-separated string. This handler runs every few seconds,
+// so the split result is kept alongside the string it came from and only re-parsed when the setting
+// actually changes. An empty or all-whitespace list falls back to the default rather than switching the
+// mode off silently: a blank editbox is far more likely to be a mistake than an intent to field no packs.
+private _configured = missionNamespace getVariable [SETTING_EWO_BACKPACKS, EWO_BACKPACKS_DEFAULT];
+if (!(_configured isEqualType "")) then { _configured = EWO_BACKPACKS_DEFAULT };
+
+private _classes = missionNamespace getVariable ["ROOT_EWO_BACKPACK_CLASSES", []];
+if ((missionNamespace getVariable ["ROOT_EWO_BACKPACK_CLASSES_RAW", ""]) isNotEqualTo _configured || {_classes isEqualTo []}) then {
+    _classes = (_configured splitString ",") apply {trim _x};
+    _classes = _classes select {_x isNotEqualTo ""};
+    if (_classes isEqualTo []) then {
+        _classes = (EWO_BACKPACKS_DEFAULT splitString ",") apply {trim _x};
+    };
+    missionNamespace setVariable ["ROOT_EWO_BACKPACK_CLASSES", _classes];
+    missionNamespace setVariable ["ROOT_EWO_BACKPACK_CLASSES_RAW", _configured];
+};
 
 private _bags = allPlayers apply {backpackContainer _x};
 _bags append ((allMissionObjects "Bag_Base") select {typeOf _x in _classes});

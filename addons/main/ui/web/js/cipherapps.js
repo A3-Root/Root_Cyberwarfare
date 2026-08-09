@@ -318,16 +318,20 @@
     }
     return "";
   }
-  // Runs every concrete cipher and returns one labelled output line per cipher.
+  // Runs every concrete cipher and returns a labelled block per cipher. Each block is a header line and
+  // its output, separated from the next by two blank lines: a cipher whose output runs onto several
+  // lines would otherwise merge into the one below it and stop being attributable.
   function runEvery(mode, s, o) {
     var lines = [];
-    CIPHERS.forEach(function (c) {
+    CIPHERS.forEach(function (c, i) {
       var problem = optionProblem(c, mode, s, o), outText = "";
       if (!problem) {
         try { outText = run(c, mode, s, o); } catch (e) { problem = "cannot read this input"; }
         if (!problem && outText === "") problem = "cannot read this input";
       }
-      lines.push("[" + c + "] " + (problem ? "(" + problem + ")" : outText));
+      if (i > 0) { lines.push(""); lines.push(""); }
+      lines.push("[" + c + "]");
+      lines.push(problem ? "(" + problem + ")" : outText);
     });
     return lines;
   }
@@ -682,10 +686,15 @@
       var res = crackOne(r.cipher, s, o);
       lines.push("[" + r.cipher + "] " + r.confidence + "%");
       lines = lines.concat(res.length ? res : ["(no candidates)"]);
+      // Two blank lines between attacked ciphers, matching the spacing an "All" encrypt/decrypt run uses.
+      lines.push("");
       lines.push("");
     });
     return lines;
   }
+  // Hand-off slot for text sent in from another app. importTarget points at the open Cryptography
+  // window's loader while one exists; pendingImport holds text that arrived before the window rendered.
+  var importTarget = null, pendingImport = null;
   function makeApp(desc) {
     var unified = desc.extra && desc.extra.mode === "cryptography";
     var isCrack = desc.extra && desc.extra.mode === "crack";
@@ -722,12 +731,19 @@
       '.rcw-crypto .cout{flex:1;min-height:0;resize:none;font-family:monospace}' +
       '.rcw-crypto .cwords{min-height:110px;resize:none}' +
       '.rcw-crypto .cfiles{border:1px solid var(--line);border-radius:6px;padding:8px;min-height:84px;overflow:auto}' +
+      '.rcw-crypto .cmsgs{border:1px solid var(--line);border-radius:6px;padding:8px;min-height:84px;max-height:220px;overflow:auto}' +
+      '.rcw-crypto .cmsg{padding:4px 6px;border-radius:4px;margin-bottom:4px;cursor:pointer}' +
+      '.rcw-crypto .cmsg .cmsgsub{display:block}' +
+      '.rcw-crypto .cmsg .cmsgmeta{display:block;font-size:11px;color:var(--muted)}' +
       '.rcw-crypto .cbtns{display:flex;gap:8px;flex-wrap:wrap;flex:0 0 auto}' +
       '</style>';
     return { id: desc.id, title: desc.title, glyph: desc.glyph || (isCrack ? "K" : "C"), kind: "script", width: 940, height: 760, menu: "Hacking Tools", external: true, showInMenu: true, singleton: true, render: function (body, win) {
-      body.innerHTML = STYLE + '<div class="pad rcw-crypto"><div class="ctop"><select class="input cmode" style="min-width:120px"></select><select class="input csrc" style="min-width:110px"><option value="text">Text</option><option value="files">Files</option></select><select class="input calgo" style="min-width:190px"></select><select class="input cvar" style="min-width:160px"></select></div><div class="cgrid"><div class="ccol">' +
+      body.innerHTML = STYLE + '<div class="pad rcw-crypto"><div class="ctop"><select class="input cmode" style="min-width:120px"></select><select class="input csrc" style="min-width:110px"><option value="text">Text</option><option value="files">Files</option><option value="messages">Messages</option></select><select class="input calgo" style="min-width:190px"></select><select class="input cvar" style="min-width:160px"></select></div><div class="cgrid"><div class="ccol">' +
         field("Input", "Text to process", "cfinput", '<textarea class="input ctext" rows="5" placeholder="Text input"></textarea>') +
         '<div class="cfiles" style="display:none"></div>' +
+        // Intercepted traffic is as much a source of ciphertext as a file on disk, so the laptop's own
+        // mailboxes and chat threads are offered as a third input alongside Text and Files.
+        '<div class="cfield cfmsgs" style="display:none"><label>Messages</label><div class="chint">Pick an email or chat message to load its body as input</div><div class="cmsgs"></div><div class="crow" style="margin-top:6px"><button class="btn cmsgrefresh">Refresh</button></div></div>' +
         // The result box takes every remaining pixel of the column: an "All" run prints one labelled
         // line per cipher, far more than a fixed-height textarea can show.
         '<div class="cfield cfresult"><label>Result</label><textarea class="input cout" readonly placeholder="Result"></textarea></div>' +
@@ -743,6 +759,7 @@
         field("Wordlist", "One candidate key per line - Vigenere bruteforce", "cfwords", '<div class="crow"><textarea class="input cwords" rows="6" placeholder="Wordlist (one key per line)"></textarea><button class="btn cwordfile">Wordlist File</button></div>') +
         '</div></div></div>';
       var mode = body.querySelector(".cmode"), src = body.querySelector(".csrc"), algo = body.querySelector(".calgo"), variant = body.querySelector(".cvar"), txt = body.querySelector(".ctext"), out = body.querySelector(".cout"), key = body.querySelector(".ckey"), shift = body.querySelector(".cshift"), alphaBox = body.querySelector(".calpha"), affineBox = body.querySelector(".caffine"), railsBox = body.querySelector(".crails"), radix = body.querySelector(".cradix"), width = body.querySelector(".cwidth"), preserve = body.querySelector(".cpres"), signed = body.querySelector(".csigned"), padding = body.querySelector(".cpad"), words = body.querySelector(".cwords"), filesWrap = body.querySelector(".cfiles"), addBtn = body.querySelector(".cadd"), remBtn = body.querySelector(".crem"), clearFilesBtn = body.querySelector(".cclrfiles"), wordFileBtn = body.querySelector(".cwordfile");
+      var msgsWrap = body.querySelector(".cmsgs"), msgsField = body.querySelector(".cfmsgs"), msgRefreshBtn = body.querySelector(".cmsgrefresh");
       var maxLen = body.querySelector(".cmax"), maxResults = body.querySelector(".cstep"), analyseBtn = body.querySelector(".canalyse");
       var fieldOf = function (el) { return el.closest(".cfield") || el; };
       (unified ? [["encrypt", "Encrypt"], ["decrypt", "Decrypt"], ["bruteforce", "Bruteforce"]] : (isCrack ? [["bruteforce", "Bruteforce"]] : [["encrypt", "Encrypt"], ["decrypt", "Decrypt"]])).forEach(function (m) { var o = document.createElement("option"); o.value = m[0]; o.textContent = m[1]; mode.appendChild(o); });
@@ -751,8 +768,11 @@
       function fillVariants() { variant.innerHTML = ""; (variants[algo.value] || [["standard", "Standard"]]).forEach(function (v) { var o = document.createElement("option"); o.value = v[0]; o.textContent = v[1]; variant.appendChild(o); }); }
       function show(el, yes) { el.style.display = yes ? "" : "none"; }
       function updateFields() {
-        var a = algo.value, fileMode = src.value === "files", every = a === "all";
-        show(filesWrap, fileMode); show(fieldOf(txt), !fileMode); show(addBtn, fileMode); show(remBtn, fileMode); show(clearFilesBtn, fileMode);
+        var a = algo.value, fileMode = src.value === "files", msgMode = src.value === "messages", every = a === "all";
+        show(filesWrap, fileMode); show(addBtn, fileMode); show(remBtn, fileMode); show(clearFilesBtn, fileMode);
+        // The message picker sits beside the input box rather than replacing it: a picked message is
+        // loaded into that box, so the operator can trim headers or quoted text before running a cipher.
+        show(msgsField, msgMode); show(fieldOf(txt), !fileMode);
         // "All" runs every cipher in one pass, so it needs every option a cipher can read - not just
         // the key. Each cipher then takes the field that belongs to it and ignores the rest.
         show(fieldOf(key), every || KEYED.indexOf(a) >= 0);
@@ -772,6 +792,66 @@
       function renderFiles() { filesWrap.innerHTML = files.length ? files.map(function (f, i) { return '<div data-i="' + i + '" style="padding:4px 6px;border-radius:4px;margin-bottom:4px;cursor:pointer;background:' + (i === selected ? "rgba(255,255,255,0.08)" : "transparent") + '">' + esc(f.name) + "</div>"; }).join("") : '<div class="muted">No files selected.</div>'; Array.prototype.slice.call(filesWrap.children).forEach(function (n) { n.onclick = function () { selected = Number(n.getAttribute("data-i")); renderFiles(); }; }); }
       function pickFile() { if (typeof AE3_pickFile !== "function") return; AE3_pickFile("open", { title: "Select file", start: window.AE3_HOME || "/home" }).then(function (p) { if (!p) return; files.push({ path: p, name: p.split("/").pop() }); selected = files.length - 1; renderFiles(); }); }
       function readFile(path) { return A3.request("fs_read", { path: path }).then(function (r) { return r && !r.error ? (r.content || "") : ""; }); }
+      // ---- Message import ------------------------------------------------------------------------
+      // The laptop's own mailboxes and chat threads, offered as input. Mail is fetched on demand and
+      // read one message at a time; chat arrives as whole threads on the chat_data channel, because the
+      // desktop bridge has no per-message chat read. Rows carry the text they will load, so picking one
+      // never needs a second round trip for chat and only one for mail.
+      var msgRows = [], msgSelected = -1, chatThreads = [], mailInbox = [], mailSent = [];
+      function loadMessageBody(row) {
+        if (row.text != null) return Promise.resolve(row.text);
+        return A3.request(row.op, { file: row.file }).then(function (m) {
+          return m && !m.error ? (m.body || "") : "";
+        }).catch(function () { return ""; });
+      }
+      function renderMessages() {
+        if (!msgRows.length) { msgsWrap.innerHTML = '<div class="muted">No messages on this device.</div>'; return; }
+        msgsWrap.innerHTML = msgRows.map(function (r, i) {
+          return '<div class="cmsg" data-i="' + i + '" style="background:' + (i === msgSelected ? "rgba(255,255,255,0.08)" : "transparent") + '">' +
+            '<span class="cmsgsub">' + esc(r.title) + '</span><span class="cmsgmeta">' + esc(r.meta) + "</span></div>";
+        }).join("");
+        Array.prototype.slice.call(msgsWrap.children).forEach(function (n) {
+          n.onclick = function () {
+            msgSelected = Number(n.getAttribute("data-i"));
+            renderMessages();
+            loadMessageBody(msgRows[msgSelected]).then(function (text) { txt.value = text; });
+          };
+        });
+      }
+      function rebuildMessageRows() {
+        msgRows = [];
+        mailInbox.forEach(function (m) {
+          msgRows.push({ op: "mail_read", file: m.file, title: "[Inbox] " + (m.subject || "(no subject)"), meta: "From " + (m.from || "unknown") + (m.received ? " - " + m.received : "") });
+        });
+        mailSent.forEach(function (m) {
+          msgRows.push({ op: "mail_read_sent", file: m.file, title: "[Sent] " + (m.subject || "(no subject)"), meta: "To " + (m.to || "unknown") + (m.received ? " - " + m.received : "") });
+        });
+        chatThreads.forEach(function (t) {
+          (t.messages || []).forEach(function (msg) {
+            // A chat line is [direction, time, text]; the direction marks who sent it.
+            var dir = msg[0] === "o" ? "to" : "from";
+            msgRows.push({ text: String(msg[2] || ""), title: "[Chat] " + String(msg[2] || "").slice(0, 60), meta: dir + " " + (t.peer || "unknown") + (msg[1] ? " - " + msg[1] : "") });
+          });
+        });
+        msgSelected = -1;
+        renderMessages();
+      }
+      function loadMessages() {
+        msgsWrap.innerHTML = '<div class="muted">Loading...</div>';
+        // The chat request answers on the chat_data channel rather than to the caller, so the threads
+        // arrive separately and the list is rebuilt again when they do.
+        A3.send("chat_pull", {});
+        Promise.all([
+          A3.request("mail_list", {}).then(function (r) { return (r && r.mails) || []; }).catch(function () { return []; }),
+          A3.request("mail_sent_list", {}).then(function (r) { return (r && r.mails) || []; }).catch(function () { return []; })
+        ]).then(function (res) { mailInbox = res[0]; mailSent = res[1]; rebuildMessageRows(); });
+      }
+      A3.on("chat_data", function (d) {
+        chatThreads = (d && d.threads) || [];
+        // Rebuild from what is already cached rather than re-requesting: this channel is also what a
+        // fresh pull answers on, and asking again from here would never stop.
+        if (src.value === "messages") rebuildMessageRows();
+      });
       function inputs() { if (src.value !== "files") return Promise.resolve([{ name: "input", text: txt.value || "" }]); return Promise.all(files.map(function (f) { return readFile(f.path).then(function (t) { return { name: f.name, text: t }; }); })); }
       // shift is Caesar's own field. When Caesar is the only selected cipher a numeric key still works,
       // so an operator who types the shift into the key box is not punished for it. Every box that is
@@ -809,13 +889,15 @@
         inputs().then(function (list) {
           var lines = [], o = opts(), cracking = mode.value === "bruteforce", every = algo.value === "all";
           if (!list.length) { setOut("No input."); return; }
-          list.forEach(function (item) {
-            if (list.length > 1) lines.push("[" + item.name + "]");
+          list.forEach(function (item, i) {
+            // Blank lines ahead of every source but the first, so a multi-file run reads as one block per
+            // file rather than as a single unbroken column.
+            if (list.length > 1 && i > 0) { lines.push(""); lines.push(""); }
+            if (list.length > 1) lines.push("=== " + item.name + " ===");
             // "All" encrypts or decrypts with every cipher and labels each output line; in bruteforce it
             // means auto, and crackOne ranks the input before attacking anything.
             if (cracking) lines = lines.concat(crackOne(algo.value, item.text, o));
             else lines = lines.concat(every ? runEvery(mode.value, item.text, o) : [runOne(algo.value, mode.value, item.text, o)]);
-            if (list.length > 1) lines.push("");
           });
           setOut(lines);
         });
@@ -839,12 +921,38 @@
         });
       }
       fillVariants(); updateFields(); renderFiles();
-      algo.onchange = function () { fillVariants(); updateFields(); }; mode.onchange = updateFields; src.onchange = updateFields; addBtn.onclick = pickFile; remBtn.onclick = function () { if (selected >= 0) { files.splice(selected, 1); selected = Math.min(selected, files.length - 1); renderFiles(); } }; clearFilesBtn.onclick = function () { files = []; selected = -1; renderFiles(); };
+      algo.onchange = function () { fillVariants(); updateFields(); }; mode.onchange = updateFields; addBtn.onclick = pickFile;
+      // The message list is fetched the first time the picker is shown and refreshed on demand, so an
+      // operator who never touches it costs the laptop nothing.
+      src.onchange = function () { updateFields(); if (src.value === "messages" && !msgRows.length) loadMessages(); };
+      msgRefreshBtn.onclick = loadMessages;
+      // Lets the Email and Messenger apps hand a message body straight to this window. Registered per
+      // instance and taken over by the newest one, so the hook always points at a window that exists.
+      importTarget = function (text) { src.value = "text"; updateFields(); txt.value = text; out.value = ""; };
+      if (pendingImport !== null) { importTarget(pendingImport); pendingImport = null; } remBtn.onclick = function () { if (selected >= 0) { files.splice(selected, 1); selected = Math.min(selected, files.length - 1); renderFiles(); } }; clearFilesBtn.onclick = function () { files = []; selected = -1; renderFiles(); };
       wordFileBtn.onclick = function () { if (typeof AE3_pickFile !== "function") return; AE3_pickFile("open", { title: "Select wordlist", start: window.AE3_HOME || "/home" }).then(function (p) { if (!p) return; readFile(p).then(function (t) { words.value = t; }); }); };
       body.querySelector(".crun").onclick = runAll; analyseBtn.onclick = analyseInput; body.querySelector(".cclear").onclick = function () { txt.value = ""; out.value = ""; files = []; selected = -1; renderFiles(); };
       body.querySelector(".csave").onclick = function () { if (typeof AE3_pickFile !== "function") return; AE3_pickFile("save", { title: "Save output", start: window.AE3_HOME || "/home", filename: algo.value + ".txt" }).then(function (p) { if (p) A3.request("fs_save", { path: p, content: out.value || "" }); }); };
-      win.app.onClose = function () {};
+      // Drop the hook again when this window closes, unless a newer window has already claimed it.
+      var ownImport = importTarget;
+      win.app.onClose = function () { if (importTarget === ownImport) importTarget = null; };
     } };
   }
   window.RootCW_makeCipherApp = makeApp;
+
+  // Entry point for the Email and Messenger apps' "Send to Cryptography" action. The window is opened
+  // if it is not already up; because the app is a singleton, a second launch only focuses the existing
+  // window and never re-renders, so the text is handed to the live instance in that case. Its presence
+  // is also what those apps test before offering the menu item, which keeps AE3 free of any dependency
+  // on this mod.
+  window.RootCW_openCryptoWith = function (text) {
+    // The app is unregistered the moment the laptop loses its hacking toolset, while this script stays
+    // loaded. Refuse rather than stash text for a window that can no longer open.
+    if (!window.Apps || typeof Apps.get !== "function" || !Apps.get("RootCW_Cryptography")) return false;
+    var body = String(text == null ? "" : text);
+    if (importTarget) { importTarget(body); }
+    else { pendingImport = body; }
+    Apps.launch("RootCW_Cryptography");
+    return true;
+  };
 })();

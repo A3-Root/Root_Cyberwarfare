@@ -28,14 +28,8 @@ private _execUserId = clientOwner;
 private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_INDEX", 1];
 private _trackerName = format ["GPS_Tracker_%1", _index];
 
-// Check if any laptops exist with hacking tools
-private _allComputers = [];
-{
-    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
-        private _netId = netId _x;
-        _allComputers pushBack _netId;
-    };
-} forEach (24 allObjects 1); // 24 = EmptyDetector class number
+// Every laptop that can receive the tracker, reduced to the netIds the link cache stores.
+private _allComputers = (call FUNC(getRegisteredLaptops)) apply {_x select 0};
 
 // If no computers exist, set empty array to signal "available to all future computers"
 // If computers exist, they will be linked individually

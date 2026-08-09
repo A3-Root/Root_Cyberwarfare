@@ -49,6 +49,22 @@
     false
 ] call CBA_fnc_addSetting;
 
+// Which backpack classnames are treated as EWO packs. Read by the sync handler on every pass, so a
+// mission can point the mode at its own pack without a restart. Broadcast on change because the sync
+// handler runs on the server.
+[
+    SETTING_EWO_BACKPACKS,
+    "EDITBOX",
+    ["EWO Backpack Classnames", "Comma-separated backpack classnames that behave as 77th JSOC EWO packs. Leave empty to restore the default list."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "EWO Settings"],
+    EWO_BACKPACKS_DEFAULT,
+    1,
+    {
+        missionNamespace setVariable [SETTING_EWO_BACKPACKS, _this, true];
+    },
+    false
+] call CBA_fnc_addSetting;
+
 // What a broadcasting network costs the pack, what a laptop on charge takes out of it, and what a
 // connected power source puts back in. All three are read per tick, so a mission can retune the pack's
 // endurance without touching the code that spends the energy.
@@ -302,6 +318,82 @@
     ["Link Cleanup Strike Grace", "ON (recommended): a link is only removed after its object has been missing for several consecutive passes, absorbing brief lookup misses right after a player joins. OFF: remove as soon as the object is missing. Only affects the automatic loop; the manual clear always acts immediately."],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Cleanup Settings"],
     true, // default ON (grace)
+    1, // mission-level
+    {},
+    false
+] call CBA_fnc_addSetting;
+
+// Which laptops the curator device dialogs list. On, a mission can wire devices to a bare laptop during
+// setup and deliver the hacking toolset later, because a link to a tool-less laptop lies dormant rather
+// than failing - it starts working the moment the tools arrive. Off, only laptops that are already
+// hacking stations can be picked, which suits missions that place unrelated laptops as scenery.
+// Server-forced: this decides what a curator may wire a device to, so a client cannot change it.
+[
+    SETTING_LIST_ALL_LAPTOPS,
+    "CHECKBOX",
+    ["List All Laptops In Device Modules", "List every laptop on the map as a link target in the Zeus and device modules, including ones with no hacking tools yet. Disable to list only laptops that are already registered stations or already carry the tools."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Core Settings"],
+    true, // default ON
+    2, // server-forced; clients cannot overwrite it
+    {},
+    false // takes effect on the next dialog opened, no restart needed
+] call CBA_fnc_addSetting;
+
+// Desktop intro video - whether it plays, and how often it may replay on the same laptop. The cooldown
+// exists because the video is triggered by a tools drive being mounted, and a drive can be re-plugged
+// repeatedly; zero seconds plays it on every mount.
+[
+    SETTING_INTRO_VIDEO_ENABLED,
+    "CHECKBOX",
+    ["Hackerman Intro Video", "Play the Hackerman loading video when a hacking-tools drive is connected and the desktop is opened."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Desktop & Audio Settings"],
+    true, // default ON
+    1, // mission-level
+    {},
+    false
+] call CBA_fnc_addSetting;
+
+[
+    SETTING_INTRO_VIDEO_COOLDOWN,
+    "SLIDER",
+    ["Hackerman Intro Video Cooldown", "Minimum seconds between two plays of the Hackerman loading video on the same laptop. Set to 0 to play it on every connection."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Desktop & Audio Settings"],
+    [0, 3600, ROOT_CYBERWARFARE_INTRO_COOLDOWN, 0],
+    1, // mission-level
+    {},
+    false
+] call CBA_fnc_addSetting;
+
+// Drive connect and disconnect audio. The Rubberducky and the ordinary AE3 flash drives are separate
+// toggles so a mission can keep one and silence the other; the volume applies to both.
+[
+    SETTING_DUCKY_SOUND_ENABLED,
+    "CHECKBOX",
+    ["Rubberducky Connection Sound", "Play the Rubberducky sound when a Rubberducky USB is connected to or disconnected from a laptop."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Desktop & Audio Settings"],
+    true, // default ON
+    1, // mission-level
+    {},
+    false
+] call CBA_fnc_addSetting;
+
+[
+    SETTING_USB_SOUND_ENABLED,
+    "CHECKBOX",
+    ["Flash Drive Connection Sound", "Play the standard flash drive sound when any other USB drive is connected to or disconnected from a laptop."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Desktop & Audio Settings"],
+    true, // default ON
+    1, // mission-level
+    {},
+    false
+] call CBA_fnc_addSetting;
+
+[
+    SETTING_DEVICE_SOUND_VOLUME,
+    "SLIDER",
+    ["Drive Connection Sound Volume", "Loudness of the drive connect and disconnect sounds. Higher values carry further from the laptop."],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Desktop & Audio Settings"],
+    [0, 10, DEVICE_SOUND_VOLUME_DEFAULT, 1],
     1, // mission-level
     {},
     false

@@ -149,7 +149,11 @@ class CfgFunctions {
 			class getPlayerFromComputer {};
 			class getUserConfirmation {};
 			class resolveDeviceId {};
+			class getRegisteredDevices {};
+			class getRegisteredLaptops {};
 			class hasHackingToolsAvailable {};
+			class isRegisteredLaptop {};
+			class setDeviceAccessMain {};
 			class localSoundBroadcast {};
 			class removePower {};
 			class syncHackermanFs {};
@@ -181,6 +185,7 @@ class CfgFunctions {
 			class addHackingToolsZeus {};
 			class registerHackableLaptopZeus {};
 			class copyDeviceLinksZeus {};
+			class manageDeviceAccessZeus {};
 			class manageDeviceLinksZeus {};
 			class clearBrokenDeviceLinksZeus {};
 			class clearBrokenDeviceLinksZeusMain {};

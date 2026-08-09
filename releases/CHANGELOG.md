@@ -1,5 +1,30 @@
 # Changelog
 
+## Hotfix 9 (v2.0.0.2)
+
+### Added
+
+- A Zeus **Manage Device Access** module for rewiring device access during play, working device-first where the existing Manage Device Links module works laptop-first. Placed on a registered object it opens that object's devices; placed on open ground it asks for a radius, reports how many devices of which types it found inside it, and then walks them one dialog at a time. Each dialog shows the device's current access mode and a checkbox per laptop, already ticked wherever that laptop reaches the device, so the existing wiring is visible before it is changed. Confirming sets that device's access to exactly what the dialog shows - unticking a laptop removes its access - and cancelling leaves the device alone and moves on to the next.
+- A scriptable `Root_fnc_setDeviceAccessMain` behind the module, for missions that want to set a device's complete access state from a trigger or script rather than adding and removing links one at a time.
+- A **Messages** input source in the Cryptography app. It lists the laptop's inbox, sent mail, and chat messages, and loads the body of the one you pick straight into the input box, so intercepted traffic can be decrypted without copying it out by hand.
+- A **Send to Cryptography** entry in the Email and Messenger right-click menus, on a message in the list, an open email, a single chat bubble, and a whole conversation. It opens Cryptography with that text already loaded. The entry only appears on laptops that have the hacking toolset.
+- CBA settings for the Hackerman intro video: one to switch it off entirely, and a cooldown slider controlling how soon it may play again on the same laptop (0 plays it on every connection). The previous fixed two-minute cooldown is now the slider's default.
+- CBA settings for drive audio: separate on/off switches for the Rubberducky sound and the standard flash drive sound, plus a shared volume slider for both. Muting a drive silences it on disconnect as well as on connect.
+- A CBA setting listing the backpack classnames treated as **77th JSOC EWO** packs. Missions can point EWO mode at their own pack; clearing the box restores the default list rather than disabling the mode.
+- A server-forced CBA setting, *List All Laptops In Device Modules*, on by default. On, every laptop on the map is offered as a link target in the Zeus and device modules, including bare ones with no hacking tools yet, so a mission can wire devices during setup and deliver the toolset later. Off, only laptops that are already registered stations or already carry the tools are listed, which suits missions that place unrelated laptops as scenery. Clients cannot override it, and it takes effect on the next dialog opened - no mission restart.
+- An AE3 setting, *Sudoers act as root at the terminal*, on by default. Accounts in `/etc/sudoers` can now read and write any file from the terminal, the way they already could from the desktop file manager. Turn it off for strict Unix semantics, where a sudoer must use `sudo` or `su` first.
+
+### Removed
+- N/A
+
+### Changed
+
+- **Fixed:** the laptop checkbox list in the Zeus device modules was empty unless a laptop had been through the Register Hackable Laptop module, leaving Public as the only way to grant any access. Every module now lists laptops according to the new *List All Laptops In Device Modules* setting, which by default includes bare laptops that have not received the hacking toolset yet - a mission can wire devices to a laptop during setup and deliver the tools later, and the link starts working the moment they arrive. Laptops that cannot hack yet are marked in the list rather than hidden, and the Add Hacking Tools module registers the laptop it installs onto as a station. USB drives are still not link targets - they deliver the tools rather than run them.
+- The Zeus device modules warn up front when a mission has no laptops at all, instead of opening a form with no laptops in it.
+- The future-laptop exclusion list is built from the same laptop roster the module dialogs offer, so a laptop that could be ticked is a laptop the access mode accounts for.
+- The Rubberducky login account is now a superuser. It can open other users' files and home directories on the laptop instead of being turned away with a missing-permissions error, both in the desktop file browser and, with the new AE3 setting on, at the terminal. An account that already exists is raised to superuser without its password being changed.
+- Cryptography results from an "All" or Bruteforce run are separated by blank lines and given a header per cipher, so a result that spans several lines can still be traced to the cipher that produced it. Multi-file runs are broken up the same way. The terminal `crack` command follows the same layout.
+
 ## Hotfix 8 (v2.0.0.1)
 
 ### Added

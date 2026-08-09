@@ -42,17 +42,12 @@ if !(hasInterface) exitWith {};
 private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_INDEX", 1];
 ROOT_CYBERWARFARE_GPS_TRACKER_NAME = format ["GPS_Tracker_%1", _index];
 
-// Get all existing laptops with hacking tools
-private _allComputers = [];
-{
-    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
-        private _displayName = getText (configOf _x >> "displayName");
-        private _computerName = _x getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _displayName];
-        private _netId = netId _x;
-        private _gridPos = mapGridPosition _x;
-        _allComputers pushBack [_netId, format ["%1 [%2]", _computerName, _gridPos]];
-    };
-} forEach (24 allObjects 1);
+// Every laptop the tracker can be linked to. Without one the dialog still works, but only the Unassigned
+// and Public access modes can do anything, so the curator is told before spending time on the form.
+private _allComputers = call FUNC(getRegisteredLaptops);
+if (_allComputers isEqualTo []) then {
+    [localize "STR_ROOT_CYBERWARFARE_ZEUS_NO_LAPTOPS_WARN"] call zen_common_fnc_showMessage;
+};
 
 private _dialogControls = [
     ["EDIT", ["Tracker Name", "Name that will appear in the terminal and as the default marker in the map for this tracker"], [ROOT_CYBERWARFARE_GPS_TRACKER_NAME]],

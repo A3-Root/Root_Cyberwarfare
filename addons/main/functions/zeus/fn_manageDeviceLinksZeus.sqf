@@ -33,47 +33,15 @@ if (!isNull _targetLaptop && {!(_targetLaptop getVariable ["ROOT_CYBERWARFARE_HA
 };
 
 // Collect every registered laptop so the module can be dropped on the ground and still be usable.
-private _allComputers = [];
-{
-    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
-        private _displayName = getText (configOf _x >> "displayName");
-        private _computerName = _x getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _displayName];
-        _allComputers pushBack [netId _x, format ["%1 [%2]", _computerName, mapGridPosition _x]];
-    };
-} forEach (24 allObjects 1);
+private _allComputers = call FUNC(getRegisteredLaptops);
 
 if (_allComputers isEqualTo []) exitWith {
     [localize "STR_ROOT_CYBERWARFARE_ZEUS_NO_LAPTOPS"] call zen_common_fnc_showMessage;
 };
 
-// Flatten the registry into [deviceType, deviceId, label] rows. Doors carry their display name one
-// slot further along than the other device types.
-private _deviceLabels = [
-    localize "STR_ROOT_CYBERWARFARE_GUI_APP_DOORS",
-    localize "STR_ROOT_CYBERWARFARE_GUI_APP_LIGHTS",
-    localize "STR_ROOT_CYBERWARFARE_GUI_APP_DRONES",
-    localize "STR_ROOT_CYBERWARFARE_GUI_APP_DATABASES",
-    localize "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM",
-    localize "STR_ROOT_CYBERWARFARE_GUI_APP_GPS",
-    localize "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES",
-    localize "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID"
-];
-
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-private _deviceRows = [];
-
-{
-    private _deviceType = _forEachIndex + 1;
-    private _nameIndex = [3, 2] select (_deviceType != DEVICE_TYPE_DOOR);
-    private _typeLabel = _deviceLabels select _forEachIndex;
-
-    {
-        private _deviceId = _x select 0;
-        private _deviceName = _x param [_nameIndex, ""];
-        if !(_deviceName isEqualType "") then { _deviceName = ""; };
-        _deviceRows pushBack [_deviceType, _deviceId, format ["%1 %2 - %3", _typeLabel, _deviceId, _deviceName]];
-    } forEach _x;
-} forEach _allDevices;
+// Flatten the registry into [deviceType, deviceId, label] rows, dropping the columns this dialog has no
+// use for.
+private _deviceRows = ([] call FUNC(getRegisteredDevices)) apply {[_x select 0, _x select 1, _x select 5]};
 
 if (_deviceRows isEqualTo []) exitWith {
     [localize "STR_ROOT_CYBERWARFARE_LINKS_NO_DEVICES"] call zen_common_fnc_showMessage;
@@ -109,10 +77,12 @@ if (_needsLaptopPicker) then {
     ]];
 };
 
+// The tick state is read from the live link cache, so it forces its default: ZEN would otherwise
+// restore whatever this dialog was last confirmed with and show a stale picture of the wiring.
 {
     _x params ["_deviceType", "_deviceId", "_label"];
     private _isLinked = (_currentLinks findIf {(_x select 0) == _deviceType && {(_x select 1) == _deviceId}}) > -1;
-    _dialogControls pushBack ["CHECKBOX", [_label, localize "STR_ROOT_CYBERWARFARE_LINKS_DEVICE_DESC"], _isLinked];
+    _dialogControls pushBack ["CHECKBOX", [_label, localize "STR_ROOT_CYBERWARFARE_LINKS_DEVICE_DESC"], _isLinked, true];
 } forEach _deviceRows;
 
 [

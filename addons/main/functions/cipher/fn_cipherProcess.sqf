@@ -303,7 +303,16 @@ if (_mode isEqualTo "bruteforce") exitWith {
     private _lines = [];
     {
         private _candidateAlgo = _x;
-        if (count _targets > 1) then { _lines pushBack format ["[%1]", _candidateAlgo]; };
+        // A multi-cipher run prints one labelled block per cipher. Two blank lines ahead of every block
+        // but the first keep the blocks apart, so a candidate can be traced back to the cipher that
+        // produced it instead of blurring into the neighbouring one.
+        if (count _targets > 1) then {
+            if (_forEachIndex > 0) then {
+                _lines pushBack "";
+                _lines pushBack "";
+            };
+            _lines pushBack format ["[%1]", _candidateAlgo];
+        };
         private _candidates = [];
         // Caesar's 26 shifts and ROT's four variants are a keyspace small enough to print whole, so they
         // are listed in full instead of being cut down to the strongest handful.
@@ -356,7 +365,6 @@ if (_mode isEqualTo "bruteforce") exitWith {
             };
         };
         _lines append ([_candidates, _limit] call _sortCandidates);
-        if (count _targets > 1) then { _lines pushBack ""; };
     } forEach _targets;
     _lines
 };

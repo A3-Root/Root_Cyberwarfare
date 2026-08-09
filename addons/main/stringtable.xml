@@ -9,8 +9,26 @@
         </Key>
     </Package>
     <Package name="Device_Access">
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_DEVICE_TITLE">
+            <English>Device Access (%1 of %2) - %3</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_DEVICE_UPDATED">
+            <English>Root Cyber Warfare: Access for device %1 updated - %2 linked computer(s).</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_FUTURE">
+            <English>Available to Future Laptops</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_FUTURE_DESC">
+            <English>Only applies to 'Linked computers only': the ticked computers keep access and laptops added later gain it too.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_FUTURE_ONLY">
             <English>Available to future computers only</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_LAPTOP_DESC">
+            <English>Let %1 reach this device</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_LAPTOP_NO_TOOLS">
+            <English>(no hacking tools yet)</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_LINKED">
             <English>Accessible by %1 linked computer(s)</English>
@@ -33,8 +51,26 @@
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_MODE_UNASSIGNED">
             <English>Unassigned (assign later)</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_NOT_A_DEVICE">
+            <English>That object is not a registered device. Place the module on a registered device, or on open ground for radius mode.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_PUBLIC">
             <English>Accessible by all current and future computers</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_RADIUS_DESC">
+            <English>Every registered device standing inside this radius is opened for editing, one dialog at a time.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_RADIUS_EMPTY">
+            <English>No registered devices within %1m.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_RADIUS_FOUND">
+            <English>%1 registered device(s) within %2m (%3). Editing them one at a time - cancel a device to leave it unchanged.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_RADIUS_TITLE">
+            <English>Manage Device Access - Radius Mode</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_RUN_FINISHED">
+            <English>Device access run finished.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_UNASSIGNED">
             <English>Registered but not accessible yet. Grant access with the Manage Device Links module.</English>
@@ -83,6 +119,9 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_NO_LAPTOPS">
             <English>No registered hackable laptops found!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_NO_LAPTOPS_WARN">
+            <English>No registered hackable laptops found - the device can only be added as Unassigned or Public.</English>
         </Key>
     </Package>
     <Package name="Device_Operations">

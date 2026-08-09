@@ -96,11 +96,24 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
         _execUserId = owner _entity;
     };
     // Mark the toolset as physically present on this object (a laptop or a USB drive) and refresh
-    // availability. Station registration (platform name and link eligibility) is owned by the
-    // Register Hackable Laptop module, so installing the toolset alone no longer turns an object into
-    // a hackable station - it only makes the tools available wherever they are plugged in.
+    // availability, so the tools follow the drive wherever it is plugged in.
     _entity setVariable ["ROOT_CYBERWARFARE_HACKINGTOOLS_INSTALLED", true, true];
     [_entity] call FUNC(syncHackingToolAvailability);
+
+    // A terminal-capable computer that receives the toolset directly is also a station an operator can
+    // work from, so it is registered here and becomes selectable in the curator device dialogs. USB
+    // drives own no terminal and are skipped: they deliver the tools rather than run them. The custom
+    // name doubles as the station name when one was supplied.
+    if (_entity getVariable ["AE3_cap_hasTerminal", false]) then {
+        _entity setVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", true, true];
+
+        private _stationName = _customLaptopName;
+        if (_stationName isEqualTo "") then {
+            _stationName = _entity getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", getText (configOf _entity >> "displayName")];
+        };
+        _entity setVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _stationName, true];
+    };
+
     if (_addCredentials) then {
         [_entity] call FUNC(seedRubberduckyCredentials);
     };

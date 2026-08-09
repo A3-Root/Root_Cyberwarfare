@@ -36,17 +36,12 @@ private _useRadiusMode = isNull _targetObject;
 
 if !(hasInterface) exitWith {};
 
-// Get all existing laptops with hacking tools
-private _allComputers = [];
-{
-    if (_x getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) then {
-        private _displayName = getText (configOf _x >> "displayName");
-        private _computerName = _x getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _displayName];
-        private _netId = netId _x;
-        private _gridPos = mapGridPosition _x;
-        _allComputers pushBack [_netId, format ["%1 [%2]", _computerName, _gridPos]];
-    };
-} forEach (24 allObjects 1);
+// Every laptop the custom device can be linked to. Without one the dialog still works, but only the
+// Unassigned and Public access modes can do anything, so the curator is told before filling the form.
+private _allComputers = call FUNC(getRegisteredLaptops);
+if (_allComputers isEqualTo []) then {
+    [localize "STR_ROOT_CYBERWARFARE_ZEUS_NO_LAPTOPS_WARN"] call zen_common_fnc_showMessage;
+};
 
 private _dialogControls = [];
 

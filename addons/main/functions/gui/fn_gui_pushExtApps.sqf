@@ -29,12 +29,17 @@ private _available = [_computer] call FUNC(syncHackingToolAvailability);
 // server flags the laptop; the first desktop refresh that sees tools available plays the video and
 // clears the flag globally so it shows once per mount (a re-plug sets it again).
 if (_available && {_computer getVariable ["ROOT_CYBERWARFARE_INTRO_PENDING", false]} && {!isNil "AE3_desktop_fnc_openFile"}) then {
+    // The pending flag is cleared whatever happens next, so a mission that switched the intro off does
+    // not leave laptops carrying a flag that would fire the moment it is switched back on.
     ["root_cyberwarfare_clearIntroPending", [netId _computer]] call CBA_fnc_serverEvent;
 
-    // Rate-limit the intro on this client: repeated mounts of the same laptop within the cooldown
-    // clear the pending flag but skip the video, so re-plugging a drive does not replay it back to back.
+    // Rate-limit the intro on this client: repeated mounts of the same laptop within the configured
+    // cooldown clear the pending flag but skip the video, so re-plugging a drive does not replay it back
+    // to back. A cooldown of zero plays it on every mount.
+    private _introEnabled = missionNamespace getVariable [SETTING_INTRO_VIDEO_ENABLED, true];
+    private _cooldown = missionNamespace getVariable [SETTING_INTRO_VIDEO_COOLDOWN, ROOT_CYBERWARFARE_INTRO_COOLDOWN];
     private _lastPlayed = _computer getVariable ["ROOT_CYBERWARFARE_INTRO_LAST", -1e9];
-    if (time - _lastPlayed >= ROOT_CYBERWARFARE_INTRO_COOLDOWN) then {
+    if (_introEnabled && {time - _lastPlayed >= _cooldown}) then {
         _computer setVariable ["ROOT_CYBERWARFARE_INTRO_LAST", time];
         [
             _computer,
