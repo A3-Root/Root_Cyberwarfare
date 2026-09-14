@@ -739,7 +739,7 @@ if (hasInterface) then {
                 params ["_actionTarget", "_actionPlayer", "_params"];
 
                 // Validate target (cannot attach to self)
-                if (isNull _actionTarget || {_actionTarget == _actionPlayer}) exitWith {
+                if (isNull _actionTarget || _actionTarget == _actionPlayer) exitWith {
                     [localize "STR_ROOT_CYBERWARFARE_GPS_UNABLE_ATTACH", true, 1.5, 2] call ace_common_fnc_displayText;
                 };
 
@@ -776,7 +776,7 @@ if (hasInterface) then {
                 params ["_actionTarget", "_actionPlayer", "_params"];
 
                 // Validate target (cannot search self)
-                if (isNull _actionTarget || {_actionTarget == _actionPlayer}) exitWith {
+                if (isNull _actionTarget || _actionTarget == _actionPlayer) exitWith {
                     [localize "STR_ROOT_CYBERWARFARE_GPS_CANNOT_SEARCH_SELF", true, 1.5, 2] call ace_common_fnc_displayText;
                 };
 

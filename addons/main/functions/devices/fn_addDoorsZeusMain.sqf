@@ -169,7 +169,7 @@ if (([_targetObject] call Root_fnc_detectBuildingDoors) isNotEqualTo []) then {
             {
                 if ((_x select 0) == _real) exitWith {
                     private _override = _x select 1;
-                    if (_override isEqualType 0 && {_override > 0} && {!(_override in _usedCustom)}) then {
+                    if (_override isEqualType 0 && _override > 0 && {!(_override in _usedCustom)}) then {
                         _custom = _override;
                     };
                 };

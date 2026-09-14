@@ -40,7 +40,7 @@ private _isLauncherObj = {
     private _obj = [(_path splitString "/"), _filesystem] call AE3_filesystem_fnc_resolvePntr;
     private _target = [(_obj select 0)] call AE3_filesystem_fnc_symlinkTarget;
     private _content = _obj select 0;
-    _target isEqualTo _catalogPath || {_content isEqualTo _launcherContent}
+    _target isEqualTo _catalogPath || _content isEqualTo _launcherContent
 };
 
 try {

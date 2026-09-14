@@ -18,7 +18,7 @@
 
 params ["_target", "_player"];
 
-if (isNull _target || {_target == _player}) exitWith {
+if (isNull _target || _target == _player) exitWith {
     ["Cannot search this target!", true, 1.5, 2] call ace_common_fnc_displayText;
 };
 

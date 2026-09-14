@@ -53,7 +53,7 @@ if (_createNew) then {
         // Use source name
         _laptopName = _sourceName + "_Copy";
     } else {
-        if (_nameHandling == 2 && {_newName != ""}) then {
+        if (_nameHandling == 2 && _newName != "") then {
             // Use specified name
             _laptopName = _newName;
         } else {
@@ -164,7 +164,7 @@ if (!_createNew) then {
         // Use source name
         _targetLaptop setVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _sourceName, true];
     } else {
-        if (_nameHandling == 2 && {_newName != ""}) then {
+        if (_nameHandling == 2 && _newName != "") then {
             // Use new name
             _targetLaptop setVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _newName, true];
         };

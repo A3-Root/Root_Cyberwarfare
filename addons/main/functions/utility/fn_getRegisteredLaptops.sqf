@@ -53,7 +53,7 @@ private _seen = createHashMap;
 
     if (
         !isNull _laptop
-        && {_netId isNotEqualTo ""}
+        && _netId isNotEqualTo ""
         && {!(_netId in _seen)}
         && {[_laptop] call FUNC(isRegisteredLaptop)}
     ) then {

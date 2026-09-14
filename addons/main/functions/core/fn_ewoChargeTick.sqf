@@ -57,7 +57,7 @@ private _rechargeSeconds = if (_rechargeRate > 0) then {60 / _rechargeRate} else
         private _steps = if (_chargeSeconds > 0) then {floor ((time - _started) / _chargeSeconds)} else {0};
         private _applied = 0;
 
-        if (_steps > 0 && {_energy > 0}) then {
+        if (_steps > 0 && _energy > 0) then {
             _applied = (_steps min _energy) min (100 - _charge);
             if (_applied > 0) then {
                 _charge = _charge + _applied;

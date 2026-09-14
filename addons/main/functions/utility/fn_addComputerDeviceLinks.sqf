@@ -27,7 +27,7 @@ params [
     ["_deviceId", 0, [0]]
 ];
 
-if (_computerIds isEqualTo [] || {_deviceType == 0}) exitWith {};
+if (_computerIds isEqualTo [] || _deviceType == 0) exitWith {};
 
 // Mutate the live cache entries in place so no stale copy is ever written back over another
 // registration's additions.

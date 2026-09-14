@@ -22,7 +22,7 @@
 
 params [["_item", "", [""]], ["_percent", 0, [0]]];
 
-if (!isServer || {_item isEqualTo ""}) exitWith {};
+if (!isServer || _item isEqualTo "") exitWith {};
 
 _percent = (_percent max 0) min 100;
 

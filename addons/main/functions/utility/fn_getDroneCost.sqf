@@ -34,7 +34,7 @@ private _cost = missionNamespace getVariable [_setting, _default];
 // answer; anything above zero is theirs and stands whatever the setting is changed to.
 if (!isNull _drone) then {
     private _perDrone = _drone getVariable [_override, 0];
-    if (_perDrone isEqualType 0 && {_perDrone > 0}) then { _cost = _perDrone; };
+    if (_perDrone isEqualType 0 && _perDrone > 0) then { _cost = _perDrone; };
 };
 
 _cost

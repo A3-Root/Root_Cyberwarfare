@@ -45,19 +45,19 @@ while {[_result, "/"] call BIS_fnc_inString && {_result select [count _result - 
     _result = _result select [0, count _result - 3];
 };
 
-private ["_guide", "_devices", "_door", "_light", "_changedrone", "_disabledrone", "_download", "_custom", "_gpstrack", "_vehicle", "_powergrid", "_netscan"];
-_guide = _result + "/guide";
-_devices = _result + "/devices";
-_door = _result + "/door";
-_light = _result + "/light";
-_changedrone = _result + "/changedrone";
-_disabledrone = _result + "/disabledrone";
-_download = _result + "/download";
-_custom = _result + "/custom";
-_gpstrack = _result + "/gpstrack";
-_vehicle = _result + "/vehicle";
-_powergrid = _result + "/powergrid";
-_netscan = _result + "/netscan";
+// Tool paths are built from the install root here and rebuilt below when a backdoor prefix applies.
+private _guide = _result + "/guide";
+private _devices = _result + "/devices";
+private _door = _result + "/door";
+private _light = _result + "/light";
+private _changedrone = _result + "/changedrone";
+private _disabledrone = _result + "/disabledrone";
+private _download = _result + "/download";
+private _custom = _result + "/custom";
+private _gpstrack = _result + "/gpstrack";
+private _vehicle = _result + "/vehicle";
+private _powergrid = _result + "/powergrid";
+private _netscan = _result + "/netscan";
 
 
 

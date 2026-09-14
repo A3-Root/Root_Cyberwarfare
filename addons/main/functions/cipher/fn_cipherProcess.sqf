@@ -67,7 +67,7 @@ private _fromBase = {
     private _result = 0;
     {
         private _digit = _digits find (toUpper _x);
-        if (_digit >= 0 && {_digit < _base}) then {
+        if (_digit >= 0 && _digit < _base) then {
             _result = (_result * _base) + _digit;
         };
     } forEach ([_value] call _chars);
@@ -138,13 +138,13 @@ private _rot = {
     private _out = "";
     {
         private _code = (toArray _x) select 0;
-        if (_variant isEqualTo "rot47" && {_code >= 33 && {_code <= 126}}) then {
+        if (_variant isEqualTo "rot47" && {_code >= 33 && _code <= 126}) then {
             _out = _out + toString [33 + ([(_code - 33) + (_sign * _shift), 94] call _mod)];
         } else {
-            if (_variant in ["rot5", "rot18"] && {_code >= 48 && {_code <= 57}}) then {
+            if (_variant in ["rot5", "rot18"] && {_code >= 48 && _code <= 57}) then {
                 _out = _out + toString [48 + ([(_code - 48) + (_sign * 5), 10] call _mod)];
             } else {
-                if (_variant in ["rot13", "rot18"] && {(_code >= 65 && {_code <= 90}) || {_code >= 97 && {_code <= 122}}}) then {
+                if (_variant in ["rot13", "rot18"] && {(_code >= 65 && _code <= 90) || {_code >= 97 && _code <= 122}}) then {
                     private _base = [65, 97] select (_code >= 97);
                     _out = _out + toString [_base + ([(_code - _base) + (_sign * 13), 26] call _mod)];
                 } else {
@@ -161,14 +161,14 @@ private _vigenere = {
     private _clean = "";
     {
         private _code = (toArray (toUpper _x)) select 0;
-        if (_code >= 65 && {_code <= 90}) then { _clean = _clean + toUpper _x; };
+        if (_code >= 65 && _code <= 90) then { _clean = _clean + toUpper _x; };
     } forEach ([_key] call _chars);
     if (_clean isEqualTo "") exitWith {""};
     private _out = "";
     private _index = 0;
     {
         private _code = (toArray _x) select 0;
-        if ((_code >= 65 && {_code <= 90}) || {_code >= 97 && {_code <= 122}}) then {
+        if ((_code >= 65 && _code <= 90) || {_code >= 97 && _code <= 122}) then {
             private _base = [65, 97] select (_code >= 97);
             private _k = ((toArray (_clean select [_index mod (count _clean), 1])) select 0) - 65;
             private _delta = [_k, -_k] select _decrypt;
@@ -208,7 +208,7 @@ private _base64 = {
         private _c4Char = _clean select [_i + 3, 1];
         private _c3 = if (_c3Char isEqualTo "=") then {0} else {_base64Alphabet find _c3Char};
         private _c4 = if (_c4Char isEqualTo "=") then {0} else {_base64Alphabet find _c4Char};
-        if (_c1 >= 0 && {_c2 >= 0}) then {
+        if (_c1 >= 0 && _c2 >= 0) then {
             private _n = (_c1 * 262144) + (_c2 * 4096) + (_c3 * 64) + _c4;
             _outBytes pushBack (floor (_n / 65536));
             if (_c3Char isNotEqualTo "=") then { _outBytes pushBack (floor ((_n mod 65536) / 256)); };
@@ -222,10 +222,11 @@ private _base32Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
 private _base32 = {
     params ["_value", "_decrypt"];
     if (!_decrypt) exitWith {
-        private _out = "";
+        private _bitFragments = [];
         {
-            _out = _out + ([[_x, 2] call _toBase, 8] call _padLeft);
+            _bitFragments pushBack ([[_x, 2] call _toBase, 8] call _padLeft);
         } forEach (toArray _value);
+        private _out = _bitFragments joinString "";
         private _encoded = "";
         for "_i" from 0 to ((count _out) - 1) step 5 do {
             private _chunk = _out select [_i, 5];
@@ -359,7 +360,7 @@ if (_mode isEqualTo "bruteforce") exitWith {
             };
             default {
                 private _plain = [_candidateAlgo, "decrypt", _text, _options] call FUNC(cipherProcess);
-                if (_plain isEqualType "" && {_plain isNotEqualTo ""}) then {
+                if (_plain isEqualType "" && _plain isNotEqualTo "") then {
                     _candidates pushBack [[_plain] call _score, format ["%1 | %2", _candidateAlgo, _plain]];
                 };
             };
@@ -383,7 +384,7 @@ switch (_algorithm) do {
         private _out = "";
         {
             private _code = (toArray _x) select 0;
-            if ((_code >= 65 && {_code <= 90}) || {_code >= 97 && {_code <= 122}}) then {
+            if ((_code >= 65 && _code <= 90) || {_code >= 97 && _code <= 122}) then {
                 private _base = [65, 97] select (_code >= 97);
                 private _shift = [_key, -_key] select _decrypt;
                 _out = _out + toString [_base + ([(_code - _base) + _shift, 26] call _mod)];
@@ -423,7 +424,7 @@ switch (_algorithm) do {
         private _out = "";
         {
             private _code = (toArray _x) select 0;
-            if ((_code >= 65 && {_code <= 90}) || {_code >= 97 && {_code <= 122}}) then {
+            if ((_code >= 65 && _code <= 90) || {_code >= 97 && _code <= 122}) then {
                 private _base = [65, 97] select (_code >= 97);
                 _out = _out + toString [_base + ([(_a * (_code - _base)) + _b, 26] call _mod)];
             } else {
@@ -459,12 +460,12 @@ switch (_algorithm) do {
         if (count _subst < 26) then { _subst = _plain; };
         private _from = [_plain, _subst] select _decrypt;
         private _to = [_subst, _plain] select _decrypt;
-        private _out = "";
+        private _outChars = [];
         {
             private _idx = _from find (toUpper _x);
-            _out = _out + (if (_idx < 0) then {_x} else {_to select [_idx, 1]});
+            _outChars pushBack (if (_idx < 0) then {_x} else {_to select [_idx, 1]});
         } forEach ([_text] call _chars);
-        _out
+        _outChars joinString ""
     };
     case "railfence": {
         private _rails = 2 max floor parseNumber str (_options getOrDefault ["rails", 7]);
@@ -493,14 +494,14 @@ switch (_algorithm) do {
         { _slices pushBack (_letters select [_pos, _x]); _pos = _pos + _x; } forEach _counts;
         private _used = [];
         for "_i" from 0 to (_rails - 1) do { _used pushBack 0; };
-        private _out = "";
+        private _outChars = [];
         {
             private _row = _x;
             private _idx = _used select _row;
-            _out = _out + ((_slices select _row) select _idx);
+            _outChars pushBack ((_slices select _row) select _idx);
             _used set [_row, _idx + 1];
         } forEach _pattern;
-        _out
+        _outChars joinString ""
     };
     case "base32": { [_text, _decrypt] call _base32 };
     case "base64": { [_text, _decrypt] call _base64 };
@@ -525,7 +526,7 @@ switch (_algorithm) do {
                 private _n = _x;
                 private _max = 2 ^ _width;
                 private _half = 2 ^ (_width - 1);
-                if (_signed && {_n >= _half}) then { _n = _n - _max; };
+                if (_signed && _n >= _half) then { _n = _n - _max; };
                 private _prefix = ["", "-"] select (_n < 0);
                 private _s = [abs _n, _radix] call _toBase;
                 if (_radix in [2, 8, 16]) then {
@@ -541,7 +542,7 @@ switch (_algorithm) do {
             private _token = [_x, _x select [1]] select _neg;
             private _n = [_token, _radix] call _fromBase;
             if (_neg) then { _n = -_n; };
-            if (_signed && {_n < 0}) then { _n = (2 ^ _width) + _n; };
+            if (_signed && _n < 0) then { _n = (2 ^ _width) + _n; };
             _bytes pushBack ([round _n, 2 ^ _width] call _mod);
         } forEach (_text splitString " ,;");
         toString _bytes

@@ -41,7 +41,9 @@ private _tracker = objectFromNetId ((_trackers select _idx) select 1);
 if (isNull _tracker) exitWith { [_owner, format ["Access denied to tracker %1", _gpsId], false] call _reply; };
 
 private _entry = _trackers select _idx;
-_entry params ["_storedTrackerId", "_trackerNetId", "_trackerName", "_trackingTime", "_updateFrequency", "_customMarker", "", "", "_currentStatus", "_allowRetracking", "_lastPingTimer", "_powerCost", ["_ownersSelection", [[], [], []]]];
+// The power cost is defaulted rather than left to the entry: a tracker registered before the per-device
+// cost existed has a shorter row, and the mission-wide cost below is what such a tracker should use.
+_entry params ["_storedTrackerId", "_trackerNetId", "_trackerName", "_trackingTime", "_updateFrequency", "_customMarker", "", "", "_currentStatus", "_allowRetracking", "_lastPingTimer", ["_powerCost", 0, [0]], ["_ownersSelection", [[], [], []]]];
 if ((_currentStatus param [0, "Untracked"]) isEqualTo "Tracking") exitWith {
 	[_owner, format ["Tracker '%1' is already being tracked.", _trackerName], false] call _reply;
 };
@@ -49,7 +51,7 @@ if (((_currentStatus param [0, "Untracked"]) in ["Completed", "Tracked", "Untrac
 	[_owner, format ["Tracker '%1' cannot be tracked again.", _trackerName], false] call _reply;
 };
 
-if ((isNil "_powerCost") || {_powerCost < 1}) then { _powerCost = _tracker getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_COST", 10]; };
+if (_powerCost < 1) then { _powerCost = _tracker getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_COST", 10]; };
 if !([_computer, _powerCost] call FUNC(checkPowerAvailable)) exitWith {
 	[_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply;
 };

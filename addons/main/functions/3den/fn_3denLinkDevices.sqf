@@ -44,7 +44,7 @@ private _deviceEntries = [];
     if (count _pair == 2) then {
         private _deviceType = floor (parseNumber (_pair select 0));
         private _deviceId = floor (parseNumber (_pair select 1));
-        if (VALIDATE_DEVICE_TYPE(_deviceType) && {_deviceId > 0}) then {
+        if (VALIDATE_DEVICE_TYPE(_deviceType) && _deviceId > 0) then {
             _deviceEntries pushBackUnique [_deviceType, _deviceId];
         } else {
             ROOT_CYBERWARFARE_LOG_ERROR_1("3DEN Link Devices: Ignoring malformed entry %1",_x);

@@ -21,6 +21,6 @@
 
 params [["_message", "", [""]], ["_color", ROOT_CYBERWARFARE_COLOR_INFO, [""]]];
 
-if (!hasInterface || {_message isEqualTo ""}) exitWith {};
+if (!hasInterface || _message isEqualTo "") exitWith {};
 
 hintSilent parseText format ["<t color='%1'>%2</t>", _color, _message];

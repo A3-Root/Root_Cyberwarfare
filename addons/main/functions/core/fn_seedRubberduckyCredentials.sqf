@@ -38,7 +38,7 @@ if (isNil "AE3_armaos_fnc_computer_addUser") exitWith {
 private _user = missionNamespace getVariable ["ROOT_CYBERWARFARE_RUBBERDUCKY_CRED_USER", "quack"];
 private _pass = missionNamespace getVariable ["ROOT_CYBERWARFARE_RUBBERDUCKY_CRED_PASS", "quack"];
 
-if !(_user isEqualType "" && {_user isNotEqualTo ""}) exitWith {
+if !(_user isEqualType "" && _user isNotEqualTo "") exitWith {
     ROOT_CYBERWARFARE_LOG_ERROR("seedRubberduckyCredentials: empty/invalid username configured");
     false
 };

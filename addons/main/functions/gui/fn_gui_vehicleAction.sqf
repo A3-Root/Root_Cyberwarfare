@@ -79,7 +79,7 @@ if (_action isEqualTo "setfuel") then {
 	private _currentFuel = round ((fuel _vehicle) * 100);
 	private _fuelCeiling = _currentFuel min _fmax;
 	private _fuelFloor = _fmin min _fuelCeiling;
-	if (_value < _fuelFloor || {_value > _fuelCeiling}) then {
+	if (_value < _fuelFloor || _value > _fuelCeiling) then {
 		_validationError = format ["Fuel/battery can only be reduced to %1-%2%3.", _fuelFloor, _fuelCeiling, "%"];
 	};
 };
@@ -87,7 +87,7 @@ if (_action isEqualTo "setfuel") then {
 if (_action isEqualTo "setspeed") then {
 	private _smin = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_MIN", -50];
 	private _smax = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_MAX", 50];
-	if (_value < _smin || {_value > _smax}) then {
+	if (_value < _smin || _value > _smax) then {
 		_validationError = format ["Speed must be %1 to %2 km/h.", _smin, _smax];
 	};
 };
@@ -95,7 +95,7 @@ if (_action isEqualTo "setspeed") then {
 if (_action isEqualTo "brakes") then {
 	private _bmin = _vehicle getVariable ["ROOT_CYBERWARFARE_BRAKES_MIN", 1];
 	private _bmax = _vehicle getVariable ["ROOT_CYBERWARFARE_BRAKES_MAX", 10];
-	if (_value < _bmin || {_value > _bmax}) then {
+	if (_value < _bmin || _value > _bmax) then {
 		_validationError = format ["Brake rate must be %1 to %2 m/s2.", _bmin, _bmax];
 	};
 };
@@ -103,7 +103,7 @@ if (_action isEqualTo "brakes") then {
 if (_action isEqualTo "setalarm") then {
 	private _amin = _vehicle getVariable ["ROOT_CYBERWARFARE_ALARM_MIN", 1];
 	private _amax = _vehicle getVariable ["ROOT_CYBERWARFARE_ALARM_MAX", 30];
-	if (_value < _amin || {_value > _amax}) then {
+	if (_value < _amin || _value > _amax) then {
 		_validationError = format ["Alarm must be %1-%2 s.", _amin, _amax];
 	};
 };

@@ -30,7 +30,7 @@ params ["_enabled", "_username", "_password"];
 if (_enabled isEqualType false) then {
     missionNamespace setVariable ["ROOT_CYBERWARFARE_RUBBERDUCKY_CREDS_ENABLED", _enabled, true];
 };
-if (_username isEqualType "" && {_username isNotEqualTo ""}) then {
+if (_username isEqualType "" && _username isNotEqualTo "") then {
     missionNamespace setVariable ["ROOT_CYBERWARFARE_RUBBERDUCKY_CRED_USER", _username, true];
 };
 if (_password isEqualType "") then {

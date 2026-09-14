@@ -62,7 +62,7 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 	private _displayName = { params ["_o", "_fallback"]; if (isNull _o) exitWith {_fallback}; private _n = getText (configOf _o >> "displayName"); [_fallback, _n] select (_n isNotEqualTo "") };
 	// Prefer the mission-maker's custom device name (stored in the registry row) over the object's
 	// class displayName, so both Zeus and 3DEN modules show the name they were given on the desktop.
-	private _labelOr = { params ["_o", "_stored", "_fallback"]; if (_stored isEqualType "" && {_stored isNotEqualTo ""}) exitWith {_stored}; [_o, _fallback] call _displayName };
+	private _labelOr = { params ["_o", "_stored", "_fallback"]; if (_stored isEqualType "" && _stored isNotEqualTo "") exitWith {_stored}; [_o, _fallback] call _displayName };
 	{
 		private _id = _x param [0, _forEachIndex];
 		private _obj = objectFromNetId (_x param [1, ""]);
@@ -154,7 +154,7 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 			case DEVICE_TYPE_DATABASE: {
 				private _fn = "";
 				if (!isNull _obj) then { _fn = _obj getVariable ["ROOT_CYBERWARFARE_DATABASE_NAME_EDIT", ""]; };
-				_label = [format ["Database %1", _id], _fn + ".txt"] select (_fn isNotEqualTo "" && {_fn isEqualType ""});
+				_label = [format ["Database %1", _id], _fn + ".txt"] select (_fn isNotEqualTo "" && _fn isEqualType "");
 				// Download time (seconds) so the GUI shows a real progress bar (#5).
 				_grid = ""; _pos = [];
 				_downloadTime = _obj getVariable ["ROOT_CYBERWARFARE_DATABASE_SIZE_EDIT", 0];
@@ -281,7 +281,7 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 						_label = _scanIp;
 						_status = _scanType;
 						_details = [["External SSH", _scanSsh], ["Interface", _scanIface]];
-						if (_scanBreakdown isNotEqualTo [] && {_scanType isEqualTo "Laptop"}) then {
+						if (_scanBreakdown isNotEqualTo [] && _scanType isEqualTo "Laptop") then {
 							private _breakdownStr = (_scanBreakdown apply { format ["%1 %2", _x select 1, _x select 0] }) joinString ", ";
 							_details pushBack ["Hackable devices", _breakdownStr];
 						};
@@ -482,7 +482,7 @@ else
 	private _computer = objectFromNetId _computerNetId;
 	private _deviceObject = objectFromNetId _deviceNetId;
 	private _playerObject = objectFromNetId _playerNetId;
-	if (_code isEqualType "" && {_code isNotEqualTo ""}) then {
+	if (_code isEqualType "" && _code isNotEqualTo "") then {
 		[_computer, _deviceObject, _playerObject, _owner] spawn (compile _code);
 	};
 }] call CBA_fnc_addEventHandler;

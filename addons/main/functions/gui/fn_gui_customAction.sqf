@@ -46,7 +46,7 @@ if !([_computer, _cost] call FUNC(checkPowerAvailable)) exitWith { [_owner, loca
 [_computer, _cost] call FUNC(consumePower);
 
 private _code = [_deactivationCode, _activationCode] select (_state isEqualTo "activate");
-if (_code isEqualType "" && {_code != ""}) then {
+if (_code isEqualType "" && _code != "") then {
 	["root_cyberwarfare_gui_customExec", [_computerNetId, _deviceNetId, _playerNetId, _owner, _code], _owner] call CBA_fnc_ownerEvent;
 };
 

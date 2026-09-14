@@ -63,7 +63,7 @@ private _applyFilter = {
     // A grid on its own still matches devices whose own grid label starts with it.
     private _gridPos = [];
     private _digits = count (toArray _grid);
-    if (_grid isNotEqualTo "" && {_distance > 0} && {_grid regexMatch "^\d+$"} && {_digits % 2 == 0} && {_digits >= 2 && _digits <= 10}) then {
+    if (_grid isNotEqualTo "" && _distance > 0 && {_grid regexMatch "^\d+$"} && {_digits % 2 == 0} && {_digits >= 2 && _digits <= 10}) then {
         _gridPos = [_grid, true] call CBA_fnc_mapGridToPos;
     };
 

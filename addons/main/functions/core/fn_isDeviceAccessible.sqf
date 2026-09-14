@@ -81,7 +81,7 @@ DEBUG_LOG_1("Checking public devices (count: %1)",count _publicDevices);
 {
     _x params ["_pubDevType", "_pubDevId", ["_excludedIdentifiers", []]];
 
-    if (_pubDevType == _deviceType && {_pubDevId == _deviceId}) exitWith {
+    if (_pubDevType == _deviceType && _pubDevId == _deviceId) exitWith {
         DEBUG_LOG_2("Found matching public device - DeviceType: %1, DeviceId: %2",_pubDevType,_pubDevId);
         DEBUG_LOG_1("Exclusion list: %1",_excludedIdentifiers);
 
@@ -124,7 +124,7 @@ if (_allowedDevices isEqualTo []) exitWith {
 // Check if device is in allowed list
 private _isAllowed = _allowedDevices findIf {
     _x params ["_type", "_id"];
-    _type == _deviceType && {_id == _deviceId}
+    _type == _deviceType && _id == _deviceId
 } != -1;
 
 DEBUG_LOG_3("Private link check result - Identifier: %1, Device: %2, Allowed: %3",_computerIdentifier,_deviceId,_isAllowed);
