@@ -139,6 +139,10 @@ if (_useRadiusMode) then {
             [_targetObject, _execUserId, _selectedComputers, _customName, _activationCode, _deactivationCode, _availableToFutureLaptops, _allowLocation, _requestedId, _accessMode] remoteExec ["Root_fnc_addCustomDeviceZeusMain", 2];
             ["Custom Device Added!"] call zen_common_fnc_showMessage;
         };
+
+        // Linked access with nothing ticked registers a device no laptop can reach, which the success
+        // message above does not convey on its own.
+        [_accessMode, _selectedComputers, _availableToFutureLaptops] call FUNC(warnUnreachableDevice);
     },
     {
         [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;

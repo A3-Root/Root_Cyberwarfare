@@ -230,10 +230,12 @@ if (hasInterface) then {
             [_computer] spawn FUNC(gui_pushExtApps);
         };
     }] call CBA_fnc_addEventHandler;
+    // A desktop that just finished opening is the moment the loading intro belongs to, so this refresh
+    // says so; the volume and app-list refreshes below leave that to the laptop's own pending flag.
     ["ae3_desktop_ready", {
         params [["_computer", objNull, [objNull]]];
         if (!isNull _computer) then {
-            [_computer] spawn FUNC(gui_pushExtApps);
+            [_computer, true] spawn FUNC(gui_pushExtApps);
         };
     }] call CBA_fnc_addEventHandler;
     // Server-driven refresh: after a re-plugged hacking-tools drive has its install flag rebroadcast,

@@ -123,6 +123,9 @@
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_NO_LAPTOPS_WARN">
             <English>No registered hackable laptops found - the device can only be added as Unassigned or Public.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_NO_LINKS_WARN">
+            <English>Device registered, but no laptop can reach it: access was set to linked computers and none were selected. Use the Manage Device Access module to grant access.</English>
+        </Key>
     </Package>
     <Package name="Device_Operations">
         <Key ID="STR_ROOT_CYBERWARFARE_DOOR_ALREADY_LOCKED">

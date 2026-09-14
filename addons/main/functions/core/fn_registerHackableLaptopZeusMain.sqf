@@ -51,9 +51,12 @@ if (_entity getVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", false]) exitWith {
     };
 };
 
-// Mark the laptop as a registered hacking station (broadcast) and store its link-dialog label.
+// Mark the laptop as a registered hacking station (broadcast) and store its link-dialog label. The
+// mission-wide roster is written as well, so the curator dialogs can offer this station as a link target
+// without having to find the object by scanning for it.
 _entity setVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", true, true];
 _entity setVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", _customLaptopName, true];
+[_entity] call FUNC(registerLaptopStation);
 
 // Refresh availability so any already-present tools (self-installed or a mounted USB) surface immediately.
 [_entity] call FUNC(syncHackingToolAvailability);

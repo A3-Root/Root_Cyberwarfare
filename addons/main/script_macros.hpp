@@ -254,6 +254,9 @@
 #ifndef GVAR_PUBLIC_DEVICES
     #define GVAR_PUBLIC_DEVICES "ROOT_CYBERWARFARE_PUBLIC_DEVICES"  // Array of publicly accessible devices
 #endif
+#ifndef GVAR_LAPTOP_REGISTRY
+    #define GVAR_LAPTOP_REGISTRY "ROOT_CYBERWARFARE_LAPTOPS"        // Array of laptops registered as hacking stations
+#endif
 
 // ============================================================================
 // Debug Logging Macros

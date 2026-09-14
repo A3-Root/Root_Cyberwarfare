@@ -103,6 +103,10 @@ private _dialogControls = [
         // Pass all parameters including the availability setting and owners selection
         [_targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, true, _ownersSelection, _requestedId, _accessMode] remoteExec ["Root_fnc_addGpsTrackerZeusMain", 2];
         ["GPS Tracker Added!"] call zen_common_fnc_showMessage;
+
+        // Linked access with nothing ticked registers a device no laptop can reach, which the success
+        // message above does not convey on its own.
+        [_accessMode, _selectedComputers, _availableToFutureLaptops] call FUNC(warnUnreachableDevice);
         _index = _index + 1;
         missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_INDEX", _index, true];
     }, 

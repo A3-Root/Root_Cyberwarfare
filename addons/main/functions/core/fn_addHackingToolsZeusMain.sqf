@@ -24,7 +24,6 @@
 
 params ["_entity", ["_path", "/rubberducky/tools", [""]], ["_execUserId", 0, [0]], ["_customLaptopName", "", [""]], ["_backdoorScriptPrefix", "", [""]], ["_silent", false, [false]], ["_addCredentials", true, [false]]];
 
-private ["_guide", "_devices", "_door", "_light", "_changedrone", "_disabledrone", "_download", "_custom", "_gpstrack", "_vehicle", "_powergrid", "_netscan"];
 
 // Validate _path is a string
 if (_path isEqualType objNull || {_path isEqualType []}) exitWith {
@@ -46,6 +45,7 @@ while {[_result, "/"] call BIS_fnc_inString && {_result select [count _result - 
     _result = _result select [0, count _result - 3];
 };
 
+private ["_guide", "_devices", "_door", "_light", "_changedrone", "_disabledrone", "_download", "_custom", "_gpstrack", "_vehicle", "_powergrid", "_netscan"];
 _guide = _result + "/guide";
 _devices = _result + "/devices";
 _door = _result + "/door";
@@ -106,6 +106,7 @@ if ((_execUserId == 0) && (_customLaptopName == "OPS_DEBUG")) then
     // name doubles as the station name when one was supplied.
     if (_entity getVariable ["AE3_cap_hasTerminal", false]) then {
         _entity setVariable ["ROOT_CYBERWARFARE_HACKABLE_LAPTOP", true, true];
+        [_entity] call FUNC(registerLaptopStation);
 
         private _stationName = _customLaptopName;
         if (_stationName isEqualTo "") then {
@@ -556,7 +557,7 @@ _content = "
             [_computer, 'Operation timed out!'] call AE3_armaos_fnc_shell_stdout;
         };
     };
-    
+
     if (count _options < 3) exitWith {
         [_computer, 'Error: Invalid syntax. Use: vehicle <VehicleID> <action> <value>'] call AE3_armaos_fnc_shell_stdout;
     };

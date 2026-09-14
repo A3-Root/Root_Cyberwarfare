@@ -549,6 +549,7 @@ crypto -m=decrypt -a=base64 /root/Downloads/message.txt -o=/root/decoded.txt
 
 **Notes:**
 - Use `crypto help` for full syntax and per-algorithm option reference.
+- The [Cryptography Guide](Cryptography-Guide) explains what each cipher does, its options, and what its output looks like.
 - Also available as the **Crypto** app on the Hackerman Desktop.
 - Some hackable files are stored pre-encrypted by the mission maker - use `crypto -m=decrypt` with the correct algorithm/key to read them.
 

@@ -203,6 +203,10 @@ if (_useRadiusMode) then {
             [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _requestedId, _doorIdMap, _accessMode] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
             ["Hackable Doors Added!"] call zen_common_fnc_showMessage;
         };
+
+        // Linked access with nothing ticked registers a device no laptop can reach, which the success
+        // message above does not convey on its own.
+        [_accessMode, _selectedComputers, _availableToFutureLaptops] call FUNC(warnUnreachableDevice);
     },
     {
         // Remove the temporary door labels on cancel as well.

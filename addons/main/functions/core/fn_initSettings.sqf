@@ -323,29 +323,31 @@
     false
 ] call CBA_fnc_addSetting;
 
-// Which laptops the curator device dialogs list. On, a mission can wire devices to a bare laptop during
-// setup and deliver the hacking toolset later, because a link to a tool-less laptop lies dormant rather
-// than failing - it starts working the moment the tools arrive. Off, only laptops that are already
-// hacking stations can be picked, which suits missions that place unrelated laptops as scenery.
+// Which laptops the curator device dialogs list. Off - the default - a laptop is offered only once a
+// mission has made it a hacking station through the Register Hackable Laptop or Add Hacking Tools
+// module, so unrelated laptops placed as scenery stay out of the list. On, every laptop on the map is
+// offered, including bare ones: a mission can then wire devices during setup and deliver the toolset
+// later, because a link handed to a tool-less laptop lies dormant rather than failing and starts
+// working the moment the tools arrive.
 // Server-forced: this decides what a curator may wire a device to, so a client cannot change it.
 [
     SETTING_LIST_ALL_LAPTOPS,
     "CHECKBOX",
-    ["List All Laptops In Device Modules", "List every laptop on the map as a link target in the Zeus and device modules, including ones with no hacking tools yet. Disable to list only laptops that are already registered stations or already carry the tools."],
+    ["List All Laptops In Device Modules", "List every laptop on the map as a link target in the Zeus and device modules, including ones with no hacking tools yet. Disabled (default), only laptops registered as hacking stations or already carrying the tools are listed."],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Core Settings"],
-    true, // default ON
+    false, // default OFF - registered stations only
     2, // server-forced; clients cannot overwrite it
     {},
     false // takes effect on the next dialog opened, no restart needed
 ] call CBA_fnc_addSetting;
 
 // Desktop intro video - whether it plays, and how often it may replay on the same laptop. The cooldown
-// exists because the video is triggered by a tools drive being mounted, and a drive can be re-plugged
-// repeatedly; zero seconds plays it on every mount.
+// exists because a desktop is opened and closed freely and a tools drive can be re-plugged repeatedly;
+// zero seconds plays it on every connection.
 [
     SETTING_INTRO_VIDEO_ENABLED,
     "CHECKBOX",
-    ["Hackerman Intro Video", "Play the Hackerman loading video when a hacking-tools drive is connected and the desktop is opened."],
+    ["Hackerman Intro Video", "Play the Hackerman loading video when a desktop is opened on a laptop that has the hacking tools, and when a hacking-tools drive is plugged into an open desktop."],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Desktop & Audio Settings"],
     true, // default ON
     1, // mission-level
@@ -356,7 +358,7 @@
 [
     SETTING_INTRO_VIDEO_COOLDOWN,
     "SLIDER",
-    ["Hackerman Intro Video Cooldown", "Minimum seconds between two plays of the Hackerman loading video on the same laptop. Set to 0 to play it on every connection."],
+    ["Hackerman Intro Video Cooldown", "Minimum seconds between two plays of the Hackerman loading video on the same laptop for the same player. Set to 0 to play it on every connection."],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Desktop & Audio Settings"],
     [0, 3600, ROOT_CYBERWARFARE_INTRO_COOLDOWN, 0],
     1, // mission-level

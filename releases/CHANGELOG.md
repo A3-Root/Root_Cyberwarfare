@@ -1,5 +1,22 @@
 # Changelog
 
+## Hotfix 10 (v2.0.0.4)
+
+### Added
+
+- A **Cryptography Guide** wiki page: the `crypto` and `crack` commands and their desktop equivalents end to end, a reference entry per cipher - what it does to the text, its options and defaults, and a worked example of the output it produces - plus Caesar and Columnar, how to read a `crack` sweep, loading intercepted mail and chat straight into the Cryptography app, planting encrypted intel from Eden, Zeus or a script, and a troubleshooting table covering missing tools, wrong keys and permission errors.
+
+### Removed
+- N/A
+
+### Changed
+
+- **Breaking:** *List All Laptops In Device Modules* now defaults to **off**. Out of the box a laptop is offered as a link target only once a mission has made it a hacking station - through the Register Hackable Laptop module, or by receiving the toolset from the Add Hacking Tools module - so unrelated laptops placed as scenery stay out of the device dialogs. Missions that relied on wiring devices to bare laptops during setup and delivering the tools later can turn the setting back on; it is server-forced and takes effect on the next dialog opened.
+- **Fixed:** the laptop list in the device modules came up empty, so every device set to *Linked computers only* was registered with no laptop able to reach it - the file or device existed, and no terminal, not even one logged in as root, could see it. The roster was asking the engine for normal entities, the collection vehicles live in, while a laptop is a prop and lives in the slow-entity collection, so the scan returned nothing to tick. The roster is now built from the mission-placed objects in all three collections, from AE3's registry of initialized laptops, and from a new registry of laptops these modules registered as hacking stations.
+- **Fixed:** a laptop only reports that it has a terminal once it has finished initializing, which a laptop nobody has switched on yet has not done, so it could be missing from the modules even when the roster worked. Laptops are now recognised from their configuration as well. USB drives remain excluded - they deliver the tools rather than run them.
+- Confirming a device module with *Linked computers only* selected and no laptop ticked now says the device is unreachable and points at the Manage Device Access module, instead of reporting a plain success.
+- **Fixed:** the Hackerman intro video never played on a laptop whose hacking tools the mission installed directly, because it was armed only when a tools drive provisioned a laptop that had none. Opening the desktop on a laptop that has the tools now plays it, subject to the existing enable switch and cooldown, and plugging a drive into an already-open desktop still plays it as before. The cooldown remains per player, so one operator watching it does not silence it for the next.
+
 ## Hotfix 9 (v2.0.0.2)
 
 ### Added

@@ -79,6 +79,10 @@ private _dialogControls = [
         private _execUserId = clientOwner;
         [_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions, _requestedId, _accessMode] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
         ["Hackable File Added!"] call zen_common_fnc_showMessage;
+
+        // Linked access with nothing ticked registers a file no laptop can reach, which the success
+        // message above does not convey on its own.
+        [_accessMode, _linkedComputers, _availableToFutureLaptops] call FUNC(warnUnreachableDevice);
     },  
     {
         [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;

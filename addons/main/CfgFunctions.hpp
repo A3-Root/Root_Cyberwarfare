@@ -153,6 +153,7 @@ class CfgFunctions {
 			class getRegisteredLaptops {};
 			class hasHackingToolsAvailable {};
 			class isRegisteredLaptop {};
+			class registerLaptopStation {};
 			class setDeviceAccessMain {};
 			class localSoundBroadcast {};
 			class removePower {};
@@ -186,6 +187,7 @@ class CfgFunctions {
 			class registerHackableLaptopZeus {};
 			class copyDeviceLinksZeus {};
 			class manageDeviceAccessZeus {};
+			class warnUnreachableDevice {};
 			class manageDeviceLinksZeus {};
 			class clearBrokenDeviceLinksZeus {};
 			class clearBrokenDeviceLinksZeusMain {};

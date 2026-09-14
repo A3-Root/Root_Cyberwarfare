@@ -115,6 +115,10 @@ private _dialogControls = [
         [_targetObject, _execUserId, _selectedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, 10, _requestedId, _accessMode] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
         [_targetObject, ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]] remoteExec ["setVariable", 2]; // General #3
         ["Power Generator Added!"] call zen_common_fnc_showMessage;
+
+        // Linked access with nothing ticked registers a device no laptop can reach, which the success
+        // message above does not convey on its own.
+        [_accessMode, _selectedComputers, _availableToFutureLaptops] call FUNC(warnUnreachableDevice);
     },
     {
         [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;

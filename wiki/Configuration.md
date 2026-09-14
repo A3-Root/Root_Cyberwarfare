@@ -8,6 +8,8 @@ Complete reference for all CBA settings in Root's Cyber Warfare.
 - [Accessing CBA Settings](#accessing-cba-settings)
 - [Power Cost Settings](#power-cost-settings)
 - [GPS Settings](#gps-settings)
+- [Device Module Settings](#device-module-settings)
+- [Desktop and Audio Settings](#desktop-and-audio-settings)
 - [Configuration Best Practices](#configuration-best-practices)
 - [Mission Parameter Overrides](#mission-parameter-overrides)
 
@@ -20,11 +22,13 @@ Root's Cyber Warfare uses **CBA (Community Base Addons) Settings** for runtime c
 - **Server config**: Via server.cfg or mission parameters
 - **Mission script**: Via script commands
 
-**Total Settings:** 15
+**Total Settings:** 22 documented here
 - **Power Cost Settings:** 5 settings
-- **GPS Settings:** 5 settings
+- **GPS Settings:** 6 settings
 - **Cleanup Settings:** 3 settings
-- **Rubberducky Settings:** 2 settings
+- **Rubberducky Settings:** 3 settings
+- **Device Module Settings:** 1 setting
+- **Desktop and Audio Settings:** 4 settings
 
 ---
 
@@ -550,6 +554,85 @@ private _credUser = missionNamespace getVariable ["ROOT_CYBERWARFARE_RUBBERDUCKY
 ```sqf
 private _credPass = missionNamespace getVariable ["ROOT_CYBERWARFARE_RUBBERDUCKY_CRED_PASS", "quack"];
 ```
+
+---
+
+## Device Module Settings
+
+### 18. List All Laptops In Device Modules
+
+**Setting Name:** `ROOT_CYBERWARFARE_LIST_ALL_LAPTOPS`
+
+**Type:** Checkbox (server-forced - clients cannot override it)
+
+**Default:** OFF (unchecked)
+
+**Description:** Decides which laptops the Zeus and Eden device modules offer as link targets.
+
+- **OFF (default):** only laptops a mission has made hacking stations are listed - those registered through the **Register Hackable Laptop** module or given the toolset by the **Add Hacking Tools** module, plus any laptop already carrying the tools. Unrelated laptops placed as scenery stay out of the list.
+- **ON:** every laptop on the map is listed, including bare ones with no tools yet. A link handed to a tool-less laptop lies dormant rather than failing, so a mission can wire devices during setup and deliver the tools later; the link starts working the moment they arrive.
+
+The change takes effect on the next dialog opened - no mission restart is needed.
+
+**Access in Script:**
+```sqf
+private _listAll = missionNamespace getVariable ["ROOT_CYBERWARFARE_LIST_ALL_LAPTOPS", false];
+```
+
+---
+
+## Desktop and Audio Settings
+
+### 19. Hackerman Intro Video
+
+**Setting Name:** `ROOT_CYBERWARFARE_INTRO_VIDEO_ENABLED`
+
+**Type:** Checkbox
+
+**Default:** ON (checked)
+
+**Description:** Plays the Hackerman loading video when a desktop is opened on a laptop that has the hacking tools, and when a hacking-tools drive is plugged into a desktop that is already open. Turn it off to suppress the video entirely.
+
+**Access in Script:**
+```sqf
+private _introEnabled = missionNamespace getVariable ["ROOT_CYBERWARFARE_INTRO_VIDEO_ENABLED", true];
+```
+
+---
+
+### 20. Hackerman Intro Video Cooldown
+
+**Setting Name:** `ROOT_CYBERWARFARE_INTRO_VIDEO_COOLDOWN`
+
+**Type:** Slider (0-3600 seconds)
+
+**Default:** 120 seconds
+
+**Description:** Minimum seconds between two plays of the video on the same laptop for the same player. Reconnecting inside the cooldown opens the desktop without the video. Set to 0 to play it on every connection. The cooldown is tracked per player, so one operator watching it does not silence it for the next.
+
+---
+
+### 21. Rubberducky Connect Sound / Flash Drive Connect Sound
+
+**Setting Names:** `ROOT_CYBERWARFARE_DUCKY_SOUND_ENABLED`, `ROOT_CYBERWARFARE_USB_SOUND_ENABLED`
+
+**Type:** Checkbox (one each)
+
+**Default:** ON (checked)
+
+**Description:** Separate switches for the Rubberducky audio and the ordinary AE3 flash drive audio, so a mission can keep one and silence the other. Muting a drive silences it on disconnect as well as on connect.
+
+---
+
+### 22. Drive Sound Volume
+
+**Setting Name:** `ROOT_CYBERWARFARE_DEVICE_SOUND_VOLUME`
+
+**Type:** Slider (0-10)
+
+**Default:** 3
+
+**Description:** Shared playback volume for both drive sounds. Zero silences them regardless of the switches above.
 
 ---
 

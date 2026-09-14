@@ -216,6 +216,10 @@ if (_useRadiusMode) then {
             // Radius mode: Use captured position (logic is already deleted)
             [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation, _requestedId, _rangeEndId, _accessMode] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
 
+            // Linked access with nothing ticked registers a device no laptop can reach, which the
+            // dialog does not convey on its own.
+            [_accessMode, _selectedComputers, _availableToFutureLaptops] call FUNC(warnUnreachableDevice);
+
         } else {
             if (_isDrone) then {
                 // Drone: name, the two hacking costs, then the flags every device carries
@@ -250,6 +254,10 @@ if (_useRadiusMode) then {
                 // Drone path can't carry the flag through the registration call; apply it on the object.
                 [_targetObject, ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]] remoteExec ["setVariable", 2];
                 ["Hackable Drone Added!"] call zen_common_fnc_showMessage;
+
+                // Linked access with nothing ticked registers a device no laptop can reach, which the
+                // dialog does not convey on its own.
+                [_accessMode, _selectedComputers, _availableToFutureLaptops] call FUNC(warnUnreachableDevice);
                 _index = _index + 1;
                 missionNamespace setVariable ["ROOT_CYBERWARFARE_VEHICLE_INDEX", _index, true];
 
@@ -288,6 +296,10 @@ if (_useRadiusMode) then {
                     _engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration, _allowLocation, _requestedId, _accessMode
                 ] remoteExec ["Root_fnc_addVehicleZeusMain", 2];
                 ["Hackable Vehicle Added!"] call zen_common_fnc_showMessage;
+
+                // Linked access with nothing ticked registers a device no laptop can reach, which the
+                // dialog does not convey on its own.
+                [_accessMode, _selectedComputers, _availableToFutureLaptops] call FUNC(warnUnreachableDevice);
                 _index = _index + 1;
                 missionNamespace setVariable ["ROOT_CYBERWARFARE_VEHICLE_INDEX", _index, true];
             };

@@ -76,6 +76,15 @@ Topics covered:
 - Best practices for mission design
 - Example mission setup walkthrough
 
+**[Cryptography Guide](Cryptography-Guide)** - Plant and break encrypted intel
+
+Topics covered:
+- The `crypto` and `crack` commands and their desktop equivalents
+- All 13 supported ciphers and their options
+- Loading intercepted mail and chat straight into the Cryptography app
+- Encrypting intel from Eden, Zeus, or a script
+- Troubleshooting missing tools, wrong keys, and permission errors
+
 **[API Reference](API-Reference)** - Complete function reference for scripters
 
 Topics covered:
@@ -98,11 +107,13 @@ Topics covered:
 **[Configuration](Configuration)** - CBA settings reference
 
 Topics covered:
-- All 15 CBA settings with defaults
+- All CBA settings with defaults
 - Power cost settings (5 settings)
-- GPS settings (5 settings)
+- GPS settings (6 settings)
 - Cleanup settings (3 settings)
-- Rubberducky settings (2 settings)
+- Rubberducky settings (3 settings)
+- Device module settings (which laptops device modules list)
+- Desktop and audio settings (intro video, drive sounds)
 - Configuration best practices
 - Mission parameter overrides
 
