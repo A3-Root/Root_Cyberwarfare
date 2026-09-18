@@ -51,7 +51,12 @@ if (_deviceRows isEqualTo []) exitWith {
 // boxes start clear, since there is nothing to pre-tick them from.
 private _currentLinks = [];
 if (!isNull _targetLaptop) then {
-    _currentLinks = (GET_LINK_CACHE) getOrDefault [[_targetLaptop] call FUNC(getComputerIdentifier), []];
+    // Gathered across every name the laptop answers to, so a link filed under its netId by an older
+    // build or by a script is shown alongside the ones written under its current identifier.
+    private _linkCache = GET_LINK_CACHE;
+    {
+        _currentLinks append (_linkCache getOrDefault [_x, []]);
+    } forEach ([_targetLaptop] call FUNC(getComputerIdentifiers));
 };
 
 private _dialogControls = [

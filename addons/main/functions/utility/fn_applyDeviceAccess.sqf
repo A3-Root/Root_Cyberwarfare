@@ -13,8 +13,10 @@
  *              - ACCESS_MODE_PUBLIC: the device enters the public list with an empty exclusion list,
  *                making it reachable by every current and future laptop. Supplied computers still
  *                receive a private link so the device keeps working if it is unpublished later.
- *              Identifiers are laptop netIds in Simple mode and player UIDs in Experimental mode, to
- *              match the identifier that fn_isDeviceAccessible resolves at access time.
+ *              Laptops arrive named by netId, because that is what a curator dialog or an Eden
+ *              attribute can carry. Each one is resolved to the identifier the link cache is keyed by
+ *              before anything is written, so a link always lands under the name the access check
+ *              looks it up by.
  *
  * Arguments:
  * 0: _deviceType <NUMBER> - Device type constant (DEVICE_TYPE_*)
@@ -58,9 +60,22 @@ if (_accessMode == ACCESS_MODE_UNASSIGNED) exitWith {
     localize "STR_ROOT_CYBERWARFARE_ACCESS_UNASSIGNED"
 };
 
+// Resolve each supplied netId to the identifier the link cache is keyed by. A name that resolves to
+// no object is kept as it is, so a caller that already did the lookup still works.
+private _identifiers = [];
+{
+    private _computer = objectFromNetId _x;
+    private _identifier = if (isNull _computer) then { _x } else { [_computer] call FUNC(getComputerIdentifier) };
+    if (_identifier isNotEqualTo "") then {
+        _identifiers pushBackUnique _identifier;
+    };
+} forEach _linkedComputers;
+
+DEBUG_LOG_2("Resolved %1 laptop(s) to identifiers: %2",count _linkedComputers,_identifiers);
+
 // Private links are shared by both remaining modes: they survive a later change of public state.
-if (_linkedComputers isNotEqualTo []) then {
-    [_linkedComputers, _deviceType, _deviceId] call FUNC(addComputerDeviceLinks);
+if (_identifiers isNotEqualTo []) then {
+    [_identifiers, _deviceType, _deviceId] call FUNC(addComputerDeviceLinks);
 };
 
 if (_accessMode == ACCESS_MODE_PUBLIC) exitWith {
@@ -76,41 +91,29 @@ if (_accessMode == ACCESS_MODE_PUBLIC) exitWith {
 
 // ACCESS_MODE_LINKED from here on.
 if (!_availableToFutureLaptops) exitWith {
-    if (_linkedComputers isEqualTo []) exitWith {
+    if (_identifiers isEqualTo []) exitWith {
         // Nothing was selected, so the device ends up with the same reachability as unassigned.
         DEBUG_LOG("Linked mode with no computers selected - device left unreachable");
         localize "STR_ROOT_CYBERWARFARE_ACCESS_UNASSIGNED"
     };
 
-    format [localize "STR_ROOT_CYBERWARFARE_ACCESS_LINKED", count _linkedComputers]
+    format [localize "STR_ROOT_CYBERWARFARE_ACCESS_LINKED", count _identifiers]
 };
 
 // Available to future laptops: publish the device but exclude every laptop that exists right now and
 // is not one of the selected ones. New laptops are absent from the exclusion list and gain access.
+// The roster is the same one the dialogs offer, so a laptop that could be ticked is a laptop this
+// list accounts for, and each entry is resolved the same way the selected ones were.
 private _excludedIdentifiers = [];
 
-if (IS_EXPERIMENTAL_MODE) then {
-    {
-        private _nearLaptops = nearestObjects [_x, [], 3] select {
-            [_x] call FUNC(isRegisteredLaptop)
-        };
-        if (_nearLaptops isNotEqualTo []) then {
-            private _uid = getPlayerUID _x;
-            if !(_uid in _linkedComputers) then {
-                _excludedIdentifiers pushBackUnique _uid;
-                DEBUG_LOG_2("Excluding player %1 (UID: %2)",name _x,_uid);
-            };
-        };
-    } forEach allPlayers;
-} else {
-    {
-        _x params ["_netId"];
-        if !(_netId in _linkedComputers) then {
-            _excludedIdentifiers pushBackUnique _netId;
-            DEBUG_LOG_1("Excluding laptop netId: %1",_netId);
-        };
-    } forEach (call FUNC(getRegisteredLaptops));
-};
+{
+    private _laptop = objectFromNetId (_x select 0);
+    private _identifier = if (isNull _laptop) then { _x select 0 } else { [_laptop] call FUNC(getComputerIdentifier) };
+    if (_identifier isNotEqualTo "" && {!(_identifier in _identifiers)}) then {
+        _excludedIdentifiers pushBackUnique _identifier;
+        DEBUG_LOG_1("Excluding laptop identifier: %1",_identifier);
+    };
+} forEach (call FUNC(getRegisteredLaptops));
 
 private _publicDevices = GET_PUBLIC_DEVICES;
 _publicDevices pushBack [_deviceType, _deviceId, _excludedIdentifiers];
@@ -119,8 +122,8 @@ call FUNC(syncDeviceData);
 
 DEBUG_LOG_1("Excluded identifiers: %1",_excludedIdentifiers);
 
-if (_linkedComputers isEqualTo []) exitWith {
+if (_identifiers isEqualTo []) exitWith {
     localize "STR_ROOT_CYBERWARFARE_ACCESS_FUTURE_ONLY"
 };
 
-format [localize "STR_ROOT_CYBERWARFARE_ACCESS_LINKED_FUTURE", count _linkedComputers]
+format [localize "STR_ROOT_CYBERWARFARE_ACCESS_LINKED_FUTURE", count _identifiers]

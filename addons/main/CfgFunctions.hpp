@@ -145,6 +145,8 @@ class CfgFunctions {
 			class getBatteryStatus {};
 			class getDroneCost {};
 			class getComputerIdentifier {};
+			class getComputerIdentifiers {};
+			class getLaptopUid {};
 			class getObjectsInTriggerArea {};
 			class getPlayerFromComputer {};
 			class getUserConfirmation {};

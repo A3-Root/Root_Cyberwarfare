@@ -26,6 +26,10 @@ params [["_laptop", objNull, [objNull]]];
 
 if (isNull _laptop) exitWith {};
 
+// Give the laptop its persistent identity as it becomes a station, so it already answers to a stable
+// name by the time a dialog offers it as a link target or a device is registered against it.
+[_laptop] call FUNC(getLaptopUid);
+
 private _registry = missionNamespace getVariable [GVAR_LAPTOP_REGISTRY, []];
 _registry = _registry select {!isNull _x};
 

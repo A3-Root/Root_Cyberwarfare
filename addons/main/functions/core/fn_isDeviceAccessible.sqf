@@ -1,8 +1,10 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Checks if a computer can access a specific device with optional backdoor bypass
- *              Supports both Simple mode (object-based) and Experimental mode (player UID-based)
+ * Description: Checks if a computer can access a specific device with optional backdoor bypass.
+ *              Access is matched against every identifier the computer answers to rather than a single
+ *              key, so a link stored under the laptop's netId and one stored under the persistent
+ *              identity Experimental mode uses both grant the access they were written for.
  *
  * Arguments:
  * 0: _computer <OBJECT> - The laptop/computer object
@@ -64,11 +66,12 @@ if !(_hasHackingTools) exitWith {
     false
 };
 
-// Get persistent identifier for this computer
-private _computerIdentifier = [_computer] call FUNC(getComputerIdentifier);
-DEBUG_LOG_1("Computer identifier: %1",_computerIdentifier);
+// Every identifier this computer's access may be filed under, so a link written by an older build or
+// by a script naming the laptop's netId still resolves.
+private _computerIdentifiers = [_computer] call FUNC(getComputerIdentifiers);
+DEBUG_LOG_1("Computer identifiers: %1",_computerIdentifiers);
 
-if (_computerIdentifier == "") exitWith {
+if (_computerIdentifiers isEqualTo []) exitWith {
     DEBUG_LOG("Unable to determine computer identifier - ACCESS DENIED");
     false
 };
@@ -91,9 +94,9 @@ DEBUG_LOG_1("Checking public devices (count: %1)",count _publicDevices);
             DEBUG_LOG("No exclusion list - device is fully public");
         };
 
-        // Check if computer identifier is NOT excluded
-        _isPublic = !(_computerIdentifier in _excludedIdentifiers);
-        DEBUG_LOG_2("Identifier %1 in exclusion list: %2",_computerIdentifier,!_isPublic);
+        // Excluding a computer means excluding every name it answers to, so a single hit locks it out.
+        _isPublic = (_computerIdentifiers findIf {_x in _excludedIdentifiers}) == -1;
+        DEBUG_LOG_2("Identifiers %1 in exclusion list: %2",_computerIdentifiers,!_isPublic);
     };
 } forEach _publicDevices;
 
@@ -108,15 +111,20 @@ DEBUG_LOG("Device not public or excluded - checking private links");
 // Check private device links using hashmap cache
 private _linkCache = GET_LINK_CACHE;
 
-// Get this computer's device links from cache
-private _allowedDevices = _linkCache getOrDefault [_computerIdentifier, []];
-DEBUG_LOG_2("Private device links for identifier %1: %2 devices",_computerIdentifier,count _allowedDevices);
+// Gather the links filed under every name this computer answers to, so access granted under any one
+// of them counts.
+private _allowedDevices = [];
+{
+    _allowedDevices append (_linkCache getOrDefault [_x, []]);
+} forEach _computerIdentifiers;
+
+DEBUG_LOG_2("Private device links for identifiers %1: %2 devices",_computerIdentifiers,count _allowedDevices);
 if (_deviceType == DEVICE_TYPE_GPS_TRACKER) then {
-    DEBUG_LOG_3("[GPS DEBUG] identifier=%1 deviceId=%2 allowedDevices=%3",_computerIdentifier,_deviceId,_allowedDevices);
+    DEBUG_LOG_3("[GPS DEBUG] identifiers=%1 deviceId=%2 allowedDevices=%3",_computerIdentifiers,_deviceId,_allowedDevices);
 };
 
 if (_allowedDevices isEqualTo []) exitWith {
-    ROOT_CYBERWARFARE_LOG_DEBUG_1("isDeviceAccessible: No device links for computer %1",_computerIdentifier);
+    ROOT_CYBERWARFARE_LOG_DEBUG_1("isDeviceAccessible: No device links for computer %1",_computerIdentifiers);
     DEBUG_LOG("No private device links found - ACCESS DENIED");
     false
 };
@@ -127,8 +135,8 @@ private _isAllowed = _allowedDevices findIf {
     _type == _deviceType && _id == _deviceId
 } != -1;
 
-DEBUG_LOG_3("Private link check result - Identifier: %1, Device: %2, Allowed: %3",_computerIdentifier,_deviceId,_isAllowed);
-ROOT_CYBERWARFARE_LOG_DEBUG_3("isDeviceAccessible: Computer %1, Device %2 = %3",_computerIdentifier,_deviceId,_isAllowed);
+DEBUG_LOG_3("Private link check result - Identifiers: %1, Device: %2, Allowed: %3",_computerIdentifiers,_deviceId,_isAllowed);
+ROOT_CYBERWARFARE_LOG_DEBUG_3("isDeviceAccessible: Computer %1, Device %2 = %3",_computerIdentifiers,_deviceId,_isAllowed);
 
 if (_isAllowed) then {
     DEBUG_LOG("Private link found - ACCESS GRANTED");

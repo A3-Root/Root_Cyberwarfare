@@ -60,8 +60,10 @@ if (_user in (keys _userlist)) then {
 // The toolset is only useful against a laptop's own secrets if it can read them, and those live under
 // other accounts' home directories. The account is therefore added to /etc/sudoers, which is what AE3
 // reads to decide whether a user may act as root over the filesystem.
+// Older AE3 builds have no sudoers roster at all. The account is still created and still logs in; it
+// simply stays unprivileged, so this is reported as information rather than as a failure.
 if (isNil "AE3_armaos_fnc_computer_addSudoer") exitWith {
-    ROOT_CYBERWARFARE_LOG_ERROR("seedRubberduckyCredentials: AE3 addSudoer command unavailable");
+    ROOT_CYBERWARFARE_LOG_INFO("seedRubberduckyCredentials: this AE3 build has no sudoers roster (AE3 2.0.0.3 or newer required), account left unprivileged");
     _accountCreated
 };
 

@@ -41,12 +41,12 @@ if (_allRows isEqualTo []) exitWith {
     [localize "STR_ROOT_CYBERWARFARE_LINKS_NO_DEVICES"] call zen_common_fnc_showMessage;
 };
 
-// Resolve each laptop to the identifier the link cache is keyed by, so the checkboxes can be pre-ticked
-// from the same key the server will write back. Experimental mode keys by the operating player's UID,
-// which is empty for a laptop nobody is using - those laptops simply start unticked.
+// Resolve each laptop to every identifier its links may be filed under, so the checkboxes are pre-ticked
+// from the same names the access check reads - including a link an older build or a script wrote under
+// the laptop's netId. A laptop the engine cannot resolve contributes no names and starts unticked.
 private _computerIdentifiers = _allComputers apply {
     private _laptop = objectFromNetId (_x select 0);
-    [_laptop] call FUNC(getComputerIdentifier)
+    [_laptop] call FUNC(getComputerIdentifiers)
 };
 
 // Opens the dialog for one device and, whichever way it is closed, moves on to the next. Passed to
@@ -82,18 +82,21 @@ private _showDeviceDialog = {
     };
 
     private _linkedFlags = _computerIdentifiers apply {
-        private _identifier = _x;
-        if (_identifier isEqualTo "") then {
+        private _identifiers = _x;
+        if (_identifiers isEqualTo []) then {
             false
         } else {
-            private _links = _linkCache getOrDefault [_identifier, []];
-            private _hasLink = (_links findIf {(_x select 0) == _deviceType && {(_x select 1) == _deviceId}}) > -1;
+            private _hasLink = (_identifiers findIf {
+                private _links = _linkCache getOrDefault [_x, []];
+                (_links findIf {(_x select 0) == _deviceType && {(_x select 1) == _deviceId}}) > -1
+            }) > -1;
 
             // In the "linked plus future laptops" state, reachability is written as an exclusion list
             // rather than as a link, so a laptop that appeared after registration reaches the device
             // with no link of its own. Ticking it from the exclusion list too means confirming the
             // dialog unchanged keeps the access it already had, instead of quietly revoking it.
-            _hasLink || {_currentFuture && {!(_identifier in _exclusions)}}
+            // Excluding a laptop excludes every name it answers to, so one hit is enough to lock it out.
+            _hasLink || {_currentFuture && {(_identifiers findIf {_x in _exclusions}) == -1}}
         }
     };
 

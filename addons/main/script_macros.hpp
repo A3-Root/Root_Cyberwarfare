@@ -257,6 +257,12 @@
 #ifndef GVAR_LAPTOP_REGISTRY
     #define GVAR_LAPTOP_REGISTRY "ROOT_CYBERWARFARE_LAPTOPS"        // Array of laptops registered as hacking stations
 #endif
+#ifndef GVAR_LAPTOP_UID
+    #define GVAR_LAPTOP_UID "ROOT_CYBERWARFARE_LAPTOP_UID"          // Object variable holding a laptop's persistent identity
+#endif
+#ifndef GVAR_LAPTOP_UID_COUNTER
+    #define GVAR_LAPTOP_UID_COUNTER "ROOT_CYBERWARFARE_LAPTOP_UID_COUNTER" // Server-side counter the laptop identities are drawn from
+#endif
 
 // ============================================================================
 // Debug Logging Macros

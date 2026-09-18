@@ -1,6 +1,6 @@
 # Changelog
 
-## Hotfix 10 (v2.0.0.4)
+## Hotfix 10 (v2.0.0.5)
 
 ### Added
 
@@ -11,6 +11,13 @@
 
 ### Changed
 
+- **Fixed:** with *Device Setup Mode* set to **Experimental**, no device registered as *Linked computers only* could ever be reached - the laptop was offered in the module, the device registered without complaint, and the terminal then reported it as inaccessible, as though the device had been wired to a laptop that does not exist. The two halves of the access system were naming laptops differently: a device was registered against the laptop the curator ticked, while the access check looked the device up against the *player* standing within three metres of the machine. Nothing ever wrote access under that name, and at mission start - when the Eden modules register their devices - there is no player standing anywhere, so the link was discarded before it was written. A laptop now carries its own identity in Experimental mode, and registration and access both use it.
+- Experimental mode's laptop identity survives the laptop being packed into inventory and deployed again, which is what that mode exists for: the redeployed machine reaches exactly the devices it reached before, with no rewiring. Simple mode is unchanged and continues to identify a laptop by its object.
+- Device access is now matched against every name a laptop answers to rather than one, so links written by earlier versions, or by a mission script naming a laptop directly, keep granting the access they were set up to grant. Nothing has to be re-registered after updating.
+- The *Manage Device Links* and *Manage Device Access* dialogs pre-tick their checkboxes from those same names, so what the dialog shows as already-granted access is what the terminal will actually allow.
+- The "available to all future laptops" exclusion list is built the same way in both device setup modes, from the laptop roster the dialogs themselves offer, instead of from whichever players happened to be standing near a laptop at the moment the device was registered.
+- The optional periodic link cleanup no longer treats a laptop packed into a player's inventory as a deleted one in Experimental mode, which would have discarded that laptop's device access while it was being carried.
+- A laptop plugged with a Rubberducky on an AE3 older than 2.0.0.3 wrote a red error to the log about the superuser roster being unavailable. The account is created and usable either way, so this is now reported as information and names the AE3 version that adds the roster.
 - **Breaking:** *List All Laptops In Device Modules* now defaults to **off**. Out of the box a laptop is offered as a link target only once a mission has made it a hacking station - through the Register Hackable Laptop module, or by receiving the toolset from the Add Hacking Tools module - so unrelated laptops placed as scenery stay out of the device dialogs. Missions that relied on wiring devices to bare laptops during setup and delivering the tools later can turn the setting back on; it is server-forced and takes effect on the next dialog opened.
 - **Fixed:** the laptop list in the device modules came up empty, so every device set to *Linked computers only* was registered with no laptop able to reach it - the file or device existed, and no terminal, not even one logged in as root, could see it. The roster was asking the engine for normal entities, the collection vehicles live in, while a laptop is a prop and lives in the slow-entity collection, so the scan returned nothing to tick. The roster is now built from the mission-placed objects in all three collections, from AE3's registry of initialized laptops, and from a new registry of laptops these modules registered as hacking stations.
 - **Fixed:** a laptop only reports that it has a terminal once it has finished initializing, which a laptop nobody has switched on yet has not done, so it could be missing from the modules even when the roster worked. Laptops are now recognised from their configuration as well. USB drives remain excluded - they deliver the tools rather than run them.

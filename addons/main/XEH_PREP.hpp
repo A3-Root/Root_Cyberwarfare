@@ -124,6 +124,8 @@ PREP(getAccessibleDevices);
 PREP(getBatteryStatus);
 PREP(getDroneCost);
 PREP(getComputerIdentifier);
+PREP(getComputerIdentifiers);
+PREP(getLaptopUid);
 PREP(getObjectsInTriggerArea);
 PREP(getPlayerFromComputer);
 PREP(getUserConfirmation);

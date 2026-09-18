@@ -90,13 +90,41 @@ private _identifiersToRemove = [];
 
 DEBUG_LOG_2("Cleanup: Checking %1 link cache entries (Mode: %2)",count keys _linkCache,GET_DEVICE_MODE);
 
+// In Experimental mode an identifier names a laptop rather than an object slot, and that laptop is
+// allowed to be absent from the world: one packed into a player's inventory exists only as an entry in
+// AE3's item buffer until it is deployed again. Both places are collected up front so a packed laptop
+// is never mistaken for a deleted one.
+private _liveIdentifiers = [];
+
+if (IS_EXPERIMENTAL_MODE) then {
+    {
+        private _laptop = objectFromNetId (_x select 0);
+        if (!isNull _laptop) then {
+            _liveIdentifiers append ([_laptop] call FUNC(getComputerIdentifiers));
+        };
+    } forEach (call FUNC(getRegisteredLaptops));
+
+    // A packed laptop's variables are filed under the lowercased names the engine reports, so the key
+    // has to be lowercased to match rather than used as it is written.
+    private _packedUidKey = toLowerANSI GVAR_LAPTOP_UID;
+    {
+        private _packedUid = _y getOrDefault [_packedUidKey, ""];
+        if (_packedUid isEqualType "" && _packedUid isNotEqualTo "") then {
+            _liveIdentifiers pushBackUnique _packedUid;
+        };
+    } forEach (missionNamespace getVariable ["AE3_LAPTOP_ITEM", createHashMap]);
+
+    DEBUG_LOG_1("Cleanup: %1 laptop identifiers currently in play",count _liveIdentifiers);
+};
+
 {
     private _identifier = _x;
     private _isValid = false;
 
     if (IS_EXPERIMENTAL_MODE) then {
-        // Experimental mode: identifier is a player UID - valid while that player is connected.
-        _isValid = (allPlayers findIf {getPlayerUID _x == _identifier}) != -1;
+        // Valid while a deployed or packed laptop still answers to this name. An empty roster before any
+        // player is present means nothing has replicated yet rather than that everything is gone.
+        _isValid = (_identifier in _liveIdentifiers) || {allPlayers isEqualTo []};
     } else {
         // Simple mode: identifier is a laptop netId - a resolved object is valid; an unresolvable netId
         // is a candidate only while players are present (a null before that just means "not networked yet").
