@@ -311,8 +311,32 @@
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACHING_OBJECT">
             <English>Attaching GPS Tracker to %1</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_FAILED">
+            <English>Failed to attach GPS tracker to %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_FREQ">
+            <English>Update Frequency (seconds)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_FREQ_DESC">
+            <English>Frequency in seconds between ping updates</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_LAPTOP_DESC">
+            <English>Link this tracker to %1</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_OBJECT">
             <English>Attach GPS Tracker</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_SUCCESS">
+            <English>GPS Tracker attached successfully to %1!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_TIME">
+            <English>Tracking Time (seconds)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_TIME_DESC">
+            <English>Maximum time in seconds the tracking will stay active</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_TITLE">
+            <English>GPS Tracker Configuration</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_CANNOT_SEARCH_SELF">
             <English>Cannot search yourself!</English>

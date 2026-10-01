@@ -216,6 +216,18 @@ if (isServer) then {
 // Register the RootCW desktop GUI apps + client reply handlers (no-op if AE3 desktop absent).
 if (hasInterface) then {
     call FUNC(gui_registerApps);
+
+    // The curator module tree is built by the engine from this machine's own config, so a module that
+    // is absent from the tree is absent from the install. Naming the mod version alongside every
+    // curator module class the client actually carries makes a version mismatch between a mission's
+    // server and a player's mod folder readable straight from the client's RPT.
+    private _curatorModules = (configProperties [
+        configFile >> "CfgVehicles",
+        "isClass _x && {getText (_x >> ""category"") isEqualTo ""ROOT_CYBERWARFARE""} && {getNumber (_x >> ""scopeCurator"") isEqualTo 2}",
+        true
+    ]) apply {configName _x};
+
+    ROOT_CYBERWARFARE_LOG_INFO_3("Version %1 - %2 curator module(s) in this install: %3",QUOTE(VERSION_STR),count _curatorModules,_curatorModules joinString ", ");
     ["ae3_desktop_volChanged", {
         private _session = uiNamespace getVariable ["AE3_desktop_session", createHashMap];
         private _computer = _session getOrDefault ["computer", objNull];

@@ -26,7 +26,7 @@ params ["_entity", ["_path", "/rubberducky/tools", [""]], ["_execUserId", 0, [0]
 
 
 // Validate _path is a string
-if (_path isEqualType objNull || {_path isEqualType []}) exitWith {
+if (_path isEqualTypeAny [objNull, []]) exitWith {
     [format [localize "STR_ROOT_CYBERWARFARE_ZEUS_INVALID_PATH_TYPE", typeName _path]] remoteExec ["systemChat", _execUserId];
 };
 

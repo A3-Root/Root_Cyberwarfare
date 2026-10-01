@@ -265,15 +265,16 @@ call Root_fnc_syncDeviceData;
         _targetObject setVariable ["ROOT_CYBERWARFARE_LIGHTS_LAST_TOGGLE", -999, true];
         _targetObject setVariable ["ROOT_CYBERWARFARE_ENGINE_LAST_TOGGLE", -999, true];
 
-        // Store with availability flag
+        // Store with availability flag. Every slot holds a real value: the registry is broadcast to
+        // every client as one array, and an element without one is not something the broadcast can
+        // carry, so the row ends where its last configured limit does.
         _allVehicles pushBack [
             _deviceId, _netId, _vehicleName,
             _allowFuel, _allowSpeed, _allowBrakes, _allowLights, _allowEngine, _allowAlarm,
             _availableToFutureLaptops, _powerCost, _linkedComputers,
             _fuelMinPercent, _fuelMaxPercent, _speedMinValue, _speedMaxValue,
             _brakesMinDecel, _brakesMaxDecel, _lightsMaxToggles, _lightsCooldown,
-            _engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration,
-            nil, nil, nil, nil, nil, nil  // Reserved slots
+            _engineMaxToggles, _engineCooldown, _alarmMinDuration, _alarmMaxDuration
         ];
 
         private _availableHacks = "";

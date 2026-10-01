@@ -1,6 +1,6 @@
 # Changelog
 
-## Hotfix 10 (v2.0.0.5)
+## Hotfix 10 (v2.0.0.6)
 
 ### Added
 
@@ -11,6 +11,10 @@
 
 ### Changed
 
+- **Fixed:** the *Manage Device Links* and *Manage Device Access* modules were missing from the Zeus module list, as was *Link Devices* from the Eden editor's module list, even though all three were documented and shipped. An addon has to declare each of its classes to the game, and these three were never added to that list, so the editors had nothing to show. All three now appear alongside the rest of the Roots Cyber Warfare modules.
+- **Fixed:** a GPS tracker attached by a player, through the ACE interaction rather than the Zeus module, could not be reached from any laptop - tracking it from a terminal reported the tracker as inaccessible. The interaction never asked which laptop the tracker should report to and registered it as *unassigned*, which means registered but deliberately reachable by nobody until access is granted later. The dialog now carries the same *Device Access* setting and laptop ticks every device module has, with every registered laptop ticked by default, so a tracker is usable the moment it is planted. Picking *Linked* with every laptop unticked now says the tracker is unreachable instead of reporting a plain success.
+- A hackable vehicle's registry entry no longer carries empty reserved slots. The device registry is sent to every player's machine as a single body of data, and an entry with nothing in a slot is not something that transfer can carry, which put every device registered in the same moment at risk of never arriving - a vehicle that the terminal would then never list.
+- Each player's log now names the mod version and every curator module their install actually carries, so a mission where a module is missing from the Zeus list can be told apart from a mod folder that is out of date without guesswork.
 - **Fixed:** with *Device Setup Mode* set to **Experimental**, no device registered as *Linked computers only* could ever be reached - the laptop was offered in the module, the device registered without complaint, and the terminal then reported it as inaccessible, as though the device had been wired to a laptop that does not exist. The two halves of the access system were naming laptops differently: a device was registered against the laptop the curator ticked, while the access check looked the device up against the *player* standing within three metres of the machine. Nothing ever wrote access under that name, and at mission start - when the Eden modules register their devices - there is no player standing anywhere, so the link was discarded before it was written. A laptop now carries its own identity in Experimental mode, and registration and access both use it.
 - Experimental mode's laptop identity survives the laptop being packed into inventory and deployed again, which is what that mode exists for: the redeployed machine reaches exactly the devices it reached before, with no rewiring. Simple mode is unchanged and continues to identify a laptop by its object.
 - Device access is now matched against every name a laptop answers to rather than one, so links written by earlier versions, or by a mission script naming a laptop directly, keep granting the access they were set up to grant. Nothing has to be re-registered after updating.
