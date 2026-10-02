@@ -8,8 +8,11 @@
  * 0: _owner <NUMBER> - clientOwner of the operator (reply target)
  * 1: _computerNetId <STRING> - netId of the laptop
  * 2: _gpsId <NUMBER> - Tracker id from the registry
- * 3: _action <STRING> - "track"
+ * 3: _action <STRING> - "track" for a listed tracker, "trackid" for one named by its identifier
  * 4: _commandPath <STRING> - Backdoor command path
+ * 5: _identifier <STRING> (Optional) - The identifier typed into the app. When one is given it names
+ *                                      the tracker and stands in for the access check, since a hidden
+ *                                      tracker is in no list for the app to have offered, default: ""
  *
  * Return Value:
  * None
@@ -17,7 +20,7 @@
  * Public: No
  */
 
-params ["_owner", "_computerNetId", "_gpsId", "_action", ["_commandPath", ""]];
+params ["_owner", "_computerNetId", "_gpsId", "_action", ["_commandPath", ""], ["_identifier", "", [""]]];
 
 private _computer = objectFromNetId _computerNetId;
 private _reply = {
@@ -27,7 +30,27 @@ private _reply = {
 
 if (isNull _computer) exitWith {};
 
-if !([_computer, DEVICE_TYPE_GPS_TRACKER, _gpsId, _commandPath] call FUNC(isDeviceAccessible)) exitWith
+// An identifier is resolved here, under the same rules the terminal command works by: an unknown code
+// says only that it is unknown, and a laptop off the network cannot use one at all.
+private _byIdentifier = _identifier isNotEqualTo "";
+private _identifierEntry = [];
+if (_byIdentifier) then {
+	_identifierEntry = [_identifier] call FUNC(resolveGpsIdentifier);
+};
+
+if (_byIdentifier && _identifierEntry isEqualTo []) exitWith {
+	[_owner, localize "STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_UNKNOWN", false] call _reply;
+};
+
+if (_byIdentifier && {missionNamespace getVariable [SETTING_GPS_IDENTIFIER_ONLINE, true]} && {!([_computer] call FUNC(isLaptopOnline))}) exitWith {
+	[_owner, localize "STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_OFFLINE", false] call _reply;
+};
+
+if (_byIdentifier) then {
+	_gpsId = _identifierEntry select 0;
+};
+
+if (!_byIdentifier && {!([_computer, DEVICE_TYPE_GPS_TRACKER, _gpsId, _commandPath] call FUNC(isDeviceAccessible))}) exitWith
 {
 	[_owner, format ["Access denied to tracker %1", _gpsId], false] call _reply;
 };

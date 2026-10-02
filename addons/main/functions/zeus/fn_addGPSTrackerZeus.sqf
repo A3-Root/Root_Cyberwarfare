@@ -64,6 +64,8 @@ private _dialogControls = [
         0
     ]],
     ["TOOLBOX:YESNO", ["Available to Future Laptops", "Only applies to 'Linked computers only': the linked computers keep access and laptops added later gain it too."], false],
+    ["TOOLBOX:YESNO", [localize "STR_ROOT_CYBERWARFARE_GPS_HIDDEN", localize "STR_ROOT_CYBERWARFARE_GPS_HIDDEN_DESC"], false],
+    ["EDIT", [localize "STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_FIELD", localize "STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_FIELD_DESC"], [""]],
     ["EDIT", ["Device ID (0 = auto)", "Fixed ID for this tracker. 0 = auto-assign a free ID."], ["0"]]
 ];
 
@@ -81,12 +83,12 @@ private _dialogControls = [
         _args params ["_targetObject", "_execUserId", "_allComputers", "_index"];
 
         // First results are the tracker configuration
-        _results params ["_trackerName", "_trackingTime", "_updateFrequency", "_lastPingTimer", "_powerCost", "_customMarker", "_allowRetracking", "_ownersSelection", "_accessMode", "_availableToFutureLaptops", "_requestedIdText"];
+        _results params ["_trackerName", "_trackingTime", "_updateFrequency", "_lastPingTimer", "_powerCost", "_customMarker", "_allowRetracking", "_ownersSelection", "_accessMode", "_availableToFutureLaptops", "_hidden", "_requestedIdentifier", "_requestedIdText"];
         private _requestedId = parseNumber _requestedIdText;
 
         // The rest are checkbox values for each computer
         private _selectedComputers = [];
-        private _checkboxStartIndex = 11;
+        private _checkboxStartIndex = 13;
 
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
@@ -101,12 +103,16 @@ private _dialogControls = [
         } forEach _underFlow;
         
         // Pass all parameters including the availability setting and owners selection
-        [_targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, true, _ownersSelection, _requestedId, _accessMode] remoteExec ["Root_fnc_addGpsTrackerZeusMain", 2];
+        [_targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, true, _ownersSelection, _requestedId, _accessMode, _hidden, _requestedIdentifier, getPlayerUID player] remoteExec ["Root_fnc_addGpsTrackerZeusMain", 2];
         ["GPS Tracker Added!"] call zen_common_fnc_showMessage;
 
-        // Linked access with nothing ticked registers a device no laptop can reach, which the success
-        // message above does not convey on its own.
-        [_accessMode, _selectedComputers, _availableToFutureLaptops] call FUNC(warnUnreachableDevice);
+        // A hidden tracker is reached by its identifier rather than by laptop access, so the usual
+        // "no laptop can reach this" warning would be telling the curator off for the normal case.
+        if (!_hidden) then {
+            // Linked access with nothing ticked registers a device no laptop can reach, which the
+            // success message above does not convey on its own.
+            [_accessMode, _selectedComputers, _availableToFutureLaptops] call FUNC(warnUnreachableDevice);
+        };
         _index = _index + 1;
         missionNamespace setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_INDEX", _index, true];
     }, 

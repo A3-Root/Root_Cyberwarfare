@@ -113,10 +113,16 @@ class CfgFunctions {
 			class disableGPSTracker {};
 			class disableGPSTrackerServer {};
 			class displayGPSPosition {};
+			class generateGpsIdentifier {};
 			class gpsTrackerClient {};
 			class gpsTrackerServer {};
+			class isLaptopOnline {};
+			class logTrackerToDiary {};
+			class registerGpsIdentifier {};
+			class resolveGpsIdentifier {};
 			class revealLaptopLocations {};
 			class searchForGPSTracker {};
+			class zeusTrackerMarker {};
 		};
 
 		class PowerGenerator {
@@ -188,6 +194,9 @@ class CfgFunctions {
 			class addHackingToolsZeus {};
 			class registerHackableLaptopZeus {};
 			class copyDeviceLinksZeus {};
+			class hiddenTrackersDialog {};
+			class hiddenTrackersZeus {};
+			class hiddenTrackersZeusMain {};
 			class manageDeviceAccessZeus {};
 			class warnUnreachableDevice {};
 			class manageDeviceLinksZeus {};

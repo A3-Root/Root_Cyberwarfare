@@ -29,6 +29,14 @@ private _customMarker = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_GPS_MARKER",
 // 3DEN BOOL attributes load as numbers (1/0); coerce to real booleans.
 private _allowRetracking = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_GPS_RETRACK", 0]) in [1, true];
 
+// A hidden tracker is in no laptop's listing: the identifier it answers to is the only way to it. A
+// mission can name that identifier here so a briefing can hand it out, or leave it blank for one to
+// be generated. Several targets synced to one module each get an identifier of their own, so a fixed
+// one is used for the first and the rest are generated.
+private _hidden = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_GPS_HIDDEN", 0]) in [1, true];
+private _requestedIdentifier = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_GPS_IDENTIFIER", ""];
+if !(_requestedIdentifier isEqualType "") then { _requestedIdentifier = ""; };
+
 // Optional fixed IDs. A single target uses the start value; multiple synced targets hand out
 // Start..End sequentially, falling back to auto-assignment once the range is exhausted or unset.
 private _startId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_GPS_ID_START", 0]);
@@ -99,7 +107,11 @@ private _nextId = _startId;
 
 	// Call the existing Zeus main function
 	// Parameters: _targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, _isFromZeus, _ownersSelection
-	[_target, _execUserId, _linkedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, false, _ownersSelection, _assignId, _accessMode] call FUNC(addGPSTrackerZeusMain);
+	[_target, _execUserId, _linkedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, false, _ownersSelection, _assignId, _accessMode, _hidden, _requestedIdentifier, ""] call FUNC(addGPSTrackerZeusMain);
+
+	// A requested identifier belongs to one tracker, so the next target synced to this module draws
+	// its own rather than colliding with it.
+	_requestedIdentifier = "";
 
 	_index = _index + 1;
 } forEach _targets;

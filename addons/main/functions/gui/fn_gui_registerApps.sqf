@@ -331,7 +331,9 @@ if (_hasWeb) then
 		// Lights: per-light On/Off plus whole-network All On / All Off (Lights #1).
 		["RootCW_Lights",    "STR_ROOT_CYBERWARFARE_GUI_APP_LIGHTS",    "&#128161;", "light",    DEVICE_TYPE_LIGHT,     [["on", "On"] call _act, ["off", "Off"] call _act], "Hacking Tools", [["allon", "All On"] call _act, ["alloff", "All Off"] call _act]],
 		["RootCW_Databases", "STR_ROOT_CYBERWARFARE_GUI_APP_DATABASES", "&#128451;", "database", DEVICE_TYPE_DATABASE,  [createHashMapFromArray [["id", "access"], ["label", "Download"], ["flow", "download"]]], "Hacking Tools"],
-		["RootCW_Gps",       "STR_ROOT_CYBERWARFARE_GUI_APP_GPS",       "&#128205;", "gps",      DEVICE_TYPE_GPS_TRACKER, [["track", "Track"] call _act], "Hacking Tools"],
+		// GPS: per-tracker Track, plus a whole-app entry for typing in the identifier of a tracker this
+		// laptop does not list - the only way to reach a hidden one.
+		["RootCW_Gps",       "STR_ROOT_CYBERWARFARE_GUI_APP_GPS",       "&#128205;", "gps",      DEVICE_TYPE_GPS_TRACKER, [["track", "Track"] call _act], "Hacking Tools", [createHashMapFromArray [["id", "trackid"], ["label", localize "STR_ROOT_CYBERWARFARE_GUI_GPS_TRACK_BY_ID"], ["flow", "prompt"], ["promptTitle", localize "STR_ROOT_CYBERWARFARE_GUI_GPS_TRACK_BY_ID_PROMPT"]]]],
 		// Drones: Disable plus side-change buttons (Drones #1); the action handler supports west/east/guer/civ.
 		["RootCW_Drones",    "STR_ROOT_CYBERWARFARE_GUI_APP_DRONES",    "&#128760;", "drone",    DEVICE_TYPE_DRONE,     [["disable", "Disable"] call _act, createHashMapFromArray [["id", "side"], ["label", "Change Side"], ["submenu", [["west", "WEST (BLUFOR)"] call _act, ["east", "EAST (OPFOR)"] call _act, ["guer", "GUER (INDFOR)"] call _act, ["civ", "CIVILIAN"] call _act]]]], "Hacking Tools"],
 		// Vehicles: plain toggles; Fuel/Speed/Alarm are added as slider actions per-vehicle in DESCRIBE
@@ -406,7 +408,9 @@ if (_hasWeb) then
 			case DEVICE_TYPE_DATABASE:  { ["root_cyberwarfare_gui_databaseAction",  [_co, _nid, _id, netId player, "", _data getOrDefault ["savePath", ""]]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_DRONE:     { ["root_cyberwarfare_gui_droneAction",     [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_VEHICLE:   { ["root_cyberwarfare_gui_vehicleAction",   [_co, _nid, _id, _action, "", _value, _lock]] call CBA_fnc_serverEvent; };
-			case DEVICE_TYPE_GPS_TRACKER: { ["root_cyberwarfare_gui_gpsAction",     [_co, _nid, _id, _action, ""]] call CBA_fnc_serverEvent; };
+			// The typed identifier travels with the action: the app has no row for a hidden tracker,
+			// so the code is the only thing naming what to track.
+			case DEVICE_TYPE_GPS_TRACKER: { ["root_cyberwarfare_gui_gpsAction",     [_co, _nid, _id, _action, "", _data getOrDefault ["promptValue", ""]]] call CBA_fnc_serverEvent; };
 			case DEVICE_TYPE_CUSTOM:    { ["root_cyberwarfare_gui_customAction",    [_co, _nid, _id, _action, netId player, ""]] call CBA_fnc_serverEvent; };
 			default {};
 		};

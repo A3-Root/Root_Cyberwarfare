@@ -65,6 +65,12 @@ if (_arrayIndex == -1) exitWith {
 private _allDevices = _allDevicesArray select _arrayIndex;
 DEBUG_LOG_2("Total devices of type %1: %2",_deviceType,count _allDevices);
 
+// A hidden GPS tracker is left out before access is even considered: it is reached by entering the
+// identifier it answers to, and a listing that showed it would give away that it exists.
+if (_deviceType == DEVICE_TYPE_GPS_TRACKER) then {
+    _allDevices = _allDevices select {!IS_HIDDEN_TRACKER(_x select 0)};
+};
+
 // Filter to only accessible devices
 private _accessibleDevices = _allDevices select {
     [_computer, _deviceType, _x select 0, _commandPath] call FUNC(isDeviceAccessible)

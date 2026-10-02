@@ -20,6 +20,7 @@ This guide covers all Zeus modules provided by Root's Cyber Warfare, enabling Ze
   - [11. Copy Device Links](#11-copy-device-links)
   - [12. Clear Broken Device Links](#12-clear-broken-device-links)
   - [13. Modify Power Costs](#13-modify-power-costs)
+  - [14. Hidden Trackers](#14-hidden-trackers)
 - [Access Control System](#access-control-system)
 - [Common Workflows](#common-workflows)
 - [Troubleshooting](#troubleshooting)
@@ -86,6 +87,7 @@ Most Zeus modules support two placement modes:
 | Copy Device Links | Transfer laptop permissions | Dialog only |
 | Clear Broken Device Links | Remove links to deleted devices/laptops on demand | Dialog only |
 | Modify Power Costs | Adjust power consumption | Dialog only |
+| Hidden Trackers | List hidden GPS trackers and their identifiers; toggle a private map overlay | Dialog only |
 
 ---
 
@@ -433,6 +435,14 @@ Available to future laptops: No
 | **Power Cost to Track** | Number | **REQUIRED** | Power cost in Wh to start tracking. |
 | **Show System Chat Message** | Checkbox | Checked | Show system chat notification when tracking starts. |
 | **Marker Visibility (Owners)** | Array | `[[], [], []]` | Which sides/groups/players can see markers (advanced). Format: `[[sides], [groups], [players]]`. |
+| **Hidden (identifier only)** | Checkbox | Unchecked | If checked, the tracker appears in no terminal or desktop listing on any laptop, and the only way to track it is to enter the identifier it answers to. |
+| **Identifier (blank = auto)** | String | (empty) | The 8-character code this tracker answers to. Leave blank to have one generated; a code already in use is replaced by a generated one. |
+
+**Identifiers:** every tracker is given an 8-character code on registration, and the code appears in
+your module feedback. Entering it on a laptop bypasses access control entirely - the laptop needs the
+hacking toolset and a network connection, nothing else - so the code is itself a piece of mission
+intelligence. Codes for hidden trackers can be read back at any time with the
+[Hidden Trackers](#14-hidden-trackers) module.
 
 **Example Configuration:**
 ```
@@ -857,6 +867,35 @@ Drone Disable: 15 Wh
 Custom Device: 20 Wh
 Power Grid: 25 Wh
 ```
+
+---
+
+### 14. Hidden Trackers
+
+**Purpose:** List every GPS tracker that no laptop lists - including every tracker planted by hand by
+a player - read the identifier each one answers to, and put a private overlay on your own map to see
+where one actually is.
+
+**How to Use:**
+1. Place the module (not on an object)
+2. Read the roster: each row is `<name> - <IDENTIFIER> - on <object> (<status>)`
+3. Tick any tracker to show it on your map, untick to remove it, then click OK
+
+**What It Does:**
+- Shows the identifiers, which are held only by the server and are shown nowhere else in the game
+- Draws a marker on **your** map that follows the tracked object, updated once a second
+
+**What It Does NOT Do:**
+- It does **not** track the device. A tick is a view; an operator still has to enter the identifier on
+  a laptop to actually start a tracking session
+- No other player or curator sees the marker - it exists on your machine only
+- No battery is spent, no tracker status changes, no listing changes, and the tracker's duration and
+  one-shot rule are untouched
+
+**Notes:**
+- Only a curator can obtain the roster; the request is refused for anyone without a curator interface
+- A tracker whose registry entry has been cleaned up is still listed, marked `No longer registered`
+- Overlays persist until you untick them, and remove themselves when the tracked object stops existing
 
 ---
 

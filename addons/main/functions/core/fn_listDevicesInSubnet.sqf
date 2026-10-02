@@ -102,10 +102,14 @@ private _accessibleCustom = _allCustom select {
     [_computer, 5, _x select 0, _commandPath] call Root_fnc_isDeviceAccessible 
 };
 
-private _accessibleGpsTrackers = _allGpsTrackers select { 
+// A hidden tracker is in no listing and in no count: the identifier it answers to is the only thing
+// that reaches it, and a tally that included it would announce that it exists.
+_allGpsTrackers = _allGpsTrackers select {!IS_HIDDEN_TRACKER(_x select 0)};
+
+private _accessibleGpsTrackers = _allGpsTrackers select {
     private _deviceData = _x;
     private _deviceId = _deviceData select 0;
-    [_computer, 6, _deviceId, _commandPath] call Root_fnc_isDeviceAccessible 
+    [_computer, 6, _deviceId, _commandPath] call Root_fnc_isDeviceAccessible
 };
 
 private _accessibleVehicles = _allVehicles select {

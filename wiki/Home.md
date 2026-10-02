@@ -20,7 +20,7 @@ The mod supports the following hackable devices:
 | **Vehicles** | Cars, tanks, aircraft - manipulate fuel, speed, brakes, lights, engine, alarms | `vehicle` |
 | **Databases** | Downloadable files with optional code execution | `download` |
 | **Custom Devices** | User-defined devices with SQF scripting | `custom` |
-| **GPS Trackers** | Real-time position tracking with map markers | `gpstrack` |
+| **GPS Trackers** | Real-time position tracking with map markers; covert trackers reached by an 8-character identifier | `gpstrack` |
 | **Power Grids** | Generator-controlled lights in radius | `powergrid` |
 
 Beyond controlling devices, hacking-tools-equipped laptops also gain:
@@ -53,7 +53,7 @@ Topics covered:
 - All Zeus modules with detailed parameters
 - Adding hacking tools to laptops, registering laptops as hackable stations
 - Registering hackable doors, lights, vehicles, files, trackers, custom devices
-- Cipher Tools module and Clear Broken Device Links maintenance module
+- Cipher Tools module, Clear Broken Device Links maintenance module, and the Hidden Trackers roster
 - Access control (public vs private devices)
 - Common workflows and troubleshooting
 

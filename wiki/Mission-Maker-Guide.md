@@ -596,6 +596,27 @@ _content = _content + "Convoy Charlie: 1600 hrs - Coastal Road";
 | 10 | `_powerCost` | NUMBER | `2` | Power cost in Wh to start tracking |
 | 11 | `_sysChat` | BOOLEAN | `true` | Show system chat message |
 | 12 | `_ownersSelection` | ARRAY | `[[], [], []]` | Marker visibility: `[[sides], [groups], [players]]` |
+| 13 | `_requestedId` | NUMBER | `0` | Fixed device ID, `0` = auto-assign |
+| 14 | `_accessMode` | NUMBER | `0` | `ACCESS_MODE_UNASSIGNED` / `_LINKED` / `_PUBLIC` |
+| 15 | `_hidden` | BOOLEAN | `false` | Tracker appears in no listing; its identifier is the only way in |
+| 16 | `_requestedIdentifier` | STRING | `""` | Identifier to use; blank or already-used draws a fresh one |
+| 17 | `_planterUid` | STRING | `""` | Player credited with planting it (gets the diary record) |
+
+**Tracker Identifiers:**
+
+Every tracker is given an 8-character identifier (alphabet without `I`, `O`, `0`, `1`) and the server
+logs it. Entering the identifier on a laptop bypasses access control, so a hidden tracker needs no
+links at all:
+
+```sqf
+// A tracker nothing lists, reachable only by the code the briefing hands out
+[_hvtVehicle, 2, [], "HVT_Convoy", 600, 10, "", false, true, 30, 10, false, [[], [], []], 0, 0, true, "D34FNDUM"]
+    remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
+```
+
+The identifier map is server-only; resolve a code with `[_code] call Root_fnc_resolveGpsIdentifier` on
+the server. Hidden tracker IDs are broadcast as `ROOT_CYBERWARFARE_GPS_HIDDEN_IDS` so listings can
+exclude them, without the codes ever leaving the server.
 
 **Marker Visibility Format:**
 ```sqf

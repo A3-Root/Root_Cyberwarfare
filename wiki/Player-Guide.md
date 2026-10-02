@@ -354,7 +354,7 @@ custom 5 deactivate    # Deactivate custom device 5
 
 **Syntax:**
 ```bash
-gpstrack <TrackerID>
+gpstrack <TrackerID|Identifier>
 ```
 
 **Description:**
@@ -362,12 +362,14 @@ Track a GPS-tagged object in real-time, showing its position on the map.
 
 **Parameters:**
 - `TrackerID` - The unique ID of the GPS tracker (from `devices gps`)
+- `Identifier` - The 8-character code a tracker answers to, issued when it was planted
 
 **Power Cost:** Per tracker (configurable, default: **2-10 Wh**)
 
 **Examples:**
 ```bash
 gpstrack 2421         # Track GPS device 2421
+gpstrack D34FNDUM     # Track whichever tracker that code belongs to
 ```
 
 **Confirmation Required:** Yes
@@ -380,6 +382,10 @@ gpstrack 2421         # Track GPS device 2421
 - If "Allow Retracking" is enabled, you can track the same device again after completion
 - Power is consumed at the start of tracking
 - Tracking statuses: `Untracked`, `Tracking`, `Completed`, `Dead`, `Disabled`
+- An identifier works from **any** terminal that carries the hacking toolset, whether or not that
+  terminal lists the tracker: the code is the credential, so links and public access are not consulted
+- An identifier can only be entered on a terminal **connected to a network** (mission-configurable)
+- A **hidden** tracker appears in no listing on any laptop, and its identifier is the only way to it
 
 ![GPS Tracking Interface](../images/Root_Cyberwarfare_GPSTracking.jpg)
 
@@ -643,10 +649,38 @@ GPS trackers provide real-time position tracking of objects, vehicles, or player
 
 ### How GPS Trackers Work
 
-1. **Placement**: Mission makers or Zeus curators attach GPS trackers to objects
+1. **Placement**: Mission makers, Zeus curators, or any player with a tracker item attach GPS trackers
+   to objects
 2. **Detection**: Players can physically search for trackers (see below)
-3. **Tracking**: Use the `gpstrack <TrackerID>` command to activate tracking
+3. **Tracking**: Use the `gpstrack <TrackerID>` command for a tracker your terminal lists, or
+   `gpstrack <Identifier>` for one it does not
 4. **Visualization**: Map markers show the target's position
+
+### Tracker Identifiers
+
+Every tracker answers to an 8-character code, for example `D34FNDUM`. Codes use no `I`, `O`, `0` or
+`1`, so one read out over the radio cannot come back as a different code.
+
+- Entering a code **bypasses access control** entirely: the laptop needs the hacking toolset and a
+  network connection, and nothing else.
+- A code is therefore an item of intelligence in its own right. Passing one on hands over the tracker;
+  losing one to the enemy hands it to them, and there is no way to revoke it.
+- A code is **never shown in any listing**. The player who planted the tracker gets it once on screen
+  and as a permanent record in their own briefing diary, under **Cyber Warfare**.
+- A curator can read every hidden tracker's code through the **Hidden Trackers** Zeus module.
+
+### Hidden Trackers
+
+A tracker planted by a player is always hidden, and a mission maker or curator can mark one hidden too.
+A hidden tracker:
+
+- appears in **no** `devices gps` listing, in no desktop GPS app list, and in no network-scan count, on
+  every laptop including the planter's own;
+- is not counted in the `devices` "N accessible of M registered" tally, so its existence is not implied
+  either;
+- can still be found by **physically searching** the object carrying it, and disabled once found - that
+  is the counter-play;
+- is reached only by entering its identifier.
 
 ### Tracking Parameters
 
@@ -704,11 +738,18 @@ Default ESD devices (configurable in CBA settings):
 
 If you have a GPS tracker item in your inventory (default: `ACE_Banana`, configurable):
 
-1. Open **ACE Self-Interaction Menu**
-2. Navigate to **Equipment** → **Attach GPS Tracker**
-3. This attaches a tracker to yourself
+1. Open the **ACE interaction menu** on the object you want to tag, or the self-interaction menu to tag
+   yourself
+2. Navigate to **GPS Tracker** → **Attach GPS Tracker**
+3. Set the **tracking time** and **update frequency**, then hold through the progress bar
 
 ![Attach GPS Tracker Menu](../images/Root_Cyberwarfare_GPSAttach.jpg)
+
+A tracker planted this way is **hidden**: no laptop lists it, and the 8-character identifier the plant
+produces is the only way to follow it. The identifier is shown on screen once and written into your
+briefing diary under **Cyber Warfare**, together with the tracker's name, the object it went on, and
+the grid you planted it at. Give the code to whoever is running the laptop - anyone who has it can
+track from any networked terminal with the toolset, so treat it as sensitive.
 
 Mission makers can configure which item acts as the GPS tracker (see [Configuration](Configuration)).
 

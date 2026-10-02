@@ -449,6 +449,36 @@ private _lastPingColor = missionNamespace getVariable ["ROOT_CYBERWARFARE_GPS_MA
 
 ---
 
+### 11a. Tracker Identifiers Require A Network
+
+**Setting Name:** `ROOT_CYBERWARFARE_GPS_IDENTIFIER_REQUIRE_ONLINE`
+
+**Type:** Checkbox
+
+**Default:** Enabled
+
+**Scope:** Server-forced (clients cannot override)
+
+**Description:** Whether a GPS tracker identifier may only be entered on a laptop that is connected to
+a network. A laptop counts as connected when it has joined a router and holds a non-loopback address -
+the same state AE3's own `ip` command reports.
+
+**Affects:**
+- `gpstrack <IDENTIFIER>` in the terminal
+- **Track by Identifier** in the desktop GPS app
+
+**Notes:**
+- Tracking a tracker the laptop already lists, by its device ID, is unaffected either way
+- Disable for missions that place no routers at all, otherwise identifiers cannot be used
+- Takes effect immediately; no mission restart
+
+**Access in Script:**
+```sqf
+private _requiresNetwork = missionNamespace getVariable ["ROOT_CYBERWARFARE_GPS_IDENTIFIER_REQUIRE_ONLINE", true];
+```
+
+---
+
 ## Cleanup Settings
 
 ### 12. Automatic Link Cleanup - Enable

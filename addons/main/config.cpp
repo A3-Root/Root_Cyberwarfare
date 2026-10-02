@@ -21,6 +21,7 @@ class CfgPatches {
 			"ROOT_CyberWarfareCopyDeviceLinksZeus",
 			"ROOT_CyberWarfareManageDeviceLinksZeus",
 			"ROOT_CyberWarfareManageDeviceAccessZeus",
+			"ROOT_CyberWarfareHiddenTrackersZeus",
 			"ROOT_CyberWarfareClearBrokenLinksZeus",
 			"ROOT_CyberWarfareAddCustomDeviceZeus",
 			"ROOT_Module3DEN_LinkDevices",

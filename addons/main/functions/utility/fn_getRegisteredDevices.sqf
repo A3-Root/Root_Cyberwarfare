@@ -53,13 +53,22 @@ private _rows = [];
             private _netId = _x param [1, ""];
             private _object = if (_netId isEqualType "") then { objectFromNetId _netId } else { objNull };
 
+            // A hidden tracker is still offered to a curator - they are the ones who may need to
+            // rewire or inspect it - but it is marked, so the dialog does not read as though an
+            // operator could find it in a listing. The identifier itself stays on the server; the
+            // Hidden Trackers module is where a curator reads it.
+            private _label = format ["%1 %2 - %3", _typeLabel, _deviceId, _deviceName];
+            if (_deviceType == DEVICE_TYPE_GPS_TRACKER && {IS_HIDDEN_TRACKER(_deviceId)}) then {
+                _label = format ["%1 %2", _label, localize "STR_ROOT_CYBERWARFARE_GPS_HIDDEN_SUFFIX"];
+            };
+
             _rows pushBack [
                 _deviceType,
                 _deviceId,
                 _deviceName,
                 _object,
                 _typeLabel,
-                format ["%1 %2 - %3", _typeLabel, _deviceId, _deviceName]
+                _label
             ];
         } forEach _x;
     };

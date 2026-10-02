@@ -1,38 +1,59 @@
 # Changelog
 
-## Hotfix 10 (v2.0.0.6)
+## Hotfix 11 (v2.0.0.7)
 
 ### Added
-
-- A **Cryptography Guide** wiki page: the `crypto` and `crack` commands and their desktop equivalents end to end, a reference entry per cipher - what it does to the text, its options and defaults, and a worked example of the output it produces - plus Caesar and Columnar, how to read a `crack` sweep, loading intercepted mail and chat straight into the Cryptography app, planting encrypted intel from Eden, Zeus or a script, and a troubleshooting table covering missing tools, wrong keys and permission errors.
+- An 8-character identifier on every GPS tracker. Entering it on a laptop starts tracking and bypasses all access control.
+- `gpstrack <IDENTIFIER>` in the terminal and **Track by Identifier** in the desktop GPS app.
+- Trackers planted by players are hidden: absent from `devices gps`, the GPS app, the scan counts and the `devices` tally. Reached only by identifier.
+- The planter's identifier is shown on screen and recorded in their briefing diary under *Cyber Warfare*.
+- *Hidden (identifier only)* and *Identifier (blank = auto)* on the Zeus and Eden GPS modules.
+- A Zeus **Hidden Trackers** module: lists hidden trackers with their identifiers and toggles a curator-local map overlay. Curator only.
+- A server-forced setting, *Tracker Identifiers Require A Network*, on by default.
 
 ### Removed
 - N/A
 
 ### Changed
+- Hidden trackers can still be found by physically searching the object, and disabled once found.
+- Hidden trackers are marked `[HIDDEN]` in the curator device dialogs; their identifiers are shown only in the Hidden Trackers module.
+- The ACE attach dialog now asks only for tracking time and update frequency.
+- **Removed:** the owner/drive access mode on hand-planted trackers, replaced by identifiers.
+- **Fixed:** *Manage Device Links*, *Manage Device Access* and Eden's *Link Devices* were missing from the module lists - not declared in `CfgPatches >> units[]`.
+- **Fixed:** a GPS tracker attached by a player was registered unassigned, so no laptop could reach it.
+- **Fixed:** a hackable vehicle's registry entry carried empty reserved slots, risking the device-data broadcast.
+- Each client's log now names the mod version and the curator modules its install carries.
 
-- **Fixed:** the *Manage Device Links* and *Manage Device Access* modules were missing from the Zeus module list, as was *Link Devices* from the Eden editor's module list, even though all three were documented and shipped. An addon has to declare each of its classes to the game, and these three were never added to that list, so the editors had nothing to show. All three now appear alongside the rest of the Roots Cyber Warfare modules.
-- **Fixed:** a GPS tracker attached by a player, through the ACE interaction rather than the Zeus module, could not be reached from any laptop - tracking it from a terminal reported the tracker as inaccessible. The interaction never asked which laptop the tracker should report to and registered it as *unassigned*, which means registered but deliberately reachable by nobody until access is granted later. The dialog now carries the same *Device Access* setting and laptop ticks every device module has, with every registered laptop ticked by default, so a tracker is usable the moment it is planted. Picking *Linked* with every laptop unticked now says the tracker is unreachable instead of reporting a plain success.
-- A hackable vehicle's registry entry no longer carries empty reserved slots. The device registry is sent to every player's machine as a single body of data, and an entry with nothing in a slot is not something that transfer can carry, which put every device registered in the same moment at risk of never arriving - a vehicle that the terminal would then never list.
-- Each player's log now names the mod version and every curator module their install actually carries, so a mission where a module is missing from the Zeus list can be told apart from a mod folder that is out of date without guesswork.
-- **Fixed:** with *Device Setup Mode* set to **Experimental**, no device registered as *Linked computers only* could ever be reached - the laptop was offered in the module, the device registered without complaint, and the terminal then reported it as inaccessible, as though the device had been wired to a laptop that does not exist. The two halves of the access system were naming laptops differently: a device was registered against the laptop the curator ticked, while the access check looked the device up against the *player* standing within three metres of the machine. Nothing ever wrote access under that name, and at mission start - when the Eden modules register their devices - there is no player standing anywhere, so the link was discarded before it was written. A laptop now carries its own identity in Experimental mode, and registration and access both use it.
-- Experimental mode's laptop identity survives the laptop being packed into inventory and deployed again, which is what that mode exists for: the redeployed machine reaches exactly the devices it reached before, with no rewiring. Simple mode is unchanged and continues to identify a laptop by its object.
-- Device access is now matched against every name a laptop answers to rather than one, so links written by earlier versions, or by a mission script naming a laptop directly, keep granting the access they were set up to grant. Nothing has to be re-registered after updating.
-- The *Manage Device Links* and *Manage Device Access* dialogs pre-tick their checkboxes from those same names, so what the dialog shows as already-granted access is what the terminal will actually allow.
-- The "available to all future laptops" exclusion list is built the same way in both device setup modes, from the laptop roster the dialogs themselves offer, instead of from whichever players happened to be standing near a laptop at the moment the device was registered.
-- The optional periodic link cleanup no longer treats a laptop packed into a player's inventory as a deleted one in Experimental mode, which would have discarded that laptop's device access while it was being carried.
-- A laptop plugged with a Rubberducky on an AE3 older than 2.0.0.3 wrote a red error to the log about the superuser roster being unavailable. The account is created and usable either way, so this is now reported as information and names the AE3 version that adds the roster.
-- **Breaking:** *List All Laptops In Device Modules* now defaults to **off**. Out of the box a laptop is offered as a link target only once a mission has made it a hacking station - through the Register Hackable Laptop module, or by receiving the toolset from the Add Hacking Tools module - so unrelated laptops placed as scenery stay out of the device dialogs. Missions that relied on wiring devices to bare laptops during setup and delivering the tools later can turn the setting back on; it is server-forced and takes effect on the next dialog opened.
-- **Fixed:** the laptop list in the device modules came up empty, so every device set to *Linked computers only* was registered with no laptop able to reach it - the file or device existed, and no terminal, not even one logged in as root, could see it. The roster was asking the engine for normal entities, the collection vehicles live in, while a laptop is a prop and lives in the slow-entity collection, so the scan returned nothing to tick. The roster is now built from the mission-placed objects in all three collections, from AE3's registry of initialized laptops, and from a new registry of laptops these modules registered as hacking stations.
-- **Fixed:** a laptop only reports that it has a terminal once it has finished initializing, which a laptop nobody has switched on yet has not done, so it could be missing from the modules even when the roster worked. Laptops are now recognised from their configuration as well. USB drives remain excluded - they deliver the tools rather than run them.
-- Confirming a device module with *Linked computers only* selected and no laptop ticked now says the device is unreachable and points at the Manage Device Access module, instead of reporting a plain success.
-- A GPS tracker registered before per-device power costs existed now falls back to the mission-wide tracker cost when tracked from the desktop app, instead of relying on a value its registry row does not carry.
-- **Fixed:** the Hackerman intro video never played on a laptop whose hacking tools the mission installed directly, because it was armed only when a tools drive provisioned a laptop that had none. Opening the desktop on a laptop that has the tools now plays it, subject to the existing enable switch and cooldown, and plugging a drive into an already-open desktop still plays it as before. The cooldown remains per player, so one operator watching it does not silence it for the next.
+## Hotfix 10 (v2.0.0.6)
+
+### Added
+- A **Cryptography Guide** wiki page: `crypto` and `crack`, a reference entry per cipher, reading a `crack` sweep, the Cryptography app, planting encrypted intel, and troubleshooting.
+
+### Removed
+- N/A
+
+### Changed
+- **Fixed:** *Manage Device Links*, *Manage Device Access* and Eden's *Link Devices* were missing from the module lists - not declared in `CfgPatches >> units[]`.
+- **Fixed:** a GPS tracker attached by a player was registered unassigned, so no laptop could reach it.
+- **Fixed:** a hackable vehicle's registry entry carried empty reserved slots, risking the device-data broadcast.
+- Each client's log now names the mod version and the curator modules its install carries.
+- **Fixed:** in **Experimental** *Device Setup Mode*, no device set to *Linked computers only* could be reached - links were written against the laptop, read against a nearby player. Laptops now carry their own identity.
+- Experimental mode's laptop identity survives pickup and redeploy; the redeployed laptop keeps its devices. Simple mode unchanged.
+- Device access is matched against every name a laptop answers to, so links from earlier versions and from mission scripts keep working. No re-registration needed.
+- *Manage Device Links* and *Manage Device Access* pre-tick from those same names.
+- The "available to all future laptops" exclusion list is built from the laptop roster in both device setup modes.
+- The periodic link cleanup no longer treats a laptop packed into inventory as deleted in Experimental mode.
+- A Rubberducky on AE3 older than 2.0.0.3 logs the missing superuser roster as information, not an error, and names the required version.
+- **Breaking:** *List All Laptops In Device Modules* now defaults to **off** - only registered stations and laptops carrying the toolset are offered as link targets.
+- **Fixed:** the laptop list in the device modules came up empty - the roster scanned only normal entities, while laptops are props. Now built from all three entity collections, AE3's laptop registry and the station registry.
+- **Fixed:** a laptop that had not finished initializing was missing from the modules. Laptops are now recognised from their configuration too; USB drives stay excluded.
+- Confirming a device module with *Linked computers only* and no laptop ticked now warns that the device is unreachable.
+- A GPS tracker with no per-device power cost falls back to the mission-wide tracker cost in the desktop app.
+- **Fixed:** the Hackerman intro video never played on a laptop whose tools the mission installed directly. Cooldown stays per player.
 
 ## Hotfix 9 (v2.0.0.2)
 
 ### Added
-
 - A Zeus **Manage Device Access** module for rewiring device access during play, working device-first where the existing Manage Device Links module works laptop-first. Placed on a registered object it opens that object's devices; placed on open ground it asks for a radius, reports how many devices of which types it found inside it, and then walks them one dialog at a time. Each dialog shows the device's current access mode and a checkbox per laptop, already ticked wherever that laptop reaches the device, so the existing wiring is visible before it is changed. Confirming sets that device's access to exactly what the dialog shows - unticking a laptop removes its access - and cancelling leaves the device alone and moves on to the next.
 - A scriptable `Root_fnc_setDeviceAccessMain` behind the module, for missions that want to set a device's complete access state from a trigger or script rather than adding and removing links one at a time.
 - A **Messages** input source in the Cryptography app. It lists the laptop's inbox, sent mail, and chat messages, and loads the body of the one you pick straight into the input box, so intercepted traffic can be decrypted without copying it out by hand.
@@ -47,7 +68,6 @@
 - N/A
 
 ### Changed
-
 - **Fixed:** the laptop checkbox list in the Zeus device modules was empty unless a laptop had been through the Register Hackable Laptop module, leaving Public as the only way to grant any access. Every module now lists laptops according to the new *List All Laptops In Device Modules* setting, which by default includes bare laptops that have not received the hacking toolset yet - a mission can wire devices to a laptop during setup and deliver the tools later, and the link starts working the moment they arrive. Laptops that cannot hack yet are marked in the list rather than hidden, and the Add Hacking Tools module registers the laptop it installs onto as a station. USB drives are still not link targets - they deliver the tools rather than run them.
 - The Zeus device modules warn up front when a mission has no laptops at all, instead of opening a form with no laptops in it.
 - The future-laptop exclusion list is built from the same laptop roster the module dialogs offer, so a laptop that could be ticked is a laptop the access mode accounts for.
@@ -57,7 +77,6 @@
 ## Hotfix 8 (v2.0.0.1)
 
 ### Added
-
 - A **Device Access** setting on every Zeus and Eden device module (Doors, Lights, Vehicles, Files, GPS Trackers, Custom Devices, Power Grids). It replaces the old "Add to Public Device List" checkbox with explicit options: *Unassigned*, *Linked computers only*, *Linked computers + all future laptops* (Eden), and *Public*. Unassigned registers the device on the network without granting any laptop access to it, so mission makers can place devices up front and hand out access later.
 - A Zeus **Manage Device Links** module. Placed on a registered laptop it lists every registered device with its type, ID, name, and current link state; placed on the ground it first asks which laptop to work on. Ticked devices can be linked, unlinked, published to all laptops, or unassigned again during play.
 - An Eden **Link Devices** module. Synchronize laptops to it and list the devices as `deviceType:deviceId` pairs to link, unlink, publish, or unassign them at mission start, after the add-device modules have handed out their IDs.
@@ -67,7 +86,6 @@
 - N/A
 
 ### Changed
-
 - **Breaking:** a device with no linked laptops is no longer silently treated as public. Access is now always stated by the module's Device Access setting, and the Zeus device dialogs no longer select every laptop for you when none are ticked.
 - **Breaking:** the `Root_fnc_add*ZeusMain` functions take an additional trailing access-mode argument. Scripts and triggers calling them through `remoteExec` should pass it; callers that omit it now register the device as Unassigned.
 - Eden missions saved before this release are migrated automatically: the legacy "Add to Public Device List" checkbox is carried forward to the equivalent Device Access value, so existing missions behave as they did in 2.0.0.0.
@@ -78,7 +96,6 @@
 ## Major Update 2 (v2.0.0.0)
 
 ### Added
-
 - A full **Hackerman Desktop** interface for AE3 laptops. Players can now use point-and-click applications for Doors, Lights, Vehicles, Drones, GPS, Databases, Custom Devices, Power Grid control, NetScan, Crypto, and Crack; the applications operate on the same accessible-device list and power economy as the terminal.
 - A **NetScan** feature in both the terminal and desktop. It reports the laptop-visible subnet, including host IP address, device type, external SSH exposure, network interface, and the accessible hackable devices associated with each host. Scan reports can also be exported into the laptop filesystem.
 - Terminal and desktop **cryptography tools**:
@@ -100,12 +117,10 @@
 - New audiovisual assets for the Rubberducky/Hackerman experience, including connection audio and a desktop loading/intro video.
 
 ### Removed
-
 - The deprecated **Add Devices** Eden module has been removed. Missions should register the appropriate device type with the dedicated Doors, Lights, Vehicle, Database, GPS, Custom Device, or Power Grid module instead.
 - The deprecated generic **Add Hackable Object** Zeus module has been removed and replaced by **Register Hackable Laptop** for laptop registration.
 
 ### Changed
-
 - Hacking-tool availability now follows the mounted USB state: a laptop provisioned through a tools USB gains the terminal and desktop tools when the drive is connected and loses USB-provisioned tools when the final tools drive is removed. Directly installed mission tools remain intact.
 - The Hackerman launcher and desktop app group now appear only when hacking tools are available, and are refreshed for active desktop users after USB-volume changes.
 - Device access, desktop requests, and desktop actions are validated on the server before their results are sent to the requesting player, improving multiplayer synchronization and authority over door, light, vehicle, drone, GPS, database, custom-device, and power-grid operations.

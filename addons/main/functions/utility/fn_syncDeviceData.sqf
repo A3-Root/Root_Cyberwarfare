@@ -32,6 +32,9 @@ missionNamespace setVariable ["ROOT_CYBERWARFARE_SYNC_PENDING", true];
 	publicVariable "ROOT_CYBERWARFARE_LINK_CACHE";
 	publicVariable "ROOT_CYBERWARFARE_PUBLIC_DEVICES";
 	publicVariable "ROOT_CYBERWARFARE_DEVICE_LINKS";
+	// Which trackers no listing may show. The identifiers these trackers answer to are deliberately
+	// not here: a client only needs to know what to leave out, never the codes themselves.
+	publicVariable "ROOT_CYBERWARFARE_GPS_HIDDEN_IDS";
 
 	ROOT_CYBERWARFARE_LOG_DEBUG("Device data broadcast to clients (debounced)");
 }, [], 1] call CBA_fnc_waitAndExecute;

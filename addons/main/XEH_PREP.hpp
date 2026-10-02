@@ -90,10 +90,16 @@ PREP(addGPSTrackerZeusMain);
 PREP(disableGPSTracker);
 PREP(disableGPSTrackerServer);
 PREP(displayGPSPosition);
+PREP(generateGpsIdentifier);
 PREP(gpsTrackerClient);
 PREP(gpsTrackerServer);
+PREP(isLaptopOnline);
+PREP(logTrackerToDiary);
+PREP(registerGpsIdentifier);
+PREP(resolveGpsIdentifier);
 PREP(revealLaptopLocations);
 PREP(searchForGPSTracker);
+PREP(zeusTrackerMarker);
 
 // Redefine PREP macro for subdirectory: powergenerator
 #undef PREP
@@ -196,6 +202,9 @@ PREP(registerHackableLaptopZeus);
 PREP(addPowerGeneratorZeus);
 PREP(addVehicleZeus);
 PREP(copyDeviceLinksZeus);
+PREP(hiddenTrackersDialog);
+PREP(hiddenTrackersZeus);
+PREP(hiddenTrackersZeusMain);
 PREP(manageDeviceAccessZeus);
 PREP(warnUnreachableDevice);
 PREP(manageDeviceLinksZeus);

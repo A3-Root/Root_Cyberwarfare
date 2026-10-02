@@ -125,6 +125,14 @@ class CfgVehicles {
 		function = "Root_fnc_manageDeviceAccessZeus";
 		displayName = "Manage Device Access";
 	};
+	class ROOT_CyberWarfareHiddenTrackersZeus: zen_modules_moduleBase {
+		author = "Root";
+		_generalMacro = "ROOT_CyberWarfareHiddenTrackersZeus";
+		curatorCanAttach = 1;
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_hiddenTrackersZeus";
+		displayName = "Hidden Trackers";
+	};
 	class ROOT_CyberWarfareClearBrokenLinksZeus: zen_modules_moduleBase {
 		author = "Root";
 		_generalMacro = "ROOT_CyberWarfareClearBrokenLinksZeus";
@@ -870,6 +878,20 @@ class CfgVehicles {
 					class LinkedFuture { name = "Linked laptops + all future laptops"; value = 3; };
 					class PublicAll { name = "Public (all laptops)"; value = 2; };
 				};
+			};
+			class ROOT_CYBERWARFARE_3DEN_GPS_HIDDEN: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_GPS_HIDDEN";
+				displayName = "Hidden (identifier only)";
+				tooltip = "If checked, this tracker appears in no terminal or desktop listing on any laptop, and the only way to track it is to enter the identifier it answers to. Device Access still applies to the laptops that would otherwise list it.";
+				typeName = "BOOL";
+				defaultValue = 0;
+			};
+			class ROOT_CYBERWARFARE_3DEN_GPS_IDENTIFIER: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_GPS_IDENTIFIER";
+				displayName = "Identifier (blank = auto)";
+				tooltip = "The 8-character code this tracker answers to, for a briefing that names it in advance. Leave blank to have one generated; a code already in use is replaced by a generated one.";
+				typeName = "STRING";
+				defaultValue = "";
 			};
 			class ROOT_CYBERWARFARE_3DEN_GPS_ID_START: Edit {
 				property = "ROOT_CYBERWARFARE_3DEN_GPS_ID_START";

@@ -149,6 +149,8 @@ private _content = "
             .
     Type 'gpstrack TrackerID' to start tracking a GPS target. Ex: 'gpstrack 2421'
             .
+    Type 'gpstrack Identifier' to track by the code a tracker answers to, from any terminal connected to a network. Ex: 'gpstrack D34FNDUM'
+            .
     Type 'vehicle VehicleID HackType Value' to hack a vehicle. Ex: 'vehicle 1337 battery 9000' or vehicle 1337 engine off'
             .
     Type 'powergrid GridID action' to control a power grid. Actions: on, off, overload. Ex: 'powergrid 1234 on' or 'powergrid 1234 overload'

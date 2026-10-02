@@ -263,6 +263,15 @@
 #ifndef GVAR_LAPTOP_UID_COUNTER
     #define GVAR_LAPTOP_UID_COUNTER "ROOT_CYBERWARFARE_LAPTOP_UID_COUNTER" // Server-side counter the laptop identities are drawn from
 #endif
+// The identifier a GPS tracker answers to. The map of identifiers is the secret itself and stays on
+// the server; only the list of hidden tracker ids is broadcast, which is what a client needs to leave
+// a hidden tracker out of its listings.
+#ifndef GVAR_GPS_IDENTIFIERS
+    #define GVAR_GPS_IDENTIFIERS "ROOT_CYBERWARFARE_GPS_IDENTIFIERS"  // Server-only HashMap of identifier -> [deviceId, name, object name, planter UID, hidden]
+#endif
+#ifndef GVAR_GPS_HIDDEN_IDS
+    #define GVAR_GPS_HIDDEN_IDS "ROOT_CYBERWARFARE_GPS_HIDDEN_IDS"    // Array of device ids that no listing may show
+#endif
 
 // ============================================================================
 // Debug Logging Macros
@@ -441,6 +450,33 @@
 // Get public devices array (or empty array if not exists)
 #ifndef GET_PUBLIC_DEVICES
     #define GET_PUBLIC_DEVICES (missionNamespace getVariable [GVAR_PUBLIC_DEVICES, []])
+#endif
+
+// Get the identifier map (server only) and the hidden-tracker id list (everywhere)
+#ifndef GET_GPS_IDENTIFIERS
+    #define GET_GPS_IDENTIFIERS (missionNamespace getVariable [GVAR_GPS_IDENTIFIERS, createHashMap])
+#endif
+#ifndef GET_GPS_HIDDEN_IDS
+    #define GET_GPS_HIDDEN_IDS (missionNamespace getVariable [GVAR_GPS_HIDDEN_IDS, []])
+#endif
+
+// A tracker nothing may list. Takes the device id as it is stored in the registry row.
+#ifndef IS_HIDDEN_TRACKER
+    #define IS_HIDDEN_TRACKER(id) ((id) in GET_GPS_HIDDEN_IDS)
+#endif
+
+// How a tracker identifier is shaped: eight characters drawn from an alphabet with no I, O, 0 or 1, so
+// a code read out over voice cannot come back as a different code.
+#ifndef GPS_IDENTIFIER_LENGTH
+    #define GPS_IDENTIFIER_LENGTH 8
+#endif
+#ifndef GPS_IDENTIFIER_ALPHABET
+    #define GPS_IDENTIFIER_ALPHABET "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+#endif
+
+// Whether an identifier may only be entered on a laptop that is connected to a network.
+#ifndef SETTING_GPS_IDENTIFIER_ONLINE
+    #define SETTING_GPS_IDENTIFIER_ONLINE "ROOT_CYBERWARFARE_GPS_IDENTIFIER_REQUIRE_ONLINE"
 #endif
 
 // Which laptops the curator device dialogs offer as link targets: every laptop on the map, or only the

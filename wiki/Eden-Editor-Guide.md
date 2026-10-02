@@ -429,6 +429,8 @@ Sync to: laptop1, laptop2
 | **Custom Marker Name (Optional)** | String | (empty) | Custom map marker name. If empty, uses GPS Tracker Name. |
 | **Allow Retracking** | Checkbox | Unchecked | If checked, tracking can be restarted after completion. |
 | **Add to Public Device List** | Checkbox | ✓ Checked | If checked, tracker is accessible by all laptops. |
+| **Hidden (identifier only)** | Checkbox | Unchecked | If checked, the tracker appears in no terminal or desktop listing on any laptop, and the only way to track it is to enter the identifier it answers to. |
+| **Identifier (blank = auto)** | String | (empty) | The 8-character code this tracker answers to, for a briefing that names it in advance. Leave blank to have one generated; a code already in use is replaced by a generated one. With several targets synced to one module, a fixed code applies to the first and the rest are generated. |
 
 **Synchronization:**
 
@@ -436,6 +438,11 @@ Sync to: laptop1, laptop2
 |-------------|--------|
 | **Any object** | Attaches GPS tracker to that object |
 | **Laptops** | Grants those laptops private access (if public checkbox is unchecked) |
+
+**Identifiers:** every tracker is given an 8-character code at mission start, written to the server's
+RPT log so a mission maker can read back a generated one. Entering the code on a laptop bypasses
+access control entirely - the laptop needs the hacking toolset and a network connection, nothing else.
+A curator can read the codes of hidden trackers in game with the **Hidden Trackers** Zeus module.
 
 **Example Setup:**
 ```

@@ -324,6 +324,11 @@ Attaches GPS trackers to objects for real-time position tracking.
 | 10 | _powerCost | NUMBER | **REQUIRED** | Power cost in Wh to start tracking |
 | 11 | _sysChat | BOOLEAN | true | Show system chat message |
 | 12 | _ownersSelection | ARRAY | [[], [], []] | Marker visibility: [[sides], [groups], [players]] |
+| 13 | _requestedId | NUMBER | 0 | Fixed device ID, 0 = auto-assign |
+| 14 | _accessMode | NUMBER | 0 | `ACCESS_MODE_UNASSIGNED` / `_LINKED` / `_PUBLIC` |
+| 15 | _hidden | BOOLEAN | false | Keep out of every device listing; the identifier is the only way in |
+| 16 | _requestedIdentifier | STRING | "" | Identifier to use; blank or already-used draws a fresh one |
+| 17 | _planterUid | STRING | "" | UID of the player credited with planting it (diary record) |
 
 **Owners Selection Format:** `[[sides], [groups], [players]]`
 
@@ -332,9 +337,17 @@ Attaches GPS trackers to objects for real-time position tracking.
 **Example:**
 ```sqf
 [_target, 0, [], "HVT", 120, 5, "", true, false, 30, 10, true, [[], [], []]] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
+
+// Hidden tracker with a briefing-known identifier
+[_target, 0, [], "HVT", 120, 5, "", false, false, 30, 10, true, [[], [], []], 0, 0, true, "D34FNDUM"] remoteExec ["Root_fnc_addGPSTrackerZeusMain", 2];
 ```
 
 **Important:** Parameters 9 and 10 are **REQUIRED** and have no default values. Always specify them explicitly.
+
+**Identifiers:** every tracker is given an 8-character identifier on registration. Entering it on a
+laptop bypasses the access check, so a hidden tracker (15) needs no laptop links at all. The identifier
+map is server-only and is never broadcast; resolve a code with `Root_fnc_resolveGpsIdentifier` on the
+server.
 
 ---
 
@@ -612,6 +625,7 @@ Tracks GPS device position.
 | 2 | _nameOfVariable | STRING | - |
 | 3 | _trackerId | STRING | - |
 | 4 | _path | STRING | - |
+| 5 | _bypassAccess | BOOLEAN | false |
 
 **Return Value:** None
 
@@ -619,6 +633,28 @@ Tracks GPS device position.
 ```sqf
 [123, _laptop, "var1", "2421", "/tools/gpstrack"] call Root_fnc_displayGPSPosition;
 ```
+
+A `_trackerId` that is not a plain number is treated as a tracker identifier: the function asks the
+server to resolve it and the reply re-enters this function with the resolved device ID and
+`_bypassAccess` set, which is the only thing that sets it. Everything after the access check - power
+cost, battery prompt, status rules - is identical for both ways of naming a tracker.
+
+---
+
+### GPS Identifier Functions
+
+| Function | Locality | Description |
+|----------|----------|-------------|
+| `Root_fnc_generateGpsIdentifier` | Server | Draws an unused 8-character identifier (alphabet excludes `I`, `O`, `0`, `1`). |
+| `Root_fnc_registerGpsIdentifier` | Server | `[_deviceId, _trackerName, _object, _plantedByUid, _hidden, _requestedIdentifier]` → the identifier. The only writer of the identifier map; adds hidden trackers to the broadcast hidden-id list. |
+| `Root_fnc_resolveGpsIdentifier` | Server | `[_identifier]` → `[deviceId, name, objectName, plantedByUid, hidden]` or `[]`. Case-insensitive. |
+| `Root_fnc_isLaptopOnline` | Any | `[_computer]` → whether the laptop is joined to a network (AE3 network parent and a non-loopback address). |
+| `Root_fnc_logTrackerToDiary` | Client | `[_trackerName, _identifier, _objectName, _grid]` writes the planter's diary record. |
+| `Root_fnc_zeusTrackerMarker` | Client | `[_deviceId, _objectNetId, _label, _enabled]` toggles a curator's private map overlay. Display only. |
+| `Root_fnc_hiddenTrackersZeusMain` | Server | `[_owner, _requester]` sends the hidden-tracker roster, including identifiers, to one curator. Refuses non-curators. |
+
+**Globals:** `ROOT_CYBERWARFARE_GPS_IDENTIFIERS` (HashMap, **server only, never broadcast**) and
+`ROOT_CYBERWARFARE_GPS_HIDDEN_IDS` (array of device IDs, broadcast with the rest of the device data).
 
 ---
 

@@ -187,6 +187,21 @@
     false // doesn't require mission restart
 ] call CBA_fnc_addSetting;
 
+// Whether a tracker identifier may only be entered on a laptop that is on a network. On, because a
+// code is meant to be worked from a station that is part of a network rather than from any machine
+// lying around; a mission that runs no networks at all can turn it off. Server-forced: it decides
+// what a code can do, which is a mission-wide rule rather than a per-client preference.
+[
+    SETTING_GPS_IDENTIFIER_ONLINE,
+    "CHECKBOX",
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_IDENTIFIER_ONLINE", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_IDENTIFIER_ONLINE_DESC"],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
+    true,
+    1, // mission-level
+    {},
+    false // doesn't require mission restart
+] call CBA_fnc_addSetting;
+
 // Power Grid Control Power Cost Setting
 [
     SETTING_POWERGRID_COST,

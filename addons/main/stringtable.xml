@@ -308,6 +308,27 @@
         </Key>
     </Package>
     <Package name="GPS">
+        <Key ID="STR_ROOT_CYBERWARFARE_DIARY_SUBJECT">
+            <English>Cyber Warfare</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DIARY_TRACKER_GRID">
+            <English>Planted at grid: %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DIARY_TRACKER_HINT">
+            <English>Enter this identifier on any laptop with the hacking toolset, connected to a network, to track it.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DIARY_TRACKER_IDENTIFIER">
+            <English>Identifier: %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DIARY_TRACKER_NAME">
+            <English>Tracker: %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DIARY_TRACKER_OBJECT">
+            <English>Attached to: %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DIARY_TRACKER_TITLE">
+            <English>GPS Tracker %1</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACHING_OBJECT">
             <English>Attaching GPS Tracker to %1</English>
         </Key>
@@ -319,9 +340,6 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_FREQ_DESC">
             <English>Frequency in seconds between ping updates</English>
-        </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_LAPTOP_DESC">
-            <English>Link this tracker to %1</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_OBJECT">
             <English>Attach GPS Tracker</English>
@@ -347,6 +365,39 @@
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ENABLE_SEARCH">
             <English>Enable GPS Tracker Search</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_HIDDEN">
+            <English>Hidden (identifier only)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_HIDDEN_DESC">
+            <English>The tracker appears in no terminal or desktop listing on any laptop. The only way to track it is to enter the identifier it answers to.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_HIDDEN_SUFFIX">
+            <English>[HIDDEN]</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_FEEDBACK">
+            <English>Identifier: %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_FEEDBACK_HIDDEN">
+            <English>Hidden - tracked only by identifier %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_FIELD">
+            <English>Identifier (blank = auto)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_FIELD_DESC">
+            <English>The 8-character code this tracker answers to. Leave blank to have one generated; a code already in use is replaced by a generated one.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_HINT">
+            <English>GPS tracker planted.&lt;br/&gt;Identifier: %1&lt;br/&gt;Recorded in your diary.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_HINT_HIDDEN">
+            <English>GPS tracker planted and hidden.&lt;br/&gt;Identifier: %1&lt;br/&gt;Enter it on any networked laptop to track. Recorded in your diary.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_OFFLINE">
+            <English>Error! This terminal is not connected to a network - a tracker identifier cannot be used from here.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_UNKNOWN">
+            <English>Error! No tracker answers to that identifier.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_MENU">
             <English>GPS Tracker</English>
         </Key>
@@ -361,6 +412,9 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_SEARCH_MODE_ON">
             <English>GPS Tracker search mode enabled</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GPS_STATUS_MISSING">
+            <English>No longer registered</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_UNABLE_ATTACH">
             <English>Unable to attach GPS Tracker!</English>
@@ -429,6 +483,12 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_GPS_ENTRY">
             <English>%1 (#%2) [%3]</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_GPS_TRACK_BY_ID">
+            <English>Track by Identifier</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_GPS_TRACK_BY_ID_PROMPT">
+            <English>Tracker identifier</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_GRID_ENTRY">
             <English>%1 (#%2) [%3]</English>
@@ -653,6 +713,12 @@
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY">
             <English>GPS Settings</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_IDENTIFIER_ONLINE">
+            <English>Tracker Identifiers Require A Network</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_IDENTIFIER_ONLINE_DESC">
+            <English>When enabled, a GPS tracker identifier can only be entered on a laptop that is connected to a network. Disable for missions that run no networks.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_MODE">
             <English>GPS Interaction Mode</English>
         </Key>
@@ -738,6 +804,21 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_SUCCESS">
             <English>Hacking Tool Added to the Device!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HIDDEN_APPLIED">
+            <English>%1 tracker overlay(s) on your map.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HIDDEN_ENTRY">
+            <English>%1 - %2 - on %3 (%4)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HIDDEN_ENTRY_DESC">
+            <English>Show this tracker on your own map only. It does not track the device, spend any battery or change what any player or laptop can see.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HIDDEN_NONE">
+            <English>No hidden GPS trackers have been planted.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HIDDEN_TITLE">
+            <English>Hidden GPS Trackers</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_INVALID_PATH_TYPE">
             <English>Invalid path parameter type. Expected string, got %1</English>

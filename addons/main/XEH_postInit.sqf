@@ -62,6 +62,32 @@ if (isServer) then {
         ROOT_CYBERWARFARE_LOG_DEBUG_3("Device linked - Computer: %1, Type: %2, ID: %3",_computerNetId,_deviceType,_deviceId);
     }] call CBA_fnc_addEventHandler;
 
+    // A terminal has been given a tracker identifier to resolve. The identifiers live here and are
+    // never broadcast, so the lookup, the network-connection rule and the refusal messages all belong
+    // to the server; only the resolved device id travels back, to the one client that asked.
+    ["root_cyberwarfare_gpsResolveIdentifier", {
+        params [["_computerNetId", "", [""]], ["_identifier", "", [""]], ["_owner", 0, [0]], ["_commandPath", "", [""]], ["_nameOfVariable", "", [""]]];
+
+        private _computer = objectFromNetId _computerNetId;
+        if (isNull _computer) exitWith {};
+
+        private _entry = [_identifier] call FUNC(resolveGpsIdentifier);
+
+        // An unknown code says only that it is unknown. Naming what does exist would turn the command
+        // into a way of discovering trackers by guesswork.
+        if (_entry isEqualTo []) exitWith {
+            ["root_cyberwarfare_gpsIdentifierResolved", [_computerNetId, -1, localize "STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_UNKNOWN", _commandPath, _nameOfVariable], _owner] call CBA_fnc_ownerEvent;
+        };
+
+        if ((missionNamespace getVariable [SETTING_GPS_IDENTIFIER_ONLINE, true]) && {!([_computer] call FUNC(isLaptopOnline))}) exitWith {
+            ["root_cyberwarfare_gpsIdentifierResolved", [_computerNetId, -1, localize "STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_OFFLINE", _commandPath, _nameOfVariable], _owner] call CBA_fnc_ownerEvent;
+        };
+
+        _entry params ["_deviceId"];
+        DEBUG_LOG_2("Tracker identifier resolved to device %1 for laptop %2",_deviceId,_computerNetId);
+        ["root_cyberwarfare_gpsIdentifierResolved", [_computerNetId, _deviceId, "", _commandPath, _nameOfVariable], _owner] call CBA_fnc_ownerEvent;
+    }] call CBA_fnc_addEventHandler;
+
     // GPS tracker status update from a client (replaces client-side full-array broadcasts)
     // The server applies the change to the authoritative array and broadcasts it (debounced)
     ["root_cyberwarfare_updateTrackerStatus", {
@@ -211,6 +237,49 @@ if (isServer) then {
     call FUNC(syncDeviceData);
 
     ROOT_CYBERWARFARE_LOG_INFO("Device cache initialized");
+};
+
+if (hasInterface) then {
+    // The server has resolved a tracker identifier this terminal was given. A resolved id re-enters
+    // the tracking command with the permission the code carries; a refusal is printed to the terminal
+    // and releases the command's wait flag so the shell does not sit there.
+    ["root_cyberwarfare_gpsIdentifierResolved", {
+        params [["_computerNetId", "", [""]], ["_deviceId", -1, [0]], ["_message", "", [""]], ["_commandPath", "", [""]], ["_nameOfVariable", "", [""]]];
+
+        private _computer = objectFromNetId _computerNetId;
+        if (isNull _computer) exitWith {};
+
+        if (_deviceId < 0) exitWith {
+            [_computer, [[[_message, ROOT_CYBERWARFARE_COLOR_ERROR]]]] call AE3_armaos_fnc_shell_stdout;
+            if (_nameOfVariable isNotEqualTo "") then {
+                missionNamespace setVariable [_nameOfVariable, true, true];
+            };
+        };
+
+        [clientOwner, _computer, _nameOfVariable, str _deviceId, _commandPath, true] call FUNC(displayGPSPosition);
+    }] call CBA_fnc_addEventHandler;
+
+    // The hidden-tracker roster a curator asked the Hidden Trackers module for.
+    ["root_cyberwarfare_zeusHiddenTrackers", {
+        _this call FUNC(hiddenTrackersDialog);
+    }] call CBA_fnc_addEventHandler;
+
+    // The identifier a tracker this player just planted answers to: shown once, and written into
+    // their own diary, which is the only record of it they get.
+    ["root_cyberwarfare_trackerIdentifierIssued", {
+        params [["_trackerName", "", [""]], ["_identifier", "", [""]], ["_objectName", "", [""]], ["_grid", "", [""]], ["_hidden", false, [false]]];
+
+        [_trackerName, _identifier, _objectName, _grid] call FUNC(logTrackerToDiary);
+
+        private _hint = format [
+            localize ([
+                "STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_HINT",
+                "STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_HINT_HIDDEN"
+            ] select _hidden),
+            _identifier
+        ];
+        [_hint, 4] call ACE_common_fnc_displayTextStructured;
+    }] call CBA_fnc_addEventHandler;
 };
 
 // Register the RootCW desktop GUI apps + client reply handlers (no-op if AE3 desktop absent).

@@ -19,6 +19,12 @@
  * 12: _ownersSelection <ARRAY> (Optional) - Additional sides, groups, or players, to get GPS Pings marked on map, default: [[], [], []]
  * 13: _requestedId <NUMBER> (Optional) - Fixed device id, 0 = auto-assign, default: 0
  * 14: _accessMode <NUMBER> (Optional) - ACCESS_MODE_* constant, default: ACCESS_MODE_UNASSIGNED
+ * 15: _hidden <BOOL> (Optional) - Keep the tracker out of every device listing, so its identifier is
+ *                                 the only way to reach it, default: false
+ * 16: _requestedIdentifier <STRING> (Optional) - Identifier the tracker should answer to; blank draws
+ *                                               a fresh one, default: ""
+ * 17: _planterUid <STRING> (Optional) - UID of the player who planted it, recorded against the
+ *                                       identifier and used for their diary record, default: ""
  *
  * Return Value:
  * None
@@ -29,7 +35,7 @@
  * Public: No
  */
 
-params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_trackerName", ""], ["_trackingTime", 60], ["_updateFrequency", 5], ["_customMarker", ""], ["_availableToFutureLaptops", false], ["_allowRetracking", false], "_lastPingTimer", "_powerCost", ["_sysChat", true], ["_ownersSelection", [[], [], []]], ["_requestedId", 0], ["_accessMode", ACCESS_MODE_UNASSIGNED, [0]]];
+params ["_targetObject", ["_execUserId", 0], ["_linkedComputers", []], ["_trackerName", ""], ["_trackingTime", 60], ["_updateFrequency", 5], ["_customMarker", ""], ["_availableToFutureLaptops", false], ["_allowRetracking", false], "_lastPingTimer", "_powerCost", ["_sysChat", true], ["_ownersSelection", [[], [], []]], ["_requestedId", 0], ["_accessMode", ACCESS_MODE_UNASSIGNED, [0]], ["_hidden", false, [false]], ["_requestedIdentifier", "", [""]], ["_planterUid", "", [""]]];
 
 if (_execUserId == 0) then {
     _execUserId = owner _targetObject;
@@ -67,6 +73,31 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_OWNERS", _ownersSelect
 // Apply the requested reachability: private links, public registration, or nothing at all.
 private _availabilityText = [DEVICE_TYPE_GPS_TRACKER, _deviceId, _linkedComputers, _accessMode, _availableToFutureLaptops] call FUNC(applyDeviceAccess);
 
+// Every tracker answers to an identifier, which a hidden one is reached by and a listed one can be
+// reached by in addition to its laptop access.
+private _identifier = [_deviceId, _trackerName, _targetObject, _planterUid, _hidden, _requestedIdentifier] call FUNC(registerGpsIdentifier);
+_targetObject setVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_HIDDEN", _hidden, true];
+
+// The person who registered it gets the code written into their own diary, because a hidden tracker
+// has no other record anybody can read back.
+if (_identifier isNotEqualTo "" && _execUserId > 0) then {
+    [
+        "root_cyberwarfare_trackerIdentifierIssued",
+        [_trackerName, _identifier, getText (configOf _targetObject >> "displayName"), mapGridPosition _targetObject, _hidden],
+        _execUserId
+    ] call CBA_fnc_ownerEvent;
+};
+
 if (_sysChat) then {
-    [format ["Root Cyber Warfare: GPS Tracker '%1' added (ID: %2). %3", _trackerName, _deviceId, _availabilityText]] remoteExec ["systemChat", _execUserId];
+    private _identifierText = "";
+    if (_identifier isNotEqualTo "") then {
+        _identifierText = format [
+            localize ([
+                "STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_FEEDBACK",
+                "STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_FEEDBACK_HIDDEN"
+            ] select _hidden),
+            _identifier
+        ];
+    };
+    [format ["Root Cyber Warfare: GPS Tracker '%1' added (ID: %2). %3 %4", _trackerName, _deviceId, _availabilityText, _identifierText]] remoteExec ["systemChat", _execUserId];
 };
