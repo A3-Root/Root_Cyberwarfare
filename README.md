@@ -3,6 +3,7 @@
 ![version](https://img.shields.io/badge/version-2.0.0.7-blue)
 [![build](https://github.com/A3-Root/Root_Cyberwarfare/actions/workflows/auto-release.yml/badge.svg?branch=master)](https://github.com/A3-Root/Root_Cyberwarfare/actions/workflows/auto-release.yml)
 [![license](https://img.shields.io/badge/License-APL--SA-blue.svg)](https://github.com/A3-Root/Root_Cyberwarfare/blob/master/LICENSE)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/A3-Root/Root_Cyberwarfare)
 
 ![License](images/APL-SA.png)
 
