@@ -32,22 +32,22 @@ _listCtrl ctrlCommit 0;
 
 private _gridEdit = _display ctrlCreate ["RscEdit", -1, _ctrlGroup];
 _gridEdit ctrlSetPosition [0.01, 0.01, _w * 0.28, 0.03];
-_gridEdit ctrlSetText "Grid";
+_gridEdit ctrlSetText (localize "STR_ROOT_CYBERWARFARE_UI_GRID");
 _gridEdit ctrlCommit 0;
 
 private _distanceEdit = _display ctrlCreate ["RscEdit", -1, _ctrlGroup];
 _distanceEdit ctrlSetPosition [_w * 0.30, 0.01, _w * 0.18, 0.03];
-_distanceEdit ctrlSetText "Distance m";
+_distanceEdit ctrlSetText (localize "STR_ROOT_CYBERWARFARE_UI_DISTANCE_M");
 _distanceEdit ctrlCommit 0;
 
 private _filterBtn = _display ctrlCreate ["RscButton", -1, _ctrlGroup];
 _filterBtn ctrlSetPosition [_w * 0.50, 0.01, _w * 0.12, 0.03];
-_filterBtn ctrlSetText "Filters";
+_filterBtn ctrlSetText (localize "STR_ROOT_CYBERWARFARE_UI_FILTERS");
 _filterBtn ctrlCommit 0;
 
 private _pinBtn = _display ctrlCreate ["RscButton", -1, _ctrlGroup];
 _pinBtn ctrlSetPosition [_w * 0.63, 0.01, _w * 0.14, 0.03];
-_pinBtn ctrlSetText "Pin Selected";
+_pinBtn ctrlSetText (localize "STR_ROOT_CYBERWARFARE_UI_PIN_SELECTED");
 _pinBtn ctrlCommit 0;
 
 private _applyFilter = {
@@ -55,7 +55,7 @@ private _applyFilter = {
     private _rows = _listCtrl getVariable ["ROOT_gui_rows", []];
     private _pins = uiNamespace getVariable ["ROOT_gui_pins", []];
     private _grid = toLower (ctrlText _gridEdit);
-    if (_grid isEqualTo "grid") then {_grid = "";};
+    if (_grid isEqualTo (toLower (localize "STR_ROOT_CYBERWARFARE_UI_GRID"))) then {_grid = "";};
     private _distance = parseNumber (ctrlText _distanceEdit);
 
     // A grid combined with a distance names a search area: the distance is measured from the centre

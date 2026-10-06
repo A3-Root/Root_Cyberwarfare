@@ -34,7 +34,7 @@ if (isNull _targetObject) then {
     // If still no object found, show error
     if (isNull _targetObject) exitWith {
         deleteVehicle _logic;
-        ["Place the module on an object!"] call zen_common_fnc_showMessage;
+        [(localize "STR_ROOT_CYBERWARFARE_UI_PLACE_THE_MODULE_ON_AN_OBJECT")] call zen_common_fnc_showMessage;
     };
 };
 
@@ -50,34 +50,34 @@ if (_allComputers isEqualTo []) then {
 };
 
 private _dialogControls = [
-    ["EDIT", ["Generator Name", "Name that will appear in the terminal"], ["Power Generator"]],
-    ["SLIDER:RADIUS",["Effect Radius","Radius in meters to affect lights"],[100, 25000, 1000, 0, _position, [7,120,32,1]]],
-    ["TOOLBOX:YESNO", ["Allow Explosion on Overload", "Create explosion when generator is overloaded"], false],
-    ["LIST", ["Explosion Type", "Choose the type of explosion created on overload"], [
+    ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_GENERATOR_NAME"), (localize "STR_ROOT_CYBERWARFARE_UI_NAME_THAT_WILL_APPEAR_IN_THE_TERMINAL")], ["Power Generator"]],
+    ["SLIDER:RADIUS",[(localize "STR_ROOT_CYBERWARFARE_UI_EFFECT_RADIUS"),(localize "STR_ROOT_CYBERWARFARE_UI_RADIUS_IN_METERS_TO_AFFECT_LIGHTS")],[100, 25000, 1000, 0, _position, [7,120,32,1]]],
+    ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_UI_ALLOW_EXPLOSION_ON_OVERLOAD"), (localize "STR_ROOT_CYBERWARFARE_UI_CREATE_EXPLOSION_WHEN_GENERATOR_IS_OVERLOADED")], false],
+    ["LIST", [(localize "STR_ROOT_CYBERWARFARE_UI_EXPLOSION_TYPE"), (localize "STR_ROOT_CYBERWARFARE_UI_CHOOSE_THE_TYPE_OF_EXPLOSION_CREATED_ON_OVERLOAD")], [
         ["ClaymoreDirectionalMine_Remote_Ammo_Scripted", "G_40mm_HE", "M_Mo_82mm_AT_LG", "Sh_120mm_APFSDS", "Sh_120mm_HE", "Sh_155mm_AMOS", "HelicopterExploSmall", "HelicopterExploBig", "Bo_GBU12_LGB", "Bo_GBU12_LGB_MI10"],
-        ["Claymore", "40mm High Explosive", "82mm High Explosive", "120mm APFSDS Tank Shell", "120mm HE Shell", "155mm HE Shell", "Small Helicopter Explosion", "Large Helicopter Explosion", "500lb GBU-12 (Type I)", "500lb GBU-12 (Type II)"],
+        [(localize "STR_ROOT_CYBERWARFARE_UI_CLAYMORE"), (localize "STR_ROOT_CYBERWARFARE_UI_40MM_HIGH_EXPLOSIVE"), (localize "STR_ROOT_CYBERWARFARE_UI_82MM_HIGH_EXPLOSIVE"), (localize "STR_ROOT_CYBERWARFARE_UI_120MM_APFSDS_TANK_SHELL"), (localize "STR_ROOT_CYBERWARFARE_UI_120MM_HE_SHELL"), (localize "STR_ROOT_CYBERWARFARE_UI_155MM_HE_SHELL"), (localize "STR_ROOT_CYBERWARFARE_UI_SMALL_HELICOPTER_EXPLOSION"), (localize "STR_ROOT_CYBERWARFARE_UI_LARGE_HELICOPTER_EXPLOSION"), (localize "STR_ROOT_CYBERWARFARE_UI_500LB_GBU_12_TYPE_I"), (localize "STR_ROOT_CYBERWARFARE_UI_500LB_GBU_12_TYPE_II")],
         0,
         11
     ]],
-    ["EDIT", ["Excluded Light Classnames", "Comma-separated list of classnames to exclude (e.g., Lamp_Street_small_F,Land_LampHalogen_F)"], [""]],
+    ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_EXCLUDED_LIGHT_CLASSNAMES"), (localize "STR_ROOT_CYBERWARFARE_UI_COMMA_SEPARATED_LIST_OF_CLASSNAMES_TO_EXCLUDE_E_G_LAMP_STREET_SMALL")], [""]],
     ["COMBO", [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_DESC"], [
         [ACCESS_MODE_UNASSIGNED, ACCESS_MODE_LINKED, ACCESS_MODE_PUBLIC],
         [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_UNASSIGNED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_LINKED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_PUBLIC"],
         0
     ]],
-    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Only applies to 'Linked computers only': the linked computers keep access and laptops added later gain it too."], false],
-    ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true],
-    ["EDIT", ["Device ID (0 = auto)", "Fixed ID for this generator. 0 = auto-assign a free ID."], ["0"]]
+    ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_ACCESS_FUTURE"), (localize "STR_ROOT_CYBERWARFARE_UI_ONLY_APPLIES_TO_LINKED_COMPUTERS_ONLY_THE_LINKED_COMPUTERS_KEEP_ACCESS_AND")], false],
+    ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_UI_ALLOW_LOCATION_VIEW"), (localize "STR_ROOT_CYBERWARFARE_UI_SHOW_THIS_DEVICE_S_GRID_LOCATION_ON_THE_LAPTOP_CLI_GUI_DISABLE")], true],
+    ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_0_AUTO"), (localize "STR_ROOT_CYBERWARFARE_UI_FIXED_ID_FOR_THIS_GENERATOR_0_AUTO_ASSIGN_A_FREE_ID")], ["0"]]
 ];
 
 // Add a checkbox for each computer
 {
     _x params ["_netId", "_computerName"];
-    _dialogControls pushBack ["CHECKBOX", [_computerName, format ["Link this device to %1", _computerName]], false];
+    _dialogControls pushBack ["CHECKBOX", [_computerName, format [(localize "STR_ROOT_CYBERWARFARE_UI_LINK_THIS_DEVICE_TO_1"), _computerName]], false];
 } forEach _allComputers;
 
 [
-    format ["Add Power Generator - %1", getText (configOf _targetObject >> "displayName")],
+    format [(localize "STR_ROOT_CYBERWARFARE_UI_ADD_POWER_GENERATOR_1"), getText (configOf _targetObject >> "displayName")],
     _dialogControls,
     {
         params ["_results", "_args"];
@@ -114,7 +114,7 @@ private _dialogControls = [
         // cost field; the trailing values carry the requested device ID and the access mode.
         [_targetObject, _execUserId, _selectedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, 10, _requestedId, _accessMode] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
         [_targetObject, ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]] remoteExec ["setVariable", 2]; // General #3
-        ["Power Generator Added!"] call zen_common_fnc_showMessage;
+        [(localize "STR_ROOT_CYBERWARFARE_UI_POWER_GENERATOR_ADDED")] call zen_common_fnc_showMessage;
 
         // Linked access with nothing ticked registers a device no laptop can reach, which the success
         // message above does not convey on its own.

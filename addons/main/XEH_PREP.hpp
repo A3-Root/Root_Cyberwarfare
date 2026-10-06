@@ -128,6 +128,7 @@ PREP(detectBuildingDoors);
 PREP(getDoorPositions);
 PREP(getAccessibleDevices);
 PREP(getBatteryStatus);
+PREP(localizeDeviceState);
 PREP(getDroneCost);
 PREP(getComputerIdentifier);
 PREP(getComputerIdentifiers);

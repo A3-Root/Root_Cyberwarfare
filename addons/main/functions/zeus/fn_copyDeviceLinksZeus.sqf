@@ -101,12 +101,12 @@ if (!isNull _targetObject && _targetHasLinks) exitWith {
 
     // Build dialog fields
     private _dialogFields = [
-        ["COMBO", ["Target Laptop", "Select the laptop to copy device links TO (will merge)"], [_targetDropdownValues, _targetDropdownOptions, 0]],
-        ["EDIT", ["Hacking Tools Path", "Path for hacking tools (will be installed if target doesn't have them). Example: /rubberducky/tools"], ["/rubberducky/tools"]]
+        ["COMBO", [(localize "STR_ROOT_CYBERWARFARE_UI_TARGET_LAPTOP"), (localize "STR_ROOT_CYBERWARFARE_UI_SELECT_THE_LAPTOP_TO_COPY_DEVICE_LINKS_TO_WILL_MERGE")], [_targetDropdownValues, _targetDropdownOptions, 0]],
+        ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_HACKING_TOOLS_PATH"), (localize "STR_ROOT_CYBERWARFARE_UI_PATH_FOR_HACKING_TOOLS_WILL_BE_INSTALLED_IF_TARGET_DOESN_T_HAVE")], ["/rubberducky/tools"]]
     ];
 
     [
-        format ["Copy Device Links FROM %1", _sourceName],
+        format [(localize "STR_ROOT_CYBERWARFARE_UI_COPY_DEVICE_LINKS_FROM_1"), _sourceName],
         _dialogFields,
         {
             params ["_results", "_args"];
@@ -151,19 +151,19 @@ if (!isNull _targetObject) exitWith {
 
     // Build dialog fields
     private _dialogFields = [
-        ["COMBO", ["Source Laptop", "Select the laptop to copy device links FROM"], [_computerDropdownValues, _computerDropdownOptions, 0]],
-        ["TOOLBOX:YESNO", ["Replace Existing Links", "Replace all existing links on target (if any)"], false],
-        ["COMBO", ["Target Name", "Keep current name, Use source laptop's name or Create new one"], [[0, 1, 2], ["Keep target's current name", "Use source laptop's name", "Specify new name"], 0]],
-        ["EDIT", ["New Name (optional)", "New name to be used"], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]]
+        ["COMBO", [(localize "STR_ROOT_CYBERWARFARE_UI_SOURCE_LAPTOP"), (localize "STR_ROOT_CYBERWARFARE_UI_SELECT_THE_LAPTOP_TO_COPY_DEVICE_LINKS_FROM")], [_computerDropdownValues, _computerDropdownOptions, 0]],
+        ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_UI_REPLACE_EXISTING_LINKS"), (localize "STR_ROOT_CYBERWARFARE_UI_REPLACE_ALL_EXISTING_LINKS_ON_TARGET_IF_ANY")], false],
+        ["COMBO", [(localize "STR_ROOT_CYBERWARFARE_UI_TARGET_NAME"), (localize "STR_ROOT_CYBERWARFARE_UI_KEEP_CURRENT_NAME_USE_SOURCE_LAPTOP_S_NAME_OR_CREATE_NEW_ONE")], [[0, 1, 2], [(localize "STR_ROOT_CYBERWARFARE_UI_KEEP_TARGET_S_CURRENT_NAME"), (localize "STR_ROOT_CYBERWARFARE_UI_USE_SOURCE_LAPTOP_S_NAME"), (localize "STR_ROOT_CYBERWARFARE_UI_SPECIFY_NEW_NAME")], 0]],
+        ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_NEW_NAME_OPTIONAL"), (localize "STR_ROOT_CYBERWARFARE_UI_NEW_NAME_TO_BE_USED")], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]]
     ];
 
     // Add hacking tools path field if target doesn't have tools
     if (!_targetHasTools) then {
-        _dialogFields pushBack ["EDIT", ["Hacking Tools Path", "Path for hacking tools (will be installed on target laptop). Example: /rubberducky/tools"], ["/rubberducky/tools"]];
+        _dialogFields pushBack ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_HACKING_TOOLS_PATH"), (localize "STR_ROOT_CYBERWARFARE_UI_PATH_FOR_HACKING_TOOLS_WILL_BE_INSTALLED_ON_TARGET_LAPTOP_EXAMPLE_RUBBERDUCKY")], ["/rubberducky/tools"]];
     };
 
     [
-        format ["Copy Device Links TO %1", getText (configOf _targetObject >> "displayName")],
+        format [(localize "STR_ROOT_CYBERWARFARE_UI_COPY_DEVICE_LINKS_TO_1"), getText (configOf _targetObject >> "displayName")],
         _dialogFields,
         {
             params ["_results", "_args"];
@@ -203,7 +203,7 @@ private _sourceDropdownValues = [];
 } forEach _computersWithLinks;
 
 // Build dropdown for existing target selection and track hacking tools status
-private _targetDropdownOptions = ["<Create New Laptop>"];
+private _targetDropdownOptions = [(localize "STR_ROOT_CYBERWARFARE_UI_CREATE_NEW_LAPTOP")];
 private _targetDropdownValues = [-1];
 private _targetComputersData = []; // Store [index, hasHackingTools]
 {
@@ -214,16 +214,16 @@ private _targetComputersData = []; // Store [index, hasHackingTools]
 
 // Build dialog fields - always include hacking tools path (needed for new laptops or existing ones without tools)
 private _dialogFields = [
-    ["COMBO", ["Source Laptop", "Select the laptop to copy device links FROM"], [_sourceDropdownValues, _sourceDropdownOptions, 0]],
-    ["COMBO", ["Target", "Select existing laptop or create new one"], [_targetDropdownValues, _targetDropdownOptions, 0]],
-    ["TOOLBOX:YESNO", ["Replace Existing Links", "Replace all existing links on target (if any)"], false],
-    ["COMBO", ["Target Name", "Keep current name, Use source laptop's name or Create new one"], [[0, 1, 2], ["Keep target's current name", "Use source laptop's name", "Specify new name"], 0]],
-    ["EDIT", ["New Name (optional)", "New name to be used if 'Specifiy New Name' or 'Create New' is selected in the fields above"], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]],
-    ["EDIT", ["Hacking Tools Path", "Path for hacking tools (will be installed if creating new laptop or target doesn't have them). Example: /rubberducky/tools"], ["/rubberducky/tools"]]
+    ["COMBO", [(localize "STR_ROOT_CYBERWARFARE_UI_SOURCE_LAPTOP"), (localize "STR_ROOT_CYBERWARFARE_UI_SELECT_THE_LAPTOP_TO_COPY_DEVICE_LINKS_FROM")], [_sourceDropdownValues, _sourceDropdownOptions, 0]],
+    ["COMBO", [(localize "STR_ROOT_CYBERWARFARE_UI_TARGET"), (localize "STR_ROOT_CYBERWARFARE_UI_SELECT_EXISTING_LAPTOP_OR_CREATE_NEW_ONE")], [_targetDropdownValues, _targetDropdownOptions, 0]],
+    ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_UI_REPLACE_EXISTING_LINKS"), (localize "STR_ROOT_CYBERWARFARE_UI_REPLACE_ALL_EXISTING_LINKS_ON_TARGET_IF_ANY")], false],
+    ["COMBO", [(localize "STR_ROOT_CYBERWARFARE_UI_TARGET_NAME"), (localize "STR_ROOT_CYBERWARFARE_UI_KEEP_CURRENT_NAME_USE_SOURCE_LAPTOP_S_NAME_OR_CREATE_NEW_ONE")], [[0, 1, 2], [(localize "STR_ROOT_CYBERWARFARE_UI_KEEP_TARGET_S_CURRENT_NAME"), (localize "STR_ROOT_CYBERWARFARE_UI_USE_SOURCE_LAPTOP_S_NAME"), (localize "STR_ROOT_CYBERWARFARE_UI_SPECIFY_NEW_NAME")], 0]],
+    ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_NEW_NAME_OPTIONAL"), (localize "STR_ROOT_CYBERWARFARE_UI_NEW_NAME_TO_BE_USED_IF_SPECIFIY_NEW_NAME_OR_CREATE_NEW")], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]],
+    ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_HACKING_TOOLS_PATH"), (localize "STR_ROOT_CYBERWARFARE_UI_PATH_FOR_HACKING_TOOLS_WILL_BE_INSTALLED_IF_CREATING_NEW_LAPTOP_OR")], ["/rubberducky/tools"]]
 ];
 
 [
-    "Copy Device Links",
+    (localize "STR_ROOT_CYBERWARFARE_UI_COPY_DEVICE_LINKS"),
     _dialogFields,
     {
         params ["_results", "_args"];

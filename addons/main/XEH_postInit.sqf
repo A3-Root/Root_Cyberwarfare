@@ -170,7 +170,7 @@ if (isServer) then {
         };
 
         // Confirm to the requesting client so the app shows the saved path instead of hanging on "Export...".
-        private _msg = if (_ok) then { format ["Network scan exported to %1", _target] } else { format ["Failed to export network scan to %1", _target] };
+        private _msg = if (_ok) then { format [(localize "STR_ROOT_CYBERWARFARE_UI_NETWORK_SCAN_EXPORTED_TO_1"), _target] } else { format [(localize "STR_ROOT_CYBERWARFARE_UI_FAILED_TO_EXPORT_NETWORK_SCAN_TO_1"), _target] };
         ["root_cyberwarfare_gui_actionResult", [DEVICE_TYPE_NETSCAN, _msg, _ok, _target], _owner] call CBA_fnc_ownerEvent;
     }] call CBA_fnc_addEventHandler;
 };
@@ -419,7 +419,7 @@ if (hasInterface) then {
 
         private _actionEwoRegisterLaptop = [
             "ROOT_EWO_RegisterLaptop",
-            "Register Hackable Laptop",
+            (localize "STR_ROOT_CYBERWARFARE_UI_REGISTER_HACKABLE_LAPTOP"),
             "",
             {
                 params ["_target", "_player"];
@@ -427,9 +427,9 @@ if (hasInterface) then {
                 // Prompt for the link-dialog name (and whether to seed the default login) the same way
                 // the Zeus module does, instead of silently registering under the class display name.
                 [
-                    "Register Hackable Laptop", [
-                        ["EDIT", ["Laptop Name", "Custom name given to the laptop for easier management of devices. Only visible to curators when linking devices to specific laptops."], [getText (configOf _target >> "displayName")]],
-                        ["TOOLBOX:YESNO", ["Add Default Credentials", "Adds the configured Rubberducky login account to the target laptop."], true]
+                    (localize "STR_ROOT_CYBERWARFARE_UI_REGISTER_HACKABLE_LAPTOP"), [
+                        ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_LAPTOP_NAME"), (localize "STR_ROOT_CYBERWARFARE_UI_CUSTOM_NAME_GIVEN_TO_THE_LAPTOP_FOR_EASIER_MANAGEMENT_OF_DEVICES_ONLY")], [getText (configOf _target >> "displayName")]],
+                        ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_UI_ADD_DEFAULT_CREDENTIALS"), (localize "STR_ROOT_CYBERWARFARE_UI_ADDS_THE_CONFIGURED_RUBBERDUCKY_LOGIN_ACCOUNT_TO_THE_TARGET_LAPTOP")], true]
                     ], {
                         params ["_results", "_args"];
                         _args params ["_target", "_player"];
@@ -449,14 +449,14 @@ if (hasInterface) then {
         // operator can rename it at any point and the next device added shows the new name.
         private _actionEwoRenameLaptop = [
             "ROOT_EWO_RenameLaptop",
-            "Rename Hackable Laptop",
+            (localize "STR_ROOT_CYBERWARFARE_UI_RENAME_HACKABLE_LAPTOP"),
             "",
             {
                 params ["_target", "_player"];
 
                 [
-                    "Rename Hackable Laptop", [
-                        ["EDIT", ["Laptop Name", "New name shown to curators when linking devices to this laptop. Registered devices, files and accounts are not affected."], [_target getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", getText (configOf _target >> "displayName")]]]
+                    (localize "STR_ROOT_CYBERWARFARE_UI_RENAME_HACKABLE_LAPTOP"), [
+                        ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_LAPTOP_NAME"), (localize "STR_ROOT_CYBERWARFARE_UI_NEW_NAME_SHOWN_TO_CURATORS_WHEN_LINKING_DEVICES_TO_THIS_LAPTOP_REGISTERED")], [_target getVariable ["ROOT_CYBERWARFARE_PLATFORM_NAME", getText (configOf _target >> "displayName")]]]
                     ], {
                         params ["_results", "_args"];
                         _args params ["_target", "_player"];
@@ -482,7 +482,7 @@ if (hasInterface) then {
         // the point of plugging one in is knowing how empty it is.
         private _actionEwoCharge = [
             "ROOT_EWO_ChargeLaptop",
-            "Charge Laptop",
+            (localize "STR_ROOT_CYBERWARFARE_UI_CHARGE_LAPTOP"),
             "",
             {},
             {
@@ -525,7 +525,7 @@ if (hasInterface) then {
         // laptops that are actually drawing power.
         private _actionEwoDisconnect = [
             "ROOT_EWO_DisconnectCharger",
-            "Disconnect Charger",
+            (localize "STR_ROOT_CYBERWARFARE_UI_DISCONNECT_CHARGER"),
             "",
             {},
             {
@@ -562,7 +562,7 @@ if (hasInterface) then {
         // its live battery level, taken from the snapshot the charging tick publishes on the backpack.
         private _actionEwoStatus = [
             "ROOT_EWO_Status",
-            "EWO Charging Status",
+            (localize "STR_ROOT_CYBERWARFARE_UI_EWO_CHARGING_STATUS"),
             "",
             {
                 private _bag = backpackContainer ACE_player;
@@ -607,7 +607,7 @@ if (hasInterface) then {
 
         private _actionEwoNetwork = [
             "ROOT_EWO_Network",
-            "EWO Network",
+            (localize "STR_ROOT_CYBERWARFARE_UI_EWO_NETWORK"),
             "",
             {},
             _ewoHasBag
@@ -619,7 +619,7 @@ if (hasInterface) then {
         // the pack energy. The label says which way the switch will go.
         private _actionEwoWifiToggle = [
             "ROOT_EWO_WifiToggle",
-            "Toggle Network",
+            (localize "STR_ROOT_CYBERWARFARE_UI_TOGGLE_NETWORK"),
             "",
             {
                 params ["_target", "_player"];
@@ -637,7 +637,7 @@ if (hasInterface) then {
                 // rather than the switch's current position.
                 params ["", "", "", "_actionData"];
                 private _on = (backpackContainer ACE_player) getVariable ["ROOT_EWO_WIFI_ON", false];
-                _actionData set [1, ["Switch Network On", "Switch Network Off"] select _on];
+                _actionData set [1, [(localize "STR_ROOT_CYBERWARFARE_UI_SWITCH_NETWORK_ON"), (localize "STR_ROOT_CYBERWARFARE_UI_SWITCH_NETWORK_OFF")] select _on];
             }
         ] call ace_interact_menu_fnc_createAction;
 
@@ -647,16 +647,16 @@ if (hasInterface) then {
         // can read the current password off it as well as change it.
         private _actionEwoWifiConfig = [
             "ROOT_EWO_WifiConfig",
-            "Network Settings",
+            (localize "STR_ROOT_CYBERWARFARE_UI_NETWORK_SETTINGS"),
             "",
             {
                 params ["_target", "_player"];
                 private _bag = backpackContainer _player;
 
                 [
-                    "EWO Network Settings", [
-                        ["EDIT", ["Network Name", "The name laptops in range see when they scan for networks."], [_bag getVariable ["ROOT_EWO_NETWORK_NAME", "EWO Net"]]],
-                        ["EDIT", ["Password", "The password a laptop has to give to join the network."], [_bag getVariable ["ROOT_EWO_PASSWORD", ""]]]
+                    (localize "STR_ROOT_CYBERWARFARE_UI_EWO_NETWORK_SETTINGS"), [
+                        ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_NETWORK_NAME"), (localize "STR_ROOT_CYBERWARFARE_UI_THE_NAME_LAPTOPS_IN_RANGE_SEE_WHEN_THEY_SCAN_FOR_NETWORKS")], [_bag getVariable ["ROOT_EWO_NETWORK_NAME", "EWO Net"]]],
+                        ["EDIT", [localize "STR_ROOT_CYBERWARFARE_UI_PASSWORD", (localize "STR_ROOT_CYBERWARFARE_UI_THE_PASSWORD_A_LAPTOP_HAS_TO_GIVE_TO_JOIN_THE_NETWORK")], [_bag getVariable ["ROOT_EWO_PASSWORD", ""]]]
                     ], {
                         params ["_results", "_args"];
                         _args params ["_player"];
@@ -674,7 +674,7 @@ if (hasInterface) then {
         // Everything the operator would otherwise have to open a laptop to find out.
         private _actionEwoWifiInfo = [
             "ROOT_EWO_WifiInfo",
-            "Network Info",
+            (localize "STR_ROOT_CYBERWARFARE_UI_NETWORK_INFO"),
             "",
             {
                 private _bag = backpackContainer ACE_player;
@@ -706,7 +706,7 @@ if (hasInterface) then {
         // has nothing to give.
         private _actionEwoPowerConnect = [
             "ROOT_EWO_PowerConnect",
-            "Connect to Power Source",
+            (localize "STR_ROOT_CYBERWARFARE_UI_CONNECT_TO_POWER_SOURCE"),
             "",
             {},
             {
@@ -747,7 +747,7 @@ if (hasInterface) then {
         // Pulling the cable back out. The energy the pack has taken on is kept; only the intake stops.
         private _actionEwoPowerDisconnect = [
             "ROOT_EWO_PowerDisconnect",
-            "Disconnect from Power Source",
+            (localize "STR_ROOT_CYBERWARFARE_UI_DISCONNECT_FROM_POWER_SOURCE"),
             "",
             {
                 params ["_target", "_player"];

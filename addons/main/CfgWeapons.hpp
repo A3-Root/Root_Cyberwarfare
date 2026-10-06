@@ -31,8 +31,8 @@ class CfgWeapons {
 		author = "Root";
 		scope = 2;
 		scopeArsenal = 2;
-		displayName = "Rubberducky USB";
-		descriptionShort = "USB pre-loaded with hacking tools. Plug into a laptop to enable hacking.";
+		displayName = "$STR_ROOT_CYBERWARFARE_UI_RUBBERDUCKY_USB";
+		descriptionShort = "$STR_ROOT_CYBERWARFARE_UI_USB_PRE_LOADED_WITH_HACKING_TOOLS_PLUG_INTO_A_LAPTOP_TO_ENABLE";
 		ae3_vehicle = "ROOT_Rubberducky_Object";
 	};
 

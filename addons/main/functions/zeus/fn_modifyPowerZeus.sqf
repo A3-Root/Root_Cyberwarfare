@@ -23,14 +23,14 @@ if !(hasInterface) exitWith {};
 // Every slider opens on the cost that is actually in force, so a curator reads the mission's current
 // figures rather than the module's own defaults, and what they leave alone stays as it was.
 [
-    "Hacking Power Requirements", [
-	["SLIDER", ["Cost to Lock/Unlock Doors", "Energy / Power (in Wh) required to lock/unlock doors"], [1, 20, missionNamespace getVariable [SETTING_DOOR_COST, 2], 1]],
-    ["SLIDER", ["Cost to Switch Drone Sides", "Energy / Power (in Wh) required to change the side of a drone without a mission-specific cost"], [1, 100, missionNamespace getVariable [SETTING_DRONE_SIDE_COST, 20], 1]],
-    ["SLIDER", ["Cost to Disable", "Energy / Power (in Wh) required to disable a drone without a mission-specific cost"], [1, 100, missionNamespace getVariable [SETTING_DRONE_HACK_COST, 10], 1]],
-	["SLIDER", ["Cost to Hack Vehicles", "Energy / Power (in Wh) required to control a vehicle without a mission-specific cost"], [1, 100, missionNamespace getVariable [SETTING_VEHICLE_COST, 2], 1]],
-    ["SLIDER", ["Cost to Activate/Deactivate Custom Devices", "Energy / Power (in Wh) required to use a custom hacking tool"], [1, 100, missionNamespace getVariable [SETTING_CUSTOM_COST, 10], 1]],
-    ["SLIDER", ["Cost to Ping GPS Trackers", "Energy / Power (in Wh) required to track a GPS tracker without a mission-specific cost"], [1, 100, missionNamespace getVariable [SETTING_GPS_COST, 10], 1]],
-    ["SLIDER", ["Cost to Control Power Grid", "Energy / Power (in Wh) required to control power grids (on/off/overload)"], [1, 100, missionNamespace getVariable [SETTING_POWERGRID_COST, 15], 1]]
+    (localize "STR_ROOT_CYBERWARFARE_UI_HACKING_POWER_REQUIREMENTS"), [
+	["SLIDER", [(localize "STR_ROOT_CYBERWARFARE_UI_COST_TO_LOCK_UNLOCK_DOORS"), (localize "STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_LOCK_UNLOCK_DOORS")], [1, 20, missionNamespace getVariable [SETTING_DOOR_COST, 2], 1]],
+    ["SLIDER", [(localize "STR_ROOT_CYBERWARFARE_UI_COST_TO_SWITCH_DRONE_SIDES"), (localize "STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_CHANGE_THE_SIDE_OF_A_DRONE")], [1, 100, missionNamespace getVariable [SETTING_DRONE_SIDE_COST, 20], 1]],
+    ["SLIDER", [(localize "STR_ROOT_CYBERWARFARE_UI_COST_TO_DISABLE"), (localize "STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_DISABLE_A_DRONE_WITHOUT_A_MISSION")], [1, 100, missionNamespace getVariable [SETTING_DRONE_HACK_COST, 10], 1]],
+	["SLIDER", [(localize "STR_ROOT_CYBERWARFARE_UI_COST_TO_HACK_VEHICLES"), (localize "STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_CONTROL_A_VEHICLE_WITHOUT_A_MISSION")], [1, 100, missionNamespace getVariable [SETTING_VEHICLE_COST, 2], 1]],
+    ["SLIDER", [(localize "STR_ROOT_CYBERWARFARE_UI_COST_TO_ACTIVATE_DEACTIVATE_CUSTOM_DEVICES"), (localize "STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_USE_A_CUSTOM_HACKING_TOOL")], [1, 100, missionNamespace getVariable [SETTING_CUSTOM_COST, 10], 1]],
+    ["SLIDER", [(localize "STR_ROOT_CYBERWARFARE_UI_COST_TO_PING_GPS_TRACKERS"), (localize "STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_TRACK_A_GPS_TRACKER_WITHOUT_A")], [1, 100, missionNamespace getVariable [SETTING_GPS_COST, 10], 1]],
+    ["SLIDER", [(localize "STR_ROOT_CYBERWARFARE_UI_COST_TO_CONTROL_POWER_GRID"), (localize "STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_CONTROL_POWER_GRIDS_ON_OFF_OVERLOAD")], [1, 100, missionNamespace getVariable [SETTING_POWERGRID_COST, 15], 1]]
 	], {
 		params ["_results"];
 		_results params ["_doorCost", "_droneSideCost", "_droneDestructionCost", "_vehicleCost", "_customCost", "_gpsCost", "_powerGridCost"];

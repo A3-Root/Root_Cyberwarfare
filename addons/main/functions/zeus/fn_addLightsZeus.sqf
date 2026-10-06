@@ -48,7 +48,7 @@ if (!_useRadiusMode) then {
 
     if !(_isLight) exitWith {
         deleteVehicle _logic;
-        ["Object is not a light!"] call zen_common_fnc_showMessage;
+        [(localize "STR_ROOT_CYBERWARFARE_UI_OBJECT_IS_NOT_A_LIGHT")] call zen_common_fnc_showMessage;
     };
 };
 
@@ -74,26 +74,26 @@ _dialogControls pushBack ["COMBO", [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE"
     [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_UNASSIGNED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_LINKED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_PUBLIC"],
     0
 ]];
-_dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Only applies to 'Linked computers only': the linked computers keep access and laptops added later gain it too."], false];
-_dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true];
+_dialogControls pushBack ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_ACCESS_FUTURE"), (localize "STR_ROOT_CYBERWARFARE_UI_ONLY_APPLIES_TO_LINKED_COMPUTERS_ONLY_THE_LINKED_COMPUTERS_KEEP_ACCESS_AND")], false];
+_dialogControls pushBack ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_UI_ALLOW_LOCATION_VIEW"), (localize "STR_ROOT_CYBERWARFARE_UI_SHOW_THIS_DEVICE_S_GRID_LOCATION_ON_THE_LAPTOP_CLI_GUI_DISABLE")], true];
 
 // Device ID entry: radius mode distributes a Start..End range across the found lights; direct mode
 // takes a single fixed ID.
 if (_useRadiusMode) then {
-    _dialogControls pushBack ["EDIT", ["Device ID Start (0 = auto)", "First light ID handed out across the area. 0 = auto-assign."], ["0"]];
-    _dialogControls pushBack ["EDIT", ["Device ID End (0 = auto)", "Last light ID handed out across the area. 0 = auto-assign."], ["0"]];
+    _dialogControls pushBack ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_START_0_AUTO"), (localize "STR_ROOT_CYBERWARFARE_UI_FIRST_LIGHT_ID_HANDED_OUT_ACROSS_THE_AREA_0_AUTO_ASSIGN")], ["0"]];
+    _dialogControls pushBack ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_END_0_AUTO"), (localize "STR_ROOT_CYBERWARFARE_UI_LAST_LIGHT_ID_HANDED_OUT_ACROSS_THE_AREA_0_AUTO_ASSIGN")], ["0"]];
 } else {
-    _dialogControls pushBack ["EDIT", ["Device ID (0 = auto)", "Fixed ID for this light. 0 = auto-assign a free ID."], ["0"]];
+    _dialogControls pushBack ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_0_AUTO"), (localize "STR_ROOT_CYBERWARFARE_UI_FIXED_ID_FOR_THIS_LIGHT_0_AUTO_ASSIGN_A_FREE_ID")], ["0"]];
 };
 
 // Add a checkbox for each computer
 {
     _x params ["_netId", "_computerName"];
-    _dialogControls pushBack ["CHECKBOX", [_computerName, format ["Link this device to %1", _computerName]], false];
+    _dialogControls pushBack ["CHECKBOX", [_computerName, format [(localize "STR_ROOT_CYBERWARFARE_UI_LINK_THIS_DEVICE_TO_1"), _computerName]], false];
 } forEach _allComputers;
 
 [
-    if (_useRadiusMode) then {"Add Hackable Lights - Radius Mode"} else {format ["Add Hackable Light - %1", getText (configOf _targetObject >> "displayName")]},
+    if (_useRadiusMode) then {(localize "STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_LIGHTS_RADIUS_MODE")} else {format [(localize "STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_LIGHT_1"), getText (configOf _targetObject >> "displayName")]},
     _dialogControls,
     {
         params ["_results", "_args"];
@@ -147,7 +147,7 @@ if (_useRadiusMode) then {
         } else {
             // Direct mode: Register single object
             [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _allowLocation, _requestedId, _accessMode] remoteExec ["Root_fnc_addLightsZeusMain", 2];
-            ["Hackable Light Added!"] call zen_common_fnc_showMessage;
+            [(localize "STR_ROOT_CYBERWARFARE_UI_HACKABLE_LIGHT_ADDED")] call zen_common_fnc_showMessage;
         };
 
         // Linked access with nothing ticked registers a device no laptop can reach, which the success

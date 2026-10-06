@@ -34,7 +34,7 @@ if (isNull _targetObject) then {
     // If still no object found, show error
     if (isNull _targetObject) exitWith {
         deleteVehicle _logic;
-        ["Place the module on an object!"] call zen_common_fnc_showMessage;
+        [(localize "STR_ROOT_CYBERWARFARE_UI_PLACE_THE_MODULE_ON_AN_OBJECT")] call zen_common_fnc_showMessage;
     };
 };
 
@@ -50,33 +50,33 @@ if (_allComputers isEqualTo []) then {
 };
 
 private _dialogControls = [
-    ["EDIT", ["Tracker Name", "Name that will appear in the terminal and as the default marker in the map for this tracker"], [ROOT_CYBERWARFARE_GPS_TRACKER_NAME]],
-    ["SLIDER", ["Tracking Time (seconds)", "Maximum time in seconds the tracking will stay active"], [1, 3000, 60, 0]],
-    ["SLIDER", ["Update Frequency (seconds)", "Frequency in seconds between position updates"], [1, 3000, 5, 0]],
-    ["SLIDER", ["Last Ping Duration", "Frequency in seconds for the last ping to be active for"], [1, 3000, 5, 0]],
-    ["SLIDER", ["Power Cost to Track", "Energy / Power (in Wh) required to track this signal"], [1, 30, 10, 1]],
-    ["EDIT", ["Custom Marker (optional)", "Custom name for the map marker to be used. Leave empty to use Tracker Name"], [""]],
-    ["TOOLBOX:YESNO", ["Allow Retracking", "Allow tracking again after the initial tracking time ends?"], false],
-    ["OWNERS", ["Additional GPS Tracking Visibility", "Additional (apart from the player who initiated the track) sides, groups, or players that can see the GPS tracking marker."], [[], [], [], 0]],
+    ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_TRACKER_NAME"), (localize "STR_ROOT_CYBERWARFARE_UI_NAME_THAT_WILL_APPEAR_IN_THE_TERMINAL_AND_AS_THE_DEFAULT_MARKER_2")], [ROOT_CYBERWARFARE_GPS_TRACKER_NAME]],
+    ["SLIDER", [(localize "STR_ROOT_CYBERWARFARE_GPS_ATTACH_TIME"), (localize "STR_ROOT_CYBERWARFARE_GPS_ATTACH_TIME_DESC")], [1, 3000, 60, 0]],
+    ["SLIDER", [(localize "STR_ROOT_CYBERWARFARE_GPS_ATTACH_FREQ"), (localize "STR_ROOT_CYBERWARFARE_UI_FREQUENCY_IN_SECONDS_BETWEEN_POSITION_UPDATES")], [1, 3000, 5, 0]],
+    ["SLIDER", [(localize "STR_ROOT_CYBERWARFARE_UI_LAST_PING_DURATION"), (localize "STR_ROOT_CYBERWARFARE_UI_FREQUENCY_IN_SECONDS_FOR_THE_LAST_PING_TO_BE_ACTIVE_FOR")], [1, 3000, 5, 0]],
+    ["SLIDER", [(localize "STR_ROOT_CYBERWARFARE_UI_POWER_COST_TO_TRACK"), (localize "STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_TRACK_THIS_SIGNAL")], [1, 30, 10, 1]],
+    ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_CUSTOM_MARKER_OPTIONAL"), (localize "STR_ROOT_CYBERWARFARE_UI_CUSTOM_NAME_FOR_THE_MAP_MARKER_TO_BE_USED_LEAVE_EMPTY_TO")], [""]],
+    ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_UI_ALLOW_RETRACKING"), (localize "STR_ROOT_CYBERWARFARE_UI_ALLOW_TRACKING_AGAIN_AFTER_THE_INITIAL_TRACKING_TIME_ENDS_2")], false],
+    ["OWNERS", [(localize "STR_ROOT_CYBERWARFARE_UI_ADDITIONAL_GPS_TRACKING_VISIBILITY"), (localize "STR_ROOT_CYBERWARFARE_UI_ADDITIONAL_APART_FROM_THE_PLAYER_WHO_INITIATED_THE_TRACK_SIDES_GROUPS_OR")], [[], [], [], 0]],
     ["COMBO", [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_DESC"], [
         [ACCESS_MODE_UNASSIGNED, ACCESS_MODE_LINKED, ACCESS_MODE_PUBLIC],
         [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_UNASSIGNED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_LINKED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_PUBLIC"],
         0
     ]],
-    ["TOOLBOX:YESNO", ["Available to Future Laptops", "Only applies to 'Linked computers only': the linked computers keep access and laptops added later gain it too."], false],
+    ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_ACCESS_FUTURE"), (localize "STR_ROOT_CYBERWARFARE_UI_ONLY_APPLIES_TO_LINKED_COMPUTERS_ONLY_THE_LINKED_COMPUTERS_KEEP_ACCESS_AND")], false],
     ["TOOLBOX:YESNO", [localize "STR_ROOT_CYBERWARFARE_GPS_HIDDEN", localize "STR_ROOT_CYBERWARFARE_GPS_HIDDEN_DESC"], false],
     ["EDIT", [localize "STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_FIELD", localize "STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_FIELD_DESC"], [""]],
-    ["EDIT", ["Device ID (0 = auto)", "Fixed ID for this tracker. 0 = auto-assign a free ID."], ["0"]]
+    ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_0_AUTO"), (localize "STR_ROOT_CYBERWARFARE_UI_FIXED_ID_FOR_THIS_TRACKER_0_AUTO_ASSIGN_A_FREE_ID")], ["0"]]
 ];
 
 // Add a checkbox for each computer
 {
     _x params ["_netId", "_computerName"];
-    _dialogControls pushBack ["CHECKBOX", [_computerName, format ["Link this tracker to %1", _computerName]], false];
+    _dialogControls pushBack ["CHECKBOX", [_computerName, format [(localize "STR_ROOT_CYBERWARFARE_UI_LINK_THIS_TRACKER_TO_1"), _computerName]], false];
 } forEach _allComputers;
 
 [
-    format ["Add GPS Tracker - %1", getText (configOf _targetObject >> "displayName")], 
+    format [(localize "STR_ROOT_CYBERWARFARE_UI_ADD_GPS_TRACKER_1"), getText (configOf _targetObject >> "displayName")],
     _dialogControls,
     {
         params ["_results", "_args"];
@@ -104,7 +104,7 @@ private _dialogControls = [
         
         // Pass all parameters including the availability setting and owners selection
         [_targetObject, _execUserId, _selectedComputers, _trackerName, _trackingTime, _updateFrequency, _customMarker, _availableToFutureLaptops, _allowRetracking, _lastPingTimer, _powerCost, true, _ownersSelection, _requestedId, _accessMode, _hidden, _requestedIdentifier, getPlayerUID player] remoteExec ["Root_fnc_addGpsTrackerZeusMain", 2];
-        ["GPS Tracker Added!"] call zen_common_fnc_showMessage;
+        [(localize "STR_ROOT_CYBERWARFARE_UI_GPS_TRACKER_ADDED")] call zen_common_fnc_showMessage;
 
         // A hidden tracker is reached by its identifier rather than by laptop access, so the usual
         // "no laptop can reach this" warning would be telling the curator off for the normal case.

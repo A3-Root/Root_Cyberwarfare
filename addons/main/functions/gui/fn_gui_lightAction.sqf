@@ -49,12 +49,12 @@ if (_state in ["allon", "alloff"]) exitWith {
 			if (!isNull _light) then {
 				[_light, [toUpper "off", toUpper "on"] select _want] remoteExec ["switchLight", 0, format ["rcw_light_%1", netId _light]];
 				_light setVariable ["ROOT_CYBERWARFARE_LIGHT_ON", _want, true];
-				["root_cyberwarfare_deviceStateChanged", [DEVICE_TYPE_LIGHT, _lid, ["off", "on"] select _want]] call CBA_fnc_serverEvent;
+				["root_cyberwarfare_deviceStateChanged", [DEVICE_TYPE_LIGHT, _lid, [(localize "STR_ROOT_CYBERWARFARE_UI_OFF"), (localize "STR_ROOT_CYBERWARFARE_UI_ON")] select _want]] call CBA_fnc_serverEvent;
 				_n = _n + 1;
 			};
 		};
 	} forEach _lights;
-	[_owner, format ["%1 of %2 lights switched %3", _n, _total, ["off", "on"] select _want], true] call _reply;
+	[_owner, format [(localize "STR_ROOT_CYBERWARFARE_UI_1_OF_2_LIGHTS_SWITCHED_3"), _n, _total, [(localize "STR_ROOT_CYBERWARFARE_UI_OFF"), (localize "STR_ROOT_CYBERWARFARE_UI_ON")] select _want], true] call _reply;
 };
 
 if !(_state in ["on", "off"]) exitWith {};

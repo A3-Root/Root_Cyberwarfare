@@ -61,7 +61,7 @@ if ((_leafName find ".") == -1) then {
 
 private _filesystem = _computer getVariable ["AE3_filesystem", []];
 if (_filesystem isEqualTo []) exitWith {
-	[_owner, "Laptop filesystem is not initialized.", false] call _reply;
+	[_owner, (localize "STR_ROOT_CYBERWARFARE_UI_LAPTOP_FILESYSTEM_IS_NOT_INITIALIZED"), false] call _reply;
 };
 
 try {
@@ -69,7 +69,7 @@ try {
 	[[], _filesystem, _savePath, "root", _databaseContent, false] call AE3_filesystem_fnc_writeToFile;
 	_computer setVariable ["AE3_filesystem", _filesystem, true];
 } catch {
-	[_owner, format ["Download failed: %1", _exception], false] call _reply;
+	[_owner, format [(localize "STR_ROOT_CYBERWARFARE_UI_DOWNLOAD_FAILED_1"), _exception], false] call _reply;
 	breakTo "exit";
 };
 

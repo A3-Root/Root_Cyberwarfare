@@ -30,9 +30,9 @@ private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDE
 ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME = format ["HackTool_%1", _index];
 
 [
-    "Register Hackable Laptop", [
-        ["EDIT", ["Laptop Name", "Custom name given to the laptop for easier management of devices. Only visible to curators when linking devices to specific laptops."], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]],
-        ["TOOLBOX:YESNO", ["Add Default Credentials", "Adds the configured Rubberducky login account to the target laptop."], true]
+    (localize "STR_ROOT_CYBERWARFARE_UI_REGISTER_HACKABLE_LAPTOP"), [
+        ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_LAPTOP_NAME"), (localize "STR_ROOT_CYBERWARFARE_UI_CUSTOM_NAME_GIVEN_TO_THE_LAPTOP_FOR_EASIER_MANAGEMENT_OF_DEVICES_ONLY")], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]],
+        ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_UI_ADD_DEFAULT_CREDENTIALS"), (localize "STR_ROOT_CYBERWARFARE_UI_ADDS_THE_CONFIGURED_RUBBERDUCKY_LOGIN_ACCOUNT_TO_THE_TARGET_LAPTOP")], true]
     ], {
         params ["_results", "_args"];
         _args params ["_entity", "_index"];

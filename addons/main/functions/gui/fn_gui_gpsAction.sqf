@@ -52,26 +52,26 @@ if (_byIdentifier) then {
 
 if (!_byIdentifier && {!([_computer, DEVICE_TYPE_GPS_TRACKER, _gpsId, _commandPath] call FUNC(isDeviceAccessible))}) exitWith
 {
-	[_owner, format ["Access denied to tracker %1", _gpsId], false] call _reply;
+	[_owner, format [(localize "STR_ROOT_CYBERWARFARE_UI_ACCESS_DENIED_TO_TRACKER_1"), _gpsId], false] call _reply;
 };
 
 // The global device registry stores GPS trackers at index 5.
 private _trackers = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [5, []];
 private _idx = _trackers findIf { (_x select 0) == _gpsId };
-if (_idx == -1) exitWith { [_owner, format ["Access denied to tracker %1", _gpsId], false] call _reply; };
+if (_idx == -1) exitWith { [_owner, format [(localize "STR_ROOT_CYBERWARFARE_UI_ACCESS_DENIED_TO_TRACKER_1"), _gpsId], false] call _reply; };
 
 private _tracker = objectFromNetId ((_trackers select _idx) select 1);
-if (isNull _tracker) exitWith { [_owner, format ["Access denied to tracker %1", _gpsId], false] call _reply; };
+if (isNull _tracker) exitWith { [_owner, format [(localize "STR_ROOT_CYBERWARFARE_UI_ACCESS_DENIED_TO_TRACKER_1"), _gpsId], false] call _reply; };
 
 private _entry = _trackers select _idx;
 // The power cost is defaulted rather than left to the entry: a tracker registered before the per-device
 // cost existed has a shorter row, and the mission-wide cost below is what such a tracker should use.
 _entry params ["_storedTrackerId", "_trackerNetId", "_trackerName", "_trackingTime", "_updateFrequency", "_customMarker", "", "", "_currentStatus", "_allowRetracking", "_lastPingTimer", ["_powerCost", 0, [0]], ["_ownersSelection", [[], [], []]]];
 if ((_currentStatus param [0, "Untracked"]) isEqualTo "Tracking") exitWith {
-	[_owner, format ["Tracker '%1' is already being tracked.", _trackerName], false] call _reply;
+	[_owner, format [(localize "STR_ROOT_CYBERWARFARE_UI_TRACKER_1_IS_ALREADY_BEING_TRACKED"), _trackerName], false] call _reply;
 };
 if (((_currentStatus param [0, "Untracked"]) in ["Completed", "Tracked", "Untrackable", "Disabled"]) && {!_allowRetracking}) exitWith {
-	[_owner, format ["Tracker '%1' cannot be tracked again.", _trackerName], false] call _reply;
+	[_owner, format [(localize "STR_ROOT_CYBERWARFARE_UI_TRACKER_1_CANNOT_BE_TRACKED_AGAIN"), _trackerName], false] call _reply;
 };
 
 if (_powerCost < 1) then { _powerCost = _tracker getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_COST", 10]; };
@@ -84,4 +84,4 @@ private _markerName = if (_customMarker isNotEqualTo "") then { _customMarker } 
 [_tracker, _markerName, _trackingTime, _updateFrequency, _storedTrackerId, _computer, _allowRetracking, _gpsId, _trackerName, _owner, _lastPingTimer, _ownersSelection] remoteExec ["Root_fnc_gpsTrackerServer", 2];
 
 ["root_cyberwarfare_deviceStateChanged", [DEVICE_TYPE_GPS_TRACKER, _gpsId, "track"]] call CBA_fnc_serverEvent;
-[_owner, "Tracking active.", true] call _reply;
+[_owner, (localize "STR_ROOT_CYBERWARFARE_UI_TRACKING_ACTIVE"), true] call _reply;

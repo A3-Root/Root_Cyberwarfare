@@ -19,9 +19,9 @@
 [
     "ROOT_CYBERWARFARE_DEVICE_SETUP_MODE",
     "LIST",
-    ["Device Setup Mode", "Simple: Uses laptop object directly for logic checking and verification. Experimental: Uses variables for logic checking and verification. Recommened only when using AE3's Experimental Deployment Type"],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Core Settings"],
-    [["SIMPLE", "EXPERIMENTAL"], ["Simple (Default)", "Experimental (AE3 Portable)"], 0],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_DEVICE_SETUP_MODE"), (localize "STR_ROOT_CYBERWARFARE_UI_SIMPLE_USES_LAPTOP_OBJECT_DIRECTLY_FOR_LOGIC_CHECKING_AND_VERIFICATION_EXPERIMENTAL_USES")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_CORE_SETTINGS")],
+    [["SIMPLE", "EXPERIMENTAL"], [(localize "STR_ROOT_CYBERWARFARE_UI_SIMPLE_DEFAULT"), (localize "STR_ROOT_CYBERWARFARE_UI_EXPERIMENTAL_AE3_PORTABLE")], 0],
     1, // mission-level
     {},
     true // requires mission restart
@@ -30,7 +30,7 @@
 [
     SETTING_VEHICLE_COST,
     "SLIDER",
-    ["Vehicle Hacking Power Cost", "Energy in Wh consumed by each vehicle hacking action unless the vehicle has a mission-specific cost."],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_VEHICLE_HACKING_POWER_COST"), (localize "STR_ROOT_CYBERWARFARE_UI_ENERGY_IN_WH_CONSUMED_BY_EACH_VEHICLE_HACKING_ACTION_UNLESS_THE_VEHICLE")],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY"],
     [1, 100, 2, 0],
     1,
@@ -41,8 +41,8 @@
 [
     SETTING_EWO_MODE,
     "CHECKBOX",
-    ["77th JSOC EWO Mode", "Enables EWO laptop registration and EWO backpack support."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "EWO Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_77TH_JSOC_EWO_MODE"), (localize "STR_ROOT_CYBERWARFARE_UI_ENABLES_EWO_LAPTOP_REGISTRATION_AND_EWO_BACKPACK_SUPPORT")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_EWO_SETTINGS")],
     false,
     1,
     {},
@@ -55,8 +55,8 @@
 [
     SETTING_EWO_BACKPACKS,
     "EDITBOX",
-    ["EWO Backpack Classnames", "Comma-separated backpack classnames that behave as 77th JSOC EWO packs. Leave empty to restore the default list."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "EWO Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_EWO_BACKPACK_CLASSNAMES"), (localize "STR_ROOT_CYBERWARFARE_UI_COMMA_SEPARATED_BACKPACK_CLASSNAMES_THAT_BEHAVE_AS_77TH_JSOC_EWO_PACKS_LEAVE")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_EWO_SETTINGS")],
     EWO_BACKPACKS_DEFAULT,
     1,
     {
@@ -71,8 +71,8 @@
 [
     SETTING_EWO_WIFI_DRAIN,
     "SLIDER",
-    ["EWO Network Drain", "Energy per minute an EWO backpack spends while its wireless network is broadcasting. The pack holds 400 energy."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "EWO Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_EWO_NETWORK_DRAIN"), (localize "STR_ROOT_CYBERWARFARE_UI_ENERGY_PER_MINUTE_AN_EWO_BACKPACK_SPENDS_WHILE_ITS_WIRELESS_NETWORK_IS")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_EWO_SETTINGS")],
     [0, 60, EWO_WIFI_DRAIN_DEFAULT, 0],
     1,
     {},
@@ -82,8 +82,8 @@
 [
     SETTING_EWO_CHARGE_RATE,
     "SLIDER",
-    ["EWO Laptop Charge Rate", "Energy per minute an EWO backpack delivers to a laptop it is charging. One energy raises a laptop battery by one percent."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "EWO Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_EWO_LAPTOP_CHARGE_RATE"), (localize "STR_ROOT_CYBERWARFARE_UI_ENERGY_PER_MINUTE_AN_EWO_BACKPACK_DELIVERS_TO_A_LAPTOP_IT_IS")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_EWO_SETTINGS")],
     [1, 60, EWO_CHARGE_RATE_DEFAULT, 0],
     1,
     {},
@@ -93,8 +93,8 @@
 [
     SETTING_EWO_RECHARGE_RATE,
     "SLIDER",
-    ["EWO Power Source Recharge Rate", "Energy per minute an EWO backpack takes in from the power source it is connected to."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "EWO Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_EWO_POWER_SOURCE_RECHARGE_RATE"), (localize "STR_ROOT_CYBERWARFARE_UI_ENERGY_PER_MINUTE_AN_EWO_BACKPACK_TAKES_IN_FROM_THE_POWER_SOURCE")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_EWO_SETTINGS")],
     [1, 60, EWO_RECHARGE_RATE_DEFAULT, 0],
     1,
     {},
@@ -105,8 +105,8 @@
 [
     "ROOT_CYBERWARFARE_DEBUG_MODE",
     "CHECKBOX",
-    ["Debug Mode", "Enable comprehensive logging to RPT file for troubleshooting."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Core Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_DEBUG_MODE"), (localize "STR_ROOT_CYBERWARFARE_UI_ENABLE_COMPREHENSIVE_LOGGING_TO_RPT_FILE_FOR_TROUBLESHOOTING")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_CORE_SETTINGS")],
     false, // default OFF
     1, // mission-level
     {},
@@ -179,7 +179,7 @@
 [
     SETTING_GPS_COST,
     "SLIDER",
-    ["GPS Tracker Power Cost", "Energy in Wh consumed by each GPS tracker ping unless the tracker has a mission-specific cost."],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_GPS_TRACKER_POWER_COST"), (localize "STR_ROOT_CYBERWARFARE_UI_ENERGY_IN_WH_CONSUMED_BY_EACH_GPS_TRACKER_PING_UNLESS_THE_TRACKER")],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY"],
     [1, 100, 10, 0], // [min, max, default, decimal places]
     1, // mission-level
@@ -258,7 +258,7 @@
     "LIST",
     [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE_DESC"],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
-    [["ColorBlack", "ColorGrey", "ColorRed", "ColorBrown", "ColorOrange", "ColorYellow", "ColorKhaki", "ColorGreen", "ColorBlue", "ColorPink", "ColorWhite", "ColorWEST", "ColorEAST", "ColorGUER", "ColorCIV", "ColorUNKNOWN"], ["Black", "Grey", "Red", "Brown", "Orange", "Yellow", "Khaki", "Green", "Blue", "Pink", "White", "BLUFOR", "OPFOR", "Independent", "Civilian", "Unknown"], 2],
+    [["ColorBlack", "ColorGrey", "ColorRed", "ColorBrown", "ColorOrange", "ColorYellow", "ColorKhaki", "ColorGreen", "ColorBlue", "ColorPink", "ColorWhite", "ColorWEST", "ColorEAST", "ColorGUER", "ColorCIV", "ColorUNKNOWN"], [(localize "STR_ROOT_CYBERWARFARE_UI_BLACK"), (localize "STR_ROOT_CYBERWARFARE_UI_GREY"), (localize "STR_ROOT_CYBERWARFARE_UI_RED"), (localize "STR_ROOT_CYBERWARFARE_UI_BROWN"), (localize "STR_ROOT_CYBERWARFARE_UI_ORANGE"), (localize "STR_ROOT_CYBERWARFARE_UI_YELLOW"), (localize "STR_ROOT_CYBERWARFARE_UI_KHAKI"), (localize "STR_ROOT_CYBERWARFARE_UI_GREEN"), (localize "STR_ROOT_CYBERWARFARE_UI_BLUE"), (localize "STR_ROOT_CYBERWARFARE_UI_PINK"), (localize "STR_ROOT_CYBERWARFARE_UI_WHITE"), (localize "STR_ROOT_CYBERWARFARE_GUI_SIDE_WEST"), (localize "STR_ROOT_CYBERWARFARE_GUI_SIDE_EAST"), (localize "STR_ROOT_CYBERWARFARE_GUI_SIDE_GUER"), (localize "STR_ROOT_CYBERWARFARE_GUI_SIDE_CIV"), (localize "STR_ROOT_CYBERWARFARE_UI_UNKNOWN")], 2],
     0, // mission-level
     {},
     false // doesn't require mission restart
@@ -270,7 +270,7 @@
     "LIST",
     [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_LASTPING", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_LASTPING_DESC"],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
-    [["ColorBlack", "ColorGrey", "ColorRed", "ColorBrown", "ColorOrange", "ColorYellow", "ColorKhaki", "ColorGreen", "ColorBlue", "ColorPink", "ColorWhite", "ColorWEST", "ColorEAST", "ColorGUER", "ColorCIV", "ColorUNKNOWN"], ["Black", "Grey", "Red", "Brown", "Orange", "Yellow", "Khaki", "Green", "Blue", "Pink", "White", "BLUFOR", "OPFOR", "Independent", "Civilian", "Unknown"], 14],
+    [["ColorBlack", "ColorGrey", "ColorRed", "ColorBrown", "ColorOrange", "ColorYellow", "ColorKhaki", "ColorGreen", "ColorBlue", "ColorPink", "ColorWhite", "ColorWEST", "ColorEAST", "ColorGUER", "ColorCIV", "ColorUNKNOWN"], [(localize "STR_ROOT_CYBERWARFARE_UI_BLACK"), (localize "STR_ROOT_CYBERWARFARE_UI_GREY"), (localize "STR_ROOT_CYBERWARFARE_UI_RED"), (localize "STR_ROOT_CYBERWARFARE_UI_BROWN"), (localize "STR_ROOT_CYBERWARFARE_UI_ORANGE"), (localize "STR_ROOT_CYBERWARFARE_UI_YELLOW"), (localize "STR_ROOT_CYBERWARFARE_UI_KHAKI"), (localize "STR_ROOT_CYBERWARFARE_UI_GREEN"), (localize "STR_ROOT_CYBERWARFARE_UI_BLUE"), (localize "STR_ROOT_CYBERWARFARE_UI_PINK"), (localize "STR_ROOT_CYBERWARFARE_UI_WHITE"), (localize "STR_ROOT_CYBERWARFARE_GUI_SIDE_WEST"), (localize "STR_ROOT_CYBERWARFARE_GUI_SIDE_EAST"), (localize "STR_ROOT_CYBERWARFARE_GUI_SIDE_GUER"), (localize "STR_ROOT_CYBERWARFARE_GUI_SIDE_CIV"), (localize "STR_ROOT_CYBERWARFARE_UI_UNKNOWN")], 14],
     0, // mission-level
     {},
     false // doesn't require mission restart
@@ -282,7 +282,7 @@
     "LIST",
     [localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_MODE", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_MODE_DESC"],
     [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
-    [["SEARCH_MODE", "ALWAYS"], ["Search Mode (Default)", "Always Visible"], 0],
+    [["SEARCH_MODE", "ALWAYS"], [(localize "STR_ROOT_CYBERWARFARE_UI_SEARCH_MODE_DEFAULT"), (localize "STR_ROOT_CYBERWARFARE_UI_ALWAYS_VISIBLE")], 0],
     1, // mission-level
     {},
     true // requires mission restart (ACE action conditions are set at init)
@@ -306,8 +306,8 @@
 [
     "ROOT_CYBERWARFARE_CLEANUP_ENABLED",
     "CHECKBOX",
-    ["Automatic Link Cleanup", "Periodically remove device links whose laptop/device has been deleted. OFF by default - links can always be cleared on demand with the 'Clear Broken Device Links' ZEN module or Root_fnc_clearBrokenDeviceLinks."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Cleanup Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_AUTOMATIC_LINK_CLEANUP"), (localize "STR_ROOT_CYBERWARFARE_UI_PERIODICALLY_REMOVE_DEVICE_LINKS_WHOSE_LAPTOP_DEVICE_HAS_BEEN_DELETED_OFF_BY")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_CLEANUP_SETTINGS")],
     false, // default OFF
     1, // mission-level
     {},
@@ -318,8 +318,8 @@
 [
     "ROOT_CYBERWARFARE_CLEANUP_TIME",
     "SLIDER",
-    ["Link Cleanup Interval", "How often (seconds) the automatic cleanup runs when enabled."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Cleanup Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_LINK_CLEANUP_INTERVAL"), (localize "STR_ROOT_CYBERWARFARE_UI_HOW_OFTEN_SECONDS_THE_AUTOMATIC_CLEANUP_RUNS_WHEN_ENABLED")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_CLEANUP_SETTINGS")],
     [30, 3600, 180, 0], // [min, max, default, decimals]
     1, // mission-level
     {},
@@ -330,8 +330,8 @@
 [
     "ROOT_CYBERWARFARE_CLEANUP_STRIKE_GRACE",
     "CHECKBOX",
-    ["Link Cleanup Strike Grace", "ON (recommended): a link is only removed after its object has been missing for several consecutive passes, absorbing brief lookup misses right after a player joins. OFF: remove as soon as the object is missing. Only affects the automatic loop; the manual clear always acts immediately."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Cleanup Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_LINK_CLEANUP_STRIKE_GRACE"), (localize "STR_ROOT_CYBERWARFARE_UI_ON_RECOMMENDED_A_LINK_IS_ONLY_REMOVED_AFTER_ITS_OBJECT_HAS_BEEN")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_CLEANUP_SETTINGS")],
     true, // default ON (grace)
     1, // mission-level
     {},
@@ -348,8 +348,8 @@
 [
     SETTING_LIST_ALL_LAPTOPS,
     "CHECKBOX",
-    ["List All Laptops In Device Modules", "List every laptop on the map as a link target in the Zeus and device modules, including ones with no hacking tools yet. Disabled (default), only laptops registered as hacking stations or already carrying the tools are listed."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Core Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_LIST_ALL_LAPTOPS_IN_DEVICE_MODULES"), (localize "STR_ROOT_CYBERWARFARE_UI_LIST_EVERY_LAPTOP_ON_THE_MAP_AS_A_LINK_TARGET_IN_THE")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_CORE_SETTINGS")],
     false, // default OFF - registered stations only
     2, // server-forced; clients cannot overwrite it
     {},
@@ -362,8 +362,8 @@
 [
     SETTING_INTRO_VIDEO_ENABLED,
     "CHECKBOX",
-    ["Hackerman Intro Video", "Play the Hackerman loading video when a desktop is opened on a laptop that has the hacking tools, and when a hacking-tools drive is plugged into an open desktop."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Desktop & Audio Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_HACKERMAN_INTRO_VIDEO"), (localize "STR_ROOT_CYBERWARFARE_UI_PLAY_THE_HACKERMAN_LOADING_VIDEO_WHEN_A_DESKTOP_IS_OPENED_ON_A")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_DESKTOP_AUDIO_SETTINGS")],
     true, // default ON
     1, // mission-level
     {},
@@ -373,8 +373,8 @@
 [
     SETTING_INTRO_VIDEO_COOLDOWN,
     "SLIDER",
-    ["Hackerman Intro Video Cooldown", "Minimum seconds between two plays of the Hackerman loading video on the same laptop for the same player. Set to 0 to play it on every connection."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Desktop & Audio Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_HACKERMAN_INTRO_VIDEO_COOLDOWN"), (localize "STR_ROOT_CYBERWARFARE_UI_MINIMUM_SECONDS_BETWEEN_TWO_PLAYS_OF_THE_HACKERMAN_LOADING_VIDEO_ON_THE")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_DESKTOP_AUDIO_SETTINGS")],
     [0, 3600, ROOT_CYBERWARFARE_INTRO_COOLDOWN, 0],
     1, // mission-level
     {},
@@ -386,8 +386,8 @@
 [
     SETTING_DUCKY_SOUND_ENABLED,
     "CHECKBOX",
-    ["Rubberducky Connection Sound", "Play the Rubberducky sound when a Rubberducky USB is connected to or disconnected from a laptop."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Desktop & Audio Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_RUBBERDUCKY_CONNECTION_SOUND"), (localize "STR_ROOT_CYBERWARFARE_UI_PLAY_THE_RUBBERDUCKY_SOUND_WHEN_A_RUBBERDUCKY_USB_IS_CONNECTED_TO_OR")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_DESKTOP_AUDIO_SETTINGS")],
     true, // default ON
     1, // mission-level
     {},
@@ -397,8 +397,8 @@
 [
     SETTING_USB_SOUND_ENABLED,
     "CHECKBOX",
-    ["Flash Drive Connection Sound", "Play the standard flash drive sound when any other USB drive is connected to or disconnected from a laptop."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Desktop & Audio Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_FLASH_DRIVE_CONNECTION_SOUND"), (localize "STR_ROOT_CYBERWARFARE_UI_PLAY_THE_STANDARD_FLASH_DRIVE_SOUND_WHEN_ANY_OTHER_USB_DRIVE_IS")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_DESKTOP_AUDIO_SETTINGS")],
     true, // default ON
     1, // mission-level
     {},
@@ -408,8 +408,8 @@
 [
     SETTING_DEVICE_SOUND_VOLUME,
     "SLIDER",
-    ["Drive Connection Sound Volume", "Loudness of the drive connect and disconnect sounds. Higher values carry further from the laptop."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Desktop & Audio Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_DRIVE_CONNECTION_SOUND_VOLUME"), (localize "STR_ROOT_CYBERWARFARE_UI_LOUDNESS_OF_THE_DRIVE_CONNECT_AND_DISCONNECT_SOUNDS_HIGHER_VALUES_CARRY_FURTHER")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_DESKTOP_AUDIO_SETTINGS")],
     [0, 10, DEVICE_SOUND_VOLUME_DEFAULT, 1],
     1, // mission-level
     {},
@@ -420,8 +420,8 @@
 [
     "ROOT_CYBERWARFARE_RUBBERDUCKY_CREDS_ENABLED",
     "CHECKBOX",
-    ["Rubberducky Default Login", "When a Rubberducky/hacking-tools USB is connected to a laptop, add a default login account to that laptop (if one with the same username does not already exist)."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Rubberducky Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_RUBBERDUCKY_DEFAULT_LOGIN"), (localize "STR_ROOT_CYBERWARFARE_UI_WHEN_A_RUBBERDUCKY_HACKING_TOOLS_USB_IS_CONNECTED_TO_A_LAPTOP_ADD")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_RUBBERDUCKY_SETTINGS")],
     true, // default ON
     1, // mission-level
     {},
@@ -432,8 +432,8 @@
 [
     "ROOT_CYBERWARFARE_RUBBERDUCKY_CRED_USER",
     "EDITBOX",
-    ["Rubberducky Login Username", "Username of the account injected on connect."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Rubberducky Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_RUBBERDUCKY_LOGIN_USERNAME"), (localize "STR_ROOT_CYBERWARFARE_UI_USERNAME_OF_THE_ACCOUNT_INJECTED_ON_CONNECT")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_RUBBERDUCKY_SETTINGS")],
     "quack",
     1, // mission-level
     {},
@@ -444,8 +444,8 @@
 [
     "ROOT_CYBERWARFARE_RUBBERDUCKY_CRED_PASS",
     "EDITBOX",
-    ["Rubberducky Login Password", "Password of the account injected on connect."],
-    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", "Rubberducky Settings"],
+    [(localize "STR_ROOT_CYBERWARFARE_UI_RUBBERDUCKY_LOGIN_PASSWORD"), (localize "STR_ROOT_CYBERWARFARE_UI_PASSWORD_OF_THE_ACCOUNT_INJECTED_ON_CONNECT")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_RUBBERDUCKY_SETTINGS")],
     "quack",
     1, // mission-level
     {},

@@ -21,33 +21,33 @@ private _entity = attachedTo _logic;
 deleteVehicle _logic;
 
 private _algorithms = [
-    ["morse", "Morse Code"],
-    ["spelling", "Spelling Alphabet"],
-    ["affine", "Affine"],
+    ["morse", (localize "STR_ROOT_CYBERWARFARE_UI_MORSE_CODE")],
+    ["spelling", (localize "STR_ROOT_CYBERWARFARE_UI_SPELLING_ALPHABET")],
+    ["affine", (localize "STR_ROOT_CYBERWARFARE_UI_AFFINE")],
     ["rot", "ROT"],
-    ["vigenere", "Vigenere"],
-    ["bacon", "Bacon"],
-    ["alpha_sub", "Alphabetical Substitution"],
-    ["railfence", "Railfence"],
+    ["vigenere", (localize "STR_ROOT_CYBERWARFARE_UI_VIGENERE")],
+    ["bacon", (localize "STR_ROOT_CYBERWARFARE_UI_BACON")],
+    ["alpha_sub", (localize "STR_ROOT_CYBERWARFARE_UI_ALPHABETICAL_SUBSTITUTION")],
+    ["railfence", (localize "STR_ROOT_CYBERWARFARE_UI_RAILFENCE")],
     ["base32", "Base32"],
     ["base64", "Base64"],
     ["ascii85", "Ascii85"],
-    ["unicode", "Unicode Notation"],
-    ["integer", "Integer"]
+    ["unicode", (localize "STR_ROOT_CYBERWARFARE_UI_UNICODE_NOTATION")],
+    ["integer", (localize "STR_ROOT_CYBERWARFARE_UI_INTEGER")]
 ];
 
 private _algorithmIds = _algorithms apply {_x select 0};
 private _algorithmLabels = _algorithms apply {_x select 1};
 
 [
-    "Cipher Tools",
+    (localize "STR_ROOT_CYBERWARFARE_UI_CIPHER_TOOLS"),
     [
-        ["COMBO", ["Mode", "Encrypt/decrypt text or analyze cipher text."], [["encrypt", "decrypt", "bruteforce"], ["Encrypt", "Decrypt", "Bruteforce / Analyse"], 0]],
-        ["COMBO", ["Algorithm", "Cipher algorithm to use."], [_algorithmIds, _algorithmLabels, 0]],
-        ["EDIT:MULTI", ["Input", "Text to process."], ["", {}, 7]],
-        ["EDIT", ["Key / Variant", "Primary key, password, keyword, or variant. Examples: rot13, LEMON, 3"], [""]],
-        ["EDIT", ["Options", "Optional key=value pairs. Examples: a=5 b=8, rails=3, radix=16 width=8 signed=0, alphabet=ZYXWVUTSRQPONMLKJIHGFEDCBA"], [""]],
-        ["EDIT", ["Write Result Path", "Optional path on the attached AE3 device. Leave empty to show the result only."], [""]]
+        ["COMBO", [(localize "STR_ROOT_CYBERWARFARE_UI_MODE"), (localize "STR_ROOT_CYBERWARFARE_UI_ENCRYPT_DECRYPT_TEXT_OR_ANALYZE_CIPHER_TEXT")], [["encrypt", "decrypt", "bruteforce"], [(localize "STR_ROOT_CYBERWARFARE_UI_ENCRYPT"), (localize "STR_ROOT_CYBERWARFARE_UI_DECRYPT"), (localize "STR_ROOT_CYBERWARFARE_UI_BRUTEFORCE_ANALYSE")], 0]],
+        ["COMBO", [(localize "STR_ROOT_CYBERWARFARE_UI_ALGORITHM"), (localize "STR_ROOT_CYBERWARFARE_UI_CIPHER_ALGORITHM_TO_USE")], [_algorithmIds, _algorithmLabels, 0]],
+        ["EDIT:MULTI", [(localize "STR_ROOT_CYBERWARFARE_UI_INPUT"), (localize "STR_ROOT_CYBERWARFARE_UI_TEXT_TO_PROCESS")], ["", {}, 7]],
+        ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_KEY_VARIANT"), (localize "STR_ROOT_CYBERWARFARE_UI_PRIMARY_KEY_PASSWORD_KEYWORD_OR_VARIANT_EXAMPLES_ROT13_LEMON_3")], [""]],
+        ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_OPTIONS"), (localize "STR_ROOT_CYBERWARFARE_UI_OPTIONAL_KEY_VALUE_PAIRS_EXAMPLES_A_5_B_8_RAILS_3_RADIX_2")], [""]],
+        ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_WRITE_RESULT_PATH"), (localize "STR_ROOT_CYBERWARFARE_UI_OPTIONAL_PATH_ON_THE_ATTACHED_AE3_DEVICE_LEAVE_EMPTY_TO_SHOW_THE")], [""]]
     ],
     {
         params ["_results", "_args"];
@@ -65,7 +65,7 @@ private _algorithmLabels = _algorithms apply {_x select 1};
         };
 
         if (isNull _entity || {isNil {_entity getVariable "AE3_filesystem"}}) exitWith {
-            ["Attach this module to an AE3 device to write the result to a file."] call zen_common_fnc_showMessage;
+            [(localize "STR_ROOT_CYBERWARFARE_UI_ATTACH_THIS_MODULE_TO_AN_AE3_DEVICE_TO_WRITE_THE_RESULT_TO")] call zen_common_fnc_showMessage;
         };
 
         [
@@ -73,7 +73,7 @@ private _algorithmLabels = _algorithms apply {_x select 1};
                 params ["_entity", "_outputPath", "_text", "_owner"];
                 private _filesystem = _entity getVariable ["AE3_filesystem", []];
                 if (_filesystem isEqualTo []) exitWith {
-                    ["Cipher result write failed: filesystem is not initialized."] remoteExecCall ["systemChat", _owner];
+                    [(localize "STR_ROOT_CYBERWARFARE_UI_CIPHER_RESULT_WRITE_FAILED_FILESYSTEM_IS_NOT_INITIALIZED")] remoteExecCall ["systemChat", _owner];
                 };
 
                 try {
@@ -84,9 +84,9 @@ private _algorithmLabels = _algorithms apply {_x select 1};
                     [[], _filesystem, _outputPath, "", "root", "root", [[true, true, true], [true, false, false]]] call AE3_filesystem_fnc_ensureFile;
                     [[], _filesystem, _outputPath, "root", _text, false] call AE3_filesystem_fnc_writeToFile;
                     _entity setVariable ["AE3_filesystem", _filesystem, true];
-                    [format ["Cipher result written to %1", _outputPath]] remoteExecCall ["systemChat", _owner];
+                    [format [(localize "STR_ROOT_CYBERWARFARE_UI_CIPHER_RESULT_WRITTEN_TO_1"), _outputPath]] remoteExecCall ["systemChat", _owner];
                 } catch {
-                    [format ["Cipher result write failed: %1", _exception]] remoteExecCall ["systemChat", _owner];
+                    [format [(localize "STR_ROOT_CYBERWARFARE_UI_CIPHER_RESULT_WRITE_FAILED_1"), _exception]] remoteExecCall ["systemChat", _owner];
                 };
             },
             [_entity, _outputPath, _text, clientOwner]
