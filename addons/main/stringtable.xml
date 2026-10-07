@@ -3,11 +3,11 @@
     <Package name="Custom_Device_Operations">
         <Key ID="STR_ROOT_CYBERWARFARE_CUSTOM_DEVICE_ACTIVATED">
             <English>Custom device '%1' (ID: %2) activated.</English>
-            <Chinesesimp>自定义设备 &apos;%1&apos;（ID：%2）已激活。</Chinesesimp>
+            <Chinesesimp>自定义设备 '%1'（ID：%2）已激活。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_CUSTOM_DEVICE_DEACTIVATED">
             <English>Custom device '%1' (ID: %2) deactivated.</English>
-            <Chinesesimp>自定义设备 &apos;%1&apos;（ID：%2）已停用。</Chinesesimp>
+            <Chinesesimp>自定义设备 '%1'（ID：%2）已停用。</Chinesesimp>
         </Key>
     </Package>
     <Package name="Device_Access">
@@ -512,12 +512,12 @@
             <Chinesesimp>此追踪器响应的 8 字符代码。留空将自动生成；若代码已被使用，则会替换为自动生成的代码。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_HINT">
-            <English>GPS tracker planted.&lt;br/&gt;Identifier: %1&lt;br/&gt;Recorded in your diary.</English>
-            <Chinesesimp>GPS 追踪器已安装。&lt;br/&gt;标识符：%1&lt;br/&gt;已记录在你的日志中。</Chinesesimp>
+            <English>GPS tracker planted.<br/>Identifier: %1<br/>Recorded in your diary.</English>
+            <Chinesesimp>GPS 追踪器已安装。<br/>标识符：%1<br/>已记录在你的日志中。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_HINT_HIDDEN">
-            <English>GPS tracker planted and hidden.&lt;br/&gt;Identifier: %1&lt;br/&gt;Enter it on any networked laptop to track. Recorded in your diary.</English>
-            <Chinesesimp>GPS 追踪器已安装并隐藏。&lt;br/&gt;标识符：%1&lt;br/&gt;在任何联网的笔记本电脑上输入此标识符即可追踪。已记录在你的日志中。</Chinesesimp>
+            <English>GPS tracker planted and hidden.<br/>Identifier: %1<br/>Enter it on any networked laptop to track. Recorded in your diary.</English>
+            <Chinesesimp>GPS 追踪器已安装并隐藏。<br/>标识符：%1<br/>在任何联网的笔记本电脑上输入此标识符即可追踪。已记录在你的日志中。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_OFFLINE">
             <English>Error! This terminal is not connected to a network - a tracker identifier cannot be used from here.</English>
@@ -627,7 +627,7 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_DOWNLOADED">
             <English>Downloaded '%1'.</English>
-            <Chinesesimp>已下载 &apos;%1&apos;。</Chinesesimp>
+            <Chinesesimp>已下载 '%1'。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_DRONE_ENTRY">
             <English>Drone %1 (%2)</English>
@@ -748,12 +748,12 @@
             <Chinesesimp>%1/%2 已锁定</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_1_DRAWS_2_WH_BR_CURRENT_BATTERY_3_WH_4_5_BR">
-            <English>%1 draws %2 Wh.&lt;br&gt;Current battery: %3 Wh (%4%5).&lt;br&gt;Remaining after continue: %6 Wh (%7%5).</English>
-            <Chinesesimp>%1消耗 %2 Wh。&lt;br&gt;当前电池电量：%3 Wh（%4%5）。&lt;br&gt;继续后剩余电量：%6 Wh（%7%5）。</Chinesesimp>
+            <English>%1 draws %2 Wh.<br>Current battery: %3 Wh (%4%5).<br>Remaining after continue: %6 Wh (%7%5).</English>
+            <Chinesesimp>%1消耗 %2 Wh。<br>当前电池电量：%3 Wh（%4%5）。<br>继续后剩余电量：%6 Wh（%7%5）。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_1_DRAWS_2_WH_BR_CURRENT_BATTERY_UNAVAILABLE">
-            <English>%1 draws %2 Wh.&lt;br&gt;Current battery: unavailable.</English>
-            <Chinesesimp>%1消耗 %2 Wh。&lt;br&gt;当前电池电量：不可用。</Chinesesimp>
+            <English>%1 draws %2 Wh.<br>Current battery: unavailable.</English>
+            <Chinesesimp>%1消耗 %2 Wh。<br>当前电池电量：不可用。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_1_OF_2_LIGHTS_SWITCHED_3">
             <English>%1 of %2 lights switched %3</English>
@@ -1276,8 +1276,8 @@
             <Chinesesimp>通过 cat 命令打开文件时显示的内容</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_CONTENT_OF_THE_FILE_THAT_COULD_BE_READ_AFTER_DOWNLOADING_VIA_THE">
-            <English>Content of the file that could be read after downloading via the command 'cat &lt;filename&gt;</English>
-            <Chinesesimp>下载后可通过 cat &lt;filename&gt; 命令读取的文件内容</Chinesesimp>
+            <English>Content of the file that could be read after downloading via the command 'cat <filename></English>
+            <Chinesesimp>下载后可通过 cat <filename> 命令读取的文件内容</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_COPY_DEVICE_LINKS">
             <English>Copy Device Links</English>
@@ -1348,8 +1348,8 @@
             <Chinesesimp>发电机过载时产生爆炸</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_CREATE_NEW_LAPTOP">
-            <English>&lt;Create New Laptop&gt;</English>
-            <Chinesesimp>&lt;创建新笔记本电脑&gt;</Chinesesimp>
+            <English><Create New Laptop></English>
+            <Chinesesimp><创建新笔记本电脑></Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_CRYPTOGRAPHY">
             <English>Cryptography</English>
@@ -1432,7 +1432,7 @@
             <Chinesesimp>已弃用，为兼容引入“设备访问”设置前保存的任务而保留。只要设置了“设备访问”，就优先使用该设置。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_DESKTOP_AUDIO_SETTINGS">
-            <English>Desktop &amp; Audio Settings</English>
+            <English>Desktop and Audio Settings</English>
             <Chinesesimp>桌面与音频设置</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_DESTROYED">
@@ -3031,7 +3031,7 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_WIFI_SET">
             <English>EWO network '%1' is now %2.</English>
-            <Chinesesimp>EWO 网络 &apos;%1&apos; 当前状态：%2。</Chinesesimp>
+            <Chinesesimp>EWO 网络 '%1' 当前状态：%2。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_ACTIVATED">
             <English>Power grid activated: %1 lights turned ON within %2m radius</English>
@@ -3131,7 +3131,7 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_WHITELIST_DESC">
             <English>Comma-separated list of base classes that will show GPS tracker interaction menu (uses isKindOf). Extra spaces and quotes are automatically handled. Example: Car,Tank,Helicopter,Man or "Car", "Tank", "Man"</English>
-            <Chinesesimp>以逗号分隔的基类列表；这些基类将显示 GPS 追踪器交互菜单（使用 isKindOf）。多余的空格和引号会自动处理。例如：Car,Tank,Helicopter,Man 或 &quot;Car&quot;, &quot;Tank&quot;, &quot;Man&quot;</Chinesesimp>
+            <Chinesesimp>以逗号分隔的基类列表；这些基类将显示 GPS 追踪器交互菜单（使用 isKindOf）。多余的空格和引号会自动处理。例如：Car,Tank,Helicopter,Man 或 "Car", "Tank", "Man"</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE">
             <English>GPS Marker Color (Active Ping)</English>
