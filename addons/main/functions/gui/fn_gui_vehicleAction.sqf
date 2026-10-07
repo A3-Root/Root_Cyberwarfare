@@ -65,7 +65,7 @@ private _needFlag = switch (_action) do {
 	default { "" };
 };
 if (_needFlag isNotEqualTo "" && {!(_vehicle getVariable [_needFlag, false])}) exitWith {
-	[_owner, "This control is not enabled on this vehicle.", false] call _reply;
+	[_owner, (localize "STR_ROOT_CYBERWARFARE_UI_THIS_CONTROL_IS_NOT_ENABLED_ON_THIS_VEHICLE"), false] call _reply;
 };
 
 if (_action isEqualTo "brakes" && {!(_vehicle isKindOf "LandVehicle")}) exitWith {
@@ -80,7 +80,7 @@ if (_action isEqualTo "setfuel") then {
 	private _fuelCeiling = _currentFuel min _fmax;
 	private _fuelFloor = _fmin min _fuelCeiling;
 	if (_value < _fuelFloor || _value > _fuelCeiling) then {
-		_validationError = format ["Fuel/battery can only be reduced to %1-%2%3.", _fuelFloor, _fuelCeiling, "%"];
+		_validationError = format [(localize "STR_ROOT_CYBERWARFARE_UI_FUEL_BATTERY_CAN_ONLY_BE_REDUCED_TO_1_2_3"), _fuelFloor, _fuelCeiling, "%"];
 	};
 };
 
@@ -88,7 +88,7 @@ if (_action isEqualTo "setspeed") then {
 	private _smin = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_MIN", -50];
 	private _smax = _vehicle getVariable ["ROOT_CYBERWARFARE_SPEED_MAX", 50];
 	if (_value < _smin || _value > _smax) then {
-		_validationError = format ["Speed must be %1 to %2 km/h.", _smin, _smax];
+		_validationError = format [(localize "STR_ROOT_CYBERWARFARE_UI_SPEED_MUST_BE_1_TO_2_KM_H"), _smin, _smax];
 	};
 };
 
@@ -96,7 +96,7 @@ if (_action isEqualTo "brakes") then {
 	private _bmin = _vehicle getVariable ["ROOT_CYBERWARFARE_BRAKES_MIN", 1];
 	private _bmax = _vehicle getVariable ["ROOT_CYBERWARFARE_BRAKES_MAX", 10];
 	if (_value < _bmin || _value > _bmax) then {
-		_validationError = format ["Brake rate must be %1 to %2 m/s2.", _bmin, _bmax];
+		_validationError = format [(localize "STR_ROOT_CYBERWARFARE_UI_BRAKE_RATE_MUST_BE_1_TO_2_M_S2"), _bmin, _bmax];
 	};
 };
 
@@ -104,7 +104,7 @@ if (_action isEqualTo "setalarm") then {
 	private _amin = _vehicle getVariable ["ROOT_CYBERWARFARE_ALARM_MIN", 1];
 	private _amax = _vehicle getVariable ["ROOT_CYBERWARFARE_ALARM_MAX", 30];
 	if (_value < _amin || _value > _amax) then {
-		_validationError = format ["Alarm must be %1-%2 s.", _amin, _amax];
+		_validationError = format [(localize "STR_ROOT_CYBERWARFARE_UI_ALARM_MUST_BE_1_2_S"), _amin, _amax];
 	};
 };
 if (_validationError isNotEqualTo "") exitWith {
@@ -166,7 +166,7 @@ switch (_action) do {
 	};
 	case "engineon": {
 		[_vehicle, true] remoteExec ["engineOn", _vehicle];
-		_msg = "Engine started.";
+		_msg = (localize "STR_ROOT_CYBERWARFARE_UI_ENGINE_STARTED");
 	};
 	case "engineoff": {
 		// A speed hold or a brake run keeps the engine turning for as long as it is active, so both are
@@ -178,19 +178,19 @@ switch (_action) do {
 	};
 	case "lightson": {
 		[_vehicle, true] remoteExec ["setPilotLight", _vehicle];
-		_msg = "Lights on.";
+		_msg = (localize "STR_ROOT_CYBERWARFARE_UI_LIGHTS_ON_2");
 	};
 	case "lightsoff": {
 		[_vehicle, false] remoteExec ["setPilotLight", _vehicle];
-		_msg = "Lights off.";
+		_msg = (localize "STR_ROOT_CYBERWARFARE_UI_LIGHTS_OFF_2");
 	};
 	case "drain": {
 		[_vehicle, 0] remoteExec ["setFuel", _vehicle];
-		_msg = "Fuel/battery drained.";
+		_msg = (localize "STR_ROOT_CYBERWARFARE_UI_FUEL_BATTERY_DRAINED");
 	};
 	case "setfuel": {
 		[_vehicle, (_value / 100) max 0] remoteExec ["setFuel", _vehicle];
-		_msg = format ["Fuel/battery set to %1%2.", round _value, "%"];
+		_msg = format [(localize "STR_ROOT_CYBERWARFARE_UI_FUEL_BATTERY_SET_TO_1_2"), round _value, "%"];
 	};
 	case "setspeed": {
 		[_vehicle] call FUNC(releaseVehicleSpeedLock);
@@ -280,7 +280,7 @@ switch (_action) do {
 		}, 0.05, [_vehicle, _startSpeed, _wanted, time, _lock, _owner]] call CBA_fnc_addPerFrameHandler;
 		_vehicle setVariable ["ROOT_CYBERWARFARE_SPEED_PFH", _handle, true];
 		_msg = if (round _requested isEqualTo round _value) then {
-			format ["Speed changing to %1 km/h over 5 seconds.", round _value]
+			format [(localize "STR_ROOT_CYBERWARFARE_UI_SPEED_CHANGING_TO_1_KM_H_OVER_5_SECONDS"), round _value]
 		} else {
 			format [localize "STR_ROOT_CYBERWARFARE_SPEED_DERATED", round (_effectiveness * 100), round _requested, round _value]
 		};
@@ -288,12 +288,12 @@ switch (_action) do {
 	case "setalarm": {
 		if (_value < 1) then { _value = 1; };
 		[_vehicle, _value] remoteExec ["Root_fnc_localSoundBroadcast", [0, -2] select isDedicated, false];
-		_msg = format ["Alarm triggered for %1s.", round _value];
+		_msg = format [(localize "STR_ROOT_CYBERWARFARE_UI_ALARM_TRIGGERED_FOR_1S"), round _value];
 	};
 	case "alarm": {
 		private _dur = _vehicle getVariable ["ROOT_CYBERWARFARE_ALARM_MIN", 5];
 		[_vehicle, _dur] remoteExec ["Root_fnc_localSoundBroadcast", [0, -2] select isDedicated, false];
-		_msg = "Alarm triggered.";
+		_msg = (localize "STR_ROOT_CYBERWARFARE_UI_ALARM_TRIGGERED");
 	};
 	case "speedup";
 	case "slowdown": {
@@ -316,11 +316,11 @@ switch (_action) do {
 		private _targetMs = _targetSpeed / 3.6;
 
 		[_vehicle, [(sin _dir) * _targetMs, (cos _dir) * _targetMs, _vel select 2]] remoteExec ["setVelocity", _vehicle];
-		_msg = format ["Speed adjusted by %1 km/h.", round _applied];
+		_msg = format [(localize "STR_ROOT_CYBERWARFARE_UI_SPEED_ADJUSTED_BY_1_KM_H"), round _applied];
 	};
 	case "brakes": {
 		[_vehicle, _value, 2] call FUNC(applyVehicleBrakes);
-		_msg = format ["Brakes applied at %1 m/s2.", round _value];
+		_msg = format [(localize "STR_ROOT_CYBERWARFARE_UI_BRAKES_APPLIED_AT_1_M_S2"), round _value];
 	};
 };
 

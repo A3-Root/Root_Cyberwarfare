@@ -149,6 +149,7 @@ class CfgFunctions {
 			class getDoorPositions {};
 			class getAccessibleDevices {};
 			class getBatteryStatus {};
+			class localizeDeviceState {};
 			class getDroneCost {};
 			class getComputerIdentifier {};
 			class getComputerIdentifiers {};

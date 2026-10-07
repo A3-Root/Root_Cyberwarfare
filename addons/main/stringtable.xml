@@ -3,846 +3,3285 @@
     <Package name="Custom_Device_Operations">
         <Key ID="STR_ROOT_CYBERWARFARE_CUSTOM_DEVICE_ACTIVATED">
             <English>Custom device '%1' (ID: %2) activated.</English>
+            <Chinesesimp>自定义设备 '%1'（ID：%2）已激活。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_CUSTOM_DEVICE_DEACTIVATED">
             <English>Custom device '%1' (ID: %2) deactivated.</English>
+            <Chinesesimp>自定义设备 '%1'（ID：%2）已停用。</Chinesesimp>
         </Key>
     </Package>
     <Package name="Device_Access">
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_DEVICE_TITLE">
             <English>Device Access (%1 of %2) - %3</English>
+            <Chinesesimp>设备访问（%1 / %2）- %3</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_DEVICE_UPDATED">
             <English>Root Cyber Warfare: Access for device %1 updated - %2 linked computer(s).</English>
+            <Chinesesimp>Root Cyber Warfare：设备 %1 的访问权限已更新 - 已关联 %2 台计算机。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_FUTURE">
             <English>Available to Future Laptops</English>
+            <Chinesesimp>允许后续添加的笔记本电脑访问</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_FUTURE_DESC">
             <English>Only applies to 'Linked computers only': the ticked computers keep access and laptops added later gain it too.</English>
+            <Chinesesimp>仅适用于“仅限关联的计算机”：勾选的计算机保留访问权限，后续添加的笔记本电脑也将获得访问权限。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_FUTURE_ONLY">
             <English>Available to future computers only</English>
+            <Chinesesimp>仅允许后续添加的计算机访问</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_LAPTOP_DESC">
             <English>Let %1 reach this device</English>
+            <Chinesesimp>允许 %1 访问此设备</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_LAPTOP_NO_TOOLS">
             <English>(no hacking tools yet)</English>
+            <Chinesesimp>（尚无黑客工具）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_LINKED">
             <English>Accessible by %1 linked computer(s)</English>
+            <Chinesesimp>允许 %1 台关联的计算机访问</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_LINKED_FUTURE">
             <English>Accessible by %1 linked computer(s) and all future computers</English>
+            <Chinesesimp>允许 %1 台关联的计算机及所有后续添加的计算机访问</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_MODE">
             <English>Device Access</English>
+            <Chinesesimp>设备访问</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_MODE_DESC">
             <English>Unassigned: the device is registered but no computer can reach it - grant access later with the Manage Device Links module. Linked: only the computers ticked below. Public: every current and future computer.</English>
+            <Chinesesimp>未分配：设备已注册，但没有计算机可以访问；可稍后通过“管理设备关联”模块授予访问权限。已关联：仅限下方勾选的计算机。公开：所有现有及后续添加的计算机。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_MODE_LINKED">
             <English>Linked computers only</English>
+            <Chinesesimp>仅限关联的计算机</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_MODE_PUBLIC">
             <English>Public (all computers)</English>
+            <Chinesesimp>公开（所有计算机）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_MODE_UNASSIGNED">
             <English>Unassigned (assign later)</English>
+            <Chinesesimp>未分配（稍后分配）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_NOT_A_DEVICE">
             <English>That object is not a registered device. Place the module on a registered device, or on open ground for radius mode.</English>
+            <Chinesesimp>该物体不是已注册的设备。请将模块放置在已注册的设备上，或放置在空地上以使用半径模式。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_PUBLIC">
             <English>Accessible by all current and future computers</English>
+            <Chinesesimp>允许所有现有及后续添加的计算机访问</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_RADIUS_DESC">
             <English>Every registered device standing inside this radius is opened for editing, one dialog at a time.</English>
+            <Chinesesimp>将逐一打开此半径内所有已注册设备的编辑对话框。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_RADIUS_EMPTY">
             <English>No registered devices within %1m.</English>
+            <Chinesesimp>%1m 范围内没有已注册的设备。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_RADIUS_FOUND">
             <English>%1 registered device(s) within %2m (%3). Editing them one at a time - cancel a device to leave it unchanged.</English>
+            <Chinesesimp>%2m 范围内有 %1 台已注册设备（%3）。将逐一编辑；取消某台设备的编辑可保持其原有设置。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_RADIUS_TITLE">
             <English>Manage Device Access - Radius Mode</English>
+            <Chinesesimp>管理设备访问 - 半径模式</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_RUN_FINISHED">
             <English>Device access run finished.</English>
+            <Chinesesimp>设备访问处理已完成。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ACCESS_UNASSIGNED">
             <English>Registered but not accessible yet. Grant access with the Manage Device Links module.</English>
+            <Chinesesimp>已注册，但尚不可访问。请通过“管理设备关联”模块授予访问权限。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LINKS_ACTION">
             <English>Action</English>
+            <Chinesesimp>操作</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LINKS_ACTION_DESC">
             <English>What to do with the ticked devices for the selected computer.</English>
+            <Chinesesimp>针对所选计算机，对勾选的设备执行的操作。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LINKS_ACTION_LINK">
             <English>Link to this computer</English>
+            <Chinesesimp>关联到此计算机</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LINKS_ACTION_PUBLIC">
             <English>Make public (all computers)</English>
+            <Chinesesimp>设为公开（所有计算机）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LINKS_ACTION_UNASSIGN">
             <English>Unassign (no computer can reach)</English>
+            <Chinesesimp>取消分配（任何计算机均不可访问）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LINKS_ACTION_UNLINK">
             <English>Unlink from this computer</English>
+            <Chinesesimp>取消与此计算机的关联</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LINKS_APPLIED">
             <English>Device Links Updated!</English>
+            <Chinesesimp>设备关联已更新！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LINKS_DEVICE_DESC">
             <English>Tick to include this device in the chosen action. Already ticked devices are the ones this computer currently reaches through a private link.</English>
+            <Chinesesimp>勾选以将此设备纳入所选操作。已勾选的设备是此计算机当前通过私有关联可访问的设备。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LINKS_LAPTOP">
             <English>Computer</English>
+            <Chinesesimp>计算机</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LINKS_LAPTOP_DESC">
             <English>Computer the action applies to. Place the module on a laptop to skip this step.</English>
+            <Chinesesimp>操作所针对的计算机。将模块放置在笔记本电脑上可跳过此步骤。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LINKS_NONE_SELECTED">
             <English>No devices ticked!</English>
+            <Chinesesimp>未勾选任何设备！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LINKS_NO_DEVICES">
             <English>No registered devices found!</English>
+            <Chinesesimp>未找到已注册的设备！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LINKS_TITLE">
             <English>Manage Device Links</English>
+            <Chinesesimp>管理设备关联</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LINKS_UPDATED">
             <English>Root Cyber Warfare: Updated access for %1 device(s).</English>
+            <Chinesesimp>Root Cyber Warfare：已更新 %1 台设备的访问权限。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_NO_LAPTOPS">
             <English>No registered hackable laptops found!</English>
+            <Chinesesimp>未找到已注册的可入侵笔记本电脑！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_NO_LAPTOPS_WARN">
             <English>No registered hackable laptops found - the device can only be added as Unassigned or Public.</English>
+            <Chinesesimp>未找到已注册的可入侵笔记本电脑；只能以“未分配”或“公开”状态添加此设备。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_NO_LINKS_WARN">
             <English>Device registered, but no laptop can reach it: access was set to linked computers and none were selected. Use the Manage Device Access module to grant access.</English>
+            <Chinesesimp>设备已注册，但没有笔记本电脑可以访问：访问权限设为仅限关联的计算机，却未选择任何计算机。请通过“管理设备访问”模块授予访问权限。</Chinesesimp>
         </Key>
     </Package>
     <Package name="Device_Operations">
         <Key ID="STR_ROOT_CYBERWARFARE_DOOR_ALREADY_LOCKED">
             <English>Door already locked.</English>
+            <Chinesesimp>门已处于锁定状态。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_DOOR_ALREADY_UNLOCKED">
             <English>Door already unlocked.</English>
+            <Chinesesimp>门已处于解锁状态。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_DOOR_LOCKED_SUCCESS">
             <English>Door locked.</English>
+            <Chinesesimp>门已锁定。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_DOOR_UNLOCKED_SUCCESS">
             <English>Door unlocked.</English>
+            <Chinesesimp>门已解锁。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_OPERATION_COMPLETED_DOORS">
             <English>Operation completed on %1 doors.</English>
+            <Chinesesimp>已对 %1 扇门完成操作。</Chinesesimp>
         </Key>
     </Package>
     <Package name="Drone_Operations">
         <Key ID="STR_ROOT_CYBERWARFARE_DRONE_ALREADY_DISABLED">
             <English>Error! Drone is already disabled or destroyed.</English>
+            <Chinesesimp>错误！无人机已被禁用或摧毁。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_DRONE_ALREADY_FACTION">
             <English>Error! Drone already of side %1.</English>
+            <Chinesesimp>错误！无人机已属于 %1 阵营。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_DRONE_DISABLED_SUCCESS">
             <English>Drone disabled.</English>
+            <Chinesesimp>无人机已禁用。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_DRONE_FACTION_CHANGED">
             <English>Drone side changed.</English>
+            <Chinesesimp>无人机阵营已更改。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_OPERATION_COMPLETED_DRONES">
             <English>Operation completed on %1 drones.</English>
+            <Chinesesimp>已对 %1 架无人机完成操作。</Chinesesimp>
         </Key>
     </Package>
     <Package name="Errors">
         <Key ID="STR_ROOT_CYBERWARFARE_BRAKES_LAND_ONLY">
             <English>Error! Brakes can only be applied to land vehicles.</English>
+            <Chinesesimp>错误！只能对地面载具施加制动。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DATABASE">
             <English>Error! Database ID %1 not found or access denied.</English>
+            <Chinesesimp>错误！未找到 ID 为 %1 的数据库，或访问被拒绝。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DRONE">
             <English>Error! Drone ID %1 not found or access denied.</English>
+            <Chinesesimp>错误！未找到 ID 为 %1 的无人机，或访问被拒绝。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_LIGHT">
             <English>Error! Light ID %1 not found or access denied.</English>
+            <Chinesesimp>错误！未找到 ID 为 %1 的灯，或访问被拒绝。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_POWERGRID">
             <English>Access denied to Power Grid ID: %1.</English>
+            <Chinesesimp>拒绝访问 ID 为 %1 的电网。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_VEHICLE">
             <English>Access denied to Vehicle ID: %1.</English>
+            <Chinesesimp>拒绝访问 ID 为 %1 的载具。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ALARM_OUT_OF_RANGE">
             <English>Error! Alarm duration %1 seconds is outside allowed range [%2 - %3 seconds].</English>
+            <Chinesesimp>错误！警报持续时间 %1 秒超出允许范围 [%2 - %3 秒]。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_BRAKES_OUT_OF_RANGE">
             <English>Error! Brake deceleration %1 m/s² is outside allowed range [%2 - %3 m/s²].</English>
+            <Chinesesimp>错误！制动减速度 %1 m/s² 超出允许范围 [%2 - %3 m/s²]。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_BUILDING_NOT_FOUND">
             <English>Error! Building ID %1 not found!</English>
+            <Chinesesimp>错误！未找到 ID 为 %1 的建筑！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_CUSTOM_DEVICE_NOT_FOUND">
             <English>Custom device with ID %1 not found.</English>
+            <Chinesesimp>未找到 ID 为 %1 的自定义设备。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_DOOR_NOT_IN_BUILDING">
             <English>Error! No such door with ID: %1 in the building (ID: %2)!</English>
+            <Chinesesimp>错误！建筑（ID：%2）内没有 ID 为 %1 的门！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ENGINE_COOLDOWN">
             <English>Error! Engine toggle on cooldown. Wait %1 seconds.</English>
+            <Chinesesimp>错误！发动机开关处于冷却中。请等待 %1 秒。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_ENGINE_MAX_TOGGLES">
             <English>Error! Engine toggle limit reached. Maximum: %1, Current count: %2.</English>
+            <Chinesesimp>错误！发动机开关次数已达上限。最大次数：%1，当前次数：%2。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_FUEL_OUT_OF_RANGE">
             <English>Error! Fuel value %1%% is outside allowed range [%2%% - %3%%].</English>
+            <Chinesesimp>错误！燃料值 %1%% 超出允许范围 [%2%% - %3%%]。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_GENERATOR_DESTROYED">
             <English>Error! Generator was destroyed and cannot be controlled!</English>
+            <Chinesesimp>错误！发电机已被摧毁，无法控制！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER">
             <English>Error! Insufficient Power!</English>
+            <Chinesesimp>错误！电量不足！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_ACTION">
             <English>Error! Invalid action - %1. Use: on, off, or overload</English>
+            <Chinesesimp>错误！无效操作 - %1。请使用：on、off 或 overload</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_ACTION_VALUE">
             <English>Error! Invalid Action/Value specified. Action: %1, Value: %2</English>
+            <Chinesesimp>错误！指定的操作或数值无效。操作：%1，数值：%2</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_BUILDING_ID">
             <English>Error! Invalid BuildingID - %1.</English>
+            <Chinesesimp>错误！无效的 BuildingID - %1。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_CUSTOM_DEVICE_ID">
             <English>Invalid input customId: %1.</English>
+            <Chinesesimp>无效的输入 customId：%1。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_CUSTOM_DEVICE_STATE">
             <English>Invalid input customState: %1.</English>
+            <Chinesesimp>无效的输入 customState：%1。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DOOR_ID">
             <English>Error! Invalid DoorID - %1.</English>
+            <Chinesesimp>错误！无效的 DoorID - %1。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DOOR_STATE">
             <English>Error! Invalid Door State Desired - %1.</English>
+            <Chinesesimp>错误！无效的目标门状态 - %1。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DRONE_FACTION">
             <English>Error! Invalid Drone Faction - %1.</English>
+            <Chinesesimp>错误！无效的无人机阵营 - %1。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DRONE_ID">
             <English>Error! Invalid DroneID - %1.</English>
+            <Chinesesimp>错误！无效的 DroneID - %1。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_GRID_ID">
             <English>Error! Invalid Grid ID - %1.</English>
+            <Chinesesimp>错误！无效的电网 ID - %1。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_INPUT">
             <English>Error! Invalid Input - %1.</English>
+            <Chinesesimp>错误！无效的输入 - %1。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_LIGHT_ID">
             <English>Error! Invalid LightID - %1.</English>
+            <Chinesesimp>错误！无效的 LightID - %1。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_LIGHT_STATE">
             <English>Error! Invalid Light State - %1.</English>
+            <Chinesesimp>错误！无效的灯光状态 - %1。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_VEHICLE_ID">
             <English>Error! Invalid VehicleID - %1.</English>
+            <Chinesesimp>错误！无效的 VehicleID - %1。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_LIGHTS_COOLDOWN">
             <English>Error! Light toggle on cooldown. Wait %1 seconds.</English>
+            <Chinesesimp>错误！灯光开关处于冷却中。请等待 %1 秒。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_LIGHTS_MAX_TOGGLES">
             <English>Error! Light toggle limit reached. Maximum: %1, Current count: %2.</English>
+            <Chinesesimp>错误！灯光开关次数已达上限。最大次数：%1，当前次数：%2。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_BUILDINGS">
             <English>Error! No accessible buildings found or access denied.</English>
+            <Chinesesimp>错误！未找到可访问的建筑，或访问被拒绝。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DATABASES">
             <English>Error! No accessible databases found or access denied.</English>
+            <Chinesesimp>错误！未找到可访问的数据库，或访问被拒绝。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DRONES">
             <English>Error! No accessible drones found or access denied.</English>
+            <Chinesesimp>错误！未找到可访问的无人机，或访问被拒绝。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DRONES_CHANGE_FACTION">
             <English>Error! No accessible drones found that need faction change.</English>
+            <Chinesesimp>错误！未找到需要更改阵营的可访问无人机。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DRONES_TO_DISABLE">
             <English>Error! No accessible drones found to disable.</English>
+            <Chinesesimp>错误！未找到可禁用的可访问无人机。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_LIGHTS">
             <English>Error! No accessible lights found or access denied.</English>
+            <Chinesesimp>错误！未找到可访问的灯，或访问被拒绝。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_VEHICLES">
             <English>Error! No vehicle found.</English>
+            <Chinesesimp>错误！未找到载具。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_BUILDINGS_CRITERIA">
             <English>Error! No accessible buildings found for the specified criteria.</English>
+            <Chinesesimp>错误！未找到符合指定条件的可访问建筑。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_NO_POWERGRIDS">
             <English>Error! No power grids found.</English>
+            <Chinesesimp>错误！未找到电网。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_OVERLOAD_NOT_SUPPORTED">
             <English>Error! This power grid does not support overload functionality.</English>
+            <Chinesesimp>错误！此电网不支持过载功能。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_POWERGRID_NOT_FOUND">
             <English>Power Grid ID %1 not found.</English>
+            <Chinesesimp>未找到 ID 为 %1 的电网。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_POWERGRID_OBJECT_NOT_FOUND">
             <English>Error! Power grid object not found.</English>
+            <Chinesesimp>错误！未找到电网物体。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_SPEED_ENGINE_DESTROYED">
             <English>Error! The engine is destroyed - the drivetrain cannot deliver any boost.</English>
+            <Chinesesimp>错误！发动机已被摧毁，传动系统无法提供任何加速。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_SPEED_OUT_OF_RANGE">
             <English>Error! Speed value %1 km/h is outside allowed range [%2 - %3 km/h].</English>
+            <Chinesesimp>错误！速度值 %1 km/h 超出允许范围 [%2 - %3 km/h]。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_SPEED_WHEELS_DESTROYED">
             <English>Error! Every wheel is destroyed - there is nothing left for the drivetrain to drive.</English>
+            <Chinesesimp>错误！所有车轮均已被摧毁，传动系统已无可驱动的车轮。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_VEHICLE_NOT_FOUND">
             <English>Vehicle ID %1 not found.</English>
+            <Chinesesimp>未找到 ID 为 %1 的载具。</Chinesesimp>
         </Key>
     </Package>
     <Package name="GPS">
         <Key ID="STR_ROOT_CYBERWARFARE_DIARY_SUBJECT">
             <English>Cyber Warfare</English>
+            <Chinesesimp>网络战</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_DIARY_TRACKER_GRID">
             <English>Planted at grid: %1</English>
+            <Chinesesimp>安装位置网格：%1</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_DIARY_TRACKER_HINT">
             <English>Enter this identifier on any laptop with the hacking toolset, connected to a network, to track it.</English>
+            <Chinesesimp>在任何装有黑客工具且已连接网络的笔记本电脑上输入此标识符，即可进行追踪。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_DIARY_TRACKER_IDENTIFIER">
             <English>Identifier: %1</English>
+            <Chinesesimp>标识符：%1</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_DIARY_TRACKER_NAME">
             <English>Tracker: %1</English>
+            <Chinesesimp>追踪器：%1</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_DIARY_TRACKER_OBJECT">
             <English>Attached to: %1</English>
+            <Chinesesimp>附着对象：%1</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_DIARY_TRACKER_TITLE">
             <English>GPS Tracker %1</English>
+            <Chinesesimp>GPS 追踪器 %1</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACHING_OBJECT">
             <English>Attaching GPS Tracker to %1</English>
+            <Chinesesimp>正在将 GPS 追踪器安装到 %1</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_FAILED">
             <English>Failed to attach GPS tracker to %1</English>
+            <Chinesesimp>无法将 GPS 追踪器安装到 %1</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_FREQ">
             <English>Update Frequency (seconds)</English>
+            <Chinesesimp>更新频率（秒）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_FREQ_DESC">
             <English>Frequency in seconds between ping updates</English>
+            <Chinesesimp>定位更新之间的间隔，单位为秒</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_OBJECT">
             <English>Attach GPS Tracker</English>
+            <Chinesesimp>安装 GPS 追踪器</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_SUCCESS">
             <English>GPS Tracker attached successfully to %1!</English>
+            <Chinesesimp>GPS 追踪器已成功安装到 %1！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_TIME">
             <English>Tracking Time (seconds)</English>
+            <Chinesesimp>追踪时间（秒）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_TIME_DESC">
             <English>Maximum time in seconds the tracking will stay active</English>
+            <Chinesesimp>追踪保持有效的最长时间，单位为秒</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ATTACH_TITLE">
             <English>GPS Tracker Configuration</English>
+            <Chinesesimp>GPS 追踪器配置</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_CANNOT_SEARCH_SELF">
             <English>Cannot search yourself!</English>
+            <Chinesesimp>不能搜查自己！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_DISABLE_SEARCH">
             <English>Disable GPS Tracker Search</English>
+            <Chinesesimp>禁用 GPS 追踪器搜索</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_ENABLE_SEARCH">
             <English>Enable GPS Tracker Search</English>
+            <Chinesesimp>启用 GPS 追踪器搜索</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_HIDDEN">
             <English>Hidden (identifier only)</English>
+            <Chinesesimp>隐藏（仅通过标识符访问）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_HIDDEN_DESC">
             <English>The tracker appears in no terminal or desktop listing on any laptop. The only way to track it is to enter the identifier it answers to.</English>
+            <Chinesesimp>此追踪器不会出现在任何笔记本电脑的终端或桌面列表中。只能通过输入其响应的标识符进行追踪。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_HIDDEN_SUFFIX">
             <English>[HIDDEN]</English>
+            <Chinesesimp>[隐藏]</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_FEEDBACK">
             <English>Identifier: %1</English>
+            <Chinesesimp>标识符：%1</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_FEEDBACK_HIDDEN">
             <English>Hidden - tracked only by identifier %1</English>
+            <Chinesesimp>已隐藏 - 只能通过标识符 %1 追踪</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_FIELD">
             <English>Identifier (blank = auto)</English>
+            <Chinesesimp>标识符（留空 = 自动生成）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_FIELD_DESC">
             <English>The 8-character code this tracker answers to. Leave blank to have one generated; a code already in use is replaced by a generated one.</English>
+            <Chinesesimp>此追踪器响应的 8 字符代码。留空将自动生成；若代码已被使用，则会替换为自动生成的代码。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_HINT">
             <English>GPS tracker planted.&lt;br/&gt;Identifier: %1&lt;br/&gt;Recorded in your diary.</English>
+            <Chinesesimp>GPS 追踪器已安装。&lt;br/&gt;标识符：%1&lt;br/&gt;已记录在你的日志中。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_HINT_HIDDEN">
             <English>GPS tracker planted and hidden.&lt;br/&gt;Identifier: %1&lt;br/&gt;Enter it on any networked laptop to track. Recorded in your diary.</English>
+            <Chinesesimp>GPS 追踪器已安装并隐藏。&lt;br/&gt;标识符：%1&lt;br/&gt;在任何联网的笔记本电脑上输入此标识符即可追踪。已记录在你的日志中。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_OFFLINE">
             <English>Error! This terminal is not connected to a network - a tracker identifier cannot be used from here.</English>
+            <Chinesesimp>错误！此终端未连接网络，无法在此使用追踪器标识符。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_UNKNOWN">
             <English>Error! No tracker answers to that identifier.</English>
+            <Chinesesimp>错误！没有追踪器响应此标识符。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_MENU">
             <English>GPS Tracker</English>
+            <Chinesesimp>GPS 追踪器</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_SEARCH">
             <English>Search for GPS Tracker</English>
+            <Chinesesimp>搜索 GPS 追踪器</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_SEARCHING">
             <English>Searching %1 for GPS Tracker</English>
+            <Chinesesimp>正在搜查 %1 是否携带 GPS 追踪器</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_SEARCH_MODE_OFF">
             <English>GPS Tracker search mode disabled</English>
+            <Chinesesimp>GPS 追踪器搜索模式已禁用</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_SEARCH_MODE_ON">
             <English>GPS Tracker search mode enabled</English>
+            <Chinesesimp>GPS 追踪器搜索模式已启用</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_STATUS_MISSING">
             <English>No longer registered</English>
+            <Chinesesimp>已取消注册</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_UNABLE_ATTACH">
             <English>Unable to attach GPS Tracker!</English>
+            <Chinesesimp>无法安装 GPS 追踪器！</Chinesesimp>
         </Key>
     </Package>
     <Package name="GUI">
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_ACTIVATE">
             <English>Activate</English>
+            <Chinesesimp>激活</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM">
             <English>Custom Devices</English>
+            <Chinesesimp>自定义设备</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_DATABASES">
             <English>Databases</English>
+            <Chinesesimp>数据库</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_DOORS">
             <English>Doors</English>
+            <Chinesesimp>门</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_DRONES">
             <English>Drones</English>
+            <Chinesesimp>无人机</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_GPS">
             <English>GPS</English>
+            <Chinesesimp>GPS</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_LIGHTS">
             <English>Lights</English>
+            <Chinesesimp>灯光</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN">
             <English>Network Scanner</English>
+            <Chinesesimp>网络扫描器</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID">
             <English>Power Grid</English>
+            <Chinesesimp>电网</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES">
             <English>Vehicles</English>
+            <Chinesesimp>载具</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_BUILDING_ENTRY">
             <English>Building %1 (%2 doors)</English>
+            <Chinesesimp>建筑 %1（%2 扇门）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_CUSTOM_ENTRY">
             <English>%1 (ID %2)</English>
+            <Chinesesimp>%1（ID %2）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_DATABASE_ENTRY">
             <English>%1 (ID %2)</English>
+            <Chinesesimp>%1（ID %2）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_DEACTIVATE">
             <English>Deactivate</English>
+            <Chinesesimp>停用</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_DOOR">
             <English>DOOR</English>
+            <Chinesesimp>门</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_DOORS_HINT">
             <English>Select a building, then Lock or Unlock its doors.</English>
+            <Chinesesimp>选择一栋建筑，然后锁定或解锁其中的门。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_DOWNLOAD">
             <English>Download</English>
+            <Chinesesimp>下载</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_DOWNLOADED">
             <English>Downloaded '%1'.</English>
+            <Chinesesimp>已下载 '%1'。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_DRONE_ENTRY">
             <English>Drone %1 (%2)</English>
+            <Chinesesimp>无人机 %1（%2）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_ENGINE_OFF">
             <English>Engine Off</English>
+            <Chinesesimp>关闭发动机</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_GPS_ENTRY">
             <English>%1 (#%2) [%3]</English>
+            <Chinesesimp>%1 (#%2) [%3]</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_GPS_TRACK_BY_ID">
             <English>Track by Identifier</English>
+            <Chinesesimp>通过标识符追踪</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_GPS_TRACK_BY_ID_PROMPT">
             <English>Tracker identifier</English>
+            <Chinesesimp>追踪器标识符</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_GRID_ENTRY">
             <English>%1 (#%2) [%3]</English>
+            <Chinesesimp>%1 (#%2) [%3]</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_LIGHT_ENTRY">
             <English>Light %1 [%2]</English>
+            <Chinesesimp>灯 %1 [%2]</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_LOCK">
             <English>Lock</English>
+            <Chinesesimp>锁定</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_OVERLOAD">
             <English>Overload</English>
+            <Chinesesimp>过载</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_OVERLOAD_CONFIRM">
             <English>Click Overload again to confirm - this permanently destroys the generator.</English>
+            <Chinesesimp>再次点击“过载”以确认；此操作将永久摧毁发电机。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_REFRESH">
             <English>Refresh</English>
+            <Chinesesimp>刷新</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_SIDE_CIV">
             <English>Civilian</English>
+            <Chinesesimp>平民</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_SIDE_EAST">
             <English>OPFOR</English>
+            <Chinesesimp>OPFOR</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_SIDE_GUER">
             <English>Independent</English>
+            <Chinesesimp>独立阵营</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_SIDE_WEST">
             <English>BLUFOR</English>
+            <Chinesesimp>BLUFOR</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_STATE_OFF">
             <English>OFF</English>
+            <Chinesesimp>关闭</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_STATE_ON">
             <English>ON</English>
+            <Chinesesimp>开启</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_TRACK">
             <English>Track</English>
+            <Chinesesimp>追踪</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_TURN_OFF">
             <English>Turn Off</English>
+            <Chinesesimp>关闭</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_TURN_ON">
             <English>Turn On</English>
+            <Chinesesimp>开启</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_UNLOCK">
             <English>Unlock</English>
+            <Chinesesimp>解锁</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_VEHICLE_ENGINE_OFF">
             <English>Engine disabled.</English>
+            <Chinesesimp>发动机已禁用。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_VEHICLE_ENTRY">
             <English>Vehicle %1 - %2</English>
+            <Chinesesimp>载具 %1 - %2</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_VEHICLE_LOCKED">
             <English>Vehicle locked.</English>
+            <Chinesesimp>载具已锁定。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_VEHICLE_UNLOCKED">
             <English>Vehicle unlocked.</English>
+            <Chinesesimp>载具已解锁。</Chinesesimp>
+        </Key>
+    </Package>
+    <Package name="Interface_Localization">
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_120MM_APFSDS_TANK_SHELL">
+            <English>120mm APFSDS Tank Shell</English>
+            <Chinesesimp>120mm 脱壳穿甲坦克炮弹</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_120MM_HE_SHELL">
+            <English>120mm HE Shell</English>
+            <Chinesesimp>120mm 高爆炮弹</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_155MM_HE_SHELL">
+            <English>155mm HE Shell</English>
+            <Chinesesimp>155mm 高爆炮弹</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_1_2_LOCKED">
+            <English>%1/%2 locked</English>
+            <Chinesesimp>%1/%2 已锁定</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_1_DRAWS_2_WH_BR_CURRENT_BATTERY_3_WH_4_5_BR">
+            <English>%1 draws %2 Wh.&lt;br&gt;Current battery: %3 Wh (%4%5).&lt;br&gt;Remaining after continue: %6 Wh (%7%5).</English>
+            <Chinesesimp>%1消耗 %2 Wh。&lt;br&gt;当前电池电量：%3 Wh（%4%5）。&lt;br&gt;继续后剩余电量：%6 Wh（%7%5）。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_1_DRAWS_2_WH_BR_CURRENT_BATTERY_UNAVAILABLE">
+            <English>%1 draws %2 Wh.&lt;br&gt;Current battery: unavailable.</English>
+            <Chinesesimp>%1消耗 %2 Wh。&lt;br&gt;当前电池电量：不可用。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_1_OF_2_LIGHTS_SWITCHED_3">
+            <English>%1 of %2 lights switched %3</English>
+            <Chinesesimp>已将 %2 个灯中的 %1 个切换为%3</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_40MM_HIGH_EXPLOSIVE">
+            <English>40mm High Explosive</English>
+            <Chinesesimp>40mm 高爆弹</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_500LB_GBU_12_TYPE_I">
+            <English>500lb GBU-12 (Type I)</English>
+            <Chinesesimp>500 磅 GBU-12（类型 I）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_500LB_GBU_12_TYPE_II">
+            <English>500lb GBU-12 (Type II)</English>
+            <Chinesesimp>500 磅 GBU-12（类型 II）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_77TH_JSOC_EWO_MODE">
+            <English>77th JSOC EWO Mode</English>
+            <Chinesesimp>77th JSOC EWO 模式</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_82MM_HIGH_EXPLOSIVE">
+            <English>82mm High Explosive</English>
+            <Chinesesimp>82mm 高爆弹</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ACCESS">
+            <English>Access</English>
+            <Chinesesimp>访问</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ACCESS_DENIED_TO_TRACKER_1">
+            <English>Access denied to tracker %1</English>
+            <Chinesesimp>追踪器 %1 访问被拒绝</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ACTIVATING_THE_POWER_GRID">
+            <English>Activating the power grid</English>
+            <Chinesesimp>开启电网</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ACTIVATING_THIS_CUSTOM_DEVICE">
+            <English>Activating this custom device</English>
+            <Chinesesimp>激活此自定义设备</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ACTIVATION_CODE">
+            <English>Activation Code</English>
+            <Chinesesimp>激活代码</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADDITIONAL_APART_FROM_THE_PLAYER_WHO_INITIATED_THE_TRACK_SIDES_GROUPS_OR">
+            <English>Additional (apart from the player who initiated the track) sides, groups, or players that can see the GPS tracking marker.</English>
+            <Chinesesimp>除发起追踪的玩家外，能够看到 GPS 追踪标记的其他阵营、小组或玩家。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADDITIONAL_GPS_TRACKING_VISIBILITY">
+            <English>Additional GPS Tracking Visibility</English>
+            <Chinesesimp>额外的 GPS 追踪可见范围</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADDS_THE_CONFIGURED_RUBBERDUCKY_LOGIN_ACCOUNT_TO_EACH_TARGET_LAPTOP">
+            <English>Adds the configured Rubberducky login account to each target laptop.</English>
+            <Chinesesimp>向每台目标笔记本电脑添加已配置的 Rubberducky 登录账户。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADDS_THE_CONFIGURED_RUBBERDUCKY_LOGIN_ACCOUNT_TO_THE_TARGET_LAPTOP">
+            <English>Adds the configured Rubberducky login account to the target laptop.</English>
+            <Chinesesimp>向目标笔记本电脑添加已配置的 Rubberducky 登录账户。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_CUSTOM_DEVICE">
+            <English>Add Custom Device</English>
+            <Chinesesimp>添加自定义设备</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_CUSTOM_DEVICES_RADIUS_MODE">
+            <English>Add Custom Devices - Radius Mode</English>
+            <Chinesesimp>添加自定义设备 - 半径模式</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_CUSTOM_DEVICE_1">
+            <English>Add Custom Device - %1</English>
+            <Chinesesimp>添加自定义设备 - %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_DEFAULT_CREDENTIALS">
+            <English>Add Default Credentials</English>
+            <Chinesesimp>添加默认登录凭据</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_GPS_TRACKER">
+            <English>Add GPS Tracker</English>
+            <Chinesesimp>添加 GPS 追踪器</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_GPS_TRACKER_1">
+            <English>Add GPS Tracker - %1</English>
+            <Chinesesimp>添加 GPS 追踪器 - %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_DOORS">
+            <English>Add Hackable Doors</English>
+            <Chinesesimp>添加可入侵的门</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_DOORS_1">
+            <English>Add Hackable Doors - %1</English>
+            <Chinesesimp>添加可入侵的门 - %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_DOORS_RADIUS_MODE">
+            <English>Add Hackable Doors - Radius Mode</English>
+            <Chinesesimp>添加可入侵的门 - 半径模式</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_DRONE_1">
+            <English>Add Hackable Drone - %1</English>
+            <Chinesesimp>添加可入侵无人机 - %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_FILE">
+            <English>Add Hackable File</English>
+            <Chinesesimp>添加可入侵文件</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_LIGHTS">
+            <English>Add Hackable Lights</English>
+            <Chinesesimp>添加可入侵的灯</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_LIGHTS_RADIUS_MODE">
+            <English>Add Hackable Lights - Radius Mode</English>
+            <Chinesesimp>添加可入侵的灯 - 半径模式</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_LIGHT_1">
+            <English>Add Hackable Light - %1</English>
+            <Chinesesimp>添加可入侵的灯 - %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_VEHICLE">
+            <English>Add Hackable Vehicle</English>
+            <Chinesesimp>添加可入侵载具</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_VEHICLES_DRONES_RADIUS_MODE">
+            <English>Add Hackable Vehicles/Drones - Radius Mode</English>
+            <Chinesesimp>添加可入侵载具/无人机 - 半径模式</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_VEHICLE_1">
+            <English>Add Hackable Vehicle - %1</English>
+            <Chinesesimp>添加可入侵载具 - %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_HACKING_TOOLS">
+            <English>Add Hacking Tools</English>
+            <Chinesesimp>添加黑客工具</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_POWER_GENERATOR">
+            <English>Add Power Generator</English>
+            <Chinesesimp>添加发电机</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_POWER_GENERATOR_1">
+            <English>Add Power Generator - %1</English>
+            <Chinesesimp>添加发电机 - %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADD_TO_PUBLIC_DEVICE_LIST">
+            <English>Add to Public Device List</English>
+            <Chinesesimp>添加到公开设备列表</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ADJUST_POWER_COST_SETTINGS">
+            <English>Adjust Power Cost Settings</English>
+            <Chinesesimp>调整电量消耗设置</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_AFFINE">
+            <English>Affine</English>
+            <Chinesesimp>仿射密码</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALARM">
+            <English>Alarm</English>
+            <Chinesesimp>警报</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALARM_MUST_BE_1_2_S">
+            <English>Alarm must be %1-%2 s.</English>
+            <Chinesesimp>警报持续时间必须在 %1-%2 秒之间。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALARM_TRIGGERED">
+            <English>Alarm triggered.</English>
+            <Chinesesimp>警报已触发。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALARM_TRIGGERED_FOR_1S">
+            <English>Alarm triggered for %1s.</English>
+            <Chinesesimp>警报已触发，持续 %1 秒。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALGORITHM">
+            <English>Algorithm</English>
+            <Chinesesimp>算法</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_ALARM_HACKING">
+            <English>Allow Alarm Hacking</English>
+            <Chinesesimp>允许入侵警报</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_BATTERY_FUEL_CONTROL">
+            <English>Allow Battery (Fuel) Control</English>
+            <Chinesesimp>允许控制电池（燃料）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_BRAKES_CONTROL">
+            <English>Allow Brakes Control</English>
+            <Chinesesimp>允许控制制动</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_BRAKES_HACKING">
+            <English>Allow Brakes Hacking</English>
+            <Chinesesimp>允许入侵制动</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_CAR_ALARM">
+            <English>Allow Car Alarm</English>
+            <Chinesesimp>允许控制载具警报</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_ENGINE_CONTROL">
+            <English>Allow Engine Control</English>
+            <Chinesesimp>允许控制引擎</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_ENGINE_HACKING">
+            <English>Allow Engine Hacking</English>
+            <Chinesesimp>允许入侵引擎</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_EXPLOSION_ON_OVERLOAD">
+            <English>Allow Explosion on Overload</English>
+            <Chinesesimp>允许过载爆炸</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_FUEL_BATTERY_HACKING">
+            <English>Allow Fuel/Battery Hacking</English>
+            <Chinesesimp>允许入侵燃料/电池</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_HACKING_THE_VEHICLE_S_BRAKES">
+            <English>Allow hacking the vehicle's brakes</English>
+            <Chinesesimp>允许入侵载具制动系统</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_HACKING_THE_VEHICLE_S_CAR_ALARM">
+            <English>Allow hacking the vehicle's car alarm</English>
+            <Chinesesimp>允许入侵载具警报</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_HACKING_THE_VEHICLE_S_ENGINE">
+            <English>Allow hacking the vehicle's engine</English>
+            <Chinesesimp>允许入侵载具引擎</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_HACKING_THE_VEHICLE_S_FUEL_BATTERY_LEVEL">
+            <English>Allow hacking the vehicle's fuel/battery level</English>
+            <Chinesesimp>允许入侵载具的燃料或电池余量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_HACKING_THE_VEHICLE_S_LIGHTS">
+            <English>Allow hacking the vehicle's lights</English>
+            <Chinesesimp>允许入侵载具车灯</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_HACKING_THE_VEHICLE_S_SPEED">
+            <English>Allow hacking the vehicle's speed</English>
+            <Chinesesimp>允许入侵载具速度</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_LIGHTS_CONTROL">
+            <English>Allow Lights Control</English>
+            <Chinesesimp>允许控制车灯</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_LIGHTS_HACKING">
+            <English>Allow Lights Hacking</English>
+            <Chinesesimp>允许入侵车灯</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_LOCATION_VIEW">
+            <English>Allow Location View</English>
+            <Chinesesimp>允许查看位置</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_RETRACKING">
+            <English>Allow Retracking</English>
+            <Chinesesimp>允许再次追踪</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_SPEED_HACKING">
+            <English>Allow Speed Hacking</English>
+            <Chinesesimp>允许入侵速度</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_SPEED_VELOCITY_CONTROL">
+            <English>Allow Speed (Velocity) Control</English>
+            <Chinesesimp>允许控制速度</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_THE_VEHICLE_ALARM_TO_BE_HACKED_TO_PRODUCE_ITS_SOUND">
+            <English>Allow the vehicle alarm to be hacked to produce its sound.</English>
+            <Chinesesimp>允许入侵载具警报以播放警报声。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_THE_VEHICLE_BRAKES_TO_BE_HACKED_AND_APPLIED">
+            <English>Allow the vehicle brakes to be hacked and applied.</English>
+            <Chinesesimp>允许入侵并启用载具制动系统。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_THE_VEHICLE_ENGINE_TO_BE_HACKED_AND_TURNED_ON_OFF">
+            <English>Allow the vehicle engine to be hacked and turned on/off.</English>
+            <Chinesesimp>允许入侵并启动/关闭载具引擎。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_THE_VEHICLE_FUEL_BATTERY_TO_BE_HACKED_AND_MODIFIED">
+            <English>Allow the vehicle fuel / battery to be hacked and modified.</English>
+            <Chinesesimp>允许入侵并修改载具的燃料或电池余量。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_THE_VEHICLE_LIGHTS_TO_BE_HACKED_AND_MODIFIED">
+            <English>Allow the vehicle lights to be hacked and modified.</English>
+            <Chinesesimp>允许入侵并修改载具车灯。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_THE_VEHICLE_SPEED_TO_BE_HACKED_AND_MODIFIED">
+            <English>Allow the vehicle speed to be hacked and modified.</English>
+            <Chinesesimp>允许入侵并修改载具速度。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_TRACKING_AGAIN_AFTER_THE_INITIAL_TRACKING_TIME_ENDS">
+            <English>Allow tracking again after the initial tracking time ends</English>
+            <Chinesesimp>允许在首次追踪时间结束后再次追踪</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALLOW_TRACKING_AGAIN_AFTER_THE_INITIAL_TRACKING_TIME_ENDS_2">
+            <English>Allow tracking again after the initial tracking time ends?</English>
+            <Chinesesimp>允许在首次追踪时间结束后再次追踪？</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALL_OFF">
+            <English>All Off</English>
+            <Chinesesimp>全部关闭</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALL_ON">
+            <English>All On</English>
+            <Chinesesimp>全部开启</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALPHABETICAL_SUBSTITUTION">
+            <English>Alphabetical Substitution</English>
+            <Chinesesimp>字母替换密码</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ALWAYS_VISIBLE">
+            <English>Always Visible</English>
+            <Chinesesimp>始终可见</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_AMMO_CLASSNAME_FOR_EXPLOSION_ON_OVERLOAD_E_G_CLAYMOREDIRECTIONALMINE_REMOTE_AMMO_SCRIPTED">
+            <English>Ammo classname for explosion on overload (e.g., ClaymoreDirectionalMine_Remote_Ammo_Scripted, HelicopterExploSmall, Bo_GBU12_LGB)</English>
+            <Chinesesimp>过载爆炸使用的弹药类名，例如 ClaymoreDirectionalMine_Remote_Ammo_Scripted、HelicopterExploSmall、Bo_GBU12_LGB</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_APPLYING_THIS_VEHICLE_BRAKE_CONTROL">
+            <English>Applying this vehicle brake control</English>
+            <Chinesesimp>控制此载具制动</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ASSIGN_A_FIXED_4_DIGIT_ID_1000_9999_0_AUTO_ASSIGN_WITH">
+            <English>Assign a fixed 4-digit ID (1000-9999). 0 = auto-assign. With a trigger, IDs are handed out Start..End across the objects found.</English>
+            <Chinesesimp>指定固定的四位 ID（1000-9999）。0 表示自动分配。使用触发器时，在找到的物体间分配起始至结束范围内的 ID。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ATTACHES_A_GPS_TRACKER_TO_AN_OBJECT_SYNCHRONIZE_TO_THE_OBJECT_TO">
+            <English>Attaches a GPS tracker to an object. Synchronize to the object to track and optionally to AE3 Laptop objects.</English>
+            <Chinesesimp>将 GPS 追踪器安装到物体上。同步到待追踪物体，也可同步到 AE3 笔记本电脑。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ATTACH_GPS_TRACKER_SELF">
+            <English>Attach GPS Tracker (Self)</English>
+            <Chinesesimp>安装 GPS 追踪器（自身）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ATTACH_THIS_MODULE_TO_AN_AE3_DEVICE_TO_WRITE_THE_RESULT_TO">
+            <English>Attach this module to an AE3 device to write the result to a file.</English>
+            <Chinesesimp>请将此模块安装到 AE3 设备，以将结果写入文件。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_AUTOMATIC_LINK_CLEANUP">
+            <English>Automatic Link Cleanup</English>
+            <Chinesesimp>自动清理关联</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_BACKDOOR_FUNCTION_PREFIX">
+            <English>Backdoor Function Prefix</English>
+            <Chinesesimp>后门函数前缀</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_BACON">
+            <English>Bacon</English>
+            <Chinesesimp>培根密码</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_BLACK">
+            <English>Black</English>
+            <Chinesesimp>黑色</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_BLUE">
+            <English>Blue</English>
+            <Chinesesimp>蓝色</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_BRAKES_APPLIED_AT_1_M_S2">
+            <English>Brakes applied at %1 m/s2.</English>
+            <Chinesesimp>已施加 %1 m/s2 的制动减速度。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_BRAKE_RATE">
+            <English>Brake Rate</English>
+            <Chinesesimp>制动减速度</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_BRAKE_RATE_MUST_BE_1_TO_2_M_S2">
+            <English>Brake rate must be %1 to %2 m/s2.</English>
+            <Chinesesimp>制动减速度必须在 %1 至 %2 m/s2 之间。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_BROWN">
+            <English>Brown</English>
+            <Chinesesimp>棕色</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_BRUTEFORCE_ANALYSE">
+            <English>Bruteforce / Analyse</English>
+            <Chinesesimp>穷举 / 分析</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_BUILDING_1">
+            <English>Building %1</English>
+            <Chinesesimp>建筑 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CAESAR">
+            <English>Caesar</English>
+            <Chinesesimp>凯撒密码</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CHANGE_SIDE">
+            <English>Change Side</English>
+            <Chinesesimp>切换阵营</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CHANGING_THIS_DRONE_SIDE">
+            <English>Changing this drone side</English>
+            <Chinesesimp>切换此无人机阵营</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CHANGING_THIS_VEHICLE_FUEL">
+            <English>Changing this vehicle fuel</English>
+            <Chinesesimp>修改此载具燃料余量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CHANGING_THIS_VEHICLE_SPEED">
+            <English>Changing this vehicle speed</English>
+            <Chinesesimp>修改此载具速度</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CHARGE_LAPTOP">
+            <English>Charge Laptop</English>
+            <Chinesesimp>为笔记本电脑充电</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CHOOSE_THE_TYPE_OF_EXPLOSION_CREATED_ON_OVERLOAD">
+            <English>Choose the type of explosion created on overload</English>
+            <Chinesesimp>选择过载时产生的爆炸类型</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CIPHER_ALGORITHM_TO_USE">
+            <English>Cipher algorithm to use.</English>
+            <Chinesesimp>使用的密码算法。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CIPHER_RESULT_WRITE_FAILED_1">
+            <English>Cipher result write failed: %1</English>
+            <Chinesesimp>密码处理结果写入失败：%1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CIPHER_RESULT_WRITE_FAILED_FILESYSTEM_IS_NOT_INITIALIZED">
+            <English>Cipher result write failed: filesystem is not initialized.</English>
+            <Chinesesimp>密码处理结果写入失败：文件系统尚未初始化。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CIPHER_RESULT_WRITTEN_TO_1">
+            <English>Cipher result written to %1</English>
+            <Chinesesimp>密码处理结果已写入 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CIPHER_TOOLS">
+            <English>Cipher Tools</English>
+            <Chinesesimp>密码工具</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CIPHER_USED_WHEN_ENCRYPTION_IS_ENABLED">
+            <English>Cipher used when encryption is enabled</English>
+            <Chinesesimp>启用加密时使用的密码算法</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CIPHER_USED_WHEN_ENCRYPTION_IS_ENABLED_2">
+            <English>Cipher used when encryption is enabled.</English>
+            <Chinesesimp>启用加密时使用的密码算法。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CIVILIAN">
+            <English>CIVILIAN</English>
+            <Chinesesimp>平民</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CLAYMORE">
+            <English>Claymore</English>
+            <Chinesesimp>阔剑地雷</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CLEANUP_SETTINGS">
+            <English>Cleanup Settings</English>
+            <Chinesesimp>清理设置</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CLEAR_BROKEN_DEVICE_LINKS">
+            <English>Clear Broken Device Links</English>
+            <Chinesesimp>清除失效关联</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CLI_GUI">
+            <English>CLI + GUI</English>
+            <Chinesesimp>命令行与图形界面</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CLI_ONLY">
+            <English>CLI only</English>
+            <Chinesesimp>仅命令行</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CODE_THAT_WILL_BE_EXECUTED_IN_A_SCHEDULED_ENVIRONMENT_SPAWN_WHEN_FILE">
+            <English>Code that will be executed in a SCHEDULED environment (spawn) when file is successfully downloaded. The code is run on the player who downloaded the file. Default parameters ['_computer', '_playerNetID']</English>
+            <Chinesesimp>成功下载文件时在调度环境（spawn）中运行的代码。代码在下载文件的玩家客户端执行。默认参数：['_computer', '_playerNetID']</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CODE_TO_EXECUTE_ON_DOWNLOAD">
+            <English>Code to Execute on Download</English>
+            <Chinesesimp>下载后执行的代码</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CODE_TO_EXECUTE_UPON_SUCCESSFUL_DOWNLOAD_LEAVE_EMPTY_FOR_NO_EXECUTION">
+            <English>Code to execute upon successful download. Leave empty for no execution.</English>
+            <Chinesesimp>成功下载后执行的代码。留空则不执行。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CODE_TO_RUN_IN_A_SCHEDULED_ENVIRONMENT_SPAWN_WHEN_DEVICE_IS_ACTIVATED">
+            <English>Code to run in a SCHEDULED environment (spawn) when device is activated. The code is run on the player who activated the device. Default parameters ['_computer', '_customObject', '_playerNetID']</English>
+            <Chinesesimp>设备激活时在调度环境（spawn）中运行的代码。代码在激活设备的玩家客户端执行。默认参数：['_computer', '_customObject', '_playerNetID']</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CODE_TO_RUN_IN_A_SCHEDULED_ENVIRONMENT_SPAWN_WHEN_DEVICE_IS_DEACTIVATED">
+            <English>Code to run in a SCHEDULED environment (spawn) when device is deactivated. The code is run on the player who deactivated the device. Default parameters ['_computer', '_customObject', '_playerNetID']</English>
+            <Chinesesimp>设备停用时在调度环境（spawn）中运行的代码。代码在停用设备的玩家客户端执行。默认参数：['_computer', '_customObject', '_playerNetID']</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CODE_TO_RUN_WHEN_DEVICE_IS_ACTIVATED_USE_THIS_SELECT_0_TO">
+            <English>Code to run when device is activated. Use (_this select 0) to reference the computer object.</English>
+            <Chinesesimp>设备激活时运行的代码。使用 (_this select 0) 引用计算机物体。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CODE_TO_RUN_WHEN_DEVICE_IS_DEACTIVATED_USE_THIS_SELECT_0_TO">
+            <English>Code to run when device is deactivated. Use (_this select 0) to reference the computer object.</English>
+            <Chinesesimp>设备停用时运行的代码。使用 (_this select 0) 引用计算机物体。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COLUMNAR_TRANSPOSITION">
+            <English>Columnar Transposition</English>
+            <Chinesesimp>列移位密码</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COMMA_SEPARATED_BACKPACK_CLASSNAMES_THAT_BEHAVE_AS_77TH_JSOC_EWO_PACKS_LEAVE">
+            <English>Comma-separated backpack classnames that behave as 77th JSOC EWO packs. Leave empty to restore the default list.</English>
+            <Chinesesimp>以逗号分隔的背包类名，这些背包将作为 77th JSOC EWO 背包。留空可恢复默认列表。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COMMA_SEPARATED_DEVICETYPE_DEVICEID_PAIRS_E_G_4_1003_1_1001_TYPES">
+            <English>Comma-separated deviceType:deviceId pairs, e.g. 4:1003, 1:1001. Types: 1 Doors, 2 Lights, 3 Drones, 4 Files, 5 Custom, 6 GPS Trackers, 7 Vehicles, 8 Power Grids.</English>
+            <Chinesesimp>以逗号分隔的 deviceType:deviceId 对，例如 4:1003, 1:1001。类型：1 门，2 灯，3 无人机，4 文件，5 自定义设备，6 GPS 追踪器，7 载具，8 电网。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COMMA_SEPARATED_LIST_OF_CLASSNAMES_TO_EXCLUDE_E_G_LAMP_STREET_SMALL">
+            <English>Comma-separated list of classnames to exclude (e.g., Lamp_Street_small_F,Land_LampHalogen_F)</English>
+            <Chinesesimp>以逗号分隔的排除类名列表，例如 Lamp_Street_small_F,Land_LampHalogen_F</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COMMA_SEPARATED_LIST_OF_LIGHT_CLASSNAMES_TO_EXCLUDE_FROM_POWER_CONTROL">
+            <English>Comma-separated list of light classnames to exclude from power control</English>
+            <Chinesesimp>以逗号分隔的灯光类名列表，这些灯光不受电源控制</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COMMA_SEPARATED_REALDOOR_CUSTOMID_PAIRS_E_G_1_101_2_102_OMITTED">
+            <English>Comma-separated realDoor:customID pairs, e.g. 1:101,2:102. Omitted doors keep their engine number.</English>
+            <Chinesesimp>以逗号分隔的 realDoor:customID 对，例如 1:101,2:102。未指定的门保留引擎编号。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COMPLETED">
+            <English>Completed</English>
+            <Chinesesimp>已完成</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CONFIGURES_POWER_COSTS_FOR_HACKING_OPERATIONS_ONLY_ONE_MODULE_OF_THIS_TYPE">
+            <English>Configures power costs for hacking operations. Only one module of this type should exist.</English>
+            <Chinesesimp>配置入侵操作的电量消耗。此类模块应仅放置一个。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CONNECT_TO_POWER_SOURCE">
+            <English>Connect to Power Source</English>
+            <Chinesesimp>连接到电源</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CONTENTS_TO_BE_DISPLAYED_WHEN_THE_FILE_IS_OPENED_USING_THE_CAT">
+            <English>Contents to be displayed when the file is opened using the 'cat' command</English>
+            <Chinesesimp>通过 cat 命令打开文件时显示的内容</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CONTENT_OF_THE_FILE_THAT_COULD_BE_READ_AFTER_DOWNLOADING_VIA_THE">
+            <English>Content of the file that could be read after downloading via the command 'cat &lt;filename&gt;'</English>
+            <Chinesesimp>下载后可通过 cat &lt;filename&gt; 命令读取的文件内容</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COPY_DEVICE_LINKS">
+            <English>Copy Device Links</English>
+            <Chinesesimp>复制设备关联</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COPY_DEVICE_LINKS_FROM_1">
+            <English>Copy Device Links FROM %1</English>
+            <Chinesesimp>从 %1 复制设备关联</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COPY_DEVICE_LINKS_TO_1">
+            <English>Copy Device Links TO %1</English>
+            <Chinesesimp>将设备关联复制到 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CORE_SETTINGS">
+            <English>Core Settings</English>
+            <Chinesesimp>核心设置</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COST_TO_ACTIVATE_DEACTIVATE_CUSTOM_DEVICES">
+            <English>Cost to Activate/Deactivate Custom Devices</English>
+            <Chinesesimp>自定义设备激活/停用耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COST_TO_CONTROL_POWER_GRID">
+            <English>Cost to Control Power Grid</English>
+            <Chinesesimp>电网控制耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COST_TO_DISABLE">
+            <English>Cost to Disable</English>
+            <Chinesesimp>禁用耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COST_TO_HACK_VEHICLES">
+            <English>Cost to Hack Vehicles</English>
+            <Chinesesimp>载具入侵耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COST_TO_LOCK_UNLOCK_DOORS">
+            <English>Cost to Lock/Unlock Doors</English>
+            <Chinesesimp>门锁定/解锁耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COST_TO_PING_GPS_TRACKERS">
+            <English>Cost to Ping GPS Trackers</English>
+            <Chinesesimp>GPS 追踪器定位耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_COST_TO_SWITCH_DRONE_SIDES">
+            <English>Cost to Switch Drone Sides</English>
+            <Chinesesimp>无人机阵营切换耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CREATES_A_CUSTOM_HACKABLE_DEVICE_WITH_PROGRAMMABLE_ACTIVATION_DEACTIVATION_CODE_TRIGGERS_ENABLE">
+            <English>Creates a custom hackable device with programmable activation/deactivation code. Triggers enable batch-registration of custom devices within the area.</English>
+            <Chinesesimp>创建可编程激活/停用代码的自定义可入侵设备。触发器可批量注册区域内的自定义设备。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CREATES_A_HACKABLE_FILE_DATABASE_SYNCHRONIZE_TO_AE3_LAPTOP_OBJECTS_TO_LINK">
+            <English>Creates a hackable file/database. Synchronize to AE3 Laptop objects to link the file to specific computers.</English>
+            <Chinesesimp>创建可入侵文件或数据库。同步到 AE3 笔记本电脑，可将文件关联到指定计算机。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CREATES_A_POWER_GENERATOR_THAT_CONTROLS_LIGHTS_WITHIN_A_RADIUS_SYNCHRONIZE_TO">
+            <English>Creates a power generator that controls lights within a radius. Synchronize to generator object and optionally to AE3 Laptop objects. Triggers enable batch-registration of powergrids within the area.</English>
+            <Chinesesimp>创建控制半径内灯光的发电机。同步到发电机物体，也可同步到 AE3 笔记本电脑。触发器可批量注册区域内的电网。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CREATE_EXPLOSION_ON_OVERLOAD">
+            <English>Create Explosion on Overload</English>
+            <Chinesesimp>过载时产生爆炸</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CREATE_EXPLOSION_WHEN_GENERATOR_IS_OVERLOADED">
+            <English>Create explosion when generator is overloaded</English>
+            <Chinesesimp>发电机过载时产生爆炸</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CREATE_EXPLOSION_WHEN_THE_GENERATOR_IS_OVERLOADED">
+            <English>Create explosion when the generator is overloaded</English>
+            <Chinesesimp>发电机过载时产生爆炸</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CREATE_NEW_LAPTOP">
+            <English>&lt;Create New Laptop&gt;</English>
+            <Chinesesimp>&lt;创建新笔记本电脑&gt;</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CRYPTOGRAPHY">
+            <English>Cryptography</English>
+            <Chinesesimp>密码学</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CUSTOM_DEVICE_1">
+            <English>Custom device %1</English>
+            <Chinesesimp>自定义设备 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CUSTOM_DEVICE_ADDED">
+            <English>Custom Device Added!</English>
+            <Chinesesimp>自定义设备已添加！</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CUSTOM_DEVICE_COST">
+            <English>Custom Device Cost</English>
+            <Chinesesimp>自定义设备耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CUSTOM_DEVICE_NAME">
+            <English>Custom Device Name</English>
+            <Chinesesimp>自定义设备名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CUSTOM_MARKER_NAME_OPTIONAL">
+            <English>Custom Marker Name (Optional)</English>
+            <Chinesesimp>自定义标记名称（可选）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CUSTOM_MARKER_OPTIONAL">
+            <English>Custom Marker (optional)</English>
+            <Chinesesimp>自定义标记（可选）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CUSTOM_NAME_FOR_THE_MAP_MARKER_LEAVE_EMPTY_TO_USE_TRACKER_NAME">
+            <English>Custom name for the map marker. Leave empty to use Tracker Name</English>
+            <Chinesesimp>自定义地图标记名称。留空则使用追踪器名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CUSTOM_NAME_FOR_THE_MAP_MARKER_TO_BE_USED_LEAVE_EMPTY_TO">
+            <English>Custom name for the map marker to be used. Leave empty to use Tracker Name</English>
+            <Chinesesimp>自定义地图标记名称。留空则使用追踪器名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CUSTOM_NAME_GIVEN_TO_THE_LAPTOP_FOR_EASIER_MANAGEMENT_OF_DEVICES_ONLY">
+            <English>Custom name given to the laptop for easier management of devices. Only visible to curators when linking devices to specific laptops.</English>
+            <Chinesesimp>为笔记本电脑指定自定义名称，便于管理设备。仅管理员将设备关联到指定电脑时可见。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CUSTOM_NAME_USED_BY_CURATOR_DEVICE_LINKING_TOOLS">
+            <English>Custom name used by curator device-linking tools.</English>
+            <Chinesesimp>管理员关联设备时使用的自定义名称。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_CUSTOM_NUMERIC_ID_A_HACKER_USES_TO_ADDRESS_THIS_DOOR_DEFAULTS_TO">
+            <English>Custom numeric ID a hacker uses to address this door. Defaults to the engine number.</English>
+            <Chinesesimp>入侵者用于指定此门的自定义数字 ID。默认为引擎编号。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DAMAGE">
+            <English>Damage</English>
+            <Chinesesimp>损伤</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DATABASE_1">
+            <English>Database %1</English>
+            <Chinesesimp>数据库 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DEACTIVATING_THE_POWER_GRID">
+            <English>Deactivating the power grid</English>
+            <Chinesesimp>关闭电网</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DEACTIVATING_THIS_CUSTOM_DEVICE">
+            <English>Deactivating this custom device</English>
+            <Chinesesimp>停用此自定义设备</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DEACTIVATION_CODE">
+            <English>Deactivation Code</English>
+            <Chinesesimp>停用代码</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DEBUG_MODE">
+            <English>Debug Mode</English>
+            <Chinesesimp>调试模式</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DECRYPT">
+            <English>Decrypt</English>
+            <Chinesesimp>解密</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DEPRECATED_KEPT_SO_MISSIONS_SAVED_BEFORE_THE_DEVICE_ACCESS_SETTING_EXISTED_KEEP">
+            <English>Deprecated, kept so missions saved before the Device Access setting existed keep working. Device Access is used instead whenever it is set.</English>
+            <Chinesesimp>已弃用，为兼容引入“设备访问”设置前保存的任务而保留。只要设置了“设备访问”，就优先使用该设置。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DESKTOP_AUDIO_SETTINGS">
+            <English>Desktop and Audio Settings</English>
+            <Chinesesimp>桌面与音频设置</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DESTROYED">
+            <English>DESTROYED</English>
+            <Chinesesimp>已摧毁</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DEVICES_TYPE_ID">
+            <English>Devices (type:id)</English>
+            <Chinesesimp>设备（类型:ID）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DEVICE_1">
+            <English>Device %1</English>
+            <Chinesesimp>设备 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_0_AUTO">
+            <English>Device ID (0 = auto)</English>
+            <Chinesesimp>设备 ID（0 = 自动）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_END_0_AUTO">
+            <English>Device ID End (0 = auto)</English>
+            <Chinesesimp>设备结束 ID（0 = 自动）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_END_FOR_TRIGGERS">
+            <English>Device ID (End, for triggers)</English>
+            <Chinesesimp>设备 ID（结束，供触发器使用）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_START">
+            <English>Device ID (Start)</English>
+            <Chinesesimp>设备 ID（起始）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_START_0_AUTO">
+            <English>Device ID Start (0 = auto)</English>
+            <Chinesesimp>设备起始 ID（0 = 自动）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DEVICE_SETUP_MODE">
+            <English>Device Setup Mode</English>
+            <Chinesesimp>设备部署模式</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DISABLE">
+            <English>Disable</English>
+            <Chinesesimp>禁用</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DISABLED">
+            <English>Disabled</English>
+            <Chinesesimp>已禁用</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DISABLING_THIS_DRONE">
+            <English>Disabling this drone</English>
+            <Chinesesimp>禁用此无人机</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DISCONNECT_CHARGER">
+            <English>Disconnect Charger</English>
+            <Chinesesimp>断开充电器</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DISCONNECT_FROM_POWER_SOURCE">
+            <English>Disconnect from Power Source</English>
+            <Chinesesimp>断开电源</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DISPLAY_NAME_FOR_THIS_VEHICLE_IN_THE_HACKING_TERMINAL">
+            <English>Display name for this vehicle in the hacking terminal</English>
+            <Chinesesimp>此载具在入侵终端中显示的名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DISTANCE_M">
+            <English>Distance m</English>
+            <Chinesesimp>距离（米）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DOOR_1">
+            <English>Door #%1</English>
+            <Chinesesimp>门 #%1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DOOR_1_2">
+            <English>Door %1</English>
+            <Chinesesimp>门 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DOOR_1_ID">
+            <English>Door #%1 ID</English>
+            <Chinesesimp>门 #%1 ID</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DOOR_ID_OVERRIDES">
+            <English>Door ID Overrides</English>
+            <Chinesesimp>门 ID 覆盖</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DOOR_LOCK_UNLOCK_COST">
+            <English>Door Lock/Unlock Cost</English>
+            <Chinesesimp>门锁定/解锁耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DOWNLOAD_FAILED_1">
+            <English>Download failed: %1</English>
+            <Chinesesimp>下载失败：%1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DOWNLOAD_TIME">
+            <English>Download time</English>
+            <Chinesesimp>下载时间</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DOWNLOAD_TIME_SECONDS">
+            <English>Download Time (seconds)</English>
+            <Chinesesimp>下载时间（秒）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DRIVE_CONNECTION_SOUND_VOLUME">
+            <English>Drive Connection Sound Volume</English>
+            <Chinesesimp>存储设备连接音量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DRONE_1">
+            <English>Drone %1</English>
+            <Chinesesimp>无人机 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DRONE_DISABLE_COST">
+            <English>Drone Disable Cost</English>
+            <Chinesesimp>无人机禁用耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DRONE_NAME">
+            <English>Drone Name</English>
+            <Chinesesimp>无人机名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DRONE_SIDE_CHANGE_COST">
+            <English>Drone Side Change Cost</English>
+            <Chinesesimp>无人机阵营切换耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DURATION">
+            <English>Duration</English>
+            <Chinesesimp>持续时间</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DURATION_IN_SECONDS_FOR_THE_LAST_PING_MARKER_TO_REMAIN_VISIBLE">
+            <English>Duration in seconds for the last ping marker to remain visible</English>
+            <Chinesesimp>最后定位标记保留的时间，单位为秒</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EAST_OPFOR">
+            <English>EAST (OPFOR)</English>
+            <Chinesesimp>东方阵营（OPFOR）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EFFECT_RADIUS">
+            <English>Effect Radius</English>
+            <Chinesesimp>作用半径</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EFFECT_RADIUS_METERS">
+            <English>Effect Radius (meters)</English>
+            <Chinesesimp>作用半径（米）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ELAPSED">
+            <English>Elapsed</English>
+            <Chinesesimp>已用时间</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENABLES_EWO_LAPTOP_REGISTRATION_AND_EWO_BACKPACK_SUPPORT">
+            <English>Enables EWO laptop registration and EWO backpack support.</English>
+            <Chinesesimp>启用 EWO 笔记本电脑注册和 EWO 背包支持。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENABLE_COMPREHENSIVE_LOGGING_TO_RPT_FILE_FOR_TROUBLESHOOTING">
+            <English>Enable comprehensive logging to RPT file for troubleshooting.</English>
+            <Chinesesimp>启用详细的 RPT 日志，以便排查问题。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENCRYPT">
+            <English>Encrypt</English>
+            <Chinesesimp>加密</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENCRYPTION_ALGORITHM">
+            <English>Encryption Algorithm</English>
+            <Chinesesimp>加密算法</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENCRYPTION_OPTIONS">
+            <English>Encryption Options</English>
+            <Chinesesimp>加密选项</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENCRYPT_DECRYPT_TEXT_OR_ANALYZE_CIPHER_TEXT">
+            <English>Encrypt/decrypt text or analyze cipher text.</English>
+            <Chinesesimp>加密/解密文本或分析密文。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENCRYPT_FILE_CONTENTS">
+            <English>Encrypt File Contents</English>
+            <Chinesesimp>加密文件内容</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENCRYPT_THE_STORED_FILE_CONTENTS_BEFORE_IT_IS_ADDED_TO_THE_HACKABLE">
+            <English>Encrypt the stored file contents before it is added to the hackable file list.</English>
+            <Chinesesimp>将文件加入可入侵文件列表前，对存储的内容进行加密。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENCRYPT_THE_STORED_FILE_CONTENTS_BEFORE_THE_FILE_IS_REGISTERED">
+            <English>Encrypt the stored file contents before the file is registered</English>
+            <Chinesesimp>注册文件前对存储的内容进行加密</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_IN_WH_CONSUMED_BY_EACH_GPS_TRACKER_PING_UNLESS_THE_TRACKER">
+            <English>Energy in Wh consumed by each GPS tracker ping unless the tracker has a mission-specific cost.</English>
+            <Chinesesimp>GPS 追踪器每次定位消耗的电量，单位为 Wh；追踪器有任务指定耗电量时使用其指定值。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_IN_WH_CONSUMED_BY_EACH_VEHICLE_HACKING_ACTION_UNLESS_THE_VEHICLE">
+            <English>Energy in Wh consumed by each vehicle hacking action unless the vehicle has a mission-specific cost.</English>
+            <Chinesesimp>每次载具入侵操作消耗的电量，单位为 Wh；载具有任务指定耗电量时使用其指定值。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_PER_MINUTE_AN_EWO_BACKPACK_DELIVERS_TO_A_LAPTOP_IT_IS">
+            <English>Energy per minute an EWO backpack delivers to a laptop it is charging. One energy raises a laptop battery by one percent.</English>
+            <Chinesesimp>EWO 背包为笔记本电脑充电时每分钟提供的电量。每单位电量可使笔记本电脑电池增加一个百分点。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_PER_MINUTE_AN_EWO_BACKPACK_SPENDS_WHILE_ITS_WIRELESS_NETWORK_IS">
+            <English>Energy per minute an EWO backpack spends while its wireless network is broadcasting. The pack holds 400 energy.</English>
+            <Chinesesimp>EWO 背包广播无线网络时每分钟消耗的电量。背包可储存 400 单位电量。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_PER_MINUTE_AN_EWO_BACKPACK_TAKES_IN_FROM_THE_POWER_SOURCE">
+            <English>Energy per minute an EWO backpack takes in from the power source it is connected to.</English>
+            <Chinesesimp>EWO 背包从连接的电源每分钟获得的电量。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_CHANGE_THE_SIDE_OF_A_DRONE">
+            <English>Energy / Power (in Wh) required to change the side of a drone without a mission-specific cost</English>
+            <Chinesesimp>未单独指定耗电量的无人机切换阵营所需的电量，单位为 Wh</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_CHANGE_THIS_DRONE_S_SIDE">
+            <English>Energy / Power (in Wh) required to change this drone's side.</English>
+            <Chinesesimp>切换此无人机阵营所需的电量，单位为 Wh。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_CONTROL_A_VEHICLE_WITHOUT_A_MISSION">
+            <English>Energy / Power (in Wh) required to control a vehicle without a mission-specific cost</English>
+            <Chinesesimp>未单独指定耗电量的载具控制所需的电量，单位为 Wh</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_CONTROL_POWER_GRIDS_ON_OFF_OVERLOAD">
+            <English>Energy / Power (in Wh) required to control power grids (on/off/overload)</English>
+            <Chinesesimp>控制电网（开启/关闭/过载）所需的电量，单位为 Wh</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_DISABLE_A_DRONE_WITHOUT_A_MISSION">
+            <English>Energy / Power (in Wh) required to disable a drone without a mission-specific cost</English>
+            <Chinesesimp>未单独指定耗电量的无人机禁用所需的电量，单位为 Wh</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_DISABLE_THIS_DRONE">
+            <English>Energy / Power (in Wh) required to disable this drone.</English>
+            <Chinesesimp>禁用此无人机所需的电量，单位为 Wh。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_HACK_THIS_VEHICLE_CONSUMPTION_PER_HACKING">
+            <English>Energy / Power (in Wh) required to hack this vehicle. Consumption per hacking action / use.</English>
+            <Chinesesimp>入侵此载具所需的电量，单位为 Wh，每次入侵操作均消耗该电量。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_LOCK_UNLOCK_DOORS">
+            <English>Energy / Power (in Wh) required to lock/unlock doors</English>
+            <Chinesesimp>锁定/解锁门所需的电量，单位为 Wh</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_TRACK_A_GPS_TRACKER_WITHOUT_A">
+            <English>Energy / Power (in Wh) required to track a GPS tracker without a mission-specific cost</English>
+            <Chinesesimp>未单独指定耗电量的 GPS 追踪器定位所需的电量，单位为 Wh</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_TRACK_THIS_SIGNAL">
+            <English>Energy / Power (in Wh) required to track this signal</English>
+            <Chinesesimp>追踪此信号所需的电量，单位为 Wh</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENERGY_POWER_IN_WH_REQUIRED_TO_USE_A_CUSTOM_HACKING_TOOL">
+            <English>Energy / Power (in Wh) required to use a custom hacking tool</English>
+            <Chinesesimp>使用自定义黑客工具所需的电量，单位为 Wh</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENGINE">
+            <English>Engine</English>
+            <Chinesesimp>引擎</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENGINE_COOLDOWN_SEC">
+            <English>Engine Cooldown (sec)</English>
+            <Chinesesimp>引擎冷却时间（秒）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENGINE_ON">
+            <English>Engine On</English>
+            <Chinesesimp>启动引擎</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ENGINE_STARTED">
+            <English>Engine started.</English>
+            <Chinesesimp>引擎已启动。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EWO_BACKPACK_CLASSNAMES">
+            <English>EWO Backpack Classnames</English>
+            <Chinesesimp>EWO 背包类名</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EWO_CHARGING_STATUS">
+            <English>EWO Charging Status</English>
+            <Chinesesimp>EWO 充电状态</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EWO_LAPTOP_CHARGE_RATE">
+            <English>EWO Laptop Charge Rate</English>
+            <Chinesesimp>EWO 笔记本电脑充电速率</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EWO_NETWORK">
+            <English>EWO Network</English>
+            <Chinesesimp>EWO 网络</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EWO_NETWORK_DRAIN">
+            <English>EWO Network Drain</English>
+            <Chinesesimp>EWO 网络耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EWO_NETWORK_SETTINGS">
+            <English>EWO Network Settings</English>
+            <Chinesesimp>EWO 网络设置</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EWO_POWER_SOURCE_RECHARGE_RATE">
+            <English>EWO Power Source Recharge Rate</English>
+            <Chinesesimp>EWO 电源补充速率</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EWO_SETTINGS">
+            <English>EWO Settings</English>
+            <Chinesesimp>EWO 设置</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EXCLUDED_LIGHT_CLASSNAMES">
+            <English>Excluded Light Classnames</English>
+            <Chinesesimp>排除的灯光类名</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EXECUTION_CODE_OPTIONAL">
+            <English>Execution Code (Optional)</English>
+            <Chinesesimp>执行代码（可选）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EXPERIMENTAL_AE3_PORTABLE">
+            <English>Experimental (AE3 Portable)</English>
+            <Chinesesimp>实验模式（AE3 便携部署）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EXPLOSION_TYPE">
+            <English>Explosion Type</English>
+            <Chinesesimp>爆炸类型</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EXPORT_TO_FILE">
+            <English>Export to File</English>
+            <Chinesesimp>导出到文件</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_EXTERNAL_SSH">
+            <English>External SSH</English>
+            <Chinesesimp>外部 SSH</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FAILED_TO_EXPORT_NETWORK_SCAN_TO_1">
+            <English>Failed to export network scan to %1</English>
+            <Chinesesimp>网络扫描结果导出到 %1 失败</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FILE_CONTENTS">
+            <English>File Contents</English>
+            <Chinesesimp>文件内容</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FILE_HACK_TIME_IN_SECONDS">
+            <English>File Hack Time (in seconds)</English>
+            <Chinesesimp>文件入侵时间（秒）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FILE_NAME">
+            <English>File Name</English>
+            <Chinesesimp>文件名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FILTERS">
+            <English>Filters</English>
+            <Chinesesimp>筛选</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FIRST_BUILDING_ID_HANDED_OUT_ACROSS_THE_AREA_0_AUTO_ASSIGN">
+            <English>First building ID handed out across the area. 0 = auto-assign.</English>
+            <Chinesesimp>区域内分配的第一个建筑 ID。0 表示自动分配。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FIRST_DEVICE_ID_HANDED_OUT_ACROSS_THE_AREA_0_AUTO_ASSIGN">
+            <English>First device ID handed out across the area. 0 = auto-assign.</English>
+            <Chinesesimp>区域内分配的第一个设备 ID。0 表示自动分配。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FIRST_LIGHT_ID_HANDED_OUT_ACROSS_THE_AREA_0_AUTO_ASSIGN">
+            <English>First light ID handed out across the area. 0 = auto-assign.</English>
+            <Chinesesimp>区域内分配的第一个灯 ID。0 表示自动分配。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FIXED_ID_FOR_THIS_BUILDING_0_AUTO_ASSIGN_A_FREE_ID">
+            <English>Fixed ID for this building. 0 = auto-assign a free ID.</English>
+            <Chinesesimp>此建筑的固定 ID。0 表示自动分配未使用的 ID。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FIXED_ID_FOR_THIS_DEVICE_0_AUTO_ASSIGN_A_FREE_ID">
+            <English>Fixed ID for this device. 0 = auto-assign a free ID.</English>
+            <Chinesesimp>此设备的固定 ID。0 表示自动分配未使用的 ID。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FIXED_ID_FOR_THIS_FILE_0_AUTO_ASSIGN_A_FREE_ID">
+            <English>Fixed ID for this file. 0 = auto-assign a free ID.</English>
+            <Chinesesimp>此文件的固定 ID。0 表示自动分配未使用的 ID。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FIXED_ID_FOR_THIS_GENERATOR_0_AUTO_ASSIGN_A_FREE_ID">
+            <English>Fixed ID for this generator. 0 = auto-assign a free ID.</English>
+            <Chinesesimp>此发电机的固定 ID。0 表示自动分配未使用的 ID。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FIXED_ID_FOR_THIS_LIGHT_0_AUTO_ASSIGN_A_FREE_ID">
+            <English>Fixed ID for this light. 0 = auto-assign a free ID.</English>
+            <Chinesesimp>此灯的固定 ID。0 表示自动分配未使用的 ID。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FIXED_ID_FOR_THIS_TRACKER_0_AUTO_ASSIGN_A_FREE_ID">
+            <English>Fixed ID for this tracker. 0 = auto-assign a free ID.</English>
+            <Chinesesimp>此追踪器的固定 ID。0 表示自动分配未使用的 ID。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FIXED_ID_FOR_THIS_VEHICLE_DRONE_0_AUTO_ASSIGN_A_FREE_ID">
+            <English>Fixed ID for this vehicle/drone. 0 = auto-assign a free ID.</English>
+            <Chinesesimp>此载具或无人机的固定 ID。0 表示自动分配未使用的 ID。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FLASH_DRIVE_CONNECTION_SOUND">
+            <English>Flash Drive Connection Sound</English>
+            <Chinesesimp>闪存盘连接音效</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FREQUENCY_IN_SECONDS_BETWEEN_POSITION_UPDATES">
+            <English>Frequency in seconds between position updates</English>
+            <Chinesesimp>两次位置更新之间的间隔秒数</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FREQUENCY_IN_SECONDS_FOR_THE_LAST_PING_TO_BE_ACTIVE_FOR">
+            <English>Frequency in seconds for the last ping to be active for</English>
+            <Chinesesimp>最后定位保持有效的时间，单位为秒</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FUEL">
+            <English>Fuel</English>
+            <Chinesesimp>燃料</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FUEL_BATTERY_CAN_ONLY_BE_REDUCED_TO_1_2_3">
+            <English>Fuel/battery can only be reduced to %1-%2%3.</English>
+            <Chinesesimp>燃料/电池余量只能降低至 %1-%2%3。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FUEL_BATTERY_DRAINED">
+            <English>Fuel/battery drained.</English>
+            <Chinesesimp>燃料/电池已耗尽。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FUEL_BATTERY_SET_TO_1_2">
+            <English>Fuel/battery set to %1%2.</English>
+            <Chinesesimp>燃料/电池余量已设置为 %1%2。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FUEL_CONTROL">
+            <English>Fuel control</English>
+            <Chinesesimp>燃料控制</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_GENERATOR_NAME">
+            <English>Generator Name</English>
+            <Chinesesimp>发电机名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_GPS_MAP">
+            <English>GPS Map</English>
+            <Chinesesimp>GPS 地图</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_GPS_TRACKERS">
+            <English>GPS Trackers</English>
+            <Chinesesimp>GPS 追踪器</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_GPS_TRACKER_ADDED">
+            <English>GPS Tracker Added!</English>
+            <Chinesesimp>GPS 追踪器已添加！</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_GPS_TRACKER_COST">
+            <English>GPS Tracker Cost</English>
+            <Chinesesimp>GPS 追踪器耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_GPS_TRACKER_NAME">
+            <English>GPS Tracker Name</English>
+            <Chinesesimp>GPS 追踪器名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_GPS_TRACKER_POWER_COST">
+            <English>GPS Tracker Power Cost</English>
+            <Chinesesimp>GPS 追踪器耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_GRANTS_SYNCHRONIZED_AE3_LAPTOPS_ACCESS_TO_DEVICES_THAT_OTHER_MODULES_ALREADY_REGISTERED">
+            <English>Grants synchronized AE3 Laptops access to devices that other modules already registered. Runs 10 seconds into the mission so device IDs exist.</English>
+            <Chinesesimp>允许同步的 AE3 笔记本电脑访问其他模块已注册的设备。任务开始 10 秒后执行，以确保设备 ID 已生成。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_GREEN">
+            <English>Green</English>
+            <Chinesesimp>绿色</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_GREY">
+            <English>Grey</English>
+            <Chinesesimp>灰色</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_GRID">
+            <English>Grid</English>
+            <Chinesesimp>网格</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_GUER_INDFOR">
+            <English>GUER (INDFOR)</English>
+            <Chinesesimp>独立阵营（INDFOR）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_GUI_ONLY">
+            <English>GUI only</English>
+            <Chinesesimp>仅图形界面</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_HACKABLE_DEVICES">
+            <English>Hackable devices</English>
+            <Chinesesimp>可入侵设备</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_HACKABLE_DOORS_ADDED">
+            <English>Hackable Doors Added!</English>
+            <Chinesesimp>可入侵的门已添加！</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_HACKABLE_DRONE_ADDED">
+            <English>Hackable Drone Added!</English>
+            <Chinesesimp>可入侵无人机已添加！</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_HACKABLE_FILE_ADDED">
+            <English>Hackable File Added!</English>
+            <Chinesesimp>可入侵文件已添加！</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_HACKABLE_LIGHT_ADDED">
+            <English>Hackable Light Added!</English>
+            <Chinesesimp>可入侵的灯已添加！</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_HACKABLE_VEHICLE_ADDED">
+            <English>Hackable Vehicle Added!</English>
+            <Chinesesimp>可入侵载具已添加！</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_HACKERMAN_INTRO_VIDEO">
+            <English>Hackerman Intro Video</English>
+            <Chinesesimp>Hackerman 开场视频</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_HACKERMAN_INTRO_VIDEO_COOLDOWN">
+            <English>Hackerman Intro Video Cooldown</English>
+            <Chinesesimp>Hackerman 开场视频冷却时间</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_HACKING_POWER_REQUIREMENTS">
+            <English>Hacking Power Requirements</English>
+            <Chinesesimp>入侵电量需求</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_HACKING_TOOLS">
+            <English>Hacking Tools</English>
+            <Chinesesimp>黑客工具</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_HACKING_TOOLS_PATH">
+            <English>Hacking Tools Path</English>
+            <Chinesesimp>黑客工具路径</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_HACKING_TOOLS_SETTINGS">
+            <English>Hacking Tools Settings</English>
+            <Chinesesimp>黑客工具设置</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_HIDDEN_TRACKERS">
+            <English>Hidden Trackers</English>
+            <Chinesesimp>隐藏的追踪器</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_HOW_OFTEN_SECONDS_THE_AUTOMATIC_CLEANUP_RUNS_WHEN_ENABLED">
+            <English>How often (seconds) the automatic cleanup runs when enabled.</English>
+            <Chinesesimp>启用自动清理后，两次运行之间的间隔秒数。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_IF_CHECKED_BUILDING_DOORS_CANNOT_BE_BREACHED_BY_ACE_EXPLOSIVES_OR_LOCKPICKING">
+            <English>If checked, building doors cannot be breached by ACE explosives or lockpicking. Only openable via hacking.</English>
+            <Chinesesimp>勾选后，建筑的门无法通过 ACE 炸药或撬锁打开，只能通过入侵打开。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_IF_CHECKED_DEFAULT_THE_DEVICE_S_GRID_LOCATION_IS_SHOWN_ON_THE">
+            <English>If checked (default), the device's grid location is shown on the laptop (CLI + GUI). Uncheck to hide it.</English>
+            <Chinesesimp>勾选时（默认）在笔记本电脑的命令行和图形界面中显示设备的网格位置。取消勾选可隐藏位置。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_IF_CHECKED_THIS_TRACKER_APPEARS_IN_NO_TERMINAL_OR_DESKTOP_LISTING_ON">
+            <English>If checked, this tracker appears in no terminal or desktop listing on any laptop, and the only way to track it is to enter the identifier it answers to. Device Access still applies to the laptops that would otherwise list it.</English>
+            <Chinesesimp>勾选后，此追踪器不会出现在任何笔记本电脑的终端或桌面列表中，只能输入其识别码进行追踪。“设备访问”仍适用于原本能够列出该追踪器的笔记本电脑。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_INPUT">
+            <English>Input</English>
+            <Chinesesimp>输入</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_INTEGER">
+            <English>Integer</English>
+            <Chinesesimp>整数编码</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_INTERFACE">
+            <English>Interface</English>
+            <Chinesesimp>接口</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_IN_PROGRESS">
+            <English>in progress...</English>
+            <Chinesesimp>进行中……</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_KEEP_CURRENT_NAME_USE_SOURCE_LAPTOP_S_NAME_OR_CREATE_NEW_ONE">
+            <English>Keep current name, Use source laptop's name or Create new one</English>
+            <Chinesesimp>保留当前名称、使用源笔记本电脑名称或创建新名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_KEEP_TARGET_S_CURRENT_NAME">
+            <English>Keep target's current name</English>
+            <Chinesesimp>保留目标的当前名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_KEY_VARIANT">
+            <English>Key / Variant</English>
+            <Chinesesimp>密钥 / 变体</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_KHAKI">
+            <English>Khaki</English>
+            <Chinesesimp>卡其色</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LAPTOP">
+            <English>Laptop</English>
+            <Chinesesimp>笔记本电脑</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LAPTOP_FILESYSTEM_IS_NOT_INITIALIZED">
+            <English>Laptop filesystem is not initialized.</English>
+            <Chinesesimp>笔记本电脑文件系统尚未初始化。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LAPTOP_NAME">
+            <English>Laptop Name</English>
+            <Chinesesimp>笔记本电脑名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LARGE_HELICOPTER_EXPLOSION">
+            <English>Large Helicopter Explosion</English>
+            <Chinesesimp>大型直升机爆炸</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LAST_BUILDING_ID_HANDED_OUT_ACROSS_THE_AREA_0_AUTO_ASSIGN">
+            <English>Last building ID handed out across the area. 0 = auto-assign.</English>
+            <Chinesesimp>区域内分配的最后一个建筑 ID。0 表示自动分配。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LAST_DEVICE_ID_HANDED_OUT_ACROSS_THE_AREA_0_AUTO_ASSIGN">
+            <English>Last device ID handed out across the area. 0 = auto-assign.</English>
+            <Chinesesimp>区域内分配的最后一个设备 ID。0 表示自动分配。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LAST_ID_HANDED_OUT_ACROSS_A_TRIGGER_AREA_0_AUTO_LEAVE_0">
+            <English>Last ID handed out across a trigger area (0 = auto). Leave 0 for single-object use.</English>
+            <Chinesesimp>触发器区域内分配的最后一个 ID（0 表示自动分配）。单个物体请保持为 0。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LAST_LIGHT_ID_HANDED_OUT_ACROSS_THE_AREA_0_AUTO_ASSIGN">
+            <English>Last light ID handed out across the area. 0 = auto-assign.</English>
+            <Chinesesimp>区域内分配的最后一个灯 ID。0 表示自动分配。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LAST_PING_DURATION">
+            <English>Last Ping Duration</English>
+            <Chinesesimp>最后定位持续时间</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LAST_PING_DURATION_SECONDS">
+            <English>Last Ping Duration (seconds)</English>
+            <Chinesesimp>最后定位持续时间（秒）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LIGHTS_AFFECTED">
+            <English>Lights affected</English>
+            <Chinesesimp>受影响的灯</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LIGHTS_OFF">
+            <English>Lights Off</English>
+            <Chinesesimp>关闭车灯</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LIGHTS_OFF_2">
+            <English>Lights off.</English>
+            <Chinesesimp>车灯已关闭。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LIGHTS_ON">
+            <English>Lights On</English>
+            <Chinesesimp>开启车灯</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LIGHTS_ON_2">
+            <English>Lights on.</English>
+            <Chinesesimp>车灯已开启。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LIGHT_1">
+            <English>Light %1</English>
+            <Chinesesimp>灯 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LIGHT_COOLDOWN_SEC">
+            <English>Light Cooldown (sec)</English>
+            <Chinesesimp>车灯冷却时间（秒）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LINKED_LAPTOPS_ALL_FUTURE_LAPTOPS">
+            <English>Linked laptops + all future laptops</English>
+            <Chinesesimp>关联的笔记本电脑及所有后续添加的笔记本电脑</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LINKED_LAPTOPS_ONLY">
+            <English>Linked laptops only</English>
+            <Chinesesimp>仅限关联的笔记本电脑</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LINK_CLEANUP_INTERVAL">
+            <English>Link Cleanup Interval</English>
+            <Chinesesimp>关联清理间隔</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LINK_CLEANUP_STRIKE_GRACE">
+            <English>Link Cleanup Strike Grace</English>
+            <Chinesesimp>关联清理宽限</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LINK_DEVICES">
+            <English>Link Devices</English>
+            <Chinesesimp>关联设备</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LINK_FILE_TO_THIS_COMPUTER_FOR_DOWNLOAD">
+            <English>Link File to this computer for download?</English>
+            <Chinesesimp>将文件关联到此计算机以供下载？</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LINK_THIS_DEVICE_TO_1">
+            <English>Link this device to %1</English>
+            <Chinesesimp>将此设备关联到 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LINK_THIS_TRACKER_TO_1">
+            <English>Link this tracker to %1</English>
+            <Chinesesimp>将此追踪器关联到 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LINK_TO_SYNCHRONIZED_LAPTOPS">
+            <English>Link to synchronized laptops</English>
+            <Chinesesimp>关联到同步的笔记本电脑</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LIST_ALL_LAPTOPS_IN_DEVICE_MODULES">
+            <English>List All Laptops In Device Modules</English>
+            <Chinesesimp>设备模块列出所有笔记本电脑</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LIST_EVERY_LAPTOP_ON_THE_MAP_AS_A_LINK_TARGET_IN_THE">
+            <English>List every laptop on the map as a link target in the Zeus and device modules, including ones with no hacking tools yet. Disabled (default), only laptops registered as hacking stations or already carrying the tools are listed.</English>
+            <Chinesesimp>在 Zeus 和设备模块中，将地图上的所有笔记本电脑列为关联目标，包括尚无黑客工具的电脑。关闭时（默认），仅列出已注册为入侵工作站或已携带工具的电脑。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LOCKED">
+            <English>locked</English>
+            <Chinesesimp>已锁定</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LOCKED_2">
+            <English>Locked</English>
+            <Chinesesimp>锁定状态</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LOCKING_ALL_DOORS">
+            <English>Locking all doors</English>
+            <Chinesesimp>锁定所有门</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LOCKING_THIS_DOOR">
+            <English>Locking this door</English>
+            <Chinesesimp>锁定此门</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LOCKING_THIS_VEHICLE">
+            <English>Locking this vehicle</English>
+            <Chinesesimp>锁定此载具</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LOCK_VEHICLE_TO_THIS_SPEED">
+            <English>Lock vehicle to this speed</English>
+            <Chinesesimp>将载具锁定在此速度</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_LOUDNESS_OF_THE_DRIVE_CONNECT_AND_DISCONNECT_SOUNDS_HIGHER_VALUES_CARRY_FURTHER">
+            <English>Loudness of the drive connect and disconnect sounds. Higher values carry further from the laptop.</English>
+            <Chinesesimp>存储设备连接和断开音效的音量。值越高，声音传播距离越远。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAKES_A_VEHICLE_HACKABLE_SYNCHRONIZE_TO_VEHICLES_AND_DRONES_AND_OPTIONALLY_TO">
+            <English>Makes a vehicle hackable. Synchronize to vehicles and drones and optionally to AE3 Laptop objects. Triggers enable batch-registration of vehicles and drones within the area.</English>
+            <Chinesesimp>使载具可被入侵。同步到载具和无人机，也可同步到 AE3 笔记本电脑。触发器可批量注册区域内的载具和无人机。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAKE_PUBLIC_ALL_LAPTOPS">
+            <English>Make public (all laptops)</English>
+            <Chinesesimp>设为公开（所有笔记本电脑）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAKE_UNBREACHABLE">
+            <English>Make Unbreachable</English>
+            <Chinesesimp>禁止破门</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MANAGE_DEVICE_ACCESS">
+            <English>Manage Device Access</English>
+            <Chinesesimp>管理设备访问</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAXIMUM_ALARM_DURATION">
+            <English>Maximum alarm duration</English>
+            <Chinesesimp>最长警报持续时间</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAXIMUM_DECELERATION_RATE">
+            <English>Maximum deceleration rate</English>
+            <Chinesesimp>最高减速度</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAXIMUM_FUEL_PERCENTAGE_0_100">
+            <English>Maximum fuel percentage (0-100%)</English>
+            <Chinesesimp>最高燃料百分比（0-100%）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAXIMUM_FUEL_PERCENTAGE_ALLOWED_0_100">
+            <English>Maximum fuel percentage allowed (0-100%)</English>
+            <Chinesesimp>允许的最高燃料百分比（0-100%）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAXIMUM_SPEED_BOOST_ALLOWED_CLAMPED_TO_2000_2000">
+            <English>Maximum speed boost allowed. Clamped to -2000 - 2000.</English>
+            <Chinesesimp>允许的最高速度增量，限制在 -2000 至 2000。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAXIMUM_SPEED_BOOST_RANGE_2000_TO_2000">
+            <English>Maximum speed boost. Range -2000 to 2000.</English>
+            <Chinesesimp>最高速度增量，范围为 -2000 至 2000。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAXIMUM_TOGGLE_COUNT_1_UNLIMITED">
+            <English>Maximum toggle count (-1 = unlimited)</English>
+            <Chinesesimp>最大切换次数（-1 表示不限）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAX_ALARM_DURATION_SEC">
+            <English>Max Alarm Duration (sec)</English>
+            <Chinesesimp>最长警报持续时间（秒）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAX_BRAKE_DECEL_M_S">
+            <English>Max Brake Decel (m/s²)</English>
+            <Chinesesimp>最高制动减速度（m/s²）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAX_ENGINE_TOGGLES">
+            <English>Max Engine Toggles</English>
+            <Chinesesimp>引擎最大切换次数</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAX_FUEL">
+            <English>Max Fuel %</English>
+            <Chinesesimp>最高燃料百分比</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAX_FUEL_BATTERY">
+            <English>Max Fuel/Battery %</English>
+            <Chinesesimp>最高燃料/电池百分比</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAX_LIGHT_TOGGLES">
+            <English>Max Light Toggles</English>
+            <Chinesesimp>车灯最大切换次数</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MAX_SPEED_BOOST_KM_H">
+            <English>Max Speed Boost (km/h)</English>
+            <Chinesesimp>最高速度增量（km/h）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MINIMUM_ALARM_DURATION">
+            <English>Minimum alarm duration</English>
+            <Chinesesimp>最短警报持续时间</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MINIMUM_DECELERATION_RATE">
+            <English>Minimum deceleration rate</English>
+            <Chinesesimp>最低减速度</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MINIMUM_FUEL_PERCENTAGE_0_100">
+            <English>Minimum fuel percentage (0-100%)</English>
+            <Chinesesimp>最低燃料百分比（0-100%）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MINIMUM_FUEL_PERCENTAGE_ALLOWED_0_100">
+            <English>Minimum fuel percentage allowed (0-100%)</English>
+            <Chinesesimp>允许的最低燃料百分比（0-100%）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MINIMUM_SECONDS_BETWEEN_TWO_PLAYS_OF_THE_HACKERMAN_LOADING_VIDEO_ON_THE">
+            <English>Minimum seconds between two plays of the Hackerman loading video on the same laptop for the same player. Set to 0 to play it on every connection.</English>
+            <Chinesesimp>同一玩家在同一笔记本电脑上两次播放 Hackerman 加载视频的最短间隔秒数。设为 0 则每次连接都播放。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MINIMUM_SPEED_BOOST_ALLOWED_NEGATIVE_SLOWDOWN_CLAMPED_TO_2000_2000">
+            <English>Minimum speed boost allowed (negative = slowdown). Clamped to -2000 - 2000.</English>
+            <Chinesesimp>允许的最低速度增量（负数表示减速），限制在 -2000 至 2000。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MINIMUM_SPEED_BOOST_NEGATIVE_SLOWDOWN_RANGE_2000_TO_2000">
+            <English>Minimum speed boost (negative = slowdown). Range -2000 to 2000.</English>
+            <Chinesesimp>最低速度增量（负数表示减速），范围为 -2000 至 2000。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MIN_ALARM_DURATION_SEC">
+            <English>Min Alarm Duration (sec)</English>
+            <Chinesesimp>最短警报持续时间（秒）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MIN_BRAKE_DECEL_M_S">
+            <English>Min Brake Decel (m/s²)</English>
+            <Chinesesimp>最低制动减速度（m/s²）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MIN_FUEL">
+            <English>Min Fuel %</English>
+            <Chinesesimp>最低燃料百分比</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MIN_FUEL_BATTERY">
+            <English>Min Fuel/Battery %</English>
+            <Chinesesimp>最低燃料/电池百分比</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MIN_SPEED_BOOST_KM_H">
+            <English>Min Speed Boost (km/h)</English>
+            <Chinesesimp>最低速度增量（km/h）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MODE">
+            <English>Mode</English>
+            <Chinesesimp>模式</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MODIFY_POWER_COSTS">
+            <English>Modify Power Costs</English>
+            <Chinesesimp>修改电量消耗</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MORSE_CODE">
+            <English>Morse Code</English>
+            <Chinesesimp>摩尔斯电码</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_MOVEMENT">
+            <English>Movement</English>
+            <Chinesesimp>移动</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NAME_OF_THE_FILE">
+            <English>Name of the File</English>
+            <Chinesesimp>文件的名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NAME_THAT_WILL_APPEAR_IN_THE_TERMINAL">
+            <English>Name that will appear in the terminal</English>
+            <Chinesesimp>在终端中显示的名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NAME_THAT_WILL_APPEAR_IN_THE_TERMINAL_AND_AS_THE_DEFAULT_MARKER">
+            <English>Name that will appear in the terminal and as the default marker name</English>
+            <Chinesesimp>在终端中显示的名称，也用作默认地图标记名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NAME_THAT_WILL_APPEAR_IN_THE_TERMINAL_AND_AS_THE_DEFAULT_MARKER_2">
+            <English>Name that will appear in the terminal and as the default marker in the map for this tracker</English>
+            <Chinesesimp>此追踪器在终端中显示的名称，也用作默认地图标记名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NAME_THAT_WILL_APPEAR_IN_THE_TERMINAL_FOR_HACKING">
+            <English>Name that will appear in the terminal for hacking</English>
+            <Chinesesimp>在入侵终端中显示的名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NAME_THAT_WILL_APPEAR_IN_THE_TERMINAL_FOR_THIS_DEVICE">
+            <English>Name that will appear in the terminal for this device</English>
+            <Chinesesimp>此设备在终端中显示的名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NAME_THAT_WILL_APPEAR_IN_THE_TERMINAL_FOR_THIS_POWER_GENERATOR">
+            <English>Name that will appear in the terminal for this power generator</English>
+            <Chinesesimp>此发电机在终端中显示的名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NETWORK_INFO">
+            <English>Network Info</English>
+            <Chinesesimp>网络信息</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NETWORK_NAME">
+            <English>Network Name</English>
+            <Chinesesimp>网络名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NETWORK_SCAN_EXPORTED_TO_1">
+            <English>Network scan exported to %1</English>
+            <Chinesesimp>网络扫描结果已导出到 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NETWORK_SETTINGS">
+            <English>Network Settings</English>
+            <Chinesesimp>网络设置</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NEW_NAME_OPTIONAL">
+            <English>New Name (optional)</English>
+            <Chinesesimp>新名称（可选）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NEW_NAME_SHOWN_TO_CURATORS_WHEN_LINKING_DEVICES_TO_THIS_LAPTOP_REGISTERED">
+            <English>New name shown to curators when linking devices to this laptop. Registered devices, files and accounts are not affected.</English>
+            <Chinesesimp>管理员关联设备到此笔记本电脑时显示的新名称。不会影响已注册的设备、文件或账户。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NEW_NAME_TO_BE_USED">
+            <English>New name to be used</English>
+            <Chinesesimp>要使用的新名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NEW_NAME_TO_BE_USED_IF_SPECIFIY_NEW_NAME_OR_CREATE_NEW">
+            <English>New name to be used if 'Specifiy New Name' or 'Create New' is selected in the fields above</English>
+            <Chinesesimp>上方选择“指定新名称”或“创建新电脑”时使用的新名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_NO">
+            <English>No</English>
+            <Chinesesimp>否</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_N_A">
+            <English>N/A</English>
+            <Chinesesimp>不适用</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_OBJECT_DOES_NOT_EXPOSE_ANY_DOOR_ANIMATIONS">
+            <English>Object does not expose any door animations!</English>
+            <Chinesesimp>物体没有任何门动画！</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_OBJECT_IS_NOT_A_LIGHT">
+            <English>Object is not a light!</English>
+            <Chinesesimp>物体不是灯！</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_OBJECT_IS_NOT_A_VEHICLE_OR_DRONE">
+            <English>Object is not a vehicle or drone!</English>
+            <Chinesesimp>物体不是载具或无人机！</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_OFF">
+            <English>Off</English>
+            <Chinesesimp>关闭</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ON">
+            <English>On</English>
+            <Chinesesimp>开启</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ONLY_APPLIES_TO_LINKED_COMPUTERS_ONLY_THE_LINKED_COMPUTERS_KEEP_ACCESS_AND">
+            <English>Only applies to 'Linked computers only': the linked computers keep access and laptops added later gain it too.</English>
+            <Chinesesimp>仅适用于“仅限关联的计算机”：已关联的计算机保留访问权限，后续添加的笔记本电脑也将获得访问权限。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ON_RECOMMENDED_A_LINK_IS_ONLY_REMOVED_AFTER_ITS_OBJECT_HAS_BEEN">
+            <English>ON (recommended): a link is only removed after its object has been missing for several consecutive passes, absorbing brief lookup misses right after a player joins. OFF: remove as soon as the object is missing. Only affects the automatic loop; the manual clear always acts immediately.</English>
+            <Chinesesimp>开启（推荐）：仅在连续多次检查均未找到物体后移除关联，避免玩家刚加入时的短暂查找失败。关闭：物体缺失时立即移除。仅影响自动清理；手动清理始终立即执行。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_OPTIONAL_KEY_VALUE_PAIRS_EXAMPLES_A_5_B_8_RAILS_3_RADIX">
+            <English>Optional key=value pairs. Examples: a=5 b=8, rails=3, radix=16 width=8 signed=0</English>
+            <Chinesesimp>可选的 key=value 参数。例如：a=5 b=8、rails=3、radix=16 width=8 signed=0</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_OPTIONAL_KEY_VALUE_PAIRS_EXAMPLES_A_5_B_8_RAILS_3_RADIX_2">
+            <English>Optional key=value pairs. Examples: a=5 b=8, rails=3, radix=16 width=8 signed=0, alphabet=ZYXWVUTSRQPONMLKJIHGFEDCBA</English>
+            <Chinesesimp>可选的 key=value 参数。例如：a=5 b=8、rails=3、radix=16 width=8 signed=0、alphabet=ZYXWVUTSRQPONMLKJIHGFEDCBA</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_OPTIONAL_PATH_ON_THE_ATTACHED_AE3_DEVICE_LEAVE_EMPTY_TO_SHOW_THE">
+            <English>Optional path on the attached AE3 device. Leave empty to show the result only.</English>
+            <Chinesesimp>连接的 AE3 设备上的可选路径。留空则仅显示结果。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_OPTIONS">
+            <English>Options</English>
+            <Chinesesimp>选项</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ORANGE">
+            <English>Orange</English>
+            <Chinesesimp>橙色</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_OVERLOADING_THE_POWER_GRID">
+            <English>Overloading the power grid</English>
+            <Chinesesimp>使电网过载</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PASSWORD">
+            <English>Password</English>
+            <Chinesesimp>密码</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PASSWORD_OF_THE_ACCOUNT_INJECTED_ON_CONNECT">
+            <English>Password of the account injected on connect.</English>
+            <Chinesesimp>连接时注入的账户密码。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PATH_FOR_HACKING_TOOLS_WILL_BE_INSTALLED_IF_CREATING_NEW_LAPTOP_OR">
+            <English>Path for hacking tools (will be installed if creating new laptop or target doesn't have them). Example: /rubberducky/tools</English>
+            <Chinesesimp>黑客工具路径（创建新电脑或目标没有工具时会安装）。例如：/rubberducky/tools</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PATH_FOR_HACKING_TOOLS_WILL_BE_INSTALLED_IF_TARGET_DOESN_T_HAVE">
+            <English>Path for hacking tools (will be installed if target doesn't have them). Example: /rubberducky/tools</English>
+            <Chinesesimp>黑客工具路径（目标没有工具时会安装）。例如：/rubberducky/tools</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PATH_FOR_HACKING_TOOLS_WILL_BE_INSTALLED_ON_TARGET_LAPTOP_EXAMPLE_RUBBERDUCKY">
+            <English>Path for hacking tools (will be installed on target laptop). Example: /rubberducky/tools</English>
+            <Chinesesimp>黑客工具路径（将安装到目标笔记本电脑）。例如：/rubberducky/tools</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PATH_FOR_THE_HACKING_TOOL_DO_NOT_ADD_TRAILING_ALWAYS_END_WITH">
+            <English>Path for the Hacking Tool. Do not add trailing '/'. Always end with a letter. No special characters or spaces except '/' and '_'. Example: /rubberducky/tools</English>
+            <Chinesesimp>黑客工具路径。末尾不要添加“/”，必须以字母结尾。除“/”和“_”外，不允许特殊字符或空格。例如：/rubberducky/tools</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PERIODICALLY_REMOVE_DEVICE_LINKS_WHOSE_LAPTOP_DEVICE_HAS_BEEN_DELETED_OFF_BY">
+            <English>Periodically remove device links whose laptop/device has been deleted. OFF by default - links can always be cleared on demand with the 'Clear Broken Device Links' ZEN module or Root_fnc_clearBrokenDeviceLinks.</English>
+            <Chinesesimp>定期移除笔记本电脑或设备已被删除的关联。默认关闭；始终可通过“清除失效关联”ZEN 模块或 Root_fnc_clearBrokenDeviceLinks 按需清理。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PINK">
+            <English>Pink</English>
+            <Chinesesimp>粉色</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PIN_SELECTED">
+            <English>Pin Selected</English>
+            <Chinesesimp>置顶所选设备</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PLACE_THE_MODULE_ON_AN_OBJECT">
+            <English>Place the module on an object!</English>
+            <Chinesesimp>请将模块放置在物体上！</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PLAY_THE_HACKERMAN_LOADING_VIDEO_WHEN_A_DESKTOP_IS_OPENED_ON_A">
+            <English>Play the Hackerman loading video when a desktop is opened on a laptop that has the hacking tools, and when a hacking-tools drive is plugged into an open desktop.</English>
+            <Chinesesimp>在有黑客工具的笔记本电脑上打开桌面时，或向已打开的桌面插入黑客工具存储设备时，播放 Hackerman 加载视频。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PLAY_THE_RUBBERDUCKY_SOUND_WHEN_A_RUBBERDUCKY_USB_IS_CONNECTED_TO_OR">
+            <English>Play the Rubberducky sound when a Rubberducky USB is connected to or disconnected from a laptop.</English>
+            <Chinesesimp>Rubberducky USB 连接到笔记本电脑或断开连接时，播放 Rubberducky 音效。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PLAY_THE_STANDARD_FLASH_DRIVE_SOUND_WHEN_ANY_OTHER_USB_DRIVE_IS">
+            <English>Play the standard flash drive sound when any other USB drive is connected to or disconnected from a laptop.</English>
+            <Chinesesimp>其他 USB 存储设备连接到笔记本电脑或断开连接时，播放标准闪存盘音效。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_COST">
+            <English>Power Cost</English>
+            <Chinesesimp>耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_COST_IN_WH_FOR_EACH_HACKING_ACTION_ON_THIS_VEHICLE">
+            <English>Power cost in Wh for each hacking action on this vehicle</English>
+            <Chinesesimp>对此载具每次入侵操作消耗的电量，单位为 Wh</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_COST_IN_WH_PER_OPERATION">
+            <English>Power cost in Wh per operation</English>
+            <Chinesesimp>每次操作消耗的电量，单位为 Wh</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_COST_IN_WH_TO_HACK_A_DRONE_AND_DISABLE_BLOW_IT">
+            <English>Power cost in Wh to hack a drone and disable (blow) it</English>
+            <Chinesesimp>入侵并禁用（摧毁）无人机消耗的电量，单位为 Wh</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_COST_IN_WH_TO_HACK_A_DRONE_AND_SWITCH_ITS_SIDE">
+            <English>Power cost in Wh to hack a drone and switch its side</English>
+            <Chinesesimp>入侵无人机并切换其阵营消耗的电量，单位为 Wh</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_COST_IN_WH_TO_PING_A_GPS_TRACKER_THAT_WAS_REGISTERED">
+            <English>Power cost in Wh to ping a GPS tracker that was registered without a cost of its own</English>
+            <Chinesesimp>未单独指定耗电量的 GPS 追踪器每次定位消耗的电量，单位为 Wh</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_COST_IN_WH_TO_SWITCH_OR_OVERLOAD_A_POWER_GRID">
+            <English>Power cost in Wh to switch or overload a power grid</English>
+            <Chinesesimp>切换或过载电网消耗的电量，单位为 Wh</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_COST_PER_ACTION">
+            <English>Power Cost per Action</English>
+            <Chinesesimp>每次操作耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_COST_TO_DISABLE">
+            <English>Power Cost to Disable</English>
+            <Chinesesimp>禁用耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_COST_TO_HACK">
+            <English>Power Cost to Hack</English>
+            <Chinesesimp>入侵耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_COST_TO_SWITCH_SIDE">
+            <English>Power Cost to Switch Side</English>
+            <Chinesesimp>切换阵营耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_COST_TO_TRACK">
+            <English>Power Cost to Track</English>
+            <Chinesesimp>追踪耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_GENERATOR_ADDED">
+            <English>Power Generator Added!</English>
+            <Chinesesimp>发电机已添加！</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_GRIDS">
+            <English>Power Grids</English>
+            <Chinesesimp>电网</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_GRID_1">
+            <English>Power grid %1</English>
+            <Chinesesimp>电网 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_POWER_GRID_COST">
+            <English>Power Grid Cost</English>
+            <Chinesesimp>电网耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PREFIX_NAME_FOR_THE_BACKDOOR_EXAMPLE_BACKDOOR_LEAVE_EMPTY_FOR_NO_BACKDOOR">
+            <English>Prefix name for the backdoor. Example: 'backdoor_'. Leave empty for no backdoor.</English>
+            <Chinesesimp>后门函数的前缀名称。例如：backdoor_。留空则不添加后门。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PREVENT_DOOR_BREACHING_BY_ACE_EXPLOSIVES_FOR_ALL_BUILDINGS_WITH_DOORS_IN">
+            <English>Prevent door breaching by ACE explosives for all buildings with doors in radius</English>
+            <Chinesesimp>禁止使用 ACE 炸药破坏半径内所有建筑的门</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PREVENT_DOOR_BREACHING_BY_ACE_EXPLOSIVES_LOCKPICKING_AND_OTHER_NON_HACKING_METHODS">
+            <English>Prevent door breaching by ACE explosives, lockpicking, and other non-hacking methods</English>
+            <Chinesesimp>禁止使用 ACE 炸药、撬锁及其他非入侵方式破门</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PRIMARY_KEY_PASSWORD_KEYWORD_OR_VARIANT_EXAMPLES_ROT13_LEMON_3">
+            <English>Primary key, password, keyword, or variant. Examples: rot13, LEMON, 3</English>
+            <Chinesesimp>主密钥、密码、关键词或变体。例如：rot13、LEMON、3</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_PUBLIC_ALL_LAPTOPS">
+            <English>Public (all laptops)</English>
+            <Chinesesimp>公开（所有笔记本电脑）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_RADIUS">
+            <English>Radius</English>
+            <Chinesesimp>半径</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_RADIUS_IN_METERS_TO_AFFECT_LIGHTS">
+            <English>Radius in meters to affect lights</English>
+            <Chinesesimp>影响灯光的半径，单位为米</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_RAILFENCE">
+            <English>Railfence</English>
+            <Chinesesimp>栅栏密码</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_RED">
+            <English>Red</English>
+            <Chinesesimp>红色</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_REDUCE_ONLY">
+            <English>Reduce only</English>
+            <Chinesesimp>仅可减少</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_REGISTER_HACKABLE_LAPTOP">
+            <English>Register Hackable Laptop</English>
+            <Chinesesimp>注册可入侵笔记本电脑</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_REMAINING">
+            <English>Remaining</English>
+            <Chinesesimp>剩余时间</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_RENAME_HACKABLE_LAPTOP">
+            <English>Rename Hackable Laptop</English>
+            <Chinesesimp>重命名可入侵笔记本电脑</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_REPLACE_ALL_EXISTING_LINKS_ON_TARGET_IF_ANY">
+            <English>Replace all existing links on target (if any)</English>
+            <Chinesesimp>替换目标的所有已有关联（如有）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_REPLACE_EXISTING_LINKS">
+            <English>Replace Existing Links</English>
+            <Chinesesimp>替换已有关联</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_ROUTER">
+            <English>Router</English>
+            <Chinesesimp>路由器</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_RUBBERDUCKY_CONNECTION_SOUND">
+            <English>Rubberducky Connection Sound</English>
+            <Chinesesimp>Rubberducky 连接音效</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_RUBBERDUCKY_DEFAULT_LOGIN">
+            <English>Rubberducky Default Login</English>
+            <Chinesesimp>Rubberducky 默认登录</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_RUBBERDUCKY_LOGIN_PASSWORD">
+            <English>Rubberducky Login Password</English>
+            <Chinesesimp>Rubberducky 登录密码</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_RUBBERDUCKY_LOGIN_USERNAME">
+            <English>Rubberducky Login Username</English>
+            <Chinesesimp>Rubberducky 登录用户名</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_RUBBERDUCKY_SETTINGS">
+            <English>Rubberducky Settings</English>
+            <Chinesesimp>Rubberducky 设置</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_RUBBERDUCKY_USB">
+            <English>Rubberducky USB</English>
+            <Chinesesimp>Rubberducky USB</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SCANNING_NETWORK">
+            <English>Scanning network</English>
+            <Chinesesimp>正在扫描网络</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SEARCH_MODE_DEFAULT">
+            <English>Search Mode (Default)</English>
+            <Chinesesimp>搜索模式（默认）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SECONDS_BETWEEN_ENGINE_TOGGLES">
+            <English>Seconds between engine toggles</English>
+            <Chinesesimp>两次切换引擎之间的间隔秒数</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SECONDS_BETWEEN_LIGHT_TOGGLES">
+            <English>Seconds between light toggles</English>
+            <Chinesesimp>两次切换车灯之间的间隔秒数</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SELECT_EXISTING_LAPTOP_OR_CREATE_NEW_ONE">
+            <English>Select existing laptop or create new one</English>
+            <Chinesesimp>选择已有笔记本电脑或创建新电脑</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SELECT_THE_LAPTOP_TO_COPY_DEVICE_LINKS_FROM">
+            <English>Select the laptop to copy device links FROM</English>
+            <Chinesesimp>选择要从中复制设备关联的笔记本电脑</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SELECT_THE_LAPTOP_TO_COPY_DEVICE_LINKS_TO_WILL_MERGE">
+            <English>Select the laptop to copy device links TO (will merge)</English>
+            <Chinesesimp>选择要复制设备关联到的笔记本电脑（将合并关联）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SHOW_THIS_DEVICE_S_GRID_LOCATION_ON_THE_LAPTOP_CLI_GUI_DISABLE">
+            <English>Show this device's grid location on the laptop (CLI + GUI). Disable to hide it.</English>
+            <Chinesesimp>在笔记本电脑的命令行和图形界面中显示此设备的网格位置。关闭可隐藏位置。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SIMPLE_DEFAULT">
+            <English>Simple (Default)</English>
+            <Chinesesimp>简单模式（默认）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SIMPLE_USES_LAPTOP_OBJECT_DIRECTLY_FOR_LOGIC_CHECKING_AND_VERIFICATION_EXPERIMENTAL_USES">
+            <English>Simple: Uses laptop object directly for logic checking and verification. Experimental: Uses variables for logic checking and verification. Recommened only when using AE3's Experimental Deployment Type</English>
+            <Chinesesimp>简单模式：直接使用笔记本电脑物体进行逻辑检查与验证。实验模式：使用变量进行逻辑检查与验证。仅建议配合 AE3 的实验部署类型使用。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SMALL_HELICOPTER_EXPLOSION">
+            <English>Small Helicopter Explosion</English>
+            <Chinesesimp>小型直升机爆炸</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SOURCE_LAPTOP">
+            <English>Source Laptop</English>
+            <Chinesesimp>源笔记本电脑</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SPECIFY_NEW_NAME">
+            <English>Specify new name</English>
+            <Chinesesimp>指定新名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SPEED">
+            <English>Speed</English>
+            <Chinesesimp>速度</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SPEED_ADJUSTED_BY_1_KM_H">
+            <English>Speed adjusted by %1 km/h.</English>
+            <Chinesesimp>速度已调整 %1 km/h。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SPEED_CHANGING_TO_1_KM_H_OVER_5_SECONDS">
+            <English>Speed changing to %1 km/h over 5 seconds.</English>
+            <Chinesesimp>速度将在 5 秒内变为 %1 km/h。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SPEED_MUST_BE_1_TO_2_KM_H">
+            <English>Speed must be %1 to %2 km/h.</English>
+            <Chinesesimp>速度必须在 %1 至 %2 km/h 之间。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SPELLING_ALPHABET">
+            <English>Spelling Alphabet</English>
+            <Chinesesimp>拼读字母表</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_STARTING_THIS_VEHICLE_ENGINE">
+            <English>Starting this vehicle engine</English>
+            <Chinesesimp>启动此载具引擎</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_STATUS">
+            <English>Status</English>
+            <Chinesesimp>状态</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_STOPPING_THIS_VEHICLE_ENGINE">
+            <English>Stopping this vehicle engine</English>
+            <Chinesesimp>关闭此载具引擎</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SWITCH_NETWORK_OFF">
+            <English>Switch Network Off</English>
+            <Chinesesimp>关闭网络</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SWITCH_NETWORK_ON">
+            <English>Switch Network On</English>
+            <Chinesesimp>开启网络</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SYNCHRONIZE_THIS_MODULE_TO_AE3_LAPTOP_OBJECTS_TO_REGISTER_THEM_AS_HACKABLE">
+            <English>Synchronize this module to AE3 Laptop objects to register them as hackable stations. Devices can then be linked to these laptops. Registration does NOT install hacking tools - the laptop still needs a hacking-tools USB (or the Add Hacking Tools module) before it can list and control devices.</English>
+            <Chinesesimp>将此模块同步到 AE3 笔记本电脑，将其注册为可入侵工作站，随后可关联设备。注册不会安装黑客工具；笔记本电脑仍需连接黑客工具 USB，或使用“添加黑客工具”模块，才能列出和控制设备。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SYNCHRONIZE_THIS_MODULE_TO_AE3_LAPTOP_OR_USB_STICK_OBJECTS_TO_ADD">
+            <English>Synchronize this module to AE3 Laptop or USB Stick objects to add hacking tools to them.</English>
+            <Chinesesimp>将此模块同步到 AE3 笔记本电脑或 USB 存储设备，以添加黑客工具。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SYNCHRONIZE_THIS_MODULE_TO_BUILDINGS_WITH_DOORS_OR_TRIGGERS_TO_MAKE_DOORS">
+            <English>Synchronize this module to buildings (with doors) or triggers to make doors hackable. Triggers enable batch-registration of terrain buildings within an area.</English>
+            <Chinesesimp>将此模块同步到带门的建筑或触发器，使门可被入侵。触发器可批量注册区域内的地形建筑。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SYNCHRONIZE_THIS_MODULE_TO_LIGHTS_OR_TRIGGERS_TO_MAKE_THEM_HACKABLE_TRIGGERS">
+            <English>Synchronize this module to lights or triggers to make them hackable. Triggers enable batch-registration of lampposts within an area.</English>
+            <Chinesesimp>将此模块同步到灯或触发器，使灯可被入侵。触发器可批量注册区域内的路灯。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_SYSTEMS">
+            <English>Systems</English>
+            <Chinesesimp>系统</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TARGET">
+            <English>Target</English>
+            <Chinesesimp>目标</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TARGET_LAPTOP">
+            <English>Target Laptop</English>
+            <Chinesesimp>目标笔记本电脑</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TARGET_NAME">
+            <English>Target Name</English>
+            <Chinesesimp>目标名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TEXT_TO_PROCESS">
+            <English>Text to process.</English>
+            <Chinesesimp>待处理的文本。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_THE_8_CHARACTER_CODE_THIS_TRACKER_ANSWERS_TO_FOR_A_BRIEFING_THAT">
+            <English>The 8-character code this tracker answers to, for a briefing that names it in advance. Leave blank to have one generated; a code already in use is replaced by a generated one.</English>
+            <Chinesesimp>此追踪器响应的八字符识别码，可提前用于任务简报。留空则自动生成；已被使用的识别码也会被替换为自动生成的识别码。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_THE_NAME_LAPTOPS_IN_RANGE_SEE_WHEN_THEY_SCAN_FOR_NETWORKS">
+            <English>The name laptops in range see when they scan for networks.</English>
+            <Chinesesimp>范围内的笔记本电脑扫描网络时看到的名称。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_THE_PASSWORD_A_LAPTOP_HAS_TO_GIVE_TO_JOIN_THE_NETWORK">
+            <English>The password a laptop has to give to join the network.</English>
+            <Chinesesimp>笔记本电脑加入网络时必须提供的密码。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_THIS_CONTROL_IS_NOT_ENABLED_ON_THIS_VEHICLE">
+            <English>This control is not enabled on this vehicle.</English>
+            <Chinesesimp>此载具未启用该控制功能。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TIME_IN_SECONDS_REQUIRED_TO_DOWNLOAD_THIS_FILE">
+            <English>Time in seconds required to download this file</English>
+            <Chinesesimp>下载此文件所需的时间，单位为秒</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TIME_TAKEN_TO_HACK_AND_DOWNLOAD_THE_FILE_IN_SECONDS">
+            <English>Time taken to hack and download the file (in seconds)</English>
+            <Chinesesimp>入侵并下载文件所需的时间，单位为秒</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TOGGLE_NETWORK">
+            <English>Toggle Network</English>
+            <Chinesesimp>切换网络</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TOOL_PATH">
+            <English>Tool Path</English>
+            <Chinesesimp>工具路径</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TRACKED">
+            <English>Tracked</English>
+            <Chinesesimp>已追踪</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TRACKER_1">
+            <English>Tracker %1</English>
+            <Chinesesimp>追踪器 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TRACKER_1_CANNOT_BE_TRACKED_AGAIN">
+            <English>Tracker '%1' cannot be tracked again.</English>
+            <Chinesesimp>追踪器“%1”无法再次追踪。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TRACKER_1_IS_ALREADY_BEING_TRACKED">
+            <English>Tracker '%1' is already being tracked.</English>
+            <Chinesesimp>追踪器“%1”正在被追踪。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TRACKER_NAME">
+            <English>Tracker Name</English>
+            <Chinesesimp>追踪器名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TRACKING">
+            <English>Tracking</English>
+            <Chinesesimp>追踪中</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TRACKING_ACTIVE">
+            <English>Tracking active.</English>
+            <Chinesesimp>追踪已启动。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TRACKING_THIS_GPS_SIGNAL">
+            <English>Tracking this GPS signal</English>
+            <Chinesesimp>追踪此 GPS 信号</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TRIGGERING_THIS_VEHICLE_ALARM">
+            <English>Triggering this vehicle alarm</English>
+            <Chinesesimp>触发此载具警报</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TURNING_THIS_VEHICLE_LIGHTS_OFF">
+            <English>Turning this vehicle lights off</English>
+            <Chinesesimp>关闭此载具车灯</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_TURNING_THIS_VEHICLE_LIGHTS_ON">
+            <English>Turning this vehicle lights on</English>
+            <Chinesesimp>开启此载具车灯</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_UNASSIGNED_REGISTERED_BUT_NO_LAPTOP_CAN_REACH_IT_GRANT_ACCESS_LATER_WITH">
+            <English>Unassigned: registered but no laptop can reach it - grant access later with the Link Devices or Manage Device Links module. Linked: only the laptops synchronized to this module. Public: every current and future laptop.</English>
+            <Chinesesimp>未分配：已注册，但笔记本电脑无法访问；可稍后通过“关联设备”或“管理设备关联”模块授予访问权限。已关联：仅限同步到此模块的笔记本电脑。公开：所有现有及后续添加的笔记本电脑。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_UNASSIGN_NO_LAPTOP_CAN_REACH">
+            <English>Unassign (no laptop can reach)</English>
+            <Chinesesimp>取消分配（任何笔记本电脑均不可访问）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_UNICODE_NOTATION">
+            <English>Unicode Notation</English>
+            <Chinesesimp>Unicode 表示法</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_UNKNOWN">
+            <English>Unknown</English>
+            <Chinesesimp>未知</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_UNLINK_FROM_SYNCHRONIZED_LAPTOPS">
+            <English>Unlink from synchronized laptops</English>
+            <Chinesesimp>取消与同步笔记本电脑的关联</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_UNLOCKED">
+            <English>unlocked</English>
+            <Chinesesimp>未锁定</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_UNLOCKING_ALL_DOORS">
+            <English>Unlocking all doors</English>
+            <Chinesesimp>解锁所有门</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_UNLOCKING_THIS_DOOR">
+            <English>Unlocking this door</English>
+            <Chinesesimp>解锁此门</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_UNLOCKING_THIS_VEHICLE">
+            <English>Unlocking this vehicle</English>
+            <Chinesesimp>解锁此载具</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_UNTRACKABLE">
+            <English>Untrackable</English>
+            <Chinesesimp>不可追踪</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_UNTRACKED">
+            <English>Untracked</English>
+            <Chinesesimp>未追踪</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_USB_PRE_LOADED_WITH_HACKING_TOOLS_PLUG_INTO_A_LAPTOP_TO_ENABLE">
+            <English>USB pre-loaded with hacking tools. Plug into a laptop to enable hacking.</English>
+            <Chinesesimp>预装黑客工具的 USB 存储设备。连接到笔记本电脑即可启用入侵功能。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_USERNAME_OF_THE_ACCOUNT_INJECTED_ON_CONNECT">
+            <English>Username of the account injected on connect.</English>
+            <Chinesesimp>连接时注入的账户用户名。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_USE_SOURCE_LAPTOP_S_NAME">
+            <English>Use source laptop's name</English>
+            <Chinesesimp>使用源笔记本电脑的名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_VEHICLE_1">
+            <English>Vehicle %1</English>
+            <Chinesesimp>载具 %1</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_VEHICLE_HACKING_POWER_COST">
+            <English>Vehicle Hacking Power Cost</English>
+            <Chinesesimp>载具入侵耗电量</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_VEHICLE_NAME">
+            <English>Vehicle Name</English>
+            <Chinesesimp>载具名称</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_VIGENERE">
+            <English>Vigenere</English>
+            <Chinesesimp>维吉尼亚密码</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_WEST_BLUFOR">
+            <English>WEST (BLUFOR)</English>
+            <Chinesesimp>西方阵营（BLUFOR）</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_WHAT_TO_DO_WITH_THE_LISTED_DEVICES_FOR_THE_SYNCHRONIZED_LAPTOPS">
+            <English>What to do with the listed devices for the synchronized laptops.</English>
+            <Chinesesimp>针对同步的笔记本电脑，对列出的设备执行的操作。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_WHEN_A_RUBBERDUCKY_HACKING_TOOLS_USB_IS_CONNECTED_TO_A_LAPTOP_ADD">
+            <English>When a Rubberducky/hacking-tools USB is connected to a laptop, add a default login account to that laptop (if one with the same username does not already exist).</English>
+            <Chinesesimp>Rubberducky 或黑客工具 USB 连接到笔记本电脑时，为电脑添加默认登录账户（同名账户不存在时）。</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_WHITE">
+            <English>White</English>
+            <Chinesesimp>白色</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_WRITE_RESULT_PATH">
+            <English>Write Result Path</English>
+            <Chinesesimp>结果写入路径</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_YELLOW">
+            <English>Yellow</English>
+            <Chinesesimp>黄色</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_YES">
+            <English>Yes</English>
+            <Chinesesimp>是</Chinesesimp>
         </Key>
     </Package>
     <Package name="Light_Operations">
         <Key ID="STR_ROOT_CYBERWARFARE_LIGHT_ALREADY_OFF">
             <English>Light already off.</English>
+            <Chinesesimp>灯已处于关闭状态。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LIGHT_ALREADY_ON">
             <English>Light already on.</English>
+            <Chinesesimp>灯已处于开启状态。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LIGHT_TURNED_OFF">
             <English>Light turned off.</English>
+            <Chinesesimp>灯已关闭。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_LIGHT_TURNED_ON">
             <English>Light turned on.</English>
+            <Chinesesimp>灯已开启。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_OPERATION_COMPLETED_LIGHTS">
             <English>Operation completed on %1 lights.</English>
+            <Chinesesimp>已对 %1 盏灯完成操作。</Chinesesimp>
         </Key>
     </Package>
     <Package name="Power">
         <Key ID="STR_ROOT_CYBERWARFARE_AFFECTED_DOORS">
             <English>Affected Doors: %1. Power Cost: %2W.</English>
+            <Chinesesimp>受影响的门：%1。电量消耗：%2W。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_NEW_POWER_LEVEL">
             <English>New Power Level: %1Wh</English>
+            <Chinesesimp>当前电量：%1Wh</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_POWER_CONFIRM_DETAILS">
             <English>Power Cost: %1 Wh. Current Battery: %2 Wh (%3%4). Remaining After Action: %5 Wh (%6%4).</English>
+            <Chinesesimp>电量消耗：%1 Wh。当前电池电量：%2 Wh（%3%4）。操作后剩余电量：%5 Wh（%6%4）。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_POWER_COST">
             <English>Power Cost: %1Wh</English>
+            <Chinesesimp>电量消耗：%1Wh</Chinesesimp>
         </Key>
     </Package>
     <Package name="PowerGrid">
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_ALREADY_CHARGING">
             <English>%1 is already charging.</English>
+            <Chinesesimp>%1 已在充电。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_ALREADY_FULL">
             <English>%1 is already fully charged.</English>
+            <Chinesesimp>%1 已充满电。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_CHARGE_CANCELLED">
             <English>Charging of %1 stopped: the laptop is no longer in your inventory.</English>
+            <Chinesesimp>%1 已停止充电：该笔记本电脑已不在你的物品栏中。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_CHARGE_COMPLETE">
             <English>Charging of %1 is complete.</English>
+            <Chinesesimp>%1 已充电完成。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_CHARGE_DISCONNECTED">
             <English>Charger disconnected from %1. The charge it has taken on is kept.</English>
+            <Chinesesimp>充电器已与 %1 断开连接。已充入的电量将保留。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_CHARGE_STARTED">
             <English>Charging %1 - battery %2%3, EWO energy %4%3.</English>
+            <Chinesesimp>正在为 %1 充电 - 电池电量 %2%3，EWO 能量 %4%3。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_DEPLETED">
             <English>Charging stopped: the EWO backpack is out of energy.</English>
+            <Chinesesimp>充电已停止：EWO 背包能量已耗尽。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_INFO_ADDRESS">
             <English>Address: %1</English>
+            <Chinesesimp>地址：%1</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_INFO_NAME">
             <English>Network name: %1</English>
+            <Chinesesimp>网络名称：%1</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_INFO_PASSWORD">
             <English>Password: %1</English>
+            <Chinesesimp>密码：%1</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_INFO_STATE">
             <English>Network is %1.</English>
+            <Chinesesimp>网络状态：%1。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_NO_ENERGY">
             <English>EWO backpack has no energy remaining.</English>
+            <Chinesesimp>EWO 背包能量已耗尽。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_POWER_CONNECTED">
             <English>EWO backpack connected to %1 - charging at %2 energy per minute.</English>
+            <Chinesesimp>EWO 背包已连接到 %1 - 每分钟充入 %2 能量。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_POWER_DISCONNECTED">
             <English>EWO backpack disconnected from its power source. The energy it has taken on is kept.</English>
+            <Chinesesimp>EWO 背包已与电源断开连接。已充入的能量将保留。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_POWER_FAR">
             <English>The power source is too far away to connect the EWO backpack to.</English>
+            <Chinesesimp>电源距离太远，无法连接 EWO 背包。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_POWER_LOST">
             <English>EWO backpack unplugged: the power source is off or out of reach.</English>
+            <Chinesesimp>EWO 背包已断开连接：电源已关闭或超出连接范围。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_POWER_OFF">
             <English>The power source is not running.</English>
+            <Chinesesimp>电源未运行。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_STATUS_CHARGING">
             <English>Charging:</English>
+            <Chinesesimp>正在充电：</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_STATUS_ENERGY">
             <English>EWO backpack energy: %1%2</English>
+            <Chinesesimp>EWO 背包能量：%1%2</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_STATUS_IDLE">
             <English>No laptops are charging.</English>
+            <Chinesesimp>没有正在充电的笔记本电脑。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_WIFI_DEPLETED">
             <English>EWO network shut down: the backpack is out of energy.</English>
+            <Chinesesimp>EWO 网络已关闭：背包能量已耗尽。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_WIFI_OFF">
             <English>off the air</English>
+            <Chinesesimp>停止广播</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_WIFI_ON">
             <English>broadcasting</English>
+            <Chinesesimp>正在广播</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_EWO_WIFI_SET">
             <English>EWO network '%1' is now %2.</English>
+            <Chinesesimp>EWO 网络 '%1' 当前状态：%2。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_ACTIVATED">
             <English>Power grid activated: %1 lights turned ON within %2m radius</English>
+            <Chinesesimp>电网已激活：已开启半径 %2m 内的 %1 盏灯</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_CANCELLED">
             <English>Operation cancelled by user.</English>
+            <Chinesesimp>用户已取消操作。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_DEACTIVATED">
             <English>Power grid deactivated: %1 lights turned OFF within %2m radius</English>
+            <Chinesesimp>电网已停用：已关闭半径 %2m 内的 %1 盏灯</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_POWERGRID_OVERLOAD_WARNING">
             <English>WARNING: Power grid overloaded! Generator destroyed. %1 objects affected within %2m radius.</English>
+            <Chinesesimp>警告：电网过载！发电机已被摧毁。半径 %2m 内的 %1 个物体受到影响。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SPEED_BLOCKED">
             <English>Drivetrain destroyed: engine %1 percent damaged, wheels %2 percent effective. Nothing is left to turn the wheels.</English>
+            <Chinesesimp>传动系统已被摧毁：发动机损坏程度为百分之 %1，车轮有效程度为百分之 %2。已无可驱动车轮的部件。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SPEED_DERATED">
             <English>Drivetrain damaged: %1 percent effective. Applied %2 km/h of the requested %3 km/h.</English>
+            <Chinesesimp>传动系统受损：有效程度为百分之 %1。请求速度为 %3 km/h，实际施加速度为 %2 km/h。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SPEED_LOCK_LOST">
             <English>Speed lock released: the drivetrain is destroyed and can no longer hold any speed.</English>
+            <Chinesesimp>速度锁定已解除：传动系统已被摧毁，无法再维持任何速度。</Chinesesimp>
         </Key>
     </Package>
     <Package name="Prompts">
         <Key ID="STR_ROOT_CYBERWARFARE_CONFIRM_PROMPT">
             <English>Are you sure? (Y/N):</English>
+            <Chinesesimp>确定吗？（Y/N）：</Chinesesimp>
         </Key>
     </Package>
     <Package name="Settings">
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_CATEGORY">
             <English>Root Cyber Warfare</English>
+            <Chinesesimp>Root Cyber Warfare</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_CUSTOM_COST">
             <English>Custom Device Power Cost</English>
+            <Chinesesimp>自定义设备电量消耗</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_CUSTOM_COST_DESC">
             <English>Power cost in Wh to hack a custom device</English>
+            <Chinesesimp>入侵自定义设备消耗的电量，单位为 Wh</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DOOR_COST">
             <English>Door Lock/Unlock Power Cost</English>
+            <Chinesesimp>门锁定/解锁电量消耗</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DOOR_COST_DESC">
             <English>Power cost in Wh to lock or unlock a door</English>
+            <Chinesesimp>锁定或解锁一扇门消耗的电量，单位为 Wh</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DRONE_HACK_COST">
             <English>Drone Hacking Power Cost</English>
+            <Chinesesimp>无人机入侵电量消耗</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DRONE_HACK_COST_DESC">
             <English>Power cost in Wh to disable a drone</English>
+            <Chinesesimp>禁用一架无人机消耗的电量，单位为 Wh</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DRONE_SIDE_COST">
             <English>Drone Side Change Power Cost</English>
+            <Chinesesimp>无人机阵营更改电量消耗</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DRONE_SIDE_COST_DESC">
             <English>Power cost in Wh to change a drone's faction</English>
+            <Chinesesimp>更改无人机阵营消耗的电量，单位为 Wh</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY">
             <English>GPS Settings</English>
+            <Chinesesimp>GPS 设置</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_IDENTIFIER_ONLINE">
             <English>Tracker Identifiers Require A Network</English>
+            <Chinesesimp>使用追踪器标识符需要联网</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_IDENTIFIER_ONLINE_DESC">
             <English>When enabled, a GPS tracker identifier can only be entered on a laptop that is connected to a network. Disable for missions that run no networks.</English>
+            <Chinesesimp>启用后，只能在已连接网络的笔记本电脑上输入 GPS 追踪器标识符。对于不使用网络的任务，可禁用此选项。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_MODE">
             <English>GPS Interaction Mode</English>
+            <Chinesesimp>GPS 交互模式</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_MODE_DESC">
             <English>Search Mode: GPS tracker interactions only appear when search mode is activated via ACE Self-Interact. Always Visible: GPS tracker interactions are always shown (legacy behavior). Requires mission restart.</English>
+            <Chinesesimp>搜索模式：只有通过 ACE 自我交互启用搜索模式后，才会显示 GPS 追踪器交互选项。始终可见：始终显示 GPS 追踪器交互选项（旧版行为）。需要重启任务。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_WHITELIST">
             <English>GPS Interaction Menu Whitelist</English>
+            <Chinesesimp>GPS 交互菜单白名单</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_INTERACTION_WHITELIST_DESC">
             <English>Comma-separated list of base classes that will show GPS tracker interaction menu (uses isKindOf). Extra spaces and quotes are automatically handled. Example: Car,Tank,Helicopter,Man or "Car", "Tank", "Man"</English>
+            <Chinesesimp>以逗号分隔的基类列表；这些基类将显示 GPS 追踪器交互菜单（使用 isKindOf）。多余的空格和引号会自动处理。例如：Car,Tank,Helicopter,Man 或 "Car", "Tank", "Man"</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE">
             <English>GPS Marker Color (Active Ping)</English>
+            <Chinesesimp>GPS 标记颜色（实时定位）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_ACTIVE_DESC">
             <English>Color of the GPS tracker marker while actively tracking</English>
+            <Chinesesimp>正在追踪时 GPS 追踪器标记的颜色</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_LASTPING">
             <English>GPS Marker Color (Last Ping)</English>
+            <Chinesesimp>GPS 标记颜色（最后定位）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_MARKER_ROOT_CYBERWARFARE_COLOR_LASTPING_DESC">
             <English>Color of the GPS tracker marker after tracking ends (last known position)</English>
+            <Chinesesimp>追踪结束后 GPS 追踪器标记的颜色（最后已知位置）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_NORMAL">
             <English>GPS Search Success Chance (Normal)</English>
+            <Chinesesimp>GPS 搜索成功率（普通）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_NORMAL_DESC">
             <English>Probability (0.0 to 1.0) of detecting a GPS tracker without spectrum device</English>
+            <Chinesesimp>未使用频谱设备时发现 GPS 追踪器的概率（0.0 至 1.0）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_TOOL">
             <English>GPS Search Success Chance (With Tool)</English>
+            <Chinesesimp>GPS 搜索成功率（使用工具）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SEARCH_CHANCE_TOOL_DESC">
             <English>Probability (0.0 to 1.0) of detecting a GPS tracker with spectrum device equipped</English>
+            <Chinesesimp>装备频谱设备时发现 GPS 追踪器的概率（0.0 至 1.0）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SPECTRUM_DEVICES">
             <English>GPS Spectrum Detection Devices</English>
+            <Chinesesimp>GPS 频谱探测设备</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_SPECTRUM_DEVICES_DESC">
             <English>Comma-separated classnames of spectrum devices that improve GPS tracker detection success rate</English>
+            <Chinesesimp>以逗号分隔的频谱设备类名列表；这些设备可提高 GPS 追踪器探测成功率</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_TRACKER_DEVICE">
             <English>GPS Tracker Item</English>
+            <Chinesesimp>GPS 追踪器物品</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_GPS_TRACKER_DEVICE_DESC">
             <English>Classname of item used as GPS tracker</English>
+            <Chinesesimp>用作 GPS 追踪器的物品类名</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_POWERGRID_COST">
             <English>Power Grid Control Power Cost</English>
+            <Chinesesimp>电网控制电量消耗</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_POWERGRID_COST_DESC">
             <English>Power cost in Wh to control power grid (on/off/overload)</English>
+            <Chinesesimp>控制电网（开启/关闭/过载）消耗的电量，单位为 Wh</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY">
             <English>Power Cost Settings</English>
+            <Chinesesimp>电量消耗设置</Chinesesimp>
         </Key>
     </Package>
     <Package name="Zeus">
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_ABORTED">
             <English>Aborted</English>
+            <Chinesesimp>已中止</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS">
             <English>Bulk Registration Radius</English>
+            <Chinesesimp>批量注册半径</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS_DESC">
             <English>Radius in meters to search for compatible objects (100-3000m)</English>
+            <Chinesesimp>搜索兼容物体的半径，单位为米（100-3000m）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_BULK_SUCCESS">
             <English>Registered %1 device(s) successfully!</English>
+            <Chinesesimp>已成功注册 %1 台设备！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_CLEAR_LINKS_RESULT">
             <English>Cleared %1 broken device link(s).</English>
+            <Chinesesimp>已清除 %1 条失效的设备关联。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_COMPLETE">
             <English>Copied %1 device links from %2 to %3</English>
+            <Chinesesimp>已将 %1 条设备关联从 %2 复制到 %3</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_COPY_LINKS_SUCCESS">
             <English>Device Links Copied!</English>
+            <Chinesesimp>设备关联已复制！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_ADDED">
             <English>Root Cyber Warfare: Added Hacking Tools to Path: %1</English>
+            <Chinesesimp>Root Cyber Warfare：已将黑客工具添加到路径：%1</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_SUCCESS">
             <English>Hacking Tool Added to the Device!</English>
+            <Chinesesimp>已将黑客工具添加到设备！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HIDDEN_APPLIED">
             <English>%1 tracker overlay(s) on your map.</English>
+            <Chinesesimp>你的地图上显示了 %1 个追踪器叠加标记。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HIDDEN_ENTRY">
             <English>%1 - %2 - on %3 (%4)</English>
+            <Chinesesimp>%1 - %2 - 位于 %3（%4）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HIDDEN_ENTRY_DESC">
             <English>Show this tracker on your own map only. It does not track the device, spend any battery or change what any player or laptop can see.</English>
+            <Chinesesimp>仅在你自己的地图上显示此追踪器。不会追踪设备、消耗电池电量，也不会改变任何玩家或笔记本电脑可见的内容。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HIDDEN_NONE">
             <English>No hidden GPS trackers have been planted.</English>
+            <Chinesesimp>尚未安装隐藏的 GPS 追踪器。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_HIDDEN_TITLE">
             <English>Hidden GPS Trackers</English>
+            <Chinesesimp>隐藏的 GPS 追踪器</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_INVALID_PATH_TYPE">
             <English>Invalid path parameter type. Expected string, got %1</English>
+            <Chinesesimp>无效的路径参数类型。应为字符串，实际为 %1</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_INVALID_TARGET">
             <English>Invalid target! Please point at a laptop or device.</English>
+            <Chinesesimp>目标无效！请指向笔记本电脑或设备。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_NO_DEVICE_LINKS">
             <English>No laptops with device links found!</English>
+            <Chinesesimp>未找到具有设备关联的笔记本电脑！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_POWER_MODIFIED">
             <English>Modified Hacking Power Cost!</English>
+            <Chinesesimp>入侵电量消耗已修改！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_REGISTER_LAPTOP_SUCCESS">
             <English>Laptop Registered as a Hackable Station!</English>
+            <Chinesesimp>笔记本电脑已注册为可入侵工作站！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_SAME_LAPTOP_ERROR">
             <English>Source and target cannot be the same laptop!</English>
+            <Chinesesimp>源和目标不能是同一台笔记本电脑！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_SOURCE_LAPTOP_NOT_FOUND">
             <English>Source laptop not found!</English>
+            <Chinesesimp>未找到源笔记本电脑！</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_TARGET_LAPTOP_NOT_FOUND">
             <English>Target laptop not found!</English>
+            <Chinesesimp>未找到目标笔记本电脑！</Chinesesimp>
         </Key>
     </Package>
 </Project>

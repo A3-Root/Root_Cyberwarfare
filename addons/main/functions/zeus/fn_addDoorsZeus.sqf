@@ -49,7 +49,7 @@ if (!_useRadiusMode) then {
 
     if !(_isBuilding) exitWith {
         deleteVehicle _logic;
-        ["Object does not expose any door animations!"] call zen_common_fnc_showMessage;
+        [(localize "STR_ROOT_CYBERWARFARE_UI_OBJECT_DOES_NOT_EXPOSE_ANY_DOOR_ANIMATIONS")] call zen_common_fnc_showMessage;
     };
 };
 
@@ -68,7 +68,7 @@ if (!_useRadiusMode && _detectedDoors isNotEqualTo []) then {
     private _drawHandle = addMissionEventHandler ["Draw3D", {
         {
             _x params ["_num", "_pos"];
-            drawIcon3D ["", [0.6, 0.1, 0.9, 1], _pos, 0, 0, 0, format ["Door #%1", _num], 2, 0.035, "PuristaMedium"];
+            drawIcon3D ["", [0.6, 0.1, 0.9, 1], _pos, 0, 0, 0, format [(localize "STR_ROOT_CYBERWARFARE_UI_DOOR_1"), _num], 2, 0.035, "PuristaMedium"];
         } forEach (missionNamespace getVariable ["ROOT_CYBERWARFARE_DOORLABEL_DATA", []]);
     }];
     missionNamespace setVariable ["ROOT_CYBERWARFARE_DOORLABEL_HANDLE", _drawHandle];
@@ -89,7 +89,7 @@ private _dialogControls = [];
 // Add radius slider if in radius mode
 if (_useRadiusMode) then {
     _dialogControls pushBack ["SLIDER:RADIUS", [localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS", localize "STR_ROOT_CYBERWARFARE_ZEUS_BULK_RADIUS_DESC"], [10, 3000, 1000, 0, _logicPosition, [7,120,32,1]]];
-    _dialogControls pushBack ["TOOLBOX:YESNO", ["Make Unbreachable", "Prevent door breaching by ACE explosives for all buildings with doors in radius"], false];
+    _dialogControls pushBack ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_UI_MAKE_UNBREACHABLE"), (localize "STR_ROOT_CYBERWARFARE_UI_PREVENT_DOOR_BREACHING_BY_ACE_EXPLOSIVES_FOR_ALL_BUILDINGS_WITH_DOORS_IN")], false];
 };
 
 _dialogControls pushBack ["COMBO", [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_DESC"], [
@@ -97,34 +97,34 @@ _dialogControls pushBack ["COMBO", [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE"
     [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_UNASSIGNED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_LINKED", localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE_PUBLIC"],
     0
 ]];
-_dialogControls pushBack ["TOOLBOX:YESNO", ["Available to Future Laptops", "Only applies to 'Linked computers only': the linked computers keep access and laptops added later gain it too."], false];
-_dialogControls pushBack ["TOOLBOX:YESNO", ["Allow Location View", "Show this device's grid location on the laptop (CLI + GUI). Disable to hide it."], true];
+_dialogControls pushBack ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_ACCESS_FUTURE"), (localize "STR_ROOT_CYBERWARFARE_UI_ONLY_APPLIES_TO_LINKED_COMPUTERS_ONLY_THE_LINKED_COMPUTERS_KEEP_ACCESS_AND")], false];
+_dialogControls pushBack ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_UI_ALLOW_LOCATION_VIEW"), (localize "STR_ROOT_CYBERWARFARE_UI_SHOW_THIS_DEVICE_S_GRID_LOCATION_ON_THE_LAPTOP_CLI_GUI_DISABLE")], true];
 
 // Add unbreachable option for buildings (always available in this module)
 if (!_useRadiusMode) then {
-    _dialogControls pushBack ["TOOLBOX:YESNO", ["Make Unbreachable", "Prevent door breaching by ACE explosives, lockpicking, and other non-hacking methods"], false];
+    _dialogControls pushBack ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_UI_MAKE_UNBREACHABLE"), (localize "STR_ROOT_CYBERWARFARE_UI_PREVENT_DOOR_BREACHING_BY_ACE_EXPLOSIVES_LOCKPICKING_AND_OTHER_NON_HACKING_METHODS")], false];
 };
 
 // Device ID entry: radius mode distributes a Start..End range across the found buildings; direct mode
 // takes a single fixed ID plus a custom ID field per detected door.
 if (_useRadiusMode) then {
-    _dialogControls pushBack ["EDIT", ["Device ID Start (0 = auto)", "First building ID handed out across the area. 0 = auto-assign."], ["0"]];
-    _dialogControls pushBack ["EDIT", ["Device ID End (0 = auto)", "Last building ID handed out across the area. 0 = auto-assign."], ["0"]];
+    _dialogControls pushBack ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_START_0_AUTO"), (localize "STR_ROOT_CYBERWARFARE_UI_FIRST_BUILDING_ID_HANDED_OUT_ACROSS_THE_AREA_0_AUTO_ASSIGN")], ["0"]];
+    _dialogControls pushBack ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_END_0_AUTO"), (localize "STR_ROOT_CYBERWARFARE_UI_LAST_BUILDING_ID_HANDED_OUT_ACROSS_THE_AREA_0_AUTO_ASSIGN")], ["0"]];
 } else {
-    _dialogControls pushBack ["EDIT", ["Device ID (0 = auto)", "Fixed ID for this building. 0 = auto-assign a free ID."], ["0"]];
+    _dialogControls pushBack ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_0_AUTO"), (localize "STR_ROOT_CYBERWARFARE_UI_FIXED_ID_FOR_THIS_BUILDING_0_AUTO_ASSIGN_A_FREE_ID")], ["0"]];
     {
-        _dialogControls pushBack ["EDIT", [format ["Door #%1 ID", _x], "Custom numeric ID a hacker uses to address this door. Defaults to the engine number."], [str _x]];
+        _dialogControls pushBack ["EDIT", [format [(localize "STR_ROOT_CYBERWARFARE_UI_DOOR_1_ID"), _x], (localize "STR_ROOT_CYBERWARFARE_UI_CUSTOM_NUMERIC_ID_A_HACKER_USES_TO_ADDRESS_THIS_DOOR_DEFAULTS_TO")], [str _x]];
     } forEach _detectedDoors;
 };
 
 // Add a checkbox for each computer
 {
     _x params ["_netId", "_computerName"];
-    _dialogControls pushBack ["CHECKBOX", [_computerName, format ["Link this device to %1", _computerName]], false];
+    _dialogControls pushBack ["CHECKBOX", [_computerName, format [(localize "STR_ROOT_CYBERWARFARE_UI_LINK_THIS_DEVICE_TO_1"), _computerName]], false];
 } forEach _allComputers;
 
 [
-    if (_useRadiusMode) then {"Add Hackable Doors - Radius Mode"} else {format ["Add Hackable Doors - %1", getText (configOf _targetObject >> "displayName")]},
+    if (_useRadiusMode) then {(localize "STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_DOORS_RADIUS_MODE")} else {format [(localize "STR_ROOT_CYBERWARFARE_UI_ADD_HACKABLE_DOORS_1"), getText (configOf _targetObject >> "displayName")]},
     _dialogControls,
     {
         params ["_results", "_args"];
@@ -201,7 +201,7 @@ if (_useRadiusMode) then {
         } else {
             // Direct mode: Register single object
             [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _requestedId, _doorIdMap, _accessMode] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
-            ["Hackable Doors Added!"] call zen_common_fnc_showMessage;
+            [(localize "STR_ROOT_CYBERWARFARE_UI_HACKABLE_DOORS_ADDED")] call zen_common_fnc_showMessage;
         };
 
         // Linked access with nothing ticked registers a device no laptop can reach, which the success

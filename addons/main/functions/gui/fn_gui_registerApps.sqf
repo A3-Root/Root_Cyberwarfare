@@ -36,10 +36,10 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 		private _batteryStatus = [_computer, _costWh] call FUNC(getBatteryStatus);
 		_batteryStatus params ["_hasBattery", "_battery", "_currentWh", "_currentPercent", "_capacityWh", "_remainingWh", "_remainingPercent"];
 		if (!_hasBattery) exitWith {
-			format ["%1 draws %2 Wh.<br>Current battery: unavailable.", _label, round _costWh]
+			format [(localize "STR_ROOT_CYBERWARFARE_UI_1_DRAWS_2_WH_BR_CURRENT_BATTERY_UNAVAILABLE"), _label, round _costWh]
 		};
 		format [
-			"%1 draws %2 Wh.<br>Current battery: %3 Wh (%4%5).<br>Remaining after continue: %6 Wh (%7%5).",
+			(localize "STR_ROOT_CYBERWARFARE_UI_1_DRAWS_2_WH_BR_CURRENT_BATTERY_3_WH_4_5_BR"),
 			_label,
 			round _costWh,
 			round _currentWh,
@@ -92,15 +92,15 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 				// Per-door custom IDs assigned by the mission maker; the id sent back for a per-door
 				// action is the custom one, resolved to the engine number server-side.
 				private _doorIdMap = _x param [5, []];
-				_label = [_obj, format ["Building %1", _id]] call _displayName;
+				_label = [_obj, format [(localize "STR_ROOT_CYBERWARFARE_UI_BUILDING_1"), _id]] call _displayName;
 				if (!isNull _obj) then {
 					private _locked = {(_obj getVariable [format ["bis_disabled_Door_%1", _x], 0]) == 1} count _doorIds;
-					_status = format ["%1/%2 locked", _locked, count _doorIds];
+					_status = format [(localize "STR_ROOT_CYBERWARFARE_UI_1_2_LOCKED"), _locked, count _doorIds];
 					private _lockCost = ((count _doorIds) - _locked) * _doorCost;
 					private _unlockCost = _locked * _doorCost;
 					_acts = [
-						["lock", "Lock", ["Locking all doors", _lockCost] call _powerConfirm] call _actC,
-						["unlock", "Unlock", ["Unlocking all doors", _unlockCost] call _powerConfirm] call _actC
+						["lock", (localize "STR_ROOT_CYBERWARFARE_GUI_LOCK"), [(localize "STR_ROOT_CYBERWARFARE_UI_LOCKING_ALL_DOORS"), _lockCost] call _powerConfirm] call _actC,
+						["unlock", (localize "STR_ROOT_CYBERWARFARE_GUI_UNLOCK"), [(localize "STR_ROOT_CYBERWARFARE_UI_UNLOCKING_ALL_DOORS"), _unlockCost] call _powerConfirm] call _actC
 					];
 					{
 						private _realDoor = _x;
@@ -109,35 +109,35 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 							if ((_x select 1) == _realDoor) exitWith { _customDoor = _x select 0; };
 						} forEach _doorIdMap;
 						private _isLocked = (_obj getVariable [format ["bis_disabled_Door_%1", _realDoor], 0]) == 1;
-						private _ds = ["unlocked", "locked"] select _isLocked;
+						private _ds = [(localize "STR_ROOT_CYBERWARFARE_UI_UNLOCKED"), (localize "STR_ROOT_CYBERWARFARE_UI_LOCKED")] select _isLocked;
 						private _singleLockCost = ([1, 0] select _isLocked) * _doorCost;
 						private _singleUnlockCost = ([0, 1] select _isLocked) * _doorCost;
 						_children pushBack createHashMapFromArray [
-							["id", str _customDoor], ["label", format ["Door %1", _customDoor]], ["status", _ds],
+							["id", str _customDoor], ["label", format [(localize "STR_ROOT_CYBERWARFARE_UI_DOOR_1_2"), _customDoor]], ["status", _ds],
 							["actions", [
-								["lock", "Lock", ["Locking this door", _singleLockCost] call _powerConfirm] call _actC,
-								["unlock", "Unlock", ["Unlocking this door", _singleUnlockCost] call _powerConfirm] call _actC
+								["lock", (localize "STR_ROOT_CYBERWARFARE_GUI_LOCK"), [(localize "STR_ROOT_CYBERWARFARE_UI_LOCKING_THIS_DOOR"), _singleLockCost] call _powerConfirm] call _actC,
+								["unlock", (localize "STR_ROOT_CYBERWARFARE_GUI_UNLOCK"), [(localize "STR_ROOT_CYBERWARFARE_UI_UNLOCKING_THIS_DOOR"), _singleUnlockCost] call _powerConfirm] call _actC
 							]]
 						];
 					} forEach _doorIds;
 				};
 			};
 			case DEVICE_TYPE_LIGHT: {
-				_label = [_obj, format ["Light %1", _id]] call _displayName;
+				_label = [_obj, format [(localize "STR_ROOT_CYBERWARFARE_UI_LIGHT_1"), _id]] call _displayName;
 				if (!isNull _obj) then {
-					if (alive _obj) then { _status = ["Off", "On"] select (_obj getVariable ["ROOT_CYBERWARFARE_LIGHT_ON", true]); }
-					else { _status = "Disabled"; };
+					if (alive _obj) then { _status = [(localize "STR_ROOT_CYBERWARFARE_UI_OFF"), (localize "STR_ROOT_CYBERWARFARE_UI_ON")] select (_obj getVariable ["ROOT_CYBERWARFARE_LIGHT_ON", true]); }
+					else { _status = (localize "STR_ROOT_CYBERWARFARE_UI_DISABLED"); };
 				};
 			};
 			case DEVICE_TYPE_POWERGRID: {
-				_label = [_obj, _x param [2, ""], format ["Power grid %1", _id]] call _labelOr;
+				_label = [_obj, _x param [2, ""], format [(localize "STR_ROOT_CYBERWARFARE_UI_POWER_GRID_1"), _id]] call _labelOr;
 					if (!isNull _obj) then {
-						_status = _obj getVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "OFF"];
+						_status = [_obj getVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "OFF"]] call FUNC(localizeDeviceState);
 						private _cost = missionNamespace getVariable [SETTING_POWERGRID_COST, 15];
 						_acts = [
-							["on", "On", ["Activating the power grid", _cost] call _powerConfirm] call _actC,
-							["off", "Off", ["Deactivating the power grid", _cost] call _powerConfirm] call _actC,
-							["overload", "Overload", ["Overloading the power grid", _cost] call _powerConfirm] call _actC
+							["on", (localize "STR_ROOT_CYBERWARFARE_UI_ON"), [(localize "STR_ROOT_CYBERWARFARE_UI_ACTIVATING_THE_POWER_GRID"), _cost] call _powerConfirm] call _actC,
+							["off", (localize "STR_ROOT_CYBERWARFARE_UI_OFF"), [(localize "STR_ROOT_CYBERWARFARE_UI_DEACTIVATING_THE_POWER_GRID"), _cost] call _powerConfirm] call _actC,
+							["overload", (localize "STR_ROOT_CYBERWARFARE_GUI_OVERLOAD"), [(localize "STR_ROOT_CYBERWARFARE_UI_OVERLOADING_THE_POWER_GRID"), _cost] call _powerConfirm] call _actC
 						];
 					// "Lights affected" must match what the action actually toggles, so the number shown
 					// equals the "N lights turned ON/OFF" report (Power Grid #1). The action (fn_gui_
@@ -148,69 +148,69 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 					private _excluded = _x param [6, []];
 					private _affected = (9 allObjects 0) select { (_x distance _obj) <= _rad };
 					if (_excluded isNotEqualTo []) then { _affected = _affected select { !(typeOf _x in _excluded) }; };
-					_details = [["Radius", format ["%1m", round _rad]], ["Lights affected", count _affected]];
+					_details = [[(localize "STR_ROOT_CYBERWARFARE_UI_RADIUS"), format ["%1m", round _rad]], [(localize "STR_ROOT_CYBERWARFARE_UI_LIGHTS_AFFECTED"), count _affected]];
 				};
 			};
 			case DEVICE_TYPE_DATABASE: {
 				private _fn = "";
 				if (!isNull _obj) then { _fn = _obj getVariable ["ROOT_CYBERWARFARE_DATABASE_NAME_EDIT", ""]; };
-				_label = [format ["Database %1", _id], _fn + ".txt"] select (_fn isNotEqualTo "" && _fn isEqualType "");
+				_label = [format [(localize "STR_ROOT_CYBERWARFARE_UI_DATABASE_1"), _id], _fn + ".txt"] select (_fn isNotEqualTo "" && _fn isEqualType "");
 				// Download time (seconds) so the GUI shows a real progress bar (#5).
 				_grid = ""; _pos = [];
 				_downloadTime = _obj getVariable ["ROOT_CYBERWARFARE_DATABASE_SIZE_EDIT", 0];
-				_details = [["Download time", format ["%1s", _downloadTime]]];
+				_details = [[(localize "STR_ROOT_CYBERWARFARE_UI_DOWNLOAD_TIME"), format ["%1s", _downloadTime]]];
 			};
 				case DEVICE_TYPE_DRONE: {
 					// Prefer the mission-maker's custom drone name (registry row index 2) over the class displayName.
-					_label = [_obj, _x param [2, ""], format ["Drone %1", _id]] call _labelOr;
+					_label = [_obj, _x param [2, ""], format [(localize "STR_ROOT_CYBERWARFARE_UI_DRONE_1"), _id]] call _labelOr;
 					if (!isNull _obj) then {
-						_status = [str (side _obj), "Disabled"] select (!alive _obj || {_obj getVariable ["ROOT_CYBERWARFARE_DRONE_DISABLED", false]});
+						_status = [[str (side _obj)] call FUNC(localizeDeviceState), (localize "STR_ROOT_CYBERWARFARE_UI_DISABLED")] select (!alive _obj || {_obj getVariable ["ROOT_CYBERWARFARE_DRONE_DISABLED", false]});
 						// The figure the confirmation quotes is the one the server will charge: a drone
 						// registered with a cost of its own is billed at that, everything else at the setting.
 						private _disableCost = [_obj, "disable"] call FUNC(getDroneCost);
 						private _sideCost = [_obj, "side"] call FUNC(getDroneCost);
 						_acts = [
-							["disable", "Disable", ["Disabling this drone", _disableCost] call _powerConfirm] call _actC,
-							createHashMapFromArray [["id", "side"], ["label", "Change Side"], ["submenu", [
-								["west", "WEST (BLUFOR)", ["Changing this drone side", _sideCost] call _powerConfirm] call _actC,
-								["east", "EAST (OPFOR)", ["Changing this drone side", _sideCost] call _powerConfirm] call _actC,
-								["guer", "GUER (INDFOR)", ["Changing this drone side", _sideCost] call _powerConfirm] call _actC,
-								["civ", "CIVILIAN", ["Changing this drone side", _sideCost] call _powerConfirm] call _actC
+							["disable", (localize "STR_ROOT_CYBERWARFARE_UI_DISABLE"), [(localize "STR_ROOT_CYBERWARFARE_UI_DISABLING_THIS_DRONE"), _disableCost] call _powerConfirm] call _actC,
+							createHashMapFromArray [["id", "side"], ["label", (localize "STR_ROOT_CYBERWARFARE_UI_CHANGE_SIDE")], ["submenu", [
+								["west", (localize "STR_ROOT_CYBERWARFARE_UI_WEST_BLUFOR"), [(localize "STR_ROOT_CYBERWARFARE_UI_CHANGING_THIS_DRONE_SIDE"), _sideCost] call _powerConfirm] call _actC,
+								["east", (localize "STR_ROOT_CYBERWARFARE_UI_EAST_OPFOR"), [(localize "STR_ROOT_CYBERWARFARE_UI_CHANGING_THIS_DRONE_SIDE"), _sideCost] call _powerConfirm] call _actC,
+								["guer", (localize "STR_ROOT_CYBERWARFARE_UI_GUER_INDFOR"), [(localize "STR_ROOT_CYBERWARFARE_UI_CHANGING_THIS_DRONE_SIDE"), _sideCost] call _powerConfirm] call _actC,
+								["civ", (localize "STR_ROOT_CYBERWARFARE_UI_CIVILIAN"), [(localize "STR_ROOT_CYBERWARFARE_UI_CHANGING_THIS_DRONE_SIDE"), _sideCost] call _powerConfirm] call _actC
 							]]]
 						];
 					};
 				};
 			case DEVICE_TYPE_VEHICLE: {
-				_label = [_obj, _x param [2, ""], format ["Vehicle %1", _id]] call _labelOr;
+				_label = [_obj, _x param [2, ""], format [(localize "STR_ROOT_CYBERWARFARE_UI_VEHICLE_1"), _id]] call _labelOr;
 				if (!isNull _obj) then {
-					_status = ["unlocked", "locked"] select ((locked _obj) > 0);
+					_status = [(localize "STR_ROOT_CYBERWARFARE_UI_UNLOCKED"), (localize "STR_ROOT_CYBERWARFARE_UI_LOCKED")] select ((locked _obj) > 0);
 					// Live vehicle properties shown beside each available vehicle.
 					_details = [
-						["Fuel", format ["%1%2", round ((fuel _obj) * 100), "%"]],
-						["Fuel control", "Reduce only"],
-						["Engine", ["Off", "On"] select (isEngineOn _obj)],
-						["Locked", ["No", "Yes"] select ((locked _obj) > 0)],
-						["Damage", format ["%1%2", round ((damage _obj) * 100), "%"]]
+						[(localize "STR_ROOT_CYBERWARFARE_UI_FUEL"), format ["%1%2", round ((fuel _obj) * 100), "%"]],
+						[(localize "STR_ROOT_CYBERWARFARE_UI_FUEL_CONTROL"), (localize "STR_ROOT_CYBERWARFARE_UI_REDUCE_ONLY")],
+						[(localize "STR_ROOT_CYBERWARFARE_UI_ENGINE"), [(localize "STR_ROOT_CYBERWARFARE_UI_OFF"), (localize "STR_ROOT_CYBERWARFARE_UI_ON")] select (isEngineOn _obj)],
+						[(localize "STR_ROOT_CYBERWARFARE_UI_LOCKED_2"), [(localize "STR_ROOT_CYBERWARFARE_UI_NO"), (localize "STR_ROOT_CYBERWARFARE_UI_YES")] select ((locked _obj) > 0)],
+						[(localize "STR_ROOT_CYBERWARFARE_UI_DAMAGE"), format ["%1%2", round ((damage _obj) * 100), "%"]]
 						];
 						private _cost = _obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", 2];
 						private _accessActions = [
-							["lock", "Lock", ["Locking this vehicle", _cost] call _powerConfirm] call _actC,
-							["unlock", "Unlock", ["Unlocking this vehicle", _cost] call _powerConfirm] call _actC
+							["lock", (localize "STR_ROOT_CYBERWARFARE_GUI_LOCK"), [(localize "STR_ROOT_CYBERWARFARE_UI_LOCKING_THIS_VEHICLE"), _cost] call _powerConfirm] call _actC,
+							["unlock", (localize "STR_ROOT_CYBERWARFARE_GUI_UNLOCK"), [(localize "STR_ROOT_CYBERWARFARE_UI_UNLOCKING_THIS_VEHICLE"), _cost] call _powerConfirm] call _actC
 						];
 						private _systemActions = [];
 						private _movementActions = [];
 						if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_ENGINE", false]) then { _systemActions append [
-							["engineon", "Engine On", ["Starting this vehicle engine", _cost] call _powerConfirm] call _actC,
-							["engineoff", "Engine Off", ["Stopping this vehicle engine", _cost] call _powerConfirm] call _actC
+							["engineon", (localize "STR_ROOT_CYBERWARFARE_UI_ENGINE_ON"), [(localize "STR_ROOT_CYBERWARFARE_UI_STARTING_THIS_VEHICLE_ENGINE"), _cost] call _powerConfirm] call _actC,
+							["engineoff", (localize "STR_ROOT_CYBERWARFARE_GUI_ENGINE_OFF"), [(localize "STR_ROOT_CYBERWARFARE_UI_STOPPING_THIS_VEHICLE_ENGINE"), _cost] call _powerConfirm] call _actC
 						]; };
 						if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_LIGHTS", false]) then { _systemActions append [
-							["lightson", "Lights On", ["Turning this vehicle lights on", _cost] call _powerConfirm] call _actC,
-							["lightsoff", "Lights Off", ["Turning this vehicle lights off", _cost] call _powerConfirm] call _actC
+							["lightson", (localize "STR_ROOT_CYBERWARFARE_UI_LIGHTS_ON"), [(localize "STR_ROOT_CYBERWARFARE_UI_TURNING_THIS_VEHICLE_LIGHTS_ON"), _cost] call _powerConfirm] call _actC,
+							["lightsoff", (localize "STR_ROOT_CYBERWARFARE_UI_LIGHTS_OFF"), [(localize "STR_ROOT_CYBERWARFARE_UI_TURNING_THIS_VEHICLE_LIGHTS_OFF"), _cost] call _powerConfirm] call _actC
 						]; };
 						if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_BRAKES", false]) then {
 							private _bmin = _obj getVariable ["ROOT_CYBERWARFARE_BRAKES_MIN", 1];
 							private _bmax = _obj getVariable ["ROOT_CYBERWARFARE_BRAKES_MAX", 10];
-							_movementActions pushBack (["brakes", "Brake Rate", _bmin, _bmax, _bmax, 1, "m/s2", createHashMap, ["Applying this vehicle brake control", _cost] call _powerConfirm] call _mkSlider);
+							_movementActions pushBack (["brakes", (localize "STR_ROOT_CYBERWARFARE_UI_BRAKE_RATE"), _bmin, _bmax, _bmax, 1, "m/s2", createHashMap, [(localize "STR_ROOT_CYBERWARFARE_UI_APPLYING_THIS_VEHICLE_BRAKE_CONTROL"), _cost] call _powerConfirm] call _mkSlider);
 						};
 						if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_FUEL", false]) then {
 							private _fmin = _obj getVariable ["ROOT_CYBERWARFARE_FUEL_MIN", 0];
@@ -218,52 +218,52 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 							private _currentFuel = round ((fuel _obj) * 100);
 							private _fuelCeiling = _currentFuel min _fmax;
 							private _fuelFloor = _fmin min _fuelCeiling;
-							_systemActions pushBack (["setfuel", "Fuel", _fuelFloor, _fuelCeiling, _fuelCeiling, 1, "%", createHashMap, ["Changing this vehicle fuel", _cost] call _powerConfirm] call _mkSlider);
+							_systemActions pushBack (["setfuel", (localize "STR_ROOT_CYBERWARFARE_UI_FUEL"), _fuelFloor, _fuelCeiling, _fuelCeiling, 1, "%", createHashMap, [(localize "STR_ROOT_CYBERWARFARE_UI_CHANGING_THIS_VEHICLE_FUEL"), _cost] call _powerConfirm] call _mkSlider);
 						};
 						if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_SPEED", false]) then {
 							private _smin = _obj getVariable ["ROOT_CYBERWARFARE_SPEED_MIN", -50];
 							private _smax = _obj getVariable ["ROOT_CYBERWARFARE_SPEED_MAX", 50];
-							private _speedOptions = createHashMapFromArray [["checkboxLabel", "Lock vehicle to this speed"], ["returnObject", true]];
-							_movementActions pushBack (["setspeed", "Speed", _smin, _smax, round (speed _obj), 1, "km/h", _speedOptions, ["Changing this vehicle speed", _cost] call _powerConfirm] call _mkSlider);
+							private _speedOptions = createHashMapFromArray [["checkboxLabel", (localize "STR_ROOT_CYBERWARFARE_UI_LOCK_VEHICLE_TO_THIS_SPEED")], ["returnObject", true]];
+							_movementActions pushBack (["setspeed", (localize "STR_ROOT_CYBERWARFARE_UI_SPEED"), _smin, _smax, round (speed _obj), 1, "km/h", _speedOptions, [(localize "STR_ROOT_CYBERWARFARE_UI_CHANGING_THIS_VEHICLE_SPEED"), _cost] call _powerConfirm] call _mkSlider);
 						};
 						if (_obj getVariable ["ROOT_CYBERWARFARE_VEHICLE_DOOR", false]) then {
 							private _amin = _obj getVariable ["ROOT_CYBERWARFARE_ALARM_MIN", 1];
 							private _amax = _obj getVariable ["ROOT_CYBERWARFARE_ALARM_MAX", 30];
-							_systemActions pushBack (["setalarm", "Alarm", _amin, _amax, _amin, 1, "s", createHashMap, ["Triggering this vehicle alarm", _cost] call _powerConfirm] call _mkSlider);
+							_systemActions pushBack (["setalarm", (localize "STR_ROOT_CYBERWARFARE_UI_ALARM"), _amin, _amax, _amin, 1, "s", createHashMap, [(localize "STR_ROOT_CYBERWARFARE_UI_TRIGGERING_THIS_VEHICLE_ALARM"), _cost] call _powerConfirm] call _mkSlider);
 						};
-					_acts = [createHashMapFromArray [["id", "access"], ["label", "Access"], ["submenu", _accessActions]]];
-					if (_systemActions isNotEqualTo []) then { _acts pushBack createHashMapFromArray [["id", "systems"], ["label", "Systems"], ["submenu", _systemActions]]; };
-					if (_movementActions isNotEqualTo []) then { _acts pushBack createHashMapFromArray [["id", "movement"], ["label", "Movement"], ["submenu", _movementActions]]; };
+					_acts = [createHashMapFromArray [["id", "access"], ["label", (localize "STR_ROOT_CYBERWARFARE_UI_ACCESS")], ["submenu", _accessActions]]];
+					if (_systemActions isNotEqualTo []) then { _acts pushBack createHashMapFromArray [["id", "systems"], ["label", (localize "STR_ROOT_CYBERWARFARE_UI_SYSTEMS")], ["submenu", _systemActions]]; };
+					if (_movementActions isNotEqualTo []) then { _acts pushBack createHashMapFromArray [["id", "movement"], ["label", (localize "STR_ROOT_CYBERWARFARE_UI_MOVEMENT")], ["submenu", _movementActions]]; };
 				};
 			};
 				case DEVICE_TYPE_GPS_TRACKER: {
-					_label = [_obj, _x param [2, ""], format ["Tracker %1", _id]] call _labelOr;
+					_label = [_obj, _x param [2, ""], format [(localize "STR_ROOT_CYBERWARFARE_UI_TRACKER_1"), _id]] call _labelOr;
 				private _trackingTime = _x param [3, 0];
 				private _updateFrequency = _x param [4, 0];
 				private _currentStatus = _x param [8, ["Untracked", 0, ""]];
 				private _statusName = if (_currentStatus isEqualType []) then { _currentStatus param [0, "Untracked"] } else { str _currentStatus };
 				private _statusStart = if (_currentStatus isEqualType []) then { _currentStatus param [1, 0] } else { 0 };
-				_status = _statusName;
+				_status = [_statusName] call FUNC(localizeDeviceState);
 				if (_statusName isEqualTo "Tracking") then {
 					private _elapsed = (time - _statusStart) max 0;
 					private _remaining = (_trackingTime - _elapsed) max 0;
-					_details = [["Status", "Tracking"], ["Elapsed", format ["%1s", round _elapsed]], ["Remaining", format ["%1s", round _remaining]], ["Duration", format ["%1s", round _trackingTime]], ["Refresh", format ["%1s", round _updateFrequency]]];
+					_details = [[(localize "STR_ROOT_CYBERWARFARE_UI_STATUS"), _status], [(localize "STR_ROOT_CYBERWARFARE_UI_ELAPSED"), format ["%1s", round _elapsed]], [(localize "STR_ROOT_CYBERWARFARE_UI_REMAINING"), format ["%1s", round _remaining]], [(localize "STR_ROOT_CYBERWARFARE_UI_DURATION"), format ["%1s", round _trackingTime]], [(localize "STR_ROOT_CYBERWARFARE_GUI_REFRESH"), format ["%1s", round _updateFrequency]]];
 				} else {
-					_details = [["Status", _statusName], ["Duration", format ["%1s", round _trackingTime]], ["Refresh", format ["%1s", round _updateFrequency]]];
+					_details = [[(localize "STR_ROOT_CYBERWARFARE_UI_STATUS"), _status], [(localize "STR_ROOT_CYBERWARFARE_UI_DURATION"), format ["%1s", round _trackingTime]], [(localize "STR_ROOT_CYBERWARFARE_GUI_REFRESH"), format ["%1s", round _updateFrequency]]];
 				};
 					private _tracked = !isNull _obj && {_statusName in ["Tracking", "Tracked", "Completed", "Untrackable"]};
 					if (_tracked) then { ([_obj, true] call _locOf) params ["_grid", "_pos"]; } else { _grid = ""; _pos = []; };
 					_mapLabel = "";
 					_mapMarker = false;
 					private _cost = _x param [11, _obj getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_COST", 10]];
-					_acts = [["track", "Track", ["Tracking this GPS signal", _cost] call _powerConfirm] call _actC];
+					_acts = [["track", (localize "STR_ROOT_CYBERWARFARE_GUI_TRACK"), [(localize "STR_ROOT_CYBERWARFARE_UI_TRACKING_THIS_GPS_SIGNAL"), _cost] call _powerConfirm] call _actC];
 				};
 				case DEVICE_TYPE_CUSTOM: {
-					_label = [_obj, _x param [2, ""], format ["Custom device %1", _id]] call _labelOr;
+					_label = [_obj, _x param [2, ""], format [(localize "STR_ROOT_CYBERWARFARE_UI_CUSTOM_DEVICE_1"), _id]] call _labelOr;
 					private _cost = missionNamespace getVariable [SETTING_CUSTOM_COST, 5];
 					_acts = [
-						["activate", "Activate", ["Activating this custom device", _cost] call _powerConfirm] call _actC,
-						["deactivate", "Deactivate", ["Deactivating this custom device", _cost] call _powerConfirm] call _actC
+						["activate", (localize "STR_ROOT_CYBERWARFARE_GUI_ACTIVATE"), [(localize "STR_ROOT_CYBERWARFARE_UI_ACTIVATING_THIS_CUSTOM_DEVICE"), _cost] call _powerConfirm] call _actC,
+						["deactivate", (localize "STR_ROOT_CYBERWARFARE_GUI_DEACTIVATE"), [(localize "STR_ROOT_CYBERWARFARE_UI_DEACTIVATING_THIS_CUSTOM_DEVICE"), _cost] call _powerConfirm] call _actC
 					];
 				};
 				case DEVICE_TYPE_NETSCAN: {
@@ -274,20 +274,26 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 					_grid = ""; _pos = [];
 					if (_scanIp isEqualTo "__SCANNING__") then {
 						_id = 0;
-						_label = "Scanning network";
-						_status = "in progress...";
+						_label = (localize "STR_ROOT_CYBERWARFARE_UI_SCANNING_NETWORK");
+						_status = (localize "STR_ROOT_CYBERWARFARE_UI_IN_PROGRESS");
 					} else {
 						_id = _forEachIndex;
 						_label = _scanIp;
-						_status = _scanType;
-						_details = [["External SSH", _scanSsh], ["Interface", _scanIface]];
+						_status = [(localize "STR_ROOT_CYBERWARFARE_UI_LAPTOP"), (localize "STR_ROOT_CYBERWARFARE_UI_ROUTER")] select (_scanType isEqualTo "Router");
+						_details = [[(localize "STR_ROOT_CYBERWARFARE_UI_EXTERNAL_SSH"), [(localize "STR_ROOT_CYBERWARFARE_UI_NO"), (localize "STR_ROOT_CYBERWARFARE_UI_YES")] select (_scanSsh isEqualTo "Yes")], [(localize "STR_ROOT_CYBERWARFARE_UI_INTERFACE"), switch (_scanIface) do {
+							case "CLI only": { (localize "STR_ROOT_CYBERWARFARE_UI_CLI_ONLY") };
+							case "GUI only": { (localize "STR_ROOT_CYBERWARFARE_UI_GUI_ONLY") };
+							case "CLI + GUI": { (localize "STR_ROOT_CYBERWARFARE_UI_CLI_GUI") };
+							case "N/A": { (localize "STR_ROOT_CYBERWARFARE_UI_N_A") };
+							default { _scanIface };
+						}]];
 						if (_scanBreakdown isNotEqualTo [] && _scanType isEqualTo "Laptop") then {
-							private _breakdownStr = (_scanBreakdown apply { format ["%1 %2", _x select 1, _x select 0] }) joinString ", ";
-							_details pushBack ["Hackable devices", _breakdownStr];
+							private _breakdownStr = (_scanBreakdown apply { format ["%1 %2", _x select 1, switch (_x select 0) do { case "Doors": { (localize "STR_ROOT_CYBERWARFARE_GUI_APP_DOORS") }; case "Lights": { (localize "STR_ROOT_CYBERWARFARE_GUI_APP_LIGHTS") }; case "Drones": { (localize "STR_ROOT_CYBERWARFARE_GUI_APP_DRONES") }; case "Databases": { (localize "STR_ROOT_CYBERWARFARE_GUI_APP_DATABASES") }; case "Custom Devices": { (localize "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM") }; case "GPS Trackers": { (localize "STR_ROOT_CYBERWARFARE_UI_GPS_TRACKERS") }; case "Vehicles": { (localize "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES") }; case "Power Grids": { (localize "STR_ROOT_CYBERWARFARE_UI_POWER_GRIDS") }; default { _x select 0 }; }] }) joinString ", ";
+							_details pushBack [(localize "STR_ROOT_CYBERWARFARE_UI_HACKABLE_DEVICES"), _breakdownStr];
 						};
 					};
 				};
-			default { _label = [_obj, format ["Device %1", _id]] call _displayName; };
+			default { _label = [_obj, format [(localize "STR_ROOT_CYBERWARFARE_UI_DEVICE_1"), _id]] call _displayName; };
 		};
 		// Default the map-link label/marker for every device type that has a position (doors, lights,
 		// vehicles, drones, custom devices, power grids), so the same [Map] link GPS already gets also
@@ -316,7 +322,7 @@ if (_hasWeb) then
 
 	{
 		_x params ["_id", "_titleKey", "_glyph", "_icon", "_type", "_actions", "_menu", ["_globals", []]];
-		private _extra = createHashMapFromArray [["type", _type], ["actions", _actions], ["icon", _icon], ["menu", _menu]];
+		private _extra = createHashMapFromArray [["type", _type], ["actions", _actions], ["icon", _icon], ["menu", (localize "STR_ROOT_CYBERWARFARE_UI_HACKING_TOOLS")]];
 		if (_menu isEqualTo "Hacking Tools") then { _extra set ["requiresFunction", "Root_fnc_hasHackingToolsAvailable"]; };
 		if (_menu isEqualTo "Hacking Tools") then { _extra set ["filters", true]; };
 		if (_globals isNotEqualTo []) then { _extra set ["globalActions", _globals]; };
@@ -326,25 +332,25 @@ if (_hasWeb) then
 		// order below = the display order within the category. Action buttons drive each device.
 		// Network Scanner: read-only list of AE3 laptops/routers on the subnet; the Export global
 		// action writes the scan to a file in the laptop's filesystem.
-		["RootCW_NetScan",   "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN",   "&#128225;", "network",  DEVICE_TYPE_NETSCAN,   [], "Hacking Tools", [createHashMapFromArray [["id", "export"], ["label", "Export to File"], ["flow", "download"]]]],
+		["RootCW_NetScan",   "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN",   "&#128225;", "network",  DEVICE_TYPE_NETSCAN,   [], "Hacking Tools", [createHashMapFromArray [["id", "export"], ["label", (localize "STR_ROOT_CYBERWARFARE_UI_EXPORT_TO_FILE")], ["flow", "download"]]]],
 		["RootCW_Doors",     "STR_ROOT_CYBERWARFARE_GUI_APP_DOORS",     "&#128682;", "door",     DEVICE_TYPE_DOOR,      [], "Hacking Tools"],
 		// Lights: per-light On/Off plus whole-network All On / All Off (Lights #1).
-		["RootCW_Lights",    "STR_ROOT_CYBERWARFARE_GUI_APP_LIGHTS",    "&#128161;", "light",    DEVICE_TYPE_LIGHT,     [["on", "On"] call _act, ["off", "Off"] call _act], "Hacking Tools", [["allon", "All On"] call _act, ["alloff", "All Off"] call _act]],
-		["RootCW_Databases", "STR_ROOT_CYBERWARFARE_GUI_APP_DATABASES", "&#128451;", "database", DEVICE_TYPE_DATABASE,  [createHashMapFromArray [["id", "access"], ["label", "Download"], ["flow", "download"]]], "Hacking Tools"],
+		["RootCW_Lights",    "STR_ROOT_CYBERWARFARE_GUI_APP_LIGHTS",    "&#128161;", "light",    DEVICE_TYPE_LIGHT,     [["on", (localize "STR_ROOT_CYBERWARFARE_UI_ON")] call _act, ["off", (localize "STR_ROOT_CYBERWARFARE_UI_OFF")] call _act], "Hacking Tools", [["allon", (localize "STR_ROOT_CYBERWARFARE_UI_ALL_ON")] call _act, ["alloff", (localize "STR_ROOT_CYBERWARFARE_UI_ALL_OFF")] call _act]],
+		["RootCW_Databases", "STR_ROOT_CYBERWARFARE_GUI_APP_DATABASES", "&#128451;", "database", DEVICE_TYPE_DATABASE,  [createHashMapFromArray [["id", "access"], ["label", (localize "STR_ROOT_CYBERWARFARE_GUI_DOWNLOAD")], ["flow", "download"]]], "Hacking Tools"],
 		// GPS: per-tracker Track, plus a whole-app entry for typing in the identifier of a tracker this
 		// laptop does not list - the only way to reach a hidden one.
-		["RootCW_Gps",       "STR_ROOT_CYBERWARFARE_GUI_APP_GPS",       "&#128205;", "gps",      DEVICE_TYPE_GPS_TRACKER, [["track", "Track"] call _act], "Hacking Tools", [createHashMapFromArray [["id", "trackid"], ["label", localize "STR_ROOT_CYBERWARFARE_GUI_GPS_TRACK_BY_ID"], ["flow", "prompt"], ["promptTitle", localize "STR_ROOT_CYBERWARFARE_GUI_GPS_TRACK_BY_ID_PROMPT"]]]],
+		["RootCW_Gps",       "STR_ROOT_CYBERWARFARE_GUI_APP_GPS",       "&#128205;", "gps",      DEVICE_TYPE_GPS_TRACKER, [["track", (localize "STR_ROOT_CYBERWARFARE_GUI_TRACK")] call _act], "Hacking Tools", [createHashMapFromArray [["id", "trackid"], ["label", localize "STR_ROOT_CYBERWARFARE_GUI_GPS_TRACK_BY_ID"], ["flow", "prompt"], ["promptTitle", localize "STR_ROOT_CYBERWARFARE_GUI_GPS_TRACK_BY_ID_PROMPT"]]]],
 		// Drones: Disable plus side-change buttons (Drones #1); the action handler supports west/east/guer/civ.
-		["RootCW_Drones",    "STR_ROOT_CYBERWARFARE_GUI_APP_DRONES",    "&#128760;", "drone",    DEVICE_TYPE_DRONE,     [["disable", "Disable"] call _act, createHashMapFromArray [["id", "side"], ["label", "Change Side"], ["submenu", [["west", "WEST (BLUFOR)"] call _act, ["east", "EAST (OPFOR)"] call _act, ["guer", "GUER (INDFOR)"] call _act, ["civ", "CIVILIAN"] call _act]]]], "Hacking Tools"],
+		["RootCW_Drones",    "STR_ROOT_CYBERWARFARE_GUI_APP_DRONES",    "&#128760;", "drone",    DEVICE_TYPE_DRONE,     [["disable", (localize "STR_ROOT_CYBERWARFARE_UI_DISABLE")] call _act, createHashMapFromArray [["id", "side"], ["label", (localize "STR_ROOT_CYBERWARFARE_UI_CHANGE_SIDE")], ["submenu", [["west", (localize "STR_ROOT_CYBERWARFARE_UI_WEST_BLUFOR")] call _act, ["east", (localize "STR_ROOT_CYBERWARFARE_UI_EAST_OPFOR")] call _act, ["guer", (localize "STR_ROOT_CYBERWARFARE_UI_GUER_INDFOR")] call _act, ["civ", (localize "STR_ROOT_CYBERWARFARE_UI_CIVILIAN")] call _act]]]], "Hacking Tools"],
 		// Vehicles: plain toggles; Fuel/Speed/Alarm are added as slider actions per-vehicle in DESCRIBE
 		// (Vehicles #1). Refuel/Drain removed.
 		["RootCW_Vehicles",  "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES",  "&#128663;", "vehicle",  DEVICE_TYPE_VEHICLE,   [], "Hacking Tools"],
-		["RootCW_PowerGrid", "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID", "&#9889;",   "power",    DEVICE_TYPE_POWERGRID, [["on", "On"] call _act, ["off", "Off"] call _act, ["overload", "Overload"] call _act], "Hacking Tools"],
-		["RootCW_Custom",    "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM",    "&#129513;", "device",   DEVICE_TYPE_CUSTOM,    [["activate", "Activate"] call _act, ["deactivate", "Deactivate"] call _act], "Hacking Tools"]
+		["RootCW_PowerGrid", "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID", "&#9889;",   "power",    DEVICE_TYPE_POWERGRID, [["on", (localize "STR_ROOT_CYBERWARFARE_UI_ON")] call _act, ["off", (localize "STR_ROOT_CYBERWARFARE_UI_OFF")] call _act, ["overload", (localize "STR_ROOT_CYBERWARFARE_GUI_OVERLOAD")] call _act], "Hacking Tools"],
+		["RootCW_Custom",    "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM",    "&#129513;", "device",   DEVICE_TYPE_CUSTOM,    [["activate", (localize "STR_ROOT_CYBERWARFARE_GUI_ACTIVATE")] call _act, ["deactivate", (localize "STR_ROOT_CYBERWARFARE_GUI_DEACTIVATE")] call _act], "Hacking Tools"]
 	];
 
 	private _hackermanExtra = createHashMapFromArray [
-		["menu", "Hacking Tools"],
+		["menu", (localize "STR_ROOT_CYBERWARFARE_UI_HACKING_TOOLS")],
 		["icon", "terminal"],
 		// Point at the base64 sidecar (PNG bytes): the CEF loader reads .b64 paths directly and skips the
 		// engine texture sampler entirely, which both renders the icon and avoids the "Unknown sampler
@@ -358,7 +364,7 @@ if (_hasWeb) then
 		["openCommand", "rootcw_hackerman_open"],
 		["width", 320],
 		["height", 630],
-		["subtitle", "Hacking Tools"],
+		["subtitle", (localize "STR_ROOT_CYBERWARFARE_UI_HACKING_TOOLS")],
 		["launchApps", [
 			["RootCW_NetScan", localize "STR_ROOT_CYBERWARFARE_GUI_APP_NETSCAN"],
 			["RootCW_Doors", localize "STR_ROOT_CYBERWARFARE_GUI_APP_DOORS"],
@@ -369,7 +375,7 @@ if (_hasWeb) then
 			["RootCW_Vehicles", localize "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES"],
 			["RootCW_PowerGrid", localize "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID"],
 			["RootCW_Custom", localize "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM"],
-			["RootCW_Cryptography", "Cryptography"]
+			["RootCW_Cryptography", (localize "STR_ROOT_CYBERWARFARE_UI_CRYPTOGRAPHY")]
 		]]
 	];
 	["RootCW_Hackerman", "Hackerman.exe", "H", "launcher", _hackermanExtra] call AE3_desktop_fnc_registerExtApp;
@@ -440,7 +446,7 @@ else
 	["RootCW_Custom", localize "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM", "Root_fnc_gui_appCustom", [0.5, 0.55]] call AE3_desktop_fnc_registerApp;
 	["RootCW_Vehicles", localize "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES", "Root_fnc_gui_appVehicles", [0.55, 0.55]] call AE3_desktop_fnc_registerApp;
 	["RootCW_Gps", localize "STR_ROOT_CYBERWARFARE_GUI_APP_GPS", "Root_fnc_gui_appGps", [0.5, 0.55]] call AE3_desktop_fnc_registerApp;
-	["RootCW_GpsMap", "GPS Map", "Root_fnc_gui_appGpsMap", [0.6, 0.7], false, false] call AE3_desktop_fnc_registerApp;
+	["RootCW_GpsMap", (localize "STR_ROOT_CYBERWARFARE_UI_GPS_MAP"), "Root_fnc_gui_appGpsMap", [0.6, 0.7], false, false] call AE3_desktop_fnc_registerApp;
 };
 
 // Server reply: device list for an open app. Feed the native control (if any) AND the browser.

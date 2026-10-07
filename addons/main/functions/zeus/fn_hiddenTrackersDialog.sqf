@@ -36,7 +36,7 @@ private _overlays = uiNamespace getVariable ["ROOT_CYBERWARFARE_ZEUS_TRACKER_OVE
 private _dialogControls = [];
 {
     _x params ["_deviceId", "_identifier", "_name", "_objectName", "", "_status"];
-    private _label = format [localize "STR_ROOT_CYBERWARFARE_ZEUS_HIDDEN_ENTRY", _name, _identifier, _objectName, _status];
+    private _label = format [localize "STR_ROOT_CYBERWARFARE_ZEUS_HIDDEN_ENTRY", _name, _identifier, _objectName, [_status] call FUNC(localizeDeviceState)];
     // The tick starts as whatever this curator currently has on their map, so the dialog reads as the
     // state of the overlays rather than as a blank form each time it is opened. It is forced, because
     // ZEN would otherwise restore what the dialog was last confirmed with.

@@ -24,10 +24,10 @@ private _index = missionNamespace getVariable ["ROOT_CYBERWARFARE_HACK_TOOL_INDE
 ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME = format ["HackTool_%1", _index];
 
 [
-    "Hacking Tools Settings", [
-	["EDIT", ["Tool Path", "Path for the Hacking Tool. Do not add trailing '/'. Always end with a letter. No special characters or spaces except '/' and '_'. Example: /rubberducky/tools"], ["/rubberducky/tools"]],
-	["EDIT", ["Laptop Name", "Custom name used by curator device-linking tools."], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]],
-    ["TOOLBOX:YESNO", ["Add Default Credentials", "Adds the configured Rubberducky login account to the target laptop."], true]
+    (localize "STR_ROOT_CYBERWARFARE_UI_HACKING_TOOLS_SETTINGS"), [
+	["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_TOOL_PATH"), (localize "STR_ROOT_CYBERWARFARE_UI_PATH_FOR_THE_HACKING_TOOL_DO_NOT_ADD_TRAILING_ALWAYS_END_WITH")], ["/rubberducky/tools"]],
+	["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_LAPTOP_NAME"), (localize "STR_ROOT_CYBERWARFARE_UI_CUSTOM_NAME_USED_BY_CURATOR_DEVICE_LINKING_TOOLS")], [ROOT_CYBERWARFARE_CUSTOM_LAPTOP_NAME]],
+    ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_UI_ADD_DEFAULT_CREDENTIALS"), (localize "STR_ROOT_CYBERWARFARE_UI_ADDS_THE_CONFIGURED_RUBBERDUCKY_LOGIN_ACCOUNT_TO_THE_TARGET_LAPTOP")], true]
 	], {
 		params ["_results", "_args"];
 		_args params ["_entity", "_index"];
