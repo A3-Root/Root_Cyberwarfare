@@ -1,5 +1,17 @@
 # Changelog
 
+## Update 12 (v2.0.0.9)
+
+### Added
+- Chinese translation by ([IO0288 张珑耀](https://github.com/IO0288))
+
+### Removed
+- N/A
+
+### Changed
+- Localized almost all hardcoded english text
+- Skipped v2008 from public release
+
 ## Hotfix 11 (v2.0.0.7)
 
 ### Added
