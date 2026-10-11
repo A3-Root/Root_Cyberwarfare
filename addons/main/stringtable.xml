@@ -3195,6 +3195,63 @@
         </Key>
     </Package>
     <Package name="Zeus">
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_ALIAS">
+            <English>Alias only.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_ASSIGNED">
+            <English>Root Cyber Warfare: identifiers set (type #id = code): %1. %2</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_CODE">
+            <English>Identifier</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_CODE_DESC">
+            <English>Code the device answers to (letters and digits, e.g. VAULTDR1). Empty = random 8-character code.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_CREDENTIAL">
+            <English>Code grants access.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_GRANTS">
+            <English>Code grants access</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_GRANTS_DESC">
+            <English>On: anyone who knows the code can use the device from any terminal with hacking tools, linked or not. Off: the code only names the device; normal link/public access still applies.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_MODULE">
+            <English>Device Identifier</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_MODULE_DESC">
+            <English>Sets the code synchronized devices answer to in terminal commands (in place of their numeric id). Synchronize to objects another module registers as devices.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_NOT_REGISTERED">
+            <English>Root Cyber Warfare: the object is not a registered device - register it first.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_PLACE_ON_DEVICE">
+            <English>Place this module on a registered device.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_SUFFIX">
+            <English>. Code: %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_TIMEOUT">
+            <English>Error! The identifier lookup timed out.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_UNKNOWN">
+            <English>Error! Unknown device identifier: %1</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DEVICE_IDENTIFIERS">
+            <English>Device identifiers</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DEVICE_IDENTIFIERS_DESC">
+            <English>Every registered device answers to an 8-character code that commands accept in place of its id. Codes that grant access work from any terminal with hacking tools.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_FILE_SIZE">
+            <English>File Size</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_VIRTUAL_FILE_SIZE">
+            <English>Virtual File Size</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_VIRTUAL_FILE_SIZE_DESC">
+            <English>Optional size such as 750KB, 50MB or 1.5GB. When set, the download takes as long as the AE3 network transfer speed needs for it (replaces the download time) and the downloaded file keeps this size for later copies. Empty = use the download time.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_ABORTED">
             <English>Aborted</English>
             <Chinesesimp>已中止</Chinesesimp>

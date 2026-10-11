@@ -22,7 +22,7 @@ if (!isServer) exitWith {};
 // Get synchronized laptops early for the condition check
 private _syncedObjects = synchronizedObjects _logic;
 private _laptops = _syncedObjects select {
-	typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"]
+	typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_PortableServer_01_black_F_AE3", "Land_PortableServer_01_olive_F_AE3", "Land_PortableServer_01_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"]
 };
 
 // Wait for mission time AND all laptops to have AE3 initialized before executing

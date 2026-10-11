@@ -479,6 +479,28 @@
     #define SETTING_GPS_IDENTIFIER_ONLINE "ROOT_CYBERWARFARE_GPS_IDENTIFIER_REQUIRE_ONLINE"
 #endif
 
+// Identifiers for every other device type (doors, lights, drones, files, custom devices, vehicles,
+// power grids). Server-only maps: code -> [deviceType, deviceId, grantsAccess] and "type:id" -> code.
+#ifndef GVAR_DEVICE_IDENTIFIERS
+    #define GVAR_DEVICE_IDENTIFIERS "ROOT_CYBERWARFARE_DEVICE_IDENTIFIERS"
+#endif
+#ifndef GVAR_DEVICE_IDENTIFIER_INDEX
+    #define GVAR_DEVICE_IDENTIFIER_INDEX "ROOT_CYBERWARFARE_DEVICE_IDENTIFIER_INDEX"
+#endif
+#ifndef GET_DEVICE_IDENTIFIERS
+    #define GET_DEVICE_IDENTIFIERS (missionNamespace getVariable [GVAR_DEVICE_IDENTIFIERS, createHashMap])
+#endif
+#ifndef GET_DEVICE_IDENTIFIER_INDEX
+    #define GET_DEVICE_IDENTIFIER_INDEX (missionNamespace getVariable [GVAR_DEVICE_IDENTIFIER_INDEX, createHashMap])
+#endif
+// Client-local grants handed out when a terminal resolves a code that grants access: "type:id" -> expiry
+#ifndef GVAR_IDENTIFIER_GRANTS
+    #define GVAR_IDENTIFIER_GRANTS "ROOT_CYBERWARFARE_IDENTIFIER_GRANTS"
+#endif
+#ifndef SETTING_DEVICE_IDENTIFIERS
+    #define SETTING_DEVICE_IDENTIFIERS "ROOT_CYBERWARFARE_DEVICE_IDENTIFIERS_ENABLED"
+#endif
+
 // Which laptops the curator device dialogs offer as link targets: every laptop on the map, or only the
 // ones already set up as hacking stations. Server-forced, because it decides what a curator is allowed
 // to wire a device to and that is a mission-wide rule rather than a per-client preference.

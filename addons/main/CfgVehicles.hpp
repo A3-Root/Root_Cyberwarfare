@@ -142,6 +142,15 @@ class CfgVehicles {
 		displayName = "$STR_ROOT_CYBERWARFARE_UI_CLEAR_BROKEN_DEVICE_LINKS";
 	};
 
+	class ROOT_CyberWarfareDeviceIdentifierZeus: zen_modules_moduleBase {
+		author = "Root";
+		_generalMacro = "ROOT_CyberWarfareDeviceIdentifierZeus";
+		curatorCanAttach = 1;
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_deviceIdentifierZeus";
+		displayName = "$STR_ROOT_CYBERWARFARE_IDENTIFIER_MODULE";
+	};
+
 	// 3DEN Editor Modules
 	class Logic;
 	class Module_F: Logic {
@@ -256,6 +265,38 @@ class CfgVehicles {
 		class ModuleDescription: ModuleDescription {
 			description = "$STR_ROOT_CYBERWARFARE_UI_SYNCHRONIZE_THIS_MODULE_TO_AE3_LAPTOP_OBJECTS_TO_REGISTER_THEM_AS_HACKABLE";
 			sync[] = {"Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3"};
+		};
+	};
+
+	class ROOT_Module3DEN_DeviceIdentifier: Module_F {
+		scope = 2;
+		displayName = "$STR_ROOT_CYBERWARFARE_IDENTIFIER_MODULE";
+		category = "ROOT_CYBERWARFARE";
+		function = "Root_fnc_3denDeviceIdentifier";
+		functionPriority = 5;
+		isGlobal = 0;
+		isTriggerActivated = 0;
+		isDisposable = 1;
+		is3DEN = 0;
+		class Attributes: AttributesBase {
+			class ROOT_CYBERWARFARE_3DEN_IDENTIFIER_CODE: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_IDENTIFIER_CODE";
+				displayName = "$STR_ROOT_CYBERWARFARE_IDENTIFIER_CODE";
+				tooltip = "$STR_ROOT_CYBERWARFARE_IDENTIFIER_CODE_DESC";
+				typeName = "STRING";
+				defaultValue = """""";
+			};
+			class ROOT_CYBERWARFARE_3DEN_IDENTIFIER_GRANTS: Checkbox {
+				property = "ROOT_CYBERWARFARE_3DEN_IDENTIFIER_GRANTS";
+				displayName = "$STR_ROOT_CYBERWARFARE_IDENTIFIER_GRANTS";
+				tooltip = "$STR_ROOT_CYBERWARFARE_IDENTIFIER_GRANTS_DESC";
+				typeName = "BOOL";
+				defaultValue = 1;
+			};
+			class ModuleDescription: ModuleDescription{};
+		};
+		class ModuleDescription: ModuleDescription {
+			description = "$STR_ROOT_CYBERWARFARE_IDENTIFIER_MODULE_DESC";
 		};
 	};
 
@@ -477,6 +518,13 @@ class CfgVehicles {
 				tooltip = "$STR_ROOT_CYBERWARFARE_UI_TIME_IN_SECONDS_REQUIRED_TO_DOWNLOAD_THIS_FILE";
 				typeName = "NUMBER";
 				defaultValue = 10;
+			};
+			class ROOT_CYBERWARFARE_3DEN_DATABASE_VSIZE: Edit {
+				property = "ROOT_CYBERWARFARE_3DEN_DATABASE_VSIZE";
+				displayName = "$STR_ROOT_CYBERWARFARE_UI_VIRTUAL_FILE_SIZE";
+				tooltip = "$STR_ROOT_CYBERWARFARE_UI_VIRTUAL_FILE_SIZE_DESC";
+				typeName = "STRING";
+				defaultValue = """""";
 			};
 			class ROOT_CYBERWARFARE_3DEN_DATABASE_CONTENT: Edit {
 				property = "ROOT_CYBERWARFARE_3DEN_DATABASE_CONTENT";

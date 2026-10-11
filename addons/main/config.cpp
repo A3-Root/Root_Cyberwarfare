@@ -24,6 +24,7 @@ class CfgPatches {
 			"ROOT_CyberWarfareHiddenTrackersZeus",
 			"ROOT_CyberWarfareClearBrokenLinksZeus",
 			"ROOT_CyberWarfareAddCustomDeviceZeus",
+			"ROOT_CyberWarfareDeviceIdentifierZeus",
 			"ROOT_Module3DEN_LinkDevices",
 			"ROOT_Module3DEN_AddHackingTools",
 			"ROOT_Module3DEN_RegisterHackableLaptop",
@@ -35,6 +36,7 @@ class CfgPatches {
 			"ROOT_Module3DEN_AddGPSTracker",
 			"ROOT_Module3DEN_AddCustomDevice",
 			"ROOT_Module3DEN_AddPowerGenerator",
+			"ROOT_Module3DEN_DeviceIdentifier",
 			"ROOT_Rubberducky_Object"
 		};
 		requiredAddons[] = {

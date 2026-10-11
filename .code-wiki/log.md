@@ -17,3 +17,4 @@ Append-only. Actions: created, updated, re-verified, archived, discovered, lint.
 2026-07-08 | created | vehicle-and-drone-control | bootstrap topic from vehicle, drone, and parameter hacking
 2026-07-08 | created | gps-tracking | bootstrap topic from tracker registration and live tracking
 2026-07-08 | created | database-and-custom-devices | bootstrap topic from database downloads, encryption, and custom devices
+2026-10-11 | updated | device-registry-and-access, database-and-custom-devices | SSH takeover (session computers, union access, source pays power, backdoor fix), direct-call tool templates (no 10 s timeout), generic device identifiers + Device Identifier module, database virtual size, servers in 3den filters

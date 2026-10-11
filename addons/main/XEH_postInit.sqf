@@ -88,6 +88,27 @@ if (isServer) then {
         ["root_cyberwarfare_gpsIdentifierResolved", [_computerNetId, _deviceId, "", _commandPath, _nameOfVariable], _owner] call CBA_fnc_ownerEvent;
     }] call CBA_fnc_addEventHandler;
 
+    // A terminal typed a device identifier in place of a device id. Codes live only here; the reply
+    // carries the device id (and whether the code grants access) back to the one client that asked.
+    ["root_cyberwarfare_resolveIdentifier", {
+        params [["_computerNetId", "", [""]], ["_identifier", "", [""]], ["_deviceType", -1, [0]], ["_owner", 0, [0]], ["_requestKey", "", [""]]];
+
+        private _computer = objectFromNetId _computerNetId;
+        private _entry = [_identifier, _deviceType] call FUNC(resolveDeviceIdentifier);
+
+        if (_entry isEqualTo []) exitWith {
+            ["root_cyberwarfare_identifierResolved", [_requestKey, -1, format [localize "STR_ROOT_CYBERWARFARE_IDENTIFIER_UNKNOWN", _identifier], false], _owner] call CBA_fnc_ownerEvent;
+        };
+
+        _entry params ["", "_deviceId", "_grantsAccess"];
+
+        if (_grantsAccess && {missionNamespace getVariable [SETTING_GPS_IDENTIFIER_ONLINE, true]} && {isNull _computer || {!([_computer] call FUNC(isLaptopOnline))}}) exitWith {
+            ["root_cyberwarfare_identifierResolved", [_requestKey, -1, localize "STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_OFFLINE", false], _owner] call CBA_fnc_ownerEvent;
+        };
+
+        ["root_cyberwarfare_identifierResolved", [_requestKey, _deviceId, "", _grantsAccess], _owner] call CBA_fnc_ownerEvent;
+    }] call CBA_fnc_addEventHandler;
+
     // GPS tracker status update from a client (replaces client-side full-array broadcasts)
     // The server applies the change to the authoritative array and broadcasts it (debounced)
     ["root_cyberwarfare_updateTrackerStatus", {
@@ -240,6 +261,12 @@ if (isServer) then {
 };
 
 if (hasInterface) then {
+    // Answer to a device identifier lookup (Root_fnc_resolveDeviceArg waits for it)
+    ["root_cyberwarfare_identifierResolved", {
+        params ["_requestKey", "_deviceId", "_error", "_grantsAccess"];
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_IDRES_" + _requestKey, [_deviceId, _error, _grantsAccess]];
+    }] call CBA_fnc_addEventHandler;
+
     // The server has resolved a tracker identifier this terminal was given. A resolved id re-enters
     // the tracking command with the permission the code carries; a refusal is printed to the terminal
     // and releases the command's wait flag so the shell does not sit there.

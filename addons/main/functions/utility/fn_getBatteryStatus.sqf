@@ -22,7 +22,8 @@ if (isNull _computer) exitWith {
     [false, objNull, 0, 0, 0, 0, 0]
 };
 
-private _battery = _computer getVariable ["AE3_power_internal", objNull];
+// Inside an SSH session the operator's computer pays, not the remote target.
+private _battery = ([_computer] call FUNC(getPowerComputer)) getVariable ["AE3_power_internal", objNull];
 if (isNull _battery) exitWith {
     [false, objNull, 0, 0, 0, 0, 0]
 };

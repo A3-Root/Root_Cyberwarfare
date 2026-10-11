@@ -13,6 +13,7 @@ PREP(3denAddCustomDevice);
 PREP(3denAddPowerGenerator);
 PREP(3denRegisterHackableLaptop);
 PREP(3denLinkDevices);
+PREP(3denDeviceIdentifier);
 
 // Redefine PREP macro for subdirectory: core
 #undef PREP
@@ -71,6 +72,7 @@ PREP(customDevice);
 
 PREP(addDatabaseZeusMain);
 PREP(downloadDatabase);
+PREP(getDatabaseTransfer);
 
 // Redefine PREP macro for subdirectory: devices
 #undef PREP
@@ -132,6 +134,16 @@ PREP(localizeDeviceState);
 PREP(getDroneCost);
 PREP(getComputerIdentifier);
 PREP(getComputerIdentifiers);
+PREP(getSessionComputers);
+PREP(getPowerComputer);
+PREP(registerDeviceIdentifier);
+PREP(unregisterDeviceIdentifier);
+PREP(resolveDeviceIdentifier);
+PREP(getDeviceIdentifier);
+PREP(findDevicesByObject);
+PREP(setDeviceIdentifier);
+PREP(resolveDeviceArg);
+PREP(clearIdentifierGrants);
 PREP(getLaptopUid);
 PREP(getObjectsInTriggerArea);
 PREP(getPlayerFromComputer);
@@ -205,6 +217,7 @@ PREP(addVehicleZeus);
 PREP(copyDeviceLinksZeus);
 PREP(hiddenTrackersDialog);
 PREP(hiddenTrackersZeus);
+PREP(deviceIdentifierZeus);
 PREP(hiddenTrackersZeusMain);
 PREP(manageDeviceAccessZeus);
 PREP(warnUnreachableDevice);

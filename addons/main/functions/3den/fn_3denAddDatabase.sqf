@@ -22,7 +22,7 @@ if (!isServer) exitWith {};
 // Get synchronized laptops early for the condition check
 private _syncedObjects = synchronizedObjects _logic;
 private _laptops = _syncedObjects select {
-	typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"]
+	typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_PortableServer_01_black_F_AE3", "Land_PortableServer_01_olive_F_AE3", "Land_PortableServer_01_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"]
 };
 
 // Wait for mission time AND all laptops to have AE3 initialized before executing
@@ -38,6 +38,7 @@ private _laptops = _syncedObjects select {
 		// Get module attributes
 		private _fileName = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_NAME", "Secret Database"];
 		private _fileSize = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_SIZE", 10];
+		private _virtualSize = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_VSIZE", ""];
 		private _fileContent = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_CONTENT", "This is a secret file downloaded from the network."];
 		private _executionCode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_DATABASE_EXEC", ""];
 		// 3DEN BOOL attributes load as numbers (1/0); coerce so the boolean checks downstream do not throw.
@@ -78,7 +79,7 @@ private _laptops = _syncedObjects select {
 		private _fileObject = _logic;
 		private _execUserId = 2; // Server
 
-		[_fileObject, _fileName, _fileSize, _fileContent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions, _requestedId, _accessMode] call FUNC(addDatabaseZeusMain);
+		[_fileObject, _fileName, _fileSize, _fileContent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions, _requestedId, _accessMode, _virtualSize] call FUNC(addDatabaseZeusMain);
 
 		// Notify admins of success
 		if (serverCommandAvailable "#kick") then {

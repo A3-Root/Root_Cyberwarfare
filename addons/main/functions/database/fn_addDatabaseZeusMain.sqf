@@ -18,6 +18,9 @@
  * 11: _encryptionOptions <STRING|HASHMAP> (Optional) - Additional cipher options, default: ""
  * 12: _requestedId <NUMBER> (Optional) - Fixed device id, 0 = auto-assign, default: 0
  * 13: _accessMode <NUMBER> (Optional) - ACCESS_MODE_* constant, default: ACCESS_MODE_UNASSIGNED
+ * 14: _virtualSize <STRING|NUMBER> (Optional) - Virtual file size ("800MB" or bytes). When set, the
+ *     download time follows the AE3 network transfer speed instead of _filesize, and the downloaded
+ *     file carries this size into later copies. default: "" (none)
  *
  * Return Value:
  * None
@@ -42,8 +45,14 @@ params [
     ["_encryptionKey", ""],
     ["_encryptionOptions", ""],
     ["_requestedId", 0],
-    ["_accessMode", ACCESS_MODE_UNASSIGNED, [0]]
+    ["_accessMode", ACCESS_MODE_UNASSIGNED, [0]],
+    ["_virtualSize", "", ["", 0]]
 ];
+
+private _virtualBytes = -1;
+if !(isNil "AE3_filesystem_fnc_parseSize") then {
+    _virtualBytes = [_virtualSize] call AE3_filesystem_fnc_parseSize;
+};
 
 if (_execUserId == 0) then {
     _execUserId = owner _fileObject;
@@ -68,6 +77,7 @@ private _databaseId = [_requestedId, _allDatabases apply { _x select 0 }] call F
 _allDatabases pushBack [_databaseId, netId _fileObject, _filename, _filesize, _linkedComputers, _availableToFutureLaptops];
 _fileObject setVariable ["ROOT_CYBERWARFARE_DATABASE_NAME_EDIT", _filename, true];
 _fileObject setVariable ["ROOT_CYBERWARFARE_DATABASE_SIZE_EDIT", _filesize, true];
+_fileObject setVariable ["ROOT_CYBERWARFARE_DATABASE_VSIZE", _virtualBytes, true];
 _fileObject setVariable ["ROOT_CYBERWARFARE_DATABASE_DATA_EDIT", _filecontent, true];
 _fileObject setVariable ["ROOT_CYBERWARFARE_DATABASE_EXECUTIONCODE", _executionCode, true];
 _fileObject setVariable ["ROOT_CYBERWARFARE_AVAILABLE_FUTURE", _availableToFutureLaptops, true];

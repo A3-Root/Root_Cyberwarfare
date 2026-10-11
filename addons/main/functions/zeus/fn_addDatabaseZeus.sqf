@@ -44,7 +44,8 @@ private _dialogControls = [
     ["COMBO", [(localize "STR_ROOT_CYBERWARFARE_UI_ENCRYPTION_ALGORITHM"), (localize "STR_ROOT_CYBERWARFARE_UI_CIPHER_USED_WHEN_ENCRYPTION_IS_ENABLED_2")], [["morse", "spelling", "affine", "rot", "vigenere", "bacon", "alpha_sub", "railfence", "base32", "base64", "ascii85", "unicode", "integer"], [(localize "STR_ROOT_CYBERWARFARE_UI_MORSE_CODE"), (localize "STR_ROOT_CYBERWARFARE_UI_SPELLING_ALPHABET"), (localize "STR_ROOT_CYBERWARFARE_UI_AFFINE"), "ROT", (localize "STR_ROOT_CYBERWARFARE_UI_VIGENERE"), (localize "STR_ROOT_CYBERWARFARE_UI_BACON"), (localize "STR_ROOT_CYBERWARFARE_UI_ALPHABETICAL_SUBSTITUTION"), (localize "STR_ROOT_CYBERWARFARE_UI_RAILFENCE"), "Base32", "Base64", "Ascii85", (localize "STR_ROOT_CYBERWARFARE_UI_UNICODE_NOTATION"), (localize "STR_ROOT_CYBERWARFARE_UI_INTEGER")], 0]],
     ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_KEY_VARIANT"), (localize "STR_ROOT_CYBERWARFARE_UI_PRIMARY_KEY_PASSWORD_KEYWORD_OR_VARIANT_EXAMPLES_ROT13_LEMON_3")], [""]],
     ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_ENCRYPTION_OPTIONS"), (localize "STR_ROOT_CYBERWARFARE_UI_OPTIONAL_KEY_VALUE_PAIRS_EXAMPLES_A_5_B_8_RAILS_3_RADIX")], [""]],
-    ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_0_AUTO"), (localize "STR_ROOT_CYBERWARFARE_UI_FIXED_ID_FOR_THIS_FILE_0_AUTO_ASSIGN_A_FREE_ID")], ["0"]]
+    ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_0_AUTO"), (localize "STR_ROOT_CYBERWARFARE_UI_FIXED_ID_FOR_THIS_FILE_0_AUTO_ASSIGN_A_FREE_ID")], ["0"]],
+    ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_VIRTUAL_FILE_SIZE"), (localize "STR_ROOT_CYBERWARFARE_UI_VIRTUAL_FILE_SIZE_DESC")], [""]]
 ];
 
 {
@@ -61,12 +62,12 @@ private _dialogControls = [
         _args params ["_fileObject", "_allComputers"];
         
         // Dialog values before the per-computer link checkboxes.
-        _results params ["_filename", "_filesize", "_filecontent", "_executionCode", "_accessMode", "_availableToFutureLaptops", "_isEncrypted", "_encryptionAlgorithm", "_encryptionKey", "_encryptionOptions", "_requestedIdText"];
+        _results params ["_filename", "_filesize", "_filecontent", "_executionCode", "_accessMode", "_availableToFutureLaptops", "_isEncrypted", "_encryptionAlgorithm", "_encryptionKey", "_encryptionOptions", "_requestedIdText", "_virtualSize"];
         private _requestedId = parseNumber _requestedIdText;
 
         // The rest are checkbox values for each computer
         private _linkedComputers = [];
-        private _checkboxStartIndex = 11;
+        private _checkboxStartIndex = 12;
 
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
@@ -77,7 +78,7 @@ private _dialogControls = [
         if (_filesize < 1) then {_filesize = 1};
 
         private _execUserId = clientOwner;
-        [_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions, _requestedId, _accessMode] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
+        [_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions, _requestedId, _accessMode, _virtualSize] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
         [(localize "STR_ROOT_CYBERWARFARE_UI_HACKABLE_FILE_ADDED")] call zen_common_fnc_showMessage;
 
         // Linked access with nothing ticked registers a file no laptop can reach, which the success

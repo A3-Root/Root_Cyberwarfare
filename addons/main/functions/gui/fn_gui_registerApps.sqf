@@ -157,8 +157,10 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 				_label = [format [(localize "STR_ROOT_CYBERWARFARE_UI_DATABASE_1"), _id], _fn + ".txt"] select (_fn isNotEqualTo "" && _fn isEqualType "");
 				// Download time (seconds) so the GUI shows a real progress bar (#5).
 				_grid = ""; _pos = [];
-				_downloadTime = _obj getVariable ["ROOT_CYBERWARFARE_DATABASE_SIZE_EDIT", 0];
+				([_obj, _computer] call FUNC(getDatabaseTransfer)) params ["_dlSeconds", "_dlBytes"];
+				_downloadTime = round _dlSeconds;
 				_details = [[(localize "STR_ROOT_CYBERWARFARE_UI_DOWNLOAD_TIME"), format ["%1s", _downloadTime]]];
+				if (_dlBytes >= 0) then { _details pushBack [(localize "STR_ROOT_CYBERWARFARE_UI_FILE_SIZE"), [_dlBytes] call AE3_filesystem_fnc_formatSize]; };
 			};
 				case DEVICE_TYPE_DRONE: {
 					// Prefer the mission-maker's custom drone name (registry row index 2) over the class displayName.

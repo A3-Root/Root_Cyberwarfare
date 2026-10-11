@@ -45,3 +45,8 @@ Database downloads and scripted custom devices. This is the subsystem that moves
 - `addons/main/functions/custom/`
 - `addons/main/functions/cipher/`
 - `addons/main/CfgFunctions.hpp`
+
+## virtual size (2026-10-11)
+
+- `addDatabaseZeusMain` param 14 `_virtualSize` ("800MB"/bytes) -> `ROOT_CYBERWARFARE_DATABASE_VSIZE`. `getDatabaseTransfer [_obj]` -> `[seconds, bytes]`: virtual size uses AE3 `shell_transferDuration` (network), else legacy `_filesize` seconds. Terminal `download` and GUI app both use it; the written file carries the size.
+- Terminal `download` writes through `AE3_filesystem_fnc_device_writeFile` (session-safe; survives `sshEnd`).

@@ -45,7 +45,7 @@ private _identifiers = GET_GPS_IDENTIFIERS;
 // A code the mission asked for is honoured when it is free, so an Eden-placed tracker can carry a
 // code the briefing already names. Anything else is drawn fresh.
 private _identifier = toUpperANSI _requestedIdentifier;
-if (_identifier isEqualTo "" || {_identifier in (keys _identifiers)}) then {
+if (_identifier isEqualTo "" || {_identifier in (keys _identifiers)} || {_identifier in GET_DEVICE_IDENTIFIERS}) then {
     if (_identifier isNotEqualTo "") then {
         ROOT_CYBERWARFARE_LOG_INFO_1(format ["registerGpsIdentifier: identifier %1 is already in use, drawing a fresh one",_identifier]);
     };

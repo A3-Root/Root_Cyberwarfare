@@ -44,20 +44,21 @@ if !(VALIDATE_DEVICE_TYPE(_deviceType)) exitWith {
     false
 };
 
+// Inside an SSH session the operator's computer takes part too: its tools may drive the session and
+// its links add to the target's ("bring your own tools" onto a computer that owns the links).
+private _sessionComputers = [_computer] call FUNC(getSessionComputers);
+
 // Check if this command is running from a backdoor path
-private _backdoorPaths = _computer getVariable ["ROOT_CYBERWARFARE_BACKDOOR_FUNCTION", []];
+private _backdoorPaths = [];
+{ _backdoorPaths append (_x getVariable ["ROOT_CYBERWARFARE_BACKDOOR_FUNCTION", []]); } forEach _sessionComputers;
 DEBUG_LOG_2("Backdoor check - CommandPath: %1, BackdoorPaths: %2",_commandPath,_backdoorPaths);
 
-if (_commandPath != "" && {_backdoorPaths isNotEqualTo []}) then {
-    {
-        if (_commandPath find _x == 0) exitWith {
-            DEBUG_LOG_1("Backdoor access granted via path: %1",_x);
-            true
-        };
-    } forEach _backdoorPaths;
+if (_commandPath != "" && {_backdoorPaths findIf {_commandPath find _x == 0} != -1}) exitWith {
+    DEBUG_LOG("Backdoor access granted");
+    true
 };
 
-private _hasHackingTools = [_computer] call FUNC(syncHackingToolAvailability);
+private _hasHackingTools = _sessionComputers findIf {[_x] call FUNC(syncHackingToolAvailability)} != -1;
 DEBUG_LOG_1("Hacking tools available: %1",_hasHackingTools);
 
 if !(_hasHackingTools) exitWith {
@@ -66,9 +67,17 @@ if !(_hasHackingTools) exitWith {
     false
 };
 
+// A device identifier typed into this command that grants access counts as a link for this machine.
+private _grants = missionNamespace getVariable [GVAR_IDENTIFIER_GRANTS, createHashMap];
+if ((_grants getOrDefault [format ["%1:%2", _deviceType, _deviceId], -1]) > diag_tickTime) exitWith {
+    DEBUG_LOG("Device identifier grant - ACCESS GRANTED");
+    true
+};
+
 // Every identifier this computer's access may be filed under, so a link written by an older build or
 // by a script naming the laptop's netId still resolves.
-private _computerIdentifiers = [_computer] call FUNC(getComputerIdentifiers);
+private _computerIdentifiers = [];
+{ { _computerIdentifiers pushBackUnique _x; } forEach ([_x] call FUNC(getComputerIdentifiers)); } forEach _sessionComputers;
 DEBUG_LOG_1("Computer identifiers: %1",_computerIdentifiers);
 
 if (_computerIdentifiers isEqualTo []) exitWith {

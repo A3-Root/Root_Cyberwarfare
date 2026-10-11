@@ -1,5 +1,25 @@
 # Changelog
 
+## Update 13 (v2.0.0.10)
+
+### Added
+- Every device type gets an 8-character identifier usable in place of its id in commands (`door VAULTDR1 a unlock`).
+- Codes grant access by default; set alias-only via the **Device Identifier** Zeus/Eden module or `Root_fnc_setDeviceIdentifier`.
+- `Root_fnc_getDeviceIdentifier`, `Root_fnc_findDevicesByObject` and the *Device identifiers* setting.
+- Hackable files can have a virtual size (Zeus/Eden field, param 14); download time then follows the AE3 network speed.
+- AE3 headless servers can be targeted by every Eden module.
+- Download time of sized files follows the downloader's AE3 network speed (per user, computer or wifi network).
+
+### Removed
+- N/A
+
+### Changed
+- Commands run over SSH control the target's linked devices; tools on either the operator's or the target's computer suffice.
+- Inside an SSH session the operator's laptop battery pays for operations.
+- Commands no longer print "Operation timed out!" after 10 seconds; Ctrl+C cancels them.
+- Downloads land in the live filesystem and survive the SSH session ending; no terminal re-open needed.
+- **Fixed:** backdoor tool paths never bypassed access checks.
+
 ## Update 12 (v2.0.0.9)
 
 ### Added

@@ -23,7 +23,7 @@ if (!isServer) exitWith {""};
 
 private _alphabet = GPS_IDENTIFIER_ALPHABET;
 private _alphabetSize = count _alphabet;
-private _taken = keys GET_GPS_IDENTIFIERS;
+private _taken = (keys GET_GPS_IDENTIFIERS) + (keys GET_DEVICE_IDENTIFIERS);
 
 private _identifier = "";
 

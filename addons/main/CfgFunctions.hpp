@@ -14,6 +14,7 @@ class CfgFunctions {
 			class 3denAddVehicle {};
 			class 3denAdjustPowerCost {};
 			class 3denLinkDevices {};
+			class 3denDeviceIdentifier {};
 			class 3denRegisterHackableLaptop {};
 		};
 
@@ -69,6 +70,7 @@ class CfgFunctions {
 			file = "\z\root_cyberwarfare\addons\main\functions\database";
 			class addDatabaseZeusMain {};
 			class downloadDatabase {};
+			class getDatabaseTransfer {};
 		};
 
 		class Devices {
@@ -153,6 +155,16 @@ class CfgFunctions {
 			class getDroneCost {};
 			class getComputerIdentifier {};
 			class getComputerIdentifiers {};
+			class getSessionComputers {};
+			class getPowerComputer {};
+			class registerDeviceIdentifier {};
+			class unregisterDeviceIdentifier {};
+			class resolveDeviceIdentifier {};
+			class getDeviceIdentifier {};
+			class findDevicesByObject {};
+			class setDeviceIdentifier {};
+			class resolveDeviceArg {};
+			class clearIdentifierGrants {};
 			class getLaptopUid {};
 			class getObjectsInTriggerArea {};
 			class getPlayerFromComputer {};
@@ -197,6 +209,7 @@ class CfgFunctions {
 			class copyDeviceLinksZeus {};
 			class hiddenTrackersDialog {};
 			class hiddenTrackersZeus {};
+			class deviceIdentifierZeus {};
 			class hiddenTrackersZeusMain {};
 			class manageDeviceAccessZeus {};
 			class warnUnreachableDevice {};

@@ -67,6 +67,8 @@ if (_filesystem isEqualTo []) exitWith {
 try {
 	[[], _filesystem, _savePath, "", "root", "root", [[true, true, true], [true, true, true]]] call AE3_filesystem_fnc_ensureFile;
 	[[], _filesystem, _savePath, "root", _databaseContent, false] call AE3_filesystem_fnc_writeToFile;
+	private _virtualBytes = _database getVariable ["ROOT_CYBERWARFARE_DATABASE_VSIZE", -1];
+	if (_virtualBytes >= 0) then { [[], _filesystem, _savePath, "root", _virtualBytes] call AE3_filesystem_fnc_setFileSize; };
 	_computer setVariable ["AE3_filesystem", _filesystem, true];
 } catch {
 	[_owner, format [(localize "STR_ROOT_CYBERWARFARE_UI_DOWNLOAD_FAILED_1"), _exception], false] call _reply;

@@ -202,6 +202,20 @@
     false // doesn't require mission restart
 ] call CBA_fnc_addSetting;
 
+// Device identifiers: every registered device (not only GPS trackers) answers to an 8-character code
+// that commands accept in place of its numeric id. A code that grants access works from any terminal
+// with hacking tools, linked or not. Uses the GPS "require network" setting for the online rule.
+[
+    SETTING_DEVICE_IDENTIFIERS,
+    "CHECKBOX",
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_DEVICE_IDENTIFIERS", localize "STR_ROOT_CYBERWARFARE_SETTING_DEVICE_IDENTIFIERS_DESC"],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", localize "STR_ROOT_CYBERWARFARE_SETTING_GPS_CATEGORY"],
+    true,
+    1, // mission-level
+    {},
+    false
+] call CBA_fnc_addSetting;
+
 // Power Grid Control Power Cost Setting
 [
     SETTING_POWERGRID_COST,

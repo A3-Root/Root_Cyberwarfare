@@ -23,7 +23,7 @@ if (!isServer) exitWith {};
 // Only AE3 laptops can act as hacking stations; USB drives are not stations, so they are excluded.
 private _syncedObjects = synchronizedObjects _logic;
 private _laptops = _syncedObjects select {
-    typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3"]
+    typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_PortableServer_01_black_F_AE3", "Land_PortableServer_01_olive_F_AE3", "Land_PortableServer_01_sand_F_AE3"]
 };
 
 // Wait for mission time and for the laptops' AE3 layer to be initialized before registering.
