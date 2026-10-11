@@ -271,6 +271,8 @@ missionNamespace setVariable ["ROOT_CYBERWARFARE_PUBLIC_DEVICES", _publicDevices
 
 **3-Tier Priority System** (checked in order, first match wins)
 
+Inside an AE3 SSH session every check uses both computers (`Root_fnc_getSessionComputers`): backdoor paths of either, hacking tools on either, links of either. After the tool check, a temporary grant from a device identifier that grants access (`ROOT_CYBERWARFARE_IDENTIFIER_GRANTS`, client-local, cleared after each command) also allows access.
+
 ### Priority 1: Backdoor Access (Highest)
 
 **Purpose:** Admin/debug bypass of all permission checks.

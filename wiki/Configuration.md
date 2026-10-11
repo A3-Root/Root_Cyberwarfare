@@ -479,6 +479,25 @@ private _requiresNetwork = missionNamespace getVariable ["ROOT_CYBERWARFARE_GPS_
 
 ---
 
+### 11b. Device Identifiers
+
+**Setting Name:** `ROOT_CYBERWARFARE_DEVICE_IDENTIFIERS_ENABLED`
+
+**Type:** Checkbox
+
+**Default:** Enabled
+
+**Scope:** Mission
+
+**Description:** Every registered device answers to an 8-character code that terminal commands accept in place of its ID. Codes that grant access work from any laptop with hacking tools; the network rule of setting 11a applies to them too.
+
+**Access in Script:**
+```sqf
+private _enabled = missionNamespace getVariable ["ROOT_CYBERWARFARE_DEVICE_IDENTIFIERS_ENABLED", true];
+```
+
+---
+
 ## Cleanup Settings
 
 ### 12. Automatic Link Cleanup - Enable

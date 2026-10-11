@@ -54,6 +54,7 @@ Root's Cyber Warfare provides **modules for the 3DEN Editor** (Arma 3's built-in
 | Add GPS Tracker | Attach GPS trackers | Any object, Laptops (optional) |
 | Add Custom Device | Create custom scripted devices | Any object, Laptops (optional) |
 | Add Power Generator | Create power grid control | Generator objects, Laptops (optional) |
+| Device Identifier | Set the code synchronized devices answer to (credential or alias) | Registered device objects |
 
 ---
 
@@ -248,6 +249,7 @@ Result: Only laptop1 can toggle lamp1
 |-----------|------|---------|-------------|
 | **File Name** | String | `Secret Database` | Name of the file (with or without extension). |
 | **Download Time (seconds)** | Number | `10` | Time in seconds required to download. |
+| **Virtual File Size** | String | (empty) | Optional size such as `750KB`, `50MB`, `1.5GB`. When set, the download takes as long as that size needs at the downloader's AE3 network speed (replaces Download Time), and the downloaded file keeps the size. |
 | **File Contents** | Multiline Text | (example) | Contents shown when using `cat` command. Uses code editor for formatting. |
 | **Execution Code (Optional)** | Multiline SQF | (empty) | Code executed upon successful download. Uses code editor. |
 | **Encrypt File Contents** | Checkbox | Unchecked | If checked, the file contents are encrypted with the selected cipher before the file is registered. |
@@ -663,6 +665,25 @@ Common ammo classnames:
 - Number of affected lights is reported in command output
 
 ---
+
+### 10. Device Identifier
+
+**Purpose:** Set the code a device answers to in terminal commands, and whether knowing the code grants access.
+
+**How to Use:**
+1. Place **Device Identifier** (F5 -> ROOT_CYBERWARFARE)
+2. Synchronize it to objects that another module registers (building, lamp, vehicle, file holder, custom device object, generator)
+
+**Attributes:**
+
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| **Identifier** | String | (empty) | Code such as `VAULTDR1`. Empty = random 8-character code. The code goes to the first synchronized object; further objects get random codes with the same rule. |
+| **Code grants access** | Checkbox | Checked | Checked: anyone with the code can use the device from any laptop with hacking tools. Unchecked: alias only, normal access still applies. |
+
+Every device already gets a random code automatically; use this module to choose the code or make it alias-only. Codes are printed to the server RPT.
+
+AE3 headless servers can be synchronized to every module here in place of laptops.
 
 ## Synchronization Guide
 

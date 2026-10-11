@@ -273,7 +273,7 @@ Registers downloadable files.
 
 **Syntax:**
 ```sqf
-[_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
+[_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions, _requestedId, _accessMode, _virtualSize] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
 ```
 
 **Parameters:**
@@ -282,12 +282,19 @@ Registers downloadable files.
 |-------|------|------|---------|
 | 0 | _fileObject | OBJECT | - |
 | 1 | _filename | STRING | - |
-| 2 | _filesize | NUMBER | - |
+| 2 | _filesize | NUMBER | - (download time in seconds) |
 | 3 | _filecontent | STRING | - |
 | 4 | _execUserId | NUMBER | 0 |
 | 5 | _linkedComputers | ARRAY | [] |
 | 6 | _executionCode | STRING | "" |
 | 7 | _availableToFutureLaptops | BOOLEAN | false |
+| 8 | _isEncrypted | BOOLEAN | false |
+| 9 | _encryptionAlgorithm | STRING | "morse" |
+| 10 | _encryptionKey | STRING | "" |
+| 11 | _encryptionOptions | STRING | "" |
+| 12 | _requestedId | NUMBER | 0 (auto) |
+| 13 | _accessMode | NUMBER | ACCESS_MODE_UNASSIGNED |
+| 14 | _virtualSize | STRING/NUMBER | "" (none) - e.g. `"800MB"`; download time then follows the AE3 network speed and `_filesize` is ignored |
 
 **Return Value:** None
 
@@ -658,6 +665,27 @@ cost, battery prompt, status rules - is identical for both ways of naming a trac
 
 ---
 
+### Device Identifier Functions
+
+Every non-GPS device gets an identifier automatically when registered (`Root_fnc_applyDeviceAccess`). Codes share the GPS alphabet and generator, so they never collide with tracker codes.
+
+| Function | Locality | Description |
+|----------|----------|-------------|
+| `Root_fnc_setDeviceIdentifier` | Any (routed to server) | `[_typeOrObject, _deviceId, _code = "", _grantsAccess = true, _execUserId = 0]`. Sets a custom code (blank = random) and whether it grants access (`false` = alias only). Accepts an object instead of type + id. **Public.** |
+| `Root_fnc_getDeviceIdentifier` | Server | `[_deviceType, _deviceId]` -> code or `""`. Also works for GPS trackers. **Public.** |
+| `Root_fnc_findDevicesByObject` | Any | `[_object]` -> `[[deviceType, deviceId], ...]`. **Public.** |
+| `Root_fnc_registerDeviceIdentifier` | Server | `[_deviceType, _deviceId, _requested = "", _grantsAccess = true]` -> code. Keeps an existing code unless a different one is requested. |
+| `Root_fnc_unregisterDeviceIdentifier` | Server | `[_deviceType, _deviceId]`. |
+| `Root_fnc_resolveDeviceIdentifier` | Server | `[_code, _deviceType = -1]` -> `[deviceType, deviceId, grantsAccess]` or `[]`. |
+| `Root_fnc_resolveDeviceArg` | Client (scheduled) | `[_computer, _deviceType, _argument]` -> `[deviceIdString]` or `[]`. Used by the terminal tools; a granting code adds a temporary access grant. |
+| `Root_fnc_clearIdentifierGrants` | Client | Drops those grants after the command. |
+
+**Globals:** `ROOT_CYBERWARFARE_DEVICE_IDENTIFIERS` and `ROOT_CYBERWARFARE_DEVICE_IDENTIFIER_INDEX` (HashMaps, **server only, never broadcast**).
+
+### Root_fnc_getDatabaseTransfer
+
+`[_database, _computer = objNull, _user = ""]` -> `[seconds, virtualBytes]`. Download time of a hackable file: with a virtual size it uses AE3 `shell_transferDuration` at the network speed of `_user` on `_computer` (per user / computer / wifi network), otherwise the legacy seconds. **Public.**
+
 ### Root_fnc_changeVehicleParams
 
 Modifies vehicle parameters.
@@ -787,6 +815,15 @@ private _doors = [_laptop, 1, ""] call Root_fnc_getAccessibleDevices;
 ```
 
 ---
+
+### SSH Session Functions
+
+| Function | Description |
+|----------|-------------|
+| `Root_fnc_getSessionComputers` | `[_computer]` -> `[_computer]`, or `[_target, _source]` when `_computer` is the target of an AE3 SSH session (only valid on the operator's machine). **Public.** |
+| `Root_fnc_getPowerComputer` | `[_computer]` -> computer whose battery pays (the SSH source inside a session). |
+
+`Root_fnc_isDeviceAccessible` considers both session computers: tools on either suffice, links of both count, backdoor paths of both apply. It also honours identifier grants (see Device Identifier Functions).
 
 ## Power Management Functions
 

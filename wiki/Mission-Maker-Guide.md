@@ -476,8 +476,10 @@ _this = [_deviceObject, "activate"|"deactivate"]
 
 **Syntax:**
 ```sqf
-[_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
+[_fileObject, _filename, _filesize, _filecontent, _execUserId, _linkedComputers, _executionCode, _availableToFutureLaptops, _isEncrypted, _encryptionAlgorithm, _encryptionKey, _encryptionOptions, _requestedId, _accessMode, _virtualSize] remoteExec ["Root_fnc_addDatabaseZeusMain", 2];
 ```
+
+Parameters 8-13 (encryption, fixed ID, access mode) are optional. Parameter 14, `_virtualSize` (`"800MB"`, `"1.5GB"` or bytes), gives the file a size: the download then takes as long as that size needs at the downloader's AE3 network speed (which can be set per wifi network, computer and user with the AE3 **Network Speed** module), and `_filesize` is ignored. The downloaded file keeps the size for later copies.
 
 **Parameters:**
 
@@ -886,6 +888,40 @@ systemChat format ["Cleared %1 broken device link(s).", _removed];
 - The periodic background version of this logic is `Root_fnc_runDeviceLinkCleanup`, gated by the `ROOT_CYBERWARFARE_CLEANUP_ENABLED`/`_CLEANUP_TIME`/`_CLEANUP_STRIKE_GRACE` CBA settings
 
 ---
+
+## Device Identifiers
+
+Every device registered by an add function or module automatically gets an 8-character identifier (shown in the Zeus feedback message and the server RPT). Players can type it in place of the device ID. By default the code grants access by itself; it can be made a plain alias.
+
+```sqf
+// Custom code that grants access (credential)
+[1, 1004, "VAULTDR1", true] call Root_fnc_setDeviceIdentifier;      // by type + id (1 = door)
+// By object: every registration of the object gets a code, the requested one goes to the first
+[_vaultBuilding, 0, "VAULTDR1", true] call Root_fnc_setDeviceIdentifier;
+// Alias only: the code names the device, normal link/public access still required
+[_generator, 0, "GRIDNORTH", false] call Root_fnc_setDeviceIdentifier;
+
+// Read a code (server), e.g. to write it into an intel file
+private _code = [1, 1004] call Root_fnc_getDeviceIdentifier;
+[_laptop, "/home/user/notes.txt", format ["Vault door code: %1", _code]] call AE3_filesystem_fnc_device_writeFile;
+```
+
+`Root_fnc_setDeviceIdentifier` waits up to 60 s for an object to be registered, so it can run right after the add call. Eden/Zeus: **Device Identifier** module. The *Device identifiers* CBA setting turns the feature off.
+
+## SSH Takeover
+
+Players can SSH (AE3 `ssh`) from their laptop into another computer and run the hacking commands there. Inside the session:
+
+- Devices linked to the remote computer are reachable, in addition to the operator's own links.
+- Hacking tools may be on either computer (tools on the operator's laptop are found in their install folder).
+- The operator's laptop battery pays power costs.
+
+This makes headless AE3 servers useful as "control computers": link doors/cameras/generators to a server inside the enemy network and let players reach it over SSH instead of linking the devices to the players' laptops.
+
+```sqf
+// Server inside the enemy base network controls the base doors
+[_baseBuilding, 0, [netId _baseServer], false, false, true, 0, [], 1] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+```
 
 ## Cipher Functions
 

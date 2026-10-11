@@ -299,7 +299,7 @@ Download a file from a database to the laptop's Downloads folder.
 **Parameters:**
 - `FileID` - The unique ID of the file (from `devices files`)
 
-**Power Cost:** Time-based (depends on file size in seconds)
+**Power Cost:** None (takes time instead)
 
 **Examples:**
 ```bash
@@ -309,9 +309,11 @@ download 1234        # Download file 1234
 **Confirmation Required:** No
 
 **Notes:**
-- Download time equals the file's configured size (in seconds)
-- Files are saved to `/home/user/Downloads/<filename>` on the laptop
-- Use `cat /home/user/Downloads/<filename>` to view downloaded files
+- Download time is either the file's configured time in seconds, or - for files with a size (e.g. `800MB`) - the size divided by your network speed. The size is shown when the download starts.
+- Your network speed can differ per wifi network, laptop and user account (set by the mission maker)
+- Files are saved to a `Files` folder in your current directory (`Files/<filename>.txt`) and appear immediately - no need to reopen the terminal
+- The downloaded file keeps its size, so copying it to a USB drive later also takes time
+- Press **Ctrl+C** to cancel a running download
 - Some files execute code automatically upon download completion
 - Download progress is shown in the terminal
 
@@ -591,6 +593,33 @@ crack -a=all /root/Downloads/cipher.txt
 - Also available as the **Crack** app on the Hackerman Desktop.
 
 ---
+
+## Device Identifiers
+
+Every registered device (door building, light, drone, file, custom device, vehicle, power grid and GPS tracker) has an 8-character code such as `VAULTDR1`. Any command that takes a device ID also accepts the code:
+
+```bash
+door VAULTDR1 a unlock
+light K7M2QX9P off
+download F1L3C0DE
+```
+
+- By default a code works on its own: any laptop with the hacking tools can use the device, even if it is not linked to it (a network connection may be required, depending on mission settings).
+- A mission maker can make a code a plain **alias**; then it only names the device and normal access still applies.
+- Codes are not listed by `devices`; they are mission intel found in files, emails or briefings.
+- Numeric IDs and `a` (all) work as before.
+
+## Using the Tools Over SSH
+
+After `ssh user@<ip>` into another computer (a laptop or a headless server), the hacking commands run against that computer:
+
+- You control the devices **linked to the remote computer** as well as your own.
+- The tools may be installed on either your laptop or the remote computer.
+- Power costs are paid by **your** laptop's battery.
+- y/n confirmations are answered in your own terminal as usual.
+- Downloaded files land on the remote computer (use `exit` to leave the session; the files stay).
+
+Long operations no longer stop with "Operation timed out!"; press **Ctrl+C** to cancel one.
 
 ## Power Management
 

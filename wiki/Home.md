@@ -134,6 +134,7 @@ devices gps
 # Lock/unlock doors
 door 1234 2881 lock        # Lock specific door
 door 1234 a unlock         # Unlock all doors in building
+door VAULTDR1 a unlock     # Same, using the building's identifier code
 
 # Control lights
 light 5678 off             # Turn off specific light

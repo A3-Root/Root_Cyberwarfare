@@ -899,6 +899,16 @@ where one actually is.
 
 ---
 
+### 15. Device Identifier
+
+**Purpose:** Set the code a device answers to in terminal commands.
+
+**How to Use:** Drop the module onto a registered device (building, light, vehicle, file holder, custom device, generator). Enter the **Identifier** (empty = random) and tick **Code grants access** (unticked = alias only). The assigned code is shown in system chat.
+
+Every device you register also gets a random code automatically, shown in the "Added!" feedback message.
+
+**Add Hackable File** also has a **Virtual File Size** field (`50MB`, `1.5GB`): the download then takes as long as that size needs at the player's AE3 network speed.
+
 ## Access Control System
 
 Root's Cyber Warfare uses a **3-tier access control system** with the following priority:
