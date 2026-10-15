@@ -6,7 +6,7 @@ Root's Cyber Warfare turns AE3 laptops into mission tools for recon, sabotage, i
 
 Fully integrated with ACE3, AE3, ZEN, Zeus, and Eden. Both the server and every client must load this mod and its dependencies.
 
-[b]Current version:[/b] 2.0.0.0
+[b]Current version:[/b] 2.1.0.0
 
 [img]https://i.imgur.com/EWy3dQc.gif[/img]
 
