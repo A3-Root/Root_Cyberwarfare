@@ -1,12 +1,8 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Takes back every access a device's identifier has handed out. A code that opens a
- *              device leaves the machine that typed it a grant for a while, so a curator changing a
- *              code is not enough on its own: whoever used the old one would keep working the device
- *              until their grant ran out. This drops those grants wherever they are held - on the
- *              server, which is where the desktop apps write them, and on every client, which is
- *              where a terminal command writes them - so the device has to be opened again.
+ * Description: Drops every grant a device's identifier has handed out, on the server and on every
+ *              client, so the device has to be opened with a code again.
  *
  * Arguments:
  * 0: _deviceType <NUMBER> - DEVICE_TYPE_* constant

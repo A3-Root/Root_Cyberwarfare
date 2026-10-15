@@ -288,8 +288,7 @@ if (isServer) then {
 };
 
 if (hasInterface) then {
-    // What the Zeus Device Identifier module is standing on, answered by the server because the
-    // codes live there. The dialog opens from here rather than from the module itself.
+    // What the Zeus Device Identifier module is standing on; the dialog opens on this answer
     ["root_cyberwarfare_identifierOverview", { _this call Root_fnc_showIdentifierZeus; }] call CBA_fnc_addEventHandler;
 
     // Answer to a device identifier lookup (Root_fnc_resolveDeviceArg waits for it)
@@ -1050,7 +1049,6 @@ ROOT_CYBERWARFARE_LOG_INFO("Post-init complete");
 // ============================================================================
 // Every Machine: Forget a revoked identifier
 // ============================================================================
-// A grant written by a code sits on the server when a desktop app resolved it and on the client when
-// a terminal command did, so a revoke has to reach both.
+// Grants sit on the server for the desktop apps and on each client for the terminal.
 
 ["root_cyberwarfare_identifierRevoked", { _this call Root_fnc_dropIdentifierGrants; }] call CBA_fnc_addEventHandler;

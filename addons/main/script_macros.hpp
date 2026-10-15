@@ -494,8 +494,7 @@
     #define GET_DEVICE_IDENTIFIER_INDEX (missionNamespace getVariable [GVAR_DEVICE_IDENTIFIER_INDEX, createHashMap])
 #endif
 // Grants handed out when a code that grants access is resolved: expiry keyed by "type:id" on the
-// machine a terminal resolved it on, and by "laptopNetId:type:id" on the server for a desktop app,
-// where a key naming only the device would hand it to every laptop in the mission
+// machine a terminal resolved it on, by "laptopNetId:type:id" on the server for a desktop app
 #ifndef GVAR_IDENTIFIER_GRANTS
     #define GVAR_IDENTIFIER_GRANTS "ROOT_CYBERWARFARE_IDENTIFIER_GRANTS"
 #endif

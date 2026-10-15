@@ -1,9 +1,8 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Drops this machine's grants for one device. A terminal files a grant under the device
- *              alone and the server files it under the laptop as well, so both shapes of key are
- *              matched here and the one function serves every machine the revoke reaches.
+ * Description: Drops this machine's grants for one device, matching both key shapes: "type:id" and
+ *              "laptopNetId:type:id".
  *
  * Arguments:
  * 0: _deviceType <NUMBER> - DEVICE_TYPE_* constant

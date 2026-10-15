@@ -101,8 +101,7 @@ uiNamespace setVariable [format ["ROOT_gui_open_%1", DEVICE_TYPE_POWERGRID], [_l
 private _send = {
 	params ["_ctrl", "_action"];
 	(_ctrl getVariable "AE3_ctx") params ["_computer", "_listCtrl"];
-	// A code in the identifier box names the device instead of the list, so a selection is only
-	// needed when the box is empty
+	// A code in the identifier box names the device instead of the list selection
 	private _code = [DEVICE_TYPE_POWERGRID] call Root_fnc_gui_identifierText;
 	private _sel = lbCurSel _listCtrl;
 	if (_sel < 0 && _code isEqualTo "") exitWith {};

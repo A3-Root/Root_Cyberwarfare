@@ -67,11 +67,8 @@ if !(_hasHackingTools) exitWith {
     false
 };
 
-// A device identifier typed into this command that grants access counts as a link for this machine.
-// Two keys, because the two front ends ask from different places: a terminal command resolves the
-// code on the operator's own machine and files the grant under the device alone, while a desktop app
-// asks the server, where a machine-wide grant would hand the device to every laptop in the mission,
-// so that one is filed under the laptop that typed the code as well.
+// A device identifier that grants access counts as a link. Two key shapes: a terminal files the
+// grant under the device alone, the server files it under the laptop as well.
 private _grants = missionNamespace getVariable [GVAR_IDENTIFIER_GRANTS, createHashMap];
 private _grantKeys = [format ["%1:%2", _deviceType, _deviceId]];
 

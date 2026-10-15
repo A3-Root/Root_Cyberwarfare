@@ -50,9 +50,7 @@ _pinBtn ctrlSetPosition [_w * 0.63, 0.01, _w * 0.14, 0.03];
 _pinBtn ctrlSetText (localize "STR_ROOT_CYBERWARFARE_UI_PIN_SELECTED");
 _pinBtn ctrlCommit 0;
 
-// A device the mission did not link to this laptop is in no list for an app to show, so it is reached
-// the only way it can be: by typing the identifier it answers to. Every list app gets the box, and
-// Root_fnc_gui_identifierText is what an action button reads it back with.
+// Identifier box, shared by every list app; read back with Root_fnc_gui_identifierText
 private _identifierEdit = _display ctrlCreate ["RscEdit", -1, _ctrlGroup];
 _identifierEdit ctrlSetPosition [_w * 0.78, 0.01, _w * 0.21, 0.03];
 _identifierEdit ctrlSetText (localize "STR_ROOT_CYBERWARFARE_GUI_IDENTIFIER_PROMPT");

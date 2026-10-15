@@ -30,10 +30,8 @@ private _reply = {
 
 if (isNull _computer) exitWith {};
 
-// A code typed into the app's identifier box names the device instead of the list selection. It is
-// resolved here, where the identifier table lives, and a code that grants access leaves this laptop a
-// grant, so the device is within reach of the lookup below from then on. An unresolved code leaves
-// the id at -1, since an exitWith inside the block would only leave the block.
+// A code typed into the app's identifier box names the device instead of the list selection. An
+// unresolved code leaves the id at -1: an exitWith inside the block would only leave the block.
 if (_identifier isNotEqualTo "") then {
 	private _resolved = [_owner, _computer, DEVICE_TYPE_LIGHT, _identifier] call Root_fnc_gui_resolveIdentifier;
 

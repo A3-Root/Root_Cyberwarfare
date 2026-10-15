@@ -1,11 +1,9 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Gathers what the Zeus Device Identifier module shows, which depends on where it was
- *              dropped. On open ground it is every registered device with the grid it stands on and
- *              the code it answers to; on a device it is that device alone, with the code it has
- *              now. Either way the answer goes to the curator who asked and to nobody else, because
- *              the identifier table is server-only and a code is mission intel. Runs on the server.
+ * Description: Gathers what the Zeus Device Identifier module shows: every registered device with its
+ *              grid and code, or the registrations sitting on one object. Answers the asking curator
+ *              only. Runs on the server.
  *
  * Arguments:
  * 0: _owner <NUMBER> - clientOwner of the curator
@@ -26,8 +24,6 @@ params [["_owner", 0, [0]], ["_objectNetId", "", [""]]];
 
 private _rows = [] call FUNC(getRegisteredDevices);
 
-// Whether knowing the code is enough to work the device is kept with the code itself, so it is read
-// back the same way the resolver reads it
 private _fnc_describe = {
 	params ["_row"];
 
@@ -46,8 +42,7 @@ if (_objectNetId isEqualTo "") exitWith {
 
 private _object = objectFromNetId _objectNetId;
 
-// A GPS tracker carries its own code and is read through the Hidden Trackers module, so it is not one
-// of the devices this module rewrites
+// GPS trackers are read through the Hidden Trackers module instead
 private _mine = _rows select {(_x select 3) isEqualTo _object && {(_x select 0) != DEVICE_TYPE_GPS_TRACKER}};
 
 if (_mine isEqualTo []) exitWith {

@@ -327,9 +327,8 @@ if (_hasWeb) then
 		private _extra = createHashMapFromArray [["type", _type], ["actions", _actions], ["icon", _icon], ["menu", (localize "STR_ROOT_CYBERWARFARE_UI_HACKING_TOOLS")]];
 		if (_menu isEqualTo "Hacking Tools") then { _extra set ["requiresFunction", "Root_fnc_hasHackingToolsAvailable"]; };
 		if (_menu isEqualTo "Hacking Tools") then { _extra set ["filters", true]; };
-		// Every device app can reach a device the mission never linked to this laptop, by typing the
-		// code it answers to. The network scanner is not a device list, and GPS asks for a code its
-		// own way, because a hidden tracker opens a map rather than joining a list.
+		// Identifier action for every device app. The network scanner is not a device list, and GPS
+		// asks for a code through its own trackid action.
 		if (_menu isEqualTo "Hacking Tools" && {!(_type in [DEVICE_TYPE_NETSCAN, DEVICE_TYPE_GPS_TRACKER])}) then {
 			_globals pushBack (createHashMapFromArray [
 				["id", "byid"],
@@ -466,9 +465,7 @@ if (_hasWeb) then
 		private _co = clientOwner;
 		private _nid = netId _computer;
 
-		// Reaching a device by its code is the same work whatever the app is: the code is resolved on
-		// the server, the laptop is left a grant for what it names, and the list comes back with the
-		// device in it, so every other action on this screen then works on it unchanged.
+		// Same work for every app, so it is handled before the per-type switch
 		if (_action isEqualTo "byid") exitWith {
 			["root_cyberwarfare_gui_identifierAdd", [_co, _nid, _type, _data getOrDefault ["promptValue", ""]]] call CBA_fnc_serverEvent;
 		};

@@ -1,9 +1,8 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Reads the identifier box of a desktop list app back. The box carries its own prompt
- *              text until something is typed into it, so that text counts as empty, and an empty
- *              answer is what tells an action button to work on the selected row instead. Client side.
+ * Description: Reads back the identifier box of a desktop list app. The box's own prompt text counts
+ *              as empty. Client side.
  *
  * Arguments:
  * 0: _deviceType <NUMBER> - DEVICE_TYPE_* constant of the app

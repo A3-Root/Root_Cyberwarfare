@@ -1,13 +1,8 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Turns an identifier typed into one of the desktop apps into the device id that app
- *              works on, under the same rules the terminal commands follow: an unknown code, or one
- *              belonging to a device of another type, is refused, and a code that grants access hands
- *              the laptop that typed it a short-lived grant so the device it names is reachable from
- *              that laptop alone. The grant is what makes the rest of an app's work unchanged - the
- *              device simply turns up in Root_fnc_getAccessibleDevices from then on. Server only; the
- *              identifier table is never broadcast.
+ * Description: Resolves an identifier typed into a desktop app to a device id. A code that grants
+ *              access also writes a grant for the laptop that typed it. Server only.
  *
  * Arguments:
  * 0: _owner <NUMBER> - clientOwner of the operator, for the error reply
@@ -49,8 +44,6 @@ if (_entry isEqualTo []) exitWith {
 
 _entry params ["", "_deviceId", "_grantsAccess"];
 
-// A code that is only a name for a device the laptop already reaches grants nothing; one that is the
-// way in writes the grant the access check reads back.
 if (_grantsAccess) then {
 	private _grants = missionNamespace getVariable [GVAR_IDENTIFIER_GRANTS, createHashMap];
 
