@@ -25,7 +25,7 @@ private _populate = {
 // Custom device code runs server-side with the operating player object, so we send netId player.
 private _mk = {
 	params ["_state"];
-	compile format ["params ['_computer', '_listCtrl']; private _sel = lbCurSel _listCtrl; if (_sel < 0) exitWith {}; ['root_cyberwarfare_gui_customAction', [clientOwner, netId _computer, parseNumber (_listCtrl lbData _sel), '%1', netId player, '']] call CBA_fnc_serverEvent;", _state];
+	compile format ["params ['_computer', '_listCtrl']; private _code = [%2] call Root_fnc_gui_identifierText; private _sel = lbCurSel _listCtrl; if (_sel < 0 && _code isEqualTo '') exitWith {}; private _id = if (_code isEqualTo '') then {parseNumber (_listCtrl lbData _sel)} else {0}; ['root_cyberwarfare_gui_customAction', [clientOwner, netId _computer, _id, '%1', netId player, '', _code]] call CBA_fnc_serverEvent;", _state, DEVICE_TYPE_CUSTOM];
 };
 
 private _buttons = [

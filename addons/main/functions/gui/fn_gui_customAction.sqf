@@ -18,7 +18,7 @@
  * Public: No
  */
 
-params ["_owner", "_computerNetId", "_customId", "_state", "_playerNetId", ["_commandPath", ""]];
+params ["_owner", "_computerNetId", "_customId", "_state", "_playerNetId", ["_commandPath", ""], ["_identifier", "", [""]]];
 
 private _computer = objectFromNetId _computerNetId;
 private _reply = {
@@ -27,6 +27,19 @@ private _reply = {
 };
 
 if (isNull _computer) exitWith {};
+
+// A code typed into the app's identifier box names the device instead of the list selection. It is
+// resolved here, where the identifier table lives, and a code that grants access leaves this laptop a
+// grant, so the device is within reach of the lookup below from then on. An unresolved code leaves
+// the id at -1, since an exitWith inside the block would only leave the block.
+if (_identifier isNotEqualTo "") then {
+	private _resolved = [_owner, _computer, DEVICE_TYPE_CUSTOM, _identifier] call Root_fnc_gui_resolveIdentifier;
+
+	_customId = [-1, _resolved param [0, -1]] select (_resolved isNotEqualTo []);
+};
+
+if (_customId isEqualTo -1) exitWith {};
+
 _state = toLower _state;
 if !(_state in ["activate", "deactivate"]) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_CUSTOM_DEVICE_STATE", _state], false] call _reply; };
 
@@ -42,8 +55,8 @@ if (_idx == -1) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERRO
 (_custom select _idx) params ["", "_deviceNetId", "_customName", "_activationCode", "_deactivationCode"];
 
 private _cost = missionNamespace getVariable [SETTING_CUSTOM_COST, 5];
-if !([_computer, _cost] call FUNC(checkPowerAvailable)) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply; };
-[_computer, _cost] call FUNC(consumePower);
+if !([_computer, _cost, DEVICE_TYPE_CUSTOM, parseNumber (str _customId)] call FUNC(checkPowerAvailable)) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply; };
+[_computer, _cost, DEVICE_TYPE_CUSTOM, parseNumber (str _customId)] call FUNC(consumePower);
 
 private _code = [_deactivationCode, _activationCode] select (_state isEqualTo "activate");
 if (_code isEqualType "" && _code != "") then {

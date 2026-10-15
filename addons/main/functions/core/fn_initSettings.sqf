@@ -370,6 +370,42 @@
     false // takes effect on the next dialog opened, no restart needed
 ] call CBA_fnc_addSetting;
 
+// Hackerman SSH - operating another computer's devices after logging into it with its own credentials.
+// Server-forced: whether a mission allows remote hacking at all, and how long a connection may idle,
+// are mission rules rather than client preferences.
+[
+    SETTING_HACK_SSH_ENABLED,
+    "CHECKBOX",
+    [(localize "STR_ROOT_CYBERWARFARE_SETTING_HACK_SSH_ENABLED"), (localize "STR_ROOT_CYBERWARFARE_SETTING_HACK_SSH_ENABLED_DESC")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_CORE_SETTINGS")],
+    true,
+    2, // server-forced; clients cannot overwrite it
+    {},
+    false
+] call CBA_fnc_addSetting;
+
+[
+    SETTING_HACK_SSH_IDLE_TIMEOUT,
+    "SLIDER",
+    [(localize "STR_ROOT_CYBERWARFARE_SETTING_HACK_SSH_IDLE_TIMEOUT"), (localize "STR_ROOT_CYBERWARFARE_SETTING_HACK_SSH_IDLE_TIMEOUT_DESC")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_CORE_SETTINGS")],
+    [0, 7200, 0, 0], // 0 = a connection stays open until something breaks it
+    2,
+    {},
+    false
+] call CBA_fnc_addSetting;
+
+[
+    SETTING_HACK_SSH_COST,
+    "SLIDER",
+    [(localize "STR_ROOT_CYBERWARFARE_SETTING_HACK_SSH_COST"), (localize "STR_ROOT_CYBERWARFARE_SETTING_HACK_SSH_COST_DESC")],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_SETTING_POWER_CATEGORY")],
+    [0, 500, 5, 0],
+    2,
+    {},
+    false
+] call CBA_fnc_addSetting;
+
 // Desktop intro video - whether it plays, and how often it may replay on the same laptop. The cooldown
 // exists because a desktop is opened and closed freely and a tools drive can be re-plugged repeatedly;
 // zero seconds plays it on every connection.

@@ -18,7 +18,9 @@
 
 params [
     ["_computer", objNull, [objNull]],
-    ["_powerWh", 0, [0]]
+    ["_powerWh", 0, [0]],
+    ["_deviceType", 0, [0]],
+    ["_deviceId", 0, [0]]
 ];
 
 DEBUG_LOG_2("consumePower - Computer: %1, Amount: %2 Wh",_computer,_powerWh);
@@ -34,8 +36,9 @@ if (_powerWh <= 0) exitWith {
     true
 };
 
-private _batteryStatus = [_computer, _powerWh] call FUNC(getBatteryStatus);
-_batteryStatus params ["_hasBattery", "_battery", "_batteryLevelWh", "_batteryPercent", "_batteryCapacityWh", "_remainingWh", "_remainingPercent"];
+// The device decides whose battery is debited; the messages below still go to the operator's screen
+private _batteryStatus = [_computer, _powerWh, _deviceType, _deviceId] call FUNC(getBatteryStatus);
+_batteryStatus params ["_hasBattery", "_battery", "_batteryLevelWh", "_batteryPercent", "_batteryCapacityWh", "_remainingWh", "_remainingPercent", "_payer"];
 DEBUG_LOG_1("Battery object: %1",_battery);
 
 if (!_hasBattery) exitWith {
@@ -50,8 +53,9 @@ private _newLevel = _batteryLevel - _powerKwh;
 
 DEBUG_LOG_4("Power consumption - Old level: %1 kWh, Consuming: %2 kWh (%3 Wh), New level: %4 kWh",_batteryLevel,_powerKwh,_powerWh,_newLevel);
 
-// Broadcast power consumption event to server
-["root_cyberwarfare_consumePower", [_computer, _battery, _newLevel, _powerWh]] call CBA_fnc_serverEvent;
+// Broadcast power consumption event to server. The payer is named rather than the executing computer,
+// because operating a remote laptop's own device draws on that laptop.
+["root_cyberwarfare_consumePower", [_payer, _battery, _newLevel, _powerWh]] call CBA_fnc_serverEvent;
 DEBUG_LOG("Power consumption event broadcast to server");
 
 // Output to shell

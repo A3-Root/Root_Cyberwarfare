@@ -33,7 +33,7 @@ if (_filesystem isEqualTo []) exitWith {};
     if ([[], _filesystem, _target, "root"] call AE3_filesystem_fnc_fsObjExists) then {
         [[], _filesystem, _target, "root"] call AE3_filesystem_fnc_delObj;
     };
-} forEach ["guide", "devices", "door", "light", "changedrone", "disabledrone", "download", "custom", "gpstrack", "vehicle", "powergrid", "netscan"];
+} forEach ["guide", "devices", "door", "light", "changedrone", "disabledrone", "download", "custom", "gpstrack", "vehicle", "powergrid", "netscan", "hackssh"];
 
 // Persist the pruned filesystem with the correct locality for this computer, then clear the
 // tools-present flag and refresh availability so the desktop apps disappear again.

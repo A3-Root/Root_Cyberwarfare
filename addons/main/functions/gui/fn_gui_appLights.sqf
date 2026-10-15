@@ -70,11 +70,14 @@ private _doAction = {
 	private _ctx = _ctrl getVariable "AE3_ctx";
 	_ctx params ["_computer", "_listCtrl"];
 
+	// A code in the identifier box names the device instead of the list, so a selection is only
+	// needed when the box is empty
+	private _code = [DEVICE_TYPE_LIGHT] call Root_fnc_gui_identifierText;
 	private _sel = lbCurSel _listCtrl;
-	if (_sel < 0) exitWith {};
-	private _lightId = parseNumber (_listCtrl lbData _sel);
+	if (_sel < 0 && _code isEqualTo "") exitWith {};
+	private _lightId = if (_code isEqualTo "") then {parseNumber (_listCtrl lbData _sel)} else {0};
 
-	["root_cyberwarfare_gui_lightAction", [clientOwner, netId _computer, _lightId, _state, ""]] call CBA_fnc_serverEvent;
+	["root_cyberwarfare_gui_lightAction", [clientOwner, netId _computer, _lightId, _state, "", [], _code]] call CBA_fnc_serverEvent;
 };
 
 {

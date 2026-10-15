@@ -58,6 +58,7 @@ private _gpstrack = _result + "/gpstrack";
 private _vehicle = _result + "/vehicle";
 private _powergrid = _result + "/powergrid";
 private _netscan = _result + "/netscan";
+private _hackssh = _result + "/hackssh";
 
 
 
@@ -574,6 +575,59 @@ _content = "
     };
 ";
 [_entity, _netscan, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call _writeFile;
+
+// Remote access. The session is opened on the server and lives there, so once it is up every other
+// tool on this computer - and the desktop apps - reach the target's devices as well as this one's.
+// The password is asked for at the prompt rather than typed on the command line.
+_content = "
+    params['_computer', '_options', '_commandName'];
+
+    private _first = ['', _options select 0] select (count _options > 0);
+
+    if (_first in ['-h', '--help', 'help']) exitWith {
+        [_computer, [[['HACKSSH - operate another computer''s devices', '#8ce10b']]]] call AE3_armaos_fnc_shell_stdout;
+        [_computer, [[['Syntax: hackssh user@address | hackssh -s | hackssh -d', '#FFD966']]]] call AE3_armaos_fnc_shell_stdout;
+        [_computer, [[['  -s   Show the current connection', '']]]] call AE3_armaos_fnc_shell_stdout;
+        [_computer, [[['  -d   Close the current connection', '']]]] call AE3_armaos_fnc_shell_stdout;
+    };
+
+    private _result = 'ROOT_CYBERWARFARE_HACKSSH_RESULT';
+
+    if (_first in ['-s', '--status']) exitWith {
+        ([_computer] call Root_fnc_getHackSession) params [['_target', objNull], ['_user', '']];
+
+        if (isNull _target) exitWith {
+            [_computer, [[['Not connected to anything.', '#FFD966']]]] call AE3_armaos_fnc_shell_stdout;
+        };
+
+        private _label = _target getVariable ['ace_cargo_customName', str _target];
+        [_computer, [[[format ['Connected to %1 as %2.', _label, _user], '#8ce10b']]]] call AE3_armaos_fnc_shell_stdout;
+    };
+
+    if (_first in ['-d', '--disconnect']) exitWith {
+        ['root_cyberwarfare_hackSshDisconnect', [netId _computer, 'STR_ROOT_CYBERWARFARE_HACKSSH_DISCONNECTED', clientOwner]] call CBA_fnc_serverEvent;
+    };
+
+    if (count (_first splitString '@') < 2) exitWith {
+        [_computer, [[['Syntax: hackssh user@address | hackssh -s | hackssh -d', '#FFD966']]]] call AE3_armaos_fnc_shell_stdout;
+    };
+
+    (_first splitString '@') params ['_user', '_address'];
+
+    [_computer, [[['Password:', '']]]] call AE3_armaos_fnc_shell_stdout;
+    private _password = [_computer] call AE3_armaos_fnc_shell_stdin;
+
+    missionNamespace setVariable [_result, nil];
+    ['root_cyberwarfare_hackSshConnect', [netId _computer, _address, _user, _password, clientOwner]] call CBA_fnc_serverEvent;
+
+    waitUntil { !isNil _result };
+
+    (missionNamespace getVariable [_result, [false, '', '']]) params ['_ok', '_message'];
+
+    private _colour = ['#fa4c58', '#8ce10b'] select _ok;
+    [_computer, [[[_message, _colour]]]] call AE3_armaos_fnc_shell_stdout;
+";
+[_entity, _hackssh, _content, true, "root", [[true, true, true], [true, true, true]], false, "caesar", "1"] call _writeFile;
 
 if (!_silent) then {
     [format [localize "STR_ROOT_CYBERWARFARE_ZEUS_HACKING_TOOLS_ADDED", _result]] remoteExec ["systemChat", _execUserId];

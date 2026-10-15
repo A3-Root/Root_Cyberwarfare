@@ -30,7 +30,7 @@ private _populate = {
 
 private _mk = {
 	params ["_act"];
-	compile format ["params ['_computer', '_listCtrl']; private _sel = lbCurSel _listCtrl; if (_sel < 0) exitWith {}; ['root_cyberwarfare_gui_vehicleAction', [clientOwner, netId _computer, parseNumber (_listCtrl lbData _sel), '%1', '']] call CBA_fnc_serverEvent;", _act];
+	compile format ["params ['_computer', '_listCtrl']; private _code = [%2] call Root_fnc_gui_identifierText; private _sel = lbCurSel _listCtrl; if (_sel < 0 && _code isEqualTo '') exitWith {}; private _id = if (_code isEqualTo '') then {parseNumber (_listCtrl lbData _sel)} else {0}; ['root_cyberwarfare_gui_vehicleAction', [clientOwner, netId _computer, _id, '%1', '', 0, false, _code]] call CBA_fnc_serverEvent;", _act, DEVICE_TYPE_VEHICLE];
 };
 
 private _buttons = [

@@ -95,19 +95,19 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a")) then {
         _string = format ['Affected Drones: %1. Power Cost: %2Wh.', _countOfChangingDrones, _changeWh];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
-        if !([_computer, _changeWh] call FUNC(checkPowerAvailable)) then {
+        if !([_computer, _changeWh, DEVICE_TYPE_DRONE, parseNumber (str _droneId)] call FUNC(checkPowerAvailable)) then {
             _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             missionNamespace setVariable [_nameOfVariable, true, true];
             breakTo "exit";
         };
 
-        if !([_computer, _changeWh] call FUNC(getUserConfirmation)) then {
+        if !([_computer, _changeWh, DEVICE_TYPE_DRONE, parseNumber (str _droneId)] call FUNC(getUserConfirmation)) then {
             missionNamespace setVariable [_nameOfVariable, true, true];
             breakTo "exit";
         };
 
-        [_computer, _changeWh] call FUNC(consumePower);
+        [_computer, _changeWh, DEVICE_TYPE_DRONE, parseNumber (str _droneId)] call FUNC(consumePower);
 
         // Disable all affected drones
         {
@@ -131,14 +131,14 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a")) then {
                     _string = format [localize "STR_ROOT_CYBERWARFARE_POWER_COST", _powerCostPerDrone];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
-                    if !([_computer, _powerCostPerDrone] call FUNC(checkPowerAvailable)) then {
+                    if !([_computer, _powerCostPerDrone, DEVICE_TYPE_DRONE, parseNumber (str _droneId)] call FUNC(checkPowerAvailable)) then {
                         _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
                         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                         missionNamespace setVariable [_nameOfVariable, true, true];
                         breakTo "exit";
                     };
 
-                    if !([_computer, _powerCostPerDrone] call FUNC(getUserConfirmation)) then {
+                    if !([_computer, _powerCostPerDrone, DEVICE_TYPE_DRONE, parseNumber (str _droneId)] call FUNC(getUserConfirmation)) then {
                         missionNamespace setVariable [_nameOfVariable, true, true];
                         breakTo "exit";
                     };
@@ -146,7 +146,7 @@ if((_droneIdNum != 0 || _droneId isEqualTo "a")) then {
                     (vehicle _drone) setDamage 1;
                     _string = localize "STR_ROOT_CYBERWARFARE_DRONE_DISABLED_SUCCESS";
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
-                    [_computer, _powerCostPerDrone] call FUNC(consumePower);
+                    [_computer, _powerCostPerDrone, DEVICE_TYPE_DRONE, parseNumber (str _droneId)] call FUNC(consumePower);
                 } else {
                     _string = localize "STR_ROOT_CYBERWARFARE_DRONE_ALREADY_DISABLED";
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;

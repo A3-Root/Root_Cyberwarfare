@@ -493,12 +493,46 @@
 #ifndef GET_DEVICE_IDENTIFIER_INDEX
     #define GET_DEVICE_IDENTIFIER_INDEX (missionNamespace getVariable [GVAR_DEVICE_IDENTIFIER_INDEX, createHashMap])
 #endif
-// Client-local grants handed out when a terminal resolves a code that grants access: "type:id" -> expiry
+// Grants handed out when a code that grants access is resolved: expiry keyed by "type:id" on the
+// machine a terminal resolved it on, and by "laptopNetId:type:id" on the server for a desktop app,
+// where a key naming only the device would hand it to every laptop in the mission
 #ifndef GVAR_IDENTIFIER_GRANTS
     #define GVAR_IDENTIFIER_GRANTS "ROOT_CYBERWARFARE_IDENTIFIER_GRANTS"
 #endif
+// How long one of those grants lasts, in seconds
+#ifndef IDENTIFIER_GRANT_DURATION
+    #define IDENTIFIER_GRANT_DURATION 600
+#endif
 #ifndef SETTING_DEVICE_IDENTIFIERS
     #define SETTING_DEVICE_IDENTIFIERS "ROOT_CYBERWARFARE_DEVICE_IDENTIFIERS_ENABLED"
+#endif
+
+// ============================================================================
+// Hackerman SSH sessions
+// ============================================================================
+// A session lets an operator drive the devices linked to another computer. The server owns the map,
+// operator netId -> [targetNetId, user, startedAt, lastUsedAt], and never broadcasts it; each operator
+// computer carries the harmless half as an object variable so a client and its apps can show it.
+#ifndef GVAR_HACK_SESSIONS
+    #define GVAR_HACK_SESSIONS "ROOT_CYBERWARFARE_HACK_SESSIONS"
+#endif
+#ifndef GET_HACK_SESSIONS
+    #define GET_HACK_SESSIONS (missionNamespace getVariable [GVAR_HACK_SESSIONS, createHashMap])
+#endif
+#ifndef VAR_HACK_SESSION
+    #define VAR_HACK_SESSION "ROOT_CYBERWARFARE_hackSession"
+#endif
+#ifndef GVAR_HACK_SWEEP
+    #define GVAR_HACK_SWEEP "ROOT_CYBERWARFARE_HACK_SWEEP"
+#endif
+#ifndef SETTING_HACK_SSH_ENABLED
+    #define SETTING_HACK_SSH_ENABLED "ROOT_CYBERWARFARE_HACK_SSH_ENABLED"
+#endif
+#ifndef SETTING_HACK_SSH_IDLE_TIMEOUT
+    #define SETTING_HACK_SSH_IDLE_TIMEOUT "ROOT_CYBERWARFARE_HACK_SSH_IDLE_TIMEOUT"
+#endif
+#ifndef SETTING_HACK_SSH_COST
+    #define SETTING_HACK_SSH_COST "ROOT_CYBERWARFARE_HACK_SSH_COST"
 #endif
 
 // Which laptops the curator device dialogs offer as link targets: every laptop on the map, or only the

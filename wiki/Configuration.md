@@ -205,6 +205,46 @@ private _powerGridCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_POWERG
 
 ---
 
+## Remote Access Settings
+
+Operating another computer's devices after logging into it — the *Remote Access* desktop app and the
+`hackssh` terminal command. All three are server-forced: whether remote hacking is allowed is a
+mission rule, not a client preference.
+
+### Remote access
+
+**Setting Name:** `ROOT_CYBERWARFARE_HACK_SSH_ENABLED`
+
+**Type:** Checkbox — **Default:** on
+
+**Description:** Whether a computer may log into another one and operate the devices linked to it. Off
+means the tool refuses every connection; devices linked to the operator's own laptop are unaffected.
+
+### Remote access idle timeout
+
+**Setting Name:** `ROOT_CYBERWARFARE_HACK_SSH_IDLE_TIMEOUT`
+
+**Type:** Slider — **Range:** 0-7200 seconds — **Default:** 0
+
+**Description:** How long a connection may sit unused before it closes. Zero keeps it open until
+something breaks it: either computer losing power, the target disabling SSH, or the route failing.
+
+### Remote access cost
+
+**Setting Name:** `ROOT_CYBERWARFARE_HACK_SSH_COST`
+
+**Type:** Slider — **Range:** 0-500 Wh — **Default:** 5 Wh
+
+**Description:** Energy the operator's own battery pays to open a connection. Operating the devices
+themselves is charged separately, to the battery of whichever computer each device is linked to.
+
+**Access in Script:**
+```sqf
+private _remoteCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_HACK_SSH_COST", 5];
+```
+
+---
+
 ## GPS Settings
 
 ### 6. GPS Tracker Device

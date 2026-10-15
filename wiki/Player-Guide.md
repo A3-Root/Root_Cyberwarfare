@@ -604,20 +604,66 @@ light K7M2QX9P off
 download F1L3C0DE
 ```
 
+In the desktop apps the same code goes into **By identifier**, at the top of every Hacking Tools app -
+Doors, Lights, Vehicles, Drones, Databases, Power Grid and Custom Devices. Type the code and the device
+it answers to joins that app's list, where the ordinary buttons work on it like any other row. The GPS
+app asks for a code its own way, through **Track by Identifier**, because a hidden tracker opens a map
+rather than joining a list.
+
 - By default a code works on its own: any laptop with the hacking tools can use the device, even if it is not linked to it (a network connection may be required, depending on mission settings).
 - A mission maker can make a code a plain **alias**; then it only names the device and normal access still applies.
 - Codes are not listed by `devices`; they are mission intel found in files, emails or briefings.
 - Numeric IDs and `a` (all) work as before.
+- A code that opens a device keeps it reachable for ten minutes from the laptop it was entered on, and
+  on that laptop only.
 
-## Using the Tools Over SSH
+## Operating Another Computer's Devices
 
-After `ssh user@<ip>` into another computer (a laptop or a headless server), the hacking commands run against that computer:
+A device can only be reached through the computer it is linked to. When that computer is not the one
+you are sitting at, log into it: you keep your own devices and gain all of its.
 
-- You control the devices **linked to the remote computer** as well as your own.
+### Remote Access (the Hackerman SSH tool)
+
+The tool is in the Hackerman toolset both ways, and it is the **same connection** whichever you use —
+open it in the terminal and the desktop apps follow, and the other way round.
+
+- **Desktop:** *Remote Access* in Hackerman.exe. Enter the address, the account and its password, press
+  **Connect**. Every other Hackerman app then lists that computer's devices beside your own.
+- **Terminal:** `hackssh user@192.168.0.5`, which asks for the password at the prompt rather than
+  taking it on the command line. `hackssh -s` shows the current connection, `hackssh -d` closes it.
+
+What it needs: a working route to the target (the same thing `ping` needs), the target powered on and
+allowing SSH, and a real account and password on **that** computer. Your laptop needs the hacking
+tools; the target does not need any.
+
+A connection stays open while you do other things — closing the app or the terminal does not drop it.
+It closes by itself if either computer loses power, the target stops allowing SSH, the route between
+you breaks, or it is left idle longer than the mission allows. Connecting is written into the target's
+`/var/log/auth.log` whether it succeeds or fails, so someone reading that laptop's logs can see you
+were there. Logging in does **not** lock the target's own user out of their laptop.
+
+### Who pays for what
+
+The battery of the computer a device is **linked to** pays for operating it:
+
+- A device linked to your own laptop: your battery.
+- A device linked only to the remote computer: the remote computer's battery.
+- A device both of you can reach: your battery.
+
+Opening a connection itself costs your own battery, if the mission set a cost for it. The figures in
+the confirmation prompt are always the battery that is about to be charged.
+
+### Over an AE3 terminal session
+
+`ssh user@<ip>` from AE3 still works and still carries the hacking commands with it:
+
+- The commands run against the remote computer and reach the devices linked to it.
 - The tools may be installed on either your laptop or the remote computer.
-- Power costs are paid by **your** laptop's battery.
 - y/n confirmations are answered in your own terminal as usual.
 - Downloaded files land on the remote computer (use `exit` to leave the session; the files stay).
+
+The network scanner is not affected by either kind of connection: it always reports the subnet your
+own laptop is on.
 
 Long operations no longer stop with "Operation timed out!"; press **Ctrl+C** to cancel one.
 

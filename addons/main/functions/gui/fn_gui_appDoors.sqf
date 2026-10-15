@@ -82,14 +82,17 @@ private _doAction = {
 	private _ctx = _ctrl getVariable "AE3_ctx";
 	_ctx params ["_computer", "_listCtrl", "_doorPanel"];
 
+	// A code in the identifier box names the device instead of the list, so a selection is only
+	// needed when the box is empty
+	private _code = [DEVICE_TYPE_DOOR] call Root_fnc_gui_identifierText;
 	private _sel = lbCurSel _listCtrl;
-	if (_sel < 0) exitWith {};
-	private _buildingId = parseNumber (_listCtrl lbData _sel);
+	if (_sel < 0 && _code isEqualTo "") exitWith {};
+	private _buildingId = if (_code isEqualTo "") then {parseNumber (_listCtrl lbData _sel)} else {0};
 
 	// Optimistic indicator: green when unlocking, red when locking.
 	_doorPanel ctrlSetBackgroundColor ([[0.16, 0.5, 0.2, 1], [0.7, 0.16, 0.16, 1]] select (_state isEqualTo "lock"));
 
-	["root_cyberwarfare_gui_doorAction", [clientOwner, netId _computer, _buildingId, _state, ""]] call CBA_fnc_serverEvent;
+	["root_cyberwarfare_gui_doorAction", [clientOwner, netId _computer, _buildingId, _state, "", "", _code]] call CBA_fnc_serverEvent;
 };
 
 {

@@ -18,7 +18,7 @@
  * Public: No
  */
 
-params ["_owner", "_computerNetId", "_databaseId", "_playerNetId", ["_commandPath", ""], ["_savePath", ""]];
+params ["_owner", "_computerNetId", "_databaseId", "_playerNetId", ["_commandPath", ""], ["_savePath", ""], ["_identifier", "", [""]]];
 scopeName "exit";
 
 private _computer = objectFromNetId _computerNetId;
@@ -28,6 +28,19 @@ private _reply = {
 };
 
 if (isNull _computer) exitWith {};
+
+// A code typed into the app's identifier box names the device instead of the list selection. It is
+// resolved here, where the identifier table lives, and a code that grants access leaves this laptop a
+// grant, so the device is within reach of the lookup below from then on. An unresolved code leaves
+// the id at -1, since an exitWith inside the block would only leave the block.
+if (_identifier isNotEqualTo "") then {
+	private _resolved = [_owner, _computer, DEVICE_TYPE_DATABASE, _identifier] call Root_fnc_gui_resolveIdentifier;
+
+	_databaseId = [-1, _resolved param [0, -1]] select (_resolved isNotEqualTo []);
+};
+
+if (_databaseId isEqualTo -1) exitWith {};
+
 
 if !([_computer, DEVICE_TYPE_DATABASE, _databaseId, _commandPath] call FUNC(isDeviceAccessible)) exitWith
 {

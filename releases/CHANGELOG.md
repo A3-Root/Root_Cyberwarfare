@@ -1,5 +1,26 @@
 # Changelog
 
+## Update 14 (v2.1.0.0)
+
+### Added
+- **Hackerman SSH**: log into another computer with its own account and password and operate every device linked to it, from your own laptop. *Remote Access* in the Hackerman toolset on the desktop, `hackssh user@address` in the terminal (`-s` status, `-d` disconnect).
+- A connection is held by the server, so it works from the desktop apps as well as the terminal, survives closing either one, and is the same session whichever you opened it from.
+- Connecting is logged on the target's `/var/log/auth.log`, success or failure, so an intrusion can be found.
+- Settings: *Remote access*, *Remote access idle timeout*, *Remote access cost*.
+- **By identifier** in every Hacking Tools app - Doors, Lights, Vehicles, Drones, Databases, Power Grid and Custom Devices. Type the code a device answers to and it joins that app's list, where the normal buttons work on it. Only the GPS app could do this before.
+- The Zeus **Device Identifier** module reads as well as writes. On open ground it lists every registered device with its grid and its code, and copies the one you pick to the clipboard; on a device it shows that device's code, replaces it with an eight-character one of your own, and can revoke the access the old code handed out.
+
+### Removed
+- N/A
+
+### Changed
+- **Fixed:** remote hacking never worked from the desktop. The device lists and actions are built on the server, where the terminal SSH session it relied on is invisible, so a desktop app could only ever see the laptop you were sitting at.
+- **Fixed:** the Zeus *Device Identifier* module did nothing but throw an error, so a code could not be set or changed from Zeus at all.
+- **Fixed:** a code that opens a device only worked from the terminal. The desktop apps resolve codes on the server now, and the laptop that typed one keeps the device within reach for ten minutes - that laptop only, not every laptop in the mission.
+- Operating a device now draws on the battery of the computer the device is linked to: your own laptop for your devices, the remote laptop for its own, and yours when both can reach it.
+- A connection closes by itself when either computer loses power, the target stops allowing SSH, the route between them breaks, or it sits idle longer than the mission allows.
+- A remote session no longer takes the target's terminal lock, so the person using that laptop is not thrown off it.
+
 ## Update 13 (v2.0.0.10)
 
 ### Added

@@ -19,7 +19,7 @@
  * Public: No
  */
 
-params ["_owner", "_computerNetId", "_buildingId", "_state", ["_commandPath", ""], ["_doorId", ""]];
+params ["_owner", "_computerNetId", "_buildingId", "_state", ["_commandPath", ""], ["_doorId", ""], ["_identifier", "", [""]]];
 
 private _computer = objectFromNetId _computerNetId;
 private _reply = {
@@ -28,6 +28,19 @@ private _reply = {
 };
 
 if (isNull _computer) exitWith {};
+
+// A code typed into the app's identifier box names the device instead of the list selection. It is
+// resolved here, where the identifier table lives, and a code that grants access leaves this laptop a
+// grant, so the device is within reach of the lookup below from then on. An unresolved code leaves
+// the id at -1, since an exitWith inside the block would only leave the block.
+if (_identifier isNotEqualTo "") then {
+	private _resolved = [_owner, _computer, DEVICE_TYPE_DOOR, _identifier] call Root_fnc_gui_resolveIdentifier;
+
+	_buildingId = [-1, _resolved param [0, -1]] select (_resolved isNotEqualTo []);
+};
+
+if (_buildingId isEqualTo -1) exitWith {};
+
 if !(_state in ["lock", "unlock"]) exitWith {};
 
 private _cost = missionNamespace getVariable [SETTING_DOOR_COST, 2];
@@ -56,12 +69,12 @@ private _changing = _doorIds select { (_building getVariable [format ["bis_disab
 if (_changing isEqualTo []) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_NO_BUILDINGS_CRITERIA", false] call _reply; };
 
 private _total = (count _changing) * _cost;
-if !([_computer, _total] call FUNC(checkPowerAvailable)) exitWith
+if !([_computer, _total, DEVICE_TYPE_DOOR, parseNumber (str _buildingId)] call FUNC(checkPowerAvailable)) exitWith
 {
 	[_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply;
 };
 
-[_computer, _total] call FUNC(consumePower);
+[_computer, _total, DEVICE_TYPE_DOOR, parseNumber (str _buildingId)] call FUNC(consumePower);
 
 {
 	_building setVariable [format ["bis_disabled_Door_%1", _x], _newState, true];

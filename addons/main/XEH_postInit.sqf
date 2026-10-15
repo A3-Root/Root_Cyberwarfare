@@ -132,6 +132,9 @@ if (isServer) then {
     // directly; they request lists and submit actions which the server validates.
     // ------------------------------------------------------------------------
     ["root_cyberwarfare_gui_reqDevices", { _this call FUNC(gui_sendDeviceList); }] call CBA_fnc_addEventHandler;
+    ["root_cyberwarfare_gui_identifierAdd", { _this call Root_fnc_gui_identifierAdd; }] call CBA_fnc_addEventHandler;
+    ["root_cyberwarfare_identifierOverviewReq", { _this call Root_fnc_identifierOverview; }] call CBA_fnc_addEventHandler;
+    ["root_cyberwarfare_revokeIdentifier", { _this call Root_fnc_revokeIdentifierAccess; }] call CBA_fnc_addEventHandler;
     ["root_cyberwarfare_gui_doorAction", { _this call FUNC(gui_doorAction); }] call CBA_fnc_addEventHandler;
     ["root_cyberwarfare_gui_lightAction", { _this call FUNC(gui_lightAction); }] call CBA_fnc_addEventHandler;
     ["root_cyberwarfare_gui_droneAction", { _this call FUNC(gui_droneAction); }] call CBA_fnc_addEventHandler;
@@ -140,6 +143,30 @@ if (isServer) then {
     ["root_cyberwarfare_gui_customAction", { _this call FUNC(gui_customAction); }] call CBA_fnc_addEventHandler;
     ["root_cyberwarfare_gui_vehicleAction", { _this call FUNC(gui_vehicleAction); }] call CBA_fnc_addEventHandler;
     ["root_cyberwarfare_gui_gpsAction", { _this call FUNC(gui_gpsAction); }] call CBA_fnc_addEventHandler;
+
+    // ------------------------------------------------------------------------
+    // Hackerman SSH: the session lives here rather than on a client, which is what lets the desktop
+    // apps - whose lists and actions are built server-side - reach a remote laptop's devices.
+    // ------------------------------------------------------------------------
+    ["root_cyberwarfare_hackSshConnect", { _this call FUNC(hackSshConnectMain); }] call CBA_fnc_addEventHandler;
+    ["root_cyberwarfare_hackSshDisconnect", { _this call FUNC(hackSshDisconnectMain); }] call CBA_fnc_addEventHandler;
+    ["root_cyberwarfare_hackSshStatus", {
+        params [["_computerNetId", "", [""]], ["_owner", 0, [0]]];
+
+        private _computer = objectFromNetId _computerNetId;
+
+        if (isNull _computer || (_owner <= 0)) exitWith {};
+
+        ([_computer] call FUNC(getHackSession)) params [["_target", objNull], ["_user", ""]];
+
+        if (isNull _target) exitWith {
+            ["root_cyberwarfare_hackSshResult", [false, "STR_ROOT_CYBERWARFARE_HACKSSH_NO_SESSION", ""], _owner] call CBA_fnc_ownerEvent;
+        };
+
+        private _label = _target getVariable ["ace_cargo_customName", netId _target];
+
+        ["root_cyberwarfare_hackSshResult", [true, "STR_ROOT_CYBERWARFARE_HACKSSH_SESSION", _label, _user], _owner] call CBA_fnc_ownerEvent;
+    }] call CBA_fnc_addEventHandler;
     // Clears the intro-video flag once a client has started playing it, so it plays once per mount.
     ["root_cyberwarfare_clearIntroPending", {
         params ["_computerNetId"];
@@ -261,6 +288,10 @@ if (isServer) then {
 };
 
 if (hasInterface) then {
+    // What the Zeus Device Identifier module is standing on, answered by the server because the
+    // codes live there. The dialog opens from here rather than from the module itself.
+    ["root_cyberwarfare_identifierOverview", { _this call Root_fnc_showIdentifierZeus; }] call CBA_fnc_addEventHandler;
+
     // Answer to a device identifier lookup (Root_fnc_resolveDeviceArg waits for it)
     ["root_cyberwarfare_identifierResolved", {
         params ["_requestKey", "_deviceId", "_error", "_grantsAccess"];
@@ -284,6 +315,33 @@ if (hasInterface) then {
         };
 
         [clientOwner, _computer, _nameOfVariable, str _deviceId, _commandPath, true] call FUNC(displayGPSPosition);
+    }] call CBA_fnc_addEventHandler;
+
+    // The outcome of a Hackerman SSH connect, disconnect or status request. The terminal command sits
+    // on a flag; the desktop app listens for the pushed result, and the app list is re-filtered because
+    // a session changes nothing about which apps exist but everything about what they can see.
+    ["root_cyberwarfare_hackSshResult", {
+        params [["_ok", false, [false]], ["_messageKey", "", [""]], ["_label", "", [""]], ["_user", "", [""]]];
+
+        // Only the key crossed the network, because the server may run another language than this
+        // player. STR_..._CONNECTED and STR_..._SESSION name the computer they are about.
+        private _message = _messageKey;
+
+        if (_messageKey select [0, 4] isEqualTo "STR_") then {
+            _message = localize _messageKey;
+
+            if (_label isNotEqualTo "") then {
+                _message = format [_message, _label, _user];
+            };
+        };
+
+        missionNamespace setVariable ["ROOT_CYBERWARFARE_HACKSSH_RESULT", [_ok, _message, _label, _user]];
+
+        if (!isNil "AE3_desktop_fnc_jsSend") then {
+            ["rootcw_hack_ssh", createHashMapFromArray [["ok", _ok], ["message", _message], ["host", _label], ["user", _user]]] call AE3_desktop_fnc_jsSend;
+        };
+
+        ["root_cyberwarfare_refreshExtApps", []] call CBA_fnc_localEvent;
     }] call CBA_fnc_addEventHandler;
 
     // The hidden-tracker roster a curator asked the Hidden Trackers module for.
@@ -988,3 +1046,11 @@ if (isClass (configFile >> "CfgPatches" >> "tsp_breach")) then {
 };
 
 ROOT_CYBERWARFARE_LOG_INFO("Post-init complete");
+
+// ============================================================================
+// Every Machine: Forget a revoked identifier
+// ============================================================================
+// A grant written by a code sits on the server when a desktop app resolved it and on the client when
+// a terminal command did, so a revoke has to reach both.
+
+["root_cyberwarfare_identifierRevoked", { _this call Root_fnc_dropIdentifierGrants; }] call CBA_fnc_addEventHandler;

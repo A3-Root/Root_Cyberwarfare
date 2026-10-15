@@ -75,10 +75,10 @@ if (((_currentStatus param [0, "Untracked"]) in ["Completed", "Tracked", "Untrac
 };
 
 if (_powerCost < 1) then { _powerCost = _tracker getVariable ["ROOT_CYBERWARFARE_GPS_TRACKER_COST", 10]; };
-if !([_computer, _powerCost] call FUNC(checkPowerAvailable)) exitWith {
+if !([_computer, _powerCost, DEVICE_TYPE_GPS_TRACKER, parseNumber (str _gpsId)] call FUNC(checkPowerAvailable)) exitWith {
 	[_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply;
 };
-[_computer, _powerCost] call FUNC(consumePower);
+[_computer, _powerCost, DEVICE_TYPE_GPS_TRACKER, parseNumber (str _gpsId)] call FUNC(consumePower);
 
 private _markerName = if (_customMarker isNotEqualTo "") then { _customMarker } else { format ["ROOT_GpsTracker_%1_%2", _gpsId, round (random 10000)] };
 [_tracker, _markerName, _trackingTime, _updateFrequency, _storedTrackerId, _computer, _allowRetracking, _gpsId, _trackerName, _owner, _lastPingTimer, _ownersSelection] remoteExec ["Root_fnc_gpsTrackerServer", 2];

@@ -26,7 +26,7 @@ private _populate = {
 // One action button per faction; the faction literal is baked into each button's handler.
 private _mk = {
 	params ["_fac"];
-	compile format ["params ['_computer', '_listCtrl']; private _sel = lbCurSel _listCtrl; if (_sel < 0) exitWith {}; ['root_cyberwarfare_gui_droneAction', [clientOwner, netId _computer, parseNumber (_listCtrl lbData _sel), '%1', '']] call CBA_fnc_serverEvent;", _fac];
+	compile format ["params ['_computer', '_listCtrl']; private _code = [%2] call Root_fnc_gui_identifierText; private _sel = lbCurSel _listCtrl; if (_sel < 0 && _code isEqualTo '') exitWith {}; private _id = if (_code isEqualTo '') then {parseNumber (_listCtrl lbData _sel)} else {0}; ['root_cyberwarfare_gui_droneAction', [clientOwner, netId _computer, _id, '%1', '', _code]] call CBA_fnc_serverEvent;", _fac, DEVICE_TYPE_DRONE];
 };
 
 private _buttons = [

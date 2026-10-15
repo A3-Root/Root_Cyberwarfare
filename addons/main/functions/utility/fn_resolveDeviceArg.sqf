@@ -59,7 +59,7 @@ if (_error isNotEqualTo "") exitWith {
 
 if (_grantsAccess) then {
     private _grants = missionNamespace getVariable [GVAR_IDENTIFIER_GRANTS, createHashMap];
-    _grants set [format ["%1:%2", _deviceType, _deviceId], diag_tickTime + 600];
+    _grants set [format ["%1:%2", _deviceType, _deviceId], diag_tickTime + IDENTIFIER_GRANT_DURATION];
     missionNamespace setVariable [GVAR_IDENTIFIER_GRANTS, _grants];
 };
 

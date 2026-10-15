@@ -143,17 +143,17 @@ if (_doorId isEqualTo "a") then {
     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
     // Check power and get confirmation
-    if !([_computer, _totalCost] call FUNC(checkPowerAvailable)) exitWith {
+    if !([_computer, _totalCost, DEVICE_TYPE_DOOR, parseNumber (str _buildingId)] call FUNC(checkPowerAvailable)) exitWith {
         [_computer, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER"] call AE3_armaos_fnc_shell_stdout;
         missionNamespace setVariable [_nameOfVariable, true, true];
     };
 
-    if !([_computer, _totalCost] call FUNC(getUserConfirmation)) exitWith {
+    if !([_computer, _totalCost, DEVICE_TYPE_DOOR, parseNumber (str _buildingId)] call FUNC(getUserConfirmation)) exitWith {
         missionNamespace setVariable [_nameOfVariable, true, true];
     };
 
     // Consume power
-    [_computer, _totalCost] call FUNC(consumePower);
+    [_computer, _totalCost, DEVICE_TYPE_DOOR, parseNumber (str _buildingId)] call FUNC(consumePower);
 
     // Apply changes to all doors
     private _newState = parseNumber (_doorDesiredState isEqualTo "lock");
@@ -203,17 +203,17 @@ if (_doorId isEqualTo "a") then {
     };
 
     // Check power and get confirmation
-    if !([_computer, _powerCostPerDoor] call FUNC(checkPowerAvailable)) exitWith {
+    if !([_computer, _powerCostPerDoor, DEVICE_TYPE_DOOR, parseNumber (str _buildingId)] call FUNC(checkPowerAvailable)) exitWith {
         [_computer, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER"] call AE3_armaos_fnc_shell_stdout;
         missionNamespace setVariable [_nameOfVariable, true, true];
     };
 
-    if !([_computer, _powerCostPerDoor] call FUNC(getUserConfirmation)) exitWith {
+    if !([_computer, _powerCostPerDoor, DEVICE_TYPE_DOOR, parseNumber (str _buildingId)] call FUNC(getUserConfirmation)) exitWith {
         missionNamespace setVariable [_nameOfVariable, true, true];
     };
 
     // Consume power
-    [_computer, _powerCostPerDoor] call FUNC(consumePower);
+    [_computer, _powerCostPerDoor, DEVICE_TYPE_DOOR, parseNumber (str _buildingId)] call FUNC(consumePower);
 
     // Apply change
     _building setVariable [format ["bis_disabled_Door_%1", _realDoor], _targetState, true];

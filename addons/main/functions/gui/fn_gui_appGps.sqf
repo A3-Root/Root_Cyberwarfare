@@ -36,25 +36,14 @@ private _track = {
 };
 
 // A tracker the mission hid is in no list for this app to show, so it is reached the only way it can
-// be: by typing the identifier it answers to. The box sits beside the list's own filter row.
-(ctrlPosition _ctrlGroup) params ["", "", "_groupWidth"];
-private _session = uiNamespace getVariable ["AE3_desktop_session", createHashMap];
-private _display = _session getOrDefault ["display", displayNull];
-
-private _codeEdit = _display ctrlCreate ["RscEdit", -1, _ctrlGroup];
-_codeEdit ctrlSetPosition [_groupWidth * 0.78, 0.01, _groupWidth * 0.20, 0.03];
-_codeEdit ctrlSetText localize "STR_ROOT_CYBERWARFARE_GUI_GPS_TRACK_BY_ID_PROMPT";
-_codeEdit ctrlCommit 0;
-uiNamespace setVariable ["ROOT_gui_gpsCodeEdit", _codeEdit];
-
+// be: by typing the identifier it answers to. The box it is typed into is the one every list app has,
+// built by Root_fnc_gui_buildListApp below, so this app no longer carries one of its own.
 private _trackByIdentifier = {
 	params ["_computer"];
-	private _codeEdit = uiNamespace getVariable ["ROOT_gui_gpsCodeEdit", controlNull];
-	if (isNull _codeEdit) exitWith {};
 
-	private _code = [ctrlText _codeEdit] call CBA_fnc_trim;
-	// The placeholder is what the box says before anything is typed into it.
-	if (_code isEqualTo "" || {_code isEqualTo (localize "STR_ROOT_CYBERWARFARE_GUI_GPS_TRACK_BY_ID_PROMPT")}) exitWith {};
+	private _code = [DEVICE_TYPE_GPS_TRACKER] call Root_fnc_gui_identifierText;
+
+	if (_code isEqualTo "") exitWith {};
 
 	["root_cyberwarfare_gui_gpsAction", [clientOwner, netId _computer, 0, "trackid", "", _code]] call CBA_fnc_serverEvent;
 };

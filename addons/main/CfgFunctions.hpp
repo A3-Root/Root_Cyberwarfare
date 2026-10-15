@@ -21,6 +21,8 @@ class CfgFunctions {
 		class Core {
 			file = "\z\root_cyberwarfare\addons\main\functions\core";
 			class addHackingToolsZeusMain {};
+			class hackSshConnectMain {};
+			class hackSshDisconnectMain {};
 			class cleanupDeviceLinks {};
 			class createDiaryEntry {};
 			class initBreachIntegration {};
@@ -87,6 +89,9 @@ class CfgFunctions {
 			class gui_requestDevices {};
 			class gui_sendDeviceList {};
 			class gui_buildListApp {};
+			class gui_identifierAdd {};
+			class gui_identifierText {};
+			class gui_resolveIdentifier {};
 			class gui_doorAction {};
 			class gui_lightAction {};
 			class gui_droneAction {};
@@ -138,6 +143,11 @@ class CfgFunctions {
 			file = "\z\root_cyberwarfare\addons\main\functions\utility";
 			class addComputerDeviceLinks {};
 			class applyDeviceAccess {};
+			class getHackSession {};
+			class getDevicePowerComputer {};
+			class hasDeviceLink {};
+			class hackSessionSweep {};
+			class manageHackSweep {};
 			class cacheDeviceLinks {};
 			class setDeviceLinksMain {};
 			class runDeviceLinkCleanup {};
@@ -164,6 +174,9 @@ class CfgFunctions {
 			class findDevicesByObject {};
 			class setDeviceIdentifier {};
 			class resolveDeviceArg {};
+			class identifierOverview {};
+			class revokeIdentifierAccess {};
+			class dropIdentifierGrants {};
 			class clearIdentifierGrants {};
 			class getLaptopUid {};
 			class getObjectsInTriggerArea {};
@@ -210,6 +223,7 @@ class CfgFunctions {
 			class hiddenTrackersDialog {};
 			class hiddenTrackersZeus {};
 			class deviceIdentifierZeus {};
+			class showIdentifierZeus {};
 			class hiddenTrackersZeusMain {};
 			class manageDeviceAccessZeus {};
 			class warnUnreachableDevice {};

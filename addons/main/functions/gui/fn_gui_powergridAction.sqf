@@ -18,7 +18,7 @@
  * Public: No
  */
 
-params ["_owner", "_computerNetId", "_gridId", "_action", ["_commandPath", ""]];
+params ["_owner", "_computerNetId", "_gridId", "_action", ["_commandPath", ""], ["_identifier", "", [""]]];
 
 private _computer = objectFromNetId _computerNetId;
 private _reply = {
@@ -27,6 +27,19 @@ private _reply = {
 };
 
 if (isNull _computer) exitWith {};
+
+// A code typed into the app's identifier box names the device instead of the list selection. It is
+// resolved here, where the identifier table lives, and a code that grants access leaves this laptop a
+// grant, so the device is within reach of the lookup below from then on. An unresolved code leaves
+// the id at -1, since an exitWith inside the block would only leave the block.
+if (_identifier isNotEqualTo "") then {
+	private _resolved = [_owner, _computer, DEVICE_TYPE_POWERGRID, _identifier] call Root_fnc_gui_resolveIdentifier;
+
+	_gridId = [-1, _resolved param [0, -1]] select (_resolved isNotEqualTo []);
+};
+
+if (_gridId isEqualTo -1) exitWith {};
+
 _action = toLower _action;
 if !(_action in ["on", "off", "overload"]) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_ACTION", _action], false] call _reply; };
 
@@ -45,7 +58,7 @@ if (isNull _gridObject) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERRO
 if (_gridObject getVariable ["ROOT_CYBERWARFARE_GENERATOR_DESTROYED", false]) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_GENERATOR_DESTROYED", false] call _reply; };
 
 private _cost = missionNamespace getVariable [SETTING_POWERGRID_COST, 15];
-if !([_computer, _cost] call FUNC(checkPowerAvailable)) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply; };
+if !([_computer, _cost, DEVICE_TYPE_POWERGRID, parseNumber (str _gridId)] call FUNC(checkPowerAvailable)) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply; };
 
 // Objects (lights) within the grid radius, minus excluded classes.
 private _objectsInRadius = (9 allObjects 0) select { (_x distance _gridObject) <= _radius };
@@ -57,14 +70,14 @@ switch (_action) do
 	{
 		["ON", _objectsInRadius] remoteExec ["Root_fnc_powerGeneratorLights", 0, format ["rcw_grid_%1", netId _gridObject]];
 		_gridObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "ON", true];
-		[_computer, _cost] call FUNC(consumePower);
+		[_computer, _cost, DEVICE_TYPE_POWERGRID, parseNumber (str _gridId)] call FUNC(consumePower);
 		[_owner, format [localize "STR_ROOT_CYBERWARFARE_POWERGRID_ACTIVATED", count _objectsInRadius, _radius], true] call _reply;
 	};
 	case "off":
 	{
 		["OFF", _objectsInRadius] remoteExec ["Root_fnc_powerGeneratorLights", 0, format ["rcw_grid_%1", netId _gridObject]];
 		_gridObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "OFF", true];
-		[_computer, _cost] call FUNC(consumePower);
+		[_computer, _cost, DEVICE_TYPE_POWERGRID, parseNumber (str _gridId)] call FUNC(consumePower);
 		[_owner, format [localize "STR_ROOT_CYBERWARFARE_POWERGRID_DEACTIVATED", count _objectsInRadius, _radius], true] call _reply;
 	};
 	case "overload":
@@ -74,7 +87,7 @@ switch (_action) do
 		_explosionType createVehicle (getPosATL _gridObject);
 		_gridObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_DESTROYED", true, true];
 		_gridObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "DESTROYED", true];
-		[_computer, _cost] call FUNC(consumePower);
+		[_computer, _cost, DEVICE_TYPE_POWERGRID, parseNumber (str _gridId)] call FUNC(consumePower);
 		[_owner, format [localize "STR_ROOT_CYBERWARFARE_POWERGRID_OVERLOAD_WARNING", count _objectsInRadius, _radius], true] call _reply;
 	};
 };

@@ -18,7 +18,7 @@
  * Public: No
  */
 
-params ["_owner", "_computerNetId", "_vehicleId", "_action", ["_commandPath", ""], ["_value", 0], ["_lock", false]];
+params ["_owner", "_computerNetId", "_vehicleId", "_action", ["_commandPath", ""], ["_value", 0], ["_lock", false], ["_identifier", "", [""]]];
 
 private _computer = objectFromNetId _computerNetId;
 private _reply = {
@@ -27,6 +27,19 @@ private _reply = {
 };
 
 if (isNull _computer) exitWith {};
+
+// A code typed into the app's identifier box names the device instead of the list selection. It is
+// resolved here, where the identifier table lives, and a code that grants access leaves this laptop a
+// grant, so the device is within reach of the lookup below from then on. An unresolved code leaves
+// the id at -1, since an exitWith inside the block would only leave the block.
+if (_identifier isNotEqualTo "") then {
+	private _resolved = [_owner, _computer, DEVICE_TYPE_VEHICLE, _identifier] call Root_fnc_gui_resolveIdentifier;
+
+	_vehicleId = [-1, _resolved param [0, -1]] select (_resolved isNotEqualTo []);
+};
+
+if (_vehicleId isEqualTo -1) exitWith {};
+
 
 _action = toLower _action;
 if (!(_value isEqualType 0)) then { _value = parseNumber (str _value); };
@@ -131,10 +144,10 @@ if (_blocked) exitWith {
 };
 
 private _cost = _vehicle getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", missionNamespace getVariable [SETTING_VEHICLE_COST, 2]];
-if !([_computer, _cost] call FUNC(checkPowerAvailable)) exitWith {
+if !([_computer, _cost, DEVICE_TYPE_VEHICLE, parseNumber (str _vehicleId)] call FUNC(checkPowerAvailable)) exitWith {
 	[_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply;
 };
-[_computer, _cost] call FUNC(consumePower);
+[_computer, _cost, DEVICE_TYPE_VEHICLE, parseNumber (str _vehicleId)] call FUNC(consumePower);
 
 private _removeBrakeHandler = {
 	params ["_vehicle"];

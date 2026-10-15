@@ -30,7 +30,7 @@ call FUNC(initSettings);
 // Hacking tools may be brought along into an AE3 SSH session: when the target computer has no tools
 // installed, the operator's own copies run against the target (and its device links).
 if (!isNil "AE3_armaos_fnc_shell_addSshPortableCommands") then {
-    [["guide", "devices", "door", "light", "changedrone", "disabledrone", "download", "custom", "gpstrack", "vehicle", "powergrid", "netscan"], ["/rubberducky/tools"]] call AE3_armaos_fnc_shell_addSshPortableCommands;
+    [["guide", "devices", "door", "light", "changedrone", "disabledrone", "download", "custom", "gpstrack", "vehicle", "powergrid", "netscan", "hackssh"], ["/rubberducky/tools"]] call AE3_armaos_fnc_shell_addSshPortableCommands;
 };
 
 // Mark addon as ready

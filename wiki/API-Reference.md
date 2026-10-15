@@ -669,6 +669,10 @@ cost, battery prompt, status rules - is identical for both ways of naming a trac
 
 Every non-GPS device gets an identifier automatically when registered (`Root_fnc_applyDeviceAccess`). Codes share the GPS alphabet and generator, so they never collide with tracker codes.
 
+Both front ends accept a code. A terminal command resolves it with `Root_fnc_resolveDeviceArg` on the operator's own machine; a desktop app sends it to the server, where `Root_fnc_gui_resolveIdentifier` turns it into a device id and, for a code that grants access, writes a grant naming the laptop that typed it. `Root_fnc_gui_identifierAdd` is what the apps' **By identifier** action calls: it resolves the code and sends the app's device list again with the device in it.
+
+`Root_fnc_revokeIdentifierAccess` `[_deviceType, _deviceId]` (public, server) takes every grant a device's code handed out back, on the server and on every client, so a code changed in Zeus does not leave the old one working until it expires. `Root_fnc_identifierOverview` answers the Zeus Device Identifier module with either every registered device and its code or the one it was dropped on.
+
 | Function | Locality | Description |
 |----------|----------|-------------|
 | `Root_fnc_setDeviceIdentifier` | Any (routed to server) | `[_typeOrObject, _deviceId, _code = "", _grantsAccess = true, _execUserId = 0]`. Sets a custom code (blank = random) and whether it grants access (`false` = alias only). Accepts an object instead of type + id. **Public.** |
@@ -820,10 +824,20 @@ private _doors = [_laptop, 1, ""] call Root_fnc_getAccessibleDevices;
 
 | Function | Description |
 |----------|-------------|
-| `Root_fnc_getSessionComputers` | `[_computer]` -> `[_computer]`, or `[_target, _source]` when `_computer` is the target of an AE3 SSH session (only valid on the operator's machine). **Public.** |
-| `Root_fnc_getPowerComputer` | `[_computer]` -> computer whose battery pays (the SSH source inside a session). |
+| `Root_fnc_getSessionComputers` | `[_computer]` -> every computer taking part: itself, the operator's computer when this one is the target of an AE3 terminal SSH session (operator's machine only), and the target of a Hackerman SSH session when this one is the operator (server **and** client). **Public.** |
+| `Root_fnc_getHackSession` | `[_computer]` -> `[_target, _user]` or `[]`. The Hackerman SSH session this computer is operating through. **Public.** |
+| `Root_fnc_hackSshConnectMain` | `[_computerNetId, _targetIp, _user, _password, _owner]` -> BOOL. Opens a session, server-side; a client call is routed there. **Public.** |
+| `Root_fnc_hackSshDisconnectMain` | `[_computerNetId, _reasonKey, _owner]` -> BOOL. Closes one. **Public.** |
+| `Root_fnc_hasDeviceLink` | `[_computer, _deviceType, _deviceId]` -> BOOL. Whether that one computer owns a route to the device, ignoring tools, backdoors, grants and sessions. |
+| `Root_fnc_getPowerComputer` | `[_computer]` -> the operator's own computer, for costs that belong to no particular device. |
+| `Root_fnc_getDevicePowerComputer` | `[_computer, _deviceType, _deviceId]` -> computer whose battery pays for that device: the one it is linked to, the operator when both can reach it or neither owns a route. |
 
-`Root_fnc_isDeviceAccessible` considers both session computers: tools on either suffice, links of both count, backdoor paths of both apply. It also honours identifier grants (see Device Identifier Functions).
+`Root_fnc_isDeviceAccessible` considers every session computer: tools on any suffice, links of all count, backdoor paths of all apply. It also honours identifier grants (see Device Identifier Functions).
+
+`Root_fnc_checkPowerAvailable`, `Root_fnc_consumePower`, `Root_fnc_getUserConfirmation` and
+`Root_fnc_getBatteryStatus` all take an optional trailing `_deviceType, _deviceId`. Pass them whenever
+the cost is for a device, so the computer that device is linked to is the one charged; omit them for a
+cost that belongs to the operator. `getBatteryStatus` returns the payer as its eighth element.
 
 ## Power Management Functions
 

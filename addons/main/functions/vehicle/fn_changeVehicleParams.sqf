@@ -102,7 +102,7 @@ if (_vehicleIDNum != 0) then {
         ];
         private _vehicleObject = objectFromNetId _vehicleNetID;
         _powerCost = _vehicleObject getVariable ["ROOT_CYBERWARFARE_VEHICLE_COST", missionNamespace getVariable [SETTING_VEHICLE_COST, 2]];
-        if !([_computer, _powerCost] call FUNC(checkPowerAvailable)) then {
+        if !([_computer, _powerCost, DEVICE_TYPE_VEHICLE, parseNumber (str _vehicleID)] call FUNC(checkPowerAvailable)) then {
             _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             breakTo "exit";
@@ -111,7 +111,7 @@ if (_vehicleIDNum != 0) then {
         if ((_vehicleIDNum == _storedDeviceID) && (alive _vehicleObject)) then {
             if ([_computer, 7, _storedDeviceID, _commandPath] call Root_fnc_isDeviceAccessible) then {
                 _foundVehicle = true;
-                if !([_computer, _powerCost] call FUNC(getUserConfirmation)) then {
+                if !([_computer, _powerCost, DEVICE_TYPE_VEHICLE, parseNumber (str _vehicleID)] call FUNC(getUserConfirmation)) then {
                     missionNamespace setVariable [_nameOfVariable, true, true];
                     breakTo "exit";
                 };
@@ -398,7 +398,7 @@ if (_vehicleIDNum != 0) then {
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         breakTo "exit";
     } else {
-        [_computer, _powerCost] call FUNC(consumePower);
+        [_computer, _powerCost, DEVICE_TYPE_VEHICLE, parseNumber (str _vehicleID)] call FUNC(consumePower);
     };
 } else {
     _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_VEHICLE_ID", _vehicleID];

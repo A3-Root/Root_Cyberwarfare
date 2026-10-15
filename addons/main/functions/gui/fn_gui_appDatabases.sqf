@@ -26,9 +26,14 @@ private _populate = {
 
 private _download = {
 	params ["_computer", "_listCtrl"];
+	// A code in the identifier box names the device instead of the list, so a selection is only
+	// needed when the box is empty
+	private _code = [DEVICE_TYPE_DATABASE] call Root_fnc_gui_identifierText;
 	private _sel = lbCurSel _listCtrl;
-	if (_sel < 0) exitWith {};
-	["root_cyberwarfare_gui_databaseAction", [clientOwner, netId _computer, parseNumber (_listCtrl lbData _sel), netId player, ""]] call CBA_fnc_serverEvent;
+	if (_sel < 0 && _code isEqualTo "") exitWith {};
+	private _databaseId = if (_code isEqualTo "") then {parseNumber (_listCtrl lbData _sel)} else {0};
+
+	["root_cyberwarfare_gui_databaseAction", [clientOwner, netId _computer, _databaseId, netId player, "", "", _code]] call CBA_fnc_serverEvent;
 };
 
 private _buttons = [[localize "STR_ROOT_CYBERWARFARE_GUI_DOWNLOAD", [0.16, 0.4, 0.6, 1], _download]];

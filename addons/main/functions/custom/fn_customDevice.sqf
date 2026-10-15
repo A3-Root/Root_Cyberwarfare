@@ -61,7 +61,7 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
     private _powerCostPerCustom = missionNamespace getVariable [SETTING_CUSTOM_COST, 10];
     private _allCustom = _allDevices select 4;
 
-    if !([_computer, _powerCostPerCustom] call FUNC(checkPowerAvailable)) then {
+    if !([_computer, _powerCostPerCustom, DEVICE_TYPE_CUSTOM, parseNumber (str _customId)] call FUNC(checkPowerAvailable)) then {
         _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         missionNamespace setVariable [_nameOfVariable, true, true];
@@ -73,7 +73,7 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
         private _storedCustomId = _x select 0;
         if(_customId == _storedCustomId) then {
             _deviceFound = true;
-            if !([_computer, _powerCostPerCustom] call FUNC(getUserConfirmation)) then {
+            if !([_computer, _powerCostPerCustom, DEVICE_TYPE_CUSTOM, parseNumber (str _customId)] call FUNC(getUserConfirmation)) then {
                 missionNamespace setVariable [_nameOfVariable, true, true];
                 breakTo "exit";
             };
@@ -107,7 +107,7 @@ if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualT
     } forEach _allCustom;
 
     if(_deviceFound) then {
-        [_computer, _powerCostPerCustom] call FUNC(consumePower);
+        [_computer, _powerCostPerCustom, DEVICE_TYPE_CUSTOM, parseNumber (str _customId)] call FUNC(consumePower);
     } else {
         _string = format [localize "STR_ROOT_CYBERWARFARE_ERROR_CUSTOM_DEVICE_NOT_FOUND", _customId];
         [_computer, _string] call AE3_armaos_fnc_shell_stdout;

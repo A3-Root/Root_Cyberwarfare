@@ -1,9 +1,14 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: ZEN module placed on a registered device (door building, light, drone, vehicle, file
- *              holder, custom device or power generator) that sets the identifier it answers to in
- *              terminal commands and whether that code grants access by itself.
+ * Description: ZEN module that reads and rewrites the identifier a registered device answers to. What
+ *              it shows depends on where it is dropped, because a curator wanting to look codes up
+ *              and a curator wanting to change one are doing different jobs: on open ground it lists
+ *              every registered device with its grid and its code, and on a device it offers that
+ *              device's current code, a new one to replace it with, and whether everyone who has
+ *              already used the old code should lose the device again. The codes live on the server,
+ *              so this asks for them rather than reading them; Root_fnc_showIdentifierZeus opens the
+ *              dialog when the answer arrives.
  *
  * Arguments:
  * 0: _logic <OBJECT> - Zeus logic module
@@ -19,26 +24,9 @@
 
 params ["_logic"];
 
-private _targetObject = attachedObject _logic;
+private _targetObject = attachedTo _logic;
 deleteVehicle _logic;
 
 if !(hasInterface) exitWith {};
 
-if (isNull _targetObject) exitWith {
-    [localize "STR_ROOT_CYBERWARFARE_IDENTIFIER_PLACE_ON_DEVICE"] call zen_common_fnc_showMessage;
-};
-
-[
-    localize "STR_ROOT_CYBERWARFARE_IDENTIFIER_MODULE",
-    [
-        ["EDIT", [localize "STR_ROOT_CYBERWARFARE_IDENTIFIER_CODE", localize "STR_ROOT_CYBERWARFARE_IDENTIFIER_CODE_DESC"], [""]],
-        ["CHECKBOX", [localize "STR_ROOT_CYBERWARFARE_IDENTIFIER_GRANTS", localize "STR_ROOT_CYBERWARFARE_IDENTIFIER_GRANTS_DESC"], true]
-    ],
-    {
-        params ["_results", "_targetObject"];
-        _results params ["_identifier", "_grantsAccess"];
-        [_targetObject, 0, _identifier, _grantsAccess, clientOwner] remoteExec ["Root_fnc_setDeviceIdentifier", 2];
-    },
-    {},
-    _targetObject
-] call zen_dialog_fnc_create;
+["root_cyberwarfare_identifierOverviewReq", [clientOwner, [netId _targetObject, ""] select (isNull _targetObject)]] call CBA_fnc_serverEvent;

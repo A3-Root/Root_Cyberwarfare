@@ -154,18 +154,18 @@ if (_trackerIdNum != 0) then {
 
                             ["root_cyberwarfare_updateTrackerStatus", [_storedTrackerId, (_allGpsTrackers select _forEachIndex) select 8]] call CBA_fnc_serverEvent;
                         } else {
-                            if !([_computer, _powerCost] call FUNC(checkPowerAvailable)) then {
+                            if !([_computer, _powerCost, DEVICE_TYPE_GPS_TRACKER, parseNumber (str _trackerId)] call FUNC(checkPowerAvailable)) then {
                                 _string = format ['Error! Insufficient Power!'];
                                 [_computer, _string] call AE3_armaos_fnc_shell_stdout;
                                 breakTo "exit";
                             };
 
-                            if !([_computer, _powerCost] call FUNC(getUserConfirmation)) then {
+                            if !([_computer, _powerCost, DEVICE_TYPE_GPS_TRACKER, parseNumber (str _trackerId)] call FUNC(getUserConfirmation)) then {
                                 missionNamespace setVariable [_nameOfVariable, true, true];
                                 breakTo "exit";
                             };
 
-                            [_computer, _powerCost] call FUNC(consumePower);
+                            [_computer, _powerCost, DEVICE_TYPE_GPS_TRACKER, parseNumber (str _trackerId)] call FUNC(consumePower);
 
                             // Start tracking
                             private _markerName = if (_customMarker != "") then { _customMarker } else { format ["ROOT_GpsTracker_%1_%2", _trackerIdNum, round(random 10000)] };

@@ -120,7 +120,7 @@ private _foundGrid = false;
         };
 
         // Check power availability
-        if !([_computer, _powerCost] call FUNC(checkPowerAvailable)) exitWith {
+        if !([_computer, _powerCost, DEVICE_TYPE_POWERGRID, parseNumber (str _gridId)] call FUNC(checkPowerAvailable)) exitWith {
             _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             _foundGrid = true;
@@ -134,7 +134,7 @@ private _foundGrid = false;
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
         };
 
-        if !([_computer, _powerCost] call FUNC(getUserConfirmation)) exitWith {
+        if !([_computer, _powerCost, DEVICE_TYPE_POWERGRID, parseNumber (str _gridId)] call FUNC(getUserConfirmation)) exitWith {
             _string = localize "STR_ROOT_CYBERWARFARE_POWERGRID_CANCELLED";
             [_computer, _string] call AE3_armaos_fnc_shell_stdout;
             missionNamespace setVariable [_nameOfVariable, true, true];
@@ -232,7 +232,7 @@ private _foundGrid = false;
         };
 
         if (_success) then {
-            [_computer, _powerCost] call FUNC(consumePower);
+            [_computer, _powerCost, DEVICE_TYPE_POWERGRID, parseNumber (str _gridId)] call FUNC(consumePower);
         };
     };
 } forEach _allPowerGrids;

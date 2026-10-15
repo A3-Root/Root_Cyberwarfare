@@ -18,7 +18,9 @@
 
 params [
     ["_computer", objNull, [objNull]],
-    ["_powerRequiredWh", 0, [0]]
+    ["_powerRequiredWh", 0, [0]],
+    ["_deviceType", 0, [0]],
+    ["_deviceId", 0, [0]]
 ];
 
 DEBUG_LOG_3("checkPowerAvailable - Computer: %1, Required: %2 Wh, Mode: %3",_computer,_powerRequiredWh,GET_DEVICE_MODE);
@@ -34,7 +36,8 @@ if (_powerRequiredWh <= 0) exitWith {
     true
 };
 
-private _batteryStatus = [_computer, _powerRequiredWh] call FUNC(getBatteryStatus);
+// The device decides which computer is asked, so a remote laptop's own devices draw on its battery
+private _batteryStatus = [_computer, _powerRequiredWh, _deviceType, _deviceId] call FUNC(getBatteryStatus);
 _batteryStatus params ["_hasBattery", "_battery", "_batteryLevelWh", "_batteryPercent", "_batteryCapacityWh", "_remainingWh"];
 DEBUG_LOG_1("Battery object: %1",_battery);
 

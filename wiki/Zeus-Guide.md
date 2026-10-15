@@ -901,11 +901,27 @@ where one actually is.
 
 ### 15. Device Identifier
 
-**Purpose:** Set the code a device answers to in terminal commands.
+**Purpose:** Read the codes devices answer to, and change one.
 
-**How to Use:** Drop the module onto a registered device (building, light, vehicle, file holder, custom device, generator). Enter the **Identifier** (empty = random) and tick **Code grants access** (unticked = alias only). The assigned code is shown in system chat.
+**How to Use:** Where you drop it decides what it does.
 
-Every device you register also gets a random code automatically, shown in the "Added!" feedback message.
+**On open ground** it lists every registered device with the grid square it stands on and the code it
+answers to. Confirming copies the selected code to the clipboard, ready to paste into a briefing, an
+email or a file.
+
+**On a device** (building, light, vehicle, file holder, custom device, generator) it opens that
+device's code:
+
+| Row | What it does |
+| --- | --- |
+| **Current identifier** | The code as it stands. An object registered twice - a building with doors *and* lights - lists both; pick the one you mean. Read-only. |
+| **Use a new identifier** | No keeps the current code. Yes replaces it with the box below. |
+| **New identifier** | Eight letters and digits. Anything else is dropped as you type; a code already in use is refused and a random one is drawn instead. |
+| **Code grants access** | Whether knowing the code is enough to work the device, or whether it only names it and normal access still applies. |
+| **Revoke existing access** | Every laptop that opened this device with the old code loses it again and has to enter a code anew. Without this, anyone who already used the old code keeps the device for up to ten minutes. |
+
+The assigned code is shown in system chat. Every device you register also gets a random code
+automatically, shown in the "Added!" feedback message.
 
 **Add Hackable File** also has a **Virtual File Size** field (`50MB`, `1.5GB`): the download then takes as long as that size needs at the player's AE3 network speed.
 

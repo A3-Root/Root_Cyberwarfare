@@ -101,9 +101,14 @@ uiNamespace setVariable [format ["ROOT_gui_open_%1", DEVICE_TYPE_POWERGRID], [_l
 private _send = {
 	params ["_ctrl", "_action"];
 	(_ctrl getVariable "AE3_ctx") params ["_computer", "_listCtrl"];
+	// A code in the identifier box names the device instead of the list, so a selection is only
+	// needed when the box is empty
+	private _code = [DEVICE_TYPE_POWERGRID] call Root_fnc_gui_identifierText;
 	private _sel = lbCurSel _listCtrl;
-	if (_sel < 0) exitWith {};
-	["root_cyberwarfare_gui_powergridAction", [clientOwner, netId _computer, parseNumber (_listCtrl lbData _sel), _action, ""]] call CBA_fnc_serverEvent;
+	if (_sel < 0 && _code isEqualTo "") exitWith {};
+	private _gridId = if (_code isEqualTo "") then {parseNumber (_listCtrl lbData _sel)} else {0};
+
+	["root_cyberwarfare_gui_powergridAction", [clientOwner, netId _computer, _gridId, _action, "", _code]] call CBA_fnc_serverEvent;
 };
 
 private _refreshBtn = _display ctrlCreate ["RscButton", -1, _ctrlGroup];
@@ -152,7 +157,7 @@ _overloadBtn ctrlAddEventHandler ["ButtonClick", {
 	if ((uiNamespace getVariable ["ROOT_gui_overloadArmed", -1]) isEqualTo _id) then
 	{
 		uiNamespace setVariable ["ROOT_gui_overloadArmed", -1];
-		["root_cyberwarfare_gui_powergridAction", [clientOwner, netId _computer, _id, "overload", ""]] call CBA_fnc_serverEvent;
+		["root_cyberwarfare_gui_powergridAction", [clientOwner, netId _computer, _id, "overload", "", ""]] call CBA_fnc_serverEvent;
 	}
 	else
 	{

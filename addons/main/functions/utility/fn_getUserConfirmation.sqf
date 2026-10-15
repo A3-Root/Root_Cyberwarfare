@@ -19,7 +19,9 @@
 
 params [
     ["_computer", objNull, [objNull]],
-    ["_powerCost", 0, [0]]
+    ["_powerCost", 0, [0]],
+    ["_deviceType", 0, [0]],
+    ["_deviceId", 0, [0]]
 ];
 
 if (isNull _computer) exitWith {
@@ -29,7 +31,8 @@ if (isNull _computer) exitWith {
 
 private _canConfirm = true;
 if (_powerCost > 0) then {
-    private _batteryStatus = [_computer, _powerCost] call FUNC(getBatteryStatus);
+    // The figures quoted are the battery that will actually be charged for this device
+    private _batteryStatus = [_computer, _powerCost, _deviceType, _deviceId] call FUNC(getBatteryStatus);
     _batteryStatus params ["_hasBattery", "_battery", "_currentWh", "_currentPercent", "_capacityWh", "_remainingWh", "_remainingPercent"];
     if (_hasBattery isEqualTo false) then {
         ROOT_CYBERWARFARE_LOG_ERROR("getUserConfirmation: Battery not found or laptop has no internal battery");

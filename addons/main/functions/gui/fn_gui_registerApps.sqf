@@ -327,6 +327,18 @@ if (_hasWeb) then
 		private _extra = createHashMapFromArray [["type", _type], ["actions", _actions], ["icon", _icon], ["menu", (localize "STR_ROOT_CYBERWARFARE_UI_HACKING_TOOLS")]];
 		if (_menu isEqualTo "Hacking Tools") then { _extra set ["requiresFunction", "Root_fnc_hasHackingToolsAvailable"]; };
 		if (_menu isEqualTo "Hacking Tools") then { _extra set ["filters", true]; };
+		// Every device app can reach a device the mission never linked to this laptop, by typing the
+		// code it answers to. The network scanner is not a device list, and GPS asks for a code its
+		// own way, because a hidden tracker opens a map rather than joining a list.
+		if (_menu isEqualTo "Hacking Tools" && {!(_type in [DEVICE_TYPE_NETSCAN, DEVICE_TYPE_GPS_TRACKER])}) then {
+			_globals pushBack (createHashMapFromArray [
+				["id", "byid"],
+				["label", localize "STR_ROOT_CYBERWARFARE_GUI_BY_IDENTIFIER"],
+				["flow", "prompt"],
+				["promptTitle", localize "STR_ROOT_CYBERWARFARE_GUI_IDENTIFIER_PROMPT"]
+			]);
+		};
+
 		if (_globals isNotEqualTo []) then { _extra set ["globalActions", _globals]; };
 		[_id, localize _titleKey, _glyph, "deviceList", _extra] call AE3_desktop_fnc_registerExtApp;
 	} forEach [
@@ -377,10 +389,56 @@ if (_hasWeb) then
 			["RootCW_Vehicles", localize "STR_ROOT_CYBERWARFARE_GUI_APP_VEHICLES"],
 			["RootCW_PowerGrid", localize "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID"],
 			["RootCW_Custom", localize "STR_ROOT_CYBERWARFARE_GUI_APP_CUSTOM"],
-			["RootCW_Cryptography", (localize "STR_ROOT_CYBERWARFARE_UI_CRYPTOGRAPHY")]
+			["RootCW_Cryptography", (localize "STR_ROOT_CYBERWARFARE_UI_CRYPTOGRAPHY")],
+			["RootCW_HackSsh", (localize "STR_ROOT_CYBERWARFARE_GUI_APP_HACKSSH")]
 		]]
 	];
 	["RootCW_Hackerman", "Hackerman.exe", "H", "launcher", _hackermanExtra] call AE3_desktop_fnc_registerExtApp;
+
+	// Remote access. Its own app rather than a device list, because it operates on the computer itself:
+	// once a session is open every other app above reaches the target's devices too, since the server
+	// resolves the session when it builds a device list.
+	private _hackSshExtra = createHashMapFromArray [
+		["menu", (localize "STR_ROOT_CYBERWARFARE_UI_HACKING_TOOLS")],
+		["icon", "network"],
+		["scriptPath", "\z\root_cyberwarfare\addons\main\ui\web\js\hacksshapp.js"],
+		["factory", "RootCW_makeHackSshApp"],
+		["requiresFunction", "Root_fnc_hasHackingToolsAvailable"],
+		["width", 520],
+		["height", 460]
+	];
+	["RootCW_HackSsh", (localize "STR_ROOT_CYBERWARFARE_GUI_APP_HACKSSH"), "R", "script", _hackSshExtra] call AE3_desktop_fnc_registerExtApp;
+
+	// Remote access commands. The browser only ever asks; the server owns the session.
+	["rootcw_hack_ssh_connect", {
+		params ["_computer", "_user", "_data"];
+
+		if (isNull _computer) exitWith {};
+
+		["root_cyberwarfare_hackSshConnect", [
+			netId _computer,
+			_data getOrDefault ["host", ""],
+			_data getOrDefault ["user", ""],
+			_data getOrDefault ["pass", ""],
+			clientOwner
+		]] call CBA_fnc_serverEvent;
+	}] call AE3_desktop_fnc_registerCmd;
+
+	["rootcw_hack_ssh_disconnect", {
+		params ["_computer"];
+
+		if (isNull _computer) exitWith {};
+
+		["root_cyberwarfare_hackSshDisconnect", [netId _computer, "STR_ROOT_CYBERWARFARE_HACKSSH_DISCONNECTED", clientOwner]] call CBA_fnc_serverEvent;
+	}] call AE3_desktop_fnc_registerCmd;
+
+	["rootcw_hack_ssh_status", {
+		params ["_computer"];
+
+		if (isNull _computer) exitWith {};
+
+		["root_cyberwarfare_hackSshStatus", [netId _computer, clientOwner]] call CBA_fnc_serverEvent;
+	}] call AE3_desktop_fnc_registerCmd;
 
 	// dev_request: browser asks for a device type -> reuse the MP-safe request path.
 	["dev_request", {
@@ -407,6 +465,14 @@ if (_hasWeb) then
 		private _ids = _data getOrDefault ["ids", []];
 		private _co = clientOwner;
 		private _nid = netId _computer;
+
+		// Reaching a device by its code is the same work whatever the app is: the code is resolved on
+		// the server, the laptop is left a grant for what it names, and the list comes back with the
+		// device in it, so every other action on this screen then works on it unchanged.
+		if (_action isEqualTo "byid") exitWith {
+			["root_cyberwarfare_gui_identifierAdd", [_co, _nid, _type, _data getOrDefault ["promptValue", ""]]] call CBA_fnc_serverEvent;
+		};
+
 		switch (_type) do {
 			// _sub carries an individual door id for per-door lock/unlock (Doors #2); "" = whole building.
 			case DEVICE_TYPE_NETSCAN:   { ["root_cyberwarfare_gui_netscanExport",   [_co, _nid, _data getOrDefault ["savePath", ""]]] call CBA_fnc_serverEvent; };

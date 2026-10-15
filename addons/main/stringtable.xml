@@ -416,7 +416,7 @@
             <Chinesesimp>安装位置网格：%1</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_DIARY_TRACKER_HINT">
-            <English>Enter this identifier on any laptop with the hacking toolset, connected to a network, to track it.</English>
+            <English>Track using this identifier.</English>
             <Chinesesimp>在任何装有黑客工具且已连接网络的笔记本电脑上输入此标识符，即可进行追踪。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_DIARY_TRACKER_IDENTIFIER">
@@ -516,7 +516,7 @@
             <Chinesesimp>GPS 追踪器已安装。&lt;br/&gt;标识符：%1&lt;br/&gt;已记录在你的日志中。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_HINT_HIDDEN">
-            <English>GPS tracker planted and hidden.&lt;br/&gt;Identifier: %1&lt;br/&gt;Enter it on any networked laptop to track. Recorded in your diary.</English>
+            <English>GPS tracker planted and hidden.&lt;br/&gt;Identifier: %1&lt;br/&gt;Diary entry added.</English>
             <Chinesesimp>GPS 追踪器已安装并隐藏。&lt;br/&gt;标识符：%1&lt;br/&gt;在任何联网的笔记本电脑上输入此标识符即可追踪。已记录在你的日志中。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GPS_IDENTIFIER_OFFLINE">
@@ -601,6 +601,9 @@
             <English>Building %1 (%2 doors)</English>
             <Chinesesimp>建筑 %1（%2 扇门）</Chinesesimp>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_BY_IDENTIFIER">
+            <English>By identifier</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_CUSTOM_ENTRY">
             <English>%1 (ID %2)</English>
             <Chinesesimp>%1（ID %2）</Chinesesimp>
@@ -647,11 +650,13 @@
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_GPS_TRACK_BY_ID_PROMPT">
             <English>Tracker identifier</English>
-            <Chinesesimp>追踪器标识符</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_GRID_ENTRY">
             <English>%1 (#%2) [%3]</English>
             <Chinesesimp>%1 (#%2) [%3]</Chinesesimp>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_IDENTIFIER_PROMPT">
+            <English>identifier</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_LIGHT_ENTRY">
             <English>Light %1 [%2]</English>
@@ -728,6 +733,80 @@
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_VEHICLE_UNLOCKED">
             <English>Vehicle unlocked.</English>
             <Chinesesimp>载具已解锁。</Chinesesimp>
+        </Key>
+    </Package>
+    <Package name="HackSsh">
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_APP_HACKSSH">
+            <English>Remote Access</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_AUTH_FAILED">
+            <English>Authentication failed.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_BAD_ADDRESS">
+            <English>Write the address as four numbers, 192.168.0.5.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_CONNECTED">
+            <English>Connected to %1. Its devices are now yours to operate.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_DISABLED">
+            <English>Remote access is disabled in this mission.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_DISCONNECTED">
+            <English>Connection closed.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_LOG_FAILED">
+            <English>Remote session refused</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_LOG_OPENED">
+            <English>Remote session opened</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_LOST">
+            <English>Connection lost.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_NO_COMPUTER">
+            <English>Computer not found!</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_NO_POWER">
+            <English>Not enough battery to open a connection.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_NO_ROUTE">
+            <English>No route to that address.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_NO_SESSION">
+            <English>This computer is not connected to anything.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_NO_TOOLS">
+            <English>No hacking tools on this computer.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_OFFLINE">
+            <English>That computer is switched off.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_REFUSED">
+            <English>Connection refused.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_SESSION">
+            <English>Connected to %1 as %2.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_HACKSSH_TIMED_OUT">
+            <English>Connection closed after being left idle.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_HACK_SSH_COST">
+            <English>Remote access cost (Wh)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_HACK_SSH_COST_DESC">
+            <English>Energy the operator's own battery pays to open a remote connection.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_HACK_SSH_ENABLED">
+            <English>Remote access (Hackerman SSH)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_HACK_SSH_ENABLED_DESC">
+            <English>Whether the Hackerman SSH tool can be used to operate another computer's devices.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_HACK_SSH_IDLE_TIMEOUT">
+            <English>Remote access idle timeout (seconds)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_HACK_SSH_IDLE_TIMEOUT_DESC">
+            <English>Seconds a remote connection may sit unused before it closes. Zero keeps it open until something breaks it.</English>
         </Key>
     </Package>
     <Package name="Interface_Localization">
@@ -3195,11 +3274,17 @@
         </Key>
     </Package>
     <Package name="Zeus">
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_ADDED">
+            <English>%1 answered. The device it names is now in this list.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_ALIAS">
             <English>Alias only.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_ASSIGNED">
             <English>Root Cyber Warfare: identifiers set (type #id = code): %1. %2</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_BAD_CODE">
+            <English>A new identifier has to be eight letters or digits. Nothing was changed.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_CODE">
             <English>Identifier</English>
@@ -3207,8 +3292,23 @@
         <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_CODE_DESC">
             <English>Code the device answers to (letters and digits, e.g. VAULTDR1). Empty = random 8-character code.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_COPIED">
+            <English>%1 copied to the clipboard.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_CREDENTIAL">
             <English>Code grants access.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_CURRENT">
+            <English>Current identifier</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_CURRENT_DESC">
+            <English>The code this device answers to now. Use the box below to replace it.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_DEVICE_TITLE">
+            <English>Device Identifier - %1 (%2)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_DISABLED">
+            <English>Error! Device identifiers are switched off in this mission.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_GRANTS">
             <English>Code grants access</English>
@@ -3216,17 +3316,53 @@
         <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_GRANTS_DESC">
             <English>On: anyone who knows the code can use the device from any terminal with hacking tools, linked or not. Off: the code only names the device; normal link/public access still applies.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_LIST_DESC">
+            <English>Every registered device, the grid it stands on and the code it answers to. The one selected on confirming is copied to the clipboard.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_LIST_LABEL">
+            <English>Registered devices</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_LIST_TITLE">
+            <English>Device Identifiers</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_MODULE">
             <English>Device Identifier</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_MODULE_DESC">
             <English>Sets the code synchronized devices answer to in terminal commands (in place of their numeric id). Synchronize to objects another module registers as devices.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_NEW">
+            <English>New identifier</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_NEW_DESC">
+            <English>Eight letters and digits. Anything else is dropped as it is typed.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_NONE_REGISTERED">
+            <English>No device has been registered yet, so there is nothing to show a code for.</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_NOT_REGISTERED">
             <English>Root Cyber Warfare: the object is not a registered device - register it first.</English>
         </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_NO_CODE">
+            <English>no code</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_NO_GRID">
+            <English>no grid</English>
+        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_PLACE_ON_DEVICE">
             <English>Place this module on a registered device.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_REPLACE">
+            <English>Use a new identifier</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_REPLACE_DESC">
+            <English>Replace the code above with the one typed below. Left on No, the device keeps the code it has.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_REVOKE">
+            <English>Revoke existing access</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_REVOKE_DESC">
+            <English>Every laptop that opened this device with the old code loses it again and has to be let in anew.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_IDENTIFIER_SUFFIX">
             <English>. Code: %1</English>

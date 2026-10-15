@@ -50,6 +50,15 @@ _pinBtn ctrlSetPosition [_w * 0.63, 0.01, _w * 0.14, 0.03];
 _pinBtn ctrlSetText (localize "STR_ROOT_CYBERWARFARE_UI_PIN_SELECTED");
 _pinBtn ctrlCommit 0;
 
+// A device the mission did not link to this laptop is in no list for an app to show, so it is reached
+// the only way it can be: by typing the identifier it answers to. Every list app gets the box, and
+// Root_fnc_gui_identifierText is what an action button reads it back with.
+private _identifierEdit = _display ctrlCreate ["RscEdit", -1, _ctrlGroup];
+_identifierEdit ctrlSetPosition [_w * 0.78, 0.01, _w * 0.21, 0.03];
+_identifierEdit ctrlSetText (localize "STR_ROOT_CYBERWARFARE_GUI_IDENTIFIER_PROMPT");
+_identifierEdit ctrlCommit 0;
+uiNamespace setVariable [format ["ROOT_gui_idEdit_%1", _deviceType], _identifierEdit];
+
 private _applyFilter = {
     params ["_listCtrl", "_populate", "_computer", "_gridEdit", "_distanceEdit"];
     private _rows = _listCtrl getVariable ["ROOT_gui_rows", []];
@@ -139,4 +148,4 @@ private _slot = (_w - 0.15) / (_n max 1);
 uiNamespace setVariable [format ["ROOT_gui_open_%1", _deviceType], [_listCtrl, _populate]];
 [_computer, _deviceType] call Root_fnc_gui_requestDevices;
 
-createHashMapFromArray [["onClose", compile format ["uiNamespace setVariable ['ROOT_gui_open_%1', nil];", _deviceType]]]
+createHashMapFromArray [["onClose", compile format ["uiNamespace setVariable ['ROOT_gui_open_%1', nil]; uiNamespace setVariable ['ROOT_gui_idEdit_%1', nil];", _deviceType]]]

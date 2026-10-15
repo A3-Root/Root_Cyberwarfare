@@ -68,8 +68,18 @@ if !(_hasHackingTools) exitWith {
 };
 
 // A device identifier typed into this command that grants access counts as a link for this machine.
+// Two keys, because the two front ends ask from different places: a terminal command resolves the
+// code on the operator's own machine and files the grant under the device alone, while a desktop app
+// asks the server, where a machine-wide grant would hand the device to every laptop in the mission,
+// so that one is filed under the laptop that typed the code as well.
 private _grants = missionNamespace getVariable [GVAR_IDENTIFIER_GRANTS, createHashMap];
-if ((_grants getOrDefault [format ["%1:%2", _deviceType, _deviceId], -1]) > diag_tickTime) exitWith {
+private _grantKeys = [format ["%1:%2", _deviceType, _deviceId]];
+
+{
+    _grantKeys pushBack format ["%1:%2:%3", netId _x, _deviceType, _deviceId];
+} forEach _sessionComputers;
+
+if ((_grantKeys findIf {(_grants getOrDefault [_x, -1]) > diag_tickTime}) != -1) exitWith {
     DEBUG_LOG("Device identifier grant - ACCESS GRANTED");
     true
 };
