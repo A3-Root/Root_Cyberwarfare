@@ -26,7 +26,7 @@ if (!isServer) exitWith {};
 
 params [["_owner", 0, [0]], ["_requester", objNull, [objNull]]];
 
-if (_owner <= 0) exitWith {};
+if (_owner <= 0 && isMultiplayer) exitWith {};
 
 // Only a curator may read the codes. A unit with no curator module assigned to it is not one.
 if (isNull _requester || {isNull (getAssignedCuratorLogic _requester)}) exitWith {

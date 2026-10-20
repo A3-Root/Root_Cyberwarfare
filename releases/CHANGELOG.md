@@ -1,5 +1,12 @@
 # Changelog
 
+## Hotfix (v2.1.0.1)
+
+### Changed
+- *Remote Access* and `hackssh` connect, status and disconnect answer in singleplayer.
+- `hackssh` gives up after 10 seconds with no answer instead of locking the terminal.
+- Zeus *Clear Broken Device Links* and *Hidden Trackers* answer in singleplayer.
+
 ## Update 14 (v2.1.0.0)
 
 ### Added

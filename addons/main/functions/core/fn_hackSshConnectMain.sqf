@@ -18,7 +18,7 @@
  * 1: _targetIp <STRING> - Target address, "192.168.0.5"
  * 2: _user <STRING> - Account on the target
  * 3: _password <STRING> - Password for that account
- * 4: _owner <NUMBER> (Optional) - Machine to answer, 0 for none
+ * 4: _owner <NUMBER> (Optional) - Machine to answer, 0 for none in multiplayer
  *
  * Return Value:
  * <BOOLEAN> - True when a session was opened
@@ -47,7 +47,7 @@ if (!isServer) exitWith {
 private _fnc_fail = {
     params ["_key"];
 
-    if (_owner > 0) then {
+    if (_owner > 0 || {!isMultiplayer}) then {
         ["root_cyberwarfare_hackSshResult", [false, _key, ""], _owner] call CBA_fnc_ownerEvent;
     };
 
@@ -135,7 +135,7 @@ if (_cost > 0) then {
 
 ROOT_CYBERWARFARE_LOG_INFO_2("hackssh: session opened from %1 to %2",_computerNetId,netId _target);
 
-if (_owner > 0) then {
+if (_owner > 0 || {!isMultiplayer}) then {
     ["root_cyberwarfare_hackSshResult", [true, "STR_ROOT_CYBERWARFARE_HACKSSH_CONNECTED", _label, _user], _owner] call CBA_fnc_ownerEvent;
 };
 

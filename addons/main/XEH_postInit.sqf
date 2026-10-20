@@ -155,7 +155,7 @@ if (isServer) then {
 
         private _computer = objectFromNetId _computerNetId;
 
-        if (isNull _computer || (_owner <= 0)) exitWith {};
+        if (isNull _computer || {_owner <= 0 && isMultiplayer}) exitWith {};
 
         ([_computer] call FUNC(getHackSession)) params [["_target", objNull], ["_user", ""]];
 

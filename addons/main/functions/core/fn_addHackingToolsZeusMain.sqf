@@ -620,9 +620,10 @@ _content = "
     missionNamespace setVariable [_result, nil];
     ['root_cyberwarfare_hackSshConnect', [netId _computer, _address, _user, _password, clientOwner]] call CBA_fnc_serverEvent;
 
-    waitUntil { !isNil _result };
+    private _tStart = time;
+    waitUntil { !isNil _result || ((time - _tStart) > 10) };
 
-    (missionNamespace getVariable [_result, [false, '', '']]) params ['_ok', '_message'];
+    (missionNamespace getVariable [_result, [false, 'Operation timed out!', '']]) params ['_ok', '_message'];
 
     private _colour = ['#fa4c58', '#8ce10b'] select _ok;
     [_computer, [[[_message, _colour]]]] call AE3_armaos_fnc_shell_stdout;

@@ -22,6 +22,6 @@ if (!isServer) exitWith {};
 
 private _removed = call FUNC(clearBrokenDeviceLinks);
 
-if (_owner > 0) then {
+if (_owner > 0 || {!isMultiplayer}) then {
     [format [localize "STR_ROOT_CYBERWARFARE_ZEUS_CLEAR_LINKS_RESULT", _removed]] remoteExec ["zen_common_fnc_showMessage", _owner];
 };

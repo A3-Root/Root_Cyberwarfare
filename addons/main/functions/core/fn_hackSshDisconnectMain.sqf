@@ -8,7 +8,7 @@
  * Arguments:
  * 0: _computerNetId <STRING> - Operator's computer
  * 1: _reasonKey <STRING> (Optional) - Stringtable key explaining why, for the operator's screen
- * 2: _owner <NUMBER> (Optional) - Machine to answer, 0 for none
+ * 2: _owner <NUMBER> (Optional) - Machine to answer, 0 for none in multiplayer
  *
  * Return Value:
  * <BOOLEAN> - True when a session was closed
@@ -40,7 +40,7 @@ if (!isNull _computer) then {
 };
 
 if (_session isEqualTo []) exitWith {
-    if (_owner > 0) then {
+    if (_owner > 0 || {!isMultiplayer}) then {
         ["root_cyberwarfare_hackSshResult", [false, "STR_ROOT_CYBERWARFARE_HACKSSH_NO_SESSION", ""], _owner] call CBA_fnc_ownerEvent;
     };
 
@@ -62,7 +62,7 @@ if (_tell <= 0 && {!isNull _computer}) then {
     _tell = [_computer] call AE3_armaos_fnc_computer_getLocality;
 };
 
-if (_tell > 0) then {
+if (_tell > 0 || {!isMultiplayer}) then {
     ["root_cyberwarfare_hackSshResult", [true, _reasonKey, ""], _tell] call CBA_fnc_ownerEvent;
 };
 
