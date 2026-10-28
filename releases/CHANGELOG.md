@@ -1,5 +1,10 @@
 # Changelog
 
+## Hotfix (v2.1.0.2)
+
+### Changed
+- Ciphers count and split text per character, so non-Latin text encrypts, decrypts and brute-forces intact.
+
 ## Hotfix (v2.1.0.1)
 
 ### Changed
