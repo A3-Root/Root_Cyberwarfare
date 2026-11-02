@@ -1,5 +1,10 @@
 # Changelog
 
+## Update (v2.1.0.4)
+
+### Changed
+- Updated to match AE3 v2.1.0.4
+
 ## Hotfix (v2.1.0.2)
 
 ### Changed
