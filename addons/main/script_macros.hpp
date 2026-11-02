@@ -146,6 +146,17 @@
 #ifndef SETTING_DOOR_COST
     #define SETTING_DOOR_COST "ROOT_CYBERWARFARE_DOOR_COST"
 #endif
+// Door states accepted by Root_fnc_setDoorState, the terminal door command and the Doors app.
+#ifndef DOOR_STATES
+    #define DOOR_STATES ["open", "close", "lock", "unlock", "lockopen", "lockclosed"]
+#endif
+// Door start state index (3DEN / Zeus / CBA) to state; 0 = unchanged.
+#ifndef DOOR_START_STATES
+    #define DOOR_START_STATES ["", "close", "open", "lockclosed", "lockopen", "unlock"]
+#endif
+#ifndef SETTING_DOOR_START_STATE
+    #define SETTING_DOOR_START_STATE "ROOT_CYBERWARFARE_DOOR_START_STATE"
+#endif
 #ifndef SETTING_CUSTOM_COST
     #define SETTING_CUSTOM_COST "ROOT_CYBERWARFARE_CUSTOM_COST"
 #endif

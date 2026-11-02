@@ -27,7 +27,7 @@ private _deactivationCode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_D
 // 3DEN checkbox attribute (typeName BOOL) loads as a boolean; accept both boolean and legacy numeric storage.
 private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_ALLOWLOCATION", 1]) in [1, true];
 
-// Optional fixed IDs. A single device uses the start value; a trigger area hands out Start..End
+// Optional fixed IDs. A single device uses the start value; an area hands out Start..End
 // sequentially, falling back to auto-assignment once the range is exhausted or unset.
 private _startId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_ID_START", 0]);
 private _endId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_ID_END", 0]);
@@ -35,32 +35,18 @@ private _endId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_ID_EN
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;
 
-// Separate triggers, laptops, and target objects
-private _triggers = _syncedObjects select {
-	_x isKindOf "EmptyDetector"
-};
-
+// Laptops to link
 private _laptops = _syncedObjects select {
 	typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_PortableServer_01_black_F_AE3", "Land_PortableServer_01_olive_F_AE3", "Land_PortableServer_01_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"]
 };
 
-private _directTargets = _syncedObjects select {
-	!(_x in _laptops) && !(_x in _triggers)
-};
-
-private _allTargets = [];
-
-// If triggers exist, get objects from trigger areas
-if (_triggers isNotEqualTo []) then {
-	private _objectsInArea = [_triggers] call FUNC(getObjectsInTriggerArea);
-	_allTargets append _objectsInArea;
-};
-
-// Add directly synchronized targets
-_allTargets append _directTargets;
+// Synced objects and/or mission-placed objects in the module area and synced trigger areas, per the Register attribute
+private _registerMode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_CUSTOM_REGISTER", 0];
+([_logic, _registerMode, _laptops] call FUNC(getModuleObjects)) params ["_synced", "_inArea"];
+private _allTargets = _synced + (_inArea arrayIntersect (allMissionObjects "All"));
 
 if (_allTargets isEqualTo []) exitWith {
-	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Custom Device: No target objects synchronized or found in trigger areas!");
+	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Custom Device: No target objects synchronized or found in the module or trigger areas!");
 	deleteVehicle _logic;
 };
 

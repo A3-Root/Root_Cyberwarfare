@@ -1,7 +1,7 @@
 ---
 topic: power-grid-control
 status: verified
-last-verified: 2026-07-08
+last-verified: 2026-11-03
 confidence_score: 0.94
 priority: core
 rank: 4
@@ -24,6 +24,10 @@ Power-grid registration and control for lights and electrical areas. The generat
 - `Root_fnc_powerGeneratorLights` toggles the affected lights in the target radius.
 - `Root_fnc_gui_appPowergrid` renders a list and live coverage circle, color-coded by generator state.
 - Generator state is stored on the object as `ROOT_CYBERWARFARE_POWERGRID_STATE` and `ROOT_CYBERWARFARE_GENERATOR_DESTROYED`.
+- Registry row index 10 is the effect area `[centerASL, a, b, angle, isRectangle]`; `[]` means the radius around the generator. Callers pass the area, else the radius, to `getPowerGridObjects` as its second argument.
+- 3DEN: synced objects are the grids, the module area is the effect area. Missions without `objectArea` fall back to the legacy radius attribute.
+- Zeus: dialog adds shape, size B and angle; `zen_common_fnc_selectPosition` picks the area center, Escape centers it on the generator.
+- GUI map marker takes the area shape, size and direction.
 
 ## decisions
 - Derive coverage directly from the registry row so the map view and the action target the same radius.

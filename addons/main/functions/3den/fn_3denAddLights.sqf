@@ -23,7 +23,7 @@ if (!isServer) exitWith {};
 // 3DEN checkbox attributes (typeName BOOL) load as booleans; accept both boolean and legacy numeric storage.
 private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_LIGHTS_ALLOWLOCATION", 1]) in [1, true];
 
-// Optional fixed IDs. A single light uses the start value; a trigger area hands out Start..End
+// Optional fixed IDs. A single light uses the start value; an area hands out Start..End
 // sequentially, falling back to auto-assignment once the range is exhausted or unset.
 private _startId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_LIGHTS_ID_START", 0]);
 private _endId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_LIGHTS_ID_END", 0]);
@@ -31,18 +31,14 @@ private _endId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_LIGHTS_ID_EN
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;
 
-// Separate triggers, laptops, and devices
-private _triggers = _syncedObjects select {
-    _x isKindOf "EmptyDetector"
-};
-
+// Laptops to link
 private _laptops = _syncedObjects select {
     typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_PortableServer_01_black_F_AE3", "Land_PortableServer_01_olive_F_AE3", "Land_PortableServer_01_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"]
 };
 
-private _directDevices = _syncedObjects select {
-    !(_x in _laptops) && !(_x in _triggers)
-};
+// Synced objects and/or objects in the module area and synced trigger areas, per the Register attribute
+private _registerMode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_LIGHTS_REGISTER", 1];
+([_logic, _registerMode, _laptops] call FUNC(getModuleObjects)) params ["_synced", "_inArea"];
 
 // Get laptop netIds for linking
 private _linkedComputers = _laptops apply { netId _x };
@@ -70,25 +66,11 @@ if (_accessMode < 0) then {
     };
 };
 
-private _allDevices = [];
-
-// If triggers exist, get objects from trigger areas
-if (_triggers isNotEqualTo []) then {
-    private _objectsInArea = [_triggers] call FUNC(getObjectsInTriggerArea);
-
-    // Filter for lights only
-    private _lights = _objectsInArea select {
-        _x isKindOf "Lamps_base_F"
-    };
-
-    _allDevices append _lights;
-};
-
-// Add directly synchronized devices
-_allDevices append _directDevices;
+// Synced objects are registered as given; area objects only when they are lights
+private _allDevices = _synced + (_inArea select { _x isKindOf "Lamps_base_F" });
 
 if (_allDevices isEqualTo []) exitWith {
-    ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Lights: No lights synchronized or found in trigger areas!");
+    ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Lights: No lights synchronized or found in the module or trigger areas!");
     deleteVehicle _logic;
 };
 

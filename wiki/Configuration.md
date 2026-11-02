@@ -56,7 +56,7 @@ Settings are organized into categories:
 
 All power costs are measured in **Watt-hours (Wh)**.
 
-### 1. Door Lock/Unlock Cost
+### 1. Door Action Cost
 
 **Setting Name:** `ROOT_CYBERWARFARE_DOOR_COST`
 
@@ -66,13 +66,12 @@ All power costs are measured in **Watt-hours (Wh)**.
 
 **Default:** 2 Wh
 
-**Description:** Power cost to lock or unlock a single door.
+**Description:** Power cost per door opened, closed, locked or unlocked.
 
 **Affects:**
-- `door <BuildingID> <DoorID> lock`
-- `door <BuildingID> <DoorID> unlock`
-- `door <BuildingID> a lock` (multiplied by number of doors)
-- `door <BuildingID> a unlock` (multiplied by number of doors)
+- `door <BuildingID> <DoorID> <state>`
+- `door <BuildingID> a <state>` (multiplied by the number of doors that change)
+- Doors app actions
 
 **Balance Considerations:**
 - **Low (1-3 Wh)**: Easy door manipulation, encourages frequent use
@@ -83,6 +82,16 @@ All power costs are measured in **Watt-hours (Wh)**.
 ```sqf
 private _doorCost = missionNamespace getVariable ["ROOT_CYBERWARFARE_DOOR_COST", 2];
 ```
+
+---
+
+### Door Start State
+
+**Setting Name:** `ROOT_CYBERWARFARE_DOOR_START_STATE`
+
+**Type:** List - Unchanged (default), Closed, Open, Locked Closed, Locked Open, Unlocked
+
+**Description:** Door state applied at registration when the Add Hackable Doors module or Zeus dialog uses "CBA Setting".
 
 ---
 

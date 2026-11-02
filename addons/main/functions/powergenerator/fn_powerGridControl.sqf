@@ -91,7 +91,7 @@ private _powerCost = missionNamespace getVariable [SETTING_POWERGRID_COST, 15];
 
 private _foundGrid = false;
 {
-    _x params ["_storedGridId", "_gridNetId", "_gridName", "_radius", "_allowExplosionOverload", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops", "", "_linkedComputers"];
+    _x params ["_storedGridId", "_gridNetId", "_gridName", "_radius", "_allowExplosionOverload", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops", "", "_linkedComputers", ["_area", []]];
 
     if (_gridIdNum == _storedGridId) then {
         private _gridObject = objectFromNetId _gridNetId;
@@ -144,7 +144,7 @@ private _foundGrid = false;
         // Execute action
         if (_action == "on") then {
             // Get objects in radius
-            private _objectsInRadius = [_gridObject, _radius, _excludedClassnames] call FUNC(getPowerGridObjects);
+            private _objectsInRadius = [_gridObject, [_area, _radius] select (_area isEqualTo []), _excludedClassnames] call FUNC(getPowerGridObjects);
 
             private _lightsAffected = count _objectsInRadius;
 
@@ -162,7 +162,7 @@ private _foundGrid = false;
         } else {
             if (_action == "off") then {
                 // Get objects in radius
-                private _objectsInRadius = [_gridObject, _radius, _excludedClassnames] call FUNC(getPowerGridObjects);
+                private _objectsInRadius = [_gridObject, [_area, _radius] select (_area isEqualTo []), _excludedClassnames] call FUNC(getPowerGridObjects);
 
                 private _lightsAffected = count _objectsInRadius;
 
@@ -185,7 +185,7 @@ private _foundGrid = false;
                     };
 
                     // Get objects in radius
-                    private _objectsInRadius = [_gridObject, _radius, _excludedClassnames] call FUNC(getPowerGridObjects);
+                    private _objectsInRadius = [_gridObject, [_area, _radius] select (_area isEqualTo []), _excludedClassnames] call FUNC(getPowerGridObjects);
 
                     private _lightsAffected = count _objectsInRadius;
 

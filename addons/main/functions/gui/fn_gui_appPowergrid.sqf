@@ -52,23 +52,28 @@ private _drawSel = {
 	private _sel = lbCurSel _listCtrl;
 	if (_sel < 0 || {_sel >= count _grids}) exitWith {};
 
-	(_grids select _sel) params ["", "_netId", "", ["_radius", 100]];
+	(_grids select _sel) params ["", "_netId", "", ["_radius", 100], "", "", "", "", "", "", ["_area", []]];
 	private _grid = objectFromNetId _netId;
 	if (isNull _grid) exitWith {};
 
-	private _pos = getPosWorld _grid;
+	// Effect area, or a circle of the radius around the generator
+	if (_area isEqualTo []) then { _area = [getPosASL _grid, _radius, _radius, 0, false]; };
+	_area params ["_center", "_a", "_b", "_angle", "_rect"];
+	private _pos = ASLToAGL _center;
 	private _state = toUpper (_grid getVariable ["ROOT_CYBERWARFARE_POWERGRID_STATE", "OFF"]);
 	private _col = switch (_state) do { case "ON": {"ColorGreen"}; case "DESTROYED": {"ColorRed"}; default {"ColorGrey"} };
 
 	private _circle = _listCtrl getVariable "AE3_circle";
 	private _dot = _listCtrl getVariable "AE3_dot";
 	_circle setMarkerPosLocal _pos;
-	_circle setMarkerSizeLocal [_radius, _radius];
+	_circle setMarkerShapeLocal (["ELLIPSE", "RECTANGLE"] select _rect);
+	_circle setMarkerSizeLocal [_a, _b];
+	_circle setMarkerDirLocal _angle;
 	_circle setMarkerColorLocal _col;
-	_dot setMarkerPosLocal _pos;
+	_dot setMarkerPosLocal getPosWorld _grid;
 
 	private _map = _listCtrl getVariable "AE3_mapCtrl";
-	_map ctrlMapAnimAdd [0.3, (0.05 max (_radius / 3000) min 1), _pos];
+	_map ctrlMapAnimAdd [0.3, (0.05 max ((_a max _b) / 3000) min 1), _pos];
 	ctrlMapAnimCommit _map;
 };
 _listCtrl setVariable ["AE3_drawSel", _drawSel];

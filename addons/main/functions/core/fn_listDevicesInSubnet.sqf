@@ -150,30 +150,14 @@ if (_type in ["doors", "all", "a"]) then {
                         {
                             if ((_x select 1) == _displayDoorId) exitWith { _displayDoorId = _x select 0; };
                         } forEach _doorIdMap;
-                        private _currentState = _building getVariable [format ['bis_disabled_Door_%1', _x], 5];
-                        private _currentStateString = "";
-                        private _currentStateStringColor = "#8ce10b";
-                        if(_currentState == 1) then {
-                            _currentStateString = "locked ";
-                            _currentStateStringColor = "#fa4c58";
-                        } else {
-                            _currentStateString = "unlocked ";
-                        };
-
-                        private _doorAnim = format ["Door_%1_rot", _x];
-                        private _phase = _building animationPhase _doorAnim;
-
-                        private _phaseString = "";
-                        private _phaseStringColor = "#8ce10b";
-                        if(_phase > 0.5) then {
-                            _phaseString = "open";
-                        } else {
-                            _phaseString = "closed";
-                            _phaseStringColor = "#fa4c58";
-                        };
+                        ([_building, _x] call FUNC(getDoorState)) params ["_isOpen", "_isLocked"];
+                        private _currentStateString = ["unlocked", "locked"] select _isLocked;
+                        private _currentStateStringColor = ["#8ce10b", "#fa4c58"] select _isLocked;
+                        private _phaseString = ["closed", "open"] select _isOpen;
+                        private _phaseStringColor = ["#FFD966", "#8ce10b"] select _isOpen;
 
                         _string = format ["    Door %1 - Status: ", _displayDoorId];
-                        [_computer, [[_string, [_currentStateString, _currentStateStringColor], " / ", [_phaseString, _phaseStringColor]]]] call AE3_armaos_fnc_shell_stdout;
+                        [_computer, [[_string, [_phaseString, _phaseStringColor], ", ", [_currentStateString, _currentStateStringColor]]]] call AE3_armaos_fnc_shell_stdout;
                     } forEach _doorsOfBuilding;
                 };
             } forEach _accessibleDoors;
@@ -195,14 +179,10 @@ if (_type in ["doors", "all", "a"]) then {
                 private _mapGridPos = [_building] call FUNC(gridLabel);
                 private _doorsOfBuilding = _x select 2;
 
-                // Calculate aggregate lock status
-                private _lockedCount = 0;
-                {
-                    private _currentState = _building getVariable [format ['bis_disabled_Door_%1', _x], 5];
-                    if (_currentState == 1) then {
-                        _lockedCount = _lockedCount + 1;
-                    };
-                } forEach _doorsOfBuilding;
+                // Aggregate position and lock status
+                private _doorStates = _doorsOfBuilding apply { [_building, _x] call FUNC(getDoorState) };
+                private _openCount = { _x select 0 } count _doorStates;
+                private _lockedCount = { _x select 1 } count _doorStates;
 
                 // Determine status color based on lock state
                 private _statusColor = "";
@@ -216,7 +196,7 @@ if (_type in ["doors", "all", "a"]) then {
                     };
                 };
 
-                _string = format ["    %1 - %2 - %3", _buildingId, _buildingDisplayName, _mapGridPos];
+                _string = format ["    %1 - %2 - %3 - %4", _buildingId, _buildingDisplayName, _mapGridPos, format [localize "STR_ROOT_CYBERWARFARE_DOOR_STATUS", _openCount, count _doorStates - _openCount, _lockedCount, count _doorStates - _lockedCount]];
                 [_computer, [[[_string, _statusColor]]]] call AE3_armaos_fnc_shell_stdout;
             } forEach _accessibleDoors;
         };
@@ -618,7 +598,7 @@ if (_type in ["powergrids", "all", "a"]) then {
         if (_deviceId != "") then {
             private _foundGrid = false;
             {
-                _x params ["_gridId", "_objectNetId", "_gridName", "_radius", "_allowExplosionOverload", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops", "_powerCost", "_linkedComputers"];
+                _x params ["_gridId", "_objectNetId", "_gridName", "_radius", "_allowExplosionOverload", "_explosionType", "_excludedClassnames", "_availableToFutureLaptops", "_powerCost", "_linkedComputers", ["_area", []]];
 
                 if (str _gridId == _deviceId) exitWith {
                     _foundGrid = true;
@@ -631,8 +611,12 @@ if (_type in ["powergrids", "all", "a"]) then {
                     _string = format ["Power Grid %1 - %2 (%3) @ %4", _gridId, _gridName, _displayName, _mapGridPos];
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
-                    // Radius
-                    _string = format ["    Radius: %1m", _radius];
+                    // Radius or effect area
+                    _string = if (_area isEqualTo []) then {
+                        format ["    Radius: %1m", _radius]
+                    } else {
+                        format ["    Area: %1m x %2m @ %3", round (_area select 1), round (_area select 2), mapGridPosition ASLToAGL (_area select 0)]
+                    };
                     [_computer, _string] call AE3_armaos_fnc_shell_stdout;
 
                     // State with color

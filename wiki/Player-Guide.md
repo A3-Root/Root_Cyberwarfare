@@ -120,7 +120,7 @@ devices powergrids 3344 # Show affected lights in power grid 3344
 **Output Format:**
 
 **Summary View** (no device ID provided):
-- **Doors**: `<Building ID> - <Building Name> - <Grid Location>` with aggregate lock status (Locked/Unlocked/Partially Locked)
+- **Doors**: `<Building ID> - <Building Name> - <Grid Location> - <open/closed and locked/unlocked counts>`, coloured by lock status
 - **Lights**: `<Light ID> - <Building Name> - <Grid Location>`
 - **Drones**: `<Drone ID> - <Drone Name> - <Grid Location>`
 - **Files**: `<File ID> - <File Name> - <Download Time>`
@@ -156,33 +156,40 @@ Device status information is color-coded for quick identification:
 
 **Syntax:**
 ```bash
-door <BuildingID> <DoorID|'a'> <lock|unlock>
+door <BuildingID> <DoorID|'a'> <state>
 ```
 
-**Description:**
-Lock or unlock doors in registered buildings.
+**States:**
+
+| State | Door | Lock |
+|-------|------|------|
+| `open` | opens | unchanged |
+| `close` | closes | unchanged |
+| `lock` | unchanged | locked |
+| `unlock` | unchanged | unlocked |
+| `lockopen` | opens | locked |
+| `lockclosed` | closes | locked |
 
 **Parameters:**
-- `BuildingID` - The unique ID of the building (from `devices doors`)
-- `DoorID` - Specific door ID, or `a` to target all doors
-- `lock|unlock` - Desired door state
+- `BuildingID` - Building ID (from `devices doors`)
+- `DoorID` - Door ID, or `a` for all doors
 
-**Power Cost:** Configurable (default: **2 Wh per door**)
+**Power Cost:** Configurable (default: **2 Wh per changed door**). Doors already in the state cost nothing.
 
 **Examples:**
 ```bash
-door 1454 2881 lock      # Lock door 2881 in building 1454
-door 1454 2881 unlock    # Unlock door 2881 in building 1454
-door 1454 a lock         # Lock ALL doors in building 1454
-door 1454 a unlock       # Unlock ALL doors in building 1454
+door 1454 2881 lockopen  # Open door 2881 in building 1454 and lock it open
+door 1454 a close        # Close all doors in building 1454
+door 1454 a unlock       # Unlock all doors in building 1454
 ```
 
-**Confirmation Required:** Yes (for multiple doors when using `a`)
+**Confirmation Required:** Yes
 
 **Notes:**
-- Doors marked as "unbreachable" cannot be opened with ACE explosives or lockpicking
-- Locking a door does not automatically close it
-- Door state (open/closed) is shown in `devices doors` output
+- A locked door cannot be opened or closed by players; the laptop can still move it.
+- Unbreachable doors cannot be opened with ACE explosives or lockpicking.
+- `devices doors` shows open/closed and locked/unlocked per door.
+- The Doors app has the same six actions as buttons.
 
 ---
 
@@ -681,7 +688,7 @@ Power costs for hacking operations are configured in **Watt-hours (Wh)**:
 
 | Operation | Default Cost (Wh) |
 |-----------|-------------------|
-| Lock/unlock door | 2 |
+| Door action (per changed door) | 2 |
 | Change drone faction | 20 |
 | Disable | 10 |
 | Custom device action | 10 |
@@ -983,7 +990,7 @@ Check:
 
 - Check door lock status: `devices doors`
 - If marked "unbreachable", hacking is the **only** way to open them
-- Unlocking doesn't auto-open doors - press your "open door" key (Space by default)
+- Unlocking does not open doors; use `door <BuildingID> <DoorID> open` or `lockopen`
 
 ---
 

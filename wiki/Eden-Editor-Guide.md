@@ -176,7 +176,7 @@ Custom Device Cost: 20
 **How to Use:**
 1. Place buildings or lamps in the scene
 2. Place the matching module (F5 → ROOT_CYBERWARFARE → Add Hackable Doors / Add Hackable Lights)
-3. **Synchronize** the module to target objects (or leave a Doors module unsynced and use a trigger area for batch registration)
+3. Set **Register**: synced objects, objects in the module area, or both. Resize the module area like a marker. Synced triggers add their area.
 4. Optionally synchronize to laptops for private access
 5. Configure attributes
 
@@ -186,14 +186,16 @@ Custom Device Cost: 20
 |-----------|------|---------|-------------|
 | **Add to Public Device List** | Checkbox | ✓ Checked | If checked, devices are accessible by all laptops (current and future). |
 | **Allow Location View** | Checkbox | ✓ Checked | If unchecked, the device's grid location is hidden (`[location hidden]`) in CLI and GUI listings. |
+| **Register** | Combo | Objects in Module Area | Synced Objects, Objects in Module Area, or both. |
+| **Door Start State** (Doors only) | Combo | CBA Setting | Unchanged, Closed, Open, Locked Closed, Locked Open or Unlocked, applied at registration. |
 | **Make Unbreachable** (Doors only) | Checkbox | Unchecked | If checked, building doors cannot be breached with ACE explosives, lockpicking, or other means except using the linked laptop. |
 
 **Synchronization:**
 
 | Module | Sync Target | Effect |
 |--------|-------------|--------|
-| Add Hackable Doors | Buildings, or a trigger area | Registers all doors in each building |
-| Add Hackable Lights | Lamps | Registers as controllable lights |
+| Add Hackable Doors | Buildings, or the module/trigger area | Registers all doors in each building |
+| Add Hackable Lights | Lamps, or the module/trigger area | Registers as controllable lights |
 | Both | Laptops | Grants those laptops private access (if "Add to Public Device List" is unchecked) |
 
 **Example Setup 1: Public Building (All Laptops)**
@@ -581,21 +583,21 @@ private _action = _this select 1; // "activate" or "deactivate"
 
 ### 9. Add Power Generator
 
-**Purpose:** Create power generators that control lights within a configurable radius.
+**Purpose:** Create power grids. Synced objects are the grids; the module area is the area whose lights they switch, anywhere on the map.
 
 **How to Use:**
 1. Place objects in the scene (representing generators)
 2. Place **Add Power Generator** module (F5 → ROOT_CYBERWARFARE)
 3. **Synchronize** the module to generator object(s)
-4. Optionally synchronize to laptops for private access
-5. Configure attributes
+4. Move and resize the module area (ellipse or rectangle) over the lights to control
+5. Optionally synchronize to laptops for private access
+6. Configure attributes
 
 **Attributes:**
 
 | Attribute | Type | Default | Description |
 |-----------|------|---------|-------------|
 | **Generator Name** | String | `Power Generator` | Display name in terminal listings. |
-| **Effect Radius (meters)** | Number | `1000` | Radius in meters to affect lights. |
 | **Allow Explosion on Activation** | Checkbox | Unchecked | If checked, `on` action creates explosion. |
 | **Allow Explosion on Deactivation** | Checkbox | Unchecked | If checked, `off` or `overload` action creates explosion. |
 | **Explosion Type** | String | `HelicopterExploSmall` | Ammo classname for explosion. |
@@ -617,7 +619,7 @@ private _action = _this select 1; // "activate" or "deactivate"
 3. Sync module to generatorObject
 4. Configure:
    Generator Name: Main Base Power
-   Effect Radius: 500
+   Module area: 500 x 500 over the base
    Allow Explosion on Activation: (unchecked)
    Allow Explosion on Deactivation: ✓ (checked)
    Explosion Type: HelicopterExploSmall
@@ -632,8 +634,8 @@ private _action = _this select 1; // "activate" or "deactivate"
 - Registers object as a power generator
 - Players use `powergrid <GridID> <on|off|overload>` to control
 - Actions:
-  - `on`: Turn on all lights in radius
-  - `off`: Turn off all lights in radius
+  - `on`: Turn on all lights in the area
+  - `off`: Turn off all lights in the area
   - `overload`: Destroy generator and all lights (with optional explosion)
 
 **Excluded Light Classnames:**
@@ -661,7 +663,7 @@ Common ammo classnames:
 **Notes:**
 - Overload permanently destroys generator object
 - Explosion (if enabled) creates damage, visual, and audio effects
-- All lights in radius (except excluded) are affected
+- All lights in the area (except excluded) are affected
 - Number of affected lights is reported in command output
 
 ---
@@ -900,7 +902,7 @@ Result: Only laptop1 can access doors, ACE breaching disabled
 3. Sync to generatorObject and laptop1
 4. Attributes:
    - Generator Name: Base Power
-   - Effect Radius: 300
+   - Module area: 300 x 300
    - Allow Explosion on Deactivation: ✓
    - Explosion Type: HelicopterExploSmall
    - Power Cost: 15

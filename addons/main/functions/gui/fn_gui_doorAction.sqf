@@ -1,16 +1,14 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Server-side door lock/unlock for the GUI Doors app. Locks or unlocks every door of a
- * building the computer can access, consuming power per changed door. Mirrors the core behaviour of
- * Root_fnc_changeDoorState but without the terminal I/O (the GUI handles confirmation and feedback).
- * Runs on the server.
+ * Description: Server-side door action for the GUI Doors app. Applies a door state to every door (or one
+ * door) of a building the computer can access, consuming power per changed door. Runs on the server.
  *
  * Arguments:
  * 0: _owner <NUMBER> - clientOwner of the operator (for the result reply)
  * 1: _computerNetId <STRING> - netId of the laptop
  * 2: _buildingId <NUMBER> - Building id from the device registry
- * 3: _state <STRING> - "lock" or "unlock"
+ * 3: _state <STRING> - "open", "close", "lock", "unlock", "lockopen" or "lockclosed"
  * 4: _commandPath <STRING> - Backdoor command path
  *
  * Return Value:
@@ -39,7 +37,8 @@ if (_identifier isNotEqualTo "") then {
 
 if (_buildingId isEqualTo -1) exitWith {};
 
-if !(_state in ["lock", "unlock"]) exitWith {};
+_state = toLower _state;
+if !(_state in DOOR_STATES) exitWith {};
 
 private _cost = missionNamespace getVariable [SETTING_DOOR_COST, 2];
 
@@ -51,7 +50,6 @@ if (_idx == -1) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_BUILDI
 private _building = objectFromNetId _bNetId;
 if (isNull _building) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_BUILDING_NOT_FOUND", false] call _reply; };
 
-private _newState = parseNumber (_state isEqualTo "lock");
 // A specific door id (#2) restricts the operation to that single door; otherwise the whole building.
 // The id sent by the GUI is the mission-maker's custom door ID, resolved back to the engine number.
 if (_doorId isNotEqualTo "") then {
@@ -62,7 +60,8 @@ if (_doorId isNotEqualTo "") then {
 	} forEach _doorIdMap;
 	_doorIds = _doorIds select { _x == _realDoor };
 };
-private _changing = _doorIds select { (_building getVariable [format ["bis_disabled_Door_%1", _x], 5]) != _newState };
+if (_doorIds isEqualTo []) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_INVALID_DOOR_ID", _doorId], false] call _reply; };
+private _changing = [_building, _doorIds, _state, true] call FUNC(setDoorState);
 
 if (_changing isEqualTo []) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_NO_BUILDINGS_CRITERIA", false] call _reply; };
 
@@ -74,17 +73,7 @@ if !([_computer, _total, DEVICE_TYPE_DOOR, parseNumber (str _buildingId)] call F
 
 [_computer, _total, DEVICE_TYPE_DOOR, parseNumber (str _buildingId)] call FUNC(consumePower);
 
-{
-	_building setVariable [format ["bis_disabled_Door_%1", _x], _newState, true];
-	if (_state isEqualTo "lock") then
-	{
-		_building setVariable [format ["ROOT_CYBERWARFARE_CYBER_LOCKED_%1", _x], true, true];
-	}
-	else
-	{
-		_building setVariable [format ["ROOT_CYBERWARFARE_CYBER_LOCKED_%1", _x], nil, true];
-	};
-} forEach _changing;
+[_building, _changing, _state] call FUNC(setDoorState);
 
 ["root_cyberwarfare_deviceStateChanged", [DEVICE_TYPE_DOOR, _bId, _state]] call CBA_fnc_serverEvent;
 

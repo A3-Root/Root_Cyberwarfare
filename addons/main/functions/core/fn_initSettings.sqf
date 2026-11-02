@@ -163,6 +163,25 @@
     false // doesn't require mission restart
 ] call CBA_fnc_addSetting;
 
+// Door state applied at registration when the module or Zeus dialog uses "CBA Setting"; index into DOOR_START_STATES
+[
+    SETTING_DOOR_START_STATE,
+    "LIST",
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_DOOR_START_STATE", localize "STR_ROOT_CYBERWARFARE_SETTING_DOOR_START_STATE_DESC"],
+    [localize "STR_ROOT_CYBERWARFARE_SETTING_CATEGORY", (localize "STR_ROOT_CYBERWARFARE_UI_CORE_SETTINGS")],
+    [[0, 1, 2, 3, 4, 5], [
+        localize "STR_ROOT_CYBERWARFARE_DOOR_START_UNCHANGED",
+        localize "STR_ROOT_CYBERWARFARE_DOOR_START_CLOSED",
+        localize "STR_ROOT_CYBERWARFARE_DOOR_START_OPEN",
+        localize "STR_ROOT_CYBERWARFARE_DOOR_START_LOCKCLOSED",
+        localize "STR_ROOT_CYBERWARFARE_DOOR_START_LOCKOPEN",
+        localize "STR_ROOT_CYBERWARFARE_DOOR_START_UNLOCKED"
+    ], 0],
+    1,
+    {},
+    false
+] call CBA_fnc_addSetting;
+
 // Custom Device Power Cost Setting
 [
     SETTING_CUSTOM_COST,

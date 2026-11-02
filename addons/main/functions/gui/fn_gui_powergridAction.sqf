@@ -50,7 +50,7 @@ private _grids = GET_DEVICES_OF_TYPE(DEVICE_TYPE_POWERGRID);
 private _idx = _grids findIf { (_x select 0) == _gridId };
 if (_idx == -1) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_POWERGRID_NOT_FOUND", _gridId], false] call _reply; };
 
-(_grids select _idx) params ["", "_gridNetId", "_gridName", "_radius", "_allowOverload", "_explosionType", "_excludedClassnames"];
+(_grids select _idx) params ["", "_gridNetId", "_gridName", "_radius", "_allowOverload", "_explosionType", "_excludedClassnames", "", "", "", ["_area", []]];
 private _gridObject = objectFromNetId _gridNetId;
 if (isNull _gridObject) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_POWERGRID_OBJECT_NOT_FOUND", false] call _reply; };
 if (_gridObject getVariable ["ROOT_CYBERWARFARE_GENERATOR_DESTROYED", false]) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_GENERATOR_DESTROYED", false] call _reply; };
@@ -58,8 +58,8 @@ if (_gridObject getVariable ["ROOT_CYBERWARFARE_GENERATOR_DESTROYED", false]) ex
 private _cost = missionNamespace getVariable [SETTING_POWERGRID_COST, 15];
 if !([_computer, _cost, DEVICE_TYPE_POWERGRID, parseNumber (str _gridId)] call FUNC(checkPowerAvailable)) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply; };
 
-// Objects (lights) within the grid radius, minus excluded classes.
-private _objectsInRadius = [_gridObject, _radius, _excludedClassnames] call FUNC(getPowerGridObjects);
+// Objects (lights) within the grid radius or effect area, minus excluded classes.
+private _objectsInRadius = [_gridObject, [_area, _radius] select (_area isEqualTo []), _excludedClassnames] call FUNC(getPowerGridObjects);
 
 switch (_action) do
 {

@@ -80,6 +80,8 @@ class CfgFunctions {
 			class addDoorsZeusMain {};
 			class addLightsZeusMain {};
 			class changeDoorState {};
+			class setDoorState {};
+			class getDoorState {};
 			class changeLightState {};
 		};
 
@@ -181,6 +183,9 @@ class CfgFunctions {
 			class clearIdentifierGrants {};
 			class getLaptopUid {};
 			class getObjectsInTriggerArea {};
+			class getObjectsInArea {};
+			class logicArea {};
+			class getModuleObjects {};
 			class getPlayerFromComputer {};
 			class getUserConfirmation {};
 			class resolveDeviceId {};

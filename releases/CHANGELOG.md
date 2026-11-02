@@ -1,5 +1,20 @@
 # Changelog
 
+## Update (v2.1.0.6)
+
+### Added
+- Door actions `open`, `close`, `lockopen`, `lockclosed` next to `lock` and `unlock` in the `door` command, Doors app and Hackerman.
+- `Root_fnc_setDoorState` and `Root_fnc_getDoorState`.
+- Door start state in the Add Hackable Doors 3DEN module, Zeus dialog, `Root_fnc_addDoorsZeusMain` and CBA setting.
+- Module area and *Register* attribute on the Add Hackable Doors, Lights, Vehicle and Custom Device 3DEN modules.
+- Power grid effect area: 3DEN module area, Zeus shape/size/angle with click-to-place center, `_area` in `Root_fnc_addPowerGeneratorZeusMain` and `Root_fnc_getPowerGridObjects`.
+
+### Changed
+- Door listings and apps show open/closed and locked/unlocked separately.
+- Door power cost counts every door the action changes.
+- Power grid map view draws the effect area shape.
+- Power Generator 3DEN module: Effect Radius attribute replaced by the module area.
+
 ## Update (v2.1.0.5)
 
 ### Added

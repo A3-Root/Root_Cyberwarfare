@@ -99,6 +99,19 @@ _dialogControls pushBack ["COMBO", [localize "STR_ROOT_CYBERWARFARE_ACCESS_MODE"
 ]];
 _dialogControls pushBack ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_ACCESS_FUTURE"), (localize "STR_ROOT_CYBERWARFARE_UI_ONLY_APPLIES_TO_LINKED_COMPUTERS_ONLY_THE_LINKED_COMPUTERS_KEEP_ACCESS_AND")], false];
 _dialogControls pushBack ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_UI_ALLOW_LOCATION_VIEW"), (localize "STR_ROOT_CYBERWARFARE_UI_SHOW_THIS_DEVICE_S_GRID_LOCATION_ON_THE_LAPTOP_CLI_GUI_DISABLE")], true];
+_dialogControls pushBack ["COMBO", [localize "STR_ROOT_CYBERWARFARE_DOOR_START_STATE", localize "STR_ROOT_CYBERWARFARE_DOOR_START_STATE_DESC"], [
+    [-1, 0, 1, 2, 3, 4, 5],
+    [
+        localize "STR_ROOT_CYBERWARFARE_DOOR_START_DEFAULT",
+        localize "STR_ROOT_CYBERWARFARE_DOOR_START_UNCHANGED",
+        localize "STR_ROOT_CYBERWARFARE_DOOR_START_CLOSED",
+        localize "STR_ROOT_CYBERWARFARE_DOOR_START_OPEN",
+        localize "STR_ROOT_CYBERWARFARE_DOOR_START_LOCKCLOSED",
+        localize "STR_ROOT_CYBERWARFARE_DOOR_START_LOCKOPEN",
+        localize "STR_ROOT_CYBERWARFARE_DOOR_START_UNLOCKED"
+    ],
+    0
+]];
 
 // Add unbreachable option for buildings (always available in this module)
 if (!_useRadiusMode) then {
@@ -161,6 +174,9 @@ if (_useRadiusMode) then {
         private _allowLocation = _results select _resultIndex;
         _resultIndex = _resultIndex + 1;
 
+        private _startState = _results select _resultIndex;
+        _resultIndex = _resultIndex + 1;
+
         // Extract unbreachable setting (for direct mode)
         if (!_useRadiusMode) then {
             _makeUnbreachable = _results select _resultIndex;
@@ -197,10 +213,10 @@ if (_useRadiusMode) then {
         // Handle radius mode or direct mode
         if (_useRadiusMode) then {
             // Radius mode: Use captured position (logic is already deleted)
-            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _requestedId, _rangeEndId, _accessMode] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+            [_logicPosition, _radius, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _requestedId, _rangeEndId, _accessMode, _startState] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
         } else {
             // Direct mode: Register single object
-            [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _requestedId, _doorIdMap, _accessMode] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+            [_targetObject, _execUserId, _selectedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _requestedId, _doorIdMap, _accessMode, _startState] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
             [(localize "STR_ROOT_CYBERWARFARE_UI_HACKABLE_DOORS_ADDED")] call zen_common_fnc_showMessage;
         };
 

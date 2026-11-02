@@ -1,7 +1,8 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Description: Server-side function to register a power generator that controls lights within radius
+ * Description: Server-side function to register a power generator that controls lights within its radius
+ * or within a separate effect area
  *
  * Arguments:
  * 0: _targetObject <OBJECT> - The generator object
@@ -16,12 +17,13 @@
  * 9: _powerCost <NUMBER> (Optional) - Power cost in Wh per operation, default: 10
  * 10: _requestedId <NUMBER> (Optional) - Fixed device id, 0 = auto-assign, default: 0
  * 11: _accessMode <NUMBER> (Optional) - ACCESS_MODE_* constant, default: ACCESS_MODE_UNASSIGNED
+ * 12: _area <ARRAY> (Optional) - Effect area [centerASL, a, b, angle, isRectangle], [] = radius around the generator, default: []
  *
  * Return Value:
  * None
  *
  * Example:
- * [_obj, 0, [], "Generator", 100, true, "HelicopterExploSmall", ["Lamp_Street_small_F"], false, 15, 0, ACCESS_MODE_PUBLIC] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
+ * [_obj, 0, [], "Generator", 100, true, "HelicopterExploSmall", ["Lamp_Street_small_F"], false, 15, 0, ACCESS_MODE_PUBLIC, [getPosASL _village, 300, 200, 45, true]] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
  *
  * Public: No
  */
@@ -38,7 +40,8 @@ params [
     ["_availableToFutureLaptops", false],
     ["_powerCost", 10],
     ["_requestedId", 0],
-    ["_accessMode", ACCESS_MODE_UNASSIGNED, [0]]
+    ["_accessMode", ACCESS_MODE_UNASSIGNED, [0]],
+    ["_area", [], [[]]]
 ];
 
 if (isNull _targetObject) exitWith {
@@ -51,6 +54,7 @@ if (_execUserId == 0) then {
 
 // Store generator configuration on the object
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_RADIUS", _radius, true];
+_targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_AREA", _area, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_OVERLOAD", _allowExplosionOverload, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXPLOSION_TYPE", _explosionType, true];
 _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_EXCLUDED", _excludedClassnames, true];
@@ -65,7 +69,7 @@ private _allPowerGrids = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_POWERGRID), 
 // Honour a caller-requested ID when free, otherwise draw a fresh unused one.
 private _deviceId = [_requestedId, _allPowerGrids apply { _x select 0 }] call FUNC(resolveDeviceId);
 
-// Store device entry: [gridId, objectNetId, gridName, radius, allowExplosionOverload, explosionType, excludedClassnames, availableToFutureLaptops, powerCost, linkedComputers]
+// Store device entry: [gridId, objectNetId, gridName, radius, allowExplosionOverload, explosionType, excludedClassnames, availableToFutureLaptops, powerCost, linkedComputers, area]
 _allPowerGrids pushBack [
     _deviceId,
     netId _targetObject,
@@ -76,7 +80,8 @@ _allPowerGrids pushBack [
     _excludedClassnames,
     _availableToFutureLaptops,
     _powerCost,
-    _linkedComputers
+    _linkedComputers,
+    _area
 ];
 
 // Update device array

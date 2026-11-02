@@ -1,7 +1,7 @@
 ---
 topic: zeus-and-eden-setup
 status: verified
-last-verified: 2026-07-08
+last-verified: 2026-11-03
 confidence_score: 0.93
 priority: core
 rank: 3
@@ -26,6 +26,9 @@ Mission-maker setup layer for RootCW. Zeus and 3DEN modules are thin editors ove
 - `Root_fnc_registerHackableLaptopZeusMain` marks the laptop as a hackable station and stores the display name used by link dialogs.
 - `Root_fnc_addHackingToolsZeusMain` installs the file tree and, in the `OPS_DEBUG` case, can attach a debug backdoor prefix.
 - 3DEN modules call the same server-side registration functions as Zeus, including radius-mode bulk registration for vehicles, databases, and custom devices.
+- Add Doors, Lights, Vehicle and Custom Device 3DEN modules have an editable area (`canSetArea`) and a Register combo (0 synced, 1 area, 2 both). `Root_fnc_getModuleObjects` returns `[synced, inArea]`; synced trigger areas always count; a module without `objectArea` registers synced objects only. Custom Device area objects are limited to mission-placed objects; default Register is synced.
+- `Root_fnc_logicArea` reads `objectArea`; `Root_fnc_getObjectsInArea` is the area query, `getObjectsInTriggerArea` wraps it.
+- Door start state (-1 CBA setting `ROOT_CYBERWARFARE_DOOR_START_STATE`, 0 unchanged, 1-5 per `DOOR_START_STATES`) is applied by `addDoorsZeusMain` through `Root_fnc_setDoorState`.
 
 ## decisions
 - Keep module UIs thin and push the real work into server-side functions, so Zeus and 3DEN stay in sync.

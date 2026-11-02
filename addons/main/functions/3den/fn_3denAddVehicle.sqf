@@ -66,7 +66,7 @@ private _engineCooldown = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_EN
 private _alarmMinDuration = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ALARM_MIN", 1];
 private _alarmMaxDuration = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ALARM_MAX", 30];
 
-// Optional fixed IDs. A single vehicle uses the start value; a trigger area hands out Start..End
+// Optional fixed IDs. A single vehicle uses the start value; an area hands out Start..End
 // sequentially, falling back to auto-assignment once the range is exhausted or unset.
 private _startId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ID_START", 0]);
 private _endId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ID_END", 0]);
@@ -74,38 +74,20 @@ private _endId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_ID_E
 // Get all synchronized objects
 private _syncedObjects = synchronizedObjects _logic;
 
-// Separate triggers, laptops, and vehicles
-private _triggers = _syncedObjects select {
-	_x isKindOf "EmptyDetector"
-};
-
+// Laptops to link
 private _laptops = _syncedObjects select {
 	typeOf _x in ["Land_Laptop_03_black_F_AE3", "Land_Laptop_03_olive_F_AE3", "Land_Laptop_03_sand_F_AE3", "Land_PortableServer_01_black_F_AE3", "Land_PortableServer_01_olive_F_AE3", "Land_PortableServer_01_sand_F_AE3", "Land_USB_Dongle_01_F_AE3"]
 };
 
-private _directVehicles = _syncedObjects select {
-	!(_x in _laptops) && !(_x in _triggers) && {_x isKindOf "AllVehicles"}
-};
+// Synced objects and/or objects in the module area and synced trigger areas, per the Register attribute
+private _registerMode = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_VEHICLE_REGISTER", 1];
+([_logic, _registerMode, _laptops] call FUNC(getModuleObjects)) params ["_synced", "_inArea"];
 
-private _allVehicles = [];
-
-// If triggers exist, get objects from trigger areas
-if (_triggers isNotEqualTo []) then {
-	private _objectsInArea = [_triggers] call FUNC(getObjectsInTriggerArea);
-
-	// Filter for vehicles and drones only
-	private _vehiclesInTrigger = _objectsInArea select {
-		_x isKindOf "AllVehicles"
-	};
-
-	_allVehicles append _vehiclesInTrigger;
-};
-
-// Add directly synchronized vehicles
-_allVehicles append _directVehicles;
+// Vehicles and drones only; area objects exclude units
+private _allVehicles = (_synced select { _x isKindOf "AllVehicles" }) + (_inArea select { _x isKindOf "AllVehicles" && {!(_x isKindOf "CAManBase")} });
 
 if (_allVehicles isEqualTo []) exitWith {
-	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Vehicle: No vehicles synchronized or found in trigger areas!");
+	ROOT_CYBERWARFARE_LOG_ERROR("3DEN Add Vehicle: No vehicles synchronized or found in the module or trigger areas!");
 	deleteVehicle _logic;
 };
 

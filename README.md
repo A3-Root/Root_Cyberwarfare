@@ -13,7 +13,7 @@ An improved adaptation and expansion of the original Cyber Warfare mod, adding a
 
 Root's Cyber Warfare introduces 8 distinct device types that can be hacked and controlled via laptop terminals:
 
-- **Building Doors** - Lock and unlock doors remotely, prevent ACE breaching
+- **Building Doors** - Open, close, lock and unlock doors remotely, set start states, prevent ACE breaching
 - **Lights** - Control building and street lights on/off
 - **Drones (UAVs)** - Change faction allegiance or disable enemy drones
 - **Vehicles** - Manipulate fuel, speed, brakes, lights, engine, and alarms with customizable limits
@@ -68,7 +68,7 @@ Root's Cyber Warfare introduces 8 distinct device types that can be hacked and c
 
 **Available Commands:**
 - `devices help` - List device types and usage
-- `door help` - Lock/unlock doors
+- `door help` - Open, close, lock and unlock doors
 - `light help` - Control lights
 - `vehicle help` - Manipulate vehicles
 - `changedrone help` - Change drone faction
@@ -121,7 +121,7 @@ private _building = nearestBuilding player;
 [_building, 0, [netId _laptop], false, false] remoteExec ["Root_fnc_addDeviceZeusMain", 2];
 
 // Players can now use the laptop to lock/unlock doors:
-// door <BuildingID> <DoorID> lock/unlock
+// door <BuildingID> <DoorID> open|close|lock|unlock|lockopen|lockclosed
 ```
 
 ### Example 2: GPS Tracking Mission

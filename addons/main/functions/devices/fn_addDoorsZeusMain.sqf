@@ -16,6 +16,8 @@
  * 6: _requestedId <NUMBER> (Optional) - Desired building ID (0 = auto-assign), default: 0
  * 7: _doorIdMap <ARRAY> (Optional) - Per-door overrides [[realDoor, customId], ...], default: []
  * 8: _accessMode <NUMBER> (Optional) - ACCESS_MODE_* constant, default: ACCESS_MODE_UNASSIGNED
+ * 9: _startState <NUMBER> (Optional) - Door start state: -1 CBA setting, 0 unchanged, 1 closed, 2 open,
+ *    3 locked closed, 4 locked open, 5 unlocked, default: -1
  *
  * RADIUS MODE (multiple objects):
  * 0: _centerPosition <ARRAY> - Position array [x, y, z] for search center
@@ -28,12 +30,13 @@
  * 7: _startId <NUMBER> (Optional) - First building ID handed out across the area (0 = auto), default: 0
  * 8: _endId <NUMBER> (Optional) - Last building ID handed out across the area (0 = auto), default: 0
  * 9: _accessMode <NUMBER> (Optional) - ACCESS_MODE_* constant, default: ACCESS_MODE_UNASSIGNED
+ * 10: _startState <NUMBER> (Optional) - Door start state, see direct mode, default: -1
  *
  * Return Value:
  * None
  *
  * Example:
- * [_building, 0, [], false, false, true, 0, [], ACCESS_MODE_PUBLIC] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+ * [_building, 0, [], false, false, true, 0, [], ACCESS_MODE_PUBLIC, 4] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
  * [[100, 200, 0], 500, 0, [], true, false, true, 0, 0, ACCESS_MODE_LINKED] remoteExec ["Root_fnc_addDoorsZeusMain", 2]; // Radius mode
  *
  * Public: No
@@ -54,6 +57,7 @@ private _doorIdMapInput = [];  // Caller-supplied per-door overrides for direct 
 private _startId = 0;          // First ID handed out across a radius sweep
 private _endId = 0;            // Last ID handed out across a radius sweep
 private _accessMode = ACCESS_MODE_UNASSIGNED; // How the registered buildings may be reached
+private _startState = -1;      // Door start state index, -1 = CBA setting
 
 private _firstParam = _this select 0;
 
@@ -72,6 +76,7 @@ if (typeName _firstParam == "ARRAY") then {
     _startId = param [7, 0, [0]];
     _endId = param [8, 0, [0]];
     _accessMode = param [9, ACCESS_MODE_UNASSIGNED, [0]];
+    _startState = param [10, -1, [0]];
 } else {
     // Direct mode: object passed
     _radiusMode = false;
@@ -84,6 +89,7 @@ if (typeName _firstParam == "ARRAY") then {
     _requestedId = param [6, 0, [0]];
     _doorIdMapInput = param [7, [], [[]]];
     _accessMode = param [8, ACCESS_MODE_UNASSIGNED, [0]];
+    _startState = param [9, -1, [0]];
 };
 
 if (_execUserId == 0) then {
@@ -120,7 +126,7 @@ if (_radiusMode) exitWith {
                 _assignId = _nextId;
                 _nextId = _nextId + 1;
             };
-            [_building, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _assignId, [], _accessMode] call FUNC(addDoorsZeusMain);
+            [_building, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _assignId, [], _accessMode, _startState] call FUNC(addDoorsZeusMain);
             _registeredCount = _registeredCount + 1;
         };
     } forEach _doorObjects;
@@ -200,6 +206,14 @@ _allDevices set [DEVICE_SLOT(DEVICE_TYPE_DOOR), _allDoors];
 missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
 call Root_fnc_syncDeviceData;
 _targetObject setVariable ["ROOT_CYBERWARFARE_CONNECTED", true, true];
+
+if (_startState < 0) then {
+    _startState = missionNamespace getVariable [SETTING_DOOR_START_STATE, 0];
+};
+private _startDoorState = DOOR_START_STATES param [_startState, ""];
+if (_startDoorState isNotEqualTo "") then {
+    [_targetObject, [], _startDoorState] call FUNC(setDoorState);
+};
 
 private _unbreachableText = ["", " [UNBREACHABLE]"] select _makeUnbreachable;
 [format ["Root Cyber Warfare: Building (%1) added (ID: %2)! %3.%4", _displayName, _deviceId, _availabilityText, _unbreachableText]] remoteExec ["systemChat", _execUserId];

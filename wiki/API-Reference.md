@@ -80,12 +80,12 @@ Registers building doors as hackable. Supports direct mode (single building) and
 
 **Syntax (direct mode):**
 ```sqf
-[_targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+[_targetObject, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _requestedId, _doorIdMap, _accessMode, _startState] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 ```
 
 **Syntax (radius mode):**
 ```sqf
-[_centerPosition, _radius, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+[_centerPosition, _radius, _execUserId, _linkedComputers, _availableToFutureLaptops, _makeUnbreachable, _allowLocation, _startId, _endId, _accessMode, _startState] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 ```
 
 **Parameters (direct mode):**
@@ -97,12 +97,19 @@ Registers building doors as hackable. Supports direct mode (single building) and
 | 2 | _linkedComputers | ARRAY | [] | Array of computer netIds (strings) |
 | 3 | _availableToFutureLaptops | BOOLEAN | false | Auto-grant access to future laptops |
 | 4 | _makeUnbreachable | BOOLEAN | false | Prevent ACE breaching |
+| 5 | _allowLocation | BOOLEAN | true | Show grid location on the laptop |
+| 6 | _requestedId | NUMBER | 0 | Building ID, 0 = auto |
+| 7 | _doorIdMap | ARRAY | [] | Per-door IDs `[[realDoor, customId], ...]` |
+| 8 | _accessMode | NUMBER | 0 | ACCESS_MODE_* constant |
+| 9 | _startState | NUMBER | -1 | Door start state: -1 CBA setting, 0 unchanged, 1 closed, 2 open, 3 locked closed, 4 locked open, 5 unlocked |
+
+Radius mode: `_startState` is index 10.
 
 **Return Value:** None
 
 **Example:**
 ```sqf
-[_building1, 0, [netId _laptop1], false, true] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
+[_building1, 0, [netId _laptop1], false, true, true, 0, [], 1, 4] remoteExec ["Root_fnc_addDoorsZeusMain", 2];
 [getMarkerPos "base", 500, 0, [], true, false] remoteExec ["Root_fnc_addDoorsZeusMain", 2]; // Radius mode
 ```
 
@@ -360,11 +367,11 @@ server.
 
 ### Root_fnc_addPowerGeneratorZeusMain
 
-Registers power generators that control lights within a radius.
+Registers power generators that control lights within a radius or a separate effect area.
 
 **Syntax:**
 ```sqf
-[_targetObject, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
+[_targetObject, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost, _requestedId, _accessMode, _area] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
 ```
 
 **Parameters:**
@@ -381,12 +388,16 @@ Registers power generators that control lights within a radius.
 | 7 | _excludedClassnames | ARRAY | [] | Light classnames to exclude from control |
 | 8 | _availableToFutureLaptops | BOOLEAN | false | Auto-grant access to future laptops |
 | 9 | _powerCost | NUMBER | 10 | Power cost in Wh per operation |
+| 10 | _requestedId | NUMBER | 0 | Grid ID, 0 = auto |
+| 11 | _accessMode | NUMBER | 0 | ACCESS_MODE_* constant |
+| 12 | _area | ARRAY | [] | Effect area `[centerASL, a, b, angle, isRectangle]`, [] = `_radius` around the generator |
 
 **Return Value:** None
 
 **Example:**
 ```sqf
 [_gen, 0, [], "Grid", 200, true, "HelicopterExploSmall", [], true, 15] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
+[_gen, 0, [], "Village", 300, false, "", [], false, 10, 0, 2, [getPosASL _village, 300, 200, 45, true]] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
 ```
 
 ---
@@ -441,9 +452,31 @@ private _removed = call Root_fnc_clearBrokenDeviceLinks;
 
 These functions control registered devices.
 
+### Root_fnc_setDoorState
+
+Moves and/or locks building doors, no power cost. Server. Returns changed door numbers.
+
+```sqf
+[_building, _doors, _state, _dryRun] call Root_fnc_setDoorState;
+[cursorObject, [], "lockopen"] remoteExec ["Root_fnc_setDoorState", 2];
+```
+
+| Index | Name | Type | Default | Description |
+|-------|------|------|---------|-------------|
+| 0 | _building | OBJECT | - | Building |
+| 1 | _doors | ARRAY | [] | Engine door numbers, [] = all detected |
+| 2 | _state | STRING | - | "open", "close", "lock", "unlock", "lockopen", "lockclosed" |
+| 3 | _dryRun | BOOLEAN | false | Only return the doors that would change |
+
+### Root_fnc_getDoorState
+
+`[_building, _door] call Root_fnc_getDoorState` returns `[isOpen, isLocked]`. Any machine.
+
+---
+
 ### Root_fnc_changeDoorState
 
-Controls door lock state.
+Terminal `door` command: changes door state with power cost and confirmation.
 
 **Syntax:**
 ```sqf
@@ -459,7 +492,7 @@ Controls door lock state.
 | 2 | _nameOfVariable | STRING | - | Completion variable name |
 | 3 | _buildingId | STRING | - | Building device ID |
 | 4 | _doorId | STRING | - | Door ID or "a" for all |
-| 5 | _desiredState | STRING | - | "lock" or "unlock" |
+| 5 | _desiredState | STRING | - | "open", "close", "lock", "unlock", "lockopen" or "lockclosed" |
 
 **Return Value:** None
 
@@ -765,10 +798,11 @@ Controls power generator.
 
 ### Root_fnc_getPowerGridObjects
 
-Objects a power grid switches: every object within the radius, minus excluded classes. Any machine.
+Objects a power grid switches: every object within the radius or inside the effect area, minus excluded classes. Any machine.
 
 ```sqf
 private _lights = [_generator, 300, ["Land_LampHalogen_F"]] call Root_fnc_getPowerGridObjects;
+private _lights = [_generator, [getPosASL _village, 300, 200, 45, true]] call Root_fnc_getPowerGridObjects;
 ```
 
 ---

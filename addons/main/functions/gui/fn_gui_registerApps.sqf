@@ -94,30 +94,41 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 				private _doorIdMap = _x param [5, []];
 				_label = [_obj, format [(localize "STR_ROOT_CYBERWARFARE_UI_BUILDING_1"), _id]] call _displayName;
 				if (!isNull _obj) then {
-					private _locked = {(_obj getVariable [format ["bis_disabled_Door_%1", _x], 0]) == 1} count _doorIds;
-					_status = format [(localize "STR_ROOT_CYBERWARFARE_UI_1_2_LOCKED"), _locked, count _doorIds];
-					private _lockCost = ((count _doorIds) - _locked) * _doorCost;
-					private _unlockCost = _locked * _doorCost;
-					_acts = [
-						["lock", (localize "STR_ROOT_CYBERWARFARE_GUI_LOCK"), [(localize "STR_ROOT_CYBERWARFARE_UI_LOCKING_ALL_DOORS"), _lockCost] call _powerConfirm] call _actC,
-						["unlock", (localize "STR_ROOT_CYBERWARFARE_GUI_UNLOCK"), [(localize "STR_ROOT_CYBERWARFARE_UI_UNLOCKING_ALL_DOORS"), _unlockCost] call _powerConfirm] call _actC
+					// Actions in display order: [state, label]; cost = doors the state changes x door cost.
+					private _doorActs = [
+						["open", "STR_ROOT_CYBERWARFARE_GUI_OPEN"],
+						["close", "STR_ROOT_CYBERWARFARE_GUI_CLOSE"],
+						["lock", "STR_ROOT_CYBERWARFARE_GUI_LOCK"],
+						["unlock", "STR_ROOT_CYBERWARFARE_GUI_UNLOCK"],
+						["lockopen", "STR_ROOT_CYBERWARFARE_GUI_LOCKOPEN"],
+						["lockclosed", "STR_ROOT_CYBERWARFARE_GUI_LOCKCLOSED"]
 					];
+					private _states = _doorIds apply { [_obj, _x] call Root_fnc_getDoorState };
+					private _open = { _x select 0 } count _states;
+					private _locked = { _x select 1 } count _states;
+					_status = format [localize "STR_ROOT_CYBERWARFARE_DOOR_STATUS", _open, count _states - _open, _locked, count _states - _locked];
+					_acts = _doorActs apply {
+						_x params ["_state", "_label"];
+						private _cost = (count ([_obj, _doorIds, _state, true] call Root_fnc_setDoorState)) * _doorCost;
+						[_state, localize _label, [format [localize "STR_ROOT_CYBERWARFARE_UI_DOOR_ACTION_ALL", localize _label], _cost] call _powerConfirm] call _actC
+					};
 					{
 						private _realDoor = _x;
 						private _customDoor = _realDoor;
 						{
 							if ((_x select 1) == _realDoor) exitWith { _customDoor = _x select 0; };
 						} forEach _doorIdMap;
-						private _isLocked = (_obj getVariable [format ["bis_disabled_Door_%1", _realDoor], 0]) == 1;
-						private _ds = [(localize "STR_ROOT_CYBERWARFARE_UI_UNLOCKED"), (localize "STR_ROOT_CYBERWARFARE_UI_LOCKED")] select _isLocked;
-						private _singleLockCost = ([1, 0] select _isLocked) * _doorCost;
-						private _singleUnlockCost = ([0, 1] select _isLocked) * _doorCost;
+						(_states select _forEachIndex) params ["_isOpen", "_isLocked"];
+						private _ds = format ["%1, %2",
+							localize (["STR_ROOT_CYBERWARFARE_DOOR_CLOSED", "STR_ROOT_CYBERWARFARE_DOOR_OPEN"] select _isOpen),
+							localize (["STR_ROOT_CYBERWARFARE_DOOR_UNLOCKED", "STR_ROOT_CYBERWARFARE_DOOR_LOCKED"] select _isLocked)];
 						_children pushBack createHashMapFromArray [
 							["id", str _customDoor], ["label", format [(localize "STR_ROOT_CYBERWARFARE_UI_DOOR_1_2"), _customDoor]], ["status", _ds],
-							["actions", [
-								["lock", (localize "STR_ROOT_CYBERWARFARE_GUI_LOCK"), [(localize "STR_ROOT_CYBERWARFARE_UI_LOCKING_THIS_DOOR"), _singleLockCost] call _powerConfirm] call _actC,
-								["unlock", (localize "STR_ROOT_CYBERWARFARE_GUI_UNLOCK"), [(localize "STR_ROOT_CYBERWARFARE_UI_UNLOCKING_THIS_DOOR"), _singleUnlockCost] call _powerConfirm] call _actC
-							]]
+							["actions", _doorActs apply {
+								_x params ["_state", "_label"];
+								private _cost = (count ([_obj, [_realDoor], _state, true] call Root_fnc_setDoorState)) * _doorCost;
+								[_state, localize _label, [format [localize "STR_ROOT_CYBERWARFARE_UI_DOOR_ACTION_ONE", localize _label], _cost] call _powerConfirm] call _actC
+							}]
 						];
 					} forEach _doorIds;
 				};
@@ -139,11 +150,13 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 							["off", (localize "STR_ROOT_CYBERWARFARE_UI_OFF"), [(localize "STR_ROOT_CYBERWARFARE_UI_DEACTIVATING_THE_POWER_GRID"), _cost] call _powerConfirm] call _actC,
 							["overload", (localize "STR_ROOT_CYBERWARFARE_GUI_OVERLOAD"), [(localize "STR_ROOT_CYBERWARFARE_UI_OVERLOADING_THE_POWER_GRID"), _cost] call _powerConfirm] call _actC
 						];
-					// Same objects the grid action switches (_x = [id, netId, name, radius, allowOverload, explosionType, excludedClassnames]).
+					// Same objects the grid action switches (_x = [id, netId, name, radius, allowOverload, explosionType, excludedClassnames, ..., area]).
 					private _rad = _x param [3, _obj getVariable ["ROOT_CYBERWARFARE_GENERATOR_RADIUS", 0]];
 					private _excluded = _x param [6, []];
-					private _affected = [_obj, _rad, _excluded] call FUNC(getPowerGridObjects);
-					_details = [[(localize "STR_ROOT_CYBERWARFARE_UI_RADIUS"), format ["%1m", round _rad]], [(localize "STR_ROOT_CYBERWARFARE_UI_LIGHTS_AFFECTED"), count _affected]];
+					private _gridArea = _x param [10, []];
+					private _affected = [_obj, [_gridArea, _rad] select (_gridArea isEqualTo []), _excluded] call FUNC(getPowerGridObjects);
+					private _size = if (_gridArea isEqualTo []) then { format ["%1m", round _rad] } else { format ["%1m x %2m @ %3", round (_gridArea select 1), round (_gridArea select 2), mapGridPosition ASLToAGL (_gridArea select 0)] };
+					_details = [[(localize "STR_ROOT_CYBERWARFARE_UI_RADIUS"), _size], [(localize "STR_ROOT_CYBERWARFARE_UI_LIGHTS_AFFECTED"), count _affected]];
 				};
 			};
 			case DEVICE_TYPE_DATABASE: {

@@ -42,6 +42,11 @@ AE3 desktop integration for RootCW. It owns command installation, GUI app regist
 - Use a visible scan delay for `netscan` so it reads like a real sweep instead of an instant lookup.
 - Write command files synchronously when the toolset is installed on the server, because freshly spawned drives can be invalidated in the same frame if writes are deferred.
 
+## doors
+- `Root_fnc_setDoorState [_building, _doors, _state, _dryRun]` is the only writer of door lock vars and door animations; states in `DOOR_STATES`. Dry run returns the doors that would change, used for power cost.
+- `Root_fnc_getDoorState` reads `Door_N_sound_source` / `noSound_source` / `source` phase, else `Door_N_rot`, plus `bis_disabled_Door_N`.
+- `door` command, Doors app (six buttons, status updated every 0.5 s) and Hackerman offer open, close, lock, unlock, lockopen, lockclosed.
+
 ## gotchas
 - If AE3 desktop is absent, GUI registration exits cleanly and nothing is registered.
 - `scanNetwork` only reports powered laptops and routers on the same subnet as the scanning laptop.

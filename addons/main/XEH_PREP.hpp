@@ -83,6 +83,8 @@ PREP(getDatabaseTransfer);
 PREP(addDoorsZeusMain);
 PREP(addLightsZeusMain);
 PREP(changeDoorState);
+PREP(setDoorState);
+PREP(getDoorState);
 PREP(changeLightState);
 
 // Redefine PREP macro for subdirectory: gps
@@ -154,6 +156,9 @@ PREP(resolveDeviceArg);
 PREP(clearIdentifierGrants);
 PREP(getLaptopUid);
 PREP(getObjectsInTriggerArea);
+PREP(getObjectsInArea);
+PREP(logicArea);
+PREP(getModuleObjects);
 PREP(getPlayerFromComputer);
 PREP(getUserConfirmation);
 PREP(resolveDeviceId);

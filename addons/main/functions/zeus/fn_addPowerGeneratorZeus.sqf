@@ -1,7 +1,7 @@
 #include "\z\root_cyberwarfare\addons\main\script_component.hpp"
 /*
  * Author: Root
- * Zeus module to add a power generator that controls lights within radius
+ * Zeus module to add a power generator that controls lights within an effect area; the curator clicks the area center
  *
  * Arguments:
  * 0: _logic <OBJECT> - Zeus logic module
@@ -52,6 +52,9 @@ if (_allComputers isEqualTo []) then {
 private _dialogControls = [
     ["EDIT", [(localize "STR_ROOT_CYBERWARFARE_UI_GENERATOR_NAME"), (localize "STR_ROOT_CYBERWARFARE_UI_NAME_THAT_WILL_APPEAR_IN_THE_TERMINAL")], ["Power Generator"]],
     ["SLIDER:RADIUS",[(localize "STR_ROOT_CYBERWARFARE_UI_EFFECT_RADIUS"),(localize "STR_ROOT_CYBERWARFARE_UI_RADIUS_IN_METERS_TO_AFFECT_LIGHTS")],[100, 25000, 1000, 0, _position, [7,120,32,1]]],
+    ["COMBO", [localize "STR_ROOT_CYBERWARFARE_ZEUS_GRID_SHAPE", localize "STR_ROOT_CYBERWARFARE_ZEUS_GRID_SHAPE_DESC"], [[false, true], [localize "STR_ROOT_CYBERWARFARE_ZEUS_GRID_ELLIPSE", localize "STR_ROOT_CYBERWARFARE_ZEUS_GRID_RECTANGLE"], 0]],
+    ["SLIDER", [localize "STR_ROOT_CYBERWARFARE_ZEUS_GRID_SIZE_B", localize "STR_ROOT_CYBERWARFARE_ZEUS_GRID_SIZE_B_DESC"], [10, 25000, 1000, 0]],
+    ["SLIDER", [localize "STR_ROOT_CYBERWARFARE_ZEUS_GRID_ANGLE", localize "STR_ROOT_CYBERWARFARE_ZEUS_GRID_ANGLE_DESC"], [0, 359, 0, 0]],
     ["TOOLBOX:YESNO", [(localize "STR_ROOT_CYBERWARFARE_UI_ALLOW_EXPLOSION_ON_OVERLOAD"), (localize "STR_ROOT_CYBERWARFARE_UI_CREATE_EXPLOSION_WHEN_GENERATOR_IS_OVERLOADED")], false],
     ["LIST", [(localize "STR_ROOT_CYBERWARFARE_UI_EXPLOSION_TYPE"), (localize "STR_ROOT_CYBERWARFARE_UI_CHOOSE_THE_TYPE_OF_EXPLOSION_CREATED_ON_OVERLOAD")], [
         ["ClaymoreDirectionalMine_Remote_Ammo_Scripted", "G_40mm_HE", "M_Mo_82mm_AT_LG", "Sh_120mm_APFSDS", "Sh_120mm_HE", "Sh_155mm_AMOS", "HelicopterExploSmall", "HelicopterExploBig", "Bo_GBU12_LGB", "Bo_GBU12_LGB_MI10"],
@@ -84,7 +87,7 @@ private _dialogControls = [
         _args params ["_targetObject", "_execUserId", "_allComputers"];
 
         // Parse results
-        _results params ["_generatorName", "_radius", "_allowExplosionOverload", "_explosionType", "_excludedClassnames", "_accessMode", "_availableToFutureLaptops", "_allowLocation", "_requestedIdText"];
+        _results params ["_generatorName", "_radius", "_isRectangle", "_sizeB", "_angle", "_allowExplosionOverload", "_explosionType", "_excludedClassnames", "_accessMode", "_availableToFutureLaptops", "_allowLocation", "_requestedIdText"];
         private _requestedId = parseNumber _requestedIdText;
 
         // Parse excluded classnames (convert comma-separated string to array)
@@ -102,7 +105,7 @@ private _dialogControls = [
 
         // Get selected computers
         private _selectedComputers = [];
-        private _checkboxStartIndex = 9;
+        private _checkboxStartIndex = 12;
 
         {
             if (_results select (_checkboxStartIndex + _forEachIndex)) then {
@@ -110,15 +113,23 @@ private _dialogControls = [
             };
         } forEach _allComputers;
 
-        // Call main function. Power cost keeps the main's default (10 Wh) since this dialog has no
-        // cost field; the trailing values carry the requested device ID and the access mode.
-        [_targetObject, _execUserId, _selectedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, 10, _requestedId, _accessMode] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
-        [_targetObject, ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]] remoteExec ["setVariable", 2]; // General #3
-        [(localize "STR_ROOT_CYBERWARFARE_UI_POWER_GENERATOR_ADDED")] call zen_common_fnc_showMessage;
+        // The curator clicks the effect area center; Escape centers the area on the generator. Power cost keeps
+        // the main's default (10 Wh) since this dialog has no cost field.
+        hint localize "STR_ROOT_CYBERWARFARE_ZEUS_GRID_PICK_HINT";
+        [_targetObject, {
+            params ["_successful", "_targetObject", "_position", "_args"];
+            _args params ["_execUserId", "_selectedComputers", "_generatorName", "_radius", "_isRectangle", "_sizeB", "_angle", "_allowExplosionOverload", "_explosionType", "_excludedArray", "_availableToFutureLaptops", "_requestedId", "_accessMode", "_allowLocation"];
+            hintSilent "";
+            private _center = [getPosASL _targetObject, _position] select _successful;
+            private _area = [_center, _radius, _sizeB, _angle, _isRectangle];
 
-        // Linked access with nothing ticked registers a device no laptop can reach, which the success
-        // message above does not convey on its own.
-        [_accessMode, _selectedComputers, _availableToFutureLaptops] call FUNC(warnUnreachableDevice);
+            [_targetObject, _execUserId, _selectedComputers, _generatorName, _radius max _sizeB, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, 10, _requestedId, _accessMode, _area] remoteExec ["Root_fnc_addPowerGeneratorZeusMain", 2];
+            [_targetObject, ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]] remoteExec ["setVariable", 2];
+            [(localize "STR_ROOT_CYBERWARFARE_UI_POWER_GENERATOR_ADDED")] call zen_common_fnc_showMessage;
+
+            // Linked access with nothing ticked registers a device no laptop can reach.
+            [_accessMode, _selectedComputers, _availableToFutureLaptops] call FUNC(warnUnreachableDevice);
+        }, [_execUserId, _selectedComputers, _generatorName, _radius, _isRectangle, _sizeB, _angle, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, _requestedId, _accessMode, _allowLocation], localize "STR_ROOT_CYBERWARFARE_ZEUS_GRID_PICK"] call zen_common_fnc_selectPosition;
     },
     {
         [localize "STR_ROOT_CYBERWARFARE_ZEUS_ABORTED"] call zen_common_fnc_showMessage;

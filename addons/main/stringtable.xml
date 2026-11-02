@@ -169,25 +169,128 @@
         </Key>
     </Package>
     <Package name="Device_Operations">
-        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_ALREADY_LOCKED">
-            <English>Door already locked.</English>
-            <Chinesesimp>门已处于锁定状态。</Chinesesimp>
-        </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_ALREADY_UNLOCKED">
-            <English>Door already unlocked.</English>
-            <Chinesesimp>门已处于解锁状态。</Chinesesimp>
-        </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_LOCKED_SUCCESS">
-            <English>Door locked.</English>
-            <Chinesesimp>门已锁定。</Chinesesimp>
-        </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_UNLOCKED_SUCCESS">
-            <English>Door unlocked.</English>
-            <Chinesesimp>门已解锁。</Chinesesimp>
-        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_OPERATION_COMPLETED_DOORS">
             <English>Operation completed on %1 doors.</English>
             <Chinesesimp>已对 %1 扇门完成操作。</Chinesesimp>
+        </Key>
+    </Package>
+    <Package name="Door_States_And_Areas">
+        <Key ID="STR_ROOT_CYBERWARFARE_3DEN_REGISTER">
+            <English>Register</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_3DEN_REGISTER_AREA">
+            <English>Objects in Module Area</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_3DEN_REGISTER_BOTH">
+            <English>Synced Objects and Module Area</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_3DEN_REGISTER_DESC">
+            <English>Synced Objects: objects synced to the module. Module Area: objects inside the module area. Synced triggers always add their area.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_3DEN_REGISTER_SYNCED">
+            <English>Synced Objects</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_ALREADY_IN_STATE">
+            <English>Door already %1.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_CLOSED">
+            <English>Closed</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_LOCKED">
+            <English>Locked</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_OPEN">
+            <English>Open</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_START_CLOSED">
+            <English>Closed</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_START_DEFAULT">
+            <English>CBA Setting</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_START_LOCKCLOSED">
+            <English>Locked Closed</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_START_LOCKOPEN">
+            <English>Locked Open</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_START_OPEN">
+            <English>Open</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_START_STATE">
+            <English>Door Start State</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_START_STATE_DESC">
+            <English>State applied to every door of each registered building at registration.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_START_UNCHANGED">
+            <English>Unchanged</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_START_UNLOCKED">
+            <English>Unlocked</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_STATE_SET">
+            <English>Door %1: %2.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_STATUS">
+            <English>%1 open, %2 closed - %3 locked, %4 unlocked</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_DOOR_UNLOCKED">
+            <English>Unlocked</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_CLOSE">
+            <English>Close</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_LOCKCLOSED">
+            <English>Lock Closed</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_LOCKOPEN">
+            <English>Lock Open</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_GUI_OPEN">
+            <English>Open</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DOOR_START_STATE">
+            <English>Door Start State</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DOOR_START_STATE_DESC">
+            <English>Door state applied at registration when the module or Zeus dialog uses CBA Setting.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DOOR_ACTION_ALL">
+            <English>%1 - all doors</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_UI_DOOR_ACTION_ONE">
+            <English>%1 - this door</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_GRID_ANGLE">
+            <English>Area Angle</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_GRID_ANGLE_DESC">
+            <English>Rotation of the effect area in degrees.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_GRID_ELLIPSE">
+            <English>Ellipse</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_GRID_PICK">
+            <English>Effect Area Center</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_GRID_PICK_HINT">
+            <English>Click the effect area center. Escape: area centered on the generator.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_GRID_RECTANGLE">
+            <English>Rectangle</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_GRID_SHAPE">
+            <English>Area Shape</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_GRID_SHAPE_DESC">
+            <English>Shape of the effect area.</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_GRID_SIZE_B">
+            <English>Area Size B (m)</English>
+        </Key>
+        <Key ID="STR_ROOT_CYBERWARFARE_ZEUS_GRID_SIZE_B_DESC">
+            <English>Second half-size of the effect area. The radius slider is size A.</English>
         </Key>
     </Package>
     <Package name="Drone_Operations">
@@ -302,8 +405,7 @@
             <Chinesesimp>错误！无效的 DoorID - %1。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DOOR_STATE">
-            <English>Error! Invalid Door State Desired - %1.</English>
-            <Chinesesimp>错误！无效的目标门状态 - %1。</Chinesesimp>
+            <English>Error! Invalid door state - %1. Use open, close, lock, unlock, lockopen or lockclosed.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_ERROR_INVALID_DRONE_FACTION">
             <English>Error! Invalid Drone Faction - %1.</English>
@@ -616,13 +718,8 @@
             <English>Deactivate</English>
             <Chinesesimp>停用</Chinesesimp>
         </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_GUI_DOOR">
-            <English>DOOR</English>
-            <Chinesesimp>门</Chinesesimp>
-        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_DOORS_HINT">
-            <English>Select a building, then Lock or Unlock its doors.</English>
-            <Chinesesimp>选择一栋建筑，然后锁定或解锁其中的门。</Chinesesimp>
+            <English>Select a building. Open/Close move the doors, Lock/Unlock set the lock, Lock Open/Lock Closed do both.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_GUI_DOWNLOAD">
             <English>Download</English>
@@ -821,10 +918,6 @@
         <Key ID="STR_ROOT_CYBERWARFARE_UI_155MM_HE_SHELL">
             <English>155mm HE Shell</English>
             <Chinesesimp>155mm 高爆炮弹</Chinesesimp>
-        </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_UI_1_2_LOCKED">
-            <English>%1/%2 locked</English>
-            <Chinesesimp>%1/%2 已锁定</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_1_DRAWS_2_WH_BR_CURRENT_BATTERY_3_WH_4_5_BR">
             <English>%1 draws %2 Wh.&lt;br&gt;Current battery: %3 Wh (%4%5).&lt;br&gt;Remaining after continue: %6 Wh (%7%5).</English>
@@ -1391,8 +1484,7 @@
             <Chinesesimp>载具入侵耗电量</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_COST_TO_LOCK_UNLOCK_DOORS">
-            <English>Cost to Lock/Unlock Doors</English>
-            <Chinesesimp>门锁定/解锁耗电量</Chinesesimp>
+            <English>Cost per Door Action</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_COST_TO_PING_GPS_TRACKERS">
             <English>Cost to Ping GPS Trackers</English>
@@ -1403,16 +1495,14 @@
             <Chinesesimp>无人机阵营切换耗电量</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_CREATES_A_CUSTOM_HACKABLE_DEVICE_WITH_PROGRAMMABLE_ACTIVATION_DEACTIVATION_CODE_TRIGGERS_ENABLE">
-            <English>Creates a custom hackable device with programmable activation/deactivation code. Triggers enable batch-registration of custom devices within the area.</English>
-            <Chinesesimp>创建可编程激活/停用代码的自定义可入侵设备。触发器可批量注册区域内的自定义设备。</Chinesesimp>
+            <English>Creates custom hackable devices with activation/deactivation code. Register picks synced objects and/or mission-placed objects inside the module area. Synced triggers add their area. Sync AE3 laptops to link them.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_CREATES_A_HACKABLE_FILE_DATABASE_SYNCHRONIZE_TO_AE3_LAPTOP_OBJECTS_TO_LINK">
             <English>Creates a hackable file/database. Synchronize to AE3 Laptop objects to link the file to specific computers.</English>
             <Chinesesimp>创建可入侵文件或数据库。同步到 AE3 笔记本电脑，可将文件关联到指定计算机。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_CREATES_A_POWER_GENERATOR_THAT_CONTROLS_LIGHTS_WITHIN_A_RADIUS_SYNCHRONIZE_TO">
-            <English>Creates a power generator that controls lights within a radius. Synchronize to generator object and optionally to AE3 Laptop objects. Triggers enable batch-registration of powergrids within the area.</English>
-            <Chinesesimp>创建控制半径内灯光的发电机。同步到发电机物体，也可同步到 AE3 笔记本电脑。触发器可批量注册区域内的电网。</Chinesesimp>
+            <English>Creates power grids. Synced objects are the grids; the module area is the area whose lights each grid switches. Synced triggers add grid objects. Sync AE3 laptops to link them.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_CREATE_EXPLOSION_ON_OVERLOAD">
             <English>Create Explosion on Overload</English>
@@ -1535,8 +1625,7 @@
             <Chinesesimp>设备结束 ID（0 = 自动）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_END_FOR_TRIGGERS">
-            <English>Device ID (End, for triggers)</English>
-            <Chinesesimp>设备 ID（结束，供触发器使用）</Chinesesimp>
+            <English>Device ID (End, for areas)</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_DEVICE_ID_START">
             <English>Device ID (Start)</English>
@@ -1595,8 +1684,7 @@
             <Chinesesimp>门 ID 覆盖</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_DOOR_LOCK_UNLOCK_COST">
-            <English>Door Lock/Unlock Cost</English>
-            <Chinesesimp>门锁定/解锁耗电量</Chinesesimp>
+            <English>Door Action Cost</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_DOWNLOAD_FAILED_1">
             <English>Download failed: %1</English>
@@ -1645,10 +1733,6 @@
         <Key ID="STR_ROOT_CYBERWARFARE_UI_EFFECT_RADIUS">
             <English>Effect Radius</English>
             <Chinesesimp>作用半径</Chinesesimp>
-        </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_UI_EFFECT_RADIUS_METERS">
-            <English>Effect Radius (meters)</English>
-            <Chinesesimp>作用半径（米）</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_ELAPSED">
             <English>Elapsed</English>
@@ -2095,8 +2179,7 @@
             <Chinesesimp>区域内分配的最后一个设备 ID。0 表示自动分配。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_LAST_ID_HANDED_OUT_ACROSS_A_TRIGGER_AREA_0_AUTO_LEAVE_0">
-            <English>Last ID handed out across a trigger area (0 = auto). Leave 0 for single-object use.</English>
-            <Chinesesimp>触发器区域内分配的最后一个 ID（0 表示自动分配）。单个物体请保持为 0。</Chinesesimp>
+            <English>Last ID handed out across the module or trigger area (0 = auto).</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_LAST_LIGHT_ID_HANDED_OUT_ACROSS_THE_AREA_0_AUTO_ASSIGN">
             <English>Last light ID handed out across the area. 0 = auto-assign.</English>
@@ -2190,14 +2273,6 @@
             <English>Locked</English>
             <Chinesesimp>锁定状态</Chinesesimp>
         </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_UI_LOCKING_ALL_DOORS">
-            <English>Locking all doors</English>
-            <Chinesesimp>锁定所有门</Chinesesimp>
-        </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_UI_LOCKING_THIS_DOOR">
-            <English>Locking this door</English>
-            <Chinesesimp>锁定此门</Chinesesimp>
-        </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_LOCKING_THIS_VEHICLE">
             <English>Locking this vehicle</English>
             <Chinesesimp>锁定此载具</Chinesesimp>
@@ -2211,8 +2286,7 @@
             <Chinesesimp>存储设备连接和断开音效的音量。值越高，声音传播距离越远。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_MAKES_A_VEHICLE_HACKABLE_SYNCHRONIZE_TO_VEHICLES_AND_DRONES_AND_OPTIONALLY_TO">
-            <English>Makes a vehicle hackable. Synchronize to vehicles and drones and optionally to AE3 Laptop objects. Triggers enable batch-registration of vehicles and drones within the area.</English>
-            <Chinesesimp>使载具可被入侵。同步到载具和无人机，也可同步到 AE3 笔记本电脑。触发器可批量注册区域内的载具和无人机。</Chinesesimp>
+            <English>Makes vehicles and drones hackable. Register picks synced vehicles and/or vehicles inside the module area. Synced triggers add their area. Sync AE3 laptops to link them.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_MAKE_PUBLIC_ALL_LAPTOPS">
             <English>Make public (all laptops)</English>
@@ -2771,12 +2845,10 @@
             <Chinesesimp>将此模块同步到 AE3 笔记本电脑或 USB 存储设备，以添加黑客工具。</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_SYNCHRONIZE_THIS_MODULE_TO_BUILDINGS_WITH_DOORS_OR_TRIGGERS_TO_MAKE_DOORS">
-            <English>Synchronize this module to buildings (with doors) or triggers to make doors hackable. Triggers enable batch-registration of terrain buildings within an area.</English>
-            <Chinesesimp>将此模块同步到带门的建筑或触发器，使门可被入侵。触发器可批量注册区域内的地形建筑。</Chinesesimp>
+            <English>Makes building doors hackable. Register picks synced buildings and/or buildings with doors inside the module area. Synced triggers add their area. Sync AE3 laptops to link them.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_SYNCHRONIZE_THIS_MODULE_TO_LIGHTS_OR_TRIGGERS_TO_MAKE_THEM_HACKABLE_TRIGGERS">
-            <English>Synchronize this module to lights or triggers to make them hackable. Triggers enable batch-registration of lampposts within an area.</English>
-            <Chinesesimp>将此模块同步到灯或触发器，使灯可被入侵。触发器可批量注册区域内的路灯。</Chinesesimp>
+            <English>Makes lights hackable. Register picks synced objects and/or lamps inside the module area. Synced triggers add their area. Sync AE3 laptops to link them.</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_SYSTEMS">
             <English>Systems</English>
@@ -2897,14 +2969,6 @@
         <Key ID="STR_ROOT_CYBERWARFARE_UI_UNLOCKED">
             <English>unlocked</English>
             <Chinesesimp>未锁定</Chinesesimp>
-        </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_UI_UNLOCKING_ALL_DOORS">
-            <English>Unlocking all doors</English>
-            <Chinesesimp>解锁所有门</Chinesesimp>
-        </Key>
-        <Key ID="STR_ROOT_CYBERWARFARE_UI_UNLOCKING_THIS_DOOR">
-            <English>Unlocking this door</English>
-            <Chinesesimp>解锁此门</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_UI_UNLOCKING_THIS_VEHICLE">
             <English>Unlocking this vehicle</English>
@@ -3161,12 +3225,10 @@
             <Chinesesimp>入侵自定义设备消耗的电量，单位为 Wh</Chinesesimp>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DOOR_COST">
-            <English>Door Lock/Unlock Power Cost</English>
-            <Chinesesimp>门锁定/解锁电量消耗</Chinesesimp>
+            <English>Door Action Power Cost</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DOOR_COST_DESC">
-            <English>Power cost in Wh to lock or unlock a door</English>
-            <Chinesesimp>锁定或解锁一扇门消耗的电量，单位为 Wh</Chinesesimp>
+            <English>Power cost in Wh per door opened, closed, locked or unlocked</English>
         </Key>
         <Key ID="STR_ROOT_CYBERWARFARE_SETTING_DRONE_HACK_COST">
             <English>Drone Hacking Power Cost</English>

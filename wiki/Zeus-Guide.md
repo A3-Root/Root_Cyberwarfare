@@ -184,6 +184,7 @@ Root Cyber Warfare: Laptop registered as a hackable station ('HQ_Terminal').
 | **Linked Computers** | Array | (empty) | List of specific laptops that should have access. Leave empty for none. |
 | **Available to Future Laptops** | Checkbox | Unchecked | If checked, all laptops added AFTER this device will automatically have access. |
 | **Allow Location View** | Checkbox | Checked | If unchecked, the building's grid location is hidden (shown as `[location hidden]`) in device listings. |
+| **Door Start State** | Combo | CBA Setting | Unchanged, Closed, Open, Locked Closed, Locked Open or Unlocked, applied to all doors at registration. |
 | **Make Unbreachable** | Checkbox | Unchecked | If checked, building doors cannot be breached with ACE explosives or lockpicking. |
 
 **Auto-Detection:**
@@ -621,12 +622,13 @@ Available to future laptops: Yes
 
 ### 9. Add Power Generator
 
-**Purpose:** Create a power generator that controls all lights within a configurable radius, with optional explosion effects.
+**Purpose:** Create a power generator that controls all lights within an effect area, with optional explosion effects.
 
 **How to Use:**
 1. Place module on an object (the "generator")
 2. Configure parameters in the dialog
 3. Click OK
+4. Click the effect area center in the world or on the map. Escape centers the area on the generator.
 
 **Parameters:**
 
@@ -635,7 +637,10 @@ Available to future laptops: Yes
 | **Target Object** | Object | (selected) | Object representing the generator. |
 | **Linked Computers** | Array | (empty) | Specific laptops with access. |
 | **Generator Name** | String | `Power Generator` | Display name in terminal. |
-| **Effect Radius (meters)** | Number | `50` | Radius in meters to affect lights. |
+| **Effect Radius (meters)** | Number | `1000` | Effect area half-size A. |
+| **Area Shape** | Combo | Ellipse | Ellipse or Rectangle. |
+| **Area Size B (m)** | Number | `1000` | Effect area half-size B. |
+| **Area Angle** | Number | `0` | Effect area rotation in degrees. |
 | **Allow Explosion on Overload** | Checkbox | Unchecked | If checked, the `overload` action creates an explosion and destroys the generator. |
 | **Explosion Type** | String | `ClaymoreDirectionalMine_Remote_Ammo_Scripted` | Ammo classname for explosion (e.g., `HelicopterExploSmall`, `Bo_GBU12_LGB`, `Sh_155mm_AMOS`). |
 | **Excluded Light Classnames** | Array | (empty) | Light classnames to exclude from control (comma-separated). |
@@ -656,11 +661,11 @@ Power Cost: 15
 ```
 
 **What It Does:**
-- Registers a power generator that controls lights in radius
+- Registers a power generator that controls lights in the effect area
 - Players use `powergrid <GridID> <on|off|overload>` to control
 - Actions:
-  - `on`: Turn on all lights in radius
-  - `off`: Turn off all lights in radius
+  - `on`: Turn on all lights in the area
+  - `off`: Turn off all lights in the area
   - `overload`: Destroy generator and all lights (with optional explosion)
 
 **Excluded Light Classnames:**

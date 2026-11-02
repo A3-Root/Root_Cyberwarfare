@@ -23,7 +23,14 @@ if (!isServer) exitWith {
 
 // Get module attributes
 private _generatorName = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_NAME", "Power Generator"];
+// Effect area: the module area; missions without one keep a radius around each generator.
 private _radius = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_RADIUS", 1000];
+private _area = [];
+if (!isNil {_logic getVariable "objectArea"}) then {
+	_area = [_logic] call FUNC(logicArea);
+	_area resize 5;
+	_radius = (_area select 1) max (_area select 2);
+};
 // 3DEN checkbox attribute (typeName BOOL) loads as a boolean; accept both boolean and legacy numeric storage.
 private _allowExplosionOverload = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_OVERLOAD", 0]) in [1, true];
 private _explosionType = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_TYPE", "ClaymoreDirectionalMine_Remote_Ammo_Scripted"];
@@ -31,7 +38,7 @@ private _excludedClassnames = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERG
 private _powerCost = _logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_COST", 10];
 private _allowLocation = (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_ALLOWLOCATION", 1]) in [1, true];
 
-// Optional fixed IDs. A single generator uses the start value; a trigger area hands out Start..End
+// Optional fixed IDs. A single generator uses the start value; an area hands out Start..End
 // sequentially, falling back to auto-assignment once the range is exhausted or unset.
 private _startId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_ID_START", 0]);
 private _endId = floor (_logic getVariable ["ROOT_CYBERWARFARE_3DEN_POWERGRID_ID_END", 0]);
@@ -116,8 +123,7 @@ private _nextId = _startId;
 	};
 
 	// Call the existing Zeus main function
-	// Parameters: _targetObject, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedClassnames, _availableToFutureLaptops, _powerCost
-	[_generator, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, _powerCost, _assignId, _accessMode] call FUNC(addPowerGeneratorZeusMain);
+	[_generator, _execUserId, _linkedComputers, _generatorName, _radius, _allowExplosionOverload, _explosionType, _excludedArray, _availableToFutureLaptops, _powerCost, _assignId, _accessMode, _area] call FUNC(addPowerGeneratorZeusMain);
 	_generator setVariable ["ROOT_CYBERWARFARE_ALLOW_LOCATION", _allowLocation, true]; // General #3
 
 } forEach _allGenerators;

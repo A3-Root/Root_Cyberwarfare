@@ -370,7 +370,41 @@ class CfgVehicles {
 		isTriggerActivated = 0;
 		isDisposable = 1;
 		is3DEN = 0;
+		canSetArea = 1;
+		canSetAreaShape = 1;
+		class AttributeValues {
+			size3[] = {50, 50, -1};
+			isRectangle = 0;
+		};
 		class Attributes: AttributesBase {
+			class ROOT_CYBERWARFARE_3DEN_DOORS_REGISTER: Combo {
+				property = "ROOT_CYBERWARFARE_3DEN_DOORS_REGISTER";
+				displayName = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER";
+				tooltip = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_DESC";
+				typeName = "NUMBER";
+				defaultValue = 1;
+				class Values {
+					class Synced { name = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_SYNCED"; value = 0; };
+					class Area { name = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_AREA"; value = 1; };
+					class Both { name = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_BOTH"; value = 2; };
+				};
+			};
+			class ROOT_CYBERWARFARE_3DEN_DOORS_STARTSTATE: Combo {
+				property = "ROOT_CYBERWARFARE_3DEN_DOORS_STARTSTATE";
+				displayName = "$STR_ROOT_CYBERWARFARE_DOOR_START_STATE";
+				tooltip = "$STR_ROOT_CYBERWARFARE_DOOR_START_STATE_DESC";
+				typeName = "NUMBER";
+				defaultValue = -1;
+				class Values {
+					class Default { name = "$STR_ROOT_CYBERWARFARE_DOOR_START_DEFAULT"; value = -1; };
+					class Unchanged { name = "$STR_ROOT_CYBERWARFARE_DOOR_START_UNCHANGED"; value = 0; };
+					class Closed { name = "$STR_ROOT_CYBERWARFARE_DOOR_START_CLOSED"; value = 1; };
+					class Open { name = "$STR_ROOT_CYBERWARFARE_DOOR_START_OPEN"; value = 2; };
+					class LockClosed { name = "$STR_ROOT_CYBERWARFARE_DOOR_START_LOCKCLOSED"; value = 3; };
+					class LockOpen { name = "$STR_ROOT_CYBERWARFARE_DOOR_START_LOCKOPEN"; value = 4; };
+					class Unlocked { name = "$STR_ROOT_CYBERWARFARE_DOOR_START_UNLOCKED"; value = 5; };
+				};
+			};
 			class ROOT_CYBERWARFARE_3DEN_DOORS_PUBLIC: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_DOORS_PUBLIC";
 				displayName = "$STR_ROOT_CYBERWARFARE_UI_ADD_TO_PUBLIC_DEVICE_LIST";
@@ -444,7 +478,25 @@ class CfgVehicles {
 		isTriggerActivated = 0;
 		isDisposable = 1;
 		is3DEN = 0;
+		canSetArea = 1;
+		canSetAreaShape = 1;
+		class AttributeValues {
+			size3[] = {50, 50, -1};
+			isRectangle = 0;
+		};
 		class Attributes: AttributesBase {
+			class ROOT_CYBERWARFARE_3DEN_LIGHTS_REGISTER: Combo {
+				property = "ROOT_CYBERWARFARE_3DEN_LIGHTS_REGISTER";
+				displayName = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER";
+				tooltip = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_DESC";
+				typeName = "NUMBER";
+				defaultValue = 1;
+				class Values {
+					class Synced { name = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_SYNCED"; value = 0; };
+					class Area { name = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_AREA"; value = 1; };
+					class Both { name = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_BOTH"; value = 2; };
+				};
+			};
 			class ROOT_CYBERWARFARE_3DEN_LIGHTS_PUBLIC: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_LIGHTS_PUBLIC";
 				displayName = "$STR_ROOT_CYBERWARFARE_UI_ADD_TO_PUBLIC_DEVICE_LIST";
@@ -630,7 +682,25 @@ class CfgVehicles {
 		isTriggerActivated = 0;
 		isDisposable = 1;
 		is3DEN = 0;
+		canSetArea = 1;
+		canSetAreaShape = 1;
+		class AttributeValues {
+			size3[] = {50, 50, -1};
+			isRectangle = 0;
+		};
 		class Attributes: AttributesBase {
+			class ROOT_CYBERWARFARE_3DEN_VEHICLE_REGISTER: Combo {
+				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_REGISTER";
+				displayName = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER";
+				tooltip = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_DESC";
+				typeName = "NUMBER";
+				defaultValue = 1;
+				class Values {
+					class Synced { name = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_SYNCED"; value = 0; };
+					class Area { name = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_AREA"; value = 1; };
+					class Both { name = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_BOTH"; value = 2; };
+				};
+			};
 			class ROOT_CYBERWARFARE_3DEN_VEHICLE_NAME: Edit {
 				property = "ROOT_CYBERWARFARE_3DEN_VEHICLE_NAME";
 				displayName = "$STR_ROOT_CYBERWARFARE_UI_VEHICLE_NAME";
@@ -973,7 +1043,25 @@ class CfgVehicles {
 		isTriggerActivated = 0;
 		isDisposable = 1;
 		is3DEN = 0;
+		canSetArea = 1;
+		canSetAreaShape = 1;
+		class AttributeValues {
+			size3[] = {10, 10, -1};
+			isRectangle = 0;
+		};
 		class Attributes: AttributesBase {
+			class ROOT_CYBERWARFARE_3DEN_CUSTOM_REGISTER: Combo {
+				property = "ROOT_CYBERWARFARE_3DEN_CUSTOM_REGISTER";
+				displayName = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER";
+				tooltip = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_DESC";
+				typeName = "NUMBER";
+				defaultValue = 0;
+				class Values {
+					class Synced { name = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_SYNCED"; value = 0; };
+					class Area { name = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_AREA"; value = 1; };
+					class Both { name = "$STR_ROOT_CYBERWARFARE_3DEN_REGISTER_BOTH"; value = 2; };
+				};
+			};
 			class ROOT_CYBERWARFARE_3DEN_CUSTOM_NAME: Edit {
 				property = "ROOT_CYBERWARFARE_3DEN_CUSTOM_NAME";
 				displayName = "$STR_ROOT_CYBERWARFARE_UI_CUSTOM_DEVICE_NAME";
@@ -1056,6 +1144,12 @@ class CfgVehicles {
 		isTriggerActivated = 0;
 		isDisposable = 1;
 		is3DEN = 0;
+		canSetArea = 1;
+		canSetAreaShape = 1;
+		class AttributeValues {
+			size3[] = {200, 200, -1};
+			isRectangle = 0;
+		};
 		class Attributes: AttributesBase {
 			class ROOT_CYBERWARFARE_3DEN_POWERGRID_NAME: Edit {
 				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_NAME";
@@ -1063,13 +1157,6 @@ class CfgVehicles {
 				tooltip = "$STR_ROOT_CYBERWARFARE_UI_NAME_THAT_WILL_APPEAR_IN_THE_TERMINAL_FOR_THIS_POWER_GENERATOR";
 				typeName = "STRING";
 				defaultValue = """Power Generator""";
-			};
-			class ROOT_CYBERWARFARE_3DEN_POWERGRID_RADIUS: Edit {
-				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_RADIUS";
-				displayName = "$STR_ROOT_CYBERWARFARE_UI_EFFECT_RADIUS_METERS";
-				tooltip = "$STR_ROOT_CYBERWARFARE_UI_RADIUS_IN_METERS_TO_AFFECT_LIGHTS";
-				typeName = "NUMBER";
-				defaultValue = 1000;
 			};
 			class ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_OVERLOAD: Checkbox {
 				property = "ROOT_CYBERWARFARE_3DEN_POWERGRID_EXPLOSION_OVERLOAD";
