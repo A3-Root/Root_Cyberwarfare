@@ -71,15 +71,15 @@ if ((_type in ["-h", "help"]) || (_deviceId in ["-h", "help"])) exitWith {
 };
 
 private _string = "";
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-private _allDoors = _allDevices select 0;
-private _allLights = _allDevices select 1;
-private _allDrones = _allDevices select 2;
-private _allDatabases = _allDevices select 3;
-private _allCustom = _allDevices select 4;
-private _allGpsTrackers = _allDevices select 5;
-private _allVehicles = _allDevices select 6;
-private _allPowerGrids = _allDevices select 7;
+private _allDevices = GET_ALL_DEVICES;
+private _allDoors = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_DOOR), []];
+private _allLights = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_LIGHT), []];
+private _allDrones = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_DRONE), []];
+private _allDatabases = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_DATABASE), []];
+private _allCustom = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_CUSTOM), []];
+private _allGpsTrackers = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_GPS_TRACKER), []];
+private _allVehicles = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_VEHICLE), []];
+private _allPowerGrids = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_POWERGRID), []];
 
 // Filter devices based on accessibility
 private _accessibleDoors = _allDoors select { 

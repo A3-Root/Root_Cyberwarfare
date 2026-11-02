@@ -21,34 +21,43 @@
 // These constants identify different device types in the cyberwarfare system
 // Used for cache lookups, access control, and device operations
 
+// Building doors (lockable)
 #ifndef DEVICE_TYPE_DOOR
-    #define DEVICE_TYPE_DOOR 1          // Building doors (lockable)
+    #define DEVICE_TYPE_DOOR 1
 #endif
+// Building lights (switchable)
 #ifndef DEVICE_TYPE_LIGHT
-    #define DEVICE_TYPE_LIGHT 2         // Building lights (switchable)
+    #define DEVICE_TYPE_LIGHT 2
 #endif
+// UAVs (hackable, faction changeable)
 #ifndef DEVICE_TYPE_DRONE
-    #define DEVICE_TYPE_DRONE 3         // UAVs (hackable, faction changeable)
+    #define DEVICE_TYPE_DRONE 3
 #endif
+// Database files (downloadable)
 #ifndef DEVICE_TYPE_DATABASE
-    #define DEVICE_TYPE_DATABASE 4      // Database files (downloadable)
+    #define DEVICE_TYPE_DATABASE 4
 #endif
+// Custom scripted devices
 #ifndef DEVICE_TYPE_CUSTOM
-    #define DEVICE_TYPE_CUSTOM 5        // Custom scripted devices
+    #define DEVICE_TYPE_CUSTOM 5
 #endif
+// GPS tracking devices
 #ifndef DEVICE_TYPE_GPS_TRACKER
-    #define DEVICE_TYPE_GPS_TRACKER 6   // GPS tracking devices
+    #define DEVICE_TYPE_GPS_TRACKER 6
 #endif
+// Vehicles (alarm, doors, etc.)
 #ifndef DEVICE_TYPE_VEHICLE
-    #define DEVICE_TYPE_VEHICLE 7       // Vehicles (alarm, doors, etc.)
+    #define DEVICE_TYPE_VEHICLE 7
 #endif
+// Power generators (light control in radius)
 #ifndef DEVICE_TYPE_POWERGRID
-    #define DEVICE_TYPE_POWERGRID 8     // Power generators (light control in radius)
+    #define DEVICE_TYPE_POWERGRID 8
 #endif
 // GUI-only pseudo device type: not a hackable device, used by the Network Scanner app so it can reuse
 // the generic device-list rendering pipeline to show scanned AE3 laptops/routers.
+// Network scanner results (laptops/routers on the subnet)
 #ifndef DEVICE_TYPE_NETSCAN
-    #define DEVICE_TYPE_NETSCAN 9       // Network scanner results (laptops/routers on the subnet)
+    #define DEVICE_TYPE_NETSCAN 9
 #endif
 
 // ============================================================================
@@ -477,6 +486,23 @@
 // Whether an identifier may only be entered on a laptop that is connected to a network.
 #ifndef SETTING_GPS_IDENTIFIER_ONLINE
     #define SETTING_GPS_IDENTIFIER_ONLINE "ROOT_CYBERWARFARE_GPS_IDENTIFIER_REQUIRE_ONLINE"
+#endif
+
+// Device registry: one array per device type, slot = DEVICE_TYPE_* - 1 (DEVICE_TYPE_DOOR .. DEVICE_TYPE_POWERGRID)
+#ifndef GVAR_ALL_DEVICES
+    #define GVAR_ALL_DEVICES "ROOT_CYBERWARFARE_ALL_DEVICES"
+#endif
+#ifndef ALL_DEVICES_EMPTY
+    #define ALL_DEVICES_EMPTY [[], [], [], [], [], [], [], []]
+#endif
+#ifndef DEVICE_SLOT
+    #define DEVICE_SLOT(type) ((type) - 1)
+#endif
+#ifndef GET_ALL_DEVICES
+    #define GET_ALL_DEVICES (missionNamespace getVariable [GVAR_ALL_DEVICES, ALL_DEVICES_EMPTY])
+#endif
+#ifndef GET_DEVICES_OF_TYPE
+    #define GET_DEVICES_OF_TYPE(type) (GET_ALL_DEVICES param [DEVICE_SLOT(type), []])
 #endif
 
 // Identifiers for every other device type (doors, lights, drones, files, custom devices, vehicles,

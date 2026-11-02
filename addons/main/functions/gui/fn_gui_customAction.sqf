@@ -46,7 +46,7 @@ if !([_computer, DEVICE_TYPE_CUSTOM, _customId, _commandPath] call FUNC(isDevice
 	[_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_CUSTOM_DEVICE_NOT_FOUND", _customId], false] call _reply;
 };
 
-private _custom = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [4, []];
+private _custom = GET_DEVICES_OF_TYPE(DEVICE_TYPE_CUSTOM);
 private _idx = _custom findIf { (_x select 0) == _customId };
 if (_idx == -1) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_CUSTOM_DEVICE_NOT_FOUND", _customId], false] call _reply; };
 

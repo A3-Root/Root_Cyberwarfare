@@ -55,11 +55,11 @@ _customState = toLower _customState;
 _customId = parseNumber _customId;
 
 if(_customId != 0 && (_customState isEqualTo "activate" || _customState isEqualTo "deactivate")) then {
-    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
+    private _allDevices = GET_ALL_DEVICES;
     // The mission's own setting is the cost, so a change to it is felt straight away rather than only
     // where a module last wrote a snapshot of it.
     private _powerCostPerCustom = missionNamespace getVariable [SETTING_CUSTOM_COST, 10];
-    private _allCustom = _allDevices select 4;
+    private _allCustom = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_CUSTOM), []];
 
     if !([_computer, _powerCostPerCustom, DEVICE_TYPE_CUSTOM, parseNumber (str _customId)] call FUNC(checkPowerAvailable)) then {
         _string = localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER";

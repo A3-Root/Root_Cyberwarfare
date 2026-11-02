@@ -52,8 +52,8 @@ private _databaseIdNum = parseNumber _databaseId;
 
 if (_databaseIdNum != 0) then {
     private _pointer = _computer getVariable "AE3_filepointer";
-    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
-    private _allDatabases = _allDevices select 3;
+    private _allDevices = GET_ALL_DEVICES;
+    private _allDatabases = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_DATABASE), []];
 
     // Filter databases to only those accessible by this computer
     private _accessibleDatabases = _allDatabases select { 

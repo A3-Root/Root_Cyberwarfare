@@ -27,6 +27,7 @@ Power-grid registration and control for lights and electrical areas. The generat
 
 ## decisions
 - Derive coverage directly from the registry row so the map view and the action target the same radius.
+- `Root_fnc_getPowerGridObjects [_gridObject, _radius, _excluded]` is the one affected-object query; the action, the GUI count and `powerGridControl` call it.
 - Apply the same object query for the displayed "lights affected" count and the action payload, so the UI number matches the actual effect.
 - Make overload destructive and one-way, because the mod treats generator destruction as a terminal state.
 - Consume power only after confirmation and a successful action path, not during the initial validation pass.

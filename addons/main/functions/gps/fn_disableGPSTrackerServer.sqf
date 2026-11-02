@@ -20,7 +20,7 @@ if (!isServer) exitWith {};
 
 params ["_allDevices", "_trackerId", "_trackerObject", "_linkedComputers", "_trackerName"];
 
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
 call Root_fnc_syncDeviceData;
 
 // Notify all linked computers

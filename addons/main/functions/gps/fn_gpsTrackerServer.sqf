@@ -31,8 +31,8 @@ params ["_trackerObject", "_markerName", "_trackingTime", "_updateFrequency", "_
 private _computerNetId = netId _computer;
 
 // Update tracker status to "Tracking" on server
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
-private _allGpsTrackers = _allDevices param [5, []];
+private _allDevices = GET_ALL_DEVICES;
+private _allGpsTrackers = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_GPS_TRACKER), []];
 
 {
     if ((_x select 0) == _trackerId) then {
@@ -52,8 +52,8 @@ private _allGpsTrackers = _allDevices param [5, []];
             _x select 11,
             _x param [12, [[], [], []]]
         ]];
-        _allDevices set [5, _allGpsTrackers];
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+        _allDevices set [DEVICE_SLOT(DEVICE_TYPE_GPS_TRACKER), _allGpsTrackers];
+        missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
 call Root_fnc_syncDeviceData;
     };
 } forEach _allGpsTrackers;
@@ -115,8 +115,8 @@ if !(_allowRetracking) then {
 };
 
 // Update the global tracker status
-_allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
-_allGpsTrackers = _allDevices param [5, []];
+_allDevices = GET_ALL_DEVICES;
+_allGpsTrackers = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_GPS_TRACKER), []];
 
 {
     if ((_x select 0) == _trackerId) then {
@@ -135,8 +135,8 @@ _allGpsTrackers = _allDevices param [5, []];
             _x select 11,
             _x param [12, [[], [], []]]
         ]];
-        _allDevices set [5, _allGpsTrackers];
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+        _allDevices set [DEVICE_SLOT(DEVICE_TYPE_GPS_TRACKER), _allGpsTrackers];
+        missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
 call Root_fnc_syncDeviceData;
     };
 } forEach _allGpsTrackers;

@@ -89,7 +89,7 @@ private _rechargeSeconds = if (_rechargeRate > 0) then {60 / _rechargeRate} else
     private _source = _bag getVariable ["ROOT_EWO_POWER_SOURCE", objNull];
     if (!isNull _source) then {
         private _connected = alive _source
-            && {(_source getVariable ["AE3_power_powerState", 0]) == 1}
+            && {([_source] call AE3_power_fnc_isPoweredOn)}
             && {(_owner distance _source) <= EWO_POWER_SOURCE_RANGE};
 
         if (_connected) then {

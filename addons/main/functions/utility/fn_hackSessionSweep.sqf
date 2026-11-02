@@ -38,8 +38,8 @@ private _toClose = [];
     switch (true) do {
         case (isNull _operator || {!alive _operator}): { _reason = "STR_ROOT_CYBERWARFARE_HACKSSH_DISCONNECTED" };
         case (isNull _target || {!alive _target}): { _reason = "STR_ROOT_CYBERWARFARE_HACKSSH_LOST" };
-        case ((_operator getVariable ["AE3_power_powerState", 0]) != 1): { _reason = "STR_ROOT_CYBERWARFARE_HACKSSH_LOST" };
-        case ((_target getVariable ["AE3_power_powerState", 0]) != 1): { _reason = "STR_ROOT_CYBERWARFARE_HACKSSH_LOST" };
+        case (!([_operator] call AE3_power_fnc_isPoweredOn)): { _reason = "STR_ROOT_CYBERWARFARE_HACKSSH_LOST" };
+        case (!([_target] call AE3_power_fnc_isPoweredOn)): { _reason = "STR_ROOT_CYBERWARFARE_HACKSSH_LOST" };
         case (!(_target getVariable ["AE3_ssh_enabled", true])): { _reason = "STR_ROOT_CYBERWARFARE_HACKSSH_LOST" };
         case (_idleTimeout > 0 && {(_now - _lastUsedAt) > _idleTimeout}): { _reason = "STR_ROOT_CYBERWARFARE_HACKSSH_TIMED_OUT" };
         default {

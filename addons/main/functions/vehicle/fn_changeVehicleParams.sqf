@@ -71,8 +71,8 @@ private _string = "";
 private _vehicleIDNum = parseNumber _vehicleID;
 
 if (_vehicleIDNum != 0) then {
-    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
-    private _allVehicles = _allDevices param [6, []];
+    private _allDevices = GET_ALL_DEVICES;
+    private _allVehicles = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_VEHICLE), []];
 
     if (_allVehicles isEqualTo []) then {
         _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_VEHICLES";

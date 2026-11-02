@@ -45,7 +45,7 @@ if !([_computer, DEVICE_TYPE_DATABASE, _databaseId, _commandPath] call FUNC(isDe
 	[_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_NO_ACCESSIBLE_DATABASES", false] call _reply;
 };
 
-private _databases = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [3, []];
+private _databases = GET_DEVICES_OF_TYPE(DEVICE_TYPE_DATABASE);
 private _idx = _databases findIf { (_x select 0) == _databaseId };
 if (_idx == -1) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DATABASE", _databaseId], false] call _reply; };
 

@@ -77,8 +77,8 @@ if !(_action in ["on", "off", "overload"]) exitWith {
 };
 
 // Get all power grids
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-private _allPowerGrids = _allDevices select 7;
+private _allDevices = GET_ALL_DEVICES;
+private _allPowerGrids = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_POWERGRID), []];
 
 if (_allPowerGrids isEqualTo []) exitWith {
     _string = localize "STR_ROOT_CYBERWARFARE_ERROR_NO_POWERGRIDS";
@@ -144,12 +144,7 @@ private _foundGrid = false;
         // Execute action
         if (_action == "on") then {
             // Get objects in radius
-            private _allObjects = (9 allObjects 0);
-            private _objectsInRadius = _allObjects select {(_x distance _gridObject) <= _radius};
-
-            if (_excludedClassnames isNotEqualTo []) then {
-                _objectsInRadius = _objectsInRadius select {!(typeOf _x in _excludedClassnames)};
-            };
+            private _objectsInRadius = [_gridObject, _radius, _excludedClassnames] call FUNC(getPowerGridObjects);
 
             private _lightsAffected = count _objectsInRadius;
 
@@ -167,12 +162,7 @@ private _foundGrid = false;
         } else {
             if (_action == "off") then {
                 // Get objects in radius
-                private _allObjects = (9 allObjects 0);
-                private _objectsInRadius = _allObjects select {(_x distance _gridObject) <= _radius};
-
-                if (_excludedClassnames isNotEqualTo []) then {
-                    _objectsInRadius = _objectsInRadius select {!(typeOf _x in _excludedClassnames)};
-                };
+                private _objectsInRadius = [_gridObject, _radius, _excludedClassnames] call FUNC(getPowerGridObjects);
 
                 private _lightsAffected = count _objectsInRadius;
 
@@ -195,12 +185,7 @@ private _foundGrid = false;
                     };
 
                     // Get objects in radius
-                    private _allObjects = (9 allObjects 0);
-                    private _objectsInRadius = _allObjects select {(_x distance _gridObject) <= _radius};
-
-                    if (_excludedClassnames isNotEqualTo []) then {
-                        _objectsInRadius = _objectsInRadius select {!(typeOf _x in _excludedClassnames)};
-                    };
+                    private _objectsInRadius = [_gridObject, _radius, _excludedClassnames] call FUNC(getPowerGridObjects);
 
                     private _lightsAffected = count _objectsInRadius;
 

@@ -41,8 +41,8 @@ if (_execUserId == 0) then {
     _execUserId = owner _targetObject;
 };
 
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-private _allGpsTrackers = _allDevices select 5;
+private _allDevices = GET_ALL_DEVICES;
+private _allGpsTrackers = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_GPS_TRACKER), []];
 
 private _netId = netId _targetObject;
 
@@ -53,8 +53,8 @@ private _deviceId = [_requestedId, _allGpsTrackers apply { _x select 0 }] call F
 _allGpsTrackers pushBack [_deviceId, _netId, _trackerName, _trackingTime, _updateFrequency, _customMarker, _linkedComputers, _availableToFutureLaptops, ["Untracked", 0, ""], _allowRetracking, _lastPingTimer, _powerCost, _ownersSelection];
 
 // Update the allDevices array with the new GPS trackers category
-_allDevices set [5, _allGpsTrackers];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+_allDevices set [DEVICE_SLOT(DEVICE_TYPE_GPS_TRACKER), _allGpsTrackers];
+missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
 call Root_fnc_syncDeviceData;
 
 

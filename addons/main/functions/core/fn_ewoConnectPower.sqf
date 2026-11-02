@@ -29,7 +29,7 @@ if (isNull _bag || {!(_bag getVariable ["ROOT_EWO_INITIALIZED", false])}) exitWi
 
 // The same tests the tick keeps applying, so a connection is never made in a state it would be dropped
 // from on the next pass.
-if ((_source getVariable ["AE3_power_powerState", 0]) != 1) exitWith {
+if (!([_source] call AE3_power_fnc_isPoweredOn)) exitWith {
     [localize "STR_ROOT_CYBERWARFARE_EWO_POWER_OFF", ROOT_CYBERWARFARE_COLOR_ERROR] remoteExecCall [QFUNC(ewoNotify), _player];
 };
 

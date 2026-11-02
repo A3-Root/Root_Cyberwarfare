@@ -59,8 +59,8 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_GENERATOR_DESTROYED", false, true]
 _targetObject setVariable ["ROOT_CYBERWARFARE_POWERGRID_COST", _powerCost, true];
 
 // Get all devices
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-private _allPowerGrids = _allDevices select 7;
+private _allDevices = GET_ALL_DEVICES;
+private _allPowerGrids = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_POWERGRID), []];
 
 // Honour a caller-requested ID when free, otherwise draw a fresh unused one.
 private _deviceId = [_requestedId, _allPowerGrids apply { _x select 0 }] call FUNC(resolveDeviceId);
@@ -80,8 +80,8 @@ _allPowerGrids pushBack [
 ];
 
 // Update device array
-_allDevices set [7, _allPowerGrids];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+_allDevices set [DEVICE_SLOT(DEVICE_TYPE_POWERGRID), _allPowerGrids];
+missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
 call Root_fnc_syncDeviceData;
 
 // Drop placeholder identifiers, then apply the requested reachability: private links, public

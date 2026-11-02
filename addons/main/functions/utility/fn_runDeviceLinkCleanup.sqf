@@ -150,7 +150,7 @@ if (_identifiersToRemove isNotEqualTo []) then {
 };
 
 // ---- Device registry (per-type arrays of [id, netId, ...]) ----
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
+private _allDevices = GET_ALL_DEVICES;
 private _cleanedDevices = [[], [], [], [], [], [], [], []];
 private _devicesRemoved = 0;
 
@@ -172,7 +172,7 @@ private _devicesRemoved = 0;
     _cleanedDevices set [_typeIndex, _cleanedList];
 } forEach _allDevices;
 
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _cleanedDevices];
+missionNamespace setVariable [GVAR_ALL_DEVICES, _cleanedDevices];
 if (_devicesRemoved > 0) then {
     _totalRemoved = _totalRemoved + _devicesRemoved;
     call Root_fnc_syncDeviceData;

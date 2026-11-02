@@ -34,7 +34,7 @@ if (isNull _requester || {isNull (getAssignedCuratorLogic _requester)}) exitWith
     ["root_cyberwarfare_zeusHiddenTrackers", [[]], _owner] call CBA_fnc_ownerEvent;
 };
 
-private _allTrackers = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [5, []];
+private _allTrackers = GET_DEVICES_OF_TYPE(DEVICE_TYPE_GPS_TRACKER);
 private _identifiers = GET_GPS_IDENTIFIERS;
 private _rows = [];
 

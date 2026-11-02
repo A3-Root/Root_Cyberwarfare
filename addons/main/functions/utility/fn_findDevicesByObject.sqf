@@ -21,7 +21,7 @@ params [["_object", objNull, [objNull]]];
 if (isNull _object) exitWith {[]};
 
 private _netId = netId _object;
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
+private _allDevices = GET_ALL_DEVICES;
 private _result = [];
 
 {

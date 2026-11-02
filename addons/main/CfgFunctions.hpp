@@ -137,6 +137,7 @@ class CfgFunctions {
 			class addPowerGeneratorZeusMain {};
 			class powerGeneratorLights {};
 			class powerGridControl {};
+			class getPowerGridObjects {};
 		};
 
 		class Utility {

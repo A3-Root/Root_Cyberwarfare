@@ -86,7 +86,7 @@ if !(_target getVariable ["AE3_ssh_enabled", true]) exitWith {
     ["STR_ROOT_CYBERWARFARE_HACKSSH_REFUSED"] call _fnc_fail
 };
 
-if ((_target getVariable ["AE3_power_powerState", 0]) != 1) exitWith {
+if (!([_target] call AE3_power_fnc_isPoweredOn)) exitWith {
     ["STR_ROOT_CYBERWARFARE_HACKSSH_OFFLINE"] call _fnc_fail
 };
 
@@ -118,7 +118,7 @@ _sessions set [_computerNetId, [netId _target, _user, serverTime, serverTime]];
 missionNamespace setVariable [GVAR_HACK_SESSIONS, _sessions];
 
 // The published half carries no password: it is what the client's apps read to show the session
-private _label = _target getVariable ["ace_cargo_customName", _targetIp];
+private _label = [_target, _targetIp] call AE3_main_fnc_getDeviceName;
 
 _computer setVariable [VAR_HACK_SESSION, [netId _target, _label, _user], true];
 

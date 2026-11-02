@@ -48,6 +48,8 @@ class CfgPatches {
 			"ace_interact_menu",
 			"zen_custom_modules",
 			"ae3_main",
+			"ae3_network",
+			"ae3_power",
 			"ae3_armaos",
 			"ae3_filesystem",
 			"ae3_desktop",

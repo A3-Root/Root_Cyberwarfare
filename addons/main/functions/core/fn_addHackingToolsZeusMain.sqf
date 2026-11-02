@@ -600,7 +600,7 @@ _content = "
             [_computer, [[['Not connected to anything.', '#FFD966']]]] call AE3_armaos_fnc_shell_stdout;
         };
 
-        private _label = _target getVariable ['ace_cargo_customName', str _target];
+        private _label = [_target, str _target] call AE3_main_fnc_getDeviceName;
         [_computer, [[[format ['Connected to %1 as %2.', _label, _user], '#8ce10b']]]] call AE3_armaos_fnc_shell_stdout;
     };
 

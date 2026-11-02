@@ -49,7 +49,7 @@ if !([_computer, DEVICE_TYPE_VEHICLE, _vehicleId, _commandPath] call FUNC(isDevi
 	[_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_VEHICLE", _vehicleId], false] call _reply;
 };
 
-private _vehicles = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [6, []];
+private _vehicles = GET_DEVICES_OF_TYPE(DEVICE_TYPE_VEHICLE);
 private _idx = _vehicles findIf { (_x select 0) == _vehicleId };
 if (_idx == -1) exitWith {
 	[_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_VEHICLE", _vehicleId], false] call _reply;

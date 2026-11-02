@@ -117,8 +117,8 @@ if (_radiusMode) exitWith {
 };
 
 // Load device arrays from global storage (direct mode)
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-private _allLamps = _allDevices select 1;
+private _allDevices = GET_ALL_DEVICES;
+private _allLamps = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_LIGHT), []];
 
 private _isValidObject = false;
 private _netId = netId _targetObject;
@@ -147,8 +147,8 @@ if (!_isValidObject) exitWith {
 private _availabilityText = [_typeofhackable, _deviceId, _linkedComputers, _accessMode, _availableToFutureLaptops] call FUNC(applyDeviceAccess);
 
 // Update global storage with modified device arrays
-_allDevices set [1, _allLamps];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+_allDevices set [DEVICE_SLOT(DEVICE_TYPE_LIGHT), _allLamps];
+missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
 call Root_fnc_syncDeviceData;
 _targetObject setVariable ["ROOT_CYBERWARFARE_CONNECTED", true, true];
 

@@ -82,8 +82,8 @@ if (_isIdentifier) exitWith {
 };
 
 if (_trackerIdNum != 0) then {
-    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
-    private _allGpsTrackers = _allDevices param [5, []];
+    private _allDevices = GET_ALL_DEVICES;
+    private _allGpsTrackers = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_GPS_TRACKER), []];
 
     if (_allGpsTrackers isEqualTo []) then {
         _string = "Error! No GPS trackers found.";
@@ -146,11 +146,11 @@ if (_trackerIdNum != 0) then {
                                 _lastPingTimer,
                                 _powerCost
                             ]];
-                            _allDevices set [5, _allGpsTrackers];
+                            _allDevices set [DEVICE_SLOT(DEVICE_TYPE_GPS_TRACKER), _allGpsTrackers];
 
                             // local copy update only - the server applies and broadcasts the authoritative change
 
-                            missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+                            missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
 
                             ["root_cyberwarfare_updateTrackerStatus", [_storedTrackerId, (_allGpsTrackers select _forEachIndex) select 8]] call CBA_fnc_serverEvent;
                         } else {
@@ -189,11 +189,11 @@ if (_trackerIdNum != 0) then {
                                 _lastPingTimer,
                                 _powerCost
                             ]];
-                            _allDevices set [5, _allGpsTrackers];
+                            _allDevices set [DEVICE_SLOT(DEVICE_TYPE_GPS_TRACKER), _allGpsTrackers];
 
                             // local copy update only - the server applies and broadcasts the authoritative change
 
-                            missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+                            missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
 
                             ["root_cyberwarfare_updateTrackerStatus", [_storedTrackerId, (_allGpsTrackers select _forEachIndex) select 8]] call CBA_fnc_serverEvent;
                             

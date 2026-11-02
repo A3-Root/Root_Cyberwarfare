@@ -114,8 +114,8 @@ if (isServer) then {
     ["root_cyberwarfare_updateTrackerStatus", {
         params ["_trackerId", "_status"];
 
-        private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-        private _allGpsTrackers = _allDevices param [5, []];
+        private _allDevices = GET_ALL_DEVICES;
+        private _allGpsTrackers = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_GPS_TRACKER), []];
 
         {
             if ((_x select 0) == _trackerId) exitWith {
@@ -123,7 +123,7 @@ if (isServer) then {
             };
         } forEach _allGpsTrackers;
 
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+        missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
         call FUNC(syncDeviceData);
     }] call CBA_fnc_addEventHandler;
 
@@ -163,7 +163,7 @@ if (isServer) then {
             ["root_cyberwarfare_hackSshResult", [false, "STR_ROOT_CYBERWARFARE_HACKSSH_NO_SESSION", ""], _owner] call CBA_fnc_ownerEvent;
         };
 
-        private _label = _target getVariable ["ace_cargo_customName", netId _target];
+        private _label = [_target, netId _target] call AE3_main_fnc_getDeviceName;
 
         ["root_cyberwarfare_hackSshResult", [true, "STR_ROOT_CYBERWARFARE_HACKSSH_SESSION", _label, _user], _owner] call CBA_fnc_ownerEvent;
     }] call CBA_fnc_addEventHandler;
@@ -275,8 +275,8 @@ if (isServer) then {
     // Initialize legacy ALL_DEVICES array for backward compatibility (only if it doesn't already exist)
     // Structure: [doors, lights, drones, databases, custom, gpsTrackers, vehicles, powerGrids]
     // 3DEN modules may have already populated this during mission initialization
-    if (isNil "ROOT_CYBERWARFARE_ALL_DEVICES") then {
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []], true];
+    if (isNil GVAR_ALL_DEVICES) then {
+        missionNamespace setVariable [GVAR_ALL_DEVICES, ALL_DEVICES_EMPTY, true];
     };
 
     // Single debounced broadcast instead of three immediate publicVariable calls - the
@@ -804,7 +804,7 @@ if (hasInterface) then {
                 private _actions = [];
                 private _sources = (nearestObjects [ACE_player, [], EWO_POWER_SOURCE_RANGE]) select {
                     !isNil {_x getVariable "AE3_power_connectedDevices"}
-                    && {(_x getVariable ["AE3_power_powerState", 0]) == 1}
+                    && {([_x] call AE3_power_fnc_isPoweredOn)}
                 };
                 {
                     private _source = _x;

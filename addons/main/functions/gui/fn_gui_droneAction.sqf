@@ -41,7 +41,7 @@ _faction = toLower _faction;
 
 // The disable action permanently destroys the drone after the power check succeeds.
 if (_faction isEqualTo "disable") exitWith {
-	private _drones = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [2, []];
+	private _drones = GET_DEVICES_OF_TYPE(DEVICE_TYPE_DRONE);
 	private _idx = _drones findIf { (_x select 0) == _droneId };
 	if (_idx == -1) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DRONE", _droneId], false] call _reply; };
 	private _drone = objectFromNetId ((_drones select _idx) select 1);
@@ -63,7 +63,7 @@ if !([_computer, DEVICE_TYPE_DRONE, _droneId, _commandPath] call FUNC(isDeviceAc
 	[_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DRONE", _droneId], false] call _reply;
 };
 
-private _drones = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [2, []];
+private _drones = GET_DEVICES_OF_TYPE(DEVICE_TYPE_DRONE);
 private _idx = _drones findIf { (_x select 0) == _droneId };
 if (_idx == -1) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_DRONE", _droneId], false] call _reply; };
 

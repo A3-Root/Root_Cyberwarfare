@@ -170,8 +170,8 @@ if (_isRadiusMode) then {
         _targetObject setVariable ["ROOT_CYBERWARFARE_DRONE_SIDE_COST", _sideCost, true];
 
         // Load device arrays from global storage
-        private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-        private _allDrones = _allDevices select 2;
+        private _allDevices = GET_ALL_DEVICES;
+        private _allDrones = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_DRONE), []];
 
         private _netId = netId _targetObject;
         // Prefer the mission-maker's custom name; fall back to the class displayName when none was given.
@@ -190,8 +190,8 @@ if (_isRadiusMode) then {
         private _availabilityText = [_typeofhackable, _deviceId, _linkedComputers, _accessMode, _availableToFutureLaptops] call FUNC(applyDeviceAccess);
 
         // Update global storage with modified drone array
-        _allDevices set [2, _allDrones];
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+        _allDevices set [DEVICE_SLOT(DEVICE_TYPE_DRONE), _allDrones];
+        missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
 call Root_fnc_syncDeviceData;
         _targetObject setVariable ["ROOT_CYBERWARFARE_CONNECTED", true, true];
         // Default location-view on; the 3DEN/Zeus caller overrides via setVariable after this call.
@@ -223,8 +223,8 @@ call Root_fnc_syncDeviceData;
         };
 
         // Load device arrays from global storage
-        private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-        private _allVehicles = _allDevices select 6;
+        private _allDevices = GET_ALL_DEVICES;
+        private _allVehicles = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_VEHICLE), []];
 
         private _netId = netId _targetObject;
 
@@ -283,8 +283,8 @@ call Root_fnc_syncDeviceData;
         private _availabilityText = [_typeofhackable, _deviceId, _linkedComputers, _accessMode, _availableToFutureLaptops] call FUNC(applyDeviceAccess);
 
         // Update global storage with modified vehicle array
-        _allDevices set [6, _allVehicles];
-        missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+        _allDevices set [DEVICE_SLOT(DEVICE_TYPE_VEHICLE), _allVehicles];
+        missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
 call Root_fnc_syncDeviceData;
         _targetObject setVariable ["ROOT_CYBERWARFARE_CONNECTED", true, true];
 

@@ -57,8 +57,8 @@ private _droneIdNum = parseNumber _droneId;
 _droneFaction = toLower _droneFaction;
 
 if((_droneIdNum != 0 || _droneId isEqualTo "a") && (_droneFaction isEqualTo "west" || _droneFaction isEqualTo "east" || _droneFaction isEqualTo "guer" || _droneFaction isEqualTo "civ")) then {
-    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
-    private _allDrones = _allDevices select 2;
+    private _allDevices = GET_ALL_DEVICES;
+    private _allDrones = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_DRONE), []];
 
     // Filter drones to only those accessible by this computer
     private _accessibleDrones = _allDrones select { 

@@ -58,7 +58,7 @@ if !(VALIDATE_ACCESS_MODE(_accessMode)) then {
 
 // A device id the registry does not hold would create links to something that cannot be reached, so a
 // stale dialog left open while the device was deleted changes nothing.
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
+private _allDevices = GET_ALL_DEVICES;
 private _devicesOfType = _allDevices param [_deviceType - 1, []];
 if ((_devicesOfType findIf {(_x select 0) == _deviceId}) < 0) exitWith {
     DEBUG_LOG_2("setDeviceAccessMain: device %1/%2 is not registered",_deviceType,_deviceId);

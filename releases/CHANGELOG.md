@@ -1,5 +1,15 @@
 # Changelog
 
+## Update (v2.1.0.5)
+
+### Added
+- `Root_fnc_getPowerGridObjects`.
+
+### Changed
+- Power, network, router and name checks use the AE3 API.
+- Network scan skips devices without power state.
+- Device registry reads fall back to the empty eight-slot registry.
+
 ## Update (v2.1.0.4)
 
 ### Changed

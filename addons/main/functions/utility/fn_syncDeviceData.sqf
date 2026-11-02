@@ -14,7 +14,7 @@
  * None
  *
  * Example:
- * missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+ * missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
  * call Root_fnc_syncDeviceData;
  *
  * Public: No
@@ -28,7 +28,7 @@ missionNamespace setVariable ["ROOT_CYBERWARFARE_SYNC_PENDING", true];
 [{
 	missionNamespace setVariable ["ROOT_CYBERWARFARE_SYNC_PENDING", false];
 
-	publicVariable "ROOT_CYBERWARFARE_ALL_DEVICES";
+	publicVariable GVAR_ALL_DEVICES;
 	publicVariable "ROOT_CYBERWARFARE_LINK_CACHE";
 	publicVariable "ROOT_CYBERWARFARE_PUBLIC_DEVICES";
 	publicVariable "ROOT_CYBERWARFARE_DEVICE_LINKS";

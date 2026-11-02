@@ -53,8 +53,8 @@ private _string = "";
 private _droneIdNum = parseNumber _droneId;
 
 if((_droneIdNum != 0 || _droneId isEqualTo "a")) then {
-    private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", []];
-    private _allDrones = _allDevices select 2;
+    private _allDevices = GET_ALL_DEVICES;
+    private _allDrones = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_DRONE), []];
 
     // Filter drones to only those accessible by this computer
     private _accessibleDrones = _allDrones select { 

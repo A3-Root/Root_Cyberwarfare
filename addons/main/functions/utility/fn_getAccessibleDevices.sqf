@@ -39,7 +39,7 @@ if !(VALIDATE_DEVICE_TYPE(_deviceType)) exitWith {
 };
 
 // Get devices from legacy array (devices are stored here by Zeus registration functions)
-private _allDevicesArray = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
+private _allDevicesArray = GET_ALL_DEVICES;
 
 // Determine array index based on device type
 // Array structure: [doors, lights, drones, databases, custom, gpsTrackers, vehicles, powerGrids]

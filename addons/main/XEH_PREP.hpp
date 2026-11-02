@@ -112,6 +112,7 @@ PREP(zeusTrackerMarker);
 PREP(addPowerGeneratorZeusMain);
 PREP(powerGeneratorLights);
 PREP(powerGridControl);
+PREP(getPowerGridObjects);
 
 // Redefine PREP macro for subdirectory: utility
 #undef PREP

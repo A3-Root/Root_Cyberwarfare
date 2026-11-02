@@ -136,8 +136,8 @@ _targetObject setVariable ["ROOT_CYBERWARFARE_ACTIVATIONCODE", _activationCode, 
 _targetObject setVariable ["ROOT_CYBERWARFARE_DEACTIVATIONCODE", _deactivationCode, true];
 
 // Get all devices
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-private _allCustom = _allDevices select 4;
+private _allDevices = GET_ALL_DEVICES;
+private _allCustom = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_CUSTOM), []];
 
 // Honour a caller-requested ID when free, otherwise draw a fresh unused one.
 private _deviceId = [_requestedId, _allCustom apply { _x select 0 }] call FUNC(resolveDeviceId);
@@ -153,8 +153,8 @@ _allCustom pushBack [
 ];
 
 // Update device array
-_allDevices set [4, _allCustom];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+_allDevices set [DEVICE_SLOT(DEVICE_TYPE_CUSTOM), _allCustom];
+missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
 call Root_fnc_syncDeviceData;
 
 // Only link computers whose object still exists, then apply the requested reachability: private

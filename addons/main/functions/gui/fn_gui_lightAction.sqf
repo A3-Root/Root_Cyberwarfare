@@ -47,7 +47,7 @@ if (_lightId isEqualTo -1) exitWith {};
 // reach, which is what a caller without a filter to speak of means.
 if (_state in ["allon", "alloff"]) exitWith {
 	private _want = _state isEqualTo "allon";
-	private _lights = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [1, []];
+	private _lights = GET_DEVICES_OF_TYPE(DEVICE_TYPE_LIGHT);
 	// Ids arrive from the browser and may come across as text.
 	private _wanted = _ids apply {if (_x isEqualType "") then {parseNumber _x} else {_x}};
 	private _n = 0;
@@ -75,8 +75,8 @@ if !([_computer, DEVICE_TYPE_LIGHT, _lightId, _commandPath] call FUNC(isDeviceAc
 	[_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_LIGHT", _lightId], false] call _reply;
 };
 
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-private _lights = _allDevices param [1, []];
+private _allDevices = GET_ALL_DEVICES;
+private _lights = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_LIGHT), []];
 private _idx = _lights findIf { (_x select 0) == _lightId };
 if (_idx == -1) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_LIGHT", _lightId], false] call _reply; };
 

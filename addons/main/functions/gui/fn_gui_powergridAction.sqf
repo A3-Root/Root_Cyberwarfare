@@ -46,7 +46,7 @@ if !([_computer, DEVICE_TYPE_POWERGRID, _gridId, _commandPath] call FUNC(isDevic
 	[_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_ACCESS_DENIED_POWERGRID", _gridId], false] call _reply;
 };
 
-private _grids = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [7, []];
+private _grids = GET_DEVICES_OF_TYPE(DEVICE_TYPE_POWERGRID);
 private _idx = _grids findIf { (_x select 0) == _gridId };
 if (_idx == -1) exitWith { [_owner, format [localize "STR_ROOT_CYBERWARFARE_ERROR_POWERGRID_NOT_FOUND", _gridId], false] call _reply; };
 
@@ -59,8 +59,7 @@ private _cost = missionNamespace getVariable [SETTING_POWERGRID_COST, 15];
 if !([_computer, _cost, DEVICE_TYPE_POWERGRID, parseNumber (str _gridId)] call FUNC(checkPowerAvailable)) exitWith { [_owner, localize "STR_ROOT_CYBERWARFARE_ERROR_INSUFFICIENT_POWER", false] call _reply; };
 
 // Objects (lights) within the grid radius, minus excluded classes.
-private _objectsInRadius = (9 allObjects 0) select { (_x distance _gridObject) <= _radius };
-if (_excludedClassnames isNotEqualTo []) then { _objectsInRadius = _objectsInRadius select { !(typeOf _x in _excludedClassnames) }; };
+private _objectsInRadius = [_gridObject, _radius, _excludedClassnames] call FUNC(getPowerGridObjects);
 
 switch (_action) do
 {

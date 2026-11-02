@@ -139,15 +139,10 @@ ROOT_CYBERWARFARE_GUI_DESCRIBE = {
 							["off", (localize "STR_ROOT_CYBERWARFARE_UI_OFF"), [(localize "STR_ROOT_CYBERWARFARE_UI_DEACTIVATING_THE_POWER_GRID"), _cost] call _powerConfirm] call _actC,
 							["overload", (localize "STR_ROOT_CYBERWARFARE_GUI_OVERLOAD"), [(localize "STR_ROOT_CYBERWARFARE_UI_OVERLOADING_THE_POWER_GRID"), _cost] call _powerConfirm] call _actC
 						];
-					// "Lights affected" must match what the action actually toggles, so the number shown
-					// equals the "N lights turned ON/OFF" report (Power Grid #1). The action (fn_gui_
-					// powergridAction) targets every object within the grid's radius minus excluded
-					// classes - so use the SAME query and the SAME radius/exclusions from the registry row
-					// (_x = [id, netId, name, radius, allowOverload, explosionType, excludedClassnames]).
+					// Same objects the grid action switches (_x = [id, netId, name, radius, allowOverload, explosionType, excludedClassnames]).
 					private _rad = _x param [3, _obj getVariable ["ROOT_CYBERWARFARE_GENERATOR_RADIUS", 0]];
 					private _excluded = _x param [6, []];
-					private _affected = (9 allObjects 0) select { (_x distance _obj) <= _rad };
-					if (_excluded isNotEqualTo []) then { _affected = _affected select { !(typeOf _x in _excluded) }; };
+					private _affected = [_obj, _rad, _excluded] call FUNC(getPowerGridObjects);
 					_details = [[(localize "STR_ROOT_CYBERWARFARE_UI_RADIUS"), format ["%1m", round _rad]], [(localize "STR_ROOT_CYBERWARFARE_UI_LIGHTS_AFFECTED"), count _affected]];
 				};
 			};

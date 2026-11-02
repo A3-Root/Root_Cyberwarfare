@@ -75,17 +75,14 @@ _bags append ((allMissionObjects "Bag_Base") select {typeOf _x in _classes});
 } forEach _bags;
 
 // A router whose pack no longer exists - the backpack was deleted, or its carrier left the mission -
-// would otherwise keep broadcasting a network nobody carries, so it is taken off the air and out of
-// the registry the laptop scan reads.
+// would otherwise keep broadcasting a network nobody carries, so it is deleted. AE3_network_fnc_getRouters skips
+// the deleted entries.
 private _proxies = missionNamespace getVariable ["ROOT_EWO_ROUTERS", []];
 private _orphans = _proxies select {isNull (_x getVariable ["ROOT_EWO_BAG", objNull])};
 
 if (_orphans isNotEqualTo []) then {
-    private _registry = missionNamespace getVariable ["AE3_network_routers", []];
-    _registry = _registry - _orphans;
     {
         deleteVehicle _x;
     } forEach _orphans;
-    missionNamespace setVariable ["AE3_network_routers", _registry, true];
     missionNamespace setVariable ["ROOT_EWO_ROUTERS", _proxies - _orphans, true];
 };

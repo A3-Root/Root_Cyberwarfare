@@ -54,7 +54,7 @@ private _identifiers = [];
     };
 } forEach _computerIds;
 
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
+private _allDevices = GET_ALL_DEVICES;
 
 // Keep only entries that name a device type in range and an id the registry actually holds.
 private _validEntries = _deviceEntries select {

@@ -33,7 +33,7 @@ private _typeLabels = [
     localize "STR_ROOT_CYBERWARFARE_GUI_APP_POWERGRID"
 ];
 
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
+private _allDevices = GET_ALL_DEVICES;
 private _rows = [];
 
 {

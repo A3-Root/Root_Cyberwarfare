@@ -655,7 +655,7 @@ cost, battery prompt, status rules - is identical for both ways of naming a trac
 | `Root_fnc_generateGpsIdentifier` | Server | Draws an unused 8-character identifier (alphabet excludes `I`, `O`, `0`, `1`). |
 | `Root_fnc_registerGpsIdentifier` | Server | `[_deviceId, _trackerName, _object, _plantedByUid, _hidden, _requestedIdentifier]` → the identifier. The only writer of the identifier map; adds hidden trackers to the broadcast hidden-id list. |
 | `Root_fnc_resolveGpsIdentifier` | Server | `[_identifier]` → `[deviceId, name, objectName, plantedByUid, hidden]` or `[]`. Case-insensitive. |
-| `Root_fnc_isLaptopOnline` | Any | `[_computer]` → whether the laptop is joined to a network (AE3 network parent and a non-loopback address). |
+| `Root_fnc_isLaptopOnline` | Any | `[_computer]` -> whether the laptop is on a network (`AE3_network_fnc_isOnline`). |
 | `Root_fnc_logTrackerToDiary` | Client | `[_trackerName, _identifier, _objectName, _grid]` writes the planter's diary record. |
 | `Root_fnc_zeusTrackerMarker` | Client | `[_deviceId, _objectNetId, _label, _enabled]` toggles a curator's private map overlay. Display only. |
 | `Root_fnc_hiddenTrackersZeusMain` | Server | `[_owner, _requester]` sends the hidden-tracker roster, including identifiers, to one curator. Refuses non-curators. |
@@ -761,6 +761,14 @@ Controls power generator.
 **Example:**
 ```sqf
 [123, _laptop, "var1", "1234", "on", "/tools/"] call Root_fnc_powerGridControl;
+```
+
+### Root_fnc_getPowerGridObjects
+
+Objects a power grid switches: every object within the radius, minus excluded classes. Any machine.
+
+```sqf
+private _lights = [_generator, 300, ["Land_LampHalogen_F"]] call Root_fnc_getPowerGridObjects;
 ```
 
 ---

@@ -24,12 +24,12 @@ params [["_computer", objNull, [objNull]]];
 
 if (isNull _computer) exitWith { [] };
 
+// A laptop that is not on a network has nothing to enumerate.
+if !([_computer] call AE3_network_fnc_isOnline) exitWith { [] };
 private _selfAddr = _computer getVariable ["AE3_network_address", [127, 0, 0, 1]];
-// Loopback means the scanning laptop is not on a network, so there is nothing to enumerate.
-if (_selfAddr isEqualTo [127, 0, 0, 1]) exitWith { [] };
 private _subnet = [_selfAddr select 0, _selfAddr select 1, _selfAddr select 2];
 
-private _devices = (missionNamespace getVariable ["ae3_desktop_computers", []]) + (missionNamespace getVariable ["AE3_network_routers", []]);
+private _devices = (missionNamespace getVariable ["ae3_desktop_computers", []]) + (call AE3_network_fnc_getRouters);
 private _defaultMode = missionNamespace getVariable ["AE3_Desktop_DefaultMode", "both"];
 
 private _rows = [];
@@ -38,10 +38,10 @@ private _seen = [];
     private _dev = _x;
     if (isNull _dev) then { continue };
 
+    if !([_dev] call AE3_network_fnc_isOnline) then { continue };                           // not connected
     private _addr = _dev getVariable ["AE3_network_address", [127, 0, 0, 1]];
-    if (_addr isEqualTo [127, 0, 0, 1]) then { continue };                                  // not connected
     if ([_addr select 0, _addr select 1, _addr select 2] isNotEqualTo _subnet) then { continue }; // other subnet
-    if ((_dev getVariable ["AE3_power_powerState", 0]) != 1) then { continue };             // powered devices only
+    if (!([_dev] call AE3_power_fnc_isPoweredOn)) then { continue };             // powered devices only
 
     private _ipStr = if (isNil "AE3_network_fnc_ip2str") then {
         (_addr apply {str _x}) joinString "."

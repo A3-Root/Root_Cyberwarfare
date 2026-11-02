@@ -56,7 +56,7 @@ if (!_byIdentifier && {!([_computer, DEVICE_TYPE_GPS_TRACKER, _gpsId, _commandPa
 };
 
 // The global device registry stores GPS trackers at index 5.
-private _trackers = (missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]]) param [5, []];
+private _trackers = GET_DEVICES_OF_TYPE(DEVICE_TYPE_GPS_TRACKER);
 private _idx = _trackers findIf { (_x select 0) == _gpsId };
 if (_idx == -1) exitWith { [_owner, format [(localize "STR_ROOT_CYBERWARFARE_UI_ACCESS_DENIED_TO_TRACKER_1"), _gpsId], false] call _reply; };
 

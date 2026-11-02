@@ -67,8 +67,8 @@ if (_isEncrypted) then {
 };
 
 // Load device arrays from global storage
-private _allDevices = missionNamespace getVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", [[], [], [], [], [], [], [], []]];
-private _allDatabases = _allDevices select 3;
+private _allDevices = GET_ALL_DEVICES;
+private _allDatabases = _allDevices param [DEVICE_SLOT(DEVICE_TYPE_DATABASE), []];
 
 // Honour a caller-requested ID when free, otherwise draw a fresh unused one.
 private _databaseId = [_requestedId, _allDatabases apply { _x select 0 }] call FUNC(resolveDeviceId);
@@ -86,8 +86,8 @@ _fileObject setVariable ["ROOT_CYBERWARFARE_AVAILABLE_FUTURE", _availableToFutur
 private _availabilityText = [DEVICE_TYPE_DATABASE, _databaseId, _linkedComputers, _accessMode, _availableToFutureLaptops] call FUNC(applyDeviceAccess);
 
 // Update global storage with new database
-_allDevices set [3, _allDatabases];
-missionNamespace setVariable ["ROOT_CYBERWARFARE_ALL_DEVICES", _allDevices];
+_allDevices set [DEVICE_SLOT(DEVICE_TYPE_DATABASE), _allDatabases];
+missionNamespace setVariable [GVAR_ALL_DEVICES, _allDevices];
 call Root_fnc_syncDeviceData;
 
 [format ["Root Cyber Warfare: File added with ID: %1. %2.", _databaseId, _availabilityText]] remoteExec ["systemChat", _execUserId];

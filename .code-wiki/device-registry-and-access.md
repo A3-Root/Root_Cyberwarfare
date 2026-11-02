@@ -1,7 +1,7 @@
 ---
 topic: device-registry-and-access
 status: verified
-last-verified: 2026-07-08
+last-verified: 2026-11-02
 confidence_score: 0.95
 priority: core
 rank: 1
@@ -23,7 +23,7 @@ related-topics:
 Server-authoritative registry and access model for all hackable devices. It is the shared layer that decides who can see a device, how laptops become stations, and when stale links are cleaned up.
 
 ## current behavior
-- `ROOT_CYBERWARFARE_ALL_DEVICES` stores eight device categories in mission namespace.
+- `ROOT_CYBERWARFARE_ALL_DEVICES` stores eight device categories in mission namespace. Access only through `script_macros.hpp`: `GVAR_ALL_DEVICES`, `GET_ALL_DEVICES` (falls back to `ALL_DEVICES_EMPTY`), `GET_DEVICES_OF_TYPE(DEVICE_TYPE_*)`, `DEVICE_SLOT(DEVICE_TYPE_*)` (= type - 1). DEVICE_TYPE_NETSCAN has no slot.
 - `ROOT_CYBERWARFARE_LINK_CACHE` tracks laptop-to-device links.
 - `ROOT_CYBERWARFARE_PUBLIC_DEVICES` tracks devices exposed to current or future laptops, with per-laptop exclusions when needed.
 - `Root_fnc_addComputerDeviceLinks` is used by registration functions to add links atomically.
