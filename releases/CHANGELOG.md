@@ -1,5 +1,12 @@
 # Changelog
 
+## Hotfix (v2.1.0.7)
+
+### Changed
+- Base64, Base32, Ascii85 and 8-bit integer encodings encode non-Latin text as UTF-8 and decode it back.
+- Ciphers count and split non-Latin text per character in every step, not only the first.
+- Non-Latin text in RCW desktop apps shows correctly (requires AE3 2.1.0.6).
+
 ## Update (v2.1.0.6)
 
 ### Added

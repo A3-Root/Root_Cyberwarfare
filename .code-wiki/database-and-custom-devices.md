@@ -26,6 +26,7 @@ Database downloads and scripted custom devices. This is the subsystem that moves
 - `Root_fnc_addCustomDeviceZeusMain` supports both direct object mode and radius bulk-registration mode.
 - `Root_fnc_customDevice` executes the custom device behavior at runtime.
 - `Root_fnc_cipherOptionsFromText`, `Root_fnc_cipherProcess`, `Root_fnc_os_crack`, and `Root_fnc_os_crypto` support the encrypted database path and security commands.
+- `fn_cipherProcess` runs under `forceUnicode 0` (reset `-1` after the call block). Base64, Base32, Ascii85 and integer width <= 8 work on UTF-8 bytes (`_utf8Encode` / `_utf8Decode`; invalid UTF-8 decodes one character per byte), matching `cipherapps.js` `bytes()` / `text()`.
 
 ## decisions
 - Store encrypted database content in encrypted form on the object when the mission maker requests encryption, so the registry holds the same payload the player downloads.

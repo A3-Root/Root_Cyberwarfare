@@ -19,7 +19,7 @@
 params [["_algorithm", "", [""]], ["_mode", "encrypt", [""]], ["_text", "", [""]], ["_options", createHashMap, [createHashMap]]];
 
 // Unicode-safe character counts and splits on user generated text
-forceUnicode 1;
+forceUnicode 0;
 private _cipherResult = call {
     private _chars = { params ["_value"]; _value splitString "" };
     private _mod = {
@@ -184,11 +184,56 @@ private _cipherResult = call {
         _out
     };
 
+    // Text <-> UTF-8 bytes for the byte encodings. Bytes that are not valid UTF-8 decode one character each.
+    private _utf8Encode = {
+        params ["_value"];
+        private _bytes = [];
+        {
+            switch (true) do {
+                case (_x < 128): { _bytes pushBack _x; };
+                case (_x < 2048): { _bytes append [192 + floor (_x / 64), 128 + (_x mod 64)]; };
+                case (_x < 65536): { _bytes append [224 + floor (_x / 4096), 128 + ((floor (_x / 64)) mod 64), 128 + (_x mod 64)]; };
+                default { _bytes append [240 + floor (_x / 262144), 128 + ((floor (_x / 4096)) mod 64), 128 + ((floor (_x / 64)) mod 64), 128 + (_x mod 64)]; };
+            };
+        } forEach (toArray _value);
+        _bytes
+    };
+    private _utf8Decode = {
+        params ["_bytes"];
+        private _codes = [];
+        private _valid = true;
+        private _i = 0;
+        private _count = count _bytes;
+        while { _valid && _i < _count } do {
+            private _b = _bytes select _i;
+            private _extra = switch (true) do {
+                case (_b < 128): { 0 };
+                case (_b >= 192 && _b < 224): { 1 };
+                case (_b >= 224 && _b < 240): { 2 };
+                case (_b >= 240 && _b < 248): { 3 };
+                default { -1 };
+            };
+            if (_extra < 0 || {_i + _extra >= _count}) then {
+                _valid = false;
+            } else {
+                private _code = [_b, _b - 192, _b - 224, _b - 240] select _extra;
+                for "_k" from 1 to _extra do {
+                    private _next = _bytes select (_i + _k);
+                    if (_next < 128 || _next >= 192) then { _valid = false; };
+                    _code = (_code * 64) + (_next - 128);
+                };
+                _codes pushBack _code;
+                _i = _i + 1 + _extra;
+            };
+        };
+        toString ([_bytes, _codes] select _valid)
+    };
+
     private _base64Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     private _base64 = {
         params ["_value", "_decrypt"];
         if (!_decrypt) exitWith {
-            private _bytes = toArray _value;
+            private _bytes = [_value] call _utf8Encode;
             private _out = "";
             for "_i" from 0 to ((count _bytes) - 1) step 3 do {
                 private _b1 = _bytes select _i;
@@ -218,7 +263,7 @@ private _cipherResult = call {
                 if (_c4Char isNotEqualTo "=") then { _outBytes pushBack (_n mod 256); };
             };
         };
-        toString _outBytes
+        [_outBytes] call _utf8Decode
     };
 
     private _base32Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
@@ -228,7 +273,7 @@ private _cipherResult = call {
             private _bitFragments = [];
             {
                 _bitFragments pushBack ([[_x, 2] call _toBase, 8] call _padLeft);
-            } forEach (toArray _value);
+            } forEach ([_value] call _utf8Encode);
             private _out = _bitFragments joinString "";
             private _encoded = "";
             for "_i" from 0 to ((count _out) - 1) step 5 do {
@@ -248,13 +293,13 @@ private _cipherResult = call {
         for "_i" from 0 to ((count _bits) - 8) step 8 do {
             _bytes pushBack ([_bits select [_i, 8], 2] call _fromBase);
         };
-        toString _bytes
+        [_bytes] call _utf8Decode
     };
 
     private _ascii85 = {
         params ["_value", "_decrypt"];
         if (!_decrypt) exitWith {
-            private _bytes = toArray _value;
+            private _bytes = [_value] call _utf8Encode;
             private _out = "<~";
             for "_i" from 0 to ((count _bytes) - 1) step 4 do {
                 private _remain = ((count _bytes) - _i) min 4;
@@ -293,7 +338,7 @@ private _cipherResult = call {
             { _n = (_n * 85) + (((toArray _x) select 0) - 33); } forEach ([_group] call _chars);
             _bytes append ([floor (_n / 16777216), floor ((_n mod 16777216) / 65536), floor ((_n mod 65536) / 256), _n mod 256] select [0, 4 - _pad]);
         };
-        toString _bytes
+        [_bytes] call _utf8Decode
     };
 
     private _decrypt = _mode isEqualTo "decrypt";
@@ -525,7 +570,7 @@ private _cipherResult = call {
             private _width = parseNumber str (_options getOrDefault ["width", 8]);
             private _signed = _options getOrDefault ["signed", false];
             if (!_decrypt) exitWith {
-                ((toArray _text) apply {
+                (([toArray _text, [_text] call _utf8Encode] select (_width <= 8)) apply {
                     private _n = _x;
                     private _max = 2 ^ _width;
                     private _half = 2 ^ (_width - 1);
@@ -548,7 +593,7 @@ private _cipherResult = call {
                 if (_signed && _n < 0) then { _n = (2 ^ _width) + _n; };
                 _bytes pushBack ([round _n, 2 ^ _width] call _mod);
             } forEach (_text splitString " ,;");
-            toString _bytes
+            [toString _bytes, [_bytes] call _utf8Decode] select (_width <= 8)
         };
         default {""};
     }
